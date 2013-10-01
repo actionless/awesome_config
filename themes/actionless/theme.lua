@@ -1,10 +1,3 @@
---[[
-                                             
-     Powerarrow Darker Awesome WM config 2.0 
-     github.com/copycat-killer               
-                                             
---]]
-
 theme                               = {}
 
 themes_dir                          = os.getenv("HOME") .. "/.config/awesome/themes/actionless"
@@ -14,7 +7,8 @@ theme.bg	= "#000000"
 theme.alt_bg	= "#000000" -- 313131
 theme.fg	= "#eeeeec"
 theme.bright	= "#adeb71"
-theme.dark	= "#"
+--theme.dark	= "#463c87"
+theme.dark	= "#5e468c"
 theme.light	= "#897eae"
 theme.alt_fg	= "#a562b3"
 theme.error	= "#ee82a8"
@@ -26,7 +20,7 @@ theme.fg_normal                     = theme.fg
 theme.fg_focus                      = theme.light
 theme.fg_urgent                     = theme.bg
 theme.bg_normal                     = theme.bg
-theme.bg_focus                      = "#ff0000"
+theme.bg_focus                      = theme.error
 theme.bg_urgent                     = theme.error
 theme.border_width                  = "3"
 theme.border_normal                 = theme.border
@@ -34,12 +28,14 @@ theme.border_focus                  = theme.bright
 theme.border_marked                 = "#CC9393"
 theme.titlebar_bg_focus             = theme.bright
 theme.titlebar_bg_normal            = theme.border
-theme.taglist_fg	            = "#00ff00"
-theme.taglist_bg	            = "#00ff00"
-theme.taglist_fg_focus              = theme.bg
-theme.taglist_bg_focus              = theme.light
+theme.taglist_fg	            = "#ff0000"
+theme.taglist_bg	            = "#ff0000"
+theme.taglist_fg_focus              = theme.fg
+theme.taglist_bg_focus              = theme.dark
 theme.tasklist_bg_focus             = theme.bg
-theme.tasklist_fg_focus             = theme.alt_fg
+theme.tasklist_fg_normal            = theme.fg
+theme.tasklist_fg_minimize          = theme.alt_fg
+theme.tasklist_fg_focus             = theme.light
 theme.textbox_widget_margin_top     = 1
 theme.notify_fg                     = theme.fg_normal
 theme.notify_bg                     = theme.bg_normal
@@ -96,8 +92,8 @@ theme.widget_mail                   = themes_dir .. "/icons/mail.png"
 theme.widget_mail_on                = themes_dir .. "/icons/mail_on.png"
 
 theme.tasklist_disable_icon         = true
-theme.tasklist_floating             = "*"
-theme.tasklist_maximized_horizontal = "_"
-theme.tasklist_maximized_vertical   = "|"
+--theme.tasklist_floating             = "*"
+--theme.tasklist_maximized_horizontal = "_"
+--theme.tasklist_maximized_vertical   = "|"
 
 return theme

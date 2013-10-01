@@ -15,6 +15,7 @@ local menubar = require("menubar")
 local shifty = require("shifty")
 
 local lain = require("lain")
+local widgets = require("widgets")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -118,7 +119,7 @@ menubar.geometry = {
 
 -- Shifty configured tags.
 shifty.config.tags = {
-    l = {
+    ["1:main"] = {
         layout    = awful.layout.suit.tile,
         mwfact    = 0.60,
         exclusive = false,
@@ -127,29 +128,29 @@ shifty.config.tags = {
         screen    = 1,
         slave     = true,
     },
-    web = {
+    ["2:web"] = {
         layout      = awful.layout.suit.tile,
-        mwfact      = 0.65,
+        mwfact      = 0.75,
         exclusive   = false,
         --max_clients = 1,
         position    = 2,
         spawn       = browser,
     },
-    work = {
+    ["3:work"] = {
         layout    = awful.layout.suit.tile,
-        mwfact    = 0.55,
+        mwfact    = 0.75,
         exclusive = false,
         position  = 3,
         --spawn     = mail,
         slave     = true
     },
-    im = {
+    ["4:im"] = {
         layout    = awful.layout.suit.tile.bottom,
         exclusive = false,
         position  = 4,
         nmaster = 0,
     },
-    media = {
+    ["5:media"] = {
         layout    = awful.layout.suit.floating,
         exclusive = false,
         position  = 5,
@@ -161,25 +162,25 @@ shifty.config.tags = {
 shifty.config.apps = {
     {
         match = {
-            "Navigator",
+            --"Navigator",
             "Vimperator",
-            "Gran Paradiso",
+            --"Gran Paradiso",
             "Chromium",
         },
-        tag = "web",
+        tag = "2:web",
     },
     {
         match = {
             "Google Chrome",
             "vmplayer",
         },
-        tag = "work",
+        tag = "3:work",
     },
     {
         match = {
             "Skype",
         },
-        tag = "im",
+        tag = "4:im",
     },
     {
         match = {
@@ -406,6 +407,7 @@ mytaglist.buttons = awful.util.table.join(
                     awful.button({ }, 4, function(t) awful.tag.viewnext(awful.tag.getscreen(t)) end),
                     awful.button({ }, 5, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end)
                     )
+mycurrenttask = {}
 mytasklist = {}
 mytasklist.buttons = awful.util.table.join(
                      awful.button({ }, 1, function (c)
@@ -456,7 +458,8 @@ for s = 1, screen.count() do
     mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
 
     -- Create a tasklist widget
-    mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons)
+    mycurrenttask[s] = widgets.tasklist(s, widgets.tasklist.filter.focused, mytasklist.buttons, 'fixed')
+    mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.minimizedcurrenttags, mytasklist.buttons)
 
     -- Create the wibox
     mywibox[s] = awful.wibox({ position = "top", screen = s, height = 18 })
@@ -466,6 +469,8 @@ for s = 1, screen.count() do
     left_layout:add(spr)
     left_layout:add(mytaglist[s])
     left_layout:add(mypromptbox[s])
+    left_layout:add(spr)
+    left_layout:add(mycurrenttask[s])
     left_layout:add(spr)
 
     -- Widgets that are aligned to the right
@@ -535,8 +540,8 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
-    --awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
-    --awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
+    awful.key({ modkey,           }, ",",   awful.tag.viewprev       ),
+    awful.key({ modkey,           }, ".",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
 
     -- By direction client focus
@@ -563,8 +568,8 @@ globalkeys = awful.util.table.join(
 
     -- Shifty: keybindings specific to shifty
     awful.key({modkey, "Shift"}, "d", shifty.del), -- delete a tag
-    awful.key({modkey, "Shift"}, "n", shifty.send_prev), -- client to prev tag
-    awful.key({modkey}, "n", shifty.send_next), -- client to next tag
+    awful.key({modkey, "Shift"}, ",", shifty.send_prev), -- client to prev tag
+    awful.key({modkey, "Shoft"}, ".", shifty.send_next), -- client to next tag
     awful.key({modkey, "Control"},
               "n",
               function()
@@ -622,7 +627,7 @@ globalkeys = awful.util.table.join(
     awful.key({ altkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
     awful.key({ altkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
 
-    awful.key({ modkey, "Control" }, "i", awful.client.restore),
+    awful.key({ modkey, "Control" }, "n", awful.client.restore),
 
     -- Prompt
     awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
@@ -717,7 +722,7 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
     awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
     awful.key({ modkey, "Shift"   }, "t",      function (c) shifty.create_titlebar(c) awful.titlebar(c) c.border_width = beautiful.border_width end),
-    awful.key({ modkey,           }, "i",
+    awful.key({ modkey,           }, "n",
         function (c)
             -- The client currently has the input focus, so it cannot be
             -- minimized, since minimized clients can't have the focus.
