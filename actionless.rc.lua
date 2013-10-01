@@ -59,7 +59,7 @@ run_once("urxvtd")
 run_once("unclutter")
 
 run_once("gxkb")
-run_once("~/.dropbox-dist/dropboxd")
+run_once("dropboxd")
 -- }}}
 
 
@@ -84,6 +84,7 @@ browser    = "chromium"
 browser2   = "iron"
 gui_editor = "/opt/sublime_text/sublime_text"
 graphics   = "pinta"
+file_manager = "stuurman"
 mail       = terminal .. " -e mutt "
 iptraf     = terminal .. " -g 180x54-20+34 -e sudo iptraf-ng -i all "
 musicplr   = terminal .. " -g 130x34-320+16 -e ncmpcpp "
@@ -142,16 +143,16 @@ shifty.config.tags = {
         --spawn     = mail,
         slave     = true
     },
-    media = {
-        layout    = awful.layout.suit.float,
-        exclusive = false,
-        position  = 9,
-    },
     im = {
         layout    = awful.layout.suit.tile.bottom,
         exclusive = false,
         position  = 4,
-	nmaster = 0,
+        nmaster = 0,
+    },
+    media = {
+        layout    = awful.layout.suit.floating,
+        exclusive = false,
+        position  = 5,
     },
 }
 
@@ -169,11 +170,16 @@ shifty.config.apps = {
     },
     {
         match = {
-            "Shredder.*",
-            "Thunderbird",
-            "mutt",
+            "Google Chrome",
+            "vmplayer",
         },
-        tag = "mail",
+        tag = "work",
+    },
+    {
+        match = {
+            "Skype",
+        },
+        tag = "im",
     },
     {
         match = {
@@ -273,13 +279,10 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 
 -- {{{ Wibox
 markup = lain.util.markup
-red    = "#897eae" --"#5e468c"
--- altbg = "#313131"
-altbg = "#000000"
 
 -- ALSA volume
 volicon = wibox.widget.imagebox(beautiful.widget_vol)
-voliconbg = wibox.widget.background(volicon, altbg)
+voliconbg = wibox.widget.background(volicon, beautiful.alt_bg)
 volumewidget = lain.widgets.alsa({
     channel = 'DAC',
     settings = function()
@@ -296,7 +299,7 @@ volumewidget = lain.widgets.alsa({
         widget:set_text(" " .. volume_now.level .. "% ")
     end
 })
-volumewidgetbg = wibox.widget.background(volumewidget, altbg)
+volumewidgetbg = wibox.widget.background(volumewidget, beautiful.alt_bg)
 
 -- MPD
 mpdicon = wibox.widget.imagebox(beautiful.widget_music)
@@ -316,10 +319,10 @@ mpdwidget = lain.widgets.mpd({
             mpdicon:set_image(beautiful.widget_music)
         end
 
-        widget:set_markup(markup(red, artist) .. title)
+        widget:set_markup(markup(beautiful.mpd_text, artist) .. title)
     end
 })
--- mpdwidgetbg = wibox.widget.background(mpdwidget, altbg)
+-- mpdwidgetbg = wibox.widget.background(mpdwidget, beautiful.alt_bg)
 mpdwidgetbg = mpdwidget
 
 -- MEM
@@ -336,7 +339,7 @@ cpuwidget = wibox.widget.background(lain.widgets.cpu({
     settings = function()
         widget:set_text(" " .. cpu_now.usage .. "% ")
     end
-}), altbg)
+}), beautiful.alt_bg)
 
 -- Coretemp
 tempicon = wibox.widget.imagebox(beautiful.widget_temp)
@@ -353,7 +356,7 @@ fswidget = lain.widgets.fs({
         widget:set_text(" " .. used .. "% ")
     end
 })
-fswidgetbg = wibox.widget.background(fswidget, altbg)
+fswidgetbg = wibox.widget.background(fswidget, beautiful.alt_bg)
 
 -- Textclock
 clockicon = wibox.widget.imagebox(beautiful.widget_clock)
@@ -560,8 +563,8 @@ globalkeys = awful.util.table.join(
 
     -- Shifty: keybindings specific to shifty
     awful.key({modkey, "Shift"}, "d", shifty.del), -- delete a tag
-    --awful.key({modkey, "Shift"}, "n", shifty.send_prev), -- client to prev tag
-    --awful.key({modkey}, "n", shifty.send_next), -- client to next tag
+    awful.key({modkey, "Shift"}, "n", shifty.send_prev), -- client to prev tag
+    awful.key({modkey}, "n", shifty.send_next), -- client to next tag
     awful.key({modkey, "Control"},
               "n",
               function()
@@ -606,6 +609,7 @@ globalkeys = awful.util.table.join(
 
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
+    awful.key({ modkey,           }, "s", function () awful.util.spawn(file_manager) end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
@@ -618,7 +622,7 @@ globalkeys = awful.util.table.join(
     awful.key({ altkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
     awful.key({ altkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
 
-    --~ awful.key({ modkey, "Control" }, "n", awful.client.restore),
+    awful.key({ modkey, "Control" }, "i", awful.client.restore),
 
     -- Prompt
     awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
@@ -679,6 +683,7 @@ globalkeys = awful.util.table.join(
     -- Copy to clipboard
     awful.key({ modkey }, "c", function () os.execute("xsel -p -o | xsel -i -b") end),
 
+    -- MM Play/Pause
     awful.key({ }, "#172",
         function ()
             awful.util.spawn_with_shell("mpc toggle || ncmpcpp toggle || ncmpc toggle || pms toggle")
@@ -706,13 +711,13 @@ globalkeys = awful.util.table.join(
 
 clientkeys = awful.util.table.join(
     awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
-    awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
+    awful.key({ modkey,           }, "q",      function (c) c:kill()                         end),
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
     awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
-    awful.key({ modkey, "Shift"   }, "t",      function (c) shifty.create_titlebar(c) awful.titlebar(c) c.border_width = 1 end),
-    awful.key({ modkey,           }, "n",
+    awful.key({ modkey, "Shift"   }, "t",      function (c) shifty.create_titlebar(c) awful.titlebar(c) c.border_width = beautiful.border_width end),
+    awful.key({ modkey,           }, "i",
         function (c)
             -- The client currently has the input focus, so it cannot be
             -- minimized, since minimized clients can't have the focus.
@@ -733,17 +738,22 @@ shifty.config.modkey = modkey
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it works on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
-for i = 1, (shifty.config.maxtags or 9) do
+for i = 1, 12 do
+    if i>10 then
+        diff = 84
+    else
+        diff = 66
+    end
     globalkeys = awful.util.table.join(globalkeys,
-        awful.key({ modkey }, "#" .. i + 9,
+        awful.key({ modkey }, "#" .. i + diff,
                   function ()
                       awful.tag.viewonly(shifty.getpos(i))
                   end),
-        awful.key({ modkey, "Control" }, "#" .. i + 9,
+        awful.key({ modkey, "Control" }, "#" .. i + diff,
                   function ()
                       awful.tag.viewtoggle(shifty.getpos(i))
                   end),
-        awful.key({ modkey, "Shift" }, "#" .. i + 9,
+        awful.key({ modkey, "Shift" }, "#" .. i + diff,
                   function ()
                       if client.focus then
                           local t = shifty.getpos(i)
@@ -751,7 +761,7 @@ for i = 1, (shifty.config.maxtags or 9) do
                           awful.tag.viewonly(t)
                        end
                   end),
-        awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9,
+        awful.key({ modkey, "Control", "Shift" }, "#" .. i + diff,
                   function ()
                       if client.focus then
                           awful.client.toggletag(shifty.getpos(i))
