@@ -404,8 +404,8 @@ mytaglist.buttons = awful.util.table.join(
                     awful.button({ modkey }, 1, awful.client.movetotag),
                     awful.button({ }, 3, awful.tag.viewtoggle),
                     awful.button({ modkey }, 3, awful.client.toggletag),
-                    awful.button({ }, 4, function(t) awful.tag.viewnext(awful.tag.getscreen(t)) end),
-                    awful.button({ }, 5, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end)
+                    awful.button({ }, 5, function(t) awful.tag.viewnext(awful.tag.getscreen(t)) end),
+                    awful.button({ }, 4, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end)
                     )
 mycurrenttask = {}
 mytasklist = {}
@@ -431,7 +431,7 @@ mytasklist.buttons = awful.util.table.join(
                                                   instance:hide()
                                                   instance = nil
                                               else
-                                                  instance = awful.menu.clients({ width=250 })
+                                                  instance = widgets.menu.clients({ width=450 })
                                               end
                                           end),
                      awful.button({ }, 4, function ()
@@ -452,8 +452,8 @@ for s = 1, screen.count() do
     mylayoutbox[s]:buttons(awful.util.table.join(
                            awful.button({ }, 1, function () awful.layout.inc(layouts, 1) end),
                            awful.button({ }, 3, function () awful.layout.inc(layouts, -1) end),
-                           awful.button({ }, 4, function () awful.layout.inc(layouts, 1) end),
-                           awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)))
+                           awful.button({ }, 5, function () awful.layout.inc(layouts, 1) end),
+                           awful.button({ }, 4, function () awful.layout.inc(layouts, -1) end)))
     -- Create a taglist widget
     mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
 
@@ -533,8 +533,8 @@ shifty.init()
 -- {{{ Mouse bindings
 root.buttons(awful.util.table.join(
     awful.button({ }, 3, function () mymainmenu:toggle() end),
-    awful.button({ }, 4, awful.tag.viewnext),
-    awful.button({ }, 5, awful.tag.viewprev)
+    awful.button({ }, 5, awful.tag.viewnext),
+    awful.button({ }, 4, awful.tag.viewprev)
 ))
 -- }}}
 
@@ -655,9 +655,6 @@ globalkeys = awful.util.table.join(
         end),
     awful.key({}, "#121",
         function ()
-    naughty.notify({ preset = naughty.config.presets.critical,
-                     title = "Oops, there were errors during startup!",
-                     text = volume_now.level })
             awful.util.spawn("amixer -q set DAC,0 toggle")
             awful.util.spawn("amixer -q set DAC,1 toggle")
             volumewidget.update()
@@ -699,17 +696,15 @@ globalkeys = awful.util.table.join(
     -- Menubar
     --awful.key({ modkey }, "space", function() menubar.show() end),
 
+    -- Scrot stuff
     awful.key({ "Control" }, "Print",  function ()
         awful.util.spawn_with_shell("scrot -ub '%Y-%m-%d--%s_$wx$h_scrot.png' -e 'mv $f ~/images/ &amp; viewnior ~/images/$f'")
     end),
     awful.key({ altkey }, "Print",  function ()
         awful.util.spawn_with_shell("scrot -s '%Y-%m-%d--%s_$wx$h_scrot.png' -e 'mv $f ~/images/ &amp; viewnior ~/images/$f'")
     end),
-    awful.key({ "Shift" }, "Print",  function ()
-        awful.util.spawn_with_shell("scrot '%Y-%m-%d--%s_$wx$h_scrot.png' -e 'mv $f ~/images/ &amp; viewnior ~/images/$f'")
-    end),
     awful.key({ }, "Print",  function ()
-        awful.util.spawn_with_shell("xfce4-screenshooter")
+        awful.util.spawn_with_shell("scrot '%Y-%m-%d--%s_$wx$h_scrot.png' -e 'mv $f ~/images/ &amp; viewnior ~/images/$f'")
     end)
 
 )
@@ -801,6 +796,7 @@ end)
 -- No border for maximized clients
 client.connect_signal("focus",
     function(c)
+        local clients = awful.client.visible(s)
 --         naughty.notify({ preset = naughty.config.presets.critical,
 --                          title = "DEBUG",
 --                          text = c.maximized_horizontal })
@@ -809,34 +805,13 @@ client.connect_signal("focus",
             c.border_color = beautiful.border_normal
         else
             c.border_width = beautiful.border_width
-            c.border_color = beautiful.border_focus
+            if #clients == 1 or layout == "max" then
+                c.border_color = beautiful.border_normal
+            else
+                c.border_color = beautiful.border_focus
+            end
         end
     end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
 
--- {{{ Arrange signal handler
-for s = 1, screen.count() do screen[s]:connect_signal("arrange", function ()
-        local clients = awful.client.visible(s)
-        local layout  = awful.layout.getname(awful.layout.get(s))
-
-        if #clients > 0 then -- Fine grained borders and floaters control
-            for _, c in pairs(clients) do -- Floaters always have borders
-                if awful.client.floating.get(c) or layout == "floating" then
-                    c.border_width = beautiful.border_width
-
-                -- No borders with only one visible client
-                elseif #clients == 1 or layout == "max" then
-                    clients[1].border_width = 0
-                    awful.client.moveresize(0, 0, beautiful.border_width*2, beautiful.border_width*2, clients[1])
-                    --awful.client.moveresize(0, 0, 4, 4, clients[1])
-                else
-                    c.border_width = beautiful.border_width
-                end
-            end
-        end
-      end)
-end
-
-
--- }}}
