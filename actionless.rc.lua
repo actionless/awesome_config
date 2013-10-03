@@ -89,6 +89,8 @@ file_manager = "stuurman"
 mail       = terminal .. " -e mutt "
 iptraf     = terminal .. " -g 180x54-20+34 -e sudo iptraf-ng -i all "
 musicplr   = terminal .. " -g 130x34-320+16 -e ncmpcpp "
+tmux       = terminal .. " -e tmux "
+tmux       = terminal .. ' -e zsh -c "TERM=screen-256color-bce tmux" '
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 local layouts = {
@@ -109,13 +111,6 @@ if beautiful.wallpaper then
     end
 end
 -- }}}
-
-menubar.geometry = {
-   height = 18,
-   width = 1680,
-   x = 0,
-   y = 1032
-}
 
 -- Shifty configured tags.
 shifty.config.tags = {
@@ -204,8 +199,9 @@ shifty.config.apps = {
             "gtkpod",
             "Ufraw",
             "easytag",
+            "Transmission"
         },
-        tag = "media",
+        tag = "5:media",
         nopopup = true,
     },
     {
@@ -275,6 +271,13 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
 -- Menubar configuration
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it
 -- }}}
+
+--menubar.geometry = {
+--   height = 18,
+--   width = 1680,
+--   x = 0,
+--   y = 1032
+--}
 
 --require("freedesktop/freedesktop")
 
@@ -478,23 +481,17 @@ for s = 1, screen.count() do
     if s == 1 then right_layout:add(wibox.widget.systray()) end
     right_layout:add(spr)
     right_layout:add(arrl)
-    --right_layout:add(kbdcfg.widget)
-    -- right_layout:add(arrl_ld)
-    --right_layout:add(arrl_dl)
     right_layout:add(voliconbg)
     right_layout:add(volumewidgetbg)
     right_layout:add(arrl)
     right_layout:add(mpdicon)
     right_layout:add(mpdwidgetbg)
-    -- right_layout:add(mailicon)
-    --right_layout:add(mailwidget)
     right_layout:add(arrl)
     right_layout:add(memicon)
     right_layout:add(memwidget)
     right_layout:add(arrl)
     right_layout:add(cpuicon)
     right_layout:add(cpuwidget)
-    --right_layout:add(arrl)
     right_layout:add(tempicon)
     right_layout:add(tempwidget)
     right_layout:add(arrl)
@@ -503,10 +500,6 @@ for s = 1, screen.count() do
     right_layout:add(arrl)
     -- right_layout:add(baticon)
     -- right_layout:add(batwidget)
-    -- right_layout:add(arrl_ld)
-    -- right_layout:add(neticon)
-    -- right_layout:add(netwidget)
-    -- right_layout:add(arrl_dl)
     right_layout:add(mytextclock)
     right_layout:add(spr)
     right_layout:add(arrl_ld)
@@ -569,7 +562,7 @@ globalkeys = awful.util.table.join(
     -- Shifty: keybindings specific to shifty
     awful.key({modkey, "Shift"}, "d", shifty.del), -- delete a tag
     awful.key({modkey, "Shift"}, ",", shifty.send_prev), -- client to prev tag
-    awful.key({modkey, "Shoft"}, ".", shifty.send_next), -- client to next tag
+    awful.key({modkey, "Shift"}, ".", shifty.send_next), -- client to next tag
     awful.key({modkey, "Control"},
               "n",
               function()
@@ -596,7 +589,11 @@ globalkeys = awful.util.table.join(
             awful.client.focus.byidx(-1)
             if client.focus then client.focus:raise() end
         end),
+
+    -- Menus
     awful.key({ modkey,           }, "w", function () mymainmenu:show() end),
+    awful.key({ modkey,           }, "i", function () instance = widgets.menu.clients({ width=450 }) end),
+    awful.key({ modkey,           }, "p", function() menubar.show() end),
 
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end),
@@ -613,7 +610,7 @@ globalkeys = awful.util.table.join(
         end),
 
     -- Standard program
-    awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
+    awful.key({ modkey,           }, "Return", function () awful.util.spawn(tmux) end),
     awful.key({ modkey,           }, "s", function () awful.util.spawn(file_manager) end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),
@@ -693,8 +690,6 @@ globalkeys = awful.util.table.join(
         end),
 
     awful.key({ modkey }, "space",  function () awful.util.spawn_with_shell("bash ~/.config/dmenu/dmenu-bind.sh")  end),
-    -- Menubar
-    --awful.key({ modkey }, "space", function() menubar.show() end),
 
     -- Scrot stuff
     awful.key({ "Control" }, "Print",  function ()
@@ -797,12 +792,9 @@ end)
 client.connect_signal("focus",
     function(c)
         local clients = awful.client.visible(s)
---         naughty.notify({ preset = naughty.config.presets.critical,
---                          title = "DEBUG",
---                          text = c.maximized_horizontal })
         if c.maximized_horizontal == true and c.maximized_vertical == true then
             c.border_width = 0
-            c.border_color = beautiful.border_normal
+            --c.border_color = beautiful.border_normal
         else
             c.border_width = beautiful.border_width
             if #clients == 1 or layout == "max" then
