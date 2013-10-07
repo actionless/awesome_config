@@ -81,7 +81,7 @@ editor_cmd = terminal .. " -e " .. editor
 
 -- user defined
 --browser    = "dwb"
-browser    = "chromium"
+browser    = "chromium --enable-user-stylesheet"
 browser2   = "iron"
 gui_editor = "/opt/sublime_text/sublime_text"
 graphics   = "pinta"
@@ -609,12 +609,6 @@ globalkeys = awful.util.table.join(
             end
         end),
 
-    -- Standard program
-    awful.key({ modkey,           }, "Return", function () awful.util.spawn(tmux) end),
-    awful.key({ modkey,           }, "s", function () awful.util.spawn(file_manager) end),
-    awful.key({ modkey, "Control" }, "r", awesome.restart),
-    awful.key({ modkey, "Shift"   }, "q", awesome.quit),
-
     awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)    end),
     awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)    end),
     awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1)      end),
@@ -690,6 +684,13 @@ globalkeys = awful.util.table.join(
         end),
 
     awful.key({ modkey }, "space",  function () awful.util.spawn_with_shell("bash ~/.config/dmenu/dmenu-bind.sh")  end),
+
+    -- Standard program
+    awful.key({ modkey,           }, "Return", function () awful.util.spawn(tmux) end),
+    awful.key({ modkey,           }, "s", function () awful.util.spawn(file_manager) end),
+    awful.key({ modkey, "Control" }, "r", awesome.restart),
+    awful.key({ modkey, "Control" }, "c", function () awful.util.spawn(browser) end),
+    awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
     -- Scrot stuff
     awful.key({ "Control" }, "Print",  function ()
@@ -771,6 +772,7 @@ root.keys(globalkeys)
 -- {{{
 
 function make_titlebar(c)
+	c.border_color = beautiful.titled_border
         -- buttons for the titlebar
         local buttons = awful.util.table.join(
                 awful.button({ }, 1, function()
@@ -800,7 +802,7 @@ function make_titlebar(c)
         local middle_layout = wibox.layout.flex.horizontal()
         local title = awful.titlebar.widget.titlewidget(c)
         title:set_align("center")
-	title:set_font("PT Sans Caption Bold 8") 
+	title:set_font(beautiful.sans_font) 
         middle_layout:add(title)
         middle_layout:buttons(buttons)
 
@@ -852,10 +854,7 @@ client.connect_signal("focus",
                 c.border_color = beautiful.border_normal
             else
 	    		if awful.client.floating.get(c) or awful.layout.get(c.screen) == awful.layout.suit.floating then
-				--shifty.create_titlebar(c)
-				--awful.titlebar(c) 
 				make_titlebar(c)
-				c.border_color = beautiful.dark
 			else
 				if #clients == 1 then
                 			c.border_color = beautiful.border_normal
