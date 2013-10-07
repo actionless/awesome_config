@@ -129,7 +129,7 @@ shifty.config.tags = {
         exclusive   = false,
         --max_clients = 1,
         position    = 2,
-        spawn       = browser,
+    --    spawn       = browser,
     },
     ["3:work"] = {
         layout    = awful.layout.suit.tile,
@@ -768,6 +768,53 @@ end
 root.keys(globalkeys)
 -- }}}
 
+-- {{{
+
+function make_titlebar(c)
+        -- buttons for the titlebar
+        local buttons = awful.util.table.join(
+                awful.button({ }, 1, function()
+                    client.focus = c
+                    c:raise()
+                    awful.mouse.client.move(c)
+                end),
+                awful.button({ }, 3, function()
+                    client.focus = c
+                    c:raise()
+                    awful.mouse.client.resize(c)
+                end)
+                )
+
+        -- Widgets that are aligned to the left
+        local left_layout = wibox.layout.fixed.horizontal()
+        left_layout:add(awful.titlebar.widget.closebutton(c))
+        left_layout:add(awful.titlebar.widget.maximizedbutton(c))
+        --left_layout:add(awful.titlebar.widget.minimizedbutton(c))
+
+        -- Widgets that are aligned to the right
+        local right_layout = wibox.layout.fixed.horizontal()
+        right_layout:add(awful.titlebar.widget.ontopbutton(c))
+        right_layout:add(awful.titlebar.widget.stickybutton(c))
+
+        -- The title goes in the middle
+        local middle_layout = wibox.layout.flex.horizontal()
+        local title = awful.titlebar.widget.titlewidget(c)
+        title:set_align("center")
+	title:set_font("DejaVu Sans Bold 7") 
+        middle_layout:add(title)
+        middle_layout:buttons(buttons)
+
+        -- Now bring it all together
+        local layout = wibox.layout.align.horizontal()
+        layout:set_left(left_layout)
+        layout:set_right(right_layout)
+        layout:set_middle(middle_layout)
+
+        awful.titlebar(c,{size=16}):set_widget(layout)
+end
+
+-- }}}
+
 -- {{{ Signals
 -- Signal function to execute when a new client appears.
 client.connect_signal("manage", function (c, startup)
@@ -784,6 +831,9 @@ client.connect_signal("manage", function (c, startup)
         awful.placement.no_overlap(c)
         awful.placement.no_offscreen(c)
     end
+    if c.type == "dialog" then
+	make_titlebar(c)
+    end
 end)
 
 --client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
@@ -792,16 +842,28 @@ end)
 client.connect_signal("focus",
     function(c)
         local clients = awful.client.visible(s)
+
         if c.maximized_horizontal == true and c.maximized_vertical == true then
             c.border_width = 0
             --c.border_color = beautiful.border_normal
         else
             c.border_width = beautiful.border_width
-            if #clients == 1 or layout == "max" then
+            if layout == "max" then
                 c.border_color = beautiful.border_normal
             else
-                c.border_color = beautiful.border_focus
-            end
+	    		if awful.client.floating.get(c) or awful.layout.get(c.screen) == awful.layout.suit.floating then
+				--shifty.create_titlebar(c)
+				--awful.titlebar(c) 
+				make_titlebar(c)
+				c.border_color = beautiful.dark
+			else
+				if #clients == 1 then
+                			c.border_color = beautiful.border_normal
+				else
+                			c.border_color = beautiful.border_focus
+				end
+            		end
+    	    end
         end
     end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)

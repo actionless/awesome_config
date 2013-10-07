@@ -26,7 +26,8 @@ theme.border_width                  = "3"
 theme.border_normal                 = theme.border
 theme.border_focus                  = theme.bright
 theme.border_marked                 = "#CC9393"
-theme.titlebar_bg_focus             = theme.bright
+theme.titlebar_fg_focus             = theme.fg
+theme.titlebar_bg_focus             = theme.dark
 theme.titlebar_bg_normal            = theme.border
 theme.taglist_fg	            = "#ff0000"
 theme.taglist_bg	            = "#ff0000"
@@ -95,5 +96,29 @@ theme.tasklist_disable_icon         = true
 --theme.tasklist_floating             = "*"
 --theme.tasklist_maximized_horizontal = "_"
 --theme.tasklist_maximized_vertical   = "|"
+
+theme.titlebar_close_button_focus               = themes_dir .. "/icons/titlebar/close_focus.png"
+theme.titlebar_close_button_normal              = themes_dir .. "/icons/titlebar/close_normal.png"
+
+theme.titlebar_ontop_button_focus_active        = themes_dir .. "/icons/titlebar/ontop_focus_active.png"
+theme.titlebar_ontop_button_normal_active       = themes_dir .. "/icons/titlebar/ontop_normal_active.png"
+theme.titlebar_ontop_button_focus_inactive      = themes_dir .. "/icons/titlebar/ontop_focus_inactive.png"
+theme.titlebar_ontop_button_normal_inactive     = themes_dir .. "/icons/titlebar/ontop_normal_inactive.png"
+
+theme.titlebar_sticky_button_focus_active       = themes_dir .. "/icons/titlebar/sticky_focus_active.png"
+theme.titlebar_sticky_button_normal_active      = themes_dir .. "/icons/titlebar/sticky_normal_active.png"
+theme.titlebar_sticky_button_focus_inactive     = themes_dir .. "/icons/titlebar/sticky_focus_inactive.png"
+theme.titlebar_sticky_button_normal_inactive    = themes_dir .. "/icons/titlebar/sticky_normal_inactive.png"
+
+theme.titlebar_floating_button_focus_active     = themes_dir .. "/icons/titlebar/floating_focus_active.png"
+theme.titlebar_floating_button_normal_active    = themes_dir .. "/icons/titlebar/floating_normal_active.png"
+theme.titlebar_floating_button_focus_inactive   = themes_dir .. "/icons/titlebar/floating_focus_inactive.png"
+theme.titlebar_floating_button_normal_inactive  = themes_dir .. "/icons/titlebar/floating_normal_inactive.png"
+
+theme.titlebar_maximized_button_focus_active    = themes_dir .. "/icons/titlebar/maximized_focus_active.png"
+theme.titlebar_maximized_button_normal_active   = themes_dir .. "/icons/titlebar/maximized_normal_active.png"
+theme.titlebar_maximized_button_focus_inactive  = themes_dir .. "/icons/titlebar/maximized_focus_inactive.png"
+theme.titlebar_maximized_button_normal_inactive = themes_dir .. "/icons/titlebar/maximized_normal_inactive.png"
+
 
 return theme
