@@ -800,7 +800,7 @@ function make_titlebar(c)
         local middle_layout = wibox.layout.flex.horizontal()
         local title = awful.titlebar.widget.titlewidget(c)
         title:set_align("center")
-	title:set_font("DejaVu Sans Bold 7") 
+	title:set_font("PT Sans Caption Bold 8") 
         middle_layout:add(title)
         middle_layout:buttons(buttons)
 

@@ -12,7 +12,8 @@ theme.dark	= "#5e468c"
 theme.light	= "#897eae"
 theme.alt_fg	= "#a562b3"
 theme.error	= "#ee82a8"
-theme.border	= "#3c3c3c"
+--theme.border	= "#3c3c3c"
+theme.border	= "#222222"
 
 -- theme.font                          = "DejaVu Sans Mono 8"
 theme.font                          = "tewi"
@@ -27,6 +28,7 @@ theme.border_normal                 = theme.border
 theme.border_focus                  = theme.bright
 theme.border_marked                 = "#CC9393"
 theme.titlebar_fg_focus             = theme.fg
+theme.titlebar_fg_normal            = "#4b4b4b"
 theme.titlebar_bg_focus             = theme.dark
 theme.titlebar_bg_normal            = theme.border
 theme.taglist_fg	            = "#ff0000"
