@@ -55,7 +55,8 @@ end
 awful.util.spawn_with_shell("eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)")
 awful.util.spawn_with_shell("xset r rate 250 25")
 awful.util.spawn_with_shell("xset b off")
-run_once("compton --backend glx --paint-on-overlay --glx-no-stencil --vsync opengl-swc --unredir-if-possible --config ~/.config/compton_awesome.conf")
+--run_once("compton --backend glx --paint-on-overlay --glx-no-stencil --vsync opengl-swc --unredir-if-possible --config ~/.config/compton_awesome.conf")
+run_once("compton --vsync opengl --dbe --config ~/.config/compton_awesome.conf")
 run_once("urxvtd")
 run_once("unclutter")
 
@@ -75,8 +76,8 @@ beautiful.init(awful.util.getdir("config") .. "/themes/actionless/theme.lua")
 -- common
 modkey     = "Mod4"
 altkey     = "Mod1"
---terminal   = "urxvtc" or "xterm"
-terminal   = "terminator"
+terminal   = "urxvtc" or "xterm"
+--terminal   = "terminator"
 editor     = "vim" or os.getenv("EDITOR") or "nano" or "vi"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -91,9 +92,9 @@ graphics   = "pinta"
 file_manager = "stuurman"
 mail       = terminal .. " -e mutt "
 iptraf     = terminal .. " -g 180x54-20+34 -e sudo iptraf-ng -i all "
-musicplr   = terminal .. " -g 130x34-320+16 -e ncmpcpp "
+musicplr   = terminal .. " -e ncmpcpp "
 tmux       = terminal .. " -e tmux "
---tmux       = terminal .. ' -e zsh -c "TERM=screen-256color-bce tmux" '
+tmux       = terminal .. ' -e zsh -c "TERM=screen-256color-bce tmux" '
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 local layouts = {
