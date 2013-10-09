@@ -81,8 +81,8 @@ editor_cmd = terminal .. " -e " .. editor
 
 -- user defined
 --browser    = "dwb"
-browser    = "chromium --enable-user-stylesheet"
-browser2   = "iron"
+chromium   = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers chromium --enable-user-stylesheet"
+firefox    = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers firefox -P actionless"
 gui_editor = "/opt/sublime_text/sublime_text"
 graphics   = "pinta"
 file_manager = "stuurman"
@@ -689,7 +689,8 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Return", function () awful.util.spawn(tmux) end),
     awful.key({ modkey,           }, "s", function () awful.util.spawn(file_manager) end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
-    awful.key({ modkey, "Control" }, "c", function () awful.util.spawn(browser) end),
+    awful.key({ modkey, "Control" }, "c", function () awful.util.spawn_with_shell(chromium) end),
+    awful.key({ modkey, "Control" }, "f", function () awful.util.spawn_with_shell(firefox) end),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
     -- Scrot stuff
