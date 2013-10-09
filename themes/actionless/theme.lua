@@ -15,8 +15,8 @@ theme.error	= "#ee82a8"
 --theme.border	= "#3c3c3c"
 theme.border	= "#222222"
 
--- theme.font                          = "DejaVu Sans Mono 8"
-theme.font                          = "tewi"
+theme.font                          = "DejaVu Sans Mono 8"
+--theme.font                          = "tewi"
 theme.sans_font                     = "PT Sans Caption Bold 8"
 theme.fg_normal                     = theme.fg
 theme.fg_focus                      = theme.bg
