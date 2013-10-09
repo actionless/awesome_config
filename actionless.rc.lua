@@ -75,14 +75,17 @@ beautiful.init(awful.util.getdir("config") .. "/themes/actionless/theme.lua")
 -- common
 modkey     = "Mod4"
 altkey     = "Mod1"
-terminal   = "urxvtc" or "xterm"
+--terminal   = "urxvtc" or "xterm"
+terminal   = "terminator"
 editor     = "vim" or os.getenv("EDITOR") or "nano" or "vi"
 editor_cmd = terminal .. " -e " .. editor
 
 -- user defined
 --browser    = "dwb"
-chromium   = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers chromium --enable-user-stylesheet"
-firefox    = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers firefox -P actionless"
+--chromium   = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers chromium --enable-user-stylesheet"
+--firefox    = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers firefox -P actionless"
+chromium   = "chromium --enable-user-stylesheet"
+firefox    = "firefox -P actionless"
 gui_editor = "/opt/sublime_text/sublime_text"
 graphics   = "pinta"
 file_manager = "stuurman"
@@ -90,7 +93,7 @@ mail       = terminal .. " -e mutt "
 iptraf     = terminal .. " -g 180x54-20+34 -e sudo iptraf-ng -i all "
 musicplr   = terminal .. " -g 130x34-320+16 -e ncmpcpp "
 tmux       = terminal .. " -e tmux "
-tmux       = terminal .. ' -e zsh -c "TERM=screen-256color-bce tmux" '
+--tmux       = terminal .. ' -e zsh -c "TERM=screen-256color-bce tmux" '
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 local layouts = {
@@ -634,14 +637,14 @@ globalkeys = awful.util.table.join(
     -- ALSA volume control
     awful.key({}, "#123",
         function ()
-            awful.util.spawn("amixer -q set DAC,0 1%+")
-            awful.util.spawn("amixer -q set DAC,1 1%+")
+            awful.util.spawn("amixer -q set Master,0 1%+")
+            awful.util.spawn("amixer -q set Master,1 1%+")
             volumewidget.update()
         end),
     awful.key({}, "#122",
         function ()
-            awful.util.spawn("amixer -q set DAC,0 1%-")
-            awful.util.spawn("amixer -q set DAC,1 1%-")
+            awful.util.spawn("amixer -q set Master,0 1%-")
+            awful.util.spawn("amixer -q set Master,1 1%-")
             volumewidget.update()
         end),
     awful.key({}, "#121",
