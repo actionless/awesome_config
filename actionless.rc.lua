@@ -67,6 +67,8 @@ musicplr   = terminal .. " -g 130x34-320+16 -e ncmpcpp "
 tmux	   = terminal .. " -e tmux "
 tmux	   = terminal .. ' -e zsh -c "TERM=screen-256color-bce tmux" '
 
+makesloppy = false
+
 -- Table of layouts to cover with awful.layout.inc, order matters.
 local layouts = {
 	awful.layout.suit.floating,
@@ -176,12 +178,6 @@ shifty.config.apps = {
 	},
 	{
 		match = {
-			"pcmanfm",
-		},
-		slave = true
-	},
-	{
-		match = {
 			"OpenOffice.*",
 			"Abiword",
 			"Gnumeric",
@@ -219,6 +215,7 @@ shifty.config.apps = {
 	{
 		match = {""},
 		honorsizehints = false,
+		slave=true,
 		buttons = awful.util.table.join(
 			awful.button({}, 1, function (c) client.focus = c; c:raise() end),
 			awful.button({modkey}, 1, function(c)
@@ -227,8 +224,7 @@ shifty.config.apps = {
 				awful.mouse.client.move(c)
 				end),
 			awful.button({modkey}, 3, awful.mouse.client.resize)
-			),
-		slave=true
+			)
 	},
 }
 
@@ -248,6 +244,8 @@ shifty.config.defaults = {
 	guess_name = true,
 	guess_position = true,
 }
+shifty.config.sloppy=false
+
 
 -- {{{ Menu
 -- Create a laucher widget and a main menu
@@ -765,6 +763,10 @@ clientkeys = awful.util.table.join(
 				make_titlebar(c)
 			end
 		end),
+	awful.key({ modkey, "Control", "Shift"		}, "t",
+		function (c)
+			awful.titlebar(c, {size = 0})
+		end),
 	awful.key({ modkey,				}, "n",
 		function (c)
 			-- The client currently has the input focus, so it cannot be
@@ -827,10 +829,10 @@ root.keys(globalkeys)
 client.connect_signal("manage", function (c, startup)
 	-- Enable sloppy focus
 	c:connect_signal("mouse::enter", function(c)
-		if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
-		   and awful.client.focus.filter(c) then
-			client.focus = c
-		end
+	--	if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
+	--	   and awful.client.focus.filter(c) then
+	--		client.focus = c
+	--	end
 	end)
 
 	if not startup and not c.size_hints.user_position
@@ -838,9 +840,9 @@ client.connect_signal("manage", function (c, startup)
 		awful.placement.no_overlap(c)
 		awful.placement.no_offscreen(c)
 	end
-	if c.type == "dialog" then
-	make_titlebar(c)
-	end
+	--if c.type == "dialog" then
+	--make_titlebar(c)
+	--end
 end)
 
 --client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
