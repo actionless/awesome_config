@@ -57,6 +57,7 @@ editor_cmd = terminal .. " -e " .. editor
 -- user defined
 --browser	= "dwb"
 chromium   = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers chromium --enable-user-stylesheet"
+chrome   = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers google-chrome --enable-user-stylesheet"
 firefox	= "GTK2_RC_FILES=~/.gtkrc-2.0.browsers firefox -P actionless"
 gui_editor = "/opt/sublime_text/sublime_text"
 graphics   = "pinta"
@@ -731,6 +732,7 @@ globalkeys = awful.util.table.join(
 	awful.key({ modkey,		   }, "s", function () awful.util.spawn(file_manager) end),
 	awful.key({ modkey, "Control" }, "r", awesome.restart),
 	awful.key({ modkey, "Control" }, "c", function () awful.util.spawn_with_shell(chromium) end),
+	awful.key({ modkey, "Control" }, "g", function () awful.util.spawn_with_shell(chrome) end),
 	awful.key({ modkey, "Control" }, "f", function () awful.util.spawn_with_shell(firefox) end),
 	awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
