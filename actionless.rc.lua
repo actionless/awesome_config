@@ -62,11 +62,11 @@ firefox	= "GTK2_RC_FILES=~/.gtkrc-2.0.browsers firefox -P actionless"
 gui_editor = "/opt/sublime_text/sublime_text"
 graphics   = "pinta"
 file_manager = "stuurman"
-mail	   = terminal .. " -e mutt "
-iptraf	 = terminal .. " -g 180x54-20+34 -e sudo iptraf-ng -i all "
-musicplr   = terminal .. " -g 130x34-320+16 -e ncmpcpp "
-tmux	   = terminal .. " -e tmux "
+--tmux	   = terminal .. " -e tmux "
 tmux	   = terminal .. ' -e zsh -c "TERM=screen-256color-bce tmux" '
+musicplr   = terminal .. " -g 130x34-320+16 -e ncmpcpp"
+tmux_run   = terminal .. " -e tmux new-session"
+--musicplr   = tmux_run .. " ncmpcpp"
 
 makesloppy = false
 
