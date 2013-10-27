@@ -78,22 +78,19 @@ beautiful.init(awful.util.getdir("config") .. "/themes/actionless/theme.lua")
 modkey     = "Mod4"
 altkey     = "Mod1"
 terminal   = "urxvtc" or "xterm"
---terminal   = "terminator"
 editor     = "vim" or os.getenv("EDITOR") or "nano" or "vi"
 editor_cmd = terminal .. " -e " .. editor
 
 -- user defined
 --browser    = "dwb"
---chromium   = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers chromium --enable-user-stylesheet"
---firefox    = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers firefox -P actionless"
-chromium   = "chromium --enable-user-stylesheet"
-firefox    = "firefox -P actionless"
+chromium   = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers chromium --enable-user-stylesheet"
+firefox    = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers firefox -P actionless"
 gui_editor = "/opt/sublime_text/sublime_text"
 graphics   = "pinta"
 file_manager = "stuurman"
 mail       = terminal .. " -e mutt "
 iptraf     = terminal .. " -g 180x54-20+34 -e sudo iptraf-ng -i all "
-musicplr   = terminal .. " -e ncmpcpp "
+musicplr   = terminal .. " -g 130x34-320+16 -e ncmpcpp "
 tmux       = terminal .. " -e tmux "
 tmux       = terminal .. ' -e zsh -c "TERM=screen-256color-bce tmux" '
 
@@ -235,8 +232,7 @@ shifty.config.apps = {
                 awful.mouse.client.move(c)
                 end),
             awful.button({modkey}, 3, awful.mouse.client.resize)
-            ),
-	slave=true
+            )
     },
 }
 
@@ -498,8 +494,8 @@ for s = 1, screen.count() do
     right_layout:add(arrl)
     right_layout:add(cpuicon)
     right_layout:add(cpuwidget)
-    --right_layout:add(tempicon)
-    --right_layout:add(tempwidget)
+--    right_layout:add(tempicon)
+--    right_layout:add(tempwidget)
     right_layout:add(arrl)
     right_layout:add(fsicon)
     right_layout:add(fswidgetbg)
@@ -617,13 +613,10 @@ globalkeys = awful.util.table.join(
 
     awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)    end),
     awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)    end),
-    awful.key({ modkey, "Shift" }, "l", function () awful.client.incwfact( 0.05) end),
-    awful.key({ modkey, "Shift" }, "h", function () awful.client.incwfact(-0.05) end),
-
-    awful.key({ altkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1)      end),
-    awful.key({ altkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1)      end),
-    awful.key({ altkey, "Control" }, "h",     function () awful.tag.incncol( 1)         end),
-    awful.key({ altkey, "Control" }, "l",     function () awful.tag.incncol(-1)         end),
+    awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1)      end),
+    awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1)      end),
+    awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1)         end),
+    awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1)         end),
     awful.key({ altkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
     awful.key({ altkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
 
@@ -655,8 +648,8 @@ globalkeys = awful.util.table.join(
         end),
     awful.key({}, "#121",
         function ()
-            awful.util.spawn("amixer -q set DAC,0 toggle")
-            awful.util.spawn("amixer -q set DAC,1 toggle")
+            awful.util.spawn("amixer -q set Master,0 toggle")
+            awful.util.spawn("amixer -q set Master,1 toggle")
             volumewidget.update()
         end),
 
