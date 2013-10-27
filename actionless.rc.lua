@@ -60,6 +60,7 @@ run_once("compton --vsync opengl --dbe --config ~/.config/compton_awesome.conf")
 run_once("urxvtd")
 run_once("unclutter")
 
+run_once("nm-applet")
 run_once("gxkb")
 run_once("dropboxd")
 -- }}}
@@ -616,8 +617,8 @@ globalkeys = awful.util.table.join(
 
     awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)    end),
     awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)    end),
-    awful.key({ modkey, "Shift" }, "l", function () awful.client.incwfact(-0.05) end),
-    awful.key({ modkey, "Shift" }, "h", function () awful.client.incwfact( 0.05) end),
+    awful.key({ modkey, "Shift" }, "l", function () awful.client.incwfact( 0.05) end),
+    awful.key({ modkey, "Shift" }, "h", function () awful.client.incwfact(-0.05) end),
 
     awful.key({ altkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1)      end),
     awful.key({ altkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1)      end),
