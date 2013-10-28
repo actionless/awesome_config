@@ -58,7 +58,7 @@ editor_cmd = terminal .. " -e " .. editor
 --browser	= "dwb"
 chromium   = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers chromium --enable-user-stylesheet"
 chrome   = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers google-chrome --enable-user-stylesheet"
-firefox	= "GTK2_RC_FILES=~/.gtkrc-2.0.browsers firefox -P actionless"
+firefox	= "GTK2_RC_FILES=~/.gtkrc-2.0.browsers firefox -P actionless -no-remote "
 gui_editor = "/opt/sublime_text/sublime_text"
 graphics   = "pinta"
 file_manager = "stuurman"
@@ -351,13 +351,13 @@ tempwidget = lain.widgets.temp({
 })
 
 -- / fs
-fsicon = wibox.widget.imagebox(beautiful.widget_hdd)
-fswidget = lain.widgets.fs({
-	settings  = function()
-		widget:set_text(" " .. used .. "% ")
-	end
-})
-fswidgetbg = wibox.widget.background(fswidget, beautiful.alt_bg)
+--fsicon = wibox.widget.imagebox(beautiful.widget_hdd)
+--fswidget = lain.widgets.fs({
+--	settings  = function()
+--		widget:set_text(" " .. used .. "% ")
+--	end
+--})
+--fswidgetbg = wibox.widget.background(fswidget, beautiful.alt_bg)
 
 -- Textclock
 clockicon = wibox.widget.imagebox(beautiful.widget_clock)
@@ -458,8 +458,7 @@ for s = 1, screen.count() do
 	mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
 
 	-- Create a tasklist widget
-	mycurrenttask[s] = widgets.tasklist(s, widgets.tasklist.filter.focused, mytasklist.buttons, 'fixed')
-	mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.minimizedcurrenttags, mytasklist.buttons)
+	mytasklist[s] = widgets.tasklist(s, widgets.tasklist.filter.focused_and_minimized_current_tags, mytasklist.buttons)
 
 	-- Create the wibox
 	mywibox[s] = awful.wibox({ position = "top", screen = s, height = 18 })
@@ -469,8 +468,6 @@ for s = 1, screen.count() do
 	left_layout:add(spr)
 	left_layout:add(mytaglist[s])
 	left_layout:add(mypromptbox[s])
-	left_layout:add(spr)
-	left_layout:add(mycurrenttask[s])
 	left_layout:add(spr)
 
 	-- Widgets that are aligned to the right
@@ -492,9 +489,9 @@ for s = 1, screen.count() do
 	right_layout:add(tempicon)
 	right_layout:add(tempwidget)
 	right_layout:add(arrl)
-	right_layout:add(fsicon)
-	right_layout:add(fswidgetbg)
-	right_layout:add(arrl)
+	--right_layout:add(fsicon)
+	--right_layout:add(fswidgetbg)
+	--right_layout:add(arrl)
 	-- right_layout:add(baticon)
 	-- right_layout:add(batwidget)
 	right_layout:add(mytextclock)

@@ -94,11 +94,30 @@ end
 
 local function tasklist_update(s, w, buttons, filter, data, style, update_function)
     local clients = {}
-    for k, c in ipairs(capi.client.get()) do
-        if not (c.skip_taskbar or c.hidden
-            or c.type == "splash" or c.type == "dock" or c.type == "desktop")
-            and filter(c, s) then
-            table.insert(clients, c)
+    local capi_clients = capi.client.get()
+    if filter == tasklist.filter.focused_and_minimized_current_tags
+    then
+        for k, c in ipairs(capi_clients) do
+            if not (c.skip_taskbar or c.hidden
+                or c.type == "splash" or c.type == "dock" or c.type == "desktop")
+                and tasklist.filter.focused(c, s) then
+                table.insert(clients, c)
+            end
+        end
+        for k, c in ipairs(capi_clients) do
+            if not (c.skip_taskbar or c.hidden
+                or c.type == "splash" or c.type == "dock" or c.type == "desktop")
+                and tasklist.filter.minimizedcurrenttags(c, s) then
+                table.insert(clients, c)
+            end
+        end
+    else
+        for k, c in ipairs(capi_clients) do
+            if not (c.skip_taskbar or c.hidden
+                or c.type == "splash" or c.type == "dock" or c.type == "desktop")
+                and filter(c, s) then
+                table.insert(clients, c)
+            end
         end
     end
 
@@ -243,6 +262,10 @@ end
 function tasklist.filter.focused(c, screen)
     -- Only print client on the same screen as this widget
     return c.screen == screen and capi.client.focus == c
+end
+
+function tasklist.filter.focused_and_minimized_current_tags(c, screen)
+    return "it's a mock for tasklist_update"
 end
 
 function tasklist.mt:__call(...)
