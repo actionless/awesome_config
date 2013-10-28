@@ -368,25 +368,25 @@ clockicon = wibox.widget.imagebox(beautiful.widget_clock)
 mytextclock = awful.widget.textclock(" %H:%M")
 
 -- calendar
-lain.widgets.calendar:attach(mytextclock, { font_size = 8 })
+lain.widgets.calendar:attach(mytextclock, { font_size = 8, font='DejaVu Sans Mono' })
 
 -- Battery
--- baticon = wibox.widget.imagebox(beautiful.widget_battery)
--- batwidget = lain.widgets.bat({
---	 settings = function()
---		 if bat_now.perc == "N/A" then
---			 bat_now.perc = "AC"
---			 baticon:set_image(beautiful.widget_ac)
---		elseif tonumber(bat_now.perc) <= 5 then
---			 baticon:set_image(beautiful.widget_battery_empty)
---		 elseif tonumber(bat_now.perc) <= 15 then
---			 baticon:set_image(beautiful.widget_battery_low)
---		 else
---			 baticon:set_image(beautiful.widget_battery)
---		 end
---		 widget:set_markup(" " .. bat_now.perc .. " ")
---	 end
---})
+ baticon = wibox.widget.imagebox(beautiful.widget_battery)
+ batwidget = lain.widgets.bat({
+	 settings = function()
+		 if bat_now.perc == "N/A" then
+			 bat_now.perc = "AC"
+			 baticon:set_image(beautiful.widget_ac)
+		elseif tonumber(bat_now.perc) <= 5 then
+			 baticon:set_image(beautiful.widget_battery_empty)
+		 elseif tonumber(bat_now.perc) <= 15 then
+			 baticon:set_image(beautiful.widget_battery_low)
+		 else
+			 baticon:set_image(beautiful.widget_battery)
+		 end
+		 widget:set_markup(" " .. bat_now.perc .. " ")
+	 end
+})
 
 -- Separators
 spr = wibox.widget.textbox(' ')
@@ -494,12 +494,13 @@ for s = 1, screen.count() do
 	right_layout:add(cpuwidget)
 --	right_layout:add(tempicon)
 --	right_layout:add(tempwidget)
+	--right_layout:add(arrl)
+	--right_layout:add(fsicon)
+	--right_layout:add(fswidgetbg)
 	right_layout:add(arrl)
-	right_layout:add(fsicon)
-	right_layout:add(fswidgetbg)
+	right_layout:add(baticon)
+	right_layout:add(batwidget)
 	right_layout:add(arrl)
-	-- right_layout:add(baticon)
-	-- right_layout:add(batwidget)
 	right_layout:add(mytextclock)
 	right_layout:add(spr)
 	right_layout:add(arrl_ld)
