@@ -6,14 +6,15 @@ theme.wallpaper                     = themes_dir .. "/wall.png"
 theme.bg	= "#000000"
 theme.alt_bg	= "#000000" -- 313131
 theme.fg	= "#eeeeec"
-theme.bright	= "#adeb71"
---theme.dark	= "#463c87"
+
 theme.dark	= "#5e468c"
 theme.light	= "#897eae"
 theme.alt_fg	= "#a562b3"
 theme.error	= "#ee82a8"
---theme.border	= "#3c3c3c"
+
 theme.border	= "#222222"
+theme.sel_border = "#ff3377" -- "#adeb71"
+theme.titlebar	= "#3e2f4f"
 
 --theme.font                          = "PT Mono 8"
 theme.font                          = "tewi 8"
@@ -26,12 +27,12 @@ theme.bg_focus                      = theme.error
 theme.bg_urgent                     = theme.error
 theme.border_width                  = "3"
 theme.border_normal                 = theme.border
-theme.border_focus                  = theme.bright
+theme.border_focus                  = theme.sel_border
 theme.border_marked                 = "#CC9393"
 theme.titlebar_fg_focus             = theme.fg
 theme.titlebar_fg_normal            = "#4b4b4b"
-theme.titlebar_bg_focus             = "#3e2f4f" --"#382C47"
-theme.titled_border	            = "#3e2f4f"
+theme.titlebar_bg_focus             = theme.titlebar
+theme.titled_border                 = theme.titlebar
 theme.titlebar_bg_normal            = theme.border
 theme.taglist_fg_focus              = theme.fg
 theme.taglist_bg_focus              = theme.dark
@@ -49,7 +50,7 @@ theme.mouse_finder_color            = "#CC9393"
 theme.menu_height                   = "16"
 theme.menu_width                    = "140"
 
-theme.mpd_text				= theme.light
+theme.mpd_text                      = theme.light
 
 theme.taglist_squares_sel           = themes_dir .. "/icons/square_sel.png"
 theme.taglist_squares_unsel         = themes_dir .. "/icons/square_unsel.png"
