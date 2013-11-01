@@ -513,7 +513,9 @@ for s = 1, screen.count() do
 end
 -- }}}
 
-
+function minimizedbutton(c)
+        return awful.titlebar.widget.button(c, "minimized", function() return "" end, function(c) c.minimized=true end)
+end
 -- {{{
 function make_titlebar(c)
 	c.border_color = beautiful.titled_border
@@ -524,6 +526,12 @@ function make_titlebar(c)
 			c:raise()
 			awful.mouse.client.move(c)
 		end),
+                awful.button({ }, 2, function()
+                        client.focus = c
+                        c:raise()
+			c.maximized_horizontal = not c.maximized_horizontal
+                        c.maximized_vertical   = not c.maximized_vertical
+                end),
 		awful.button({ }, 3, function()
 			client.focus = c
 			c:raise()
@@ -533,8 +541,8 @@ function make_titlebar(c)
 	-- Widgets that are aligned to the left
 	local left_layout = wibox.layout.fixed.horizontal()
 	left_layout:add(awful.titlebar.widget.closebutton(c))
-	left_layout:add(awful.titlebar.widget.maximizedbutton(c))
-	--left_layout:add(awful.titlebar.widget.minimizedbutton(c))
+	left_layout:add(minimizedbutton(c))
+	--left_layout:add(awful.titlebar.widget.maximizedbutton(c))
 	-- Widgets that are aligned to the right
 	local right_layout = wibox.layout.fixed.horizontal()
 	right_layout:add(awful.titlebar.widget.ontopbutton(c))
