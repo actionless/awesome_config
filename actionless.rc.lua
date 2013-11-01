@@ -58,7 +58,7 @@ editor_cmd = terminal .. " -e " .. editor
 --browser	= "dwb"
 chromium   = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers chromium --enable-user-stylesheet"
 chrome   = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers google-chrome --enable-user-stylesheet"
-firefox	= "GTK2_RC_FILES=~/.gtkrc-2.0.browsers firefox -P actionless -no-remote "
+firefox	= "GTK2_RC_FILES=~/.gtkrc-2.0.browsers firefox -P actionless "
 gui_editor = "/opt/sublime_text/sublime_text"
 graphics   = "pinta"
 file_manager = "stuurman"
