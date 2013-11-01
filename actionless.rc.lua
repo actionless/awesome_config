@@ -58,7 +58,7 @@ editor_cmd = terminal .. " -e " .. editor
 --browser	= "dwb"
 chromium   = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers chromium --enable-user-stylesheet"
 chrome   = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers google-chrome --enable-user-stylesheet"
-firefox	= "GTK2_RC_FILES=~/.gtkrc-2.0.browsers firefox -P actionless -no-remote "
+firefox	= "GTK2_RC_FILES=~/.gtkrc-2.0.browsers firefox -P actionless"
 gui_editor = "/opt/sublime_text/sublime_text"
 graphics   = "pinta"
 file_manager = "stuurman"
@@ -94,7 +94,9 @@ end
 awful.util.spawn_with_shell("eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)")
 awful.util.spawn_with_shell("xset r rate 250 25")
 awful.util.spawn_with_shell("xset b off")
+run_once("xfce4-power-manager")
 --run_once("compton --backend glx --paint-on-overlay --glx-no-stencil --vsync opengl-swc --unredir-if-possible --config ~/.config/compton_awesome.conf")
+--run_once("compton --backend glx --paint-on-overlay --glx-no-stencil --vsync opengl-swc --glx-no-rebind-pixmap --config ~/.config/compton_awesome.conf")
 run_once("compton --vsync opengl --dbe --config ~/.config/compton_awesome.conf")
 run_once("urxvtd")
 run_once("unclutter")
