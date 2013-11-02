@@ -305,7 +305,7 @@ volumewidgetbg = wibox.widget.background(volumewidget, beautiful.alt_bg)
 -- MPD
 mpdicon = wibox.widget.imagebox(beautiful.widget_music)
 mpdicon:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn_with_shell(musicplr) end)))
-mpdwidget = lain.widgets.mpd({
+mpdwidget = widgets.mpd({
 	settings = function()
 		if mpd_now.state == "play" then
 			artist = " " .. mpd_now.artist .. " "
