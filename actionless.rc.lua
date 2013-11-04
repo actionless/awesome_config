@@ -310,7 +310,7 @@ volumewidgetbg = wibox.widget.background(volumewidget, beautiful.alt_bg)
 -- MPD
 mpdicon = wibox.widget.imagebox(beautiful.widget_music)
 mpdicon:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn_with_shell(musicplr) end)))
-mpdwidget = lain.widgets.mpd({
+mpdwidget = widgets.mpd({
 	settings = function()
 		if mpd_now.state == "play" then
 			artist = " " .. mpd_now.artist .. " "
@@ -660,8 +660,8 @@ globalkeys = awful.util.table.join(
 
 	awful.key({ modkey,		   }, "l",	 function () awful.tag.incmwfact( 0.05)	end),
 	awful.key({ modkey,		   }, "h",	 function () awful.tag.incmwfact(-0.05)	end),
-	awful.key({ modkey, "Shift" }, "l", function () awful.client.incwfact( 0.05) end),
 	awful.key({ modkey, "Shift" }, "h", function () awful.client.incwfact(-0.05) end),
+	awful.key({ modkey, "Shift" }, "l", function () awful.client.incwfact( 0.05) end),
 
 	awful.key({ altkey, "Shift"   }, "h",	 function () awful.tag.incnmaster( 1)	  end),
 	awful.key({ altkey, "Shift"   }, "l",	 function () awful.tag.incnmaster(-1)	  end),

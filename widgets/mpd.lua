@@ -18,7 +18,7 @@ local os           = { execute  = os.execute,
                        getenv   = os.getenv }
 local string       = { format   = string.format, 
                        gmatch   = string.gmatch }
-
+local asyncshell  = require("widgets.asyncshell")
 local setmetatable = setmetatable
 
 -- MPD infos
@@ -38,7 +38,8 @@ local function worker(args)
 
     local mpdcover = helpers.scripts_dir .. "mpdcover"
     local mpdh = "telnet://" .. host .. ":" .. port
-    local echo = "echo 'password " .. password .. "\nstatus\ncurrentsong\nclose'"
+    --local echo = "echo 'password " .. password .. "\nstatus\ncurrentsong\nclose'"
+    local echo = "echo 'status\ncurrentsong'"
 
     mpd.widget = wibox.widget.textbox('')
 
@@ -50,6 +51,10 @@ local function worker(args)
     helpers.set_map("current mpd track", nil)
 
     function mpd.update()
+        asyncshell.request(echo .. " | curl --connect-timeout 1 -fsm 1 " .. mpdh, function(f) mpd.update2(f) end)
+    end
+
+    function mpd.update2(f)
         mpd_now = {
             state  = "N/A",
             file   = "N/A",
@@ -59,7 +64,7 @@ local function worker(args)
             date   = "N/A"
         }
 
-        local f = io.popen(echo .. " | curl --connect-timeout 1 -fsm 1 " .. mpdh)
+        --local f = io.popen(echo .. " | curl --connect-timeout 1 -fsm 1 " .. mpdh)
 
         for line in f:lines() do
             for k, v in string.gmatch(line, "([%w]+):[%s](.*)$") do
