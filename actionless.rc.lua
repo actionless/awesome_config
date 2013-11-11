@@ -478,14 +478,15 @@ for s = 1, screen.count() do
 
 	-- Widgets that are aligned to the right
 	local right_layout = wibox.layout.fixed.horizontal()
-	if s == 1 then right_layout:add(wibox.widget.systray()) end
 	right_layout:add(spr)
+	right_layout:add(arrl)
+	right_layout:add(mpdicon)
+	right_layout:add(mpdwidgetbg)
 	right_layout:add(arrl)
 	right_layout:add(voliconbg)
 	right_layout:add(volumewidgetbg)
 	right_layout:add(arrl)
-	right_layout:add(mpdicon)
-	right_layout:add(mpdwidgetbg)
+	if s == 1 then right_layout:add(wibox.widget.systray()) end
 	right_layout:add(arrl)
 	right_layout:add(memicon)
 	right_layout:add(memwidget)
@@ -607,6 +608,28 @@ globalkeys = awful.util.table.join(
 		function()
 			awful.client.focus.bydirection("right")
 			if client.focus then client.focus:raise() end
+		end),
+
+	-- By direction client swap
+	awful.key({ modkey, "Shift" }, "Down",
+		function()
+			awful.client.swap.bydirection("down")
+			if client.swap then client.swap:raise() end
+		end),
+	awful.key({ modkey, "Shift" }, "Up",
+		function()
+			awful.client.swap.bydirection("up")
+			if client.swap then client.swap:raise() end
+		end),
+	awful.key({ modkey, "Shift" }, "Left",
+		function()
+			awful.client.swap.bydirection("left")
+			if client.swap then client.swap:raise() end
+		end),
+	awful.key({ modkey, "Shift" }, "Right",
+		function()
+			awful.client.swap.bydirection("right")
+			if client.swap then client.swap:raise() end
 		end),
 
 	-- Shifty: keybindings specific to shifty
