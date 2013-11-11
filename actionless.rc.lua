@@ -605,6 +605,28 @@ globalkeys = awful.util.table.join(
 			if client.focus then client.focus:raise() end
 		end),
 
+	-- By direction client swap
+	awful.key({ modkey, "Shift" }, "Down",
+		function()
+			awful.client.swap.bydirection("down")
+			if client.swap then client.swap:raise() end
+		end),
+	awful.key({ modkey, "Shift" }, "Up",
+		function()
+			awful.client.swap.bydirection("up")
+			if client.swap then client.swap:raise() end
+		end),
+	awful.key({ modkey, "Shift" }, "Left",
+		function()
+			awful.client.swap.bydirection("left")
+			if client.swap then client.swap:raise() end
+		end),
+	awful.key({ modkey, "Shift" }, "Right",
+		function()
+			awful.client.swap.bydirection("right")
+			if client.swap then client.swap:raise() end
+		end),
+
 	-- Shifty: keybindings specific to shifty
 	awful.key({modkey, "Shift"}, "d", shifty.del), -- delete a tag
 	awful.key({modkey, "Shift"}, ",", shifty.send_prev), -- client to prev tag
