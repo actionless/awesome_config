@@ -173,6 +173,7 @@ shifty.config.apps = {
 		match = {
 			"Google Chrome",
 			"vmplayer",
+			"meld",
 		},
 		tag = "3:work",
 	},
