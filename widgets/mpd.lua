@@ -77,6 +77,12 @@ local function worker(args)
                 end
             end
         end
+	if mpd_now.artist == "N/A" then
+		mpd_now.artist = escape_f(mpd_now.file:match("^(.*) [-] .*"))
+	end
+	if mpd_now.title == "N/A" then
+		mpd_now.title = escape_f(mpd_now.file:match("^.* [-] (.*)"))
+	end
 
         f:close()
 
