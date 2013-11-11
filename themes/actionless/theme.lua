@@ -17,8 +17,8 @@ theme.sel_border = "#ff3377" -- "#adeb71"
 theme.titlebar	= "#3e2f4f"
 
 --theme.font                          = "PT Mono 8"
-theme.font                          = "tewi 8"
---theme.font                          = "DejaVu Sans Mono 8"
+--theme.font                          = "tewi 8"
+theme.font                          = "DejaVu Sans Mono 8"
 --theme.font                          = "PT Sans 8"
 theme.sans_font                     = "PT Sans Caption Bold 8"
 theme.fg_normal                     = theme.fg
