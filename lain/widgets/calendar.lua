@@ -37,7 +37,7 @@ function calendar:show(t_out, inc_offset)
     local tims = t_out or 0
     local f, c_text
     local today = tonumber(os.date('%d'))
-    local init_t = '/usr/bin/cal | sed -r -e "s/(^| )( '
+    local init_t = '/usr/bin/cal -H aaa | sed -r -e "s/(^| )( '
     -- let's take font only, font size is set in calendar table
 
     if offs == 0
