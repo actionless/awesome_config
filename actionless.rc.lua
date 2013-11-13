@@ -96,15 +96,15 @@ awful.util.spawn_with_shell("eval $(gnome-keyring-daemon -s --components=pkcs11,
 awful.util.spawn_with_shell("xset r rate 250 25")
 awful.util.spawn_with_shell("xset b off")
 run_once("xfce4-power-manager")
---run_once("compton --backend glx --paint-on-overlay --glx-no-stencil --vsync opengl-swc --unredir-if-possible --config ~/.config/compton_awesome.conf")
+run_once("compton --backend glx --paint-on-overlay --glx-no-stencil --vsync opengl-swc --unredir-if-possible --config ~/.config/compton_awesome.conf")
 --run_once("compton --backend glx --paint-on-overlay --glx-no-stencil --vsync opengl-swc --glx-no-rebind-pixmap --config ~/.config/compton_awesome.conf")
-run_once("compton --vsync opengl --dbe --config ~/.config/compton_awesome.conf")
+--run_once("compton --vsync opengl --dbe --config ~/.config/compton_awesome.conf")
 run_once("urxvtd")
 run_once("unclutter")
 
 run_once("nm-applet")
 run_once("gxkb")
-run_once("dropboxd")
+run_once("./.dropbox-dist/dropboxd")
 -- }}}
 
 
