@@ -68,7 +68,7 @@ graphics   = "pinta"
 file_manager = "stuurman"
 --tmux	   = terminal .. " -e tmux "
 tmux	   = terminal .. ' -e tmux '
-musicplr   = terminal .. " -g 130x34-320+16 -e ncmpcpp"
+musicplr   = terminal .. " --geometry=850x466 -e ncmpcpp"
 tmux_run   = terminal .. " -e tmux new-session"
 --musicplr   = tmux_run .. " ncmpcpp"
 
