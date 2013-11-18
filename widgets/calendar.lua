@@ -37,16 +37,14 @@ function calendar:show(t_out, inc_offset)
     local tims = t_out or 0
     local f, c_text
     local today = tonumber(os.date('%d'))
-    local init_t = '/usr/bin/cal | sed -r -e "s/(^| )( '
+    local init_t = '/usr/bin/cal  | sed -r -e "s/(^| )( '
     -- let's take font only, font size is set in calendar table
-    local font = beautiful.font:sub(beautiful.font:find(""),
-                 beautiful.font:find(" "))
 
     if offs == 0
     then -- current month showing, today highlighted
         if today >= 10
         then
-           init_t = '/usr/bin/cal | sed -r -e "s/(^| )('
+           init_t = '/usr/bin/cal  | sed -r -e "s/(^| )('
         end
 
         calendar.offset = 0
@@ -86,12 +84,13 @@ function calendar:show(t_out, inc_offset)
        f = io.popen('/usr/bin/cal ' .. month .. ' ' .. year)
     end
 
-    c_text = "<tt><span font='" .. font .. " "
+    c_text = "<tt><span font='" .. calendar.font .. " "
              .. calendar.font_size .. "'><b>"
              .. f:read() .. "</b>\n\n"
              .. f:read() .. "\n"
              .. f:read("*all"):gsub("\n*$", "")
              .. "</span></tt>"
+ 
     f:close()
 
     cal_notification = naughty.notify({ text = c_text,
@@ -106,6 +105,7 @@ function calendar:attach(widget, args)
     local args = args or {}
     calendar.icons = args.icons or icons_dir .. "cal/white/"
     calendar.font_size = tonumber(args.font_size) or 12
+    calendar.font = args.font or beautiful.font:sub(beautiful.font:find(""), beautiful.font:find(" "))
     calendar.fg = args.fg or beautiful.fg_normal or "#FFFFFF"
     calendar.bg = args.bg or beautiful.bg_normal or "#FFFFFF"
     calendar.position = args.position or "top_right"

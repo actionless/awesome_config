@@ -286,7 +286,7 @@ markup = lain.util.markup
 volicon = wibox.widget.imagebox(beautiful.widget_vol)
 voliconbg = wibox.widget.background(volicon, beautiful.alt_bg)
 volumewidget = lain.widgets.alsa({
-	channel = 'DAC',
+	channel = 'Master',
 	settings = function()
 		if volume_now.status == "off" then
 			volicon:set_image(beautiful.widget_vol_mute)
@@ -366,7 +366,7 @@ clockicon = wibox.widget.imagebox(beautiful.widget_clock)
 mytextclock = awful.widget.textclock(" %H:%M")
 
 -- calendar
-lain.widgets.calendar:attach(mytextclock, { font_size = 8 })
+widgets.calendar:attach(mytextclock, { font_size = 8, font='DejaVu Sans Mono' })
 
 -- Battery
 -- baticon = wibox.widget.imagebox(beautiful.widget_battery)
@@ -705,20 +705,20 @@ globalkeys = awful.util.table.join(
 	-- ALSA volume control
 	awful.key({}, "#123",
 		function ()
-			awful.util.spawn("amixer -q set DAC,0 1%+")
-			awful.util.spawn("amixer -q set DAC,1 1%+")
+			awful.util.spawn("amixer -q set Master,0 1%+")
+			awful.util.spawn("amixer -q set Master,1 1%+")
 			volumewidget.update()
 		end),
 	awful.key({}, "#122",
 		function ()
-			awful.util.spawn("amixer -q set DAC,0 1%-")
-			awful.util.spawn("amixer -q set DAC,1 1%-")
+			awful.util.spawn("amixer -q set Master,0 1%-")
+			awful.util.spawn("amixer -q set Master,1 1%-")
 			volumewidget.update()
 		end),
 	awful.key({}, "#121",
 		function ()
-			awful.util.spawn("amixer -q set DAC,0 toggle")
-			awful.util.spawn("amixer -q set DAC,1 toggle")
+			awful.util.spawn("amixer -q set Master,0 toggle")
+			awful.util.spawn("amixer -q set Master,1 toggle")
 			volumewidget.update()
 		end),
 
