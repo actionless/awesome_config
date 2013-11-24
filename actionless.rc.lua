@@ -50,7 +50,8 @@ beautiful.init(awful.util.getdir("config") .. "/themes/actionless/theme.lua")
 -- common
 modkey	 = "Mod4"
 altkey	 = "Mod1"
-terminal = "urxvtc" or "xterm"
+--terminal = "urxvtc" or "xterm"
+terminal = "terminator" or "xterm"
 editor	 = "vim" or os.getenv("EDITOR") or "nano" or "vi"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -61,11 +62,13 @@ chrome   = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers google-chrome --enable-user-styl
 --firefox	= "GTK2_RC_FILES=~/.gtkrc-2.0.browsers firefox -P actionless "
 firefox	= "firefox -P actionless "
 gui_editor = "/opt/sublime_text/sublime_text"
+--compositor = "compton --backend glx --paint-on-overlay --glx-no-stencil --vsync opengl-swc --unredir-if-possible --config ~/.config/compton_awesome.conf"
+compositor = "compton --backend glx --paint-on-overlay --glx-no-stencil --vsync opengl-swc --unredir-if-possible --config ~/.config/compton_awesome.conf"
 graphics   = "pinta"
 file_manager = "stuurman"
 --tmux	   = terminal .. " -e tmux "
-tmux	   = terminal .. ' -e zsh -c "TERM=screen-256color-bce tmux" '
-musicplr   = terminal .. " -g 130x34-320+16 -e ncmpcpp"
+tmux	   = terminal .. ' -e tmux '
+musicplr   = terminal .. " --geometry=850x466 -e ncmpcpp"
 tmux_run   = terminal .. " -e tmux new-session"
 --musicplr   = tmux_run .. " ncmpcpp"
 
@@ -95,7 +98,10 @@ end
 awful.util.spawn_with_shell("eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)")
 awful.util.spawn_with_shell("xset r rate 250 25")
 awful.util.spawn_with_shell("xset b off")
-run_once("compton --backend glx --paint-on-overlay --glx-no-stencil --vsync opengl-swc --unredir-if-possible --config ~/.config/compton_awesome.conf")
+run_once(compositor)
+--run_once("xfce4-power-manager")
+--run_once("compton --backend glx --paint-on-overlay --glx-no-stencil --vsync opengl-swc --glx-no-rebind-pixmap --config ~/.config/compton_awesome.conf")
+--run_once("compton --vsync opengl --dbe --config ~/.config/compton_awesome.conf")
 run_once("urxvtd")
 run_once("unclutter")
 
@@ -169,6 +175,7 @@ shifty.config.apps = {
 		match = {
 			"Google Chrome",
 			"vmplayer",
+			"meld",
 		},
 		tag = "3:work",
 	},
@@ -259,6 +266,8 @@ myawesomemenu = {
 }
 
 mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
+									{ "kill compositor", "killall compton" },
+									{ "start compositor", compositor },
 									{ "open terminal", terminal }
 								  }
 						})
@@ -758,7 +767,7 @@ globalkeys = awful.util.table.join(
 	awful.key({ modkey }, "space",  function () awful.util.spawn_with_shell("bash ~/.config/dmenu/dmenu-bind.sh")  end),
 
 	-- Standard program
-	awful.key({ modkey,		   }, "Return", function () awful.util.spawn(tmux) end),
+	awful.key({ modkey,		   }, "Return", function () awful.util.spawn(terminal) end),
 	awful.key({ modkey,		   }, "s", function () awful.util.spawn(file_manager) end),
 	awful.key({ modkey, "Control" }, "r", awesome.restart),
 	awful.key({ modkey, "Control" }, "c", function () awful.util.spawn_with_shell(chromium) end),

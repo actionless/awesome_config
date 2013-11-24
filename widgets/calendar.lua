@@ -39,6 +39,8 @@ function calendar:show(t_out, inc_offset)
     local today = tonumber(os.date('%d'))
     local init_t = '/usr/bin/cal  | sed -r -e "s/(^| )( '
     -- let's take font only, font size is set in calendar table
+    local font = beautiful.font:sub(beautiful.font:find(""),
+                 beautiful.font:find(" "))
 
     if offs == 0
     then -- current month showing, today highlighted
