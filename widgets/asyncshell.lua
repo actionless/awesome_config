@@ -48,7 +48,7 @@ function asyncshell.deliver(id)
       asyncshell.request_table[id].callback then
       local output = io.open(asyncshell.file_template .. id, 'r')
       asyncshell.request_table[id].callback(output)
-	awful.util.spawn("rm " .. asyncshell.file_template .. id)
+	awful.util.spawn_with_shell("rm " .. asyncshell.file_template .. id)
    end
 end
 
