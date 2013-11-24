@@ -44,8 +44,6 @@ local function worker(args)
     mpd.widget = wibox.widget.textbox('')
 
     mpd_notification_preset = {
-        title   = "Now playing",
-        timeout = 6
     }
 
     helpers.set_map("current mpd track", nil)
@@ -59,19 +57,20 @@ end
 
     function mpd.show_notification()
 		mpd.hide_notification()
-                mpd.id = naughty.notify({
-                    preset = mpd_notification_preset,
-                    icon = "/tmp/mpdcover.png" --,
-                    --replaces_id = mpd.id
+		mpd.id = naughty.notify({
+			icon = "/tmp/mpdcover.png" ,
+			title   = "Now playing",
+			text = string.format("%s (%s) - %s\n%s", mpd_now.artist, mpd_now.album, mpd_now.date, mpd_now.title),
+			timeout = 6
                 })
     end
 
 
     function mpd.update()
-        asyncshell.request(echo .. " | curl --connect-timeout 1 -fsm 1 " .. mpdh, function(f) mpd.update2(f) end)
+        asyncshell.request(echo .. " | curl --connect-timeout 1 -fsm 1 " .. mpdh, function(f) mpd.post_update(f) end)
     end
 
-    function mpd.update2(f)
+    function mpd.post_update(f)
         mpd_now = {
             state  = "N/A",
             file   = "N/A",
@@ -103,8 +102,6 @@ end
 
         f:close()
 
-        mpd_notification_preset.text = string.format("%s (%s) - %s\n%s", mpd_now.artist,
-                                       mpd_now.album, mpd_now.date, mpd_now.title)
         widget = mpd.widget
         settings()
 

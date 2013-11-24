@@ -44,6 +44,9 @@ end
 
 -- {{{ Variable definitions
 -- localization
+naughty.config.presets.normal.opacity = 0.8
+naughty.config.presets.low.opacity = 0.8
+naughty.config.presets.critical.opacity = 0.8
 os.setlocale(os.getenv("LANG"))
 -- beautiful init
 beautiful.init(awful.util.getdir("config") .. "/themes/actionless/theme.lua")
@@ -66,13 +69,9 @@ gui_editor = "/opt/sublime_text/sublime_text"
 compositor = "compton --backend glx --paint-on-overlay --glx-no-stencil --vsync opengl-swc --unredir-if-possible --config ~/.config/compton_awesome.conf"
 graphics   = "pinta"
 file_manager = "stuurman"
---tmux	   = terminal .. " -e tmux "
 tmux	   = terminal .. ' -e tmux '
 musicplr   = terminal .. " --geometry=850x466 -e ncmpcpp"
 tmux_run   = terminal .. " -e tmux new-session"
---musicplr   = tmux_run .. " ncmpcpp"
-
-makesloppy = false
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 local layouts = {
@@ -102,7 +101,7 @@ run_once(compositor)
 --run_once("xfce4-power-manager")
 --run_once("compton --backend glx --paint-on-overlay --glx-no-stencil --vsync opengl-swc --glx-no-rebind-pixmap --config ~/.config/compton_awesome.conf")
 --run_once("compton --vsync opengl --dbe --config ~/.config/compton_awesome.conf")
-run_once("urxvtd")
+--run_once("urxvtd")
 run_once("unclutter")
 
 run_once("gxkb")
@@ -376,7 +375,7 @@ clockicon = wibox.widget.imagebox(beautiful.widget_clock)
 mytextclock = awful.widget.textclock(" %H:%M")
 
 -- calendar
-widgets.calendar:attach(mytextclock, { font_size = 8, font=beautiful.font })
+widgets.calendar:attach(mytextclock, { font_size = 8, font="DejaVu Sans Mono" })
 
 -- Battery
 -- baticon = wibox.widget.imagebox(beautiful.widget_battery)
