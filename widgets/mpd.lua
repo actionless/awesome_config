@@ -23,7 +23,7 @@ local setmetatable = setmetatable
 
 -- MPD infos
 -- lain.widgets.mpd
-local mpd = {}
+local mpd = {id=nil}
 
 local function worker(args)
     local args        = args or {}
@@ -49,6 +49,23 @@ local function worker(args)
     }
 
     helpers.set_map("current mpd track", nil)
+
+function mpd.hide_notification()
+	    if mpd.id ~= nil then
+	        naughty.destroy(mpd.id)
+	        mpd.id = nil
+	    end
+end
+
+    function mpd.show_notification()
+		mpd.hide_notification()
+                mpd.id = naughty.notify({
+                    preset = mpd_notification_preset,
+                    icon = "/tmp/mpdcover.png" --,
+                    --replaces_id = mpd.id
+                })
+    end
+
 
     function mpd.update()
         asyncshell.request(echo .. " | curl --connect-timeout 1 -fsm 1 " .. mpdh, function(f) mpd.update2(f) end)
@@ -100,11 +117,9 @@ local function worker(args)
                 os.execute(string.format("%s %q %q %d %q", mpdcover, music_dir,
                            mpd_now.file, cover_size, default_art))
 
-                mpd.id = naughty.notify({
-                    preset = mpd_notification_preset,
-                    icon = "/tmp/mpdcover.png",
-                    replaces_id = mpd.id
-                }).id
+                mpd.show_notification()
+		mpd.widget:connect_signal("mouse::enter", function () mpd.show_notification() end)
+		mpd.widget:connect_signal("mouse::leave", function () mpd.hide_notification() end)
             end
         elseif mpd_now.state ~= "pause"
         then

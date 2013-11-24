@@ -307,6 +307,7 @@ volumewidgetbg = wibox.widget.background(volumewidget, beautiful.alt_bg)
 mpdicon = wibox.widget.imagebox(beautiful.widget_music)
 mpdicon:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn_with_shell(musicplr) end)))
 mpdwidget = widgets.mpd({
+	music_dir = '/media/m/music/',
 	settings = function()
 		if mpd_now.state == "play" then
 			artist = " " .. mpd_now.artist .. " "
@@ -366,7 +367,7 @@ clockicon = wibox.widget.imagebox(beautiful.widget_clock)
 mytextclock = awful.widget.textclock(" %H:%M")
 
 -- calendar
-widgets.calendar:attach(mytextclock, { font_size = 8, font='DejaVu Sans Mono' })
+widgets.calendar:attach(mytextclock, { font_size = 8, font=beautiful.font })
 
 -- Battery
 -- baticon = wibox.widget.imagebox(beautiful.widget_battery)
