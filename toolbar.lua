@@ -73,10 +73,8 @@ cpuwidget = wibox.widget.background(lain.widgets.cpu({
 
 -- Coretemp
 tempicon = wibox.widget.imagebox(beautiful.widget_temp)
-tempwidget = lain.widgets.temp({
-	settings = function()
-		widget:set_text(" " .. coretemp_now .. "°C ")
-	end
+tempwidget = widgets.temp({
+	sensor = "CPU Temperature"
 })
 
 -- / fs
