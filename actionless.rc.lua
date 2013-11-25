@@ -100,7 +100,7 @@ run_once("xfce4-power-manager")
 run_once("unclutter")
 
 run_once("gxkb")
-run_once("dropboxd")
+run_once("~/.dropbox-dist/dropboxd")
 -- }}}
 
 
