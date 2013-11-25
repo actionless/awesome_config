@@ -6,7 +6,7 @@
                                                   
 --]]
 
-local icons_dir    = require("lain.helpers").icons_dir
+local icons_dir    = require("widgets.helpers").icons_dir
 
 local awful        = require("awful")
 local beautiful    = require("beautiful")
@@ -19,7 +19,6 @@ local tonumber     = tonumber
 local setmetatable = setmetatable
 
 -- Calendar notification
--- lain.widgets.calendar
 local calendar = {}
 local cal_notification = nil
 

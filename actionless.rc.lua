@@ -14,7 +14,6 @@ local menubar = require("menubar")
 -- shifty - dynamic tagging library
 local shifty = require("shifty")
 
-local lain = require("lain")
 local widgets = require("widgets")
 
 -- {{{ Error handling

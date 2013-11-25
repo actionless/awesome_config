@@ -6,7 +6,7 @@
 
 --]]
 local asyncshell   = require("widgets.asyncshell")
-local newtimer     = require("lain.helpers").newtimer
+local newtimer     = require("widgets.helpers").newtimer
 
 local wibox        = require("wibox")
 
@@ -16,7 +16,6 @@ local tonumber     = tonumber
 local setmetatable = setmetatable
 
 -- coretemp
--- lain.widgets.temp
 local temp = {}
 
 local function worker(args)

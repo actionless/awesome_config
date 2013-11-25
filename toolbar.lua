@@ -7,7 +7,7 @@ local toolbar = {}
 function toolbar.init()
 
 -- {{{ Wibox
-markup = lain.util.markup
+markup = widgets.markup
 
 -- ALSA volume
 volicon = wibox.widget.imagebox(beautiful.widget_vol)
