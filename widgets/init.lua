@@ -5,6 +5,7 @@ local widgets =
 	asyncshell  = require("widgets.asyncshell"),
 	calendar  = require("widgets.calendar"),
 	alsa  = require("widgets.alsa"),
+	temp  = require("widgets.temp"),
 	menu  = require("widgets.menu")
 }
 

@@ -72,12 +72,10 @@ cpuwidget = wibox.widget.background(lain.widgets.cpu({
 }), beautiful.alt_bg)
 
 -- Coretemp
---tempicon = wibox.widget.imagebox(beautiful.widget_temp)
---tempwidget = lain.widgets.temp({
---	settings = function()
---		widget:set_text(" " .. coretemp_now .. "°C ")
---	end
---})
+tempicon = wibox.widget.imagebox(beautiful.widget_temp)
+tempwidget = widgets.temp({
+	sensor = "CPU"
+})
 
 -- / fs
 --fsicon = wibox.widget.imagebox(beautiful.widget_hdd)
@@ -216,8 +214,8 @@ for s = 1, screen.count() do
 	right_layout:add(arrl)
 	right_layout:add(cpuicon)
 	right_layout:add(cpuwidget)
---	right_layout:add(tempicon)
---	right_layout:add(tempwidget)
+	right_layout:add(tempicon)
+	right_layout:add(tempwidget)
 	right_layout:add(arrl)
 	--right_layout:add(fsicon)
 	--right_layout:add(fswidgetbg)
