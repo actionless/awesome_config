@@ -34,11 +34,9 @@ local function worker(args)
     function post_update(f)
 	for line in f:lines() do
 		for k, v in string.gmatch(line, "(.*):.*%+(.*)[ ]+$") do
---coretemp_now = k
 			if k == sensor then coretemp_now = v end
 		end
 		for k, v in string.gmatch(line, "(.*):.*%+(.*)[ ]+%(.*$") do
---coretemp_now = k
 			if k == sensor then coretemp_now = v end
 		end
 	end
