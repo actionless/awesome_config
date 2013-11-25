@@ -56,8 +56,8 @@ local function worker(args)
 		mpd.hide_notification()
 		mpd.id = naughty.notify({
 			icon = "/tmp/mpdcover.png" ,
-			title   = "Now playing",
-			text = string.format("%s (%s) - %s\n%s", mpd_now.artist, mpd_now.album, mpd_now.date, mpd_now.title),
+			title   = mpd_now.title,
+			text = string.format("%s (%s)\n%s", mpd_now.album, mpd_now.date, mpd_now.artist),
 			timeout = 6
 				})
 	end
