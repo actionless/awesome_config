@@ -96,9 +96,7 @@ end
 awful.util.spawn_with_shell("xset r rate 250 25")
 awful.util.spawn_with_shell("xset b off")
 run_once(compositor)
---run_once("xfce4-power-manager")
---run_once("compton --backend glx --paint-on-overlay --glx-no-stencil --vsync opengl-swc --glx-no-rebind-pixmap --config ~/.config/compton_awesome.conf")
---run_once("compton --vsync opengl --dbe --config ~/.config/compton_awesome.conf")
+run_once("xfce4-power-manager")
 --run_once("urxvtd")
 run_once("unclutter")
 
