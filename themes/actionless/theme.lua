@@ -1,6 +1,7 @@
 theme                               = {}
 
 themes_dir                          = os.getenv("HOME") .. "/.config/awesome/themes/actionless"
+theme.dir			= themes_dir
 theme.wallpaper                     = themes_dir .. "/wall.png"
 
 theme.bg	= "#000000"

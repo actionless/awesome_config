@@ -7,7 +7,7 @@
 												  
 --]]
 
-local helpers	  = require("lain.helpers")
+local helpers	  = require("widgets.helpers")
 
 local awful		= require("awful")
 local escape_f	 = require("awful.util").escape
@@ -23,7 +23,6 @@ local asyncshell  = require("widgets.asyncshell")
 local setmetatable = setmetatable
 
 -- MPD infos
--- lain.widgets.mpd
 local mpd = {id=nil}
 
 local function worker(args)

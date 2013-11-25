@@ -7,7 +7,7 @@
 												  
 --]]
 
-local newtimer		= require("lain.helpers").newtimer
+local newtimer		= require("widgets.helpers").newtimer
 
 local wibox		   = require("wibox")
 local awful		   = require("awful")
@@ -18,7 +18,6 @@ local string		  = { match  = string.match }
 local setmetatable	= setmetatable
 
 -- ALSA volume
--- lain.widgets.alsa
 local alsa = {}
 
 local function worker(args)
