@@ -160,6 +160,14 @@ shifty.config.tags = {
 shifty.config.apps = {
 	{
 		match = {
+			"plugin-container",
+		},
+		float = true,
+--		fullscreen = true,
+		tag = "debug"
+	},
+	{
+		match = {
 			--"Navigator",
 			"Vimperator",
 			--"Gran Paradiso",
@@ -238,7 +246,6 @@ shifty.config.defaults = {
 	layout = awful.layout.suit.tile,
 	ncol = 1,
 	mwfact = 0.60,
-	floatBars = true,
 	guess_name = true,
 	guess_position = true,
 }
@@ -607,6 +614,7 @@ client.connect_signal("focus",
 				c.border_color = beautiful.border_normal
 			else
 				if awful.client.floating.get(c) or awful.layout.get(c.screen) == awful.layout.suit.floating then
+				--if awful.layout.get(c.screen) == awful.layout.suit.floating then
 				make_titlebar(c)
 				else
 					if #clients == 1 then

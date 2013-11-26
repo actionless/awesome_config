@@ -9,7 +9,8 @@ theme.alt_bg	= "#000000" -- 313131
 theme.fg	= "#eeeeec"
 
 theme.dark	= "#5e468c"
-theme.light	= "#897eae"
+--theme.light	= "#897eae"
+theme.light	= "#adeb71"
 theme.alt_fg	= "#a562b3"
 theme.error	= "#ee82a8"
 
