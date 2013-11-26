@@ -14,6 +14,7 @@ volicon = wibox.widget.imagebox(beautiful.widget_vol)
 voliconbg = wibox.widget.background(volicon, beautiful.alt_bg)
 volumewidget = widgets.alsa({
 	channel = 'Master',
+	channels_toggle = {'Master', 'PCM', 'Headphone'},
 	settings = function()
 		if volume_now.status == "off" then
 			volicon:set_image(beautiful.widget_vol_mute)

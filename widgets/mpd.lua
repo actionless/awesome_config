@@ -120,8 +120,6 @@ local function worker(args)
 			mpd_now.title = escape_f(mpd_now.file:match("^.* [-] (.*)")) or escape_f(mpd_now.file)
 		end
 
-		f:close()
-
 		widget = mpd.widget
 		settings()
 
