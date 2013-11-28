@@ -17,7 +17,6 @@ local os           = { date = os.date }
 local tonumber     = tonumber
 
 local setmetatable = setmetatable
-
 -- Calendar notification
 local calendar = {}
 local cal_notification = nil
@@ -104,7 +103,7 @@ end
 
 function calendar:attach(widget, args)
     local args = args or {}
-    calendar.icons = args.icons or icons_dir .. "cal/white/"
+    calendar.icons = args.icons or icons_dir .. "calendar/white/"
     calendar.font_size = tonumber(args.font_size) or 12
     calendar.font = args.font or beautiful.font:sub(beautiful.font:find(""), beautiful.font:find(" "))
     calendar.fg = args.fg or beautiful.fg_normal or "#FFFFFF"
