@@ -53,7 +53,8 @@ beautiful.init(awful.util.getdir("config") .. "/themes/actionless/theme.lua")
 modkey	 = "Mod4"
 altkey	 = "Mod1"
 --terminal = "urxvtc" or "xterm"
-terminal = "terminator" or "xterm"
+--terminal = "terminator" or "xterm"
+terminal = "urxvt" or "xterm"
 editor	 = "vim" or os.getenv("EDITOR") or "nano" or "vi"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -63,7 +64,7 @@ chromium   = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers chromium --enable-user-stylesh
 chrome   = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers google-chrome --enable-user-stylesheet"
 firefox	= "firefox -P actionless "
 gui_editor = "/opt/sublime_text/sublime_text"
-compositor = "compton --backend glx --paint-on-overlay --glx-no-stencil --vsync opengl-swc --unredir-if-possible --config ~/.config/compton_awesome.conf"
+compositor = "compton --backend glx --paint-on-overlay --glx-no-stencil --vsync opengl-swc --unredir-if-possible --config /home/lie/.config/compton_awesome.conf"
 graphics   = "pinta"
 file_manager = "stuurman"
 tmux	   = terminal .. ' -e tmux '
@@ -479,7 +480,7 @@ globalkeys = awful.util.table.join(
 	awful.key({ modkey }, "space",  function () awful.util.spawn_with_shell("bash ~/.config/dmenu/dmenu-bind.sh")  end),
 
 	-- Standard program
-	awful.key({ modkey,		   }, "Return", function () awful.util.spawn(terminal) end),
+	awful.key({ modkey,		   }, "Return", function () awful.util.spawn(tmux) end),
 	awful.key({ modkey,		   }, "s", function () awful.util.spawn(file_manager) end),
 	awful.key({ modkey, "Control" }, "r", awesome.restart),
 	awful.key({ modkey, "Control" }, "c", function () awful.util.spawn_with_shell(chromium) end),
