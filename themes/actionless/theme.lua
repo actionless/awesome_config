@@ -14,7 +14,8 @@ theme.alt_fg	= "#a562b3"
 --theme.error	= "#ee82a8"
 theme.error	= "#ff3377"
 
-theme.border	= "#222222"
+--theme.border	= "#222222"
+theme.border	= "#000000"
 theme.sel_border = "#ff3377" -- "#adeb71"
 theme.titlebar	= "#3e2f4f"
 
@@ -98,6 +99,8 @@ theme.widget_vol_no                 = themes_dir .. "/icons/vol_no.png"
 theme.widget_vol_mute               = themes_dir .. "/icons/vol_mute.png"
 theme.widget_mail                   = themes_dir .. "/icons/mail.png"
 theme.widget_mail_on                = themes_dir .. "/icons/mail_on.png"
+
+theme.dropdown_icon                = themes_dir .. "/icons/dropdown.png"
 
 theme.tasklist_disable_icon         = true
 --theme.tasklist_floating             = "*"

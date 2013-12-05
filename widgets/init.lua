@@ -11,7 +11,8 @@ local widgets =
 	alsa  = require("widgets.alsa"),
 	temp  = require("widgets.temp"),
 	--misc
-	asyncshell    = require("widgets.asyncshell")
+	asyncshell    = require("widgets.asyncshell"),
+	systray_toggle    = require("widgets.systray_toggle")
 }
 
 return widgets
