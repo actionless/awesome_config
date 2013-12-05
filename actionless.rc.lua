@@ -384,7 +384,7 @@ globalkeys = awful.util.table.join(
 
 	-- Menus
 	awful.key({ modkey,		   }, "w", function () mymainmenu:show() end),
-	awful.key({ modkey,		   }, "i", function () instance = widgets.menu.clients({ width=450 }) end),
+	awful.key({ modkey,		   }, "i", function () instance = widgets.menu.clients_on_tag({ width=1680, coords = {x=0, y=18}, }) end),
 	awful.key({ modkey,		   }, "p", function() menubar.show() end),
 
 	-- Layout manipulation

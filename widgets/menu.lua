@@ -3,7 +3,7 @@
 -- @author Julien Danjou &lt;julien@danjou.info&gt;
 -- @author dodo
 -- @copyright 2008, 2011 Damien Leone, Julien Danjou, dodo
--- @release v3.5.1
+-- @release v3.5.2
 --------------------------------------------------------------------------------
 
 local wibox = require("wibox")
@@ -32,6 +32,7 @@ local capi = {
     client = client }
 local tag = require("awful.tag")
 local naughty = require("naughty")
+
 -- awful.menu
 local menu = { mt = {} }
 
@@ -121,7 +122,7 @@ local function item_position(_menu, child)
 end
 
 
-local function set_coords(_menu, screen_idx, m_coords)
+local function set_coords_bak(_menu, screen_idx, m_coords)
     local s_geometry = capi.screen[screen_idx].workarea
     local screen_w = s_geometry.x + s_geometry.width
     local screen_h = s_geometry.y + s_geometry.height
@@ -159,6 +160,11 @@ local function set_coords(_menu, screen_idx, m_coords)
     _menu.wibox.y = _menu.y
 end
 
+local function set_coords(_menu, screen_idx, m_coords)
+    _menu.wibox.x = 0
+    _menu.wibox.y = 18
+    _menu.wibox.width = capi.screen[screen_idx].workarea.width
+end
 
 local function set_size(_menu)
     local in_dir, other, a, b = 0, 0, "height", "width"
@@ -316,7 +322,12 @@ function menu:show(args)
     local screen_index = capi.mouse.screen
 
     if not set_size(self) then return end
-    set_coords(self, screen_index, coords)
+    if coords == nil then
+        set_coords(self, screen_index, coords)
+    else
+        _menu.wibox.x = coords.x
+        _menu.wibox.y = coords.y
+    end
 
     keygrabber.run(self._keygrabber)
     self.wibox.visible = true
@@ -458,6 +469,33 @@ end
 -- @param _menu Menu table, see new() function for more informations
 -- @return The menu.
 function menu:clients(args) -- FIXME crude api
+    _menu = self or {}
+    local cls = capi.client.get()
+    local cls_t = {}
+    for k, c in pairs(cls) do
+        cls_t[#cls_t + 1] = {
+            util.escape(c.name) or "",
+            function ()
+                if not c:isvisible() then
+                    tags.viewmore(c:tags(), c.screen)
+                end
+                capi.client.focus = c
+                c:raise()
+            end,
+            c.icon }
+    end
+    args = args or {}
+    args.items = args.items or {}
+    table_merge(args.items, cls_t)
+
+    local m = menu.new(args)
+    m:show(args)
+    return m
+end
+
+
+function menu:clients_on_tag(args) -- FIXME crude api
+--    naughty.notify(args)
     _menu = self or {}
     local cls = capi.client.get()
     local cls_t = {}
