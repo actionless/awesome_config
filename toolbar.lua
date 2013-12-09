@@ -57,7 +57,8 @@ mpdwidgetbg = mpdwidget
 
 -- MEM
 memicon = wibox.widget.imagebox(beautiful.widget_mem)
-memwidget = lain.widgets.mem({
+memwidget = widgets.mem({
+	list_length = 20,
 	settings = function()
 		widget:set_text(" " .. mem_now.used .. "MB ")
 	end
@@ -65,7 +66,8 @@ memwidget = lain.widgets.mem({
 
 -- CPU
 cpuicon = wibox.widget.imagebox(beautiful.widget_cpu)
-cpuwidget = wibox.widget.background(lain.widgets.cpu({
+cpuwidget = wibox.widget.background(widgets.cpu({
+	list_length = 20,
 	settings = function()
 		widget:set_text(" " .. cpu_now.usage .. "% ")
 	end
