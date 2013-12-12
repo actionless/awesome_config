@@ -7,6 +7,8 @@
                                                   
 --]]
 
+local theme_dir = "/themes/actionless/"
+
 local debug  = require("debug")
 
 local awful = require("awful")
@@ -17,8 +19,12 @@ local rawget = rawget
 -- Lain helper functions for internal use
 local helpers = {}
 
+helpers.beautiful = require("beautiful")
+helpers.beautiful.init(awful.util.getdir("config") .. theme_dir .. "theme.lua")
+helpers.font = string.match(helpers.beautiful.font, "([%a, ]+) %d+")
+
 helpers.dir    = debug.getinfo(1, 'S').source:match[[^@(.*/).*$]]
-helpers.icons_dir   = awful.util.getdir("config") .. "/themes/actionless/" .. 'icons/'
+helpers.icons_dir   = awful.util.getdir("config") .. theme_dir .. 'icons/'
 helpers.scripts_dir = helpers.dir .. 'scripts/'
 
 -- {{{ Modules loader

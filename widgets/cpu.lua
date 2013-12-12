@@ -8,7 +8,9 @@
 --]]
 
 local first_line   = require("widgets.helpers").first_line
-local newtimer     = require("widgets.helpers").newtimer
+local newtimer		= require("widgets.helpers").newtimer
+local font     = require("widgets.helpers").font
+
 
 local wibox        = require("wibox")
 local naughty     = require("naughty")
@@ -33,6 +35,8 @@ local function worker(args)
     local args     = args or {}
     local timeout  = args.timeout or 5
     local settings = args.settings or function() end
+    cpu.font = args.font or font
+
 	cpu.list_len = args.list_length or 10
 	cpu.timeout = args.timeout or 0
 

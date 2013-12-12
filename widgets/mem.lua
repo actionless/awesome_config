@@ -7,7 +7,8 @@
 												  
 --]]
 
-local newtimer		= require("lain.helpers").newtimer
+local newtimer		= require("widgets.helpers").newtimer
+local font     = require("widgets.helpers").font
 
 local wibox		   = require("wibox")
 local naughty     = require("naughty")
@@ -34,6 +35,7 @@ local function worker(args)
 	local settings = args.settings or function() end
 	mem.list_len = args.list_length or 10
 	mem.timeout = args.timeout or 0
+	mem.font = args.font or font
 
 	function mem.hide_notification()
 		if mem.id ~= nil then
