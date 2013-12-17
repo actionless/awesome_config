@@ -6,18 +6,18 @@ theme.wallpaper                     = themes_dir .. "/wall.png"
 
 theme.bg	= "#000000"
 theme.alt_bg	= "#000000" -- 313131
-theme.fg	= "#eeeeec"
+theme.fg	= "#bcbcbc"
 
-theme.dark	= "#5e468c"
+theme.dark	= "#441188"
 --theme.light	= "#adeb71"
-theme.light	= "#a562b3"
+theme.light	= "#8432ff"
 theme.alt_fg	= "#a562b3"
 --theme.error	= "#ee82a8"
-theme.error	= "#ff3377"
+theme.error	= "#f92672"
 
 --theme.border	= "#222222"
 theme.border	= "#000000"
-theme.sel_border = "#ff3377" -- "#adeb71"
+theme.sel_border = "#f92672"
 theme.titlebar	= "#3e2f4f"
 
 --theme.font                          = "PT Mono 8"
@@ -41,9 +41,7 @@ theme.titlebar_bg_focus             = theme.titlebar
 theme.titled_border                 = theme.titlebar
 theme.titlebar_bg_normal            = theme.border
 theme.taglist_fg_focus              = theme.fg
---theme.taglist_bg_focus              = "#443360"
---theme.taglist_bg_focus              = "#83468C"
-theme.taglist_bg_focus              = "#5e468c"
+theme.taglist_bg_focus              = theme.dark
 theme.tasklist_bg_focus             = theme.bg
 theme.tasklist_fg_normal            = theme.fg
 theme.tasklist_fg_minimize          = theme.alt_fg
