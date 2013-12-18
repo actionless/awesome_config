@@ -246,7 +246,7 @@ function minimizedbutton(c)
 end
 -- {{{
 function make_titlebar(c)
-	c.border_color = beautiful.titled_border
+	c.border_color = beautiful.titlebar_focus
 	-- buttons for the titlebar
 	local buttons = awful.util.table.join(
 		awful.button({ }, 1, function()

@@ -607,17 +607,20 @@ client.connect_signal("focus",
 		local clients = awful.client.visible(s)
 
 		if c.maximized_horizontal == true and c.maximized_vertical == true then
+			awful.titlebar(c, {size = 0})
 			c.border_width = 0
 			--c.border_color = beautiful.border_normal
 		else
 			c.border_width = beautiful.border_width
 			if layout == "max" then
+				awful.titlebar(c, {size = 0})
 				c.border_color = beautiful.border_normal
 			else
 				if awful.client.floating.get(c) or awful.layout.get(c.screen) == awful.layout.suit.floating then
-				--if awful.layout.get(c.screen) == awful.layout.suit.floating then
-				make_titlebar(c)
+					--if awful.layout.get(c.screen) == awful.layout.suit.floating then
+					make_titlebar(c)
 				else
+					awful.titlebar(c, {size = 0})
 					if #clients == 1 then
 						c.border_color = beautiful.border_normal
 					else
@@ -627,6 +630,12 @@ client.connect_signal("focus",
 			end
 		end
 	end)
-client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+client.connect_signal("unfocus", function(c)
+		if awful.client.floating.get(c) or awful.layout.get(c.screen) == awful.layout.suit.floating then
+			c.border_color = beautiful.titlebar
+		else
+			c.border_color = beautiful.border_normal
+		end
+	end)
 -- }}}
 
