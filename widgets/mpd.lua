@@ -114,10 +114,10 @@ local function worker(args)
 			end
 		end
 		if mpd_now.artist == "N/A" then
-			mpd_now.artist = escape_f(mpd_now.file:match("^(.*) [-] .*")) or "N/A"
+			mpd_now.artist = escape_f(mpd_now.file:match("^(.*)['/].* .*")) or "N/A"
 		end
 		if mpd_now.title == "N/A" then
-			mpd_now.title = escape_f(mpd_now.file:match("^.* [-] (.*)")) or escape_f(mpd_now.file)
+			mpd_now.title = escape_f(mpd_now.file:match(".*['/'](.*)")) or escape_f(mpd_now.file)
 		end
 
 		f:close()

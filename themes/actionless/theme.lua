@@ -2,20 +2,24 @@ theme                               = {}
 
 themes_dir                          = os.getenv("HOME") .. "/.config/awesome/themes/actionless"
 theme.dir			= themes_dir
-theme.wallpaper                     = themes_dir .. "/wall.png"
+--theme.wallpaper                     = themes_dir .. "/glonely.png"
+theme.wallpaper                     = '/home/lie/Dropbox/pokemon_13/pic/pattern/tumblr_mqgornTRMX1qe8qruo2_500.png'
+
+
 
 theme.bg	= "#000000"
 theme.alt_bg	= "#000000"
 theme.fg	= "#bcbcbc"
 
-theme.dark	= "#441188"
-theme.light	= "#8432ff"
+theme.light	= "#a562b3"
+theme.dark	= "#370f3e"
 theme.alt_fg	= "#a562b3"
 theme.error	= "#f92672"
 
 theme.border	= "#000000"
-theme.sel_border = "#f92672"
-theme.titlebar_focus	= "#3e2f4f"
+--theme.sel_border = "#f92672"
+theme.sel_border = "#d33862"
+theme.titlebar_focus	= "#66436C"
 theme.titlebar	= "#3c3c3c"
 
 --theme.font                          = "PT Mono 8"

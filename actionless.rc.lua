@@ -100,7 +100,9 @@ run_once(compositor)
 --run_once("compton --backend glx --paint-on-overlay --glx-no-stencil --vsync opengl-swc --glx-no-rebind-pixmap --config ~/.config/compton_awesome.conf")
 --run_once("compton --vsync opengl --dbe --config ~/.config/compton_awesome.conf")
 --run_once("urxvtd")
+--awful.util.spawn_with_shell('feh --bg-tile tumblr_mqgornTRMX1qe8qruo2_500.png')
 run_once("unclutter")
+awful.util.spawn_with_shell("xset b off")
 
 run_once("gxkb")
 run_once("dropboxd")
@@ -111,7 +113,7 @@ run_once("dropboxd")
 -- {{{ Wallpaper
 if beautiful.wallpaper then
 	for s = 1, screen.count() do
-		gears.wallpaper.maximized(beautiful.wallpaper, s, true)
+		gears.wallpaper.tiled(beautiful.wallpaper, s)
 	end
 end
 -- }}}
