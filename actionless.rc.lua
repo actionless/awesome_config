@@ -353,6 +353,50 @@ globalkeys = awful.util.table.join(
 			if client.swap then client.swap:raise() end
 		end),
 
+	-- By direction client focus (VIM style)
+	awful.key({ modkey }, "j",
+		function()
+			awful.client.focus.bydirection("down")
+			if client.focus then client.focus:raise() end
+		end),
+	awful.key({ modkey }, "k",
+		function()
+			awful.client.focus.bydirection("up")
+			if client.focus then client.focus:raise() end
+		end),
+	awful.key({ modkey }, "h",
+		function()
+			awful.client.focus.bydirection("left")
+			if client.focus then client.focus:raise() end
+		end),
+	awful.key({ modkey }, "l",
+		function()
+			awful.client.focus.bydirection("right")
+			if client.focus then client.focus:raise() end
+		end),
+
+	-- By direction client swap (VIM style)
+	awful.key({ modkey, "Shift" }, "j",
+		function()
+			awful.client.swap.bydirection("down")
+			if client.swap then client.swap:raise() end
+		end),
+	awful.key({ modkey, "Shift" }, "k",
+		function()
+			awful.client.swap.bydirection("up")
+			if client.swap then client.swap:raise() end
+		end),
+	awful.key({ modkey, "Shift" }, "h",
+		function()
+			awful.client.swap.bydirection("left")
+			if client.swap then client.swap:raise() end
+		end),
+	awful.key({ modkey, "Shift" }, "l",
+		function()
+			awful.client.swap.bydirection("right")
+			if client.swap then client.swap:raise() end
+		end),
+
 	-- Shifty: keybindings specific to shifty
 	awful.key({modkey, "Shift"}, "d", shifty.del), -- delete a tag
 	awful.key({modkey, "Shift"}, ",", shifty.send_prev), -- client to prev tag
@@ -373,27 +417,16 @@ globalkeys = awful.util.table.join(
 		shifty.add({nopopup = true})
 	end),
 
-	awful.key({ modkey,		   }, "j",
-		function ()
-			awful.client.focus.byidx( 1)
-			if client.focus then client.focus:raise() end
-		end),
-	awful.key({ modkey,		   }, "k",
-		function ()
-			awful.client.focus.byidx(-1)
-			if client.focus then client.focus:raise() end
-		end),
-
 	-- Menus
 	awful.key({ modkey,		   }, "w", function () mymainmenu:show() end),
 	awful.key({ modkey,		   }, "i", function () instance = widgets.menu.clients_on_tag({ width=1680, coords = {x=0, y=18}, }) end),
 	awful.key({ modkey,		   }, "p", function() menubar.show() end),
 
 	-- Layout manipulation
-	awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)	end),
-	awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)	end),
-	awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end),
-	awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end),
+--	awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)	end),
+--	awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)	end),
+--	awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end),
+--	awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end),
 	awful.key({ modkey,		   }, "u", awful.client.urgent.jumpto),
 	awful.key({ modkey,		   }, "Tab",
 		function ()
@@ -403,15 +436,16 @@ globalkeys = awful.util.table.join(
 			end
 		end),
 
-	awful.key({ modkey,		   }, "l",	 function () awful.tag.incmwfact( 0.05)	end),
-	awful.key({ modkey,		   }, "h",	 function () awful.tag.incmwfact(-0.05)	end),
-	awful.key({ modkey, "Shift" }, "h", function () awful.client.incwfact(-0.05) end),
-	awful.key({ modkey, "Shift" }, "l", function () awful.client.incwfact( 0.05) end),
+	awful.key({ modkey, "Control" }, "l",	 function () awful.tag.incmwfact( 0.05)	end),
+	awful.key({ modkey,	"Control" }, "h",	 function () awful.tag.incmwfact(-0.05)	end),
+	awful.key({ modkey, "Control" }, "j", function () awful.client.incwfact(-0.05) end),
+	awful.key({ modkey, "Control" }, "k", function () awful.client.incwfact( 0.05) end),
 
-	awful.key({ altkey, "Shift"   }, "h",	 function () awful.tag.incnmaster(-1)	  end),
-	awful.key({ altkey, "Shift"   }, "l",	 function () awful.tag.incnmaster( 1)	  end),
-	awful.key({ altkey, "Control" }, "h",	 function () awful.tag.incncol(-1)		 end),
-	awful.key({ altkey, "Control" }, "l",	 function () awful.tag.incncol( 1)		 end),
+	awful.key({ modkey, altkey }, "h",	 function () awful.tag.incnmaster(-1)	  end),
+	awful.key({ modkey, altkey }, "l",	 function () awful.tag.incnmaster( 1)	  end),
+	awful.key({ modkey, altkey }, "j",	 function () awful.tag.incncol(-1)		 end),
+	awful.key({ modkey, altkey }, "k",	 function () awful.tag.incncol( 1)		 end),
+
 	awful.key({ altkey,		   }, "space", function () awful.layout.inc(layouts,  1) end),
 	awful.key({ altkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
 
@@ -545,11 +579,14 @@ shifty.config.modkey = modkey
 -- Be careful: we use keycodes to make it works on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
 for i = 1, 12 do
-	if i>10 then
-		diff = 84
-	else
-		diff = 66
-	end
+	-- F-keys
+--	if i>10 then
+--		diff = 84
+--	else
+--		diff = 66
+--	end
+	-- num keys
+	diff = 9
 	globalkeys = awful.util.table.join(globalkeys,
 		awful.key({ modkey }, "#" .. i + diff,
 			function ()
