@@ -13,7 +13,8 @@ local wibox		   = require("wibox")
 local awful		   = require("awful")
 
 local io			  = { popen  = io.popen }
-local string		  = { match  = string.match }
+local string		  = { match  = string.match,
+                          format = string.format }
 
 local setmetatable	= setmetatable
 
@@ -59,6 +60,8 @@ local function worker(args)
 		then
 			volume_now.level  = "0"
 			volume_now.status = "off"
+		else
+			volume_now.level = string.format("%2s", volume_now.level)
 		end
 
 		if volume_now.status == ""

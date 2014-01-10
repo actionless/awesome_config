@@ -14,6 +14,7 @@ local widgets =
 	temp  = require("widgets.temp"),
 	--misc
 	settings = require("widgets.settings"),
+	random_pic = require("widgets.random_pic"),
 	asyncshell    = require("widgets.asyncshell"),
 	systray_toggle    = require("widgets.systray_toggle")
 }

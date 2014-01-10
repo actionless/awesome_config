@@ -34,8 +34,10 @@ cpu.widget:connect_signal("mouse::leave", function () cpu.hide_notification() en
 
 local function worker(args)
 	local args     = args or {}
-	local timeout  = args.timeout or 5
-	local settings = args.settings or function() end
+	local interval  = args.interval or 5
+	local settings = args.settings or function()
+		widget:set_text("" .. string.format("%-3s", cpu_now.usage .. "%").. " ")
+	end
 	cpu.font = args.font or font
 	cpu.timeout = args.timeout or 0
 
@@ -89,7 +91,7 @@ local function worker(args)
         local dtotal = total - cpu.last_total
 
         cpu_now = {}
-        cpu_now.usage = tostring(math.ceil((dactive / dtotal) * 100))
+        cpu_now.usage = math.ceil((dactive / dtotal) * 100)
 
         widget = cpu.widget
         settings()
@@ -99,9 +101,9 @@ local function worker(args)
         cpu.last_total = total
     end
 
-    newtimer("cpu", timeout, cpu.update)
+    newtimer("cpu", interval, cpu.update)
 
-    return cpu.widget
+    return setmetatable(cpu, { __index = cpu.widget })
 end
 
 return setmetatable(cpu, { __call = function(_, ...) return worker(...) end })

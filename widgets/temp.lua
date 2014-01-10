@@ -32,7 +32,7 @@ local function worker(args)
 			temp.widget:set_bg(beautiful.bg)
 			temp.widget:set_fg(beautiful.fg)
 		end
-		temp.widget_text:set_text(coretemp_now .. '°C ')
+		temp.widget_text:set_text(string.format("%2i", coretemp_now) .. '°C')
 	end
     local sensor   = args.sensor or "CPU Temperature"
 

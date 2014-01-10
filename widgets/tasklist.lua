@@ -11,7 +11,7 @@ local ipairs = ipairs
 local setmetatable = setmetatable
 local table = table
 local common = require("awful.widget.common")
-local beautiful = require("beautiful")
+local beautiful = require("widgets.helpers").beautiful
 local client = require("awful.client")
 local util = require("awful.util")
 local tag = require("awful.tag")
@@ -21,6 +21,7 @@ local fixed = require("wibox.layout.fixed")
 --- Tasklist widget module for awful
 -- awful.widget.tasklist
 local tasklist = { mt = {} }
+
 
 -- Public structures
 tasklist.filter = {}
@@ -41,7 +42,7 @@ local function tasklist_label(c, args)
     local bg_image_urgent = args.bg_image_urgent or theme.bg_image_urgent
     local bg_image_minimize = args.bg_image_minimize or theme.bg_image_minimize
     local tasklist_disable_icon = args.tasklist_disable_icon or theme.tasklist_disable_icon or false
-    local font = args.font or theme.tasklist_font or theme.font or ""
+    local font = theme.tasklist_font or theme.font
     local bg = nil
     local text = "<span font_desc='"..font.."'>"
     local name = ""

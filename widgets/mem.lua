@@ -31,8 +31,10 @@ mem.widget:connect_signal("mouse::leave", function () mem.hide_notification() en
 
 local function worker(args)
 	local args	 = args or {}
-	local timeout  = args.timeout or 3
-	local settings = args.settings or function() end
+	local interval  = args.interval or 5
+	local settings = args.settings or function()
+		widget:set_text("" .. string.format("%-6s", mem_now.used .. "MB "))
+	end
 	mem.timeout = args.timeout or 0
 	mem.font = args.font or font
 
@@ -83,9 +85,9 @@ local function worker(args)
 		settings()
 	end
 
-	newtimer("mem", timeout, update)
+	newtimer("mem", interval, update)
 
-	return mem.widget
+    return setmetatable(mem, { __index = mem.widget })
 end
 
 return setmetatable(mem, { __call = function(_, ...) return worker(...) end })

@@ -3,6 +3,7 @@ local wibox = require("wibox")
 local beautiful = require("beautiful")
 local awful = require("awful")
 local widgets = require("widgets")
+--local rpic = require("widgets.random_pic")
 local toolbar = {}
 function toolbar.init()
 
@@ -21,11 +22,13 @@ volumewidget = widgets.alsa({
 			volicon:set_image(beautiful.widget_vol_no)
 		elseif tonumber(volume_now.level) <= 50 then
 			volicon:set_image(beautiful.widget_vol_low)
-		else
+		elseif tonumber(volume_now.level) <= 75 then
 			volicon:set_image(beautiful.widget_vol)
+		else
+			volicon:set_image(beautiful.widget_vol_high)
 		end
 
-		widget:set_text(" " .. volume_now.level .. "% ")
+		widget:set_text("" .. volume_now.level .. "%")
 	end
 })
 volumewidgetbg = wibox.widget.background(volumewidget, beautiful.alt_bg)
@@ -41,8 +44,9 @@ mpdwidget = widgets.mpd({
 			title  = mpd_now.title  .. " "
 			mpdicon:set_image(beautiful.widget_music_on)
 		elseif mpd_now.state == "pause" then
-			artist = " mpd "
+			artist = "mpd "
 			title  = "paused "
+			mpdicon:set_image(beautiful.widget_music)
 		else
 			artist = ""
 			title  = ""
@@ -56,22 +60,20 @@ mpdwidget = widgets.mpd({
 mpdwidgetbg = mpdwidget
 
 -- MEM
-memicon = wibox.widget.imagebox(beautiful.widget_mem)
 memwidget = widgets.mem({
 	list_length = 20,
-	settings = function()
-		widget:set_text(" " .. mem_now.used .. "MB ")
-	end
 })
+memicon = wibox.widget.imagebox(beautiful.widget_mem)
+memicon:connect_signal("mouse::enter", function () memwidget.show_notification() end)
+memicon:connect_signal("mouse::leave", function () memwidget.hide_notification() end)
 
 -- CPU
-cpuicon = wibox.widget.imagebox(beautiful.widget_cpu)
-cpuwidget = wibox.widget.background(widgets.cpu({
+cpuwidget = widgets.cpu({
 	list_length = 20,
-	settings = function()
-		widget:set_text(" " .. cpu_now.usage .. "% ")
-	end
-}), beautiful.alt_bg)
+})
+cpuicon = wibox.widget.imagebox(beautiful.widget_cpu)
+cpuicon:connect_signal("mouse::enter", function () cpuwidget.show_notification() end)
+cpuicon:connect_signal("mouse::leave", function () cpuwidget.hide_notification() end)
 
 -- Coretemp
 tempicon = wibox.widget.imagebox(beautiful.widget_temp)
@@ -116,12 +118,9 @@ widgets.calendar:attach(mytextclock, { font_size = 8, })
 
 -- Separators
 spr = wibox.widget.textbox(' ')
-arrl = wibox.widget.imagebox()
-arrl:set_image(beautiful.arrl)
-arrl_dl = wibox.widget.imagebox()
-arrl_dl:set_image(beautiful.arrl_dl)
-arrl_ld = wibox.widget.imagebox()
-arrl_ld:set_image(beautiful.arrl_ld)
+--arrl = wibox.widget.imagebox()
+--arrl:set_image(beautiful.arrl)
+sep  = wibox.widget.textbox(' ')
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -187,7 +186,7 @@ for s = 1, screen.count() do
 	mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
 
 	-- Create a tasklist widget
-	mytasklist[s] = widgets.tasklist(s, widgets.tasklist.filter.focused_and_minimized_current_tags, mytasklist.buttons)
+	mytasklist[s] = widgets.tasklist(s, widgets.tasklist.filter.focused_and_minimized_current_tags, mytasklist.buttons, {font = 'Dina 11'})
 
 	-- Create the wibox
 	mywibox[s] = awful.wibox({ position = "top", screen = s, height = 18 })
@@ -202,25 +201,25 @@ for s = 1, screen.count() do
 	-- Widgets that are aligned to the right
 	local right_layout = wibox.layout.fixed.horizontal()
 	right_layout:add(spr)
-	right_layout:add(arrl)
+	right_layout:add(sep)
 	right_layout:add(mpdicon)
 	right_layout:add(mpdwidgetbg)
-	right_layout:add(arrl)
+	right_layout:add(sep)
 	right_layout:add(voliconbg)
 	right_layout:add(volumewidgetbg)
-	right_layout:add(arrl)
+	right_layout:add(sep)
 	--systray = widgets.systray()
 	--if s == 1 then right_layout:add(systray) end
 	if s == 1 then right_layout:add(widgets.systray_toggle(s)) end
-	right_layout:add(arrl)
+	right_layout:add(sep)
 	right_layout:add(memicon)
 	right_layout:add(memwidget)
-	right_layout:add(arrl)
+	right_layout:add(sep)
 	right_layout:add(cpuicon)
 	right_layout:add(cpuwidget)
 	right_layout:add(tempicon)
 	right_layout:add(tempwidget)
-	right_layout:add(arrl)
+	right_layout:add(sep)
 	--right_layout:add(fsicon)
 	--right_layout:add(fswidgetbg)
 	--right_layout:add(arrl)
@@ -228,7 +227,7 @@ for s = 1, screen.count() do
 	-- right_layout:add(batwidget)
 	right_layout:add(mytextclock)
 	right_layout:add(spr)
-	right_layout:add(arrl_ld)
+--	right_layout:add(arrl_ld)
 	right_layout:add(mylayoutbox[s])
 
 	-- Now bring it all together (with the tasklist in the middle)
