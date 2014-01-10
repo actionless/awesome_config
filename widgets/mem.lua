@@ -1,26 +1,26 @@
 
 --[[
-												  
-	 Licensed under GNU General Public License v2 
-	  * (c) 2013,	  Luke Bonham				
-	  * (c) 2010-2012, Peter Hofmann			  
-												  
+                                                  
+     Licensed under GNU General Public License v2 
+      * (c) 2013-2014, Yauheni Kirylau
+      * (c) 2013,      Luke Bonham                
+      * (c) 2010-2012, Peter Hofmann              
+                                                  
 --]]
 
-local newtimer		= require("widgets.helpers").newtimer
-local font     = require("widgets.helpers").font
+local newtimer  = require("widgets.helpers").newtimer
+local font      = require("widgets.helpers").font
 
-local wibox		   = require("wibox")
-local naughty     = require("naughty")
+local wibox     = require("wibox")
+local naughty   = require("naughty")
 
-local io			  = { lines  = io.lines,
-						 popen = io.popen }
-local math			= { floor  = math.floor }
-local string		  = { format = string.format,
-						  gmatch = string.gmatch,
-						  len	= string.len }
-
-local setmetatable	= setmetatable
+local io        = { lines  = io.lines,
+                    popen = io.popen }
+local math      = { floor  = math.floor }
+local string    = { format = string.format,
+                    gmatch = string.gmatch,
+                    len    = string.len }
+local setmetatable = setmetatable
 
 -- Memory usage (ignoring caches)
 -- lain.widgets.mem
@@ -33,9 +33,12 @@ local function worker(args)
 	local args	 = args or {}
 	local timeout  = args.timeout or 3
 	local settings = args.settings or function() end
-	mem.list_len = args.list_length or 10
 	mem.timeout = args.timeout or 0
 	mem.font = args.font or font
+
+	mem.list_len = args.list_length or 10
+	mem.command = args.command or "COLUMNS=512 top -o \\%MEM -b -n 1 | head -n " .. mem.list_len +6 .. "| tail -n " .. mem.list_len  .. 
+	                              ' | awk ' .. '\'{printf "%-5s %-4s %s\\n", $1, $10, $12}\''
 
 	function mem.hide_notification()
 		if mem.id ~= nil then
@@ -46,7 +49,7 @@ local function worker(args)
 
 	function mem.show_notification()
 		mem.hide_notification()
-		local f = io.popen("ps aux | awk '{print $2, $4, $11}' | sort -k2r | head -n " .. mem.list_len)
+		local f = io.popen(mem.command)
 		local output = ''
 		for line in f:lines() do
 			output = output .. line .. '\n'

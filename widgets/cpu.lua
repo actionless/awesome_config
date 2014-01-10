@@ -2,18 +2,19 @@
 --[[
                                                   
      Licensed under GNU General Public License v2 
+      * (c) 2013-2014, Yauheni Kirylau
       * (c) 2013,      Luke Bonham                
       * (c) 2010-2012, Peter Hofmann              
                                                   
 --]]
 
 local first_line   = require("widgets.helpers").first_line
-local newtimer		= require("widgets.helpers").newtimer
-local font     = require("widgets.helpers").font
+local newtimer     = require("widgets.helpers").newtimer
+local font         = require("widgets.helpers").font
 
 
 local wibox        = require("wibox")
-local naughty     = require("naughty")
+local naughty      = require("naughty")
 
 local math         = { ceil   = math.ceil }
 local string       = { format = string.format,
@@ -24,21 +25,23 @@ local setmetatable = setmetatable
 -- CPU usage
 -- widgets.cpu
 local cpu = {
-    last_total = 0,
-    last_active = 0
+	last_total = 0,
+	last_active = 0
 }
 cpu.widget = wibox.widget.textbox('')
 cpu.widget:connect_signal("mouse::enter", function () cpu.show_notification() end)
 cpu.widget:connect_signal("mouse::leave", function () cpu.hide_notification() end)
 
 local function worker(args)
-    local args     = args or {}
-    local timeout  = args.timeout or 5
-    local settings = args.settings or function() end
-    cpu.font = args.font or font
+	local args     = args or {}
+	local timeout  = args.timeout or 5
+	local settings = args.settings or function() end
+	cpu.font = args.font or font
+	cpu.timeout = args.timeout or 0
 
 	cpu.list_len = args.list_length or 10
-	cpu.timeout = args.timeout or 0
+	cpu.command = args.command or "COLUMNS=512 top -o \\%CPU -b -n 1 | head -n " .. cpu.list_len +6 .. "| tail -n " .. cpu.list_len  .. 
+	                              ' | awk ' .. '\'{printf "%-5s %-4s %s\\n", $1, $9, $12}\''
 
 	function cpu.hide_notification()
 		if cpu.id ~= nil then
@@ -49,7 +52,7 @@ local function worker(args)
 
 	function cpu.show_notification()
 		cpu.hide_notification()
-		local f = io.popen("ps aux | awk '{print $2, $3, $11}' | sort -k2r | head -n " .. cpu.list_len)
+		local f = io.popen(cpu.command)
 		local output = ''
 		for line in f:lines() do
 			output = output .. line .. '\n'
@@ -57,7 +60,7 @@ local function worker(args)
 		cpu.id = naughty.notify({
 			text = output,
 			timeout = cpu.timeout
-				})
+		})
 	end
 
     function cpu.update()

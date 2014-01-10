@@ -6,8 +6,7 @@
       * (c) 2010-2012, Peter Hofmann              
                                                   
 --]]
-
-local theme_dir = "/themes/actionless/"
+local settings = require("widgets.settings")
 
 local debug  = require("debug")
 
@@ -16,6 +15,7 @@ local capi   = { timer = timer }
 local io     = { open = io.open }
 local rawget = rawget
 
+local theme_dir = settings.theme_dir
 -- Lain helper functions for internal use
 local helpers = {}
 
