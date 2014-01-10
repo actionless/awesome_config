@@ -12,6 +12,7 @@ local setmetatable = setmetatable
 local table = table
 local common = require("awful.widget.common")
 local beautiful = require("widgets.helpers").beautiful
+local awful = require("awful")
 local client = require("awful.client")
 local util = require("awful.util")
 local tag = require("awful.tag")
@@ -100,7 +101,7 @@ local function tasklist_update(s, w, buttons, filter, data, style, update_functi
     then
         for k, c in ipairs(capi_clients) do
             if not (c.skip_taskbar or c.hidden
-                or c.type == "splash" or c.type == "dock" or c.type == "desktop")
+                or c.type == "splash" or c.type == "dock" or c.type == "desktop" or awful.layout.get(c.screen) == awful.layout.suit.floating)
                 and tasklist.filter.focused(c, s) then
                 table.insert(clients, c)
             end
