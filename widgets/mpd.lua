@@ -2,6 +2,7 @@
 --[[
 												  
 	 Licensed under GNU General Public License v2 
+	  * (c) 2014, Yauheni Kirylau
 	  * (c) 2013, Luke Bonham					 
 	  * (c) 2010, Adrian C. <anrxc@sysphere.org>  
 												  
@@ -11,14 +12,15 @@ local helpers	  = require("widgets.helpers")
 
 local awful		= require("awful")
 local escape_f	 = require("awful.util").escape
-local naughty	  = require("naughty")
+local naughty	  = require("widgets.naughty")
 local wibox		= require("wibox")
 
 local io		   = { popen	= io.popen }
 local os		   = { execute  = os.execute,
 					   getenv   = os.getenv }
 local string	   = { format   = string.format,
-					   gmatch   = string.gmatch }
+					   gmatch   = string.gmatch,
+					   match   = string.match }
 local asyncshell  = require("widgets.asyncshell")
 local setmetatable = setmetatable
 
@@ -37,9 +39,7 @@ local function worker(args)
 	local settings	= args.settings or function() end
 
 	local mpdcover = helpers.scripts_dir .. "mpdcover"
-	local mpdh = "telnet://" .. host .. ":" .. port
-	--local echo = "echo 'password " .. password .. "\nstatus\ncurrentsong\nclose'"
-	local echo = "echo 'status\ncurrentsong'"
+	local echo = 'mpc --format "file: %file%\\nArtist: %albumartist%\\nTitle: %title%\\nAlbum: %album%\\nDate: %date%"'
 
 	mpd.widget = wibox.widget.textbox('')
 
@@ -64,7 +64,7 @@ local function worker(args)
 
 
 	function mpd.update()
-		asyncshell.request(echo .. " | curl --connect-timeout 1 -fsm 1 " .. mpdh, function(f) mpd.post_update(f) end)
+		asyncshell.request(echo, function(f) mpd.post_update(f) end)
 	end
 
 	function mpd.toggle()
@@ -100,17 +100,16 @@ local function worker(args)
 			date   = "N/A"
 		}
 
-		--local f = io.popen(echo .. " | curl --connect-timeout 1 -fsm 1 " .. mpdh)
-
 		for line in f:lines() do
-			for k, v in string.gmatch(line, "([%w]+):[%s](.*)$") do
-				if	 k == "state"  then mpd_now.state  = v
-				elseif k == "file"   then mpd_now.file   = v
-				elseif k == "Artist" then mpd_now.artist = escape_f(v)
-				elseif k == "Title"  then mpd_now.title  = escape_f(v)
-				elseif k == "Album"  then mpd_now.album  = escape_f(v)
-				elseif k == "Date"   then mpd_now.date   = escape_f(v)
-				end
+			if string.match(line,"%[playing%]") then mpd_now.state  = 'play'
+			elseif string.match(line,"%[paused%]") then mpd_now.state = 'pause' end
+
+			k,v = string.match(line, "([%w]+):[%s](.*)$")
+			if k == "file"   then mpd_now.file   = v
+			elseif k == "Artist" then mpd_now.artist = escape_f(v)
+			elseif k == "Title"  then mpd_now.title  = escape_f(v)
+			elseif k == "Album"  then mpd_now.album  = escape_f(v)
+			elseif k == "Date"   then mpd_now.date   = escape_f(v)
 			end
 		end
 		if mpd_now.artist == "N/A" then
@@ -122,8 +121,6 @@ local function worker(args)
 			mpd_now.title = escape_f(mpd_now.file:match(".*['/'].* [-] (.*)[.].*")) or
 			escape_f(mpd_now.file:match(".*['/'](.*)i[.].*")) or escape_f(mpd_now.file)
 		end
-
-		f:close()
 
 		widget = mpd.widget
 		settings()

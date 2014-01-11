@@ -7,9 +7,10 @@ require("awful.autofocus")
 -- Widget and layout library
 local wibox = require("wibox")
 -- Theme handling library
-local beautiful = require("beautiful")
+local beautiful = require("widgets.helpers").beautiful
 -- Notification library
-local naughty = require("naughty")
+local naughty = require("widgets.naughty")
+local naughty2 = require("naughty")
 local menubar = require("menubar")
 -- shifty - dynamic tagging library
 local shifty = require("shifty")
@@ -42,33 +43,36 @@ end
 -- }}}
 
 -- {{{ Variable definitions
--- localization
 naughty.config.presets.normal.opacity = 0.8
 naughty.config.presets.low.opacity = 0.8
 naughty.config.presets.critical.opacity = 0.8
+naughty2.config.presets.normal.opacity = 0.8
+naughty2.config.presets.low.opacity = 0.8
+naughty2.config.presets.critical.opacity = 0.8
+-- localization
 os.setlocale(os.getenv("LANG"))
--- beautiful init
-beautiful.init(awful.util.getdir("config") .. "/themes/actionless/theme.lua")
 -- common
 modkey	 = "Mod4"
 altkey	 = "Mod1"
 --terminal = "urxvtc" or "xterm"
 --terminal = "terminator" or "xterm"
-terminal = "urxvt -lsp 1 " or "xterm"
+terminal = "urxvt -lsp 1 -geometry 120x30" or "xterm"
 editor	 = "vim" or os.getenv("EDITOR") or "nano" or "vi"
 editor_cmd = terminal .. " -e " .. editor
 
 -- user defined
 --browser	= "dwb"
-chromium   = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers chromium --enable-user-stylesheet"
-chrome   = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers google-chrome --enable-user-stylesheet"
+--chromium   = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers chromium --enable-user-stylesheet"
+--chrome   = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers google-chrome --enable-user-stylesheet"
+chromium   = "chromium --enable-user-stylesheet"
+chrome   = "google-chrome --enable-user-stylesheet"
 firefox	= "firefox -P actionless "
 gui_editor = "/opt/sublime_text/sublime_text"
 compositor = "compton --backend glx --paint-on-overlay --glx-no-stencil --vsync opengl-swc --unredir-if-possible --config /home/lie/.config/compton_awesome.conf"
 graphics   = "pinta"
 file_manager = "stuurman"
 tmux	   = terminal .. ' -e tmux '
-musicplr   = terminal .. " --geometry=850x466 -e ncmpcpp"
+musicplr   = terminal .. " -geometry 120x50 -e ncmpcpp"
 tmux_run   = terminal .. " -e tmux new-session"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.

@@ -53,7 +53,7 @@ mpdwidget = widgets.mpd({
 			mpdicon:set_image(beautiful.widget_music)
 		end
 
-		widget:set_markup(markup(beautiful.mpd_text, artist) .. title)
+		widget:set_markup('<span font="' .. beautiful.tasklist_font .. '">' .. markup(beautiful.mpd_text, artist) .. title .. '</span>')
 	end
 })
 -- mpdwidgetbg = wibox.widget.background(mpdwidget, beautiful.alt_bg)
@@ -278,7 +278,7 @@ function make_titlebar(c)
 	local middle_layout = wibox.layout.flex.horizontal()
 	local title = awful.titlebar.widget.titlewidget(c)
 	title:set_align("center")
-	title:set_font(beautiful.sans_font)
+	title:set_font(beautiful.titlebar_font)
 	middle_layout:add(title)
 	middle_layout:buttons(buttons)
 	-- Now bring it all together

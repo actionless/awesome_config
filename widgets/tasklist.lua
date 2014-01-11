@@ -10,8 +10,9 @@ local capi = { screen = screen,
 local ipairs = ipairs
 local setmetatable = setmetatable
 local table = table
-local common = require("awful.widget.common")
+local common = require("widgets.common")
 local beautiful = require("widgets.helpers").beautiful
+local wibox = require("wibox")
 local awful = require("awful")
 local client = require("awful.client")
 local util = require("awful.util")
@@ -94,7 +95,7 @@ local function tasklist_label(c, args)
     return text, bg, bg_image, not tasklist_disable_icon and c.icon or nil
 end
 
-local function tasklist_update(s, w, buttons, filter, data, style, update_function)
+local function tasklist_update(s, w, buttons, filter, data, style, update_function, right_margin)
     local clients = {}
     local capi_clients = capi.client.get()
     if filter == tasklist.filter.focused_and_minimized_current_tags
@@ -125,7 +126,7 @@ local function tasklist_update(s, w, buttons, filter, data, style, update_functi
 
     local function label(c) return tasklist_label(c, style) end
 
-    update_function(w, buttons, label, data, clients)
+    update_function(w, buttons, label, data, clients, right_margin)
 end
 
 --- Create a new tasklist widget. The last two arguments (update_function
@@ -157,6 +158,7 @@ end
 -- font The font.
 function tasklist.new(screen, filter, buttons, resize, style, update_function, base_widget)
     local uf = update_function or common.list_update
+    local right_margin = 3
     if resize == 'fixed' then
         f_layout = fixed.horizontal()
     else
@@ -165,7 +167,7 @@ function tasklist.new(screen, filter, buttons, resize, style, update_function, b
     local w = base_widget or f_layout
 
     local data = setmetatable({}, { __mode = 'k' })
-    local u = function () tasklist_update(screen, w, buttons, filter, data, style, uf) end
+    local u = function () tasklist_update(screen, w, buttons, filter, data, style, uf, right_margin) end
     tag.attached_connect_signal(screen, "property::selected", u)
     tag.attached_connect_signal(screen, "property::activated", u)
     capi.client.connect_signal("property::urgent", u)

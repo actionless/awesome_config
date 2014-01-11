@@ -3,6 +3,8 @@ local widgets =
 	--awesome forks
 	tasklist  = require("widgets.tasklist"),
 	menu    = require("widgets.menu"),
+	common    = require("widgets.common"),
+	naughty    = require("widgets.naughty"),
 	--lain forks
 	markup    = require("widgets.markup"),
 	helpers    = require("widgets.helpers"),
