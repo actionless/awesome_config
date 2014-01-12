@@ -40,7 +40,7 @@ mpdwidget = widgets.mpd({
 	music_dir = '/media/m/music/',
 	settings = function()
 		if mpd_now.state == "play" then
-			artist = " " .. mpd_now.artist .. " "
+			artist = " " .. mpd_now.artist .. "   "
 			title  = mpd_now.title  .. " "
 			mpdicon:set_image(beautiful.widget_music_on)
 		elseif mpd_now.state == "pause" then

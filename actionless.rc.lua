@@ -72,7 +72,7 @@ compositor = "compton --backend glx --paint-on-overlay --glx-no-stencil --vsync 
 graphics   = "pinta"
 file_manager = "stuurman"
 tmux	   = terminal .. ' -e tmux '
-musicplr   = terminal .. " -geometry 120x50 -e ncmpcpp"
+musicplr   = terminal .. " -e ncmpcpp"
 tmux_run   = terminal .. " -e tmux new-session"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
