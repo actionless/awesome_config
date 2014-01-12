@@ -56,7 +56,7 @@ modkey	 = "Mod4"
 altkey	 = "Mod1"
 --terminal = "urxvtc" or "xterm"
 --terminal = "terminator" or "xterm"
-terminal = "urxvt -lsp 1 -geometry 120x30" or "xterm"
+terminal = "st" or "urxvt -lsp 1 -geometry 120x30" or "xterm"
 editor	 = "vim" or os.getenv("EDITOR") or "nano" or "vi"
 editor_cmd = terminal .. " -e " .. editor
 
