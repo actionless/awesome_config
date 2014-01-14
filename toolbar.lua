@@ -96,7 +96,7 @@ clockicon = wibox.widget.imagebox(beautiful.widget_clock)
 mytextclock = awful.widget.textclock(" %H:%M")
 
 -- calendar
-widgets.calendar:attach(mytextclock, { font_size = 8, })
+widgets.calendar:attach(mytextclock)
 
 -- Battery
 -- baticon = wibox.widget.imagebox(beautiful.widget_battery)

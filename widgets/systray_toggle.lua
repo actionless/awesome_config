@@ -1,7 +1,6 @@
 ---------------------------------------------------------------------------
--- @author Uli Schlachter
--- @copyright 2010 Uli Schlachter
--- @release v3.5.2
+-- @author Yauheni Kirylau
+-- @copyright 2013-2014 Yauheni Kirylau
 ---------------------------------------------------------------------------
 
 local wibox     = require("wibox")
@@ -103,7 +102,6 @@ end
 
 function systray_toggle.mt:__call(...)
     scr = ...
---    widget = wibox.widget.textbox(systray_toggle.text)
     widget = wibox.widget.imagebox(beautiful.dropdown_icon)
     widget:connect_signal("mouse::enter", function ()
         systray_toggle.arrow = true
@@ -116,8 +114,6 @@ function systray_toggle.mt:__call(...)
     systray_toggle.widget = widget
     return widget
 end
-
---helpers.newtimer("systray", timeout, mpd.update)
 
 return setmetatable(systray_toggle, systray_toggle.mt)
 

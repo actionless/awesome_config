@@ -11,7 +11,7 @@
 local first_line   = require("widgets.helpers").first_line
 local newtimer     = require("widgets.helpers").newtimer
 local font         = require("widgets.helpers").font
-
+local mono_preset      = require("widgets.helpers").mono_preset
 
 local wibox        = require("wibox")
 local naughty      = require("naughty")
@@ -61,7 +61,8 @@ local function worker(args)
 		end
 		cpu.id = naughty.notify({
 			text = output,
-			timeout = cpu.timeout
+			timeout = cpu.timeout,
+			preset = mono_preset
 		})
 	end
 

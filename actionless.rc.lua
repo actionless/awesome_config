@@ -9,8 +9,7 @@ local wibox = require("wibox")
 -- Theme handling library
 local beautiful = require("widgets.helpers").beautiful
 -- Notification library
-local naughty = require("widgets.naughty")
-local naughty2 = require("naughty")
+local naughty = require("naughty")
 local menubar = require("menubar")
 -- shifty - dynamic tagging library
 local shifty = require("shifty")
@@ -46,9 +45,9 @@ end
 naughty.config.presets.normal.opacity = beautiful.notification_opacity
 naughty.config.presets.low.opacity = beautiful.notification_opacity
 naughty.config.presets.critical.opacity = beautiful.notification_opacity
-naughty2.config.presets.normal.opacity = beautiful.notification_opacity
-naughty2.config.presets.low.opacity = beautiful.notification_opacity
-naughty2.config.presets.critical.opacity = beautiful.notification_opacity
+naughty.config.presets.normal.font = beautiful.notification_font
+naughty.config.presets.low.font = beautiful.notification_font
+naughty.config.presets.critical.font = beautiful.notification_font
 -- localization
 os.setlocale(os.getenv("LANG"))
 -- common

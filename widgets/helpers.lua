@@ -27,6 +27,9 @@ helpers.dir    = debug.getinfo(1, 'S').source:match[[^@(.*/).*$]]
 helpers.icons_dir   = awful.util.getdir("config") .. theme_dir .. 'icons/'
 helpers.scripts_dir = helpers.dir .. 'scripts/'
 
+helpers.mono_preset = { font=helpers.beautiful.notification_monofont,
+				        opacity=helpers.beautiful.notification_opacity }
+
 -- {{{ Modules loader
 
 function helpers.wrequire(table, key)
