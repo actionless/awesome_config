@@ -18,8 +18,8 @@ theme.error	= "#f92672"
 
 theme.border	= "#000000"
 theme.sel_border = "#d33862"
-theme.titlebar_focus	= "#66436C"
 theme.titlebar	= "#3c3c3c"
+theme.titlebar_focus	= "#66436C"
 
 --theme.font                          = "PT Mono 8"
 --theme.font                          = "DejaVu Sans Mono 8"
@@ -39,6 +39,7 @@ theme.border_normal                 = theme.border
 theme.border_focus                  = theme.sel_border
 theme.border_marked                 = theme.error
 
+theme.taglist_font                  = theme.font
 theme.taglist_fg_focus              = theme.shiny
 theme.taglist_bg_focus              = theme.dark
 
