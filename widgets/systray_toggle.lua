@@ -7,10 +7,11 @@
 local wibox     = require("wibox")
 local awful     = require("awful")
 local wbase = require("wibox.widget.base")
-local systray_widget = require("wibox.widget.systray")
 local lbase = require("wibox.layout.base")
-local beautiful = require("beautiful")
---local capi = { awesome = awesome }
+local systray_widget = require("wibox.widget.systray")
+local beautiful = require("widgets.helpers").beautiful
+local asyncshell = require("widgets.asyncshell")
+local helpers     = require("widgets.helpers")
 local capi = {
     client = client,
     mouse = mouse,
@@ -21,32 +22,65 @@ local setmetatable = setmetatable
 local error = error
 local abs = math.abs
 
-local helpers     = require("widgets.helpers")
+--- widgets.systray_toggle
+local systray_toggle = { mt = {}, arrow=false, popup=false }
 local scr = 1
---- wibox.widget.systray
-local systray_toggle = { mt = {} }
-
---systray_toggle.text = ' ↧ '
 
 systray_toggle.geometry = {
-    height = 24,
-    width = 340,
-    x = 1340,
-    y = 18
+    icon_size = 24,
+    x = 1400,
+    y = 18,
+    lmargin = 5,
+    rmargin = 5,
+    tmargin = 2,
+    bmargin = 2,
 }
 
 local function initialize()
     local mywibox = wibox({})
     mywibox.ontop = true
-    local layout = wibox.layout.fixed.horizontal()
+    mywibox.opacity = beautiful.notification_opacity
     local systray = systray_widget()
-    layout:add(systray)
+    local flayout = wibox.layout.flex.horizontal()
+    flayout:add(systray)
+    local lmargin = wibox.layout.margin(wibox.widget.textbox(''),
+                                       systray_toggle.geometry['lmargin'], 0,
+                                       systray_toggle.geometry['tmargin'], systray_toggle.geometry['bmargin']
+                                       )
+    local rmargin = wibox.layout.margin(wibox.widget.textbox(''),
+                                       0, systray_toggle.geometry['rmargin'],
+                                       systray_toggle.geometry['tmargin'], systray_toggle.geometry['bmargin']
+                                       )
+    local layout = wibox.layout.align.horizontal()
+    layout:set_left(lmargin)
+    layout:set_middle(flayout)
+    layout:set_right(rmargin)
+
     mywibox:set_widget(layout)
-    mywibox:connect_signal("mouse::leave", function () systray_toggle.hide() end)
+    mywibox:connect_signal("mouse::enter", function () systray_toggle.popup=true end)
+    mywibox:connect_signal("mouse::leave", function () systray_toggle.popup=false systray_toggle.check() end)
     systray_toggle.wibox = mywibox
 end
 
+function systray_toggle.check()
+    asyncshell.request('sleep 0.1', systray_toggle.post_check)
+end
+function systray_toggle.post_check()
+    if not systray_toggle.popup and not systray_toggle.arrow then
+        systray_toggle.hide()
+    end
+end
+
 function systray_toggle.show()
+    local num_icons = capi.awesome.systray()
+    local geometry = systray_toggle.geometry
+
+    if num_icons < 1 then
+        num_icons = 2
+    end
+    local width = num_icons * geometry.icon_size + geometry.lmargin + geometry.rmargin
+    local height = geometry.icon_size + geometry.tmargin + geometry.bmargin
+
     if not systray_toggle.wibox then
         initialize()
     elseif systray_toggle.wibox.visible then -- Menu already shown, exit
@@ -56,12 +90,10 @@ function systray_toggle.show()
     -- Set position and size
     scr = scr or capi.mouse.screen or 1
     local scrgeom = capi.screen[scr].workarea
-    local geometry = systray_toggle.geometry
     systray_toggle.wibox:geometry({x = geometry.x or scrgeom.x,
                              y = geometry.y or scrgeom.y,
-                             height = geometry.height or theme.get_font_height() * 1.5,
-                             width = geometry.width or scrgeom.width})
-
+                             height = height,
+                             width = width})
     systray_toggle.wibox.visible = true
 end
 
@@ -73,7 +105,14 @@ function systray_toggle.mt:__call(...)
     scr = ...
 --    widget = wibox.widget.textbox(systray_toggle.text)
     widget = wibox.widget.imagebox(beautiful.dropdown_icon)
-    widget:connect_signal("mouse::enter", function () systray_toggle.show() end)
+    widget:connect_signal("mouse::enter", function ()
+        systray_toggle.arrow = true
+        systray_toggle.show()
+    end)
+    widget:connect_signal("mouse::leave", function ()
+        systray_toggle.arrow = false
+        systray_toggle.check()
+    end)
     systray_toggle.widget = widget
     return widget
 end

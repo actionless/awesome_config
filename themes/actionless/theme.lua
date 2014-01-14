@@ -5,7 +5,7 @@ theme.dir			= themes_dir
 --theme.wallpaper                     = themes_dir .. "/glonely.png"
 theme.wallpaper                     = '/home/lie/Dropbox/pokemon_13/pic/pattern/tumblr_mqgornTRMX1qe8qruo2_500.png'
 
-
+theme.notification_opacity = 0.8
 
 theme.bg	= "#000000"
 theme.alt_bg	= "#000000"
@@ -31,7 +31,7 @@ theme.font                          = "Meslo LG S 8"
 --theme.tasklist_font                 = "tewi 9"
 --theme.tasklist_font                 = "PT Sans 9.4"
 theme.sans_font             		= "PT Sans Caption 8.8"
-theme.notification_font             = theme.sans_font
+theme.notification_font             = "PT Sans 10"
 theme.tasklist_font                 = "PT Sans Caption Bold 8.8"
 theme.titlebar_font                 = "PT Sans Caption Bold 8"
 theme.fg_normal                     = theme.fg

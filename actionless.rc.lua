@@ -43,12 +43,12 @@ end
 -- }}}
 
 -- {{{ Variable definitions
-naughty.config.presets.normal.opacity = 0.8
-naughty.config.presets.low.opacity = 0.8
-naughty.config.presets.critical.opacity = 0.8
-naughty2.config.presets.normal.opacity = 0.8
-naughty2.config.presets.low.opacity = 0.8
-naughty2.config.presets.critical.opacity = 0.8
+naughty.config.presets.normal.opacity = beautiful.notification_opacity
+naughty.config.presets.low.opacity = beautiful.notification_opacity
+naughty.config.presets.critical.opacity = beautiful.notification_opacity
+naughty2.config.presets.normal.opacity = beautiful.notification_opacity
+naughty2.config.presets.low.opacity = beautiful.notification_opacity
+naughty2.config.presets.critical.opacity = beautiful.notification_opacity
 -- localization
 os.setlocale(os.getenv("LANG"))
 -- common
@@ -101,12 +101,8 @@ awful.util.spawn_with_shell("xset r rate 250 25")
 awful.util.spawn_with_shell("xset b off")
 run_once(compositor)
 --run_once("xfce4-power-manager")
---run_once("compton --backend glx --paint-on-overlay --glx-no-stencil --vsync opengl-swc --glx-no-rebind-pixmap --config ~/.config/compton_awesome.conf")
---run_once("compton --vsync opengl --dbe --config ~/.config/compton_awesome.conf")
 --run_once("urxvtd")
---awful.util.spawn_with_shell('feh --bg-tile tumblr_mqgornTRMX1qe8qruo2_500.png')
 run_once("unclutter")
-awful.util.spawn_with_shell("xset b off")
 
 run_once("gxkb")
 run_once("dropboxd")
