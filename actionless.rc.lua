@@ -63,7 +63,7 @@ chromium   = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers chromium --enable-user-stylesh
 chrome   = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers google-chrome --enable-user-stylesheet"
 firefox	= "firefox -P actionless "
 gui_editor = "/opt/sublime_text/sublime_text"
-compositor = "compton --backend glx --paint-on-overlay --glx-no-stencil --vsync opengl-swc --unredir-if-possible --config ~/.config/compton_awesome.conf"
+compositor = "compton --config ~/.config/compton_awesome.conf"
 graphics   = "pinta"
 file_manager = "stuurman"
 tmux	   = terminal .. ' -e tmux '
@@ -99,6 +99,7 @@ run_once("xfce4-power-manager")
 --run_once("urxvtd")
 run_once("unclutter")
 
+run_once("nm-applet")
 run_once("gxkb")
 run_once("~/.dropbox-dist/dropboxd")
 -- }}}
