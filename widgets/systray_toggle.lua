@@ -11,6 +11,7 @@ local systray_widget = require("wibox.widget.systray")
 local beautiful = require("widgets.helpers").beautiful
 local asyncshell = require("widgets.asyncshell")
 local helpers     = require("widgets.helpers")
+local settings     = require("widgets.settings")
 local capi = {
     client = client,
     mouse = mouse,
@@ -27,7 +28,7 @@ local scr = 1
 
 systray_toggle.geometry = {
     icon_size = 24,
-    x = 1400,
+    x = settings.screen_width - 280 ,
     y = 18,
     lmargin = 5,
     rmargin = 5,
