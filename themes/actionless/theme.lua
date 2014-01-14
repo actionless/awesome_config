@@ -2,58 +2,81 @@ theme                               = {}
 
 themes_dir                          = os.getenv("HOME") .. "/.config/awesome/themes/actionless"
 theme.dir			= themes_dir
-theme.wallpaper                     = themes_dir .. "/wall.png"
+--theme.wallpaper                     = themes_dir .. "/glonely.png"
+theme.wallpaper                     = '/home/lie/Dropbox/pokemon_13/pic/pattern/tumblr_mqgornTRMX1qe8qruo2_500.png'
 
 theme.bg	= "#000000"
-theme.alt_bg	= "#000000" -- 313131
-theme.fg	= "#eeeeec"
+theme.alt_bg	= "#000000"
 
-theme.dark	= "#5e468c"
-theme.light	= "#897eae"
+theme.fg	= "#bcbcbc"
 theme.alt_fg	= "#a562b3"
-theme.error	= "#ee82a8"
+theme.shiny = "#ffffff"
 
-theme.border	= "#222222"
-theme.sel_border = "#ff3377" -- "#adeb71"
-theme.titlebar	= "#3e2f4f"
+theme.light	= "#a562b3"
+theme.dark	= "#370f3e"
+theme.error	= "#f92672"
+
+theme.border	= "#000000"
+theme.sel_border = "#d33862"
+theme.titlebar	= "#3c3c3c"
+theme.titlebar_focus	= "#66436C"
 
 --theme.font                          = "PT Mono 8"
---theme.font                          = "tewi 8"
-theme.font                          = "DejaVu Sans Mono 8"
---theme.font                          = "PT Sans 8"
-theme.sans_font                     = "PT Sans Caption Bold 8"
+--theme.font                          = "DejaVu Sans Mono 8"
+--theme.font                          = "tewi 9"
+--theme.font                          = "Dina 8"
+theme.font                          = "Ubuntu Mono 10"
+theme.sans_font             		= "Ubuntu 8.9"
 theme.fg_normal                     = theme.fg
-theme.fg_focus                      = theme.bg
-theme.fg_urgent                     = theme.bg
 theme.bg_normal                     = theme.bg
-theme.bg_focus                      = theme.error
+theme.fg_focus                      = theme.error
+theme.bg_focus                      = theme.dark
+theme.fg_urgent                     = theme.bg
 theme.bg_urgent                     = theme.error
+
 theme.border_width                  = "3"
 theme.border_normal                 = theme.border
 theme.border_focus                  = theme.sel_border
-theme.border_marked                 = "#CC9393"
-theme.titlebar_fg_focus             = theme.fg
-theme.titlebar_fg_normal            = "#4b4b4b"
-theme.titlebar_bg_focus             = theme.titlebar
-theme.titled_border                 = theme.titlebar
-theme.titlebar_bg_normal            = theme.border
-theme.taglist_fg_focus              = theme.fg
+theme.border_marked                 = theme.error
+
+theme.taglist_font                  = theme.font
+theme.taglist_fg_focus              = theme.shiny
 theme.taglist_bg_focus              = theme.dark
+
+--theme.tasklist_font                 = "Dina 11"
+--theme.tasklist_font                 = "tewi 9"
+--theme.tasklist_font                 = "PT Sans 9.4"
+theme.tasklist_font                 = theme.sans_font
+theme.tasklist_fg_focus             = theme.light
 theme.tasklist_bg_focus             = theme.bg
 theme.tasklist_fg_normal            = theme.fg
-theme.tasklist_fg_minimize          = theme.alt_fg
-theme.tasklist_fg_focus             = theme.light
-theme.textbox_widget_margin_top     = 1
+theme.tasklist_bg_normal            = theme.bg
+theme.tasklist_fg_minimize          = theme.fg
+theme.tasklist_bg_minimize          = theme.titlebar
+
+theme.titlebar_font                 = "Ubuntu Bold 9"
+theme.titlebar_fg_focus             = theme.shiny
+theme.titlebar_fg_normal            = theme.fg
+theme.titlebar_bg_focus             = theme.titlebar_focus
+theme.titlebar_bg_normal            = theme.titlebar
+
+theme.notification_opacity = 0.8
+theme.notification_font             = theme.sans_font
+theme.notification_monofont         = theme.font
 theme.notify_fg                     = theme.fg_normal
 theme.notify_bg                     = theme.bg_normal
 theme.notify_border                 = theme.border_focus
+
+theme.textbox_widget_margin_top     = 1
 theme.awful_widget_height           = 14
 theme.awful_widget_margin_top       = 2
-theme.mouse_finder_color            = "#CC9393"
+theme.mouse_finder_color            = theme.error
 theme.menu_height                   = "16"
 theme.menu_width                    = "140"
 
 theme.mpd_text                      = theme.light
+
+-- ICONS
 
 theme.taglist_squares_sel           = themes_dir .. "/icons/square_sel.png"
 theme.taglist_squares_unsel         = themes_dir .. "/icons/square_unsel.png"
@@ -91,12 +114,15 @@ theme.widget_net                    = themes_dir .. "/icons/net.png"
 theme.widget_hdd                    = themes_dir .. "/icons/hdd.png"
 theme.widget_music                  = themes_dir .. "/icons/note.png"
 theme.widget_music_on               = themes_dir .. "/icons/note_on.png"
+theme.widget_vol_high                    = themes_dir .. "/icons/vol_high.png"
 theme.widget_vol                    = themes_dir .. "/icons/vol.png"
 theme.widget_vol_low                = themes_dir .. "/icons/vol_low.png"
 theme.widget_vol_no                 = themes_dir .. "/icons/vol_no.png"
 theme.widget_vol_mute               = themes_dir .. "/icons/vol_mute.png"
 theme.widget_mail                   = themes_dir .. "/icons/mail.png"
 theme.widget_mail_on                = themes_dir .. "/icons/mail_on.png"
+
+theme.dropdown_icon                = themes_dir .. "/icons/dropdown.png"
 
 theme.tasklist_disable_icon         = true
 --theme.tasklist_floating             = "*"

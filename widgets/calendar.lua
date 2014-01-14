@@ -7,6 +7,7 @@
 --]]
 
 local icons_dir    = require("widgets.helpers").icons_dir
+local mono_preset  = require("widgets.helpers").mono_preset
 
 local awful        = require("awful")
 local beautiful    = require("beautiful")
@@ -17,7 +18,6 @@ local os           = { date = os.date }
 local tonumber     = tonumber
 
 local setmetatable = setmetatable
-
 -- Calendar notification
 local calendar = {}
 local cal_notification = nil
@@ -37,9 +37,6 @@ function calendar:show(t_out, inc_offset)
     local f, c_text
     local today = tonumber(os.date('%d'))
     local init_t = '/usr/bin/cal  | sed -r -e "s/(^| )( '
-    -- let's take font only, font size is set in calendar table
---    local font = beautiful.font:sub(beautiful.font:find(""),
---                 beautiful.font:find(" "))
 
     if offs == 0
     then -- current month showing, today highlighted
@@ -85,12 +82,11 @@ function calendar:show(t_out, inc_offset)
        f = io.popen('/usr/bin/cal ' .. month .. ' ' .. year)
     end
 
-    c_text = "<tt><span font='" .. calendar.font .. " "
-             .. calendar.font_size .. "'><b>"
+    c_text = "<tt><b>"
              .. f:read() .. "</b>\n\n"
              .. f:read() .. "\n"
              .. f:read("*all"):gsub("\n*$", "")
-             .. "</span></tt>"
+             .. "</tt>"
  
     f:close()
 
@@ -99,14 +95,13 @@ function calendar:show(t_out, inc_offset)
                                         position = calendar.position,
                                         fg = calendar.fg,
                                         bg = calendar.bg,
-                                        timeout = tims })
+                                        timeout = tims,
+										preset = mono_preset })
 end
 
 function calendar:attach(widget, args)
     local args = args or {}
-    calendar.icons = args.icons or icons_dir .. "cal/white/"
-    calendar.font_size = tonumber(args.font_size) or 12
-    calendar.font = args.font or beautiful.font:sub(beautiful.font:find(""), beautiful.font:find(" "))
+    calendar.icons = args.icons or icons_dir .. "calendar/white/"
     calendar.fg = args.fg or beautiful.fg_normal or "#FFFFFF"
     calendar.bg = args.bg or beautiful.bg_normal or "#FFFFFF"
     calendar.position = args.position or "top_right"

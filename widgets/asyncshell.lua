@@ -22,6 +22,26 @@ local function next_id()
    return asyncshell.id_counter
 end
 
+function asyncshell.wait(seconds, callback)
+   local id = next_id()
+   local tmpfname = asyncshell.file_template .. id
+   asyncshell.request_table[id] = {callback = callback}
+   local req =
+      string.format("bash -c 'sleep %s; " ..
+                    'echo "asyncshell.deliver_timer(%s)" | ' ..
+                    "awesome-client' 2> /dev/null",
+                    seconds, id)
+   awful.util.spawn(req, false)
+   return id
+end
+function asyncshell.deliver_timer(id)
+   if asyncshell.request_table[id] and
+      asyncshell.request_table[id].callback then
+      asyncshell.request_table[id].callback()
+	awful.util.spawn_with_shell("rm " .. asyncshell.file_template .. id)
+   end
+end
+
 -- Sends an asynchronous request for an output of the shell command.
 -- @param command Command to be executed and taken output from
 -- @param callback Function to be called when the command finishes

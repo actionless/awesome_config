@@ -10,8 +10,10 @@ local capi = { screen = screen,
 local ipairs = ipairs
 local setmetatable = setmetatable
 local table = table
-local common = require("awful.widget.common")
-local beautiful = require("beautiful")
+local common = require("widgets.common")
+local beautiful = require("widgets.helpers").beautiful
+local wibox = require("wibox")
+local awful = require("awful")
 local client = require("awful.client")
 local util = require("awful.util")
 local tag = require("awful.tag")
@@ -21,6 +23,7 @@ local fixed = require("wibox.layout.fixed")
 --- Tasklist widget module for awful
 -- awful.widget.tasklist
 local tasklist = { mt = {} }
+
 
 -- Public structures
 tasklist.filter = {}
@@ -41,7 +44,7 @@ local function tasklist_label(c, args)
     local bg_image_urgent = args.bg_image_urgent or theme.bg_image_urgent
     local bg_image_minimize = args.bg_image_minimize or theme.bg_image_minimize
     local tasklist_disable_icon = args.tasklist_disable_icon or theme.tasklist_disable_icon or false
-    local font = args.font or theme.tasklist_font or theme.font or ""
+    local font = theme.tasklist_font or theme.font
     local bg = nil
     local text = "<span font_desc='"..font.."'>"
     local name = ""
@@ -92,14 +95,14 @@ local function tasklist_label(c, args)
     return text, bg, bg_image, not tasklist_disable_icon and c.icon or nil
 end
 
-local function tasklist_update(s, w, buttons, filter, data, style, update_function)
+local function tasklist_update(s, w, buttons, filter, data, style, update_function, right_margin)
     local clients = {}
     local capi_clients = capi.client.get()
     if filter == tasklist.filter.focused_and_minimized_current_tags
     then
         for k, c in ipairs(capi_clients) do
             if not (c.skip_taskbar or c.hidden
-                or c.type == "splash" or c.type == "dock" or c.type == "desktop")
+                or c.type == "splash" or c.type == "dock" or c.type == "desktop" or awful.layout.get(c.screen) == awful.layout.suit.floating)
                 and tasklist.filter.focused(c, s) then
                 table.insert(clients, c)
             end
@@ -123,7 +126,7 @@ local function tasklist_update(s, w, buttons, filter, data, style, update_functi
 
     local function label(c) return tasklist_label(c, style) end
 
-    update_function(w, buttons, label, data, clients)
+    update_function(w, buttons, label, data, clients, right_margin)
 end
 
 --- Create a new tasklist widget. The last two arguments (update_function
@@ -155,6 +158,7 @@ end
 -- font The font.
 function tasklist.new(screen, filter, buttons, resize, style, update_function, base_widget)
     local uf = update_function or common.list_update
+    local right_margin = 3
     if resize == 'fixed' then
         f_layout = fixed.horizontal()
     else
@@ -163,7 +167,7 @@ function tasklist.new(screen, filter, buttons, resize, style, update_function, b
     local w = base_widget or f_layout
 
     local data = setmetatable({}, { __mode = 'k' })
-    local u = function () tasklist_update(screen, w, buttons, filter, data, style, uf) end
+    local u = function () tasklist_update(screen, w, buttons, filter, data, style, uf, right_margin) end
     tag.attached_connect_signal(screen, "property::selected", u)
     tag.attached_connect_signal(screen, "property::activated", u)
     capi.client.connect_signal("property::urgent", u)
