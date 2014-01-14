@@ -79,7 +79,8 @@ cpuicon:connect_signal("mouse::leave", function () cpuwidget.hide_notification()
 -- Coretemp
 tempicon = wibox.widget.imagebox(beautiful.widget_temp)
 tempwidget = widgets.temp({
-	sensor = "CPU"
+	sensor = "CPU",
+	critical = 65
 })
 
 -- / fs
