@@ -30,19 +30,19 @@ local function worker(args)
 	alsa.widget = wibox.widget.textbox('')
 
 	function alsa.up()
-		awful.util.spawn("amixer -q set " .. channel .. ",0 1%+")
+		awful.util.spawn_with_shell("amixer -q set " .. channel .. ",0 1%+")
 	--	awful.util.spawn("amixer -q set " .. channel .. ",1 1%+")
 		alsa.update()
 	end
 
 	function alsa.down()
-		awful.util.spawn("amixer -q set " .. channel .. ",0 1%-")
+		awful.util.spawn_with_shell("amixer -q set " .. channel .. ",0 1%-")
 	--	awful.util.spawn("amixer -q set " .. channel .. ",1 1%-")
 		alsa.update()
 	end
 
 	function alsa.toggle()
-		awful.util.spawn("amixer -q set " .. channel .. ",0 toggle")
+		awful.util.spawn_with_shell("amixer -q set " .. channel .. ",0 toggle")
 	--	awful.util.spawn("amixer -q set " .. channel .. ",1 toggle")
 		alsa.update()
 	end
