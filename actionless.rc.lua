@@ -464,20 +464,17 @@ globalkeys = awful.util.table.join(
 	-- ALSA volume control
 	awful.key({}, "#123",
 		function ()
-			awful.util.spawn("amixer -q set Master,0 1%+")
-			awful.util.spawn("amixer -q set Master,1 1%+")
+			volumewidget.up()
 			volumewidget.update()
 		end),
 	awful.key({}, "#122",
 		function ()
-			awful.util.spawn("amixer -q set Master,0 1%-")
-			awful.util.spawn("amixer -q set Master,1 1%-")
+			volumewidget.down()
 			volumewidget.update()
 		end),
 	awful.key({}, "#121",
 		function ()
-			awful.util.spawn("amixer -q set Master,0 toggle")
-			awful.util.spawn("amixer -q set Master,1 toggle")
+			volumewidget.toggle()
 			volumewidget.update()
 		end),
 
@@ -493,13 +490,11 @@ globalkeys = awful.util.table.join(
 		end),
 	awful.key({ altkey, "Control" }, "Left",
 		function ()
-			awful.util.spawn_with_shell("mpc prev || ncmpcpp prev || ncmpc prev || pms prev")
-			mpdwidget.update()
+			mpdwidget.prev_song()
 		end),
 	awful.key({ altkey, "Control" }, "Right",
 		function ()
-			awful.util.spawn_with_shell("mpc next || ncmpcpp next || ncmpc next || pms next")
-			mpdwidget.update()
+			mpdwidget.next_song()
 		end),
 
 	-- Copy to clipboard
@@ -508,8 +503,7 @@ globalkeys = awful.util.table.join(
 	-- MM Play/Pause
 	awful.key({ }, "#172",
 		function ()
-			awful.util.spawn_with_shell("mpc toggle || ncmpcpp toggle || ncmpc toggle || pms toggle")
-			mpdwidget.update()
+			mpdwidget.toggle()
 		end),
 
 	awful.key({ modkey }, "space",  function () awful.util.spawn_with_shell("bash ~/.config/dmenu/dmenu-bind.sh")  end),

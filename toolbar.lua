@@ -56,7 +56,6 @@ mpdwidget = widgets.mpd({
 		widget:set_markup('<span font="' .. beautiful.tasklist_font .. '">' .. markup(beautiful.mpd_text, artist) .. title .. '</span>')
 	end
 })
--- mpdwidgetbg = wibox.widget.background(mpdwidget, beautiful.alt_bg)
 mpdwidgetbg = mpdwidget
 
 -- MEM
