@@ -24,6 +24,7 @@ local string	   = { format   = string.format,
 local asyncshell  = require("widgets.asyncshell")
 local setmetatable = setmetatable
 
+
 -- MPD infos
 local mpd = {id=nil}
 
@@ -39,7 +40,7 @@ local function worker(args)
 	local settings	= args.settings or function() end
 
 	local mpdcover = helpers.scripts_dir .. "mpdcover"
-	local echo = 'mpc --format "file: %file%\\nArtist:%artist%\\nTitle:%title%\\nAlbum:%album%\\nDate:%date%"'
+	local echo = 'mpc --format "file:%file%\\nArtist:%artist%\\nTitle:%title%\\nAlbum:%album%\\nDate:%date%"'
 
 	mpd.widget = wibox.widget.textbox('')
 
@@ -54,12 +55,14 @@ local function worker(args)
 
 	function mpd.show_notification()
 		mpd.hide_notification()
+--})
+		os.execute(string.format("%s %q %q %d %q", mpdcover, music_dir, mpd_now.file, cover_size, default_art))
 		mpd.id = naughty.notify({
-			icon = "/tmp/mpdcover.png" ,
+			icon = "/tmp/mpdcover.png",
 			title   = mpd_now.title,
 			text = string.format("%s (%s)\n%s", mpd_now.album, mpd_now.date, mpd_now.artist),
 			timeout = 6
-				})
+		})
 	end
 
 
@@ -119,7 +122,7 @@ local function worker(args)
 		end
 		if mpd_now.title == "N/A" or mpd_now.title == '' then
 			mpd_now.title = escape_f(mpd_now.file:match(".*['/'].* [-] (.*)[.].*")) or
-			escape_f(mpd_now.file:match(".*['/'](.*)i[.].*")) or escape_f(mpd_now.file)
+			escape_f(mpd_now.file:match(".*['/'](.*) [.].*")) or escape_f(mpd_now.file)
 		end
 
 		widget = mpd.widget
@@ -130,9 +133,6 @@ local function worker(args)
 			if mpd_now.title ~= helpers.get_map("current mpd track")
 			then
 				helpers.set_map("current mpd track", mpd_now.title)
-
-				os.execute(string.format("%s %q %q %d %q", mpdcover, music_dir, mpd_now.file, cover_size, default_art))
-
 				mpd.show_notification()
 			end
 		elseif mpd_now.state ~= "pause"
@@ -142,8 +142,8 @@ local function worker(args)
 	end
 
 	helpers.newtimer("mpd", timeout, mpd.update)
-
-	return setmetatable(mpd, { __index = mpd.widget })
+ 
+       return setmetatable(mpd, { __index = mpd.widget })
 end
 
 return setmetatable(mpd, { __call = function(_, ...) return worker(...) end })
