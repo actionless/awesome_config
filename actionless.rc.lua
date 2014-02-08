@@ -103,7 +103,7 @@ run_once("unclutter")
 
 run_once("nm-applet")
 run_once("gxkb")
-run_once("~/.dropbox-dist/dropboxd")
+run_once("dropboxd")
 -- }}}
 
 

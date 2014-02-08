@@ -45,10 +45,10 @@ local function worker(args)
 	end
 	function post_update(f)
 		for line in f:lines() do
-			for k, v in string.gmatch(line, "(.*):.*%+(.*)°C(.*)$") do
-				if k == sensor then
-					coretemp_now = v 
-				end
+			k, v = string.match(line, "(.*):[ ]+(.*)°C.*[(]")
+			if k == sensor then
+				coretemp_now = v
+				break
 			end
 		end
 		settings()
