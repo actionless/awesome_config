@@ -95,14 +95,16 @@ function run_once(cmd)
 end
 
 --awful.util.spawn_with_shell("eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)")
+--awful.util.spawn_with_shell("/home/lie/.screenlayout/awesome.sh")
 awful.util.spawn_with_shell("xset r rate 250 25")
 awful.util.spawn_with_shell("xset b off")
 run_once(compositor)
 run_once("xfce4-power-manager")
+run_once("xscreensaver -no-splash")
 --run_once("urxvtd")
 run_once("unclutter")
 
-run_once("nm-applet")
+--run_once("nm-applet")
 run_once("gxkb")
 run_once("dropboxd")
 -- }}}
@@ -299,6 +301,18 @@ root.buttons(awful.util.table.join(
 -- }}}
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
+
+	awful.key({modkey, altkey}, "s", function()
+		local screen = 1
+		naughty.notify({text=mouse.screen})
+		if mouse.screen == 1 then
+			screen = 2
+		end
+		awful.tag.viewnext(screen)
+	end),
+
+	awful.key({modkey, "Control"}, "s", function() run_once("xscreensaver-command -lock") end),
+
 	awful.key({ modkey,		   }, ",",   awful.tag.viewprev	   ),
 	awful.key({ modkey,		   }, ".",  awful.tag.viewnext	   ),
 	awful.key({ modkey,		   }, "Escape", awful.tag.history.restore),
@@ -411,21 +425,11 @@ globalkeys = awful.util.table.join(
 		shifty.add({nopopup = true})
 	end),
 
-	awful.key({ modkey,		   }, "j",
-		function ()
-			awful.client.focus.byidx( 1)
-			if client.focus then client.focus:raise() end
-		end),
-	awful.key({ modkey,		   }, "k",
-		function ()
-			awful.client.focus.byidx(-1)
-			if client.focus then client.focus:raise() end
-		end),
-
 	-- Menus
 	awful.key({ modkey,		   }, "w", function () mymainmenu:show() end),
 	awful.key({ modkey,		   }, "i", function () instance = widgets.menu.clients_on_tag({ width=1400, coords = {x=0, y=18}, }) end),
-	awful.key({ modkey,		   }, "p", function() menubar.show() end),
+	awful.key({ modkey,		   }, "p", function () instance = widgets.menu.clients({ width=1680, coords = {x=0, y=18}, }) end),
+	--awful.key({ modkey,		   }, "p", function() menubar.show() end),
 
 	-- Layout manipulation
 --	awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)	end),

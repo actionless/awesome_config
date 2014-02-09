@@ -31,35 +31,20 @@ local function worker(args)
 	alsa.widget = wibox.widget.textbox('')
 
 	function alsa.up()
-		awful.util.spawn("amixer -q set " .. channel .. ",0 1%+")
+		awful.util.spawn_with_shell("amixer -q set " .. channel .. ",0 1%+")
 	--	awful.util.spawn("amixer -q set " .. channel .. ",1 1%+")
 		alsa.update()
 	end
 
 	function alsa.down()
-		awful.util.spawn("amixer -q set " .. channel .. ",0 1%-")
+		awful.util.spawn_with_shell("amixer -q set " .. channel .. ",0 1%-")
 	--	awful.util.spawn("amixer -q set " .. channel .. ",1 1%-")
 		alsa.update()
 	end
 
 	function alsa.toggle()
-		if volume_now.status == "off" then
-			for k, ch in pairs(channels_toggle) do
-				awful.util.spawn("amixer -q set " .. ch .. ",0 toggle")
-			--	awful.util.spawn("amixer -q set " .. ch .. ",1 toggle")
-			end
-		else
-			awful.util.spawn("amixer -q set " .. channel .. ",0 toggle")
-		--	awful.util.spawn("amixer -q set " .. channel .. ",1 toggle")
-		end
 		alsa.update()
 	end
-
-	alsa.widget:buttons(awful.util.table.join(
-		awful.button({ }, 1, alsa.toggle),
-		awful.button({ }, 5, alsa.down),
-		awful.button({ }, 4, alsa.up)
-	))
 
 	function alsa.update()
 		local f = assert(io.popen('amixer get ' .. channel))
@@ -87,6 +72,12 @@ local function worker(args)
 				volume_now.status = "on"
 			end
 		end
+
+		alsa.widget:buttons(awful.util.table.join(
+			awful.button({ }, 1, alsa.toggle),
+			awful.button({ }, 5, alsa.down),
+			awful.button({ }, 4, alsa.up)
+		))
 
 		widget = alsa.widget
 		settings()

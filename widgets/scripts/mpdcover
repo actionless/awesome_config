@@ -23,6 +23,7 @@ file=$2
 
 # Regex expression used for image search
 IMG_REG="(Front|front|Cover|cover|Art|art|Folder|folder)\.(jpg|jpeg|png|gif)$"
+IMG_REG2="\.(jpg|jpeg|png|gif)$"
 
 # Path of temporary resized cover
 TEMP_PATH="/tmp/mpdcover.png"
@@ -41,9 +42,10 @@ DEFAULT_ART=$4
 COVER_BACKGROUND="none"
 
 #--------------------------------------------------------------------
+echo DEBUG -1
 
 # check if anything is playing at all
-[[ -z $file ]] && exit 1
+[[ -z "$MUSIC_DIR"/$file ]] && exit 1
 
 # Art directory
 art="$MUSIC_DIR/${file%/*}"
@@ -52,9 +54,11 @@ art="$MUSIC_DIR/${file%/*}"
 # cover.
 cover="$(find "$art/" -maxdepth 1 -type f | egrep -i -m1 "$IMG_REG")"
 
+[[ -z $cover ]] && cover="$(find "$art/" -maxdepth 1 -type f | egrep -i -m1 "$IMG_REG2")"
+echo DEBUG 0
 # when no cover is found, use DEFAULT_ART as cover
 cover="${cover:=$DEFAULT_ART}"
-
+echo DEBUG 1
 # check if art is available
 if [[ -n $cover ]]; then
    if [[ -n $COVER_RESIZE ]]; then
