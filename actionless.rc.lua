@@ -55,7 +55,8 @@ modkey	 = "Mod4"
 altkey	 = "Mod1"
 --terminal = "urxvtc" or "xterm"
 --terminal = "terminator" or "xterm"
-terminal = "st" or "urxvt -lsp 1 -geometry 120x30" or "xterm"
+--terminal = "st" or "urxvt -lsp 1 -geometry 120x30" or "xterm"
+terminal = "xterm"
 editor	 = "vim" or os.getenv("EDITOR") or "nano" or "vi"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -113,6 +114,9 @@ if beautiful.wallpaper then
 	for s = 1, screen.count() do
 		gears.wallpaper.tiled(beautiful.wallpaper, s)
 	end
+else if beautiful.wallpaper_cmd then
+		run_once(beautiful.wallpaper_cmd)
+end
 end
 -- }}}
 
