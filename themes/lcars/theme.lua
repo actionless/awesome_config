@@ -43,8 +43,8 @@ theme.tasklist_fg_focus             = theme.light
 theme.tasklist_bg_focus             = theme.bg
 theme.tasklist_fg_normal            = theme.fg
 theme.tasklist_bg_normal            = theme.bg
-theme.tasklist_fg_minimize          = theme.fg
-theme.tasklist_bg_minimize          = theme.titlebar
+theme.tasklist_fg_minimize          = theme.shiny
+theme.tasklist_bg_minimize          = "#6666ff"
 
 theme.titlebar_font                 = "Ubuntu Bold 9"
 theme.titlebar_fg_focus             = theme.shiny
