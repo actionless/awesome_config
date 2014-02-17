@@ -56,7 +56,7 @@ altkey	 = "Mod1"
 --terminal = "urxvtc" or "xterm"
 --terminal = "terminator" or "xterm"
 --terminal = "st" or "urxvt -lsp 1 -geometry 120x30" or "xterm"
-terminal = "xterm"
+terminal = "dwt -b" or "xterm"
 editor	 = "vim" or os.getenv("EDITOR") or "nano" or "vi"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -68,8 +68,8 @@ firefox	= "firefox -P actionless "
 gui_editor = "/opt/sublime_text/sublime_text"
 compositor = "compton"
 graphics   = "pinta"
-file_manager = "stuurman"
-tmux	   = terminal .. ' -e tmux '
+file_manager = "stuurman" or "pcmanfm"
+tmux	   = terminal .. [[ -e "sh -c 'TERM=xterm-256color tmux'" ]]
 musicplr   = terminal .. " --geometry=850x466 -e ncmpcpp"
 tmux_run   = terminal .. " -e tmux new-session"
 
