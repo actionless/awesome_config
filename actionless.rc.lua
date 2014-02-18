@@ -100,7 +100,7 @@ end
 awful.util.spawn_with_shell("xset r rate 250 25")
 awful.util.spawn_with_shell("xset b off")
 run_once(compositor)
-run_once("xscreensaver -no-splash")
+--run_once("xscreensaver -no-splash")
 --run_once("xfce4-power-manager")
 --run_once("urxvtd")
 run_once("unclutter")
@@ -414,7 +414,7 @@ globalkeys = awful.util.table.join(
 	awful.key({modkey, "Shift"}, "d", shifty.del), -- delete a tag
 	awful.key({modkey, "Shift"}, ",", shifty.send_prev), -- client to prev tag
 	awful.key({modkey, "Shift"}, ".", shifty.send_next), -- client to next tag
-	awful.key({modkey, "Control"},
+	awful.key({modkey, "Shift"},
 			  "n",
 			  function()
 				  local t = awful.tag.selected()
