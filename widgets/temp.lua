@@ -43,7 +43,8 @@ local function worker(args)
 	function temp.update()
 		asyncshell.request("sensors ", function (f) temp.post_update(f) end)
 	end
-	function temp.post_update(f)
+
+	function post_update(f)
 		for line in f:lines() do
 			k, v = string.match(line, "(.*):[ ]+(.*)°C.*[(]")
 			if k == sensor then
