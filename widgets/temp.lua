@@ -40,10 +40,10 @@ local function worker(args)
 	temp.widget = wibox.widget.background()
 	temp.widget:set_widget(temp.widget_text)
 
-	function update()
-		asyncshell.request("sensors ", function (f) post_update(f) end)
+	function temp.update()
+		asyncshell.request("sensors ", function (f) temp.post_update(f) end)
 	end
-	function post_update(f)
+	function temp.post_update(f)
 		for line in f:lines() do
 			k, v = string.match(line, "(.*):[ ]+(.*)°C.*[(]")
 			if k == sensor then
@@ -54,7 +54,7 @@ local function worker(args)
 		settings()
 	end
 
-	newtimer("coretemp", timeout, update)
+	newtimer("coretemp", timeout, temp.update)
 	return temp.widget
 end
 
