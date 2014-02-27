@@ -41,11 +41,11 @@ local function worker(args)
     bat.widget = wibox.widget.background()
 	bat.widget:set_widget(bat.widget_text)
 
-	function update()
-		asyncshell.request('upower -d', function(f) post_update_battery(f) end)
+	function bat.update()
+		asyncshell.request('upower -d', function(f) bat.post_update(f) end)
 	end
 
-    function post_update_battery(f)
+    function bat.post_update(f)
         for line in f:lines() do 
 			k, v = string.match(line, "[ ]+(.*):[ ]+(.*)")
 			if k == 'percentage' then
@@ -77,7 +77,7 @@ local function worker(args)
 		bat_prev = bat_now
     end
 
-    newtimer("bat_widget", timeout, update)
+    newtimer("bat_widget", timeout, bat.update)
 
     return bat.widget
 end
