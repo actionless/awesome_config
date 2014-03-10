@@ -1,4 +1,3 @@
-local lain = require("lain")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 local awful = require("awful")
@@ -77,17 +76,9 @@ cpuicon:connect_signal("mouse::leave", function () cpuwidget.hide_notification()
 -- Coretemp
 tempicon = wibox.widget.imagebox(beautiful.widget_temp)
 tempwidget = widgets.temp({
-	sensor = "CPU Temperature"
+	sensor = "CPU Temperature",
+	critical = 75
 })
-
--- / fs
---fsicon = wibox.widget.imagebox(beautiful.widget_hdd)
---fswidget = lain.widgets.fs({
---	settings  = function()
---		widget:set_text(" " .. used .. "% ")
---	end
---})
---fswidgetbg = wibox.widget.background(fswidget, beautiful.alt_bg)
 
 -- Textclock
 clockicon = wibox.widget.imagebox(beautiful.widget_clock)
@@ -98,27 +89,32 @@ mytextclock = awful.widget.textclock(" %H:%M")
 widgets.calendar:attach(mytextclock)
 
 -- Battery
--- baticon = wibox.widget.imagebox(beautiful.widget_battery)
--- batwidget = lain.widgets.bat({
+--baticon = wibox.widget.imagebox(beautiful.widget_battery)
+--batwidget = widgets.bat({
 --	 settings = function()
---		 if bat_now.perc == "N/A" then
---			 bat_now.perc = "AC"
---			 baticon:set_image(beautiful.widget_ac)
---		elseif tonumber(bat_now.perc) <= 5 then
---			 baticon:set_image(beautiful.widget_battery_empty)
---		 elseif tonumber(bat_now.perc) <= 15 then
---			 baticon:set_image(beautiful.widget_battery_low)
---		 else
---			 baticon:set_image(beautiful.widget_battery)
---		 end
---		 widget:set_markup(" " .. bat_now.perc .. " ")
---	 end
+--		if bat_now.on_bat == "no" then
+--			baticon:set_image(beautiful.widget_ac)
+--		 	widget:set_bg(beautiful.bg)
+--		 	widget:set_fg(beautiful.fg)
+--		elseif bat_now.lo_bat == 'yes' then
+--			baticon:set_image(beautiful.widget_battery_empty)
+--		 	widget:set_bg(beautiful.error)
+--		 	widget:set_fg(beautiful.bg)
+--		elseif tonumber(bat_now.perc) <= 25 then
+--			baticon:set_image(beautiful.widget_battery_low)
+--		 	widget:set_bg(beautiful.fg)
+--		 	widget:set_fg(beautiful.bg)
+--		else
+--			baticon:set_image(beautiful.widget_battery)
+--		 	widget:set_bg(beautiful.bg)
+--		 	widget:set_fg(beautiful.fg)
+--		end
+--		widget.widget:set_markup(string.format("%-4s",bat_now.perc .. "%"))
+--	end
 --})
 
 -- Separators
 spr = wibox.widget.textbox(' ')
---arrl = wibox.widget.imagebox()
---arrl:set_image(beautiful.arrl)
 sep  = wibox.widget.textbox(' ')
 
 -- Create a wibox for each screen and add it
@@ -169,6 +165,7 @@ mytasklist.buttons = awful.util.table.join(
 		awful.client.focus.byidx(-1)
 		if client.focus then client.focus:raise() end
 	end))
+	systray_toggle = widgets.systray_toggle
 
 for s = 1, screen.count() do
 	-- Create a promptbox for each screen
@@ -207,9 +204,7 @@ for s = 1, screen.count() do
 	right_layout:add(voliconbg)
 	right_layout:add(volumewidgetbg)
 	right_layout:add(sep)
-	--systray = widgets.systray()
-	--if s == 1 then right_layout:add(systray) end
-	if s == 1 then right_layout:add(widgets.systray_toggle(s)) end
+	if s == 1 then right_layout:add(systray_toggle(s)) end
 	right_layout:add(sep)
 	right_layout:add(memicon)
 	right_layout:add(memwidget)
@@ -219,14 +214,11 @@ for s = 1, screen.count() do
 	right_layout:add(tempicon)
 	right_layout:add(tempwidget)
 	right_layout:add(sep)
-	--right_layout:add(fsicon)
-	--right_layout:add(fswidgetbg)
-	--right_layout:add(arrl)
 	-- right_layout:add(baticon)
 	-- right_layout:add(batwidget)
+	right_layout:add(sep)
 	right_layout:add(mytextclock)
 	right_layout:add(spr)
---	right_layout:add(arrl_ld)
 	right_layout:add(mylayoutbox[s])
 
 	-- Now bring it all together (with the tasklist in the middle)

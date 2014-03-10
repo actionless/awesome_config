@@ -25,9 +25,15 @@ local function worker(args)
 	local args	 = args or {}
 	local timeout  = args.timeout or 5
 	local channel  = args.channel or "Master"
+	local channels_toggle = args.channels_toggle or {channel, }
 	local settings = args.settings or function() end
 
 	alsa.widget = wibox.widget.textbox('')
+	alsa.widget:buttons(awful.util.table.join(
+		awful.button({ }, 1, alsa.toggle),
+		awful.button({ }, 5, alsa.down),
+		awful.button({ }, 4, alsa.up)
+	))
 
 	function alsa.up()
 		awful.util.spawn_with_shell("amixer -q set " .. channel .. ",0 1%+")
@@ -42,8 +48,8 @@ local function worker(args)
 	end
 
 	function alsa.toggle()
-		awful.util.spawn_with_shell("amixer -q set " .. channel .. ",0 toggle")
-	--	awful.util.spawn("amixer -q set " .. channel .. ",1 toggle")
+		awful.util.spawn("amixer -q set " .. channel .. ",0 toggle")
+		awful.util.spawn("amixer -q set " .. channel .. ",1 toggle")
 		alsa.update()
 	end
 
@@ -73,12 +79,6 @@ local function worker(args)
 				volume_now.status = "on"
 			end
 		end
-
-		alsa.widget:buttons(awful.util.table.join(
-			awful.button({ }, 1, alsa.toggle),
-			awful.button({ }, 5, alsa.down),
-			awful.button({ }, 4, alsa.up)
-		))
 
 		widget = alsa.widget
 		settings()

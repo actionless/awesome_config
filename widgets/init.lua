@@ -14,6 +14,7 @@ local widgets =
 	calendar  = require("widgets.calendar"),
 	alsa  = require("widgets.alsa"),
 	temp  = require("widgets.temp"),
+	bat  = require("widgets.bat"),
 	--misc
 	settings = require("widgets.settings"),
 	random_pic = require("widgets.random_pic"),

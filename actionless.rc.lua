@@ -53,26 +53,20 @@ os.setlocale(os.getenv("LANG"))
 -- common
 modkey	 = "Mod4"
 altkey	 = "Mod1"
---terminal = "urxvtc" or "xterm"
---terminal = "terminator" or "xterm"
 terminal = "st" or "urxvt -lsp 1 -geometry 120x30" or "xterm"
-editor	 = "vim" or os.getenv("EDITOR") or "nano" or "vi"
+editor	 = "vim" or os.getenv("EDITOR") or "vi" or "nano"
 editor_cmd = terminal .. " -e " .. editor
 
 -- user defined
---browser	= "dwb"
---chromium   = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers chromium --enable-user-stylesheet"
---chrome   = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers google-chrome --enable-user-stylesheet"
+browser	= "dwb"
 chromium   = "chromium --enable-user-stylesheet"
 chrome   = "google-chrome --enable-user-stylesheet"
 firefox	= "firefox -P actionless "
-gui_editor = "/opt/sublime_text/sublime_text"
-compositor = "compton --backend glx --paint-on-overlay --glx-no-stencil --vsync opengl-swc --unredir-if-possible --config /home/lie/.config/compton_awesome.conf"
-graphics   = "pinta"
 file_manager = "stuurman"
 tmux	   = terminal .. ' -e tmux '
 musicplr   = terminal .. " -e ncmpcpp"
 tmux_run   = terminal .. " -e tmux new-session"
+dmenu	   = "bash ~/.config/dmenu/dmenu-bind.sh"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 local layouts = {
@@ -96,13 +90,9 @@ function run_once(cmd)
 end
 
 --awful.util.spawn_with_shell("eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)")
---awful.util.spawn_with_shell("/home/lie/.screenlayout/awesome.sh")
 awful.util.spawn_with_shell("xset r rate 250 25")
 awful.util.spawn_with_shell("xset b off")
-run_once(compositor)
---run_once("xscreensaver -no-splash")
---run_once("xfce4-power-manager")
---run_once("urxvtd")
+run_once("compton")
 run_once("unclutter")
 
 run_once("gxkb")
@@ -115,6 +105,9 @@ run_once("dropboxd")
 if beautiful.wallpaper then
 	for s = 1, screen.count() do
 		gears.wallpaper.tiled(beautiful.wallpaper, s)
+	end
+else if beautiful.wallpaper_cmd then
+		run_once(beautiful.wallpaper_cmd)
 	end
 end
 -- }}}
@@ -167,7 +160,7 @@ shifty.config.apps = {
 			"plugin-container",
 		},
 		float = true,
---		fullscreen = true,
+		fullscreen = true,
 		tag = "debug"
 	},
 	{
@@ -192,6 +185,7 @@ shifty.config.apps = {
 			"Skype",
 		},
 		tag = "4:im",
+		nopopup = true,
 	},
 	{
 		match = {
@@ -200,27 +194,6 @@ shifty.config.apps = {
 			"Gnumeric",
 		},
 		tag = "office",
-	},
-	{
-		match = {
-			"Mplayer.*",
-			"Mirage",
-			"gimp",
-			"gtkpod",
-			"Ufraw",
-			"easytag",
-			"Transmission"
-		},
-		tag = "5:media",
-		nopopup = true,
-	},
-	{
-		match = {
-			"MPlayer",
-			"Gnuplot",
-			"galculator",
-		},
-		float = true,
 	},
 	{
 		match = {""},
@@ -266,8 +239,6 @@ myawesomemenu = {
 }
 
 mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-									{ "kill compositor", "killall compton" },
-									{ "start compositor", compositor },
 									{ "open terminal", terminal }
 								  }
 						})
@@ -316,7 +287,8 @@ globalkeys = awful.util.table.join(
 		awful.tag.viewnext(screen)
 	end),
 
-	awful.key({modkey, "Control"}, "s", function() run_once("xscreensaver-command -lock") end),
+	awful.key({ modkey, "Control"}, "t", function() systray_toggle.toggle() end),
+	awful.key({ modkey, "Control"}, "s", function() run_once("xscreensaver-command -lock") end),
 
 	awful.key({ modkey,		   }, ",",   awful.tag.viewprev	   ),
 	awful.key({ modkey,		   }, ".",  awful.tag.viewnext	   ),
@@ -366,6 +338,18 @@ globalkeys = awful.util.table.join(
 			if client.swap then client.swap:raise() end
 		end),
 
+	-- Client resize
+	awful.key({ modkey, "Control" }, "Right",	 function () awful.tag.incmwfact( 0.05)	end),
+	awful.key({ modkey,	"Control" }, "Left",	 function () awful.tag.incmwfact(-0.05)	end),
+	awful.key({ modkey, "Control" }, "Down", function () awful.client.incwfact(-0.05) end),
+	awful.key({ modkey, "Control" }, "Up", function () awful.client.incwfact( 0.05) end),
+
+	-- Layout tuning
+	awful.key({ modkey, altkey }, "Left",	 function () awful.tag.incnmaster(-1)	  end),
+	awful.key({ modkey, altkey }, "Right",	 function () awful.tag.incnmaster( 1)	  end),
+	awful.key({ modkey, altkey }, "Down",	 function () awful.tag.incncol(-1)		 end),
+	awful.key({ modkey, altkey }, "Up",	 function () awful.tag.incncol( 1)		 end),
+
 	-- By direction client focus (VIM style)
 	awful.key({ modkey }, "j",
 		function()
@@ -410,6 +394,19 @@ globalkeys = awful.util.table.join(
 			if client.swap then client.swap:raise() end
 		end),
 
+	-- Client resize (VIM style)
+	awful.key({ modkey, "Control" }, "l",	 function () awful.tag.incmwfact( 0.05)	end),
+	awful.key({ modkey,	"Control" }, "h",	 function () awful.tag.incmwfact(-0.05)	end),
+	awful.key({ modkey, "Control" }, "j", function () awful.client.incwfact(-0.05) end),
+	awful.key({ modkey, "Control" }, "k", function () awful.client.incwfact( 0.05) end),
+
+	-- Layout tuning (VIM style)
+	awful.key({ modkey, altkey }, "h",	 function () awful.tag.incnmaster(-1)	  end),
+	awful.key({ modkey, altkey }, "l",	 function () awful.tag.incnmaster( 1)	  end),
+	awful.key({ modkey, altkey }, "j",	 function () awful.tag.incncol(-1)		 end),
+	awful.key({ modkey, altkey }, "k",	 function () awful.tag.incncol( 1)		 end),
+
+
 	-- Shifty: keybindings specific to shifty
 	awful.key({modkey, "Shift"}, "d", shifty.del), -- delete a tag
 	awful.key({modkey, "Shift"}, ",", shifty.send_prev), -- client to prev tag
@@ -432,15 +429,11 @@ globalkeys = awful.util.table.join(
 
 	-- Menus
 	awful.key({ modkey,		   }, "w", function () mymainmenu:show() end),
-	awful.key({ modkey,		   }, "i", function () instance = widgets.menu.clients_on_tag({ width=1680, coords = {x=0, y=18}, }) end),
-	awful.key({ modkey,		   }, "p", function () instance = widgets.menu.clients({ width=1680, coords = {x=0, y=18}, }) end),
+	awful.key({ modkey,		   }, "i", function () instance = widgets.menu.clients_on_tag({ width=widgets.settings.screen_width, coords = {x=0, y=18}, }) end),
+	awful.key({ modkey,		   }, "p", function () instance = widgets.menu.clients({ width=widgets.settings.screen_width, coords = {x=0, y=18}, }) end),
 	--awful.key({ modkey,		   }, "p", function() menubar.show() end),
 
 	-- Layout manipulation
---	awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)	end),
---	awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)	end),
---	awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end),
---	awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end),
 	awful.key({ modkey,		   }, "u", awful.client.urgent.jumpto),
 	awful.key({ modkey,		   }, "Tab",
 		function ()
@@ -450,15 +443,6 @@ globalkeys = awful.util.table.join(
 			end
 		end),
 
-	awful.key({ modkey, "Control" }, "l",	 function () awful.tag.incmwfact( 0.05)	end),
-	awful.key({ modkey,	"Control" }, "h",	 function () awful.tag.incmwfact(-0.05)	end),
-	awful.key({ modkey, "Control" }, "j", function () awful.client.incwfact(-0.05) end),
-	awful.key({ modkey, "Control" }, "k", function () awful.client.incwfact( 0.05) end),
-
-	awful.key({ modkey, altkey }, "h",	 function () awful.tag.incnmaster(-1)	  end),
-	awful.key({ modkey, altkey }, "l",	 function () awful.tag.incnmaster( 1)	  end),
-	awful.key({ modkey, altkey }, "j",	 function () awful.tag.incncol(-1)		 end),
-	awful.key({ modkey, altkey }, "k",	 function () awful.tag.incncol( 1)		 end),
 
 	awful.key({ altkey,		   }, "space", function () awful.layout.inc(layouts,  1) end),
 	awful.key({ altkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
@@ -477,66 +461,28 @@ globalkeys = awful.util.table.join(
 			  end),
 
 	-- ALSA volume control
-	awful.key({}, "#123",
-		function ()
-			awful.util.spawn("amixer -q set Master,0 1%+")
-			awful.util.spawn("amixer -q set Master,1 1%+")
-			volumewidget.update()
-		end),
-	awful.key({}, "#122",
-		function ()
-			awful.util.spawn("amixer -q set Master,0 1%-")
-			awful.util.spawn("amixer -q set Master,1 1%-")
-			volumewidget.update()
-		end),
-	awful.key({}, "#121",
-		function ()
-			awful.util.spawn("amixer -q set Master,0 toggle")
-			awful.util.spawn("amixer -q set Master,1 toggle")
-			volumewidget.update()
-		end),
+	awful.key({}, "#123", function () volumewidget.up() end),
+	awful.key({}, "#122", function () volumewidget.down() end),
+	awful.key({}, "#121", function () volumewidget.toggle() end),
 
 	-- MPD control
-	awful.key({ altkey, "Control" }, "Up",
-		function ()
-			mpdwidget.toggle()
-		end),
-	awful.key({ altkey, "Control" }, "Down",
-		function ()
-			awful.util.spawn_with_shell("mpc stop || ncmpcpp stop || ncmpc stop || pms stop")
-			mpdwidget.update()
-		end),
-	awful.key({ altkey, "Control" }, "Left",
-		function ()
-			awful.util.spawn_with_shell("mpc prev || ncmpcpp prev || ncmpc prev || pms prev")
-			mpdwidget.update()
-		end),
-	awful.key({ altkey, "Control" }, "Right",
-		function ()
-			awful.util.spawn_with_shell("mpc next || ncmpcpp next || ncmpc next || pms next")
-			mpdwidget.update()
-		end),
+	awful.key({ }, "#150", function () mpdwidget.prev_song() end),
+	awful.key({ }, "#148", function () mpdwidget.next_song() end),
+	awful.key({ }, "#172", function () mpdwidget.toggle() end),
 
 	-- Copy to clipboard
 	awful.key({ modkey }, "c", function () os.execute("xsel -p -o | xsel -i -b") end),
 
-	-- MM Play/Pause
-	awful.key({ }, "#172",
-		function ()
-			awful.util.spawn_with_shell("mpc toggle || ncmpcpp toggle || ncmpc toggle || pms toggle")
-			mpdwidget.update()
-		end),
-
-	awful.key({ modkey }, "space",  function () awful.util.spawn_with_shell("bash ~/.config/dmenu/dmenu-bind.sh")  end),
+	awful.key({ modkey }, "space",  function () awful.util.spawn_with_shell(dmenu)  end),
 
 	-- Standard program
-	awful.key({ modkey,		   }, "Return", function () awful.util.spawn(tmux) end),
-	awful.key({ modkey,		   }, "s", function () awful.util.spawn(file_manager) end),
-	awful.key({ modkey, "Control" }, "r", awesome.restart),
-	awful.key({ modkey, "Control" }, "c", function () awful.util.spawn_with_shell(chromium) end),
-	awful.key({ modkey, "Control" }, "g", function () awful.util.spawn_with_shell(chrome) end),
-	awful.key({ modkey, "Control" }, "f", function () awful.util.spawn_with_shell(firefox) end),
-	awful.key({ modkey, "Shift"   }, "q", awesome.quit),
+	awful.key({ modkey,				}, "Return", function () awful.util.spawn(tmux) end),
+	awful.key({ modkey,				}, "s", function () awful.util.spawn(file_manager) end),
+	awful.key({ modkey, "Control"	}, "r", awesome.restart),
+	awful.key({ modkey, "Control"	}, "c", function () awful.util.spawn_with_shell(chromium) end),
+	awful.key({ modkey, "Control"	}, "g", function () awful.util.spawn_with_shell(chrome) end),
+	awful.key({ modkey, "Control"	}, "f", function () awful.util.spawn_with_shell(firefox) end),
+	awful.key({ modkey, "Shift"		}, "q", awesome.quit),
 
 	-- Scrot stuff
 	awful.key({ "Control" }, "Print",  function ()

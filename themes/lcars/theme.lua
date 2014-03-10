@@ -1,30 +1,26 @@
 theme                               = {}
 
-themes_dir                          = os.getenv("HOME") .. "/.config/awesome/themes/actionless"
+themes_dir                          = os.getenv("HOME") .. "/.config/awesome/themes/lcars"
 theme.dir			= themes_dir
-theme.wallpaper                     = themes_dir .. "/vulcarona_pattern.png"
+theme.wallpaper_cmd                     = "hsetroot"
 
 theme.bg	= "#000000"
 theme.alt_bg	= "#000000"
 
-theme.fg	= "#bcbcbc"
-theme.alt_fg	= "#a562b3"
-theme.shiny = "#ffffff"
+theme.fg	= "#ffcc99"
+theme.alt_fg	= "#ffcc66"
+theme.shiny = "#000000"
 
-theme.light	= "#a562b3"
-theme.dark	= "#370f3e"
-theme.error	= "#f92672"
+theme.light	= "#cc99cc"
+theme.dark	= "#cc6699"
+theme.error	= "#ff3300"
 
 theme.border	= "#000000"
-theme.sel_border = "#d33862"
-theme.titlebar	= "#3c3c3c"
-theme.titlebar_focus	= "#66436C"
+theme.sel_border = "#cc99cc"
+theme.titlebar	= "#000000"
+theme.titlebar_focus	= "#cc6699"
 
---theme.font                          = "PT Mono 8"
---theme.font                          = "DejaVu Sans Mono 8"
---theme.font                          = "tewi 9"
---theme.font                          = "Dina 8"
-theme.font                          = "Ubuntu Mono 10"
+theme.font                          = "Meslo LG S 10"
 theme.sans_font             		= "Ubuntu 8.9"
 theme.fg_normal                     = theme.fg
 theme.bg_normal                     = theme.bg
@@ -42,16 +38,13 @@ theme.taglist_font                  = theme.font
 theme.taglist_fg_focus              = theme.shiny
 theme.taglist_bg_focus              = theme.dark
 
---theme.tasklist_font                 = "Dina 11"
---theme.tasklist_font                 = "tewi 9"
---theme.tasklist_font                 = "PT Sans 9.4"
-theme.tasklist_font                 = theme.sans_font
+theme.tasklist_font                 = theme.font
 theme.tasklist_fg_focus             = theme.light
 theme.tasklist_bg_focus             = theme.bg
 theme.tasklist_fg_normal            = theme.fg
 theme.tasklist_bg_normal            = theme.bg
-theme.tasklist_fg_minimize          = theme.fg
-theme.tasklist_bg_minimize          = theme.titlebar
+theme.tasklist_fg_minimize          = theme.shiny
+theme.tasklist_bg_minimize          = "#6666ff"
 
 theme.titlebar_font                 = "Ubuntu Bold 9"
 theme.titlebar_fg_focus             = theme.shiny
