@@ -250,12 +250,12 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it
 -- }}}
 
---menubar.geometry = {
---   height = 18,
---   width = 1680,
---   x = 0,
---   y = 1032
---}
+menubar.geometry = {
+   height = 18,
+   width = 1680,
+   x = 0,
+   y = 1032
+}
 
 --require("freedesktop/freedesktop")
 
@@ -431,7 +431,7 @@ globalkeys = awful.util.table.join(
 	awful.key({ modkey,		   }, "w", function () mymainmenu:show() end),
 	awful.key({ modkey,		   }, "i", function () instance = widgets.menu.clients_on_tag({ width=widgets.settings.screen_width, coords = {x=0, y=18}, }) end),
 	awful.key({ modkey,		   }, "p", function () instance = widgets.menu.clients({ width=widgets.settings.screen_width, coords = {x=0, y=18}, }) end),
-	--awful.key({ modkey,		   }, "p", function() menubar.show() end),
+	awful.key({ modkey,"Control"}, "p", function() menubar.show() end),
 
 	-- Layout manipulation
 	awful.key({ modkey,		   }, "u", awful.client.urgent.jumpto),
