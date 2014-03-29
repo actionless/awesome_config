@@ -463,7 +463,8 @@ globalkeys = awful.util.table.join(
 	awful.key({ modkey,		   }, "w", function () mymainmenu:show() end),
 	awful.key({ modkey,		   }, "i", function () instance = widgets.menu.clients_on_tag({ width=widgets.settings.screen_width, coords = {x=0, y=18}, }) end),
 	awful.key({ modkey,		   }, "p", function () instance = widgets.menu.clients({ width=widgets.settings.screen_width, coords = {x=0, y=18}, }) end),
-	awful.key({ modkey, "Control"}, "p", function() menubar.show() end),
+	--awful.key({ modkey, "Control"}, "p", function() menubar.show() end),
+	awful.key({ modkey,        }, "space", function() menubar.show() end),
 
 	-- Layout manipulation
 --	awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)	end),
@@ -518,7 +519,7 @@ globalkeys = awful.util.table.join(
 	-- Copy to clipboard
 	awful.key({ modkey }, "c", function () os.execute("xsel -p -o | xsel -i -b") end),
 
-	awful.key({ modkey }, "space",  function () awful.util.spawn_with_shell(dmenu)  end),
+--	awful.key({ modkey }, "space",  function () awful.util.spawn_with_shell(dmenu)  end),
 
 	-- Standard program
 	awful.key({ modkey,				}, "Return", function () awful.util.spawn(tmux) end),
