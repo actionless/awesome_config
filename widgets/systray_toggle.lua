@@ -101,6 +101,18 @@ function systray_toggle.hide()
     systray_toggle.wibox.visible = false
 end
 
+function systray_toggle.toggle()
+    if not systray_toggle.wibox then
+        systray_toggle.show()
+        return
+    end
+    if systray_toggle.wibox.visible == false then
+        systray_toggle.show()
+    else
+        systray_toggle.hide()
+    end
+end
+
 function systray_toggle.mt:__call(...)
     scr = ...
     widget = wibox.widget.imagebox(beautiful.dropdown_icon)
@@ -113,7 +125,7 @@ function systray_toggle.mt:__call(...)
         systray_toggle.check()
     end)
     systray_toggle.widget = widget
-    return widget
+    return setmetatable(systray_toggle, { __index = widget})
 end
 
 return setmetatable(systray_toggle, systray_toggle.mt)

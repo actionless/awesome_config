@@ -24,7 +24,6 @@ local string    = { format = string.format,
 local setmetatable = setmetatable
 
 -- Memory usage (ignoring caches)
--- lain.widgets.mem
 local mem = {}
 mem.widget = wibox.widget.textbox('')
 mem.widget:connect_signal("mouse::enter", function () mem.show_notification() end)

@@ -2,9 +2,7 @@ theme                               = {}
 
 themes_dir                          = os.getenv("HOME") .. "/.config/awesome/themes/actionless"
 theme.dir			= themes_dir
---theme.wallpaper                     = themes_dir .. "/glonely.png"
---theme.wallpaper                     = '/home/lie/Dropbox/pokemon_13/pic/pattern/tumblr_mqgornTRMX1qe8qruo2_500.png'
-theme.wallpaper                     = themes_dir .. '/pattern1.jpg'
+theme.wallpaper                     = themes_dir .. "/vulcarona_pattern.png"
 
 theme.bg	= "#000000"
 theme.alt_bg	= "#000000"

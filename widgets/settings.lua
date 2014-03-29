@@ -1,5 +1,5 @@
 local settings = {
-	theme_dir = "/themes/lcars/",
+	theme_dir = "/themes/actionless/",
 	screen_width = 1400,
 	screen_height = 900
 }

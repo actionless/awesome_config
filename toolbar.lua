@@ -178,6 +178,7 @@ mytasklist.buttons = awful.util.table.join(
 		awful.client.focus.byidx(-1)
 		if client.focus then client.focus:raise() end
 	end))
+	systray_toggle = widgets.systray_toggle
 
 for s = 1, screen.count() do
 	-- Create a promptbox for each screen
@@ -216,9 +217,7 @@ for s = 1, screen.count() do
 	right_layout:add(voliconbg)
 	right_layout:add(volumewidgetbg)
 	right_layout:add(sep)
-	--systray = widgets.systray()
-	--if s == 1 then right_layout:add(systray) end
-	if s == 1 then right_layout:add(widgets.systray_toggle(s)) end
+	if s == 1 then right_layout:add(systray_toggle(s)) end
 	right_layout:add(sep)
 	right_layout:add(memicon)
 	right_layout:add(memwidget)

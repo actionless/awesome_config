@@ -48,6 +48,8 @@ local function worker(args)
 	end
 
 	function alsa.toggle()
+		awful.util.spawn("amixer -q set " .. channel .. ",0 toggle")
+		awful.util.spawn("amixer -q set " .. channel .. ",1 toggle")
 		alsa.update()
 	end
 
