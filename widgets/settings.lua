@@ -1,6 +1,6 @@
 local settings = {
 	theme_dir = "/themes/actionless/",
-	screen_width = 1400,
+	screen_width = 1440,
 	screen_height = 900
 }
 
