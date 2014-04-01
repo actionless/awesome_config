@@ -1,4 +1,5 @@
 
+
 --[[
 
      Licensed under GNU General Public License v2
@@ -46,7 +47,7 @@ local function worker(args)
 
 	function temp.post_update(f)
 		for line in f:lines() do
-			k, v = string.match(line, "(.*):[ ]+(.*)°C.*[(]")
+			k, v = string.match(line, "(.*):[ ]+(.*) C.*[(]")
 			if k == sensor then
 				coretemp_now = v
 				break
