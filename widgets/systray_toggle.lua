@@ -28,7 +28,7 @@ local scr = 1
 
 systray_toggle.geometry = {
     icon_size = 24,
-    x = settings.screen_width - 280 ,
+    x = settings.screen_width - 350 ,
     y = 18,
     lmargin = 5,
     rmargin = 5,
