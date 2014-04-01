@@ -87,7 +87,7 @@ end
 awful.util.spawn_with_shell("xset r rate 250 25")
 awful.util.spawn_with_shell("xset b off")
 run_once(compositor)
---run_once("xscreensaver -no-splash")
+run_once("xscreensaver -no-splash")
 --run_once("xfce4-power-manager")
 --run_once("urxvtd")
 run_once("unclutter")
