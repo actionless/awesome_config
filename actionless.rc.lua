@@ -68,7 +68,8 @@ gui_editor = "/opt/sublime_text/sublime_text"
 compositor = "compton --xrender-sync --xrender-sync-fence"
 graphics   = "pinta"
 file_manager = "stuurman" or "pcmanfm"
-tmux	   = terminal .. [[ -e "sh -c 'TERM=xterm-256color tmux'" ]]
+--tmux	   = terminal .. [[ -e "sh -c 'TERM=xterm-256color tmux'" ]]
+tmux = terminal .. " -e tmux"
 musicplr   = terminal .. " --geometry=850x466 -e ncmpcpp"
 tmux_run   = terminal .. " -e tmux new-session"
 
@@ -283,9 +284,9 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 
 menubar.geometry = {
    height = 18,
-   width = 1400,
+   width = widgets.settings.screen_width,
    x = 0,
-   y = 882
+   y = widgets.settings.screen_height - 18
 }
 
 --require("freedesktop/freedesktop")
