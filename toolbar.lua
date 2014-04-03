@@ -29,7 +29,8 @@ volumewidget = widgets.alsa({
 			volicon:set_image(beautiful.widget_vol_high)
 		end
 
-		widget:set_text("" .. volume_now.level .. "%")
+		--widget:set_text("" .. volume_now.level .. "%")
+		widget:set_text("" .. string.format("%-4s", volume_now.level .. "%").. " ")
 	end
 })
 volumewidgetbg = wibox.widget.background(volumewidget, beautiful.bg)
@@ -216,7 +217,6 @@ for s = 1, screen.count() do
 	right_layout:add(sep)
 	right_layout:add(voliconbg)
 	right_layout:add(volumewidgetbg)
-	right_layout:add(sep)
 	if s == 1 then right_layout:add(systray_toggle(s)) end
 	right_layout:add(sep)
 	right_layout:add(memicon)
