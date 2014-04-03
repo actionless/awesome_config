@@ -161,8 +161,8 @@ local function set_coords_bak(_menu, screen_idx, m_coords)
 end
 
 local function set_coords(_menu, screen_idx, m_coords)
-    _menu.wibox.x = 0
-    _menu.wibox.y = 18
+    _menu.wibox.x = _menu.coords.x
+    _menu.wibox.y = _menu.coords.y
     _menu.wibox.width = capi.screen[screen_idx].workarea.width
 end
 
@@ -171,7 +171,11 @@ local function set_size(_menu)
     local dir = _menu.layout.get_dir and _menu.layout:get_dir() or "y"
     if dir == "x" then  a, b = b, a  end
     for _, item in ipairs(_menu.items) do
-        other = math.max(other, item[b])
+        if _menu.width then
+            other = _menu.width
+        else
+            other = math.max(other, item[b])
+        end
         in_dir = in_dir + item[a]
     end
     _menu[a], _menu[b] = in_dir, other
@@ -322,12 +326,7 @@ function menu:show(args)
     local screen_index = capi.mouse.screen
 
     if not set_size(self) then return end
-    if coords == nil then
-        set_coords(self, screen_index, coords)
-    else
-        _menu.wibox.x = coords.x
-        _menu.wibox.y = coords.y
-    end
+    set_coords(self, screen_index, coords)
 
     keygrabber.run(self._keygrabber)
     self.wibox.visible = true
@@ -671,6 +670,8 @@ function menu.new(args, parent)
         items = {},
         parent = parent,
         layout = args.layout(),
+        width = args.width,
+        coords = args.coords,
         theme = load_theme(args.theme or {}, parent and parent.theme) })
 
     if parent then

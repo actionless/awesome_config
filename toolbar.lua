@@ -12,7 +12,7 @@ markup = widgets.markup
 
 -- ALSA volume
 volicon = wibox.widget.imagebox(beautiful.widget_vol)
-voliconbg = wibox.widget.background(volicon, beautiful.alt_bg)
+voliconbg = wibox.widget.background(volicon, beautiful.bg)
 volumewidget = widgets.alsa({
 	channel = 'Master',
 	channels_toggle = {'Master', 'PCM', 'Headphone'},
@@ -32,7 +32,7 @@ volumewidget = widgets.alsa({
 		widget:set_text("" .. volume_now.level .. "%")
 	end
 })
-volumewidgetbg = wibox.widget.background(volumewidget, beautiful.alt_bg)
+volumewidgetbg = wibox.widget.background(volumewidget, beautiful.bg)
 
 -- MPD
 mpdicon = wibox.widget.imagebox(beautiful.widget_music)
