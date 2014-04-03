@@ -13,6 +13,9 @@ local naughty = require("naughty")
 local menubar = require("menubar")
 
 local widgets = require("widgets")
+local capi = {
+	screen = screen
+}
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -152,9 +155,9 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 
 menubar.geometry = {
    height = 18,
-   width = widgets.settings.screen_width,
+   width = capi.screen[1].workarea.width,
    x = 0,
-   y = widgets.settings.screen_height - 18
+   y = capi.screen[1].workarea.height - 18
 }
 
 --require("freedesktop/freedesktop")
@@ -304,8 +307,8 @@ globalkeys = awful.util.table.join(
 
 	-- Menus
 	awful.key({ modkey,		   }, "w", function () mymainmenu:show() end),
-	awful.key({ modkey,		   }, "i", function () instance = widgets.menu.clients_on_tag({}, { width=widgets.settings.screen_width, coords = {x=0, y=18}, }) end),
-	awful.key({ modkey,		   }, "p", function () instance = widgets.menu.clients({}, { width=widgets.settings.screen_width, coords = {x=0, y=18}, }) end),
+	awful.key({ modkey,		   }, "i", function () instance = widgets.menu.clients_on_tag({}, { width=capi.screen[1].workarea.width, coords = {x=0, y=18}, }) end),
+	awful.key({ modkey,		   }, "p", function () instance = widgets.menu.clients({}, { width=capi.screen[1].workarea.width, coords = {x=0, y=18}, }) end),
 	--awful.key({ modkey, "Control"}, "p", function() menubar.show() end),
 	awful.key({ modkey,        }, "space", function() menubar.show() end),
 

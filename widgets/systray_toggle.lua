@@ -27,8 +27,9 @@ local systray_toggle = { mt = {}, arrow=false, popup=false }
 local scr = 1
 
 systray_toggle.geometry = {
+    screen = 1,
     icon_size = 24,
-    x = settings.screen_width - 350 ,
+    x = capi.screen[1].workarea.width - 350 ,
     y = 18,
     lmargin = 5,
     rmargin = 5,

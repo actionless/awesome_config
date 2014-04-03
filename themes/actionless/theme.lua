@@ -16,7 +16,7 @@ theme.dark	= "#ad7fa8"
 theme.error	= "#f92672"
 
 theme.border	= "#000000"
-theme.sel_border = "#ad4f88"
+theme.sel_border = "#d33862"
 theme.titlebar	= "#3c3c3c"
 theme.titlebar_focus	= "#66436C"
 
