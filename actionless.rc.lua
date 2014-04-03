@@ -52,9 +52,8 @@ os.setlocale(os.getenv("LANG"))
 modkey	 = "Mod4"
 altkey	 = "Mod1"
 --terminal = "urxvtc" or "xterm"
---terminal = "terminator" or "xterm"
---terminal = "st" or "urxvt -lsp 1 -geometry 120x30" or "xterm"
-terminal = "dwt -b" or "xterm"
+terminal = "st" or "urxvt -lsp 1 -geometry 120x30" or "xterm"
+--terminal = "dwt -b" or "xterm"
 editor	 = "vim" or os.getenv("EDITOR") or "nano" or "vi"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -67,7 +66,8 @@ gui_editor = "/opt/sublime_text/sublime_text"
 compositor = "compton --xrender-sync --xrender-sync-fence"
 graphics   = "pinta"
 file_manager = "stuurman" or "pcmanfm"
-tmux	   = terminal .. [[ -e "sh -c 'TERM=xterm-256color tmux'" ]]
+--tmux	   = terminal .. [[ -e "sh -c 'TERM=xterm-256color tmux'" ]]
+tmux = terminal .. " -e tmux"
 musicplr   = terminal .. " --geometry=850x466 -e ncmpcpp"
 tmux_run   = terminal .. " -e tmux new-session"
 
@@ -87,7 +87,7 @@ end
 awful.util.spawn_with_shell("xset r rate 250 25")
 awful.util.spawn_with_shell("xset b off")
 run_once(compositor)
---run_once("xscreensaver -no-splash")
+run_once("xscreensaver -no-splash")
 --run_once("xfce4-power-manager")
 --run_once("urxvtd")
 run_once("unclutter")
@@ -123,7 +123,7 @@ end
 tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, awful.layout.layouts[1])
+    tags[s] = awful.tag({ '1:main', '2:web', 3, '4:im', 5, 6, 7, 8, 9 }, s, awful.layout.layouts[1])
 end
 -- }}}
 
@@ -152,9 +152,9 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 
 menubar.geometry = {
    height = 18,
-   width = 1400,
+   width = widgets.settings.screen_width,
    x = 0,
-   y = 882
+   y = widgets.settings.screen_height - 18
 }
 
 --require("freedesktop/freedesktop")
@@ -500,8 +500,8 @@ awful.rules.rules = {
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
-    { rule = { class = "Chromium" },
-      properties = { tag = tags[1][2] } },
+    { rule = { class = "Chromium" }, properties = { tag = tags[1][2] } },
+    { rule = { class = "Skype" }, properties = { tag = tags[1][4] } },
 }
 -- }}}
 

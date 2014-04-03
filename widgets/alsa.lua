@@ -29,11 +29,6 @@ local function worker(args)
 	local settings = args.settings or function() end
 
 	alsa.widget = wibox.widget.textbox('')
-	alsa.widget:buttons(awful.util.table.join(
-		awful.button({ }, 1, alsa.toggle),
-		awful.button({ }, 5, alsa.down),
-		awful.button({ }, 4, alsa.up)
-	))
 
 	function alsa.up()
 		awful.util.spawn_with_shell("amixer -q set " .. channel .. ",0 1%+")
@@ -52,6 +47,12 @@ local function worker(args)
 		awful.util.spawn("amixer -q set " .. channel .. ",1 toggle")
 		alsa.update()
 	end
+
+	alsa.widget:buttons(awful.util.table.join(
+		awful.button({ }, 1, alsa.toggle),
+		awful.button({ }, 5, alsa.down),
+		awful.button({ }, 4, alsa.up)
+	))
 
 	function alsa.update()
 		local f = assert(io.popen('amixer get ' .. channel))
