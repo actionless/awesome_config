@@ -55,8 +55,8 @@ os.setlocale(os.getenv("LANG"))
 modkey	 = "Mod4"
 altkey	 = "Mod1"
 --terminal = "urxvtc" or "xterm"
---terminal = "st" or "urxvt -lsp 1 -geometry 120x30" or "xterm"
-terminal = "dwt -b" or "xterm"
+terminal = "st" or "urxvt -lsp 1 -geometry 120x30" or "xterm"
+--terminal = "dwt -b" or "xterm"
 editor	 = "vim" or os.getenv("EDITOR") or "nano" or "vi"
 editor_cmd = terminal .. " -e " .. editor
 
