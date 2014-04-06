@@ -73,6 +73,7 @@ file_manager = "stuurman" or "pcmanfm"
 tmux = terminal .. " -e tmux"
 musicplr   = terminal .. " --geometry=850x466 -e ncmpcpp"
 tmux_run   = terminal .. " -e tmux new-session"
+dmenu = "~/.config/dmenu/dmenu-bind.sh"
 
 
 -- {{{ Autostart applications
@@ -310,7 +311,8 @@ globalkeys = awful.util.table.join(
 	awful.key({ modkey,		   }, "i", function () instance = widgets.menu.clients_on_tag({}, { width=capi.screen[1].workarea.width, coords = {x=0, y=18}, }) end),
 	awful.key({ modkey,		   }, "p", function () instance = widgets.menu.clients({}, { width=capi.screen[1].workarea.width, coords = {x=0, y=18}, }) end),
 	--awful.key({ modkey, "Control"}, "p", function() menubar.show() end),
-	awful.key({ modkey,        }, "space", function() menubar.show() end),
+	--awful.key({ modkey,        }, "space", function() menubar.show() end),
+	awful.key({ modkey,        }, "space", function() awful.util.spawn_with_shell(dmenu) end),
 
 	-- Layout manipulation
 --	awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)	end),
