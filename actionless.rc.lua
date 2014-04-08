@@ -123,7 +123,7 @@ end
 tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ '1:main', '2:web', 3, '4:im', 5, 6, 7, 8, 9 }, s, awful.layout.layouts[1])
+    tags[s] = awful.tag({ '1:main', '2:web', '3:ww', '4:im', 5, 6, 7, 8, 9, 10 }, s, awful.layout.layouts[1])
 end
 -- }}}
 
@@ -304,8 +304,8 @@ globalkeys = awful.util.table.join(
 
 	-- Menus
 	awful.key({ modkey,		   }, "w", function () mymainmenu:show() end),
-	awful.key({ modkey,		   }, "i", function () instance = widgets.menu.clients_on_tag({ width=widgets.settings.screen_width, coords = {x=0, y=18}, }) end),
-	awful.key({ modkey,		   }, "p", function () instance = awful.menu.clients({ width=widgets.settings.screen_width, coords = {x=0, y=18}, }) end),
+	awful.key({ modkey,		   }, "i", function () instance = widgets.menu.clients_on_tag({}, { width=widgets.settings.screen_width, coords = {x=0, y=18} }) end),
+	awful.key({ modkey,		   }, "p", function () instance = widgets.menu.clients({}, { width=widgets.settings.screen_width, coords = {x=0, y=18} }) end),
 	--awful.key({ modkey, "Control"}, "p", function() menubar.show() end),
 	awful.key({ modkey,        }, "space", function() menubar.show() end),
 

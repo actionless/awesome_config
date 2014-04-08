@@ -122,7 +122,7 @@ local function item_position(_menu, child)
 end
 
 
-local function set_coords_bak(_menu, screen_idx, m_coords)
+local function set_coords(_menu, screen_idx, m_coords)
     local s_geometry = capi.screen[screen_idx].workarea
     local screen_w = s_geometry.x + s_geometry.width
     local screen_h = s_geometry.y + s_geometry.height
@@ -160,18 +160,17 @@ local function set_coords_bak(_menu, screen_idx, m_coords)
     _menu.wibox.y = _menu.y
 end
 
-local function set_coords(_menu, screen_idx, m_coords)
-    _menu.wibox.x = 0
-    _menu.wibox.y = 18
-    _menu.wibox.width = capi.screen[screen_idx].workarea.width
-end
-
 local function set_size(_menu)
     local in_dir, other, a, b = 0, 0, "height", "width"
     local dir = _menu.layout.get_dir and _menu.layout:get_dir() or "y"
     if dir == "x" then  a, b = b, a  end
+
     for _, item in ipairs(_menu.items) do
-        other = math.max(other, item[b])
+        if _menu.width then
+            other = _menu.width
+        else
+            other = math.max(other, item[b])
+        end
         in_dir = in_dir + item[a]
     end
     _menu[a], _menu[b] = in_dir, other
@@ -322,12 +321,7 @@ function menu:show(args)
     local screen_index = capi.mouse.screen
 
     if not set_size(self) then return end
-    if coords == nil then
-        set_coords(self, screen_index, coords)
-    else
-        _menu.wibox.x = coords.x
-        _menu.wibox.y = coords.y
-    end
+    set_coords(self, screen_index, coords)
 
     keygrabber.run(self._keygrabber)
     self.wibox.visible = true
@@ -495,7 +489,6 @@ end
 
 
 function menu:clients_on_tag(args) -- FIXME crude api
---    naughty.notify(args)
     _menu = self or {}
     local cls = capi.client.get()
     local cls_t = {}
@@ -671,7 +664,10 @@ function menu.new(args, parent)
         items = {},
         parent = parent,
         layout = args.layout(),
-        theme = load_theme(args.theme or {}, parent and parent.theme) })
+        theme = load_theme(args.theme or {}, parent and parent.theme),
+        width = args.width,
+        coords = args.coords
+    })
 
     if parent then
         _menu.auto_expand = parent.auto_expand
