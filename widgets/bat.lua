@@ -46,9 +46,10 @@ local function worker(args)
 	end
 
     function bat.post_update(f)
+		bat_now = {}
         for line in f:lines() do 
 			k, v = string.match(line, "[ ]+(.*):[ ]+(.*)")
-			if k == 'percentage' then
+			if k == 'percentage' and not bat_now.perc then
 				bat_now.perc = string.match(v,"%d+")
 			elseif k == 'time to empty' then
 				bat_now.time = tonumber(v)

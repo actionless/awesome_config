@@ -13,6 +13,9 @@ local naughty = require("naughty")
 local menubar = require("menubar")
 
 local widgets = require("widgets")
+local capi = {
+	screen = screen
+}
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -70,6 +73,7 @@ file_manager = "stuurman" or "pcmanfm"
 tmux = terminal .. " -e tmux"
 musicplr   = terminal .. " --geometry=850x466 -e ncmpcpp"
 tmux_run   = terminal .. " -e tmux new-session"
+dmenu = "~/.config/dmenu/dmenu-bind.sh"
 
 
 -- {{{ Autostart applications
@@ -123,7 +127,7 @@ end
 tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ '1:main', '2:web', '3:ww', '4:im', 5, 6, 7, 8, 9, 10 }, s, awful.layout.layouts[1])
+    tags[s] = awful.tag({ '1:main', '2:web', 3, '4:im', 5, 6, 7, 8, 9 }, s, awful.layout.layouts[1])
 end
 -- }}}
 
@@ -152,9 +156,9 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 
 menubar.geometry = {
    height = 18,
-   width = widgets.settings.screen_width,
+   width = capi.screen[1].workarea.width,
    x = 0,
-   y = widgets.settings.screen_height - 18
+   y = capi.screen[1].workarea.height - 18
 }
 
 --require("freedesktop/freedesktop")
@@ -308,6 +312,10 @@ globalkeys = awful.util.table.join(
 	awful.key({ modkey,		   }, "p", function () instance = widgets.menu.clients({}, { width=widgets.settings.screen_width, coords = {x=0, y=18} }) end),
 	--awful.key({ modkey, "Control"}, "p", function() menubar.show() end),
 	awful.key({ modkey,        }, "space", function() menubar.show() end),
+
+	--awful.key({ modkey, "Control"}, "p", function() menubar.show() end),
+	--awful.key({ modkey,        }, "space", function() menubar.show() end),
+	awful.key({ modkey,        }, "space", function() awful.util.spawn_with_shell(dmenu) end),
 
 	-- Layout manipulation
 --	awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)	end),

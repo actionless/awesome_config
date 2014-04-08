@@ -4,15 +4,15 @@ themes_dir                          = os.getenv("HOME") .. "/.config/awesome/the
 theme.dir			= themes_dir
 theme.wallpaper                     = themes_dir .. "/vulcarona_pattern.png"
 
-theme.bg	= "#000000"
-theme.alt_bg	= "#000000"
+theme.bg	= "#dedede"
+theme.alt_bg	= "#ad7fa8"
 
-theme.fg	= "#bcbcbc"
+theme.fg	= "#101010"
 theme.alt_fg	= "#a562b3"
 theme.shiny = "#ffffff"
 
 theme.light	= "#a562b3"
-theme.dark	= "#370f3e"
+theme.dark	= "#ad7fa8"
 theme.error	= "#f92672"
 
 theme.border	= "#000000"
@@ -29,7 +29,7 @@ theme.font                          = "monoOne 10"
 theme.sans_font             		= "PT Sans 10"
 theme.fg_normal                     = theme.fg
 theme.bg_normal                     = theme.bg
-theme.fg_focus                      = theme.error
+theme.fg_focus                      = theme.fg
 theme.bg_focus                      = theme.dark
 theme.fg_urgent                     = theme.bg
 theme.bg_urgent                     = theme.error
@@ -40,19 +40,19 @@ theme.border_focus                  = theme.sel_border
 theme.border_marked                 = theme.error
 
 theme.taglist_font                  = theme.font
-theme.taglist_fg_focus              = theme.shiny
+theme.taglist_fg_focus              = theme.fg
 theme.taglist_bg_focus              = theme.dark
 
 --theme.tasklist_font                 = "Dina 11"
 --theme.tasklist_font                 = "tewi 9"
 --theme.tasklist_font                 = "PT Sans 9.4"
 theme.tasklist_font                 = theme.font
-theme.tasklist_fg_focus             = theme.light
+theme.tasklist_fg_focus             = theme.fg
 theme.tasklist_bg_focus             = theme.bg
 theme.tasklist_fg_normal            = theme.fg
 theme.tasklist_bg_normal            = theme.bg
-theme.tasklist_fg_minimize          = theme.fg
-theme.tasklist_bg_minimize          = theme.titlebar
+theme.tasklist_fg_minimize          = theme.bg
+theme.tasklist_bg_minimize          = "#6c6c6c"
 
 theme.titlebar_font                 = "Ubuntu Condensed Bold 9"
 theme.titlebar_fg_focus             = theme.shiny

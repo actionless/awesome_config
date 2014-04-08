@@ -160,6 +160,15 @@ local function set_coords(_menu, screen_idx, m_coords)
     _menu.wibox.y = _menu.y
 end
 
+<<<<<<< HEAD
+=======
+local function set_coords(_menu, screen_idx, m_coords)
+    _menu.wibox.x = _menu.coords.x
+    _menu.wibox.y = _menu.coords.y
+    _menu.wibox.width = capi.screen[screen_idx].workarea.width
+end
+
+>>>>>>> origin/lappy
 local function set_size(_menu)
     local in_dir, other, a, b = 0, 0, "height", "width"
     local dir = _menu.layout.get_dir and _menu.layout:get_dir() or "y"
