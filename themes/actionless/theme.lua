@@ -40,12 +40,9 @@ theme.border_focus                  = theme.sel_border
 theme.border_marked                 = theme.error
 
 theme.taglist_font                  = theme.font
-theme.taglist_fg_focus              = theme.fg
+theme.taglist_fg_focus              = theme.shiny
 theme.taglist_bg_focus              = theme.dark
 
---theme.tasklist_font                 = "Dina 11"
---theme.tasklist_font                 = "tewi 9"
---theme.tasklist_font                 = "PT Sans 9.4"
 theme.tasklist_font                 = theme.font
 theme.tasklist_fg_focus             = theme.fg
 theme.tasklist_bg_focus             = theme.bg
@@ -54,7 +51,8 @@ theme.tasklist_bg_normal            = theme.bg
 theme.tasklist_fg_minimize          = theme.bg
 theme.tasklist_bg_minimize          = "#6c6c6c"
 
-theme.titlebar_font                 = "Ubuntu Condensed Bold 9"
+--theme.titlebar_font                 = "PT Caption Bold 9"
+theme.titlebar_font                 = theme.font
 theme.titlebar_fg_focus             = theme.shiny
 theme.titlebar_fg_normal            = theme.fg
 theme.titlebar_bg_focus             = theme.titlebar_focus
