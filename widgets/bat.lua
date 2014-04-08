@@ -8,8 +8,8 @@
 --]]
 
 local asyncshell   = require("widgets.asyncshell")
-local newtimer     = require("lain.helpers").newtimer
-local first_line   = require("lain.helpers").first_line
+local newtimer     = require("widgets.helpers").newtimer
+local first_line   = require("widgets.helpers").first_line
 
 local naughty      = require("naughty")
 local wibox        = require("wibox")
