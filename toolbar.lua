@@ -1,4 +1,3 @@
-local lain = require("lain")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 local awful = require("awful")
@@ -247,9 +246,6 @@ for s = 1, screen.count() do
 end
 -- }}}
 
-function minimizedbutton(c)
-        return awful.titlebar.widget.button(c, "minimized", function() return "" end, function(c) c.minimized=true end)
-end
 -- {{{
 function make_titlebar(c)
 	c.border_color = beautiful.titlebar_focus
@@ -275,7 +271,7 @@ function make_titlebar(c)
 	-- Widgets that are aligned to the left
 	local left_layout = wibox.layout.fixed.horizontal()
 	left_layout:add(awful.titlebar.widget.closebutton(c))
-	left_layout:add(minimizedbutton(c))
+	left_layout:add(awful.titlebar.widget.minimizebutton(c))
 	--left_layout:add(awful.titlebar.widget.maximizedbutton(c))
 	-- Widgets that are aligned to the right
 	local right_layout = wibox.layout.fixed.horizontal()
