@@ -1,3 +1,4 @@
+-- "dynamic" tagging
 require("eminent")
 -- Standard awesome library
 local gears = require("gears")
@@ -11,11 +12,13 @@ local beautiful = require("widgets.helpers").beautiful
 -- Notification library
 local naughty = require("naughty")
 local menubar = require("menubar")
-
-local widgets = require("widgets")
+-- awesome std c library
 local capi = {
 	screen = screen
 }
+
+-- my own widgets
+local widgets = require("widgets")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -316,10 +319,6 @@ globalkeys = awful.util.table.join(
 	awful.key({ modkey,        }, "space", function() awful.util.spawn_with_shell(dmenu) end),
 
 	-- Layout manipulation
---	awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)	end),
---	awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)	end),
---	awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end),
---	awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end),
 	awful.key({ modkey,		   }, "u", awful.client.urgent.jumpto),
 	awful.key({ modkey,		   }, "Tab",
 		function ()
