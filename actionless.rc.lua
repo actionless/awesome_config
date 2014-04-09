@@ -1,3 +1,4 @@
+-- "dynamic" tagging
 require("eminent")
 -- Standard awesome library
 local gears = require("gears")
@@ -11,11 +12,13 @@ local beautiful = require("widgets.helpers").beautiful
 -- Notification library
 local naughty = require("naughty")
 local menubar = require("menubar")
-
-local widgets = require("widgets")
+-- awesome std c library
 local capi = {
 	screen = screen
 }
+
+-- my own widgets
+local widgets = require("widgets")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -127,7 +130,7 @@ end
 tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ '1:main', '2:web', 3, '4:im', 5, 6, 7, 8, 9 }, s, awful.layout.layouts[1])
+    tags[s] = awful.tag({ '1:bs', '2:web', '3:ww', '4:im', '5:mm', 6, 7, 8, '9:sd' }, s, awful.layout.layouts[1])
 end
 -- }}}
 
@@ -308,17 +311,14 @@ globalkeys = awful.util.table.join(
 
 	-- Menus
 	awful.key({ modkey,		   }, "w", function () mymainmenu:show() end),
-	awful.key({ modkey,		   }, "i", function () instance = widgets.menu.clients_on_tag({}, { width=capi.screen[1].workarea.width, coords = {x=0, y=18}, }) end),
-	awful.key({ modkey,		   }, "p", function () instance = widgets.menu.clients({}, { width=capi.screen[1].workarea.width, coords = {x=0, y=18}, }) end),
+	awful.key({ modkey,		   }, "i", function () instance = widgets.menu.clients_on_tag({}, { width=widgets.settings.screen_width, coords = {x=0, y=18} }) end),
+	awful.key({ modkey,		   }, "p", function () instance = widgets.menu.clients({}, { width=widgets.settings.screen_width, coords = {x=0, y=18} }) end),
+
 	awful.key({ modkey, "Control"}, "p", function() menubar.show() end),
 	--awful.key({ modkey,        }, "space", function() menubar.show() end),
 	awful.key({ modkey,        }, "space", function() awful.util.spawn_with_shell(dmenu) end),
 
 	-- Layout manipulation
---	awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)	end),
---	awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)	end),
---	awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end),
---	awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end),
 	awful.key({ modkey,		   }, "u", awful.client.urgent.jumpto),
 	awful.key({ modkey,		   }, "Tab",
 		function ()
@@ -338,8 +338,8 @@ globalkeys = awful.util.table.join(
 	awful.key({ modkey, altkey }, "j",	 function () awful.tag.incncol(-1)		 end),
 	awful.key({ modkey, altkey }, "k",	 function () awful.tag.incncol( 1)		 end),
 
-	awful.key({ altkey,		   }, "space", function () awful.layout.inc(1) end),
-	awful.key({ altkey, "Shift"   }, "space", function () awful.layout.inc( -1) end),
+	awful.key({ altkey,		   }, "space", function () awful.layout.inc(awful.layout.layouts, 1) end),
+	awful.key({ altkey, "Shift"   }, "space", function () awful.layout.inc(awful.layout.layouts, -1) end),
 
 	awful.key({ modkey, "Control" }, "n", awful.client.restore),
 
@@ -358,6 +358,7 @@ globalkeys = awful.util.table.join(
 	awful.key({}, "#123", function () volumewidget.up() end),
 	awful.key({}, "#122", function () volumewidget.down() end),
 	awful.key({}, "#121", function () volumewidget.toggle() end),
+	awful.key({}, "#198", function () volumewidget.toggle_mic() end),
 
 	-- MPD control
 	awful.key({ }, "#150", function () mpdwidget.prev_song() end),
