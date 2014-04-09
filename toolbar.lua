@@ -100,29 +100,29 @@ mytextclock = awful.widget.textclock(" %H:%M")
 widgets.calendar:attach(mytextclock)
 
 -- Battery
---baticon = wibox.widget.imagebox(beautiful.widget_battery)
---batwidget = widgets.bat({
---	 settings = function()
---		if bat_now.on_bat == "no" then
---			baticon:set_image(beautiful.widget_ac)
---		 	widget:set_bg(beautiful.bg)
---		 	widget:set_fg(beautiful.fg)
---		elseif bat_now.lo_bat == 'yes' then
---			baticon:set_image(beautiful.widget_battery_empty)
---		 	widget:set_bg(beautiful.error)
---		 	widget:set_fg(beautiful.bg)
---		elseif tonumber(bat_now.perc) <= 25 then
---			baticon:set_image(beautiful.widget_battery_low)
---		 	widget:set_bg(beautiful.fg)
---		 	widget:set_fg(beautiful.bg)
---		else
---			baticon:set_image(beautiful.widget_battery)
---		 	widget:set_bg(beautiful.bg)
---		 	widget:set_fg(beautiful.fg)
---		end
---		widget.widget:set_markup(string.format("%-4s",bat_now.perc .. "%"))
---	end
---})
+baticon = wibox.widget.imagebox(beautiful.widget_battery)
+batwidget = widgets.bat({
+	 settings = function()
+		if bat_now.on_bat == "no" then
+			baticon:set_image(beautiful.widget_ac)
+		 	widget:set_bg(beautiful.bg)
+		 	widget:set_fg(beautiful.fg)
+		elseif bat_now.lo_bat == 'yes' then
+			baticon:set_image(beautiful.widget_battery_empty)
+		 	widget:set_bg(beautiful.error)
+		 	widget:set_fg(beautiful.bg)
+		elseif tonumber(bat_now.perc) <= 25 then
+			baticon:set_image(beautiful.widget_battery_low)
+		 	widget:set_bg(beautiful.fg)
+		 	widget:set_fg(beautiful.bg)
+		else
+			baticon:set_image(beautiful.widget_battery)
+		 	widget:set_bg(beautiful.bg)
+		 	widget:set_fg(beautiful.fg)
+		end
+		widget.widget:set_markup(string.format("%-4s",bat_now.perc .. "%"))
+	end
+})
 
 -- Separators
 spr = wibox.widget.textbox(' ')
@@ -229,8 +229,8 @@ for s = 1, screen.count() do
 	--right_layout:add(fsicon)
 	--right_layout:add(fswidgetbg)
 	--right_layout:add(arrl)
-	--right_layout:add(baticon)
-	--right_layout:add(batwidget)
+	right_layout:add(baticon)
+	right_layout:add(batwidget)
 	right_layout:add(mytextclock)
 	right_layout:add(spr)
 --	right_layout:add(arrl_ld)

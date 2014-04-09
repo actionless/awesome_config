@@ -358,6 +358,7 @@ globalkeys = awful.util.table.join(
 	awful.key({}, "#123", function () volumewidget.up() end),
 	awful.key({}, "#122", function () volumewidget.down() end),
 	awful.key({}, "#121", function () volumewidget.toggle() end),
+	awful.key({}, "#198", function () volumewidget.toggle_mic() end),
 
 	-- MPD control
 	awful.key({ }, "#150", function () mpdwidget.prev_song() end),

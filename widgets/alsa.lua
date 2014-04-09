@@ -25,6 +25,7 @@ local function worker(args)
 	local args	 = args or {}
 	local timeout  = args.timeout or 5
 	local channel  = args.channel or "Master"
+	local mic_channel = args.mic_channel or "Capture"
 	local channels_toggle = args.channels_toggle or {channel, }
 	local settings = args.settings or function() end
 
@@ -45,6 +46,12 @@ local function worker(args)
 	function alsa.toggle()
 		awful.util.spawn("amixer -q set " .. channel .. ",0 toggle")
 		awful.util.spawn("amixer -q set " .. channel .. ",1 toggle")
+		alsa.update()
+	end
+
+	function alsa.toggle_mic()
+		awful.util.spawn("amixer -q set " .. mic_channel .. ",0 toggle")
+		awful.util.spawn("amixer -q set " .. mic_channel .. ",1 toggle")
 		alsa.update()
 	end
 
