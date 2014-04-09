@@ -14,7 +14,7 @@ volicon = wibox.widget.imagebox(beautiful.widget_vol)
 voliconbg = wibox.widget.background(volicon, beautiful.bg)
 volumewidget = widgets.alsa({
 	channel = 'Master',
-	channels_toggle = {'Master', 'PCM', 'Headphone'},
+	--channels_toggle = {'Master', 'PCM', 'Headphone'},
 	settings = function()
 		if volume_now.status == "off" then
 			volicon:set_image(beautiful.widget_vol_mute)
@@ -78,8 +78,8 @@ cpuicon:connect_signal("mouse::leave", function () cpuwidget.hide_notification()
 -- Coretemp
 tempicon = wibox.widget.imagebox(beautiful.widget_temp)
 tempwidget = widgets.temp({
-	sensor = "Core 0",
-	critical = 65
+	sensor = "Physical id 0",
+	critical = 70
 })
 
 -- / fs
@@ -187,10 +187,10 @@ for s = 1, screen.count() do
 	-- We need one layoutbox per screen.
 	mylayoutbox[s] = awful.widget.layoutbox(s)
 	mylayoutbox[s]:buttons(awful.util.table.join(
-						   awful.button({ }, 1, function () awful.layout.inc(layouts, 1) end),
-						   awful.button({ }, 3, function () awful.layout.inc(layouts, -1) end),
-						   awful.button({ }, 5, function () awful.layout.inc(layouts, 1) end),
-						   awful.button({ }, 4, function () awful.layout.inc(layouts, -1) end)))
+						   awful.button({ }, 1, function () awful.layout.inc(awful.layout.layouts, 1) end),
+						   awful.button({ }, 3, function () awful.layout.inc(awful.layout.layouts, -1) end),
+						   awful.button({ }, 5, function () awful.layout.inc(awful.layout.layouts, 1) end),
+						   awful.button({ }, 4, function () awful.layout.inc(awful.layout.layouts, -1) end)))
 	-- Create a taglist widget
 	mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
 
