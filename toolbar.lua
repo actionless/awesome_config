@@ -111,10 +111,10 @@ batwidget = widgets.bat({
 			baticon:set_image(beautiful.widget_battery_empty)
 		 	widget:set_bg(beautiful.error)
 		 	widget:set_fg(beautiful.bg)
-		elseif tonumber(bat_now.perc) <= 25 then
+		elseif tonumber(bat_now.perc) <= 30 then
 			baticon:set_image(beautiful.widget_battery_low)
-		 	widget:set_bg(beautiful.fg)
-		 	widget:set_fg(beautiful.bg)
+		 	widget:set_bg(beautiful.dark)
+		 	widget:set_fg(beautiful.fg)
 		else
 			baticon:set_image(beautiful.widget_battery)
 		 	widget:set_bg(beautiful.bg)
@@ -196,6 +196,7 @@ for s = 1, screen.count() do
 
 	-- Create a tasklist widget
 	mytasklist[s] = widgets.tasklist(s, widgets.tasklist.filter.focused_and_minimized_current_tags, mytasklist.buttons)
+    --mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons)
 
 	-- Create the wibox
 	mywibox[s] = awful.wibox({ position = "top", screen = s, height = 18 })
