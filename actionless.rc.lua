@@ -71,7 +71,7 @@ firefox	= "firefox -P actionless "
 gui_editor = "/opt/sublime_text/sublime_text"
 compositor = "compton --xrender-sync --xrender-sync-fence"
 graphics   = "pinta"
-file_manager = "stuurman" or "pcmanfm"
+file_manager = "pcmanfm"
 --tmux	   = terminal .. [[ -e "sh -c 'TERM=xterm-256color tmux'" ]]
 tmux = terminal .. " -e tmux"
 --musicplr   = terminal .. " --geometry=850x466 -e ncmpcpp"
@@ -105,7 +105,7 @@ run_once("dropboxd")
 -- }}}
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
-awful.layout.layouts = {
+layouts = {
 	awful.layout.suit.tile,
 	awful.layout.suit.tile.bottom,
 	awful.layout.suit.floating,
@@ -113,6 +113,7 @@ awful.layout.layouts = {
 	awful.layout.suit.fair.horizontal,
 	awful.layout.suit.spiral
 }
+awful.layout.layouts = layouts
 -- }}}
 
 -- {{{ Wallpaper
@@ -339,8 +340,8 @@ globalkeys = awful.util.table.join(
 	awful.key({ modkey, altkey }, "j",	 function () awful.tag.incncol(-1)		 end),
 	awful.key({ modkey, altkey }, "k",	 function () awful.tag.incncol( 1)		 end),
 
-	awful.key({ altkey,		   }, "space", function () awful.layout.inc(awful.layout.layouts, 1) end),
-	awful.key({ altkey, "Shift"   }, "space", function () awful.layout.inc(awful.layout.layouts, -1) end),
+	awful.key({ altkey,		   }, "space", function () awful.layout.inc(layouts, 1) end),
+	awful.key({ altkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
 
 	awful.key({ modkey, "Control" }, "n", awful.client.restore),
 

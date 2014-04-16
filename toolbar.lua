@@ -113,8 +113,8 @@ batwidget = widgets.bat({
 		 	widget:set_fg(beautiful.bg)
 		elseif tonumber(bat_now.perc) <= 25 then
 			baticon:set_image(beautiful.widget_battery_low)
-		 	widget:set_bg(beautiful.fg)
-		 	widget:set_fg(beautiful.bg)
+		 	widget:set_bg(beautiful.dark)
+		 	widget:set_fg(beautiful.fg)
 		else
 			baticon:set_image(beautiful.widget_battery)
 		 	widget:set_bg(beautiful.bg)
