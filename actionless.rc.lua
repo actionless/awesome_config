@@ -181,10 +181,10 @@ root.buttons(awful.util.table.join(
 globalkeys = awful.util.table.join(
 
 	awful.key({modkey, altkey}, "s", function()
-		local screen = 1
-		naughty.notify({text=mouse.screen})
 		if mouse.screen == 1 then
-			screen = 2
+			local screen = 2
+		else
+			local screen = 1
 		end
 		awful.tag.viewnext(screen)
 	end),
@@ -405,7 +405,6 @@ clientkeys = awful.util.table.join(
 			if c.titlebar then
 				awful.titlebar(c, {size = 0})
 			else
-				--awful.titlebar.add(c, { modkey = modkey })
 				make_titlebar(c)
 			end
 		end),
@@ -502,66 +501,70 @@ awful.rules.rules = {
                      buttons = clientbuttons,
 					 size_hints_honor = false},
 	  callback = awful.client.setslave },
-    { rule = { class = "MPlayer" },
-      properties = { floating = true } },
-    -- Set Firefox to always map on tags number 2 of screen 1.
-    -- { rule = { class = "Firefox" },
-    --   properties = { tag = tags[1][2] } },
-    { rule = { class = "Chromium" }, properties = { tag = tags[1][2] } },
-    { rule = { class = "Skype" }, properties = { tag = tags[1][4] } },
+    { rule = { class = "MPlayer" },		properties = { floating=true } },
+
+    { rule = { class = "Chromium" },	properties = { tag=tags[1][2],
+	                                                   raise=false } },
+    { rule = { class = "Skype" },		properties = { tag=tags[1][4],
+	                                                   raise=false } },
 }
 -- }}}
+
 
 -- {{{ Signals
 -- Signal function to execute when a new client appears.
 client.connect_signal("manage", function (c, startup)
-	-- Enable sloppy focus
-	c:connect_signal("mouse::enter", function(c)
-	--	if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
-	--	   and awful.client.focus.filter(c) then
-	--		client.focus = c
-	--	end
-	end)
-
 	if not startup and not c.size_hints.user_position
 	   and not c.size_hints.program_position then
 		awful.placement.no_overlap(c)
 		awful.placement.no_offscreen(c)
 	end
-	--if c.type == "dialog" then
-	--make_titlebar(c)
-	--end
 end)
 
 --client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 --client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
--- No border for maximized clients
+
+function remove_titlebar(c)
+	awful.titlebar(c, {size = 0})
+end
+
+function remove_border(c)
+	remove_titlebar(c)
+	c.border_width = 0
+	--c.border_color = beautiful.border_normal
+end
+
+local gtk3_app_classes = {}
+gtk3_app_classes["Transmission-gtk"] = true
+
+for class in pairs(gtk3_app_classes) do
+	local rule = { rule = {class = class}, properties = {border_width=0}}
+	table.insert(awful.rules.rules, rule)
+end
+
+function make_border(c, num_clients)
+	if not gtk3_app_classes[c.class] then
+		c.border_width = beautiful.border_width
+	end
+	if num_clients == 1 then
+		c.border_color = beautiful.border_normal
+	else
+		c.border_color = beautiful.border_focus
+	end
+end
+
 client.connect_signal("focus",
 	function(c)
 		local clients = awful.client.visible(s)
 
 		if c.maximized_horizontal == true and c.maximized_vertical == true then
-			awful.titlebar(c, {size = 0})
-			c.border_width = 0
-			--c.border_color = beautiful.border_normal
+			remove_border(c)
+		--elseif awful.client.floating.get(c) or awful.layout.get(c.screen) == awful.layout.suit.floating then
+		elseif awful.layout.get(c.screen) == awful.layout.suit.floating then
+			make_titlebar(c)
 		else
-			c.border_width = beautiful.border_width
-			if layout == "max" then
-				awful.titlebar(c, {size = 0})
-				c.border_color = beautiful.border_normal
-			else
-				if awful.client.floating.get(c) or awful.layout.get(c.screen) == awful.layout.suit.floating then
-					--if awful.layout.get(c.screen) == awful.layout.suit.floating then
-					make_titlebar(c)
-				else
-					awful.titlebar(c, {size = 0})
-					if #clients == 1 then
-						c.border_color = beautiful.border_normal
-					else
-						c.border_color = beautiful.border_focus
-					end
-				end
-			end
+			remove_titlebar(c)
+			make_border(c, #clients)
 		end
 	end)
 client.connect_signal("unfocus", function(c)
@@ -572,4 +575,3 @@ client.connect_signal("unfocus", function(c)
 		end
 	end)
 -- }}}
-
