@@ -313,11 +313,14 @@ globalkeys = awful.util.table.join(
 
 	-- Menus
 	awful.key({ modkey,		   }, "w", function () mymainmenu:show() end),
-	awful.key({ modkey,		   }, "i", function () instance = widgets.menu.clients_on_tag({}, { width=widgets.settings.screen_width, coords = {x=0, y=18} }) end),
+	awful.key({ modkey,		   }, "i", function ()
+		instance = widgets.menu_addon.clients_on_tag({
+				theme = {width=capi.screen[1].workarea.width},
+				coords = {x=0, y=18}})
+	end),
 	awful.key({ modkey,		   }, "p", function ()
 		instance = awful.menu.clients({
-				width = widgets.settings.screen_width,
-				theme = { width = widgets.settings.screen_width},
+				theme = {width=capi.screen[1].workarea.width},
 				coords = {x=0, y=18}})
 	end),
 

@@ -6,6 +6,7 @@ local newtimer  = require("widgets.helpers").newtimer
 local font      = require("widgets.helpers").font
 local beautiful      = require("widgets.helpers").beautiful
 local mono_preset      = require("widgets.helpers").mono_preset
+local first_line	= require("widgets.helpers").first_line
 
 local wibox     = require("wibox")
 local naughty   = require("naughty")
@@ -69,6 +70,7 @@ local function worker(args)
 		for line in f:lines() do
 				netctl.current = line
 		end
+		--first_line(f)
 
 		widget = netctl.widget
 		settings()

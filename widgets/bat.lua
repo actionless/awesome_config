@@ -7,13 +7,11 @@
 
 local asyncshell	= require("widgets.asyncshell")
 local newtimer		= require("widgets.helpers").newtimer
-local first_line	= require("widgets.helpers").first_line
 local beautiful		= require("widgets.helpers").beautiful
 
 local naughty		= require("naughty")
 local wibox			= require("wibox")
 
-local math			= { floor  = math.floor }
 local string		= { format = string.format,
 						match = string.match }
 
