@@ -1,4 +1,5 @@
 local awful = require("awful")
+local wibox = require("wibox")
 
 local settings = require("widgets").settings
 local beautiful = require("widgets").helpers.beautiful

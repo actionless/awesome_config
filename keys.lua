@@ -1,4 +1,11 @@
 local awful = require("awful")
+local wibox = require("wibox")
+local capi = {
+	screen = screen
+}
+
+
+local widgets = require("widgets")
 local bars = require("bars")
 
 

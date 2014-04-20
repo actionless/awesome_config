@@ -9,7 +9,7 @@ require("awful.autofocus")
 local wibox = require("wibox")
 -- Notification library
 local naughty = require("naughty")
-local menubar = require("menubar")
+menubar = require("menubar")
 -- awesome std c library
 local capi = {
 	screen = screen
