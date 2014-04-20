@@ -1,5 +1,6 @@
 local widgets =
 {
+	netctl = require("widgets.netctl"),
 	--awesome forks
 	tasklist  = require("widgets.tasklist"),
 	menu    = require("widgets.menu"),

@@ -10,29 +10,10 @@ function toolbar.init()
 markup = widgets.markup
 
 -- ALSA volume
-volicon = wibox.widget.imagebox(beautiful.widget_vol)
-voliconbg = wibox.widget.background(volicon, beautiful.bg)
 volumewidget = widgets.alsa({
 	channel = 'Master',
 	--channels_toggle = {'Master', 'PCM', 'Headphone'},
-	settings = function()
-		if volume_now.status == "off" then
-			volicon:set_image(beautiful.widget_vol_mute)
-		elseif tonumber(volume_now.level) == 0 then
-			volicon:set_image(beautiful.widget_vol_no)
-		elseif tonumber(volume_now.level) <= 50 then
-			volicon:set_image(beautiful.widget_vol_low)
-		elseif tonumber(volume_now.level) <= 75 then
-			volicon:set_image(beautiful.widget_vol)
-		else
-			volicon:set_image(beautiful.widget_vol_high)
-		end
-
-		--widget:set_text("" .. volume_now.level .. "%")
-		widget:set_text("" .. string.format("%-4s", volume_now.level .. "%").. " ")
-	end
 })
-volumewidgetbg = wibox.widget.background(volumewidget, beautiful.bg)
 
 -- MPD
 mpdicon = wibox.widget.imagebox(beautiful.widget_music)
@@ -67,6 +48,9 @@ memicon = wibox.widget.imagebox(beautiful.widget_mem)
 memicon:connect_signal("mouse::enter", function () memwidget.show_notification() end)
 memicon:connect_signal("mouse::leave", function () memwidget.hide_notification() end)
 
+-- NetCtl
+netctlwidget = widgets.netctl({with_icon=true})
+
 -- CPU
 cpuwidget = widgets.cpu({
 	list_length = 20,
@@ -100,29 +84,7 @@ mytextclock = awful.widget.textclock(" %H:%M")
 widgets.calendar:attach(mytextclock)
 
 -- Battery
-baticon = wibox.widget.imagebox(beautiful.widget_battery)
-batwidget = widgets.bat({
-	 settings = function()
-		if bat_now.on_bat == "no" then
-			baticon:set_image(beautiful.widget_ac)
-		 	widget:set_bg(beautiful.bg)
-		 	widget:set_fg(beautiful.fg)
-		elseif bat_now.lo_bat == 'yes' then
-			baticon:set_image(beautiful.widget_battery_empty)
-		 	widget:set_bg(beautiful.error)
-		 	widget:set_fg(beautiful.bg)
-		elseif tonumber(bat_now.perc) <= 25 then
-			baticon:set_image(beautiful.widget_battery_low)
-		 	widget:set_bg(beautiful.dark)
-		 	widget:set_fg(beautiful.fg)
-		else
-			baticon:set_image(beautiful.widget_battery)
-		 	widget:set_bg(beautiful.bg)
-		 	widget:set_fg(beautiful.fg)
-		end
-		widget.widget:set_markup(string.format("%-4s",bat_now.perc .. "%"))
-	end
-})
+batwidget = widgets.bat({})
 
 -- Separators
 spr = wibox.widget.textbox(' ')
@@ -211,11 +173,12 @@ for s = 1, screen.count() do
 	local right_layout = wibox.layout.fixed.horizontal()
 	right_layout:add(spr)
 	right_layout:add(sep)
+	right_layout:add(netctlwidget)
+	right_layout:add(sep)
 	right_layout:add(mpdicon)
 	right_layout:add(mpdwidgetbg)
 	right_layout:add(sep)
-	right_layout:add(voliconbg)
-	right_layout:add(volumewidgetbg)
+	right_layout:add(volumewidget)
 	if s == 1 then right_layout:add(systray_toggle(s)) end
 	right_layout:add(sep)
 	right_layout:add(memicon)
@@ -229,7 +192,6 @@ for s = 1, screen.count() do
 	--right_layout:add(fsicon)
 	--right_layout:add(fswidgetbg)
 	--right_layout:add(arrl)
-	right_layout:add(baticon)
 	right_layout:add(batwidget)
 	right_layout:add(mytextclock)
 	right_layout:add(spr)

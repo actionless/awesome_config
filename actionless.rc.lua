@@ -537,6 +537,7 @@ end
 
 local gtk3_app_classes = {}
 gtk3_app_classes["Transmission-gtk"] = true
+gtk3_app_classes["Gedit"] = true
 
 for class in pairs(gtk3_app_classes) do
 	local rule = { rule = {class = class}, properties = {border_width=0}}
@@ -560,8 +561,8 @@ client.connect_signal("focus",
 
 		if c.maximized_horizontal == true and c.maximized_vertical == true then
 			remove_border(c)
-		--elseif awful.client.floating.get(c) or awful.layout.get(c.screen) == awful.layout.suit.floating then
-		elseif awful.layout.get(c.screen) == awful.layout.suit.floating then
+		elseif awful.client.floating.get(c) or awful.layout.get(c.screen) == awful.layout.suit.floating then
+		--elseif awful.layout.get(c.screen) == awful.layout.suit.floating then
 			make_titlebar(c)
 		else
 			remove_titlebar(c)
