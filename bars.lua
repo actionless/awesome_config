@@ -19,20 +19,20 @@ function bars.make_border(c, num_clients)
 	end
 end
 
-
-function bars.remove_border(c)
-	remove_titlebar(c)
-	c.border_width = 0
-	--c.border_color = beautiful.border_normal
-end
-
-
 function bars.remove_titlebar(c)
 	awful.titlebar(c, {size = 0})
 end
 
+function bars.remove_border(c)
+	bars.remove_titlebar(c)
+	c.border_width = 0
+	--c.border_color = beautiful.border_normal
+end
 
 function bars.make_titlebar(c)
+	if settings.gtk3_app_classes[c.class] then
+		return
+	end
 	c.border_color = beautiful.titlebar_focus
 	-- buttons for the titlebar
 	local buttons = awful.util.table.join(

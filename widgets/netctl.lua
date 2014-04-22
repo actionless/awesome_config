@@ -29,8 +29,8 @@ netctl.widget = wibox.layout.fixed.horizontal()
 netctl.widget:add(netctl.icon_widget)
 netctl.widget:add(netctl.text_widget)
 
-netctl.widget:connect_signal("mouse::enter", function () netctl.show_notification() end)
-netctl.widget:connect_signal("mouse::leave", function () netctl.hide_notification() end)
+--netctl.widget:connect_signal("mouse::enter", function () netctl.show_notification() end)
+--netctl.widget:connect_signal("mouse::leave", function () netctl.hide_notification() end)
 
 local function worker(args)
 	local args	 = args or {}
