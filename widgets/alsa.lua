@@ -48,28 +48,35 @@ local volume_now = {
 
 local function worker(args)
 	local args	 = args or {}
-	local timeout  = args.timeout or 5
-	local channel  = args.channel or "Master"
-	local mic_channel = args.mic_channel or "Capture"
-	local channels_toggle = args.channels_toggle or {channel, }
+	alsa.timeout  = args.timeout or 5
+	alsa.channel  = args.channel or "Master"
+	alsa.mic_channel = args.mic_channel or "Capture"
+	alsa.channels_toggle = args.channels_toggle or {channel, }
 
 	function alsa.up()
-		awful.util.spawn_with_shell("amixer -q set " .. channel .. ",0 1%+")
+		awful.util.spawn_with_shell("amixer -q set " .. alsa.channel .. ",0 1%+")
 	--	awful.util.spawn("amixer -q set " .. channel .. ",1 1%+")
 		volume_now.level = volume_now.level + 1
 		alsa.update_indicator()
 	end
 
 	function alsa.down()
-		awful.util.spawn_with_shell("amixer -q set " .. channel .. ",0 1%-")
+		awful.util.spawn_with_shell("amixer -q set " .. alsa.channel .. ",0 1%-")
 	--	awful.util.spawn("amixer -q set " .. channel .. ",1 1%-")
 		volume_now.level = volume_now.level - 1
 		alsa.update_indicator()
 	end
 
 	function alsa.toggle()
-		awful.util.spawn("amixer -q set " .. channel .. ",0 toggle")
-		awful.util.spawn("amixer -q set " .. channel .. ",1 toggle")
+		if volume_now.status == 'off' then
+			for _, channel in pairs(alsa.channels_toggle) do 
+				awful.util.spawn("amixer -q set " .. channel .. ",0 on")
+				awful.util.spawn("amixer -q set " .. channel .. ",1 on")
+			end
+		else
+			awful.util.spawn("amixer -q set " .. alsa.channel .. ",0 off")
+			awful.util.spawn("amixer -q set " .. alsa.channel .. ",1 off")
+		end
 		if volume_now.status == 'off' then
 			volume_now.status = 'on'
 		else
@@ -79,8 +86,8 @@ local function worker(args)
 	end
 
 	function alsa.toggle_mic()
-		awful.util.spawn("amixer -q set " .. mic_channel .. ",0 toggle")
-		awful.util.spawn("amixer -q set " .. mic_channel .. ",1 toggle")
+		awful.util.spawn("amixer -q set " .. alsa.mic_channel .. ",0 toggle")
+		awful.util.spawn("amixer -q set " .. alsa.mic_channel .. ",1 toggle")
 		--alsa.update_indicator()
 	end
 
@@ -101,7 +108,7 @@ local function worker(args)
 	end
 
 	function alsa.update()
-		asyncshell.request('amixer get ' .. channel,
+		asyncshell.request('amixer get ' .. alsa.channel,
 		                   function(f) alsa.post_update(f) end)
 	end
 	function alsa.post_update(f)
