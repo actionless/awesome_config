@@ -4,8 +4,8 @@ themes_dir                          = os.getenv("HOME") .. "/.config/awesome/the
 theme.dir			= themes_dir
 theme.wallpaper                     = themes_dir .. "/vulcarona_pattern.png"
 
-theme.bg	= "#dedede"
-theme.alt_bg	= "#ad7fa8"
+theme.bg	= "#d8d8d8"
+theme.alt_bg	= "#a8a8a8"
 
 theme.fg	= "#101010"
 theme.alt_fg	= "#a562b3"
@@ -25,8 +25,8 @@ theme.titlebar_focus	= "#66436C"
 --theme.font                          = "tewi 9"
 --theme.font                          = "Dina 8"
 --theme.font                          = "Meslo LG S 10"
-theme.font                          = "monoOne 10"
 --theme.font                          = "Share Tech Mono 11"
+theme.font                          = "monoOne 10"
 theme.sans_font             		= "Share Tech 11"
 theme.fg_normal                     = theme.fg
 theme.bg_normal                     = theme.bg
