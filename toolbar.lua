@@ -15,6 +15,7 @@ function toolbar.init()
 volumewidget = widgets.alsa({
 	channel = 'Master',
 	channels_toggle = {'Master', 'Headphone', 'Speaker'},
+	--widget_bg = beautiful.alt_bg,
 })
 
 -- MPD
