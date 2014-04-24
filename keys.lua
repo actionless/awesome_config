@@ -47,6 +47,16 @@ globalkeys = awful.util.table.join(
 	awful.key({ modkey,				}, "Escape",
 		awful.tag.history.restore),
 
+	-- By direction screen focus
+	awful.key({ modkey,				}, "Next",
+		function()
+			awful.screen.focus_relative(1)
+		end),
+	awful.key({ modkey,				}, "Prior",
+		function()
+			awful.screen.focus_relative(-1)
+		end),
+
 	-- By direction client focus
 	awful.key({ modkey,				}, "Down",
 		function()
