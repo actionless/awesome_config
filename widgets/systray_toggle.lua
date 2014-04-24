@@ -89,7 +89,7 @@ function systray_toggle.show()
     end
 
     -- Set position and size
-    scr = scr or capi.mouse.screen or 1
+    scr = capi.mouse.screen or 1
     local scrgeom = capi.screen[scr].workarea
     systray_toggle.wibox:geometry({x = geometry.x or scrgeom.x,
                              y = geometry.y or scrgeom.y,
@@ -115,7 +115,6 @@ function systray_toggle.toggle()
 end
 
 function systray_toggle.mt:__call(...)
-    scr = ...
     widget = wibox.widget.imagebox(beautiful.dropdown_icon)
     widget:connect_signal("mouse::enter", function ()
         systray_toggle.arrow = true

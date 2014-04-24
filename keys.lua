@@ -25,16 +25,6 @@ root.buttons(awful.util.table.join(
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
 
-	awful.key({ modkey,	altkey		}, "s",
-		function()
-			if mouse.screen == 1 then
-				local screen = 2
-			else
-				local screen = 1
-			end
-			awful.tag.viewnext(screen)
-		end),
-
 	awful.key({ modkey,	"Control"	}, "t",
 		function() systray_toggle.toggle() end),
 	awful.key({ modkey,	"Control"	}, "s",
@@ -192,13 +182,13 @@ globalkeys = awful.util.table.join(
 	awful.key({ modkey,		   }, "i",
 		function ()
 			instance = widgets.menu_addon.clients_on_tag({
-				theme = {width=capi.screen[1].workarea.width},
+				theme = {width=capi.screen[mouse.screen].workarea.width},
 				coords = {x=0, y=18}})
 		end),
 	awful.key({ modkey,		   }, "p",
 		function ()
 			instance = awful.menu.clients({
-					theme = {width=capi.screen[1].workarea.width},
+					theme = {width=capi.screen[mouse.screen].workarea.width},
 					coords = {x=0, y=18}})
 		end),
 	awful.key({ modkey, "Control"}, "p",
@@ -322,59 +312,51 @@ clientkeys = awful.util.table.join(
 		end)
 )
 
--- Bind all key numbers to tags.
--- Be careful: we use keycodes to make it works on any keyboard layout.
--- This should map on the top row of your keyboard, usually 1 to 9.
-for i = 1, 12 do
+for screen = 1, 2 do
+  for i = 1, 12 do
 
-	-- f-keys:
-	--if i>10 then
-	--	diff = 84
-	--else
-	--	diff = 66
-	--end
-	-- num keys:
-	diff = 9
+	if screen == 1 then
+		-- num keys:
+		diff = 9
+	elseif screen == 2 then
+		-- f-keys:
+		if i>10 then
+			diff = 84
+		else
+			diff = 66
+		end
+	end
 
-    globalkeys = awful.util.table.join(globalkeys,
-        -- View tag only.
-        awful.key({ modkey }, "#" .. i + diff,
-                  function ()
-                        local screen = mouse.screen
-                        local tag = awful.tag.gettags(screen)[i]
-                        if tag then
-                           awful.tag.viewonly(tag)
-                        end
-                  end),
-        -- Toggle tag.
-        awful.key({ modkey, "Control" }, "#" .. i + diff,
-                  function ()
-                      local screen = mouse.screen
-                      local tag = awful.tag.gettags(screen)[i]
-                      if tag then
-                         awful.tag.viewtoggle(tag)
-                      end
-                  end),
-        -- Move client to tag.
-        awful.key({ modkey, "Shift" }, "#" .. i + diff,
-                  function ()
-                      if client.focus then
-                          local tag = awful.tag.gettags(client.focus.screen)[i]
-                          if tag then
-                              awful.client.movetotag(tag)
-                          end
-                     end
-                  end),
-        -- Toggle tag.
-        awful.key({ modkey, "Control", "Shift" }, "#" .. i + diff,
-                  function ()
-                      if client.focus then
-                          local tag = awful.tag.gettags(client.focus.screen)[i]
-                          if tag then
-                              awful.client.toggletag(tag)
-                          end
-                      end
-                  end))
+	globalkeys = awful.util.table.join(globalkeys,
+		-- View tag only.
+		awful.key({ modkey }, "#" .. i + diff,
+			function ()
+				local tag = awful.tag.gettags(screen)[i]
+				if tag then awful.tag.viewonly(tag) end
+			  end),
+		-- Toggle tag.
+		awful.key({ modkey, "Control" }, "#" .. i + diff,
+			function ()
+				local tag = awful.tag.gettags(screen)[i]
+				if tag then awful.tag.viewtoggle(tag) end
+			end),
+		-- Move client to tag.
+		awful.key({ modkey, "Shift" }, "#" .. i + diff,
+			function ()
+				if client.focus then
+					local tag = awful.tag.gettags(screen)[i]
+					if tag then awful.client.movetotag(tag) end
+				 end
+			end),
+		-- Toggle tag.
+		awful.key({ modkey, "Control", "Shift" }, "#" .. i + diff,
+			function ()
+				if client.focus then
+					local tag = awful.tag.gettags(screen)[i]
+					if tag then awful.client.toggletag(tag) end
+				end
+			end))
+  end
 end
 
 clientbuttons = awful.util.table.join(

@@ -191,7 +191,7 @@ for s = 1, screen.count() do
 	right_layout:add(mpdwidgetbg)
 	right_layout:add(separator)
 	right_layout:add(volumewidget)
-	if s == 1 then right_layout:add(systray_toggle(s)) end
+	if s == 1 then right_layout:add(systray_toggle()) end
 	right_layout:add(separator)
 	right_layout:add(memicon)
 	right_layout:add(memwidget)
