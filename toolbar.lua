@@ -77,7 +77,7 @@ cpuicon:connect_signal(
 tempicon = wibox.widget.imagebox(beautiful.widget_temp)
 tempwidget = widgets.temp({
 	sensor = "Core 0",
-	critical = 65
+	critical = 75
 })
 
 -- Textclock
