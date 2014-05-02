@@ -73,7 +73,8 @@ local function worker(args)
 			bat.icon_widget:set_image(beautiful.widget_battery_low)
 		 	bat.text_bg:set_bg(beautiful.dark)
 		 	bat.text_bg:set_fg(beautiful.fg)
-		elseif bat_now.state == 'fully-charged' then
+		elseif bat_now.state == 'fully-charged' 
+		  or bat_now.state == 'charging' then
 			bat.icon_widget:set_image(beautiful.widget_ac)
 			bat.icon_bg:set_bg(beautiful.bg)
 			bat.text_bg:set_bg(beautiful.bg)
