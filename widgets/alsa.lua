@@ -53,7 +53,7 @@ local function worker(args)
 	alsa.timeout  = args.timeout or 5
 	alsa.channel  = args.channel or "Master"
 	alsa.mic_channel = args.mic_channel or "Capture"
-	alsa.channels_toggle = args.channels_toggle or {alsa.channel, }
+	alsa.channels_toggle = args.channels_toggle or {channel, }
 
 	if widget_bg then
 		alsa.icon_bg:set_bg(widget_bg)
