@@ -28,7 +28,7 @@ local function worker(args)
 	local settings = args.settings or function()
 		if tonumber(coretemp_now) >= critical then
 			temp.widget:set_bg(beautiful.error)
-			temp.widget:set_fg(beautiful.bg)
+			temp.widget:set_fg(beautiful.fg)
 		else
 			temp.widget:set_bg(beautiful.bg)
 			temp.widget:set_fg(beautiful.fg)
