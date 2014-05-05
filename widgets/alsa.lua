@@ -81,12 +81,12 @@ local function worker(args)
 	function alsa.toggle()
 		if alsa.volume.status == 'off' then
 			for _, channel in pairs(alsa.channels_toggle) do 
-				awful.util.spawn("amixer -q set " .. channel .. ",0 on")
-				--awful.util.spawn("amixer -q set " .. channel .. ",1 on")
+				awful.util.spawn_with_shell("amixer -q set " .. channel .. ",0 on")
+				awful.util.spawn_with_shell("amixer -q set " .. channel .. ",1 on")
 			end
 		else
-			awful.util.spawn("amixer -q set " .. alsa.channel .. ",0 off")
-			--awful.util.spawn("amixer -q set " .. alsa.channel .. ",1 off")
+			awful.util.spawn_with_shell("amixer -q set " .. alsa.channel .. ",0 off")
+			awful.util.spawn_with_shell("amixer -q set " .. alsa.channel .. ",1 off")
 		end
 		if alsa.volume.status == 'off' then
 			alsa.volume.status = 'on'
