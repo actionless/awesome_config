@@ -14,7 +14,7 @@ function toolbar.init()
 -- ALSA volume
 volumewidget = widgets.alsa({
 	channel = 'Master',
-	channels_toggle = {'Master', 'PCM', 'Headphone'},
+	channels_toggle = {'Master', 'Headphone', 'Speaker'},
 })
 
 -- MPD
