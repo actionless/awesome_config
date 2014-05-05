@@ -1,7 +1,7 @@
 ---------------------------------------------------------------------------
 -- @author Julien Danjou &lt;julien@danjou.info&gt;
 -- @copyright 2008-2009 Julien Danjou
--- @release v3.5.2
+-- @release v3.5.5
 ---------------------------------------------------------------------------
 
 -- Grab environment we need
@@ -65,7 +65,7 @@ function common.list_update(w, buttons, label, data, objects, right_margin)
             -- And all of this gets a background
             bgb:set_widget(l)
 
-            bgb:buttons(common.create_buttons(buttons, o, right_margin))
+            bgb:buttons(common.create_buttons(buttons, o))
 
             data[o] = {
                 ib = ib,
