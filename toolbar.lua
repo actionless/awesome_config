@@ -14,8 +14,7 @@ function toolbar.init()
 -- ALSA volume
 volumewidget = widgets.alsa({
 	channel = 'Master',
-	channels_toggle = {'Master', 'Headphone', 'Speaker'},
-	--widget_bg = beautiful.alt_bg,
+	channels_toggle = {'Master', 'PCM', 'Headphone'},
 })
 
 -- MPD
@@ -77,7 +76,7 @@ cpuicon:connect_signal(
 tempicon = wibox.widget.imagebox(beautiful.widget_temp)
 tempwidget = widgets.temp({
 	sensor = "Core 0",
-	critical = 75
+	critical = 65
 })
 
 -- Textclock
