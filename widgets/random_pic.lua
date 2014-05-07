@@ -11,7 +11,6 @@ local newtimer     = require("widgets.helpers").newtimer
 local icons_dir     = require("widgets.helpers").icons_dir
 
 local wibox        = require("wibox")
-local naughty        = require("naughty")
 
 local io           = io
 local tonumber     = tonumber

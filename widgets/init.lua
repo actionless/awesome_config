@@ -9,7 +9,6 @@ local widgets = {
 	-- awesome forks
 	tasklist		= require("widgets.tasklist"),
 	common			= require("widgets.common"),
-	naughty			= require("widgets.naughty"),
 	-- lain forks
 	markup			= require("widgets.markup"),
 	helpers			= require("widgets.helpers"),

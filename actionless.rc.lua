@@ -51,6 +51,7 @@ end
 naughty.config.presets.normal.opacity = beautiful.notification_opacity
 naughty.config.presets.low.opacity = beautiful.notification_opacity
 naughty.config.presets.critical.opacity = beautiful.notification_opacity
+
 naughty.config.presets.normal.font = beautiful.notification_font
 naughty.config.presets.low.font = beautiful.notification_font
 naughty.config.presets.critical.font = beautiful.notification_font

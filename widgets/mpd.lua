@@ -12,7 +12,7 @@ local helpers	  = require("widgets.helpers")
 
 local awful		= require("awful")
 local escape_f	 = require("awful.util").escape
-local naughty	  = require("widgets.naughty")
+local naughty	  = require("naughty")
 local wibox		= require("wibox")
 
 local io		   = { popen	= io.popen }
