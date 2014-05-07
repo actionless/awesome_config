@@ -10,7 +10,7 @@ local capi = { screen = screen,
 local ipairs = ipairs
 local setmetatable = setmetatable
 local table = table
-local common = require("widgets.common")
+local common = require("widgets.common_widget_with_margin")
 local beautiful = require("widgets.helpers").beautiful
 local wibox = require("wibox")
 local awful = require("awful")

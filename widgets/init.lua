@@ -8,7 +8,7 @@ local widgets = {
 	menu_addon		= require("widgets.menu_addon"),
 	-- awesome forks
 	tasklist		= require("widgets.tasklist"),
-	common			= require("widgets.common"),
+	common_widget_with_margin = require("widgets.common_widget_with_margin"),
 	-- lain forks
 	markup			= require("widgets.markup"),
 	helpers			= require("widgets.helpers"),
