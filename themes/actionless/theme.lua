@@ -11,8 +11,7 @@ theme.fg		= "#101010"
 theme.alt_fg	= "#a562b3"
 theme.shiny		= "#ffffff"
 
-theme.light		= "#a562b3"
-theme.dark		= "#ad7fa8"
+theme.theme		= "#ad7fa8"
 theme.error		= "#f92672"
 
 theme.border					= "#000000"
@@ -27,12 +26,12 @@ theme.titlebar_focus			= "#66436C"
 --theme.font					= "Meslo LG S 10"
 --theme.font					= "Share Tech Mono 11"
 theme.font						= "monoOne 10"
---theme.sans_font			 	= "Share Tech 11"
-theme.sans_font			 		= "Fira Sans 9"
+--theme.sans_font				= "Share Tech 11"
+theme.sans_font					= "Fira Sans 9"
 theme.fg_normal					= theme.fg
 theme.bg_normal					= theme.bg
 theme.fg_focus					= theme.fg
-theme.bg_focus					= theme.dark
+theme.bg_focus					= theme.theme
 theme.fg_urgent					= theme.bg
 theme.bg_urgent					= theme.error
 
@@ -43,7 +42,7 @@ theme.border_marked				= theme.error
 
 theme.taglist_font				= theme.font
 theme.taglist_fg_focus			= theme.shiny
-theme.taglist_bg_focus			= theme.dark
+theme.taglist_bg_focus			= theme.theme
 
 theme.tasklist_font				= theme.font
 theme.tasklist_fg_focus			= theme.fg
@@ -74,7 +73,7 @@ theme.mouse_finder_color		= theme.error
 theme.menu_height				= "16"
 theme.menu_width				= "140"
 
-theme.player_text				= theme.light
+theme.player_text				= theme.theme
 
 -- ICONS
 

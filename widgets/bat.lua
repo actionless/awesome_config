@@ -1,21 +1,19 @@
 --[[
-     Licensed under GNU General Public License v2
+     Licensed under GNU General Public License v3
       * (c) 2014,		Yauheni Kirylau
-      * (c) 2013,		Luke Bonham
-      * (c) 2010-2012,	Peter Hofmann
 --]]
+
+local naughty		= require("naughty")
+local wibox			= require("wibox")
+local string		= { format	= string.format,
+					    match	= string.match }
+
+local setmetatable = setmetatable
 
 local asyncshell	= require("widgets.asyncshell")
 local newtimer		= require("widgets.helpers").newtimer
 local beautiful		= require("widgets.helpers").beautiful
 
-local naughty		= require("naughty")
-local wibox			= require("wibox")
-
-local string		= { format = string.format,
-						match = string.match }
-
-local setmetatable = setmetatable
 
 -- Batterys info
 local bat = {}
@@ -50,7 +48,7 @@ local function worker(args)
 
     function bat.post_update(f)
 		bat_now = {}
-        for line in f:lines() do 
+		for line in f:lines() do
 			k, v = string.match(line, "[ ]+(.*):[ ]+(.*)")
 			if k == 'percentage' and not bat_now.perc then
 				bat_now.percentage = tonumber(string.match(v,"%d+"))
@@ -59,8 +57,8 @@ local function worker(args)
 			elseif k == 'on-low-battery' then
 				if v == 'yes' then
 					bat.icon_widget:set_image(beautiful.widget_battery_empty)
-				 	bat.text_bg:set_bg(beautiful.error)
-				 	bat.text_bg:set_fg(beautiful.bg)
+					bat.text_bg:set_bg(beautiful.error)
+					bat.text_bg:set_fg(beautiful.bg)
 				end
 			end 
 		end
@@ -71,8 +69,8 @@ local function worker(args)
 
 		if bat_now.percentage < 25 then
 			bat.icon_widget:set_image(beautiful.widget_battery_low)
-		 	bat.text_bg:set_bg(beautiful.dark)
-		 	bat.text_bg:set_fg(beautiful.fg)
+			bat.text_bg:set_bg(beautiful.theme)
+			bat.text_bg:set_fg(beautiful.fg)
 		elseif bat_now.state == 'fully-charged' 
 		  or bat_now.state == 'charging' then
 			bat.icon_widget:set_image(beautiful.widget_ac)
@@ -81,8 +79,8 @@ local function worker(args)
 			bat.text_bg:set_fg(beautiful.fg)
 		else
 			bat.icon_widget:set_image(beautiful.widget_battery)
-		 	bat.text_bg:set_bg(beautiful.bg)
-		 	bat.text_bg:set_fg(beautiful.fg)
+			bat.text_bg:set_bg(beautiful.bg)
+			bat.text_bg:set_fg(beautiful.fg)
 		end
 		-- notifications for low and critical states
 		--if bat_now.perc <= 5
