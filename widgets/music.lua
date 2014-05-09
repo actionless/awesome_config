@@ -25,6 +25,7 @@ local asyncshell	= require("widgets.asyncshell")
 -- player infos
 local player = {id=nil}
 local player_status = {}
+player.cover = "/tmp/playercover.png"
 player.widget = common.widget(beautiful.widget_music)
 player.widget:buttons(awful.util.table.join(
 	awful.button({			}, 1, function ()
@@ -36,8 +37,9 @@ local function worker(args)
 	local timeout	 = args.timeout or 2
 	local popup_timeout	= args.timeout or 5
 	local default_art = args.default_art or ""
-	local cover_size  = args.cover_size or 100
 	local backend = args.backend or "mpd"
+	local cover_size  = args.cover_size or 100
+	local resize = string.format('%sx%s', cover_size, cover_size)
 
 	-- mpd related
 	local host		= args.host or "127.0.0.1"
@@ -57,12 +59,8 @@ local function worker(args)
 -------------------------------------------------------------------------------
 	function player.show_notification()
 		player.hide_notification()
-		if backend == 'mpd' then
-			os.execute(string.format("%s %q %q %d %q", playercover, music_dir, player_status.file, cover_size, default_art))
-			player_status.cover = "/tmp/playercover.png"
-		end
 		player.id = naughty.notify({
-			icon = player_status.cover,
+			icon = player.cover,
 			title   = player_status.title,
 			text = string.format("%s (%s)\n%s", player_status.album, player_status.date, player_status.artist),
 			timeout = popup_timeout
@@ -76,31 +74,34 @@ local function worker(args)
 				function(f) player.post_update(f) end)
 		elseif backend == 'clementine' then
 			asyncshell.request(
-				"qdbus org.mpris.MediaPlayer2.clementine /Player GetMetadata",
+				"qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 PlaybackStatus",
 				function(f) player.clementine_update(f) end)
 		end
 	end
 -------------------------------------------------------------------------------
 	function player.toggle()
-		if backend == 'mpd' then
-			awful.util.spawn_with_shell(
-				"mpc toggle || ncmpcpp toggle || ncmpc toggle || pms toggle")
+		if backend == 'mpd' then awful.util.spawn_with_shell(
+			"mpc toggle || ncmpcpp toggle || ncmpc toggle || pms toggle")
+		elseif backend == 'clementine' then awful.util.spawn_with_shell(
+			"qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 PlayPause")
 		end
 		player.update()
 	end
 
 	function player.next_song()
-		if backend == 'mpd' then
-			awful.util.spawn_with_shell(
-				"mpc next || ncmpcpp next || ncmpc next || pms next")
+		if backend == 'mpd' then awful.util.spawn_with_shell(
+			"mpc next || ncmpcpp next || ncmpc next || pms next")
+		elseif backend == 'clementine' then awful.util.spawn_with_shell(
+			"qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 Next")
 		end
 		player.update()
 	end
 
 	function player.prev_song()
-		if backend == 'mpd' then
-			awful.util.spawn_with_shell(
-				"mpc prev || ncmpcpp prev || ncmpc prev || pms prev")
+		if backend == 'mpd' then awful.util.spawn_with_shell(
+			"mpc prev || ncmpcpp prev || ncmpc prev || pms prev")
+		elseif backend == 'clementine' then awful.util.spawn_with_shell(
+			"qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 Previous")
 		end
 		player.update()
 	end
@@ -144,18 +145,29 @@ local function worker(args)
 			end
 
 		end
-		player.post_update()
+		player.parse_status()
 	end
 
 	function player.clementine_update(f)
 		player.pre_update()
 		for line in f:lines() do
-
-			--if string.match(line,"%[playing%]") then
+			if string.match(line,"Playing") then
 				player_status.state  = 'play'
-			--elseif string.match(line,"%[paused%]") then
-			--	player_status.state = 'pause' end
-
+			elseif string.match(line,"Paused") then
+				player_status.state = 'pause' end
+		end
+		if player_status.state == 'play'
+			or player_status.state == 'pause'
+		then
+			asyncshell.request(
+				"qdbus org.mpris.MediaPlayer2.clementine /Player GetMetadata",
+				function(f) player.clementine_post_update(f) end)
+		else
+			player.parse_status()
+		end
+	end
+	function player.clementine_post_update(f)
+		for line in f:lines() do
 			k, v = string.match(line, "([%w]+): (.*)$")
 			if     k == "location" then
 				player_status.file = v:match("^file://(.*)$")
@@ -166,9 +178,8 @@ local function worker(args)
 			elseif k == "arturl" then
 				player_status.cover	= v:match("^file://(.*)$")
 			end
-
 		end
-		player.post_update()
+		player.parse_status()
 	end
 -------------------------------------------------------------------------------
 	function player.predict_missing_tags()
@@ -203,19 +214,42 @@ local function worker(args)
 		end
 	end
 -------------------------------------------------------------------------------
-	function player.post_update()
+	function player.process_new_song()
+		helpers.set_map("current player track", player_status.title)
+		local command = ''
+		if backend == 'clementine' then
+			command = string.format(
+				[[convert "%q" -thumbnail "%q" -gravity center -background "none" -extent "%q" "%q"]],
+				player_status.cover, resize, resize, player.cover)
+		elseif backend == 'mpd' then
+			command = string.format(
+				"%s %q %q %d %q",
+				cover_script, music_dir, player_status.file, cover_size, default_art)
+		end
+		asyncshell.request(
+			command,
+			function(f) player.show_notification() end)
+	end
+-------------------------------------------------------------------------------
+	function player.parse_status()
 		player.predict_missing_tags()
 		local artist = ""
 		local title = ""
+
 		if player_status.state == "play" then
 			artist = player_status.artist
 			title  = player_status.title
 			player.widget.icon_widget:set_image(beautiful.widget_music_on)
-		else
-			if player_status.state == "pause" then
-				artist = "player"
-				title  = "paused"
+			if player_status.title ~= helpers.get_map("current player track") then
+				player.process_new_song()
 			end
+		elseif player_status.state ~= "pause" then
+			artist = "player"
+			title  = "paused"
+			helpers.set_map("current player track", nil)
+			player.widget.icon_widget:set_image(beautiful.widget_music)
+		else
+			-- stop
 			player.widget.icon_widget:set_image(beautiful.widget_music)
 		end
 
@@ -225,17 +259,6 @@ local function worker(args)
 			' ' ..
 			title ..
 			'</span>')
-
-		if player_status.state == "play" then
-			if player_status.title ~= helpers.get_map("current player track") then
-				helpers.set_map("current player track", player_status.title)
-				if backend ~= 'clementine' then
-					player.show_notification()
-				end
-			end
-		elseif player_status.state ~= "pause" then
-			helpers.set_map("current player track", nil)
-		end
 	end
 -------------------------------------------------------------------------------
 	helpers.newtimer("player", timeout, player.update)
