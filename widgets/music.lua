@@ -157,13 +157,14 @@ local function worker(args)
 			--	player_status.state = 'pause' end
 
 			k, v = string.match(line, "([%w]+): (.*)$")
-			if     k == "location" then player_status.file = v
+			if     k == "location" then
+				player_status.file = v:match("^file://(.*)$")
 			elseif k == "artist" then player_status.artist = escape_f(v)
 			elseif k == "title"  then player_status.title  = escape_f(v)
 			elseif k == "album"  then player_status.album  = escape_f(v)
 			elseif k == "year"   then player_status.date   = escape_f(v)
 			elseif k == "arturl" then
-				player_status.cover  = v:match("^file://(.*)$")
+				player_status.cover	= v:match("^file://(.*)$")
 			end
 
 		end
@@ -181,11 +182,13 @@ local function worker(args)
 			or player_status.artist == ''
 		then
 			player_status.artist = escape_f(
-				player_status.file:match("^(.*)['/]%d+ [-] .*")
+				player_status.file:match("^.*[/](.*)[/]%d+ [-] .*[/]")
 			) or escape_f(
-				player_status.file:match("^.*['/](.*) [-] .*")
+				player_status.file:match("^(.*)[/]%d+ [-] .*")
 			) or escape_f(
-				player_status.file:match("^(.*)['/].*")
+				player_status.file:match("^.*[/](.*) [-] .*")
+			) or escape_f(
+				player_status.file:match("^(.*)[/].*")
 			) or "N/A"
 		end
 
@@ -193,9 +196,9 @@ local function worker(args)
 			or player_status.title == ''
 		then
 			player_status.title = escape_f(
-				player_status.file:match(".*['/'].* [-] (.*)[.].*")
+				player_status.file:match(".*[/].* [-] (.*)[.].*")
 			) or escape_f(
-				player_status.file:match(".*['/'](.*) [.].*")
+				player_status.file:match(".*[/](.*) [.].*")
 			) or escape_f(player_status.file)
 		end
 	end
@@ -218,7 +221,7 @@ local function worker(args)
 
 		player.widget.text_widget:set_markup(
 			'<span font="' .. beautiful.tasklist_font .. '">' ..
-			markup(beautiful.player_text, artist) ..
+			markup(beautiful.player_text, markup.bold(artist)) ..
 			' ' ..
 			title ..
 			'</span>')

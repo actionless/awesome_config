@@ -25,7 +25,8 @@ theme.titlebar_focus			= "#66436C"
 --theme.font					= "Dina 8"
 --theme.font					= "Meslo LG S 10"
 --theme.font					= "Share Tech Mono 11"
-theme.font						= "monoOne 10"
+--theme.font						= "monoOne 10"
+theme.font						= "Fira Mono 9"
 --theme.sans_font				= "Share Tech 11"
 theme.sans_font					= "Fira Sans 9"
 theme.fg_normal					= theme.fg
@@ -73,7 +74,7 @@ theme.mouse_finder_color		= theme.error
 theme.menu_height				= "16"
 theme.menu_width				= "140"
 
-theme.player_text				= theme.theme
+theme.player_text				= "#8d5f88"
 
 -- ICONS
 

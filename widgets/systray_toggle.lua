@@ -24,20 +24,18 @@ local abs = math.abs
 
 --- widgets.systray_toggle
 local systray_toggle = { mt = {}, arrow=false, popup=false }
-local scr = 1
+systray_toggle.widget = wibox.widget.imagebox(beautiful.dropdown_icon)
+systray_toggle.widget:connect_signal("mouse::enter", function ()
+    systray_toggle.arrow = true
+    systray_toggle.show()
+end)
+systray_toggle.widget:connect_signal("mouse::leave", function ()
+    systray_toggle.arrow = false
+    systray_toggle.check()
+end)
 
-systray_toggle.geometry = {
-    screen = 1,
-    icon_size = 24,
-    x = capi.screen[1].workarea.width - 350 ,
-    y = 18,
-    lmargin = 5,
-    rmargin = 5,
-    tmargin = 2,
-    bmargin = 2,
-}
 
-local function initialize()
+function systray_toggle.initialize()
     local mywibox = wibox({})
     mywibox.ontop = true
     mywibox.opacity = beautiful.notification_opacity
@@ -73,29 +71,25 @@ function systray_toggle.post_check()
 end
 
 function systray_toggle.show()
-    local num_icons = capi.awesome.systray()
+    systray_toggle.num_icons = capi.awesome.systray()
+    if systray_toggle.num_icons < 1 then
+        systray_toggle.num_icons = 2
+    end
+
     local geometry = systray_toggle.geometry
-
-    if num_icons < 1 then
-        num_icons = 2
-    end
-    local width = num_icons * geometry.icon_size + geometry.lmargin + geometry.rmargin
-    local height = geometry.icon_size + geometry.tmargin + geometry.bmargin
-
-    if not systray_toggle.wibox then
-        initialize()
-    elseif systray_toggle.wibox.visible then -- Menu already shown, exit
-        return
-    end
+    local width
+        = systray_toggle.num_icons * geometry.icon_size
+        + geometry.lmargin + geometry.rmargin
+    local height
+        = geometry.icon_size
+        + geometry.tmargin + geometry.bmargin
 
     -- Set position and size
-    scr = capi.mouse.screen or 1
-    local scrgeom = capi.screen[scr].workarea
+    systray_toggle.wibox.visible = true
     systray_toggle.wibox:geometry({x = geometry.x or scrgeom.x,
                              y = geometry.y or scrgeom.y,
                              height = height,
                              width = width})
-    systray_toggle.wibox.visible = true
 end
 
 function systray_toggle.hide()
@@ -103,10 +97,6 @@ function systray_toggle.hide()
 end
 
 function systray_toggle.toggle()
-    if not systray_toggle.wibox then
-        systray_toggle.show()
-        return
-    end
     if systray_toggle.wibox.visible == false then
         systray_toggle.show()
     else
@@ -114,20 +104,29 @@ function systray_toggle.toggle()
     end
 end
 
-function systray_toggle.mt:__call(...)
-    widget = wibox.widget.imagebox(beautiful.dropdown_icon)
-    widget:connect_signal("mouse::enter", function ()
-        systray_toggle.arrow = true
-        systray_toggle.show()
-    end)
-    widget:connect_signal("mouse::leave", function ()
-        systray_toggle.arrow = false
-        systray_toggle.check()
-    end)
-    systray_toggle.widget = widget
-    return setmetatable(systray_toggle, { __index = widget})
+local function worker(args)
+    local args = args or {}
+    local scr = args.scr or capi.mouse.screen or 1
+    local scrgeom = capi.screen[scr].workarea
+    systray_toggle.geometry = {
+        scr = scr,
+        icon_size = 24,
+        x = scrgeom.width - 350 ,
+        y = 18,
+        lmargin = 5,
+        rmargin = 5,
+        tmargin = 2,
+        bmargin = 2,
+    }
+    systray_toggle.initialize()
+    return setmetatable(systray_toggle, { __index = systray_toggle.widget})
 end
 
-return setmetatable(systray_toggle, systray_toggle.mt)
+return setmetatable(
+	systray_toggle,
+	{ __call = function(_, ...)
+		return worker(...)
+	end }
+)
 
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80
