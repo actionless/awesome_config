@@ -7,34 +7,23 @@
 												  
 --]]
 
-local newtimer		= require("widgets.helpers").newtimer
-local beautiful		= require("widgets.helpers").beautiful
-
 local wibox		   = require("wibox")
 local awful		   = require("awful")
 
 local io			  = { popen  = io.popen }
 local string		  = { match  = string.match,
                           format = string.format }
-
-local asyncshell  = require("widgets.asyncshell")
 local setmetatable	= setmetatable
+
+local asyncshell	= require("widgets.asyncshell")
+local common		= require("widgets.common")
+local newtimer		= require("widgets.helpers").newtimer
+local beautiful		= require("widgets.helpers").beautiful
+
 
 -- ALSA volume
 local alsa = {}
-
-alsa.text_widget = wibox.widget.textbox('')
-alsa.text_bg = wibox.widget.background()
-alsa.text_bg:set_widget(alsa.text_widget)
-
-alsa.icon_widget = wibox.widget.imagebox(beautiful.widget_vol)
-alsa.icon_bg = wibox.widget.background()
-alsa.icon_bg:set_widget(alsa.icon_widget)
-
-alsa.widget = wibox.layout.fixed.horizontal()
-alsa.widget:add(alsa.icon_bg)
-alsa.widget:add(alsa.text_bg)
-
+alsa.widget = common.widget(beautiful.widget_vol)
 alsa.widget:buttons(awful.util.table.join(
 	awful.button({ }, 1, function () alsa.toggle() end),
 	awful.button({ }, 5, function () alsa.down() end),
@@ -104,15 +93,15 @@ local function worker(args)
 
 	function alsa.update_indicator()
 		if alsa.volume.status == "off" then
-			alsa.icon_widget:set_image(beautiful.widget_vol_mute)
+			alsa.widget.icon_widget:set_image(beautiful.widget_vol_mute)
 		elseif alsa.volume.level == 0 then
-			alsa.icon_widget:set_image(beautiful.widget_vol_no)
+			alsa.widget.icon_widget:set_image(beautiful.widget_vol_no)
 		elseif alsa.volume.level <= 50 then
-			alsa.icon_widget:set_image(beautiful.widget_vol_low)
+			alsa.widget.icon_widget:set_image(beautiful.widget_vol_low)
 		elseif alsa.volume.level <= 75 then
-			alsa.icon_widget:set_image(beautiful.widget_vol)
+			alsa.widget.icon_widget:set_image(beautiful.widget_vol)
 		else
-			alsa.icon_widget:set_image(beautiful.widget_vol_high)
+			alsa.widget.icon_widget:set_image(beautiful.widget_vol_high)
 		end
 
 		alsa.text_widget:set_text(

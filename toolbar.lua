@@ -17,37 +17,11 @@ volumewidget = widgets.alsa({
 	channels_toggle = {'Master', 'PCM', 'Headphone'},
 })
 
--- MPD
-mpdicon = wibox.widget.imagebox(beautiful.widget_music)
-mpdicon:buttons(awful.util.table.join(
-	awful.button({			}, 1, function ()
-		awful.util.spawn_with_shell(musicplr) end)
-))
-mpdwidget = widgets.mpd({
+-- MUSIC
+musicwidget = widgets.music({
+	backend = 'clementine',
 	music_dir = '/media/m/music/',
-	settings = function()
-		if mpd_now.state == "play" then
-			artist = " " .. mpd_now.artist .. "   "
-			title  = mpd_now.title  .. " "
-			mpdicon:set_image(beautiful.widget_music_on)
-		elseif mpd_now.state == "pause" then
-			artist = "mpd "
-			title  = "paused "
-			mpdicon:set_image(beautiful.widget_music)
-		else
-			artist = ""
-			title  = ""
-			mpdicon:set_image(beautiful.widget_music)
-		end
-
-		widget:set_markup(
-			'<span font="' .. beautiful.tasklist_font .. '">' ..
-			widgets.markup(beautiful.mpd_text, artist) ..
-			title ..
-			'</span>')
-	end
 })
-mpdwidgetbg = mpdwidget
 
 -- MEM
 memwidget = widgets.mem({
@@ -186,8 +160,7 @@ for s = 1, screen.count() do
 	right_layout:add(separator)
 	right_layout:add(netctlwidget)
 	right_layout:add(separator)
-	right_layout:add(mpdicon)
-	right_layout:add(mpdwidgetbg)
+	right_layout:add(musicwidget)
 	right_layout:add(separator)
 	right_layout:add(volumewidget)
 	if s == 1 then right_layout:add(systray_toggle()) end

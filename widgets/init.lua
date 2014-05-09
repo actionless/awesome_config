@@ -1,5 +1,7 @@
 local widgets = {
 	-- my own widgets
+	common			= require("widgets.common"),
+	music			= require("widgets.music"),
 	netctl			= require("widgets.netctl"),
 	bat				= require("widgets.bat"),
 	systray_toggle	= require("widgets.systray_toggle"),
@@ -12,7 +14,6 @@ local widgets = {
 	-- lain forks
 	markup			= require("widgets.markup"),
 	helpers			= require("widgets.helpers"),
-	mpd				= require("widgets.mpd"),
 	cpu				= require("widgets.cpu"),
 	mem				= require("widgets.mem"),
 	calendar		= require("widgets.calendar"),
