@@ -27,10 +27,6 @@ local player = {id=nil}
 local player_status = {}
 player.cover = "/tmp/playercover.png"
 player.widget = common.widget(beautiful.widget_music)
-player.widget:buttons(awful.util.table.join(
-	awful.button({			}, 1, function ()
-		awful.util.spawn_with_shell(musicplr) end)
-))
 
 local function worker(args)
 	local args		= args or {}
@@ -47,8 +43,17 @@ local function worker(args)
 	local password	= args.password or [[""]]
 	local music_dir	= args.music_dir or os.getenv("HOME") .. "/Music"
 	local cover_script = helpers.scripts_dir .. "mpdcover"
-
+	if backend == 'mpd' then
+		player.cmd = 'ncmpcpp'
+	elseif backend == 'clementine' then
+		player.cmd = 'clementine'
+	end
 	helpers.set_map("current player track", nil)
+
+-------------------------------------------------------------------------------
+	function player.run_player()
+			awful.util.spawn_with_shell(player.cmd)
+	end
 -------------------------------------------------------------------------------
 	function player.hide_notification()
 		if player.id ~= nil then
@@ -67,19 +72,13 @@ local function worker(args)
 		})
 	end
 -------------------------------------------------------------------------------
-	function player.update()
-		if backend == 'mpd' then
-			asyncshell.request(
-				'mpc --format "file:%file%\\nArtist:%artist%\\nTitle:%title%\\nAlbum:%album%\\nDate:%date%"',
-				function(f) player.post_update(f) end)
-		elseif backend == 'clementine' then
-			asyncshell.request(
-				"qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 PlaybackStatus",
-				function(f) player.clementine_update(f) end)
-		end
-	end
--------------------------------------------------------------------------------
 	function player.toggle()
+		if player_status.state ~= 'pause'
+			and player_status.state ~= 'play'
+		then
+			player.run_player()
+			return
+		end
 		if backend == 'mpd' then awful.util.spawn_with_shell(
 			"mpc toggle || ncmpcpp toggle || ncmpc toggle || pms toggle")
 		elseif backend == 'clementine' then awful.util.spawn_with_shell(
@@ -116,7 +115,7 @@ local function worker(args)
 		awful.button({ }, 4, player.prev_song)
 	))
 -------------------------------------------------------------------------------
-	function player.pre_update()
+	function player.update()
 		player_status = {
 			state  = "N/A",
 			file   = "N/A",
@@ -125,10 +124,18 @@ local function worker(args)
 			album  = "N/A",
 			date   = "N/A"
 		}
+		if backend == 'mpd' then
+			asyncshell.request(
+				'mpc --format "file:%file%\\nArtist:%artist%\\nTitle:%title%\\nAlbum:%album%\\nDate:%date%"',
+				function(f) player.post_update(f) end)
+		elseif backend == 'clementine' then
+			asyncshell.request(
+				"qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 PlaybackStatus",
+				function(f) player.clementine_update(f) end)
+		end
 	end
 -------------------------------------------------------------------------------
 	function player.mpd_update(f)
-		player.pre_update()
 		for line in f:lines() do
 
 			if string.match(line,"%[playing%]") then
@@ -149,7 +156,6 @@ local function worker(args)
 	end
 
 	function player.clementine_update(f)
-		player.pre_update()
 		for line in f:lines() do
 			if string.match(line,"Playing") then
 				player_status.state  = 'play'
@@ -214,23 +220,6 @@ local function worker(args)
 		end
 	end
 -------------------------------------------------------------------------------
-	function player.process_new_song()
-		helpers.set_map("current player track", player_status.title)
-		local command = ''
-		if backend == 'clementine' then
-			command = string.format(
-				[[convert "%q" -thumbnail "%q" -gravity center -background "none" -extent "%q" "%q"]],
-				player_status.cover, resize, resize, player.cover)
-		elseif backend == 'mpd' then
-			command = string.format(
-				"%s %q %q %d %q",
-				cover_script, music_dir, player_status.file, cover_size, default_art)
-		end
-		asyncshell.request(
-			command,
-			function(f) player.show_notification() end)
-	end
--------------------------------------------------------------------------------
 	function player.parse_status()
 		player.predict_missing_tags()
 		local artist = ""
@@ -243,7 +232,7 @@ local function worker(args)
 			if player_status.title ~= helpers.get_map("current player track") then
 				player.process_new_song()
 			end
-		elseif player_status.state ~= "pause" then
+		elseif player_status.state == "pause" then
 			artist = "player"
 			title  = "paused"
 			helpers.set_map("current player track", nil)
@@ -259,6 +248,23 @@ local function worker(args)
 			' ' ..
 			title ..
 			'</span>')
+	end
+-------------------------------------------------------------------------------
+	function player.process_new_song()
+		helpers.set_map("current player track", player_status.title)
+		local command = ''
+		if backend == 'clementine' then
+			command = string.format(
+				[[convert "%q" -thumbnail "%q" -gravity center -background "none" -extent "%q" "%q"]],
+				player_status.cover, resize, resize, player.cover)
+		elseif backend == 'mpd' then
+			command = string.format(
+				"%s %q %q %d %q",
+				cover_script, music_dir, player_status.file, cover_size, default_art)
+		end
+		asyncshell.request(
+			command,
+			function(f) player.show_notification() end)
 	end
 -------------------------------------------------------------------------------
 	helpers.newtimer("player", timeout, player.update)
