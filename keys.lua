@@ -289,15 +289,11 @@ clientkeys = awful.util.table.join(
 	awful.key({ modkey,				}, "t",	  function (c) c.ontop = not c.ontop			end),
 	awful.key({ modkey, "Shift"		}, "t",
 		function (c)
-			if c.titlebar then
+			if (c:titlebar_top():geometry()['height'] > 0) then
 				awful.titlebar(c, {size = 0})
 			else
 				bars.make_titlebar(c)
 			end
-		end),
-	awful.key({ modkey, "Control", "Shift"		}, "t",
-		function (c)
-			awful.titlebar(c, {size = 0})
 		end),
 	awful.key({ modkey,				}, "n",
 		function (c)

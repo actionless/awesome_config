@@ -122,6 +122,8 @@ mytasklist.buttons = awful.util.table.join(
 	systray_toggle = widgets.systray_toggle
 
 for s = 1, screen.count() do
+	local i = beautiful.screen_margin
+	awful.screen.padding( screen[s], {top = i, bottom = i, left = i, right = i} )
 	-- Create a promptbox for each screen
 	mypromptbox[s] = awful.widget.prompt()
 	-- Create an imagebox widget which will contains an icon indicating which layout we're using.
@@ -189,6 +191,7 @@ for s = 1, screen.count() do
 	layout:set_right(right_layout)
 
 	mywibox[s]:set_widget(layout)
+	mywibox[s].opacity = beautiful.panel_opacity
 end
 
 
