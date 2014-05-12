@@ -6,7 +6,7 @@ local capi = {
 
 
 local widgets = require("widgets")
-local bars = require("bars")
+local bars = widgets.bars
 
 
 local keys = {}
@@ -281,26 +281,22 @@ globalkeys = awful.util.table.join(
 )
 
 clientkeys = awful.util.table.join(
-	awful.key({ modkey,				}, "f",	  function (c) c.fullscreen = not c.fullscreen  end),
-	awful.key({ modkey,				}, "q",	  function (c) c:kill()						 end),
-	awful.key({ modkey, "Control"	}, "space",  awful.client.floating.toggle					 ),
-	awful.key({ modkey, "Control"	}, "Return", function (c) c:swap(awful.client.getmaster()) end),
-	awful.key({ modkey,				}, "o",	  awful.client.movetoscreen						),
-	awful.key({ modkey,				}, "t",	  function (c) c.ontop = not c.ontop			end),
+	awful.key({ modkey,				}, "f",
+		function (c) c.fullscreen = not c.fullscreen end),
+	awful.key({ modkey,				}, "q",
+		function (c) c:kill() end),
+	awful.key({ modkey, "Control"	}, "space",
+		awful.client.floating.toggle),
+	awful.key({ modkey, "Control"	}, "Return",
+		function (c) c:swap(awful.client.getmaster()) end),
+	awful.key({ modkey,				}, "o",
+		awful.client.movetoscreen),
+	awful.key({ modkey,				}, "t",
+		function (c) c.ontop = not c.ontop end),
 	awful.key({ modkey, "Shift"		}, "t",
-		function (c)
-			if (c:titlebar_top():geometry()['height'] > 0) then
-				awful.titlebar(c, {size = 0})
-			else
-				bars.make_titlebar(c)
-			end
-		end),
+		bars.titlebar_toggle),
 	awful.key({ modkey,				}, "n",
-		function (c)
-			-- The client currently has the input focus, so it cannot be
-			-- minimized, since minimized clients can't have the focus.
-			c.minimized = true
-		end),
+		function (c) c.minimized = true end),
 	awful.key({ modkey,				}, "m",
 		function (c)
 			c.maximized_horizontal = not c.maximized_horizontal

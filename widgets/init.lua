@@ -1,6 +1,7 @@
 local widgets = {
 	-- my own widgets
 	common			= require("widgets.common"),
+	bars			= require("widgets.bars"),
 	music			= require("widgets.music"),
 	netctl			= require("widgets.netctl"),
 	bat				= require("widgets.bat"),
