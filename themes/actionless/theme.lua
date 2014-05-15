@@ -20,15 +20,16 @@ theme.titlebar					= "#3c3c3c"
 theme.titlebar_focus			= "#66436C"
 
 --theme.font					= "PT Mono 8"
-theme.font					= "DejaVu Sans Mono 9"
+--theme.font					= "DejaVu Sans Mono 9"
 --theme.font					= "tewi 9"
 --theme.font					= "Dina 8"
 --theme.font					= "Meslo LG S 10"
 --theme.font					= "Share Tech Mono 11"
---theme.font					= "monoOne 10"
+theme.font					= "monoOne 10"
 --theme.font					= "Fira Mono 9"
+--theme.font						= "Source Code Pro Medium 9.4"
 --theme.sans_font				= "Share Tech 11"
-theme.sans_font					= "Fira Sans 9"
+theme.sans_font					= "Source Sans Pro Regular 10"
 theme.fg_normal					= theme.fg
 theme.bg_normal					= theme.bg
 theme.fg_focus					= theme.fg
@@ -43,7 +44,7 @@ theme.border_normal				= theme.border
 theme.border_focus				= theme.sel_border
 theme.border_marked				= theme.error
 
-theme.panel_opacity				= 0.9
+theme.panel_opacity				= 1.0
 
 theme.taglist_font				= theme.font
 theme.taglist_fg_focus			= theme.shiny
@@ -57,8 +58,9 @@ theme.tasklist_bg_normal		= theme.bg
 theme.tasklist_fg_minimize		= theme.bg
 theme.tasklist_bg_minimize		= "#6c6c6c"
 
+--theme.titlebar_font				= theme.sans_font
 --theme.titlebar_font			= "PT Caption Bold 9"
-theme.titlebar_font				= theme.font
+theme.titlebar_font				= "Source Sans Pro Bold 10.5"
 theme.titlebar_fg_focus			= theme.shiny
 theme.titlebar_fg_normal		= theme.fg
 theme.titlebar_bg_focus			= theme.titlebar_focus

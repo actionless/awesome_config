@@ -10,6 +10,9 @@ local toolbar = {}
 
 function toolbar.init()
 
+close_button = widgets.manage_client({
+	client = client,
+})
 
 -- ALSA volume
 volumewidget = widgets.alsa({
@@ -153,6 +156,7 @@ for s = 1, screen.count() do
 	local left_layout = wibox.layout.fixed.horizontal()
 	left_layout:add(separator)
 	left_layout:add(mytaglist[s])
+	left_layout:add(close_button)
 	left_layout:add(mypromptbox[s])
 	left_layout:add(separator)
 
