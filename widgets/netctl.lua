@@ -67,8 +67,11 @@ local function worker(args)
 		for line in f:lines() do
 				netctl.current = line
 		end
-		--first_line(f)
-
+		if netctl.current == 'ethernet' then
+			netctl.icon_widget:set_image(beautiful.widget_wired)
+		else
+			netctl.icon_widget:set_image(beautiful.widget_wireless)
+		end
 		widget = netctl.widget
 		settings()
 	end

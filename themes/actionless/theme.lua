@@ -118,7 +118,10 @@ theme.widget_cpu				= themes_dir .. "/icons/cpu.png"
 theme.widget_temp				= themes_dir .. "/icons/temp.png"
 theme.widget_net				= themes_dir .. "/icons/net.png"
 theme.widget_hdd				= themes_dir .. "/icons/hdd.png"
+
 theme.widget_wireless			= themes_dir .. "/icons/wireless.png"
+theme.widget_wired				= themes_dir .. "/icons/wired.png"
+
 theme.widget_music				= themes_dir .. "/icons/note.png"
 theme.widget_music_on			= themes_dir .. "/icons/note_on.png"
 theme.widget_vol_high			= themes_dir .. "/icons/vol_high.png"
