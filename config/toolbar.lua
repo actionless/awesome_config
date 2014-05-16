@@ -37,7 +37,9 @@ memicon:connect_signal(
 	"mouse::leave", function () memwidget.hide_notification() end)
 
 -- NetCtl
-netctlwidget = widgets.netctl({with_icon=true})
+netctlwidget = widgets.netctl({
+	preset = 'bond'
+})
 
 -- CPU
 cpuwidget = widgets.cpu({

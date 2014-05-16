@@ -170,7 +170,7 @@ local function worker(args)
 			-- playing
 			artist = player_status.artist
 			title  = player_status.title
-			player.widget.icon_widget:set_image(beautiful.widget_music_on)
+			player.widget:set_image(beautiful.widget_music_on)
 			-- playing new song
 			if player_status.title ~= helpers.get_map("current player track") then
 				helpers.set_map("current player track", player_status.title)
@@ -181,14 +181,14 @@ local function worker(args)
 			artist = "player"
 			title  = "paused"
 			helpers.set_map("current player track", nil)
-			player.widget.icon_widget:set_image(beautiful.widget_music)
+			player.widget:set_image(beautiful.widget_music)
 		else
 			-- stop
-			player.widget.icon_widget:set_image(beautiful.widget_music)
+			player.widget:set_image(beautiful.widget_music)
 		end
 
 		player.player_status = player_status
-		player.widget.text_widget:set_markup(
+		player.widget:set_markup(
 			'<span font="' .. beautiful.tasklist_font .. '">' ..
 			markup(beautiful.player_text, markup.bold(artist)) ..
 			' ' ..

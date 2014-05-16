@@ -7,21 +7,33 @@ local common = {}
 
 
 function common.widget()
-	local widget_dict = {}
+	local widget = {}
 
-	widget_dict.text_widget = wibox.widget.textbox('')
-	widget_dict.text_bg = wibox.widget.background()
-	widget_dict.text_bg:set_widget(widget_dict.text_widget)
+	widget.text_widget = wibox.widget.textbox('')
+	widget.text_bg = wibox.widget.background()
+	widget.text_bg:set_widget(widget.text_widget)
 
-	widget_dict.icon_widget = wibox.widget.imagebox()
-	widget_dict.icon_bg = wibox.widget.background()
-	widget_dict.icon_bg:set_widget(widget_dict.icon_widget)
+	widget.icon_widget = wibox.widget.imagebox()
+	widget.icon_bg = wibox.widget.background()
+	widget.icon_bg:set_widget(widget.icon_widget)
 
-	widget_dict.widget = wibox.layout.fixed.horizontal()
-	widget_dict.widget:add(widget_dict.icon_bg)
-	widget_dict.widget:add(widget_dict.text_bg)
+	widget.widget = wibox.layout.fixed.horizontal()
+	widget.widget:add(widget.icon_bg)
+	widget.widget:add(widget.text_bg)
 
-	return setmetatable(widget_dict, { __index = widget_dict.widget })
+	function widget:set_image(...)
+		return widget.icon_widget:set_image(...)
+	end
+
+	function widget:set_text(...)
+		return widget.text_widget:set_text(...)
+	end
+
+	function widget:set_markup(...)
+		return widget.text_widget:set_markup(...)
+	end
+
+	return setmetatable(widget, { __index = widget.widget })
 end
 
 return common

@@ -8,33 +8,24 @@ local font		= helpers.font
 local beautiful	= helpers.beautiful
 local mono_preset = helpers.mono_preset
 local first_line = helpers.first_line
+local common_widget = require("widgets.common").widget
 
-local wibox		= require("wibox")
 local naughty	= require("naughty")
 
 local io		= { popen = io.popen }
 local string    = { format = string.format }
 local setmetatable = setmetatable
 
-local netctl = {current = 'loading...'}
-
-netctl.text_widget = wibox.widget.textbox('')
-netctl.icon_widget = wibox.widget.imagebox(beautiful.widget_wireless)
-
-netctl.widget = wibox.layout.fixed.horizontal()
-
-netctl.widget:add(netctl.icon_widget)
-netctl.widget:add(netctl.text_widget)
-
+local netctl = {
+	current = 'loading...',
+	widget = common_widget()
+}
 --netctl.widget:connect_signal("mouse::enter", function () netctl.show_notification() end)
 --netctl.widget:connect_signal("mouse::leave", function () netctl.hide_notification() end)
 
 local function worker(args)
 	local args	 = args or {}
 	local interval  = args.interval or 5
-	local settings = args.settings or function()
-		netctl.text_widget:set_text("" .. string.format("%-6s", netctl.current))
-	end
 	netctl.timeout = args.timeout or 0
 	netctl.font = args.font or font
 
@@ -68,12 +59,11 @@ local function worker(args)
 				netctl.current = line
 		end
 		if netctl.current == 'ethernet' then
-			netctl.icon_widget:set_image(beautiful.widget_wired)
+			netctl.widget:set_image(beautiful.widget_wired)
 		else
-			netctl.icon_widget:set_image(beautiful.widget_wireless)
+			netctl.widget:set_image(beautiful.widget_wireless)
 		end
-		widget = netctl.widget
-		settings()
+		netctl.widget:set_text("" .. string.format("%-6s", netctl.current))
 	end
 
 	newtimer("netctl", interval, netctl.update)

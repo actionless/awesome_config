@@ -2,6 +2,7 @@
 --[[
 												  
 	 Licensed under GNU General Public License v2 
+	  * (c) 2013-2014, Yauhen Kirylau
 	  * (c) 2013, Luke Bonham					 
 	  * (c) 2010, Adrian C. <anrxc@sysphere.org>  
 												  
@@ -93,19 +94,21 @@ local function worker(args)
 
 	function alsa.update_indicator()
 		if alsa.volume.status == "off" then
-			alsa.widget.icon_widget:set_image(beautiful.widget_vol_mute)
+			alsa.widget:set_image(beautiful.widget_vol_mute)
 		elseif alsa.volume.level == 0 then
-			alsa.widget.icon_widget:set_image(beautiful.widget_vol_no)
+			alsa.widget:set_image(beautiful.widget_vol_no)
 		elseif alsa.volume.level <= 50 then
-			alsa.widget.icon_widget:set_image(beautiful.widget_vol_low)
+			alsa.widget:set_image(beautiful.widget_vol_low)
 		elseif alsa.volume.level <= 75 then
-			alsa.widget.icon_widget:set_image(beautiful.widget_vol)
+			alsa.widget:set_image(beautiful.widget_vol)
 		else
-			alsa.widget.icon_widget:set_image(beautiful.widget_vol_high)
+			alsa.widget:set_image(beautiful.widget_vol_high)
 		end
-
-		alsa.text_widget:set_text(
-			string.format("%-4s", alsa.volume.level .. "%"))
+		alsa.widget:set_text(
+			string.format(
+				"%-4s",
+				alsa.volume.level .. "%"
+		))
 	end
 
 	function alsa.update()
