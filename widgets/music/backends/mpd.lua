@@ -8,13 +8,23 @@ local escape_f		= require("awful.util").escape
 local string		= { format	= string.format,
 					    match	= string.match }
 
+local helpers		= require("widgets.helpers")
 local asyncshell	= require("widgets.asyncshell")
 
-local mpd = {}
+local mpd = {
+	player_status = {},
+	cover_script = helpers.scripts_dir .. "mpdcover"
+}
 
-function mpd.init(player, player_status)
-	mpd.player = player
-	mpd.player_status = player_status
+function mpd.init(music_dir, cover_size,
+                  default_player_status, default_art,
+                  parse_status_callback, notification_callback)
+	mpd.default_player_status = default_player_status
+	mpd.parse_status_callback = parse_status_callback
+	mpd.notification_callback = notification_callback
+	mpd.cover_size = cover_size
+	mpd.music_dir = music_dir
+	mpd.default_art = default_art
 end
 -------------------------------------------------------------------------------
 function mpd.toggle()
@@ -42,27 +52,31 @@ function mpd.parse_metadata(f)
 	for line in f:lines() do
 
 		if string.match(line,"%[playing%]") then
-			player_status.state  = 'play'
+			mpd.player_status.state  = 'play'
 		elseif string.match(line,"%[paused%]") then
-			player_status.state = 'pause' end
+			mpd.player_status.state = 'pause' end
 
 		k, v = string.match(line, "([%w]+):(.*)$")
-		if     k == "file"   then player_status.file   = v
-		elseif k == "Artist" then player_status.artist = escape_f(v)
-		elseif k == "Title"  then player_status.title  = escape_f(v)
-		elseif k == "Album"  then player_status.album  = escape_f(v)
-		elseif k == "Date"   then player_status.date   = escape_f(v)
+		if     k == "file"   then mpd.player_status.file   = v
+		elseif k == "Artist" then mpd.player_status.artist = escape_f(v)
+		elseif k == "Title"  then mpd.player_status.title  = escape_f(v)
+		elseif k == "Album"  then mpd.player_status.album  = escape_f(v)
+		elseif k == "Date"   then mpd.player_status.date   = escape_f(v)
 		end
 
 	end
-	mpd.player.parse_status()
+	mpd.parse_status_callback(mpd.player_status)
 end
 -------------------------------------------------------------------------------
 function mpd.resize_cover()
 	asyncshell.request(string.format(
 		"%s %q %q %d %q",
-		cover_script, music_dir, player_status.file, cover_size, default_art),
-		function(f) player.show_notification() end)
+		mpd.cover_script,
+		mpd.music_dir,
+		mpd.player_status.file,
+		mpd.cover_size,
+		mpd.default_art),
+		function(f) mpd.notification_callback() end)
 end
 
 return mpd
