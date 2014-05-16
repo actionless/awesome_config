@@ -70,12 +70,12 @@ end
 -------------------------------------------------------------------------------
 function mpd.resize_cover()
 	asyncshell.request(string.format(
-		"%s %q %q %d %q",
-		mpd.cover_script,
-		mpd.music_dir,
-		mpd.player_status.file,
-		mpd.cover_size,
-		mpd.default_art),
+			"%s %q %q %d %q",
+			mpd.cover_script,
+			mpd.music_dir,
+			mpd.player_status.file,
+			mpd.cover_size,
+			mpd.default_art),
 		function(f) mpd.notification_callback() end)
 end
 
