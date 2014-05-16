@@ -1,8 +1,8 @@
 local awful = require("awful")
 local wibox = require("wibox")
 
-local settings = require("widgets").settings
-local beautiful = require("widgets").helpers.beautiful
+local settings = require("widgets.settings")
+local beautiful = require("widgets.helpers").beautiful
 
 
 bars = {}
@@ -76,6 +76,14 @@ function bars.make_titlebar(c)
 	layout:set_middle(middle_layout)
 
 	awful.titlebar(c,{size=16}):set_widget(layout)
+end
+
+function bars.titlebar_toggle(c)
+	if (c:titlebar_top():geometry()['height'] > 0) then
+		awful.titlebar(c, {size = 0})
+	else
+		bars.make_titlebar(c)
+	end
 end
 
 

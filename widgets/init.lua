@@ -1,9 +1,11 @@
 local widgets = {
 	-- my own widgets
 	common			= require("widgets.common"),
+	bars			= require("widgets.bars"),
 	music			= require("widgets.music"),
 	netctl			= require("widgets.netctl"),
 	bat				= require("widgets.bat"),
+	manage_client	= require("widgets.manage_client"),
 	systray_toggle	= require("widgets.systray_toggle"),
 	random_pic		= require("widgets.random_pic"),
 	-- awesome addons

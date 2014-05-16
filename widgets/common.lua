@@ -13,7 +13,7 @@ function common.widget()
 	widget_dict.text_bg = wibox.widget.background()
 	widget_dict.text_bg:set_widget(widget_dict.text_widget)
 
-	widget_dict.icon_widget = wibox.widget.imagebox(beautiful.widget_vol)
+	widget_dict.icon_widget = wibox.widget.imagebox()
 	widget_dict.icon_bg = wibox.widget.background()
 	widget_dict.icon_bg:set_widget(widget_dict.icon_widget)
 

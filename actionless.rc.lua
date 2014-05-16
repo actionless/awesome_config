@@ -11,16 +11,15 @@ local wibox = require("wibox")
 local naughty = require("naughty")
 menubar = require("menubar")
 -- awesome std c library
-local capi = {
-	screen = screen
-}
+local capi = { screen = screen }
 
 -- my own widgets
-local widgets = require("widgets")
-local beautiful = require("widgets.helpers").beautiful
-local settings = require("widgets.settings")
+local widgets	= require("widgets")
+local beautiful	= widgets.helpers.beautiful
+local settings	= widgets.settings
+local bars		= widgets.bars
 
-local bars = require("bars")
+local config	= require("config")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -100,12 +99,9 @@ awful.util.spawn_with_shell("xset r rate 250 25")
 awful.util.spawn_with_shell("xset b off")
 run_once(compositor)
 run_once("xscreensaver -no-splash")
---run_once("xfce4-power-manager")
---run_once("urxvtd")
 run_once("unclutter")
 
 run_once("gxkb")
-run_once("dropboxd")
 -- }}}
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
@@ -172,11 +168,8 @@ menubar.geometry = {
 
 --require("freedesktop/freedesktop")
 
-local toolbar = require("toolbar")
-toolbar.init()
-local keys = require("keys")
-keys.init()
-
+config.toolbar.init()
+config.keys.init()
 
 
 -- {{{ Rules

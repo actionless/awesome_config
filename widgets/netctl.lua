@@ -2,21 +2,18 @@
      Licensed under GNU General Public License v2 
       * (c) 2013-2014, Yauheni Kirylau             
 --]]
-local newtimer  = require("widgets.helpers").newtimer
-local font      = require("widgets.helpers").font
-local beautiful      = require("widgets.helpers").beautiful
-local mono_preset      = require("widgets.helpers").mono_preset
-local first_line	= require("widgets.helpers").first_line
+local helpers	= require("widgets.helpers")
+local newtimer	= helpers.newtimer
+local font		= helpers.font
+local beautiful	= helpers.beautiful
+local mono_preset = helpers.mono_preset
+local first_line = helpers.first_line
 
-local wibox     = require("wibox")
-local naughty   = require("naughty")
+local wibox		= require("wibox")
+local naughty	= require("naughty")
 
-local io        = { lines  = io.lines,
-                    popen = io.popen }
-local math      = { floor  = math.floor }
-local string    = { format = string.format,
-                    gmatch = string.gmatch,
-                    len    = string.len }
+local io		= { popen = io.popen }
+local string    = { format = string.format }
 local setmetatable = setmetatable
 
 local netctl = {current = 'loading...'}
@@ -70,8 +67,11 @@ local function worker(args)
 		for line in f:lines() do
 				netctl.current = line
 		end
-		--first_line(f)
-
+		if netctl.current == 'ethernet' then
+			netctl.icon_widget:set_image(beautiful.widget_wired)
+		else
+			netctl.icon_widget:set_image(beautiful.widget_wireless)
+		end
 		widget = netctl.widget
 		settings()
 	end
