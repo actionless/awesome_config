@@ -12,7 +12,8 @@ local debug  = require("debug")
 
 local awful = require("awful")
 local capi   = { timer = timer }
-local io     = { open = io.open }
+local io     = { open = io.open,
+                 lines = io.lines }
 local rawget = rawget
 
 local theme_dir = settings.theme_dir
@@ -80,6 +81,36 @@ end
 
 function helpers.get_map(element)
     return helpers.map_table[element]
+end
+
+-- }}}
+
+--- {{{
+
+function helpers.first_line_in_fo(f)
+    return f:read("*l")
+end
+
+function helpers.find_in_fo(f, regex)
+	local match = nil
+	for line in f:lines() do
+		match = line:match("netctl@(.*)%.service.*enabled")
+		if match then return match end
+	end
+end
+
+function helpers.find_value_in_fo(f, regex, match_key)
+	local key, value = nil, nil
+	for line in f:lines() do
+		key, value = line:match(regex)
+		if key == match_key then
+			return value
+		end
+	end
+end
+
+function helpers.find_value_in_file(file_name, regex, match_key)
+	return helpers.find_value_in_fo(io.open(file_name), regex, match_key)
 end
 
 -- }}}

@@ -38,7 +38,9 @@ memicon:connect_signal(
 
 -- NetCtl
 netctlwidget = widgets.netctl({
-	preset = 'bond'
+	preset = 'bond',
+	wireless_if = 'wlp12s0',
+	wired_if = 'enp0s25'
 })
 
 -- CPU
