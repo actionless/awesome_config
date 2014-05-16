@@ -80,7 +80,7 @@ tmux = terminal .. " -e tmux"
 --musicplr   = terminal .. " --geometry=850x466 -e ncmpcpp"
 musicplr   = terminal .. " -e ncmpcpp"
 tmux_run   = terminal .. " -e tmux new-session"
-dmenu = "~/.config/dmenu/dmenu-bind.sh"
+dmenu = "~/.config/dmenu/dmenu-recent.sh"
 scrot_preview_cmd = [['mv $f ~/images/ &amp; viewnior ~/images/$f']]
 
 
