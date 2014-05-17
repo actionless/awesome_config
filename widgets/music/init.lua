@@ -1,6 +1,6 @@
 local music = {
-	backends		= require("widgets.music.backends"),
-	widget			= require("widgets.music.widget")
+  backends	= require("widgets.music.backends"),
+  widget	= require("widgets.music.widget")
 }
 
 return music
