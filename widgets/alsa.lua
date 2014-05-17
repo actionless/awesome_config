@@ -18,8 +18,8 @@ local setmetatable	= setmetatable
 
 local asyncshell	= require("widgets.asyncshell")
 local common		= require("widgets.common")
-local newtimer		= require("widgets.helpers").newtimer
-local beautiful		= require("widgets.helpers").beautiful
+local helpers		= require("widgets.helpers")
+local beautiful		= helpers.beautiful
 
 
 -- ALSA volume
@@ -40,10 +40,13 @@ local function worker(args)
 	local args	 = args or {}
 	local with_icon = args.with_icon or true
 	local widget_bg = args.widget_bg
+        alsa.step = args.step or 2
 	alsa.timeout  = args.timeout or 5
 	alsa.channel  = args.channel or "Master"
 	alsa.mic_channel = args.mic_channel or "Capture"
 	alsa.channels_toggle = args.channels_toggle or {channel, }
+
+        helpers.set_map("volume in progress", false)
 
 	if widget_bg then
 		alsa.icon_bg:set_bg(widget_bg)
@@ -51,22 +54,35 @@ local function worker(args)
 	end
 
 	function alsa.up()
-		awful.util.spawn_with_shell("amixer -q set " .. alsa.channel .. ",0 1%+")
-		--awful.util.spawn("amixer -q set " .. channel .. ",1 1%+")
+                if helpers.get_map("volume in progress") then
+                  return
+                end
+                helpers.set_map("volume in progress", true)
 		if alsa.volume.level < 100 then
-			alsa.volume.level = alsa.volume.level + 1
+			alsa.volume.level = alsa.volume.level + alsa.step
 		end
-		alsa.update_indicator()
+		asyncshell.request(
+                  "amixer -q set " .. alsa.channel .. ",0 " .. alsa.step .. "%+",
+		  function(f) alsa.post_volume() end)
 	end
 
 	function alsa.down()
-		awful.util.spawn_with_shell("amixer -q set " .. alsa.channel .. ",0 1%-")
-		--awful.util.spawn("amixer -q set " .. channel .. ",1 1%-")
+                if helpers.get_map("volume in progress") then
+                  return
+                end
+                helpers.set_map("volume in progress", true)
 		if alsa.volume.level > 0 then
-			alsa.volume.level = alsa.volume.level - 1
+			alsa.volume.level = alsa.volume.level - alsa.step
 		end
-		alsa.update_indicator()
+		asyncshell.request(
+                  "amixer -q set " .. alsa.channel .. ",0 " .. alsa.step .. "%-",
+		  function(f) alsa.post_volume() end)
 	end
+
+        function alsa.post_volume()
+          helpers.set_map("volume in progress", false)
+	  alsa.update_indicator()
+        end
 
 	function alsa.toggle()
 		if alsa.volume.status == 'off' then
@@ -140,7 +156,7 @@ local function worker(args)
 		alsa.update_indicator()
 	end
 
-	newtimer("alsa", alsa.timeout, alsa.update)
+	helpers.newtimer("alsa", alsa.timeout, alsa.update)
 	return setmetatable(alsa, { __index = alsa.widget })
 end
 
