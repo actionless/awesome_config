@@ -119,8 +119,9 @@ theme.widget_temp				= themes_dir .. "/icons/temp.png"
 theme.widget_net				= themes_dir .. "/icons/net.png"
 theme.widget_hdd				= themes_dir .. "/icons/hdd.png"
 
-theme.widget_wireless			= themes_dir .. "/icons/wireless.png"
-theme.widget_wired				= themes_dir .. "/icons/wired.png"
+theme.widget_net_wireless			= themes_dir .. "/icons/net_wireless.png"
+theme.widget_net_wired				= themes_dir .. "/icons/net_wired.png"
+theme.widget_net_searching				= themes_dir .. "/icons/net_searching.png"
 
 theme.widget_music				= themes_dir .. "/icons/note.png"
 theme.widget_music_on			= themes_dir .. "/icons/note_on.png"

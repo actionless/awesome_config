@@ -65,13 +65,15 @@ local function worker(args)
       "/proc/net/bonding/bond0",
       "(.*): (.*)",
       "Currently Active Slave"
-    ) or 'error'
+    ) or 'bndng.err'
     if netctl.interface == netctl.wired_if then
       netctl.update_widget('ethernet')
     elseif netctl.interface == netctl.wireless_if then
       netctl.netctl_auto_update()
+    elseif netctl.interface == "None" then
+      netctl.update_widget("bndng...")
     else
-      netctl.widget.set_text(netctl.interface)
+      netctl.update_widget(netctl.interface)
     end
   end
 
@@ -80,7 +82,8 @@ local function worker(args)
       'netctl-auto current',
       function(f)
         netctl.update_widget(
-          helpers.first_line_in_fo(f) or 'error')
+          helpers.first_line_in_fo(f)
+          or 'nctl-a...')
       end)
   end
 
@@ -91,17 +94,19 @@ local function worker(args)
         netctl.update_widget(
           helpers.find_in_fo(
             f, "netctl@(.*)%.service.*enabled"
-          ) or 'error')
+          ) or 'nctl...')
       end)
   end
 
   function netctl.update_widget(network_name)
-    if netctl.interface == netctl.wired_if then
-      netctl.widget:set_image(beautiful.widget_wired)
-    elseif netctl.interface == netctl.wireless_if then
-      netctl.widget:set_image(beautiful.widget_wireless)
-    end
     netctl.widget:set_text(string.format("%-6s", network_name))
+    if netctl.interface == netctl.wired_if then
+      netctl.widget:set_image(beautiful.widget_net_wired)
+    elseif netctl.interface == netctl.wireless_if then
+      netctl.widget:set_image(beautiful.widget_net_wireless)
+    else
+      netctl.widget:set_image(beautiful.widget_net_searching)
+    end
   end
 
   newtimer("netctl", interval, netctl.update)
