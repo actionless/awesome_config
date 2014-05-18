@@ -31,9 +31,10 @@ function asyncshell.wait(seconds, callback)
     [[ bash -c 'sleep %s;
        echo "asyncshell.deliver_timer(%s)" | awesome-client' 2> /dev/null ]],
     seconds, id)
-   awful.util.spawn(req, false)
+   awful.util.spawn_with_shell(req, false)
    return id
 end
+
 function asyncshell.deliver_timer(id)
   if asyncshell.request_table[id]
     and asyncshell.request_table[id].callback
