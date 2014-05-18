@@ -8,7 +8,7 @@
                                                   
 --]]
 
-local first_line   = require("widgets.helpers").first_line
+local first_line_in_file   = require("widgets.helpers").first_line_in_file
 local newtimer     = require("widgets.helpers").newtimer
 local font         = require("widgets.helpers").font
 local mono_preset      = require("widgets.helpers").mono_preset
@@ -70,7 +70,7 @@ local function worker(args)
         -- Read the amount of time the CPUs have spent performing
         -- different kinds of work. Read the first line of /proc/stat
         -- which is the sum of all CPUs.
-        local times = first_line("/proc/stat")
+        local times = first_line_in_file("/proc/stat")
         local at = 1
         local idle = 0
         local total = 0

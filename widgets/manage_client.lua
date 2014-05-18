@@ -7,7 +7,6 @@ local newtimer	= helpers.newtimer
 local font		= helpers.font
 local beautiful	= helpers.beautiful
 local mono_preset = helpers.mono_preset
-local first_line = helpers.first_line
 local common	= require("widgets.common")
 
 local wibox		= require("wibox")

@@ -2,6 +2,7 @@
 --[[
                                                   
      Licensed under GNU General Public License v2 
+      * (c) 2013-2014  Yauheni Kirylau
       * (c) 2013,      Luke Bonham                
       * (c) 2010-2012, Peter Hofmann              
                                                   
@@ -40,22 +41,6 @@ end
 
 -- }}}
 
--- {{{ Read the first line of a file or return nil.
-
-function helpers.first_line(f)
-    local fp = io.open(f)
-    if not fp
-    then
-        return nil
-    end
-
-    local content = fp:read("*l")
-    fp:close()
-    return content
-end
-
--- }}}
-
 -- {{{ Timer maker
 
 helpers.timer_table = {}
@@ -85,32 +70,50 @@ end
 
 -- }}}
 
---- {{{
+-- {{{ Read the ... of a file or return nil.
 
 function helpers.first_line_in_fo(f)
-    return f:read("*l")
+  if not f then return nil end
+  return f:read("*l")
 end
 
 function helpers.find_in_fo(f, regex)
-	local match = nil
-	for line in f:lines() do
-		match = line:match("netctl@(.*)%.service.*enabled")
-		if match then return match end
-	end
+  if not f then return nil end
+  local match = nil
+  for line in f:lines() do
+    match = line:match(regex)
+    if match then
+      return match
+    end
+  end
 end
 
 function helpers.find_value_in_fo(f, regex, match_key)
-	local key, value = nil, nil
-	for line in f:lines() do
-		key, value = line:match(regex)
-		if key == match_key then
-			return value
-		end
-	end
+  if not f then return nil end
+  local key, value = nil, nil
+  for line in f:lines() do
+    key, value = line:match(regex)
+    if key == match_key then
+      return value
+    end
+  end
+end
+
+----------------------------------------
+
+function helpers.first_line_in_file(f)
+  fp = io.open(f)
+  local content = helpers.first_line_in_fo(fp)
+  fp:close()
+  return content
 end
 
 function helpers.find_value_in_file(file_name, regex, match_key)
-	return helpers.find_value_in_fo(io.open(file_name), regex, match_key)
+  fp = io.open(file_name)
+  content = helpers.find_value_in_fo(
+    fp, regex, match_key)
+  fp:close()
+  return content
 end
 
 -- }}}
