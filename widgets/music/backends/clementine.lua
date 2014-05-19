@@ -10,11 +10,17 @@ local string		= { format	= string.format,
 
 local asyncshell	= require("widgets.asyncshell")
 
-local clementine	= {}
 
-function clementine.init(player, player_status)
-	clementine.player = player
-	clementine.player_status = player_status
+local clementine	= {}
+clementine.player_status = {}
+clementine.cover_path = "/tmp/playercover.png"
+
+function clementine.init(default_player_status, parse_status_callback,
+                         cover_size, notification_callback)
+	clementine.default_player_status = default_player_status
+	clementine.parse_status_callback = parse_status_callback
+	clementine.resize = string.format('%sx%s', cover_size, cover_size)
+	clementine.notification_callback = notification_callback
 end
 -------------------------------------------------------------------------------
 function clementine.toggle()
@@ -33,13 +39,14 @@ function clementine.prev_song()
 end
 -------------------------------------------------------------------------------
 function clementine.update()
+	clementine.player_status = clementine.default_player_status
 	asyncshell.request(
 		"qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 PlaybackStatus",
 		function(f) clementine.post_update(f) end)
 end
 -------------------------------------------------------------------------------
-function clementine.post_update(f)
-	for line in f:lines() do
+function clementine.post_update(lines)
+	for _, line in pairs(lines) do
 		if string.match(line,"Playing") then
 			clementine.player_status.state  = 'play'
 		elseif string.match(line,"Paused") then
@@ -52,15 +59,15 @@ function clementine.post_update(f)
 			"qdbus org.mpris.MediaPlayer2.clementine /Player GetMetadata",
 			function(f) clementine.parse_metadata(f) end)
 	else
-		clementine.player.parse_status()
+		clementine.parse_status_callback(clementine.player_status)
 	end
 end
 -------------------------------------------------------------------------------
-function clementine.parse_metadata(f)
-	for line in f:lines() do
+function clementine.parse_metadata(lines)
+	for _, line in pairs(lines) do
 		k, v = string.match(line, "([%w]+): (.*)$")
 		if     k == "location" then
-			clementine.player_status.file = v:match("^file://(.*)$")
+			clementine.player_status.file = v:match("^.*://(.*)$")
 		elseif k == "artist" then clementine.player_status.artist = escape_f(v)
 		elseif k == "title"  then clementine.player_status.title  = escape_f(v)
 		elseif k == "album"  then clementine.player_status.album  = escape_f(v)
@@ -69,14 +76,18 @@ function clementine.parse_metadata(f)
 			clementine.player_status.cover	= v:match("^file://(.*)$")
 		end
 	end
-	clementine.player.parse_status()
+	clementine.parse_status_callback(clementine.player_status)
 end
 -------------------------------------------------------------------------------
 function clementine.resize_cover()
-	asyncshell.request(string.format(
-		[[convert "%q" -thumbnail "%q" -gravity center -background "none" -extent "%q" "%q"]],
-		clementine.player_status.cover, resize, resize, clementine.player.cover),
-		function(f) clementine.player.show_notification() end)
+	asyncshell.request(
+		string.format(
+			[[convert %q -thumbnail %q -gravity center -background "none" -extent %q %q]],
+			clementine.player_status.cover,
+			clementine.resize,
+			clementine.resize,
+			clementine.cover_path),
+		function(f) clementine.notification_callback() end)
 end
 
 return clementine

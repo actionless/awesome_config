@@ -22,7 +22,7 @@ volumewidget = widgets.alsa({
 
 -- MUSIC
 musicwidget = widgets.music.widget({
-	backend = 'mpd',
+	backend = 'clementine',
 	music_dir = '/media/m/music/',
 })
 

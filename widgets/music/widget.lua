@@ -41,26 +41,31 @@ local function worker(args)
     date   = "N/A"
   }
 
-  -- mpd related
-  local host		= args.host or "127.0.0.1"
-  local port		= args.port or "6600"
-  local password	= args.password or [[""]]
-  local music_dir	= args.music_dir or os.getenv("HOME") .. "/Music"
-
+  local parse_status_callback = function(player_status)
+    player.parse_status(player_status) end
+  local notification_callback = function()
+    player.show_notification() end
   if backend_name == 'mpd' then
+    local host		= args.host or "127.0.0.1"
+    local port		= args.port or "6600"
+    local password	= args.password or [[""]]
+    local music_dir	= args.music_dir or os.getenv("HOME") .. "/Music"
     player.backend = backends.mpd
     player.backend.init(
       music_dir,
       cover_size,
       default_player_status,
       default_art,
-      function(player_status) player.parse_status(player_status) end,
-      function() player.show_notification() end
-    )
+      parse_status_callback,
+      notification_callback)
     player.cmd = args.player_cmd or 'ncmpcpp'
   elseif backend_name == 'clementine' then
     player.backend = backends.clementine
-    player.backend.init(player, player_status)
+    player.backend.init(
+      default_player_status,
+      parse_status_callback,
+      cover_size,
+      notification_callback)
     player.cmd = args.player_cmd or 'clementine'
   end
 
