@@ -46,10 +46,10 @@ local function worker(args)
 			function(f) bat.post_update(f) end)
 	end
 
-    function bat.post_update(f)
+    function bat.post_update(lines)
 		bat_now = {}
-		for line in f:lines() do
-			k, v = string.match(line, "[ ]+(.*):[ ]+(.*)")
+		for _, line in pairs(lines) do
+			k, v = string.match(line, "(.*):[ ]+(.*)")
 			if k == 'percentage' and not bat_now.perc then
 				bat_now.percentage = tonumber(string.match(v,"%d+"))
 			elseif k == 'state' then

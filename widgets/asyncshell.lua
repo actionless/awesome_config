@@ -10,38 +10,28 @@ local awful = require('awful')
 asyncshell = {}
 asyncshell.request_table = {}
 asyncshell.id_counter = 0
-asyncshell.folder = "/tmp/asyncshell"
-asyncshell.file_template = asyncshell.folder .. '/req'
-
--- Create a directory for asynchell response files
-os.execute("mkdir -p " .. asyncshell.folder)
 
 -- Returns next tag - unique identifier of the request
 local function next_id()
-  -- @TODO: add lock
+  -- @TODO: add lock?
   asyncshell.id_counter = (asyncshell.id_counter + 1) % 100000
-  return asyncshell.id_counter
+  return string.format("%d", asyncshell.id_counter)
 end
 
 function asyncshell.wait(seconds, callback)
   local id = next_id()
-  local tmpfname = asyncshell.file_template .. id
   asyncshell.request_table[id] = {callback = callback}
   local req = string.format(
     [[ bash -c 'sleep %s;
-       echo "asyncshell.deliver_timer(%s)" | awesome-client' 2> /dev/null ]],
+       echo "asyncshell.deliver_timer(\"%s\")" | awesome-client' 2> /dev/null ]],
     seconds, id)
-   awful.util.spawn_with_shell(req, false)
-   return id
+  awful.util.spawn_with_shell(req, false)
+  return id
 end
 
 function asyncshell.deliver_timer(id)
-  if asyncshell.request_table[id]
-    and asyncshell.request_table[id].callback
-  then
-    asyncshell.request_table[id].callback()
-    awful.util.spawn_with_shell("rm " .. asyncshell.file_template .. id)
-  end
+  asyncshell.request_table[id].callback()
+  table.remove(asyncshell.request_table, id)
 end
 
 -- Sends an asynchronous request for an output of the shell command.
@@ -50,29 +40,47 @@ end
 -- @return Request ID
 function asyncshell.request(command, callback)
   local id = next_id()
-  local tmpfname = asyncshell.file_template .. id
-  asyncshell.request_table[id] = {callback = callback}
-  local req = string.format(
-    [[ bash -c '%s > %s;
-       echo "asyncshell.deliver(%s)" | awesome-client' 2> /dev/null ]],
-    string.gsub(command, "'", "'\\''"), tmpfname, id, tmpfname)
-  awful.util.spawn_with_shell(req, false)
+  asyncshell.request_table[id] = {
+    callback = callback,
+    table = {},
+    counter = 1}
+  c = asyncshell.request_table[id].counter
+  awful.util.spawn_with_shell(string.format(
+    [[ sh -c '
+       %s | while read line; do
+         echo "asyncshell.pipe_consume(\"%q\", \"$line\")" | awesome-client;
+       done
+       echo "asyncshell.pipe_finish(\"%q\")" | awesome-client;'
+    ]],
+    string.gsub(command, "'", "'\\''"), id, id
+  ))
   return id
+end
+
+-- Consumes command's output line by line
+-- @param id Request ID
+-- @param line The next line of the command's output
+function asyncshell.pipe_consume(id, line)
+  local c = asyncshell.request_table[id].counter
+  asyncshell.request_table[id].table[c] = line
+  asyncshell.request_table[id].counter = c + 1
 end
 
 -- Calls the remembered callback function on the output of the shell
 -- command.
 -- @param id Request ID
--- @param output The output file of the shell command to be delievered
-function asyncshell.deliver(id)
-  if asyncshell.request_table[id]
-    and asyncshell.request_table[id].callback
-  then
-    local output = io.open(asyncshell.file_template .. id, 'r')
-    asyncshell.request_table[id].callback(output)
-    awful.util.spawn_with_shell("rm " .. asyncshell.file_template .. id)
-  end
+function asyncshell.pipe_finish(id)
+  local output = asyncshell.request_table[id].table
+  asyncshell.request_table[id].callback(output)
+  table.remove(asyncshell.request_table, id)
 end
+
+------------------------------------------------------------------------------
+
+asyncshell.folder = "/tmp/asyncshell"
+asyncshell.file_template = asyncshell.folder .. '/req'
+-- Create a directory for asynchell response files
+os.execute("mkdir -p " .. asyncshell.folder)
 
 -- Sends a synchronous request for an output of the command. Waits for
 -- the output, but if the given timeout expires returns nil.
@@ -91,5 +99,6 @@ function asyncshell.demand(command, timeout)
     return io.open(tmpfname)
   end
 end
+
 
 return asyncshell

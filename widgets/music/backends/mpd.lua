@@ -53,8 +53,8 @@ function mpd.update()
   function(f) mpd.parse_metadata(f) end)
 end
 -------------------------------------------------------------------------------
-function mpd.parse_metadata(f)
- for line in f:lines() do
+function mpd.parse_metadata(lines)
+ for _, line in pairs(lines) do
 
   if string.match(line,"%[playing%]") then
    mpd.player_status.state  = 'play'

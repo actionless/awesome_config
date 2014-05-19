@@ -132,9 +132,10 @@ local function worker(args)
 		                   function(f) alsa.post_update(f) end)
 	end
 
-	function alsa.post_update(f)
+	function alsa.post_update(lines)
 		level, alsa.volume.status = string.match(
-			f:read("*all"), "([%d]+)%%.*%[([%l]*)")
+			table.concat(lines, '\n'),
+                        "([%d]+)%%.*%[([%l]*)")
 		alsa.volume.level = tonumber(level) or nil
 
 		if alsa.volume.level == nil

@@ -72,15 +72,23 @@ end
 
 -- {{{ Read the ... of a file or return nil.
 
-function helpers.first_line_in_fo(f)
+
+function helpers.flines_to_lines(f)
   if not f then return nil end
-  return f:read("*l")
+  local lines = {}
+  local counter = 1
+  for line in f:lines() do 
+    lines[counter] = line
+    counter = counter + 1
+  end
+  return lines
 end
 
-function helpers.find_in_fo(f, regex)
-  if not f then return nil end
+----------------------------------------------
+
+function helpers.find_in_lines(lines, regex)
   local match = nil
-  for line in f:lines() do
+  for _, line in pairs(lines) do
     match = line:match(regex)
     if match then
       return match
@@ -88,15 +96,32 @@ function helpers.find_in_fo(f, regex)
   end
 end
 
-function helpers.find_value_in_fo(f, regex, match_key)
-  if not f then return nil end
+function helpers.find_value_in_lines(lines, regex, match_key)
   local key, value = nil, nil
-  for line in f:lines() do
+  for _, line in pairs(lines) do
     key, value = line:match(regex)
     if key == match_key then
       return value
     end
   end
+end
+
+----------------------------------------------
+
+function helpers.first_line_in_fo(f)
+  if not f then return nil end
+  return f:read("*l")
+end
+
+function helpers.find_in_fo(f, regex)
+  return helpers.find_in_lines(
+    helpers.flines_to_lines(f), regex)
+end
+
+function helpers.find_value_in_fo(f, regex, match_key)
+  return helpers.find_value_in_lines(
+    helpers.flines_to_lines(f),
+    regex, match_key)
 end
 
 ----------------------------------------
