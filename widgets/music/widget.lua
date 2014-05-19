@@ -30,7 +30,7 @@ local function worker(args)
   local popup_timeout = args.timeout or 5
   local default_art   = args.default_art or ""
   local backend_name  = args.backend or "mpd"
-  player.cover_size    = args.cover_size or 100
+  local cover_size    = args.cover_size or 100
 
   local default_player_status = {
     state  = "N/A",
@@ -43,21 +43,14 @@ local function worker(args)
 
   local parse_status_callback = function(player_status)
     player.parse_status(player_status) end
-  local notification_callback = function()
-    player.show_notification() end
+
   if backend_name == 'mpd' then
-    local host		= args.host or "127.0.0.1"
-    local port		= args.port or "6600"
-    local password	= args.password or [[""]]
-    local music_dir	= args.music_dir or os.getenv("HOME") .. "/Music"
     player.backend = backends.mpd
     player.backend.init(
-      music_dir,
-      player.cover_size,
+      args,
       default_player_status,
-      default_art,
       parse_status_callback,
-      notification_callback)
+      function() player.show_notification() end)
     player.cmd = args.player_cmd or 'ncmpcpp'
   elseif backend_name == 'clementine' then
     player.backend = backends.clementine
@@ -134,7 +127,7 @@ local function worker(args)
   function player.predict_missing_tags(player_status)
     if player_status.file == 'N/A' or player_status.file == ''
     then
-      return
+      return player_status
     end
 
     if player_status.artist == "N/A" or player_status.artist == ''
@@ -179,11 +172,7 @@ local function worker(args)
       -- playing new song
       if player_status.title ~= helpers.get_map("current player track") then
         helpers.set_map("current player track", player_status.title)
-        if player.backend.resize_cover ~= nil then
-          player.backend.resize_cover()
-        else
-          player.resize_cover()
-        end
+        player.resize_cover()
       end
     elseif player_status.state == "pause" then
       -- paused
@@ -205,7 +194,10 @@ local function worker(args)
   end
 -------------------------------------------------------------------------------
 function player.resize_cover()
-  local resize = string.format('%sx%s', player.cover_size, player.cover_size)
+  if player.backend.resize_cover then
+    return player.backend.resize_cover(cover_size, default_art)
+  end
+  local resize = string.format('%sx%s', cover_size, cover_size)
   asyncshell.request(
     string.format(
       [[convert %q -thumbnail %q -gravity center -background "none" -extent %q %q]],

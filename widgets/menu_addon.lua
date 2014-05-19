@@ -1,8 +1,6 @@
 --------------------------------------------------------------------------------
 -- @author Yauheni Kirylau &lt;actionless.loveless@gmail.com&gt;
--- @author Julien Danjou &lt;julien@danjou.info&gt;
--- @author dodo
--- @copyright 2008-2014 Yauheni Kirylau, Damien Leone, Julien Danjou, dodo
+-- @copyright 2013-2014 Yauheni Kirylau
 --------------------------------------------------------------------------------
 
 local menu = require("awful.menu")
