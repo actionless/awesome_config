@@ -79,9 +79,9 @@ local function worker(args)
   function netctl.netctl_auto_update()
     asyncshell.request(
       'netctl-auto current',
-      function(f)
+      function(lines)
         netctl.update_widget(
-          helpers.first_line_in_fo(f)
+          lines[1]
           or 'nctl-a...')
       end)
   end
