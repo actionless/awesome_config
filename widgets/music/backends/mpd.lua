@@ -4,7 +4,6 @@
 --]]
 
 local awful		= require("awful")
-local escape_f  	= require("awful.util").escape
 local string		= { format	= string.format,
                             match	= string.match }
 
@@ -16,7 +15,7 @@ local mpd = {
   cover_script = helpers.scripts_dir .. "mpdcover"
 }
 
-function mpd.init(args, default_player_status,
+function mpd.init(args,
                   parse_status_callback, notification_callback)
   local args = args or {} 
   mpd.music_dir = args.music_dir or os.getenv("HOME") .. "/Music"
@@ -24,7 +23,6 @@ function mpd.init(args, default_player_status,
   mpd.port = args.port or "6600"
   mpd.password = args.password or [[""]]
 
-  mpd.default_player_status = default_player_status
   mpd.parse_status_callback = parse_status_callback
   mpd.notification_callback = notification_callback
 end
@@ -56,28 +54,30 @@ function mpd.update()
 end
 -------------------------------------------------------------------------------
 function mpd.parse_metadata(lines)
-  for _, line in pairs(lines) do
+  mpd.player_status = {}
+  local state = nil
 
-    if string.match(line,"%[playing%]") then
-       mpd.player_status.state  = 'play'
-    elseif string.match(line,"%[paused%]") then
-       mpd.player_status.state = 'pause'
-    end
-
-    k, v = string.match(line, "([%w]+):(.*)$")
-    if     k == "file"   then mpd.player_status.file   = v
-    elseif k == "Artist" then mpd.player_status.artist = escape_f(v)
-    elseif k == "Title"  then mpd.player_status.title  = escape_f(v)
-    elseif k == "Album"  then mpd.player_status.album  = escape_f(v)
-    elseif k == "Date"   then mpd.player_status.date   = escape_f(v)
-    end
-
+  if helpers.find_in_lines(lines, "%[playing%]") then
+    state  = 'play'
+  elseif helpers.find_in_lines(lines, "%[paused%]") then
+    state = 'pause'
   end
+
+  if state then
+    mpd.player_status = helpers.find_values_in_lines(
+      lines, "([%w]+):(.*)$", {
+        file='file',
+        artist='Artist',
+        title='Title',
+        album='Album',
+        date='Dear'})
+  end
+  mpd.player_status.state = state
+
   mpd.parse_status_callback(mpd.player_status)
 end
 -------------------------------------------------------------------------------
 function mpd.resize_cover(cover_size, default_art)
-  -- @TODO: do we still need it?
   asyncshell.request(string.format(
     "%s %q %q %d %q",
     mpd.cover_script,

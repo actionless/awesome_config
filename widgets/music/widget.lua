@@ -19,6 +19,8 @@ local asyncshell	= require("widgets.asyncshell")
 local backends		= require("widgets.music.backends")
 
 
+local N_A = "N/A"
+
 -- player infos
 local player = {id=nil}
 player.cover = "/tmp/playercover.png"
@@ -32,15 +34,6 @@ local function worker(args)
   local backend_name  = args.backend or "mpd"
   local cover_size    = args.cover_size or 100
 
-  local default_player_status = {
-    state  = "N/A",
-    file   = "N/A",
-    artist = "N/A",
-    title  = "N/A",
-    album  = "N/A",
-    date   = "N/A"
-  }
-
   local parse_status_callback = function(player_status)
     player.parse_status(player_status) end
 
@@ -48,14 +41,12 @@ local function worker(args)
     player.backend = backends.mpd
     player.backend.init(
       args,
-      default_player_status,
       parse_status_callback,
       function() player.show_notification() end)
     player.cmd = args.player_cmd or 'ncmpcpp'
   elseif backend_name == 'clementine' then
     player.backend = backends.clementine
     player.backend.init(
-      default_player_status,
       parse_status_callback)
     player.cmd = args.player_cmd or 'clementine'
   end
@@ -125,13 +116,26 @@ local function worker(args)
   end
 -------------------------------------------------------------------------------
   function player.predict_missing_tags(player_status)
-    if player_status.file == 'N/A' or player_status.file == ''
+    if player_status.file then
+      player_status.file = player_status.file:match("^.*://(.*)$")
+        or player_status.file
+    else
+      player_status.file = N_A
+    end
+
+    if player_status.cover then
+      player_status.cover = player_status.cover:match("^file://(.*)$")
+        or player_status.file
+    else
+      player_status.cover = default_art or N_A
+    end
+
+    if player_status.file == N_A or player_status.file == ''
     then
       return player_status
     end
 
-    if player_status.artist == "N/A" or player_status.artist == ''
-    then
+    if not player_status.artist then
       player_status.artist = escape_f(
         player_status.file:match("^.*[/](.*)[/]%d+ [-] .*[/]")
       ) or escape_f(
@@ -140,12 +144,10 @@ local function worker(args)
         player_status.file:match("^.*[/](.*) [-] .*")
       ) or escape_f(
         player_status.file:match("^(.*)[/].*")
-      ) or
-        "N/A"
+      )
     end
 
-    if player_status.title == "N/A" or player_status.title == ''
-    then
+    if not player_status.title then
       player_status.title = escape_f(
         player_status.file:match(".*[/].* [-] (.*)[.].*")
       ) or escape_f(
@@ -153,6 +155,16 @@ local function worker(args)
       ) or escape_f(
         player_status.file
       )
+    end
+
+    for _, k in ipairs({
+      'file', 'locationartist', 'title', 'album', 'date', 'cover'
+    }) do
+      if player_status[k] then
+        player_status[k] = escape_f(player_status[k])
+      else
+        player_status[k] = N_A
+      end
     end
     return player_status
   end
