@@ -30,7 +30,7 @@ local function worker(args)
   local popup_timeout = args.timeout or 5
   local default_art   = args.default_art or ""
   local backend_name  = args.backend or "mpd"
-  local cover_size    = args.cover_size or 100
+  player.cover_size    = args.cover_size or 100
 
   local default_player_status = {
     state  = "N/A",
@@ -53,7 +53,7 @@ local function worker(args)
     player.backend = backends.mpd
     player.backend.init(
       music_dir,
-      cover_size,
+      player.cover_size,
       default_player_status,
       default_art,
       parse_status_callback,
@@ -63,9 +63,7 @@ local function worker(args)
     player.backend = backends.clementine
     player.backend.init(
       default_player_status,
-      parse_status_callback,
-      cover_size,
-      notification_callback)
+      parse_status_callback)
     player.cmd = args.player_cmd or 'clementine'
   end
 
@@ -168,6 +166,8 @@ local function worker(args)
 -------------------------------------------------------------------------------
   function player.parse_status(player_status)
     player_status = player.predict_missing_tags(player_status)
+    player.player_status = player_status
+
     local artist = ""
     local title = ""
 
@@ -179,7 +179,11 @@ local function worker(args)
       -- playing new song
       if player_status.title ~= helpers.get_map("current player track") then
         helpers.set_map("current player track", player_status.title)
-        player.backend.resize_cover()
+        if player.backend.resize_cover ~= nil then
+          player.backend.resize_cover()
+        else
+          player.resize_cover()
+        end
       end
     elseif player_status.state == "pause" then
       -- paused
@@ -192,7 +196,6 @@ local function worker(args)
       player.widget:set_image(beautiful.widget_music)
     end
 
-    player.player_status = player_status
     player.widget:set_markup(
       '<span font="' .. beautiful.tasklist_font .. '">' ..
       markup(beautiful.player_text, markup.bold(artist)) ..
@@ -200,6 +203,18 @@ local function worker(args)
       title ..
       '</span>')
   end
+-------------------------------------------------------------------------------
+function player.resize_cover()
+  local resize = string.format('%sx%s', player.cover_size, player.cover_size)
+  asyncshell.request(
+    string.format(
+      [[convert %q -thumbnail %q -gravity center -background "none" -extent %q %q]],
+      player.player_status.cover,
+      resize,
+      resize,
+      player.cover),
+    function(f) player.show_notification() end)
+end
 -------------------------------------------------------------------------------
   helpers.newtimer("player", timeout, player.update)
   return setmetatable(player, { __index = player.widget })
