@@ -29,7 +29,7 @@ theme.font					= "monoOne 10"
 --theme.font					= "Fira Mono 9"
 --theme.font						= "Source Code Pro Medium 9.4"
 --theme.sans_font				= "Share Tech 11"
-theme.sans_font					= "Source Sans Pro Regular 10"
+theme.sans_font					= "Source Sans Pro Regular 11.06"
 theme.fg_normal					= theme.fg
 theme.bg_normal					= theme.bg
 theme.fg_focus					= theme.fg
@@ -50,7 +50,7 @@ theme.taglist_font				= theme.font
 theme.taglist_fg_focus			= theme.shiny
 theme.taglist_bg_focus			= theme.theme
 
-theme.tasklist_font				= theme.font
+theme.tasklist_font				= theme.sans_font
 theme.tasklist_fg_focus			= theme.fg
 theme.tasklist_bg_focus			= theme.bg
 theme.tasklist_fg_normal		= theme.fg
