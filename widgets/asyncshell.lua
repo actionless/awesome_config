@@ -61,6 +61,7 @@ end
 -- @param id Request ID
 -- @param line The next line of the command's output
 function asyncshell.pipe_consume(id, line)
+  if not asyncshell.request_table[id] then return end
   local c = asyncshell.request_table[id].counter
   asyncshell.request_table[id].table[c] = line
   asyncshell.request_table[id].counter = c + 1
@@ -70,9 +71,10 @@ end
 -- command.
 -- @param id Request ID
 function asyncshell.pipe_finish(id)
-  local output = asyncshell.request_table[id].table
-  asyncshell.request_table[id].callback(output)
-  table.remove(asyncshell.request_table, id)
+  if not asyncshell.request_table[id] then return end
+  asyncshell.request_table[id].callback(
+    asyncshell.request_table[id].table)
+  asyncshell.request_table[id] = nil
 end
 
 ------------------------------------------------------------------------------
