@@ -7,7 +7,6 @@
 --]]
 
 local helpers      = require('actionless.helpers')
-local icons_dir    = helpers.icons_dir
 local mono_preset  = helpers.mono_preset
 
 local awful        = require("awful")
@@ -102,7 +101,7 @@ end
 
 function calendar:attach(widget, args)
     local args = args or {}
-    calendar.icons = args.icons or icons_dir .. "calendar/white/"
+    calendar.icons = args.icons or beautiful.icons_dir .. "calendar/white/"
     calendar.fg = args.fg or beautiful.fg_normal or "#FFFFFF"
     calendar.bg = args.bg or beautiful.bg_normal or "#FFFFFF"
     calendar.position = args.position or "top_right"

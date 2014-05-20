@@ -5,14 +5,14 @@
 
 local naughty		= require("naughty")
 local wibox		= require("wibox")
+local beautiful		= require("beautiful")
+
 local string		= { format	= string.format,
                             match	= string.match }
-
 local setmetatable = setmetatable
 
-local async	= require("actionless.async")
+local async		= require("actionless.async")
 local helpers 		= require("actionless.helpers")
-local beautiful		= helpers.beautiful
 local common_widget	= require("actionless.widgets.common").widget
 
 

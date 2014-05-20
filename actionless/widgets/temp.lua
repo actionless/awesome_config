@@ -1,15 +1,11 @@
-
-
 --[[
-
      Licensed under GNU General Public License v2
       * (c) 2013-2014, Yauheni Kirylau
       * (c) 2013,      Luke Bonham
-
 --]]
 
 local wibox        = require("wibox")
-
+local beautiful    = require("beautiful")
 local io           = io
 local tonumber     = tonumber
 local setmetatable = setmetatable
@@ -17,7 +13,6 @@ local setmetatable = setmetatable
 local async = require("actionless.async")
 local helpers = require("actionless.helpers")
 local newtimer = helpers.newtimer
-local beautiful = helpers.beautiful
 
 
 -- coretemp

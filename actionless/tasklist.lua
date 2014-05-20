@@ -17,9 +17,9 @@ local util = require("awful.util")
 local tag = require("awful.tag")
 local flex = require("wibox.layout.flex")
 local fixed = require("wibox.layout.fixed")
+local beautiful = require("beautiful")
 
 local common = require("actionless.common_widget_with_margin")
-local beautiful = require("actionless.helpers").beautiful
 
 --- Tasklist widget module for awful
 -- awful.widget.tasklist

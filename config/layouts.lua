@@ -1,9 +1,7 @@
 local awful = require("awful")
 local gears = require("gears")
+local beautiful = require("beautiful")
 local capi = { screen = screen }
-
-local helpers = require("actionless.helpers")
-local beautiful = helpers.beautiful
 
 
 local layouts = {}

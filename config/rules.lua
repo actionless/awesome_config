@@ -1,8 +1,7 @@
+local beautiful = require("beautiful")
 local awful = require("awful")
 awful.rules = require("awful.rules")
 
-local helpers	= require("actionless.helpers")
-local beautiful	= helpers.beautiful
 local settings = require("actionless.settings")
 
 

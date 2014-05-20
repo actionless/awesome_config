@@ -1,9 +1,8 @@
 local awful = require("awful")
 local client = require("client")
+local beautiful = require("beautiful")
 
 local bars	= require("actionless.bars")
-local helpers	= require("actionless.helpers")
-local beautiful	= helpers.beautiful
 
 
 local signals = {}

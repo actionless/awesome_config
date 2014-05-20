@@ -6,12 +6,12 @@
 local awful		= require("awful")
 local escape_f		= require("awful.util").escape
 local naughty		= require("naughty")
+local beautiful		= require("beautiful")
 local os		= { getenv	= os.getenv }
 local string		= { format	= string.format }
 local setmetatable	= setmetatable
 
 local helpers		= require("actionless.helpers")
-local beautiful		= helpers.beautiful
 local common_widget	= require("actionless.widgets.common").widget
 local markup		= require("actionless.markup")
 local async	        = require("actionless.async")

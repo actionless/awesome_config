@@ -2,21 +2,21 @@
      Licensed under GNU General Public License v2 
       * (c) 2013-2014, Yauheni Kirylau             
 --]]
-local helpers	= require("actionless.helpers")
-local newtimer	= helpers.newtimer
-local font		= helpers.font
-local beautiful	= helpers.beautiful
-local mono_preset = helpers.mono_preset
-local common	= require("actionless.widgets.common")
 
-local wibox		= require("wibox")
 local awful		= require("awful")
 local naughty	= require("naughty")
 local client	= require("client")
-
+local beautiful = require("beautiful")
 local io		= { popen = io.popen }
 local string    = { format = string.format }
 local setmetatable = setmetatable
+
+local common	= require("actionless.widgets.common")
+local helpers	= require("actionless.helpers")
+local newtimer	= helpers.newtimer
+local font		= helpers.font
+local mono_preset = helpers.mono_preset
+
 
 local manage_client = {}
 

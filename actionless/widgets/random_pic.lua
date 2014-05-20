@@ -5,15 +5,14 @@
 
 local wibox        = require("wibox")
 local math         = require("math")
+local beautiful = require("beautiful")
 
 local tonumber     = tonumber
 local setmetatable = setmetatable
 
 local async   = require("actionless.async")
 local helpers = require("actionless.helpers")
-local beautiful    = helpers.beautiful
 local newtimer     = helpers.newtimer
-local icons_dir     = helpers.icons_dir
 
 
 local function scandir(directory)
@@ -37,7 +36,7 @@ local function worker(args)
 	--local interval  = args.interval or 5
 	local interval  = args.interval or math.random(5,15)
 
-	local dir = args.dir or icons_dir .. 'random_pics/'
+	local dir = args.dir or beautiful.icons_dir .. 'random_pics/'
 	local image_list = scandir(dir)
 	rp.widget:set_image(random_image())
 

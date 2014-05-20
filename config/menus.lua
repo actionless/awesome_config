@@ -1,9 +1,7 @@
 local awful = require("awful")
 local capi = { screen = screen }
 local menubar = require("menubar")
-
-local helpers	= require("actionless.helpers")
-local beautiful	= helpers.beautiful
+local beautiful = require("beautiful")
 
 local menus = {}
 

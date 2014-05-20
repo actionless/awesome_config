@@ -8,6 +8,7 @@ local awful = require("awful")
 local wbase = require("wibox.widget.base")
 local lbase = require("wibox.layout.base")
 local systray_widget = require("wibox.widget.systray")
+local beautiful = require("beautiful")
 
 local capi = { client = client,
                mouse = mouse,
@@ -18,9 +19,6 @@ local error = error
 local abs = math.abs
 
 local async = require("actionless.async")
-local settings = require("actionless.settings")
-local helpers = require("actionless.helpers")
-local beautiful = helpers.beautiful
 
 --- widgets.systray_toggle
 local systray_toggle = { mt = {}, arrow=false, popup=false }

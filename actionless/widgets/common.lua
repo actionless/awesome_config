@@ -1,6 +1,5 @@
-local wibox			= require("wibox")
-
-local beautiful		= require("actionless.helpers").beautiful
+local wibox = require("wibox")
+local beautiful = require("beautiful")
 
 
 local common = {}
@@ -33,14 +32,14 @@ function common.widget()
 		return widget.text_widget:set_markup(...)
 	end
   
-  function widget:set_bg(...)
+	function widget:set_bg(...)
 		widget.text_bg:set_bg(...)
-    widget.icon_bg:set_bg(...)
+		widget.icon_bg:set_bg(...)
 	end
 
   function widget:set_fg(...)
 		widget.text_bg:set_fg(...)
-    widget.icon_bg:set_fg(...)
+		widget.icon_bg:set_fg(...)
 	end
 
 	return setmetatable(widget, { __index = widget.widget })

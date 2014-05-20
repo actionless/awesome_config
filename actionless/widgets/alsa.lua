@@ -7,6 +7,7 @@
 
 local wibox		= require("wibox")
 local awful		= require("awful")
+local beautiful		= require("beautiful")
 
 local io		= { popen  = io.popen }
 local string		= { match  = string.match,
@@ -16,7 +17,6 @@ local setmetatable	= setmetatable
 local async	        = require("actionless.async")
 local common_widget	= require("actionless.widgets.common").widget
 local helpers		= require("actionless.helpers")
-local beautiful		= helpers.beautiful
 
 
 -- ALSA volume

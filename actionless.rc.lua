@@ -1,24 +1,23 @@
 -- "dynamic" tagging
 require("eminent")
--- Standard awesome library
+
 local awful = require("awful")
 require("awful.autofocus")
--- Widget and layout library
 local wibox = require("wibox")
--- Notification library
 local naughty = require("naughty")
+local beautiful	= require("beautiful")
+
+beautiful.init(awful.util.getdir("config") .. "/themes/actionless/theme.lua")
 
 -- my own widgets
 local widgets	= require("actionless.widgets")
 local settings	= require("actionless.settings")
 local helpers	= require("actionless.helpers")
---local beautiful	= helpers.beautiful
-local beautiful	= require("beautiful")
 
+-- local config folder
 local config	= require("config")
 
 
-beautiful.init(awful.util.getdir("config") .. settings.theme_dir .. "theme.lua")
 
 local status = {}
 
