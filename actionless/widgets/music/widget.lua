@@ -4,7 +4,6 @@
 --]]
 
 local awful		= require("awful")
-local escape_f		= require("awful.util").escape
 local naughty		= require("naughty")
 local beautiful		= require("beautiful")
 local os		= { getenv	= os.getenv }
@@ -12,6 +11,7 @@ local string		= { format	= string.format }
 local setmetatable	= setmetatable
 
 local helpers		= require("actionless.helpers")
+local escape_f		= helpers.escape
 local common_widget	= require("actionless.widgets.common").widget
 local markup		= require("actionless.markup")
 local async	        = require("actionless.async")
@@ -124,7 +124,6 @@ local function worker(args)
     else
       player_status.file = N_A
     end
-
     if player_status.cover then
       player_status.cover = player_status.cover:match("^file://(.*)$")
         or player_status.file
@@ -137,30 +136,36 @@ local function worker(args)
       return player_status
     end
 
-    if not player_status.artist then
-      player_status.artist = escape_f(
+    if not player_status.artist or #player_status.artist == 0 then
+      player_status.artist =
         player_status.file:match("^.*[/](.*)[/]%d+ [-] .*[/]")
-      ) or escape_f(
-        player_status.file:match("^(.*)[/]%d+ [-] .*")
-      ) or escape_f(
+      or
+        player_status.file:match("^(.*)[/]%d+ [-] .*[/]")
+      or
         player_status.file:match("^.*[/](.*) [-] .*")
-      ) or escape_f(
+      or
+        player_status.file:match("^(.*)[/].* ")
+      or
+        player_status.file:match("^(.*)[/]%d+ [-] .*")
+      or
         player_status.file:match("^(.*)[/].*")
-      )
     end
 
-    if not player_status.title then
-      player_status.title = escape_f(
+    if not player_status.title or #player_status.title == 0 then
+      player_status.title =
         player_status.file:match(".*[/].* [-] (.*)[.].*")
-      ) or escape_f(
+      or
         player_status.file:match(".*[/](.*) [.].*")
-      ) or escape_f(
+      or
+        player_status.file:match(".*[/](.*)[.].*")
+      or
         player_status.file
-      )
     end
 
+    -- let's escape all the bad for pango symbols
+    -- and insert placeholders for missing fields
     for _, k in ipairs({
-      'file', 'locationartist', 'title', 'album', 'date', 'cover'
+      'file', 'locationartist', 'title', 'album', 'date', 'cover', 'artist',
     }) do
       if player_status[k] then
         player_status[k] = escape_f(player_status[k])
@@ -203,8 +208,8 @@ local function worker(args)
       markup.font(font,
         markup.fg.color(beautiful.player_text,
           markup.bold(
-            artist)) ..
-        ' ' ..
+            artist))
+        .. " " ..
         title))
   end
 -------------------------------------------------------------------------------

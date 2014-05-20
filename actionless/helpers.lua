@@ -183,4 +183,10 @@ end
 
 -- }}}
 
+local xml_entity_names = { ["'"] = "&apos;", ["\""] = "&quot;", ["<"] = "&lt;", [">"] = "&gt;", ["&"] = "&amp;" };
+function helpers.escape(text)
+    --return text and text:gsub("['&<>\"]", xml_entity_names) or nil
+    return text and text:gsub("[&<>\"]", xml_entity_names) or nil
+end
+
 return helpers
