@@ -9,11 +9,11 @@ bars = {}
 
 
 function bars.make_border(c)
-        local num_clients = awful.client.visible(s)
+        local clients = awful.client.visible(c.screen)
 	if not settings.gtk3_app_classes[c.class] then
 		c.border_width = beautiful.border_width
 	end
-	if num_clients == 1 then
+	if #clients == 1 then
 		c.border_color = beautiful.border_normal
 	else
 		c.border_color = beautiful.border_focus
