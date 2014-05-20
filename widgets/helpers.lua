@@ -70,6 +70,10 @@ end
 
 -- }}}
 
+function helpers.only_digits(str)
+  return tonumber(str:match("%d+"))
+end
+
 -- {{{ Read the ... of a file or return nil.
 
 

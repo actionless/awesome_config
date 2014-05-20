@@ -109,10 +109,14 @@ theme.arrl						= themes_dir .. "/icons/arrl.png"
 theme.arrl_dl					= themes_dir .. "/icons/arrl_dl.png"
 theme.arrl_ld					= themes_dir .. "/icons/arrl_ld.png"
 
-theme.widget_ac					= themes_dir .. "/icons/ac.png"
+theme.widget_ac = themes_dir .. "/icons/ac.png"
+theme.widget_ac_charging = themes_dir .. "/icons/ac_charging.png"
+theme.widget_ac_charging_low = themes_dir .. "/icons/ac_charging_low.png"
+
 theme.widget_battery			= themes_dir .. "/icons/battery.png"
 theme.widget_battery_low		= themes_dir .. "/icons/battery_low.png"
 theme.widget_battery_empty		= themes_dir .. "/icons/battery_empty.png"
+
 theme.widget_mem				= themes_dir .. "/icons/mem.png"
 theme.widget_cpu				= themes_dir .. "/icons/cpu.png"
 theme.widget_temp				= themes_dir .. "/icons/temp.png"

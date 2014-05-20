@@ -32,6 +32,16 @@ function common.widget()
 	function widget:set_markup(...)
 		return widget.text_widget:set_markup(...)
 	end
+  
+  function widget:set_bg(...)
+		widget.text_bg:set_bg(...)
+    widget.icon_bg:set_bg(...)
+	end
+
+  function widget:set_fg(...)
+		widget.text_bg:set_fg(...)
+    widget.icon_bg:set_fg(...)
+	end
 
 	return setmetatable(widget, { __index = widget.widget })
 end
