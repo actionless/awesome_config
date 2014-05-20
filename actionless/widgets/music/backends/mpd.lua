@@ -7,8 +7,8 @@ local awful		= require("awful")
 local string		= { format	= string.format,
                             match	= string.match }
 
-local helpers		= require("widgets.helpers")
-local asyncshell	= require("widgets.asyncshell")
+local helpers		= require("actionless.helpers")
+local async	= require("actionless.async")
 
 local mpd = {
   player_status = {},
@@ -43,7 +43,7 @@ function mpd.prev_song()
 end
 -------------------------------------------------------------------------------
 function mpd.update()
-  asyncshell.request(
+  async.execute(
     [[mpc --format "file:%file%
                     Artist:%artist%
                     Title:%title%
@@ -78,7 +78,7 @@ function mpd.parse_metadata(lines)
 end
 -------------------------------------------------------------------------------
 function mpd.resize_cover(cover_size, default_art)
-  asyncshell.request(string.format(
+  async.execute(string.format(
     "%s %q %q %d %q",
     mpd.cover_script,
     mpd.music_dir,

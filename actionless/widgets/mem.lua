@@ -8,9 +8,10 @@
                                                   
 --]]
 
-local newtimer  = require("widgets.helpers").newtimer
-local font      = require("widgets.helpers").font
-local mono_preset      = require("widgets.helpers").mono_preset
+local helpers = require("actionless.helpers")
+local newtimer  = helpers.newtimer
+local font      = helpers.font
+local mono_preset =helpers.mono_preset
 
 local wibox     = require("wibox")
 local naughty   = require("naughty")

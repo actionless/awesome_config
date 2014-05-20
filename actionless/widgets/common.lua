@@ -1,6 +1,6 @@
 local wibox			= require("wibox")
 
-local beautiful		= require("widgets.helpers").beautiful
+local beautiful		= require("actionless.helpers").beautiful
 
 
 local common = {}

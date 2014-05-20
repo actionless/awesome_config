@@ -1,8 +1,9 @@
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 local awful = require("awful")
-local widgets = require("widgets")
---local rpic = require("widgets.random_pic")
+local widgets = require("actionless.widgets")
+local custom_tasklist = require("actionless.tasklist")
+--local rpic = widgets.random_pic
 
 
 local toolbar = {}
@@ -150,8 +151,8 @@ for s = 1, screen.count() do
 		s, awful.widget.taglist.filter.all, mytaglist.buttons)
 
 	-- Create a tasklist widget
-	mytasklist[s] = widgets.tasklist(
-		s, widgets.tasklist.filter.focused_and_minimized_current_tags, mytasklist.buttons)
+	mytasklist[s] = custom_tasklist(
+		s, custom_tasklist.filter.focused_and_minimized_current_tags, mytasklist.buttons)
 
 	-- Create the wibox
 	mywibox[s] = awful.wibox({ position = "top", screen = s, height = 18 })

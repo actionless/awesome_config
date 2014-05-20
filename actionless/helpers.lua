@@ -7,7 +7,7 @@
       * (c) 2010-2012, Peter Hofmann              
                                                   
 --]]
-local settings = require("widgets.settings")
+local settings = require("actionless.settings")
 
 local debug  = require("debug")
 

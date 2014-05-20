@@ -10,10 +10,10 @@ local string		= { format	= string.format,
 
 local setmetatable = setmetatable
 
-local asyncshell	= require("widgets.asyncshell")
-local helpers 		= require("widgets.helpers")
+local async	= require("actionless.async")
+local helpers 		= require("actionless.helpers")
 local beautiful		= helpers.beautiful
-local common_widget	= require("widgets.common").widget
+local common_widget	= require("actionless.widgets.common").widget
 
 
 -- Batterys info
@@ -31,7 +31,7 @@ local function worker(args)
   local device = args.device or "battery_BAT0"
 
   function bat.update()
-    asyncshell.request(
+    async.execute(
       'upower -i /org/freedesktop/UPower/devices/' .. device,
       function(f) bat.post_update(f) end)
   end
@@ -57,11 +57,13 @@ local function worker(args)
     elseif bat.now.state == 'charging' then
       if bat.now.percentage < 30 then
         bat.widget:set_image(beautiful.widget_ac_charging_low)
+        bat.widget:set_bg(beautiful.theme)
+        bat.widget:set_fg(beautiful.bg)
       else
         bat.widget:set_image(beautiful.widget_ac_charging)
+        bat.widget:set_bg(beautiful.bg)
+        bat.widget:set_fg(beautiful.fg)
       end
-      bat.widget:set_bg(beautiful.theme)
-      bat.widget:set_fg(beautiful.fg)
     -- on battery:
     else
       if bat.now.on_low_battery == 'yes' then

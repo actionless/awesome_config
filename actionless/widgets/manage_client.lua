@@ -2,12 +2,12 @@
      Licensed under GNU General Public License v2 
       * (c) 2013-2014, Yauheni Kirylau             
 --]]
-local helpers	= require("widgets.helpers")
+local helpers	= require("actionless.helpers")
 local newtimer	= helpers.newtimer
 local font		= helpers.font
 local beautiful	= helpers.beautiful
 local mono_preset = helpers.mono_preset
-local common	= require("widgets.common")
+local common	= require("actionless.widgets.common")
 
 local wibox		= require("wibox")
 local awful		= require("awful")

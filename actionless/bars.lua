@@ -1,8 +1,9 @@
 local awful = require("awful")
 local wibox = require("wibox")
 
-local settings = require("widgets.settings")
-local beautiful = require("widgets.helpers").beautiful
+local widgets = require("actionless.widgets")
+local settings = require("actionless.settings")
+local beautiful = require("actionless.helpers").beautiful
 
 
 bars = {}

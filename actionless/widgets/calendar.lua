@@ -6,8 +6,9 @@
                                                   
 --]]
 
-local icons_dir    = require("widgets.helpers").icons_dir
-local mono_preset  = require("widgets.helpers").mono_preset
+local helpers      = require('actionless.helpers')
+local icons_dir    = helpers.icons_dir
+local mono_preset  = helpers.mono_preset
 
 local awful        = require("awful")
 local beautiful    = require("beautiful")
@@ -96,7 +97,7 @@ function calendar:show(t_out, inc_offset)
                                         fg = calendar.fg,
                                         bg = calendar.bg,
                                         timeout = tims,
-										preset = mono_preset })
+    preset = mono_preset })
 end
 
 function calendar:attach(widget, args)

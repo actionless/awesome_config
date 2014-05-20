@@ -5,8 +5,8 @@
 
 local awful		= require("awful")
 
-local asyncshell	= require("widgets.asyncshell")
-local helpers           = require("widgets.helpers")
+local async	= require("actionless.async")
+local helpers           = require("actionless.helpers")
 
 
 local clementine = {}
@@ -33,7 +33,7 @@ function clementine.prev_song()
 end
 -------------------------------------------------------------------------------
 function clementine.update()
-  asyncshell.request(
+  async.execute(
     "qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 PlaybackStatus",
     function(f) clementine.post_update(f) end)
 end
@@ -48,7 +48,7 @@ function clementine.post_update(lines)
   clementine.player_status.state = state
   if state == 'play' or state == 'pause'
   then
-    asyncshell.request(
+    async.execute(
       "qdbus org.mpris.MediaPlayer2.clementine /Player GetMetadata",
       function(f) clementine.parse_metadata(f) end)
   else

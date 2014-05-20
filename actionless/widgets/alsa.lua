@@ -13,15 +13,15 @@ local string		= { match  = string.match,
                             format = string.format }
 local setmetatable	= setmetatable
 
-local asyncshell	= require("widgets.asyncshell")
-local common		= require("widgets.common")
-local helpers		= require("widgets.helpers")
+local async	        = require("actionless.async")
+local common_widget	= require("actionless.widgets.common").widget
+local helpers		= require("actionless.helpers")
 local beautiful		= helpers.beautiful
 
 
 -- ALSA volume
 local alsa = {}
-alsa.widget = common.widget(beautiful.widget_vol)
+alsa.widget = common_widget(beautiful.widget_vol)
 alsa.widget:buttons(awful.util.table.join(
   awful.button({ }, 1, function () alsa.toggle() end),
   awful.button({ }, 5, function () alsa.down() end),
@@ -52,7 +52,7 @@ local function worker(args)
     if alsa.volume.level < 100 then
       alsa.volume.level = alsa.volume.level + alsa.step
     end
-    asyncshell.request(
+    async.execute(
       "amixer -q set " .. alsa.channel .. ",0 " .. alsa.step .. "%+",
       function(f) alsa.post_volume() end)
   end
@@ -66,7 +66,7 @@ local function worker(args)
     if alsa.volume.level > 0 then
       alsa.volume.level = alsa.volume.level - alsa.step
     end
-    asyncshell.request(
+    async.execute(
       "amixer -q set " .. alsa.channel .. ",0 " .. alsa.step .. "%-",
       function(f) alsa.post_volume() end)
   end
@@ -116,7 +116,7 @@ local function worker(args)
   end
 
   function alsa.update()
-    asyncshell.request(
+    async.execute(
       'amixer get ' .. alsa.channel,
       function(f) alsa.post_update(f) end)
   end

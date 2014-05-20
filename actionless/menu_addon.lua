@@ -8,7 +8,7 @@ local tags = require("awful.tag")
 local capi = { client = client }
 local escape_f = require("awful.util").escape
 
-local table_merge = require("widgets.helpers").imerge
+local table_merge = require("actionless.widgets.helpers").imerge
 
 
 local menu_addon = { mt={} }

@@ -3,24 +3,24 @@
 -- @copyright 2013-2014 Yauheni Kirylau
 ---------------------------------------------------------------------------
 
-local wibox     = require("wibox")
-local awful     = require("awful")
+local wibox = require("wibox")
+local awful = require("awful")
 local wbase = require("wibox.widget.base")
 local lbase = require("wibox.layout.base")
 local systray_widget = require("wibox.widget.systray")
-local beautiful = require("widgets.helpers").beautiful
-local asyncshell = require("widgets.asyncshell")
-local helpers     = require("widgets.helpers")
-local settings     = require("widgets.settings")
-local capi = {
-    client = client,
-    mouse = mouse,
-    screen = screen,
-    awesome = awesome
-}
+
+local capi = { client = client,
+               mouse = mouse,
+               screen = screen,
+               awesome = awesome }
 local setmetatable = setmetatable
 local error = error
 local abs = math.abs
+
+local async = require("actionless.async")
+local settings = require("actionless.settings")
+local helpers = require("actionless.helpers")
+local beautiful = helpers.beautiful
 
 --- widgets.systray_toggle
 local systray_toggle = { mt = {}, arrow=false, popup=false }
@@ -62,7 +62,7 @@ function systray_toggle.initialize()
 end
 
 function systray_toggle.check()
-    asyncshell.wait(0.3, systray_toggle.post_check)
+    async.wait(0.3, systray_toggle.post_check)
 end
 function systray_toggle.post_check()
     if not systray_toggle.popup and not systray_toggle.arrow then

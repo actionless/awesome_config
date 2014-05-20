@@ -7,16 +7,18 @@
       * (c) 2013,      Luke Bonham
 
 --]]
-local asyncshell   = require("widgets.asyncshell")
-local newtimer     = require("widgets.helpers").newtimer
 
 local wibox        = require("wibox")
 
 local io           = io
 local tonumber     = tonumber
-
 local setmetatable = setmetatable
-local beautiful    = require("widgets.helpers").beautiful
+
+local async = require("actionless.async")
+local helpers = require("actionless.helpers")
+local newtimer = helpers.newtimer
+local beautiful = helpers.beautiful
+
 
 -- coretemp
 local temp = {}
@@ -32,7 +34,7 @@ local function worker(args)
 	temp.widget:set_widget(temp.widget_text)
 
 	function temp.update()
-		asyncshell.request("sensors ", function (f) temp.post_update(f) end)
+		async.execute("sensors ", function (f) temp.post_update(f) end)
 	end
 
 	function temp.post_update(lines)

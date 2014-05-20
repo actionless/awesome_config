@@ -14,10 +14,11 @@ menubar = require("menubar")
 local capi = { screen = screen }
 
 -- my own widgets
-local widgets	= require("widgets")
-local beautiful	= widgets.helpers.beautiful
-local settings	= widgets.settings
-local bars		= widgets.bars
+local widgets	= require("actionless.widgets")
+local settings	= require("actionless.settings")
+local bars	= require("actionless.bars")
+local helpers	= require("actionless.helpers")
+local beautiful	= helpers.beautiful
 
 local config	= require("config")
 

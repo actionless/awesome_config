@@ -3,17 +3,17 @@
       * (c) 2013-2014, Yauheni Kirylau
 --]]
 
-local asyncshell   = require("widgets.asyncshell")
-local newtimer     = require("widgets.helpers").newtimer
-local icons_dir     = require("widgets.helpers").icons_dir
-
 local wibox        = require("wibox")
-
-local tonumber     = tonumber
 local math         = require("math")
 
+local tonumber     = tonumber
 local setmetatable = setmetatable
-local beautiful    = require("widgets.helpers").beautiful
+
+local async   = require("actionless.async")
+local helpers = require("actionless.helpers")
+local beautiful    = helpers.beautiful
+local newtimer     = helpers.newtimer
+local icons_dir     = helpers.icons_dir
 
 
 local function scandir(directory)

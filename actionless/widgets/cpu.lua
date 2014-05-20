@@ -7,20 +7,21 @@
       * (c) 2010-2012, Peter Hofmann              
                                                   
 --]]
-
-local first_line_in_file   = require("widgets.helpers").first_line_in_file
-local newtimer     = require("widgets.helpers").newtimer
-local font         = require("widgets.helpers").font
-local mono_preset      = require("widgets.helpers").mono_preset
-
 local wibox        = require("wibox")
 local naughty      = require("naughty")
-
 local math         = { ceil   = math.ceil }
 local string       = { format = string.format,
                        gmatch = string.gmatch }
 local tostring     = tostring
 local setmetatable = setmetatable
+
+
+local helpers = require("actionless.helpers")
+local first_line_in_file = helpers.first_line_in_file
+local newtimer = helpers.newtimer
+local font = helpers.font
+local mono_preset = helpers.mono_preset
+
 
 -- CPU usage
 -- widgets.cpu

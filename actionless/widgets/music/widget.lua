@@ -10,13 +10,13 @@ local os		= { getenv	= os.getenv }
 local string		= { format	= string.format }
 local setmetatable	= setmetatable
 
-local helpers		= require("widgets.helpers")
+local helpers		= require("actionless.helpers")
 local beautiful		= helpers.beautiful
-local common_widget	= require("widgets.common").widget
-local markup		= require("widgets.markup")
-local asyncshell	= require("widgets.asyncshell")
+local common_widget	= require("actionless.widgets.common").widget
+local markup		= require("actionless.markup")
+local async	        = require("actionless.async")
 
-local backends		= require("widgets.music.backends")
+local backends		= require("actionless.widgets.music.backends")
 
 
 local N_A = "N/A"
@@ -213,7 +213,7 @@ function player.resize_cover()
     return player.backend.resize_cover(cover_size, default_art)
   end
   local resize = string.format('%sx%s', cover_size, cover_size)
-  asyncshell.request(
+  async.execute(
     string.format(
       [[convert %q -thumbnail %q -gravity center -background "none" -extent %q %q]],
       player.player_status.cover,

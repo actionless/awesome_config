@@ -8,13 +8,13 @@ local setmetatable	= setmetatable
 
 local naughty		= require("naughty")
 
-local helpers		= require("widgets.helpers")
+local helpers		= require("actionless.helpers")
 local newtimer		= helpers.newtimer
 local font		= helpers.font
 local beautiful		= helpers.beautiful
 local mono_preset	= helpers.mono_preset
-local common_widget	= require("widgets.common").widget
-local markup		= require("widgets.markup")
+local common_widget	= require("actionless.widgets.common").widget
+local markup		= require("actionless.markup")
 
 
 local netctl = {
@@ -80,7 +80,7 @@ local function worker(args)
   end
 
   function netctl.netctl_auto_update()
-    asyncshell.request(
+    async.execute(
       'netctl-auto current',
       function(lines)
         netctl.update_widget(
@@ -90,7 +90,7 @@ local function worker(args)
   end
 
   function netctl.netctl_update()
-    asyncshell.request(
+    async.execute(
       "systemctl list-unit-files 'netctl@*'",
       function(f)
         netctl.update_widget(

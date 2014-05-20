@@ -10,8 +10,6 @@ local capi = { screen = screen,
 local ipairs = ipairs
 local setmetatable = setmetatable
 local table = table
-local common = require("widgets.common_widget_with_margin")
-local beautiful = require("widgets.helpers").beautiful
 local wibox = require("wibox")
 local awful = require("awful")
 local client = require("awful.client")
@@ -19,6 +17,9 @@ local util = require("awful.util")
 local tag = require("awful.tag")
 local flex = require("wibox.layout.flex")
 local fixed = require("wibox.layout.fixed")
+
+local common = require("actionless.common_widget_with_margin")
+local beautiful = require("actionless.helpers").beautiful
 
 --- Tasklist widget module for awful
 -- awful.widget.tasklist
