@@ -65,7 +65,7 @@ function clementine.parse_metadata(lines)
       album='album',
       date='year',
       cover='arturl'})
-  helpers.dict_merge(clementine.player_status, player_status)
+  helpers.merge(clementine.player_status, player_status)
   clementine.parse_status_callback(clementine.player_status)
 end
 

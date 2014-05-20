@@ -6,33 +6,26 @@
 local menu = require("awful.menu")
 local tags = require("awful.tag")
 local capi = {
-    timer = timer,
-    screen = screen,
-    mouse = mouse,
     client = client }
-local util = require("awful.util")
+local escape_f = require("awful.util").escape
+
+local table_merge = require("widgets.helpers").imerge
 
 
 local menu_addon = { mt={} }
 
 
-local table_merge = function (t, set)
-    for _, v in ipairs(set) do
-        table.insert(t, v)
-    end
-end
-
-
 function menu_addon.clients_on_tag(args, item_args)
-    local cls = capi.client.get()
+    local cls = capi.client.focus
     local cls_t = {}
-    local all_tags = tags.gettags(1)
-    for k, t in ipairs(all_tags) do
+
+    local all_tags = tags.gettags(cls.screen)
+    for _, t in ipairs(all_tags) do
         if t.selected then
             clients = t.clients(t)
-            for k2, c in ipairs(clients) do
+            for _, c in ipairs(clients) do
                 cls_t[#cls_t + 1] = {
-                    util.escape(c.name) or "",
+                    escape_f(c.name) or "",
                     function ()
                         if not c:isvisible() then
                             tags.viewmore(c:tags(), c.screen)

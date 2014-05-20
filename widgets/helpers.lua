@@ -88,13 +88,13 @@ function helpers.flines_to_lines(f)
   return lines
 end
 
-function helpers.table_merge(t, set)
+function helpers.imerge(t, set)
     for _, v in ipairs(set) do
         table.insert(t, v)
     end
 end
 
-function helpers.dict_getn(dict)
+function helpers.getn(dict)
   local num_items = 0
   for k,v in pairs(dict) do
     num_items = num_items + 1
@@ -102,7 +102,7 @@ function helpers.dict_getn(dict)
   return num_items
 end
 
-function helpers.dict_merge(t, set)
+function helpers.merge(t, set)
     for k, v in pairs(set) do
         t[k] = v
     end
@@ -131,22 +131,22 @@ end
 
 function helpers.find_values_in_lines(lines, regex, match_keys)
   local key, value = nil, nil
-  local values = {}
-  local match_keys_length = helpers.dict_getn(match_keys)
+  local result_values = {}
+  local match_keys_length = helpers.getn(match_keys)
   for _, line in ipairs(lines) do
     if match_keys_length <= 0 then
-      return values
+      return result_values
     end
     key, value = line:match(regex)
     for result_key, match_key in pairs(match_keys) do
       if key == match_key then
-        values[result_key] = value
+        result_values[result_key] = value
         match_keys[key] = nil
         match_keys_length = match_keys_length - 1
       end
     end
   end
-  return values
+  return result_values
 end
 
 ----------------------------------------------
