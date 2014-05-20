@@ -16,7 +16,6 @@ local capi = { screen = screen }
 -- my own widgets
 local widgets	= require("actionless.widgets")
 local settings	= require("actionless.settings")
-local bars	= require("actionless.bars")
 local helpers	= require("actionless.helpers")
 local beautiful	= helpers.beautiful
 
@@ -171,72 +170,4 @@ menubar.geometry = {
 
 config.toolbar.init()
 config.keys.init()
-
-
--- {{{ Rules
--- Rules to apply to new clients (through the "manage" signal).
-awful.rules.rules = {
-    -- All clients will match this rule.
-    { rule = { },
-      properties = { border_width = beautiful.border_width,
-                     border_color = beautiful.border_normal,
-                     focus = awful.client.focus.filter,
-                     raise = true,
-                     keys = clientkeys,
-                     buttons = clientbuttons,
-					 size_hints_honor = false},
-	  callback = awful.client.setslave },
-    { rule = { class = "MPlayer" },		properties = { floating=true } },
-
-    { rule = { class = "Chromium" },	properties = { tag=tags[1][2],
-	                                                   raise=false } },
-    { rule = { class = "Skype" },		properties = { tag=tags[1][4],
-	                                                   raise=false } },
-}
--- }}}
-
-for class in pairs(settings.gtk3_app_classes) do
-	local rule = { rule = {class = class}, properties = {border_width=0}}
-	table.insert(awful.rules.rules, rule)
-end
-
--- {{{ Signals
--- Signal function to execute when a new client appears.
-client.connect_signal("manage", function (c, startup)
-	if not startup and not c.size_hints.user_position
-	   and not c.size_hints.program_position then
-		awful.placement.no_overlap(c)
-		awful.placement.no_offscreen(c)
-	end
-end)
---client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
---client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
-
-client.connect_signal("focus", function(c)
-  if c.maximized_horizontal == true and c.maximized_vertical == true then
-    -- maximized
-    bars.remove_border(c)
-  elseif awful.client.floating.get(c) then
-    -- floating client
-    bars.make_titlebar(c)
-  elseif awful.layout.get(c.screen) == awful.layout.suit.floating then
-    -- floating layout
-    bars.make_titlebar(c)
-  else
-    bars.remove_titlebar(c)
-    bars.make_border(c)
-  end
-end)
-
-client.connect_signal("unfocus", function(c)
-  if awful.client.floating.get(c) then
-    -- floating client
-    c.border_color = beautiful.titlebar
-  elseif awful.layout.get(c.screen) == awful.layout.suit.floating then
-    -- floating layout
-    c.border_color = beautiful.titlebar
-  else
-    c.border_color = beautiful.border_normal
-  end
-end)
--- }}}
+config.signals.init()
