@@ -1,17 +1,12 @@
 -- "dynamic" tagging
 require("eminent")
 -- Standard awesome library
-local gears = require("gears")
 local awful = require("awful")
-awful.rules = require("awful.rules")
 require("awful.autofocus")
 -- Widget and layout library
 local wibox = require("wibox")
 -- Notification library
 local naughty = require("naughty")
-menubar = require("menubar")
--- awesome std c library
-local capi = { screen = screen }
 
 -- my own widgets
 local widgets	= require("actionless.widgets")
@@ -20,6 +15,10 @@ local helpers	= require("actionless.helpers")
 local beautiful	= helpers.beautiful
 
 local config	= require("config")
+
+
+
+local status = {}
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -104,70 +103,9 @@ run_once("unclutter")
 run_once("gxkb")
 -- }}}
 
--- Table of layouts to cover with awful.layout.inc, order matters.
-layouts = {
-	awful.layout.suit.tile,
-	awful.layout.suit.tile.bottom,
-	awful.layout.suit.floating,
-	awful.layout.suit.fair,
-	awful.layout.suit.fair.horizontal,
-	awful.layout.suit.spiral
-}
-awful.layout.layouts = layouts
--- }}}
-
--- {{{ Wallpaper
-if beautiful.wallpaper then
-	for s = 1, screen.count() do
-		gears.wallpaper.tiled(beautiful.wallpaper, s)
-	end
-else if beautiful.wallpaper_cmd then
-		run_once(beautiful.wallpaper_cmd)
-end
-end
--- }}}
-
--- {{{ Tags
--- Define a tag table which hold all screen tags.
-tags = {}
-for s = 1, screen.count() do
-    -- Each screen has its own tag table.
-    tags[s] = awful.tag({ '1:bs', '2:web', '3:ww', '4:im', '5:mm', 6, 7, 8, '9:sd', '0:nl' }, s, awful.layout.layouts[1])
-end
--- }}}
-
--- {{{ Menu
--- Create a laucher widget and a main menu
-myawesomemenu = {
-   { "manual", terminal .. " -e man awesome" },
-   { "edit config", editor_cmd .. " " .. awesome.conffile },
-   { "restart", awesome.restart },
-   { "quit", awesome.quit }
-}
-
-mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-									{ "kill compositor", "killall compton" },
-									{ "start compositor", compositor },
-									{ "open terminal", terminal }
-								  }
-						})
-
-mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
-									 menu = mymainmenu })
-
--- Menubar configuration
-menubar.utils.terminal = terminal -- Set the terminal for applications that require it
--- }}}
-
-menubar.geometry = {
-   height = 18,
-   width = capi.screen[1].workarea.width,
-   x = 0,
-   y = capi.screen[1].workarea.height - 18
-}
-
---require("freedesktop/freedesktop")
-
+config.layouts.init()
+config.menus.init()
 config.toolbar.init()
 config.keys.init()
+config.rules.init()
 config.signals.init()
