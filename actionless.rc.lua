@@ -12,11 +12,13 @@ local naughty = require("naughty")
 local widgets	= require("actionless.widgets")
 local settings	= require("actionless.settings")
 local helpers	= require("actionless.helpers")
-local beautiful	= helpers.beautiful
+--local beautiful	= helpers.beautiful
+local beautiful	= require("beautiful")
 
 local config	= require("config")
 
 
+beautiful.init(awful.util.getdir("config") .. settings.theme_dir .. "theme.lua")
 
 local status = {}
 
