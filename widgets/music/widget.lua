@@ -200,11 +200,12 @@ local function worker(args)
     end
 
     player.widget:set_markup(
-      '<span font="' .. font .. '">' ..
-      markup(beautiful.player_text, markup.bold(artist)) ..
-      ' ' ..
-      title ..
-      '</span>')
+      markup.font(font,
+        markup.fg.color(beautiful.player_text,
+          markup.bold(
+            artist)) ..
+        ' ' ..
+        title))
   end
 -------------------------------------------------------------------------------
 function player.resize_cover()
