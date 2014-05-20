@@ -2,17 +2,19 @@
   Licensed under GNU General Public License v2 
    * (c) 2013-2014, Yauheni Kirylau             
 --]]
+
+local string		= { format = string.format }
+local setmetatable	= setmetatable
+
+local naughty		= require("naughty")
+
 local helpers		= require("widgets.helpers")
 local newtimer		= helpers.newtimer
 local font		= helpers.font
 local beautiful		= helpers.beautiful
 local mono_preset	= helpers.mono_preset
 local common_widget	= require("widgets.common").widget
-
-local naughty		= require("naughty")
-
-local string		= { format = string.format }
-local setmetatable	= setmetatable
+local markup		= require("widgets.markup")
 
 
 local netctl = {
@@ -26,6 +28,7 @@ local netctl = {
 local function worker(args)
   local args = args or {}
   local interval = args.interval or 5
+  local font = args.font or beautiful.tasklist_font or beautiful.font
   netctl.timeout = args.timeout or 0
   netctl.font = args.font or font
 
@@ -98,7 +101,10 @@ local function worker(args)
   end
 
   function netctl.update_widget(network_name)
-    netctl.widget:set_text(string.format("%-6s", network_name))
+    netctl.widget:set_markup(
+      markup.font(
+        font,
+        string.format("%-6s", network_name)))
     if netctl.interface == netctl.wired_if then
       netctl.widget:set_image(beautiful.widget_net_wired)
     elseif netctl.interface == netctl.wireless_if then
