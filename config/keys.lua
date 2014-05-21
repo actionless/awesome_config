@@ -1,5 +1,6 @@
 local awful = require("awful")
 local wibox = require("wibox")
+local menubar = require("menubar")
 local capi = { screen = screen }
 
 local widgets = require("actionless.widgets")
