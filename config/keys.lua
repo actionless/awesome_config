@@ -6,6 +6,7 @@ local capi = { screen = screen }
 
 local widgets = require("actionless.widgets")
 local bars = require("actionless.bars")
+local menu_addon = require("actionless.menu_addon")
 
 
 local keys = {}
@@ -184,7 +185,7 @@ local globalkeys = awful.util.table.join(
 		function () mymainmenu:show() end),
 	awful.key({ modkey,		   }, "i",
 		function ()
-			instance = widgets.menu_addon.clients_on_tag({
+			instance = menu_addon.clients_on_tag({
 				theme = {width=capi.screen[mouse.screen].workarea.width},
 				coords = {x=0, y=18}})
 		end),
