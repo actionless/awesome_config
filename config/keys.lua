@@ -1,3 +1,4 @@
+
 local awful = require("awful")
 local wibox = require("wibox")
 local menubar = require("menubar")
@@ -10,8 +11,12 @@ local bars = require("actionless.bars")
 local keys = {}
 
 
-function keys.init()
+function keys.init(status)
 
+local modkey = "Mod4"
+local altkey = "Mod1"
+
+local cmd = status.cmds
 
 -- {{{ Mouse bindings
 root.buttons(awful.util.table.join(
@@ -21,7 +26,7 @@ root.buttons(awful.util.table.join(
 ))
 -- }}}
 -- {{{ Key bindings
-globalkeys = awful.util.table.join(
+local globalkeys = awful.util.table.join(
 
 	awful.key({ modkey,	"Control"	}, "t",
 		function() systray_toggle.toggle() end),
@@ -194,7 +199,7 @@ globalkeys = awful.util.table.join(
 	--awful.key({ modkey,        }, "space",
 	--	function() menubar.show() end),
 	awful.key({ modkey,        }, "space",
-		function() awful.util.spawn_with_shell(dmenu) end),
+		function() awful.util.spawn_with_shell(cmd.dmenu) end),
 
 	-- Layout manipulation
 	awful.key({ modkey, "Control"	}, "n",
@@ -244,15 +249,15 @@ globalkeys = awful.util.table.join(
 
 	-- Standard program
 	awful.key({ modkey,				}, "Return",
-		function () awful.util.spawn(tmux) end),
+		function () awful.util.spawn(cmd.tmux) end),
 	awful.key({ modkey,				}, "s",
-		function () awful.util.spawn(file_manager) end),
+		function () awful.util.spawn(cmd.file_manager) end),
 	awful.key({ modkey, "Control"	}, "c",
-		function () awful.util.spawn_with_shell(chromium) end),
+		function () awful.util.spawn_with_shell(cmd.chromium) end),
 	awful.key({ modkey, "Control"	}, "g",
-		function () awful.util.spawn_with_shell(chrome) end),
+		function () awful.util.spawn_with_shell(cmd.chrome) end),
 	awful.key({ modkey, "Control"	}, "f",
-		function () awful.util.spawn_with_shell(firefox) end),
+		function () awful.util.spawn_with_shell(cmd.firefox) end),
 
 	awful.key({ modkey, "Control"	}, "r",
 		awesome.restart),
@@ -263,22 +268,22 @@ globalkeys = awful.util.table.join(
 	awful.key({ "Control"			}, "Print", 
 		function ()
 			awful.util.spawn_with_shell(
-			"scrot -ub '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. scrot_preview_cmd)
+			"scrot -ub '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. cmd.scrot_preview_cmd)
 		end),
 	awful.key({ altkey				}, "Print",
 		function ()
 			awful.util.spawn_with_shell(
-			"scrot -s '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. scrot_preview_cmd)
+			"scrot -s '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. cmd.scrot_preview_cmd)
 		end),
 	awful.key({						}, "Print",
 		function ()
 			awful.util.spawn_with_shell(
-			"scrot '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. scrot_preview_cmd)
+			"scrot '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. cmd.scrot_preview_cmd)
 		end)
 
 )
 
-clientkeys = awful.util.table.join(
+status.clientkeys = awful.util.table.join(
 	awful.key({ modkey,				}, "f",
 		function (c) c.fullscreen = not c.fullscreen end),
 	awful.key({ modkey,				}, "q",
@@ -349,7 +354,7 @@ for screen = 1, 2 do
   end
 end
 
-clientbuttons = awful.util.table.join(
+status.clientbuttons = awful.util.table.join(
     awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
     awful.button({ modkey }, 1, awful.mouse.client.move),
     awful.button({ modkey }, 3, awful.mouse.client.resize))

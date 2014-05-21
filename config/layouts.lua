@@ -7,7 +7,7 @@ local capi = { screen = screen }
 local layouts = {}
 
 
-function layouts.init()
+function layouts.init(status)
 -- Table of layouts to cover with awful.layout.inc, order matters.
 my_layouts = {
   awful.layout.suit.tile,
@@ -33,10 +33,10 @@ end
 
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
-tags = {}
+status.tags = {}
 for s = 1, capi.screen.count() do
   -- Each screen has its own tag table.
-  tags[s] = awful.tag({ '1:bs', '2:web', '3:ww', '4:im', '5:mm', 6, 7, 8, '9:sd', '0:nl' }, s, awful.layout.layouts[1])
+  status.tags[s] = awful.tag({ '1:bs', '2:web', '3:ww', '4:im', '5:mm', 6, 7, 8, '9:sd', '0:nl' }, s, awful.layout.layouts[1])
 end
 -- }}}
 

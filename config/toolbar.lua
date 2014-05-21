@@ -9,7 +9,7 @@ local custom_tasklist = require("actionless.tasklist")
 local toolbar = {}
 
 
-function toolbar.init()
+function toolbar.init(status)
 
 close_button = widgets.manage_client({
 	client = client,

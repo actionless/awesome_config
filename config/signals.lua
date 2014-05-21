@@ -7,7 +7,7 @@ local bars	= require("actionless.bars")
 
 local signals = {}
 
-function signals.init()
+function signals.init(status)
 -- {{{ Signals
 
 -- Signal function to execute when a new client appears.

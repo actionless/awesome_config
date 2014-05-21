@@ -1,4 +1,6 @@
 local config = {
+	autorun	= require("config.autorun"),
+	variables = require("config.variables"),
 	keys	= require("config.keys"),
 	toolbar	= require("config.toolbar"),
 	rules	= require("config.rules"),
