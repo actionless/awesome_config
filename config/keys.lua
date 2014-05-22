@@ -2,9 +2,12 @@
 local awful = require("awful")
 local wibox = require("wibox")
 local menubar = require("menubar")
-local capi = { screen = screen }
+local capi = { screen = screen,
+               client = client,
+               mouse = mouse }
 
 local widgets = require("actionless.widgets")
+local helpers = require("actionless.helpers")
 local bars = require("actionless.bars")
 local menu_addon = require("actionless.menu_addon")
 
@@ -35,9 +38,13 @@ local globalkeys = awful.util.table.join(
 		function() run_once("xscreensaver-command -lock") end),
 
 	awful.key({ modkey,				}, ",",
-		awful.tag.viewprev),
+                function()
+                  awful.tag.viewprev(helpers.get_current_screen())
+                end),
 	awful.key({ modkey,				}, ".",
-		awful.tag.viewnext),
+                function()
+                  awful.tag.viewnext(helpers.get_current_screen())
+                end),
 	awful.key({ modkey,				}, "Escape",
 		awful.tag.history.restore),
 
