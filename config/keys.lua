@@ -35,7 +35,7 @@ local globalkeys = awful.util.table.join(
 	awful.key({ modkey,	"Control"	}, "t",
 		function() systray_toggle.toggle() end),
 	awful.key({ modkey,	"Control"	}, "s",
-		function() run_once("xscreensaver-command -lock") end),
+		function() helpers.run_once("xscreensaver-command -lock") end),
 
 	awful.key({ modkey,				}, ",",
                 function()
@@ -224,9 +224,9 @@ local globalkeys = awful.util.table.join(
 		end),
 
 	awful.key({ altkey,				}, "space",
-		function () awful.layout.inc(layouts, 1) end),
+		function () awful.layout.inc(status.layouts, 1) end),
 	awful.key({ altkey, "Shift"		}, "space",
-		function () awful.layout.inc(layouts, -1) end),
+		function () awful.layout.inc(status.layouts, -1) end),
 
 
 	-- Prompt

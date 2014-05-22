@@ -9,7 +9,7 @@ local layouts = {}
 
 function layouts.init(status)
 -- Table of layouts to cover with awful.layout.inc, order matters.
-my_layouts = {
+status.layouts = {
   awful.layout.suit.tile,
   awful.layout.suit.tile.bottom,
   awful.layout.suit.floating,
@@ -17,7 +17,7 @@ my_layouts = {
   awful.layout.suit.fair.horizontal,
   awful.layout.suit.spiral
 }
-awful.layout.layouts = my_layouts
+awful.layout.layouts = status.layouts
 -- }}}
 
 -- {{{ Wallpaper
