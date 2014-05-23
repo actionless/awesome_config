@@ -117,6 +117,7 @@ function helpers.find_in_lines(lines, regex)
 end
 
 function helpers.find_value_in_lines(lines, regex, match_key)
+  if lines == nil then return nil end
   local key, value = nil, nil
   for _, line in ipairs(lines) do
     key, value = line:match(regex)
@@ -175,6 +176,7 @@ end
 
 function helpers.find_value_in_file(file_name, regex, match_key)
   fp = io.open(file_name)
+  if fp == nil then return nil end
   content = helpers.find_value_in_fo(
     fp, regex, match_key)
   fp:close()

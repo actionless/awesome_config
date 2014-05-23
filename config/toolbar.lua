@@ -24,7 +24,7 @@ volumewidget = widgets.alsa({
 -- MUSIC
 musicwidget = widgets.music.widget({
 	backend = 'mpd',
-	music_dir = '/media/m/music/',
+	music_dir = '/media/terik/jessie/music/',
 })
 
 -- MEM
