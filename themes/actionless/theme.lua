@@ -15,6 +15,7 @@ theme.theme		= "#ad7fa8"
 theme.error		= "#f92672"
 
 theme.border					= "#000000"
+--theme.sel_border				= "#d33862"
 theme.sel_border				= "#d33862"
 theme.titlebar					= "#3c3c3c"
 theme.titlebar_focus			= "#66436C"
@@ -40,12 +41,12 @@ theme.bg_urgent					= theme.error
 
 theme.screen_margin				= 0
 
-theme.border_width				= "3"
+theme.border_width				= "12"
 theme.border_normal				= theme.border
 theme.border_focus				= theme.sel_border
 theme.border_marked				= theme.error
 
-theme.panel_opacity				= 1.0
+theme.panel_opacity				= 0.9
 
 theme.taglist_font				= theme.font
 theme.taglist_fg_focus			= theme.shiny
