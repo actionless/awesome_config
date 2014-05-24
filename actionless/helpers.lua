@@ -1,12 +1,10 @@
-
 --[[
-                                                  
      Licensed under GNU General Public License v2 
       * (c) 2013-2014  Yauheni Kirylau
       * (c) 2013,      Luke Bonham                
       * (c) 2010-2012, Peter Hofmann              
-                                                  
 --]]
+
 local debug  = require("debug")
 local awful = require("awful")
 local capi   = { timer = timer,
@@ -163,7 +161,7 @@ function helpers.find_value_in_lines(lines, regex, match_key)
   end
 end
 
-function helpers.find_values_in_lines(lines, regex, match_keys)
+function helpers.find_values_in_lines(lines, regex, match_keys, post_func)
   local key, value = nil, nil
   local result_values = {}
   local match_keys_length = helpers.getn(match_keys)
@@ -174,6 +172,7 @@ function helpers.find_values_in_lines(lines, regex, match_keys)
     key, value = line:match(regex)
     for result_key, match_key in pairs(match_keys) do
       if key == match_key then
+        if post_func then value = post_func(value) end
         result_values[result_key] = value
         match_keys[key] = nil
         match_keys_length = match_keys_length - 1
@@ -201,10 +200,10 @@ function helpers.find_value_in_fo(f, regex, match_key)
     regex, match_key)
 end
 
-function helpers.find_values_in_fo(f, regex, match_keys)
+function helpers.find_values_in_fo(f, regex, match_keys, post_func)
   return helpers.find_values_in_lines(
     helpers.flines_to_lines(f),
-    regex, match_keys)
+    regex, match_keys, post_func)
 end
 ----------------------------------------
 
@@ -220,13 +219,15 @@ function helpers.find_value_in_file(file_name, regex, match_key)
     helpers.find_value_in_fo, regex, match_key)
 end
 
-function helpers.find_values_in_file(file_name, regex, match_keys)
+function helpers.find_values_in_file(file_name, regex, match_keys, post_func)
   return helpers.process_filename(
     file_name,
-    helpers.find_values_in_fo, regex, match_keys)
+    helpers.find_values_in_fo, regex, match_keys, post_func)
 end
 
+--=============================================================================
 -- }}}
+
 function helpers.run_once(cmd)
   findme = cmd
   firstspace = cmd:find(" ")

@@ -65,14 +65,15 @@ local function worker(args)
         buf = "Buffers",
         cache = "Cached",
         swap = "SwapTotal",
-        swapf = "SwapFree" }
-    )
-    helpers.map_table_values(
-      mem.now, function(v) return math.floor(v / 1024) end)
+        swapf = "SwapFree" },
+      function(v) return math.floor(v / 1024) end)
     mem.now.used = mem.now.total - (mem.now.free + mem.now.buf + mem.now.cache)
     mem.now.swapused = mem.now.swap - mem.now.swapf
 
-    mem.widget:set_text("" .. string.format("%-6s", mem.now.used .. "MB "))
+    mem.widget:set_text(
+      string.format(
+        "%-6s", mem.now.used .. "MB"
+    ))
   end
 
   newtimer("mem", update_interval, update)
