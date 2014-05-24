@@ -73,20 +73,6 @@ function helpers.only_digits(str)
   return tonumber(str:match("%d+"))
 end
 
--- {{{ Read the ... of a file or return nil.
-
-
-function helpers.flines_to_lines(f)
-  if not f then return nil end
-  local lines = {}
-  local counter = 1
-  for line in f:lines() do 
-    lines[counter] = line
-    counter = counter + 1
-  end
-  return lines
-end
-
 function helpers.imerge(t, set)
     for _, v in ipairs(set) do
         table.insert(t, v)
@@ -106,6 +92,20 @@ function helpers.merge(t, set)
         t[k] = v
     end
 end
+-- {{{ Read the ... of a file or return nil.
+
+
+function helpers.flines_to_lines(f)
+  if not f then return nil end
+  local lines = {}
+  local counter = 1
+  for line in f:lines() do 
+    lines[counter] = line
+    counter = counter + 1
+  end
+  return lines
+end
+
 ----------------------------------------------
 
 function helpers.find_in_lines(lines, regex)
