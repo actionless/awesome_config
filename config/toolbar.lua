@@ -32,7 +32,7 @@ batwidget = widgets.bat({
 
 -- CPU
 cpuwidget = widgets.cpu({
-  update_interval = 3,
+  update_interval = 5,
   list_length = 20,
 })
 
@@ -44,8 +44,9 @@ memwidget = widgets.mem({
 
 -- MUSIC
 musicwidget = widgets.music.widget({
-	backend = 'mpd',
-	music_dir = '/media/terik/jessie/music/',
+  update_interval = 5,
+  backend = 'mpd',
+  music_dir = '/media/terik/jessie/music/',
 })
 
 -- NetCtl

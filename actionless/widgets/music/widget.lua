@@ -14,7 +14,7 @@ local helpers		= require("actionless.helpers")
 local escape_f		= helpers.escape
 local common_widget	= require("actionless.widgets.common").widget
 local markup		= require("actionless.markup")
-local async	        = require("actionless.async")
+local async		= require("actionless.async")
 
 local backends		= require("actionless.widgets.music.backends")
 
@@ -27,14 +27,14 @@ player.cover = "/tmp/playercover.png"
 player.widget = common_widget()
 
 local function worker(args)
-  local args          = args or {}
-  local timeout       = args.timeout or 2
-  local popup_timeout = args.timeout or 5
-  local default_art   = args.default_art or ""
-  local backend_name  = args.backend or "mpd"
-  local cover_size    = args.cover_size or 100
-  local font	      = args.font or beautiful.tasklist_font
-                        or beautiful.font
+  local args            = args or {}
+  local update_interval = args.update_interval or 2
+  local timeout         = args.timeout or 5
+  local default_art     = args.default_art or ""
+  local backend_name    = args.backend or "mpd"
+  local cover_size      = args.cover_size or 100
+  local font            = args.font or beautiful.tasklist_font
+                          or beautiful.font
 
   local parse_status_callback = function(player_status)
     player.parse_status(player_status) end
@@ -78,7 +78,7 @@ local function worker(args)
         player.player_status.date,
         player.player_status.artist
       ),
-      timeout = popup_timeout
+      timeout = timeout
     })
   end
 -------------------------------------------------------------------------------
@@ -228,7 +228,7 @@ function player.resize_cover()
     function(f) player.show_notification() end)
 end
 -------------------------------------------------------------------------------
-  helpers.newtimer("player", timeout, player.update)
+  helpers.newtimer("player", update_interval, player.update)
   return setmetatable(player, { __index = player.widget })
 end
 
