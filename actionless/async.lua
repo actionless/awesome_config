@@ -31,7 +31,7 @@ end
 
 function async.deliver_timer(id)
   async.request_table[id].callback()
-  table.remove(async.request_table, id)
+  async.request_table[id] = nil
 end
 
 -- Sends an asynchronous request for an output of the shell command.
