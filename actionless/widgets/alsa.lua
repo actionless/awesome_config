@@ -36,7 +36,7 @@ alsa.volume = {
 local function worker(args)
   local args = args or {}
   alsa.step = args.step or 2
-  alsa.timeout  = args.timeout or 5
+  alsa.update_interval  = args.update_interval or 5
   alsa.channel  = args.channel or "Master"
   alsa.mic_channel = args.mic_channel or "Capture"
   alsa.channels_toggle = args.channels_toggle or {channel, }
@@ -146,7 +146,7 @@ local function worker(args)
     alsa.update_indicator()
   end
 
-  helpers.newtimer("alsa", alsa.timeout, alsa.update)
+  helpers.newtimer("alsa", alsa.update_interval, alsa.update)
   return setmetatable(alsa, { __index = alsa.widget })
 end
 

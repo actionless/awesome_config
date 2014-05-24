@@ -14,14 +14,15 @@ local toolbar = {}
 
 function toolbar.init(status)
 
-close_button = widgets.manage_client({
-	client = client,
-})
+
+-- CLOSE button
+close_button = widgets.manage_client()
 
 -- ALSA volume
 volumewidget = widgets.alsa({
-	channel = 'Master',
-	channels_toggle = {'Master', 'Speaker', 'Headphone'},
+  update_interval = 5,
+  channel = 'Master',
+  channels_toggle = {'Master', 'Speaker', 'Headphone'},
 })
 
 -- MUSIC

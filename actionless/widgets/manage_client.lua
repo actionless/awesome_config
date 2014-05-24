@@ -5,11 +5,11 @@
 
 local awful		= require("awful")
 local naughty	= require("naughty")
-local client	= require("client")
 local beautiful = require("beautiful")
 local io		= { popen = io.popen }
 local string    = { format = string.format }
 local setmetatable = setmetatable
+local capi = { client = client }
 
 local common	= require("actionless.widgets.common")
 local helpers	= require("actionless.helpers")
@@ -34,7 +34,7 @@ local function worker(args)
 		--awful.button({ }, 5, function () alsa.down() end),
 		awful.button({ }, 1, function () 
 			naughty.notify({text='DEBUG'})
-			client.focus:kill()  end)
+			capi.client.focus:kill()  end)
 	))
 
     return setmetatable(manage_client, { __index = manage_client.widget })
