@@ -13,7 +13,8 @@ local capi   = { timer = timer,
                  client = client,
                  mouse = mouse }
 local io     = { open = io.open,
-                 lines = io.lines }
+                 lines = io.lines,
+                 popen = io.popen }
 local rawget = rawget
 local beautiful = require("beautiful")
 
@@ -92,6 +93,12 @@ function helpers.merge(t, set)
         t[k] = v
     end
 end
+
+function helpers.map_table_values(t, func)
+  for k, v in pairs(t) do
+    t[k] = func(v)
+  end
+end
 -- {{{ Read the ... of a file or return nil.
 
 
@@ -106,6 +113,33 @@ function helpers.flines_to_lines(f)
   return lines
 end
 
+function helpers.process_filename(file_name, func, ...)
+  local fp = io.open(file_name)
+  if fp == nil then return nil end
+  local result = func(fp, ...)
+  fp:close()
+  return result
+end
+
+function helpers.process_command(cmd, func)
+  local fp = io.popen(cmd)
+  if fp == nil then return nil end
+  local result = func(fp)
+  fp:close()
+  return result
+end
+
+function helpers.filename_to_lines(file_name)
+  return helpers.process_filename(file_name, helpers.flines_to_lines)
+end
+
+function helpers.command_to_lines(cmd)
+  return helpers.process_command(cmd, helpers.flines_to_lines)
+end
+
+function helpers.command_to_string(cmd)
+  return table.concat(helpers.command_to_lines(cmd), '\n')
+end
 ----------------------------------------------
 
 function helpers.find_in_lines(lines, regex)
@@ -167,22 +201,29 @@ function helpers.find_value_in_fo(f, regex, match_key)
     regex, match_key)
 end
 
+function helpers.find_values_in_fo(f, regex, match_keys)
+  return helpers.find_values_in_lines(
+    helpers.flines_to_lines(f),
+    regex, match_keys)
+end
 ----------------------------------------
 
-function helpers.first_line_in_file(f)
-  fp = io.open(f)
-  local content = helpers.first_line_in_fo(fp)
-  fp:close()
-  return content
+function helpers.first_line_in_file(file_name)
+  return helpers.process_filename(
+    file_name,
+    helpers.first_line_in_fo)
 end
 
 function helpers.find_value_in_file(file_name, regex, match_key)
-  fp = io.open(file_name)
-  if fp == nil then return nil end
-  content = helpers.find_value_in_fo(
-    fp, regex, match_key)
-  fp:close()
-  return content
+  return helpers.process_filename(
+    file_name,
+    helpers.find_value_in_fo, regex, match_key)
+end
+
+function helpers.find_values_in_file(file_name, regex, match_keys)
+  return helpers.process_filename(
+    file_name,
+    helpers.find_values_in_fo, regex, match_keys)
 end
 
 -- }}}

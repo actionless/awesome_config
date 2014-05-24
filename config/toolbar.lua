@@ -36,21 +36,17 @@ cpuwidget = widgets.cpu({
   list_length = 20,
 })
 
+-- MEM
+memwidget = widgets.mem({
+  update_interval = 10,
+  list_length = 20,
+})
+
 -- MUSIC
 musicwidget = widgets.music.widget({
 	backend = 'mpd',
 	music_dir = '/media/terik/jessie/music/',
 })
-
--- MEM
-memwidget = widgets.mem({
-	list_length = 20,
-})
-memicon = wibox.widget.imagebox(beautiful.widget_mem)
-memicon:connect_signal(
-	"mouse::enter", function () memwidget.show_notification() end)
-memicon:connect_signal(
-	"mouse::leave", function () memwidget.hide_notification() end)
 
 -- NetCtl
 netctlwidget = widgets.netctl({
@@ -180,7 +176,6 @@ for s = 1, screen.count() do
 	right_layout:add(volumewidget)
 	if s == 1 then right_layout:add(systray_toggle()) end
 	right_layout:add(separator)
-	right_layout:add(memicon)
 	right_layout:add(memwidget)
 	right_layout:add(separator)
 	right_layout:add(cpuwidget)
