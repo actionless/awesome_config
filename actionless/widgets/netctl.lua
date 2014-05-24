@@ -27,7 +27,7 @@ local netctl = {
 
 local function worker(args)
   local args = args or {}
-  local interval = args.interval or 5
+  local update_interval = args.update_interval or 5
   local font = args.font or beautiful.tasklist_font or beautiful.font
   netctl.timeout = args.timeout or 0
   netctl.font = args.font or font
@@ -92,10 +92,10 @@ local function worker(args)
   function netctl.netctl_update()
     async.execute(
       "systemctl list-unit-files 'netctl@*'",
-      function(f)
+      function(lines)
         netctl.update_widget(
-          helpers.find_in_fo(
-            f, "netctl@(.*)%.service.*enabled"
+          helpers.find_in_lines(
+            lines, "netctl@(.*)%.service.*enabled"
           ) or 'nctl...')
       end)
   end
@@ -114,7 +114,7 @@ local function worker(args)
     end
   end
 
-  newtimer("netctl", interval, netctl.update)
+  newtimer("netctl", update_interval, netctl.update)
 
   return setmetatable(
     netctl,
