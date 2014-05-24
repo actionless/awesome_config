@@ -6,6 +6,7 @@
 -- wwidget.text = async.demand('wscript -Kiev', 5):read("*l") or "Error"
 
 local awful = require('awful')
+local helpers = require("actionless.helpers")
 
 async = {}
 async.request_table = {}
@@ -39,6 +40,34 @@ end
 -- @param callback Function to be called when the command finishes
 -- @return Request ID
 function async.execute(command, callback)
+  local id = next_id()
+  async.request_table[id] = {
+    callback = callback,
+    table = {},
+    counter = 1}
+  c = async.request_table[id].counter
+  awful.util.spawn_with_shell(string.format(
+    [[
+  echo async.pipe_multiline_done\(\"%q\", \""$(%s | %s)"\"\) | awesome-client;
+    ]],
+    id, command:gsub('"','\"'), "awk 1 ORS='\\\\n'"
+  )) --:-")]]))  that beardy smily helps my stupid syntax highlighter
+  return id
+end
+
+function async.pipe_multiline_done(id, lines)
+  if not async.request_table[id] then return end
+  async.request_table[id].callback(
+    -- @TODO: remove split; do split in parser
+    helpers.split_string(lines, '\n'))
+  async.request_table[id] = nil
+end
+
+-- Sends an asynchronous request for an output of the shell command.
+-- @param command Command to be executed and taken output from
+-- @param callback Function to be called when the command finishes
+-- @return Request ID
+function async.execute_iter(command, callback)
   local id = next_id()
   async.request_table[id] = {
     callback = callback,

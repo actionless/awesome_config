@@ -69,7 +69,15 @@ end
 -- }}}
 
 function helpers.only_digits(str)
+  if not str then return nil end
   return tonumber(str:match("%d+"))
+end
+
+function helpers.split_string(str, sep)
+        local sep, fields = sep or ":", {}
+        local pattern = string.format("([^%s]+)", sep)
+        str:gsub(pattern, function(c) fields[#fields+1] = c end)
+        return fields
 end
 
 function helpers.imerge(t, set)

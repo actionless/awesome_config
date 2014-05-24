@@ -38,7 +38,7 @@ local function worker(args)
 
   function bat.post_update(lines)
     bat.now = helpers.find_values_in_lines(
-      lines, "(.*):[ ]+(.*)",
+      lines, "[ ]+(.*):[ ]+(.*)",
       { percentage='percentage',
         state='state',
         on_low_battery='on-low-battery' }
