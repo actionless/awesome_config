@@ -9,7 +9,9 @@
 --]]
 local debug  = require("debug")
 local awful = require("awful")
-local capi   = { timer = timer }
+local capi   = { timer = timer,
+                 client = client,
+                 mouse = mouse }
 local io     = { open = io.open,
                  lines = io.lines }
 local rawget = rawget
@@ -184,11 +186,27 @@ function helpers.find_value_in_file(file_name, regex, match_key)
 end
 
 -- }}}
+function helpers.run_once(cmd)
+  findme = cmd
+  firstspace = cmd:find(" ")
+  if firstspace then
+	findme = cmd:sub(0, firstspace-1)
+  end
+  awful.util.spawn_with_shell("pgrep -u $USER -x " .. findme .. " > /dev/null || (" .. cmd .. ")")
+end
 
 local xml_entity_names = { ["'"] = "&apos;", ["\""] = "&quot;", ["<"] = "&lt;", [">"] = "&gt;", ["&"] = "&amp;" };
 function helpers.escape(text)
     --return text and text:gsub("['&<>\"]", xml_entity_names) or nil
     return text and text:gsub("[&<>\"]", xml_entity_names) or nil
+end
+
+function helpers.get_current_screen()
+  if capi.client.focus then
+    return capi.client.focus.screen
+  else
+    return capi.mouse.screen
+  end
 end
 
 return helpers

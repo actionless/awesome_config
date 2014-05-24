@@ -7,7 +7,7 @@ local settings = require("actionless.settings")
 
 local rules = {}
 
-function rules.init()
+function rules.init(status)
 -- {{{ Rules
 -- Rules to apply to new clients (through the "manage" signal).
 awful.rules.rules = {
@@ -17,17 +17,17 @@ awful.rules.rules = {
                    border_color = beautiful.border_normal,
                    focus = awful.client.focus.filter,
                    raise = true,
-                   keys = clientkeys,
-                   buttons = clientbuttons,
+                   keys = status.clientkeys,
+                   buttons = status.clientbuttons,
                    size_hints_honor = false},
   callback = awful.client.setslave },
 
   { rule = { class = "MPlayer" },
     properties = { floating=true } },
   { rule = { class = "Chromium" },
-    properties = { tag=tags[1][2], raise=false } },
+    properties = { tag=status.tags[1][2], raise=false } },
   { rule = { class = "Skype" },
-    properties = { tag=tags[1][4], raise=false } },
+    properties = { tag=status.tags[1][4], raise=false } },
 
 }
 -- }}}
