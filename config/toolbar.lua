@@ -1,8 +1,11 @@
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 local awful = require("awful")
-local widgets = require("actionless.widgets")
-local custom_tasklist = require("actionless.tasklist")
+local capi = { screen = screen }
+
+local actionless = require("actionless")
+local widgets = actionless.widgets
+local custom_tasklist = actionless.tasklist
 --local rpic = widgets.random_pic
 
 
@@ -84,9 +87,9 @@ mylayoutbox = {}
 mytaglist = {}
 mytaglist.buttons = awful.util.table.join(
 	awful.button({			}, 1, awful.tag.viewonly),
-	awful.button({ modkey	}, 1, awful.client.movetotag),
+	awful.button({ modkey		}, 1, awful.client.movetotag),
 	awful.button({			}, 3, awful.tag.viewtoggle),
-	awful.button({ modkey	}, 3, awful.client.toggletag),
+	awful.button({ modkey		}, 3, awful.client.toggletag),
 	awful.button({			}, 5, function(t)
 		awful.tag.viewnext(awful.tag.getscreen(t)) end),
 	awful.button({			}, 4, function(t)
@@ -112,11 +115,13 @@ mytasklist.buttons = awful.util.table.join(
 		end
 	end),
 	awful.button({ }, 3, function ()
-		if instance then
-			instance:hide()
-			instance = nil
+		if status.menu_ac_instance then
+			status.menu_ac_instance:hide()
+			status.menu_ac_instance = nil
 		else
-			instance = widgets.menu.clients({ width=450 })
+			status.menu_ac_instance = awful.menu.clients({
+				theme = {width=capi.screen[mouse.screen].workarea.width},
+				coords = {x=0, y=18}})
 		end
 	end),
 	awful.button({ }, 4, function ()

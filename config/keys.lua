@@ -192,7 +192,7 @@ local globalkeys = awful.util.table.join(
 		function () mymainmenu:show() end),
 	awful.key({ modkey,		   }, "i",
 		function ()
-			instance = menu_addon.clients_on_tag({
+			menu_addon.clients_on_tag({
 				theme = {width=capi.screen[mouse.screen].workarea.width},
 				coords = {x=0, y=18}})
 		end),

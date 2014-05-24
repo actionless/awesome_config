@@ -1,6 +1,5 @@
 local actionless = {
   widgets = require("actionless.widgets"),
-  layouts = require("actionless.layouts"),
   -- awesome addons
   menu_addon = require("actionless.menu_addon"),
   -- awesome forks
