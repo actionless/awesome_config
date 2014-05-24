@@ -25,6 +25,11 @@ volumewidget = widgets.alsa({
   channels_toggle = {'Master', 'Speaker', 'Headphone'},
 })
 
+-- Battery
+batwidget = widgets.bat({
+  update_interval = 30,
+})
+
 -- MUSIC
 musicwidget = widgets.music.widget({
 	backend = 'mpd',
@@ -72,9 +77,6 @@ mytextclock = awful.widget.textclock(" %H:%M")
 
 -- calendar
 widgets.calendar:attach(mytextclock)
-
--- Battery
-batwidget = widgets.bat({})
 
 -- Separators
 separator = wibox.widget.textbox(' ')

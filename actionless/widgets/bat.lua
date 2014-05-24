@@ -27,7 +27,7 @@ bat.now = {
 
 local function worker(args)
   local args = args or {}
-  local timeout = args.timeout or 30
+  local update_interval = args.update_interval or 30
   local device = args.device or "battery_BAT0"
 
   function bat.update()
@@ -87,7 +87,7 @@ local function worker(args)
     --            text = "shutdown imminent",
     --            title = "battery nearly exhausted",
     --            position = "top_right",
-    --            timeout = 15,
+    --            update_interval = 15,
     --            fg="#000000",
     --            bg="#ffffff",
     --            ontop = true,
@@ -96,7 +96,7 @@ local function worker(args)
     --end
   end
 
-  helpers.newtimer("bat_widget_" .. device, timeout, bat.update)
+  helpers.newtimer("bat_widget_" .. device, update_interval, bat.update)
 
   return bat.widget
 end
