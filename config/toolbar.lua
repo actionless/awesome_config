@@ -30,6 +30,12 @@ batwidget = widgets.bat({
   update_interval = 30,
 })
 
+-- CPU
+cpuwidget = widgets.cpu({
+  update_interval = 3,
+  list_length = 20,
+})
+
 -- MUSIC
 musicwidget = widgets.music.widget({
 	backend = 'mpd',
@@ -52,16 +58,6 @@ netctlwidget = widgets.netctl({
 	wireless_if = 'wlp12s0',
 	wired_if = 'enp0s25'
 })
-
--- CPU
-cpuwidget = widgets.cpu({
-	list_length = 20,
-})
-cpuicon = wibox.widget.imagebox(beautiful.widget_cpu)
-cpuicon:connect_signal(
-	"mouse::enter", function () cpuwidget.show_notification() end)
-cpuicon:connect_signal(
-	"mouse::leave", function () cpuwidget.hide_notification() end)
 
 -- Coretemp
 tempicon = wibox.widget.imagebox(beautiful.widget_temp)
@@ -187,7 +183,6 @@ for s = 1, screen.count() do
 	right_layout:add(memicon)
 	right_layout:add(memwidget)
 	right_layout:add(separator)
-	right_layout:add(cpuicon)
 	right_layout:add(cpuwidget)
 	right_layout:add(tempicon)
 	right_layout:add(tempwidget)

@@ -98,7 +98,7 @@ theme.menu_submenu_icon		= icons_dir .. "submenu.png"
 theme.taglist_squares_sel	= icons_dir .. "square_sel.png"
 theme.taglist_squares_unsel	= icons_dir .. "square_unsel.png"
 
-theme.arrl			= layout_icons_dir .. "arrl.png"
+theme.arrl			= icons_dir .. "arrl.png"
 
 theme.widget_ac			= icons_dir .. "ac.png"
 theme.widget_ac_charging	= icons_dir .. "ac_charging.png"

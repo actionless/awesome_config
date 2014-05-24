@@ -7,8 +7,8 @@
       * (c) 2010-2012, Peter Hofmann              
                                                   
 --]]
-local wibox        = require("wibox")
 local naughty      = require("naughty")
+local beautiful    = require("beautiful")
 local math         = { ceil   = math.ceil }
 local string       = { format = string.format,
                        gmatch = string.gmatch }
@@ -21,51 +21,53 @@ local first_line_in_file = helpers.first_line_in_file
 local newtimer = helpers.newtimer
 local font = helpers.font
 local mono_preset = helpers.mono_preset
+local common_widget = require("actionless.widgets.common").widget
 
 
 -- CPU usage
 -- widgets.cpu
 local cpu = {
-	last_total = 0,
-	last_active = 0
+  last_total = 0,
+  last_active = 0
 }
-cpu.widget = wibox.widget.textbox('')
+cpu.widget = common_widget()
+cpu.widget:set_image(beautiful.widget_cpu)
 cpu.widget:connect_signal("mouse::enter", function () cpu.show_notification() end)
 cpu.widget:connect_signal("mouse::leave", function () cpu.hide_notification() end)
 
 local function worker(args)
-	local args     = args or {}
-	local interval  = args.interval or 5
-	local settings = args.settings or function()
-		widget:set_text("" .. string.format("%-3s", cpu_now.usage .. "%").. " ")
-	end
-	cpu.font = args.font or font
-	cpu.timeout = args.timeout or 0
+  local args     = args or {}
+  local update_interval  = args.update_interval or 5
+  local settings = args.settings or function()
+    widget:set_text("" .. string.format("%-3s", cpu_now.usage .. "%").. " ")
+  end
+  cpu.font = args.font or font
+  cpu.timeout = args.timeout or 0
 
-	cpu.list_len = args.list_length or 10
-	cpu.command = args.command or "COLUMNS=512 top -o \\%CPU -b -n 1 | head -n " .. cpu.list_len +6 .. "| tail -n " .. cpu.list_len  .. 
-	                              ' | awk ' .. '\'{printf "%-5s %-4s %s\\n", $1, $9, $12}\''
+  cpu.list_len = args.list_length or 10
+  cpu.command = args.command or "COLUMNS=512 top -o \\%CPU -b -n 1 | head -n " .. cpu.list_len +6 .. "| tail -n " .. cpu.list_len  .. 
+                                ' | awk ' .. '\'{printf "%-5s %-4s %s\\n", $1, $9, $12}\''
 
-	function cpu.hide_notification()
-		if cpu.id ~= nil then
-			naughty.destroy(cpu.id)
-			cpu.id = nil
-		end
-	end
+  function cpu.hide_notification()
+    if cpu.id ~= nil then
+      naughty.destroy(cpu.id)
+      cpu.id = nil
+    end
+  end
 
-	function cpu.show_notification()
-		cpu.hide_notification()
-		local f = io.popen(cpu.command)
-		local output = ''
-		for line in f:lines() do
-			output = output .. line .. '\n'
-		end
-		cpu.id = naughty.notify({
-			text = output,
-			timeout = cpu.timeout,
-			preset = mono_preset
-		})
-	end
+  function cpu.show_notification()
+    cpu.hide_notification()
+    local f = io.popen(cpu.command)
+    local output = ''
+    for line in f:lines() do
+      output = output .. line .. '\n'
+    end
+    cpu.id = naughty.notify({
+      text = output,
+      timeout = cpu.timeout,
+      preset = mono_preset
+    })
+  end
 
     function cpu.update()
         -- Read the amount of time the CPUs have spent performing
@@ -103,7 +105,7 @@ local function worker(args)
         cpu.last_total = total
     end
 
-    newtimer("cpu", interval, cpu.update)
+    newtimer("cpu", update_interval, cpu.update)
 
     return setmetatable(cpu, { __index = cpu.widget })
 end
