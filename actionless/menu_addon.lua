@@ -20,8 +20,8 @@ function menu_addon.clients_on_tag(args, item_args)
 
   local selected_tags = tags.selectedlist(cls.screen)
   for _, t in ipairs(selected_tags) do
-    local clients = t.clients(t)
-    for _, c in ipairs(clients) do
+    local clients_on_tag = t.clients(t)
+    for _, c in ipairs(clients_on_tag) do
       table.insert(cls_t, {
         escape_f(c.name) or "",
         function ()
@@ -34,12 +34,12 @@ function menu_addon.clients_on_tag(args, item_args)
         end,
         c.icon
       })
-    end
-    if item_args then
-      if type(item_args) == "function" then
-        table_merge(cls_t[#cls_t], item_args(c))
-      else
-        table_merge(cls_t[#cls_t], item_args)
+      if item_args then
+        if type(item_args) == "function" then
+          table_merge(cls_t[#cls_t], item_args(c))
+        else
+          table_merge(cls_t[#cls_t], item_args)
+        end
       end
     end
   end

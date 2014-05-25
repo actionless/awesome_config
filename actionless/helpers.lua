@@ -13,7 +13,6 @@ local capi   = { timer = timer,
 local io     = { open = io.open,
                  lines = io.lines,
                  popen = io.popen }
-local rawget = rawget
 local beautiful = require("beautiful")
 
 
@@ -112,8 +111,8 @@ end
 -- }}}
 
 function helpers.run_once(cmd)
-  findme = cmd
-  firstspace = cmd:find(" ")
+  local findme = cmd
+  local firstspace = cmd:find(" ")
   if firstspace then
 	findme = cmd:sub(0, firstspace-1)
   end

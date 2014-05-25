@@ -29,7 +29,7 @@ local function worker(args)
   end
 
   function temp.post_update(str)
-    coretemp_now = parse.find_in_multiline_string(
+    local coretemp_now = parse.find_in_multiline_string(
       str, sensor .. ":[ ]+(.*)°C.*[(]")
     if tonumber(coretemp_now) >= warning then
       temp.widget:set_bg(beautiful.error)

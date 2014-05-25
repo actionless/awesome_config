@@ -1,12 +1,13 @@
 local awful = require("awful")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
+local client = client
 
 local widgets = require("actionless.widgets")
 local settings = require("actionless.settings")
 
 
-bars = {}
+local bars = {}
 
 
 function bars.make_border(c)

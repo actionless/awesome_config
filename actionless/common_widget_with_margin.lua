@@ -6,11 +6,6 @@
 
 -- Grab environment we need
 local math = math
-local type = type
-local ipairs = ipairs
-local pairs = pairs
-local pcall = pcall
-local setmetatable = setmetatable
 local capi = { button = button }
 local util = require("awful.util")
 local wibox = require("wibox")
@@ -86,7 +81,7 @@ function common.list_update(w, buttons, label, data, objects, right_margin)
         end
         bgb:set_bgimage(bg_image)
         ib:set_image(icon)
-        delimiter = wibox.layout.margin(bgb, right_margin, 0)
+        local delimiter = wibox.layout.margin(bgb, right_margin, 0)
         w:add(delimiter)
    end
 end

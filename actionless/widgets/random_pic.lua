@@ -16,8 +16,7 @@ local newtimer     = helpers.newtimer
 
 
 local function scandir(directory)
-    local i, t, popen = 0, {}, io.popen
-	result = {}
+    local i, t, popen, result = 0, {}, io.popen, {}
     for filename in popen('ls -a "'..directory..'"'):lines() do
         i = i + 1
 		if filename ~= '.' and filename ~= '..' then
@@ -36,23 +35,23 @@ local function worker(args)
 	--local interval  = args.interval or 5
 	local interval  = args.interval or math.random(5,15)
 
-	local dir = args.dir or beautiful.icons_dir .. 'random_pics/'
-	local image_list = scandir(dir)
-	rp.widget:set_image(random_image())
+	rp.dir = args.dir or beautiful.icons_dir .. 'random_pics/'
+	rp.image_list = scandir(rp.dir)
 
-	function random_image()
-		local image_name = image_list[ math.random(1, #image_list) ]
-		return dir .. image_name
+	function rp.random_image()
+		local image_name = rp.image_list[ math.random(1, #rp.image_list) ]
+		return rp.dir .. image_name
 	end
 	
 	function rp.update()
-		rp.widget:set_image(random_image())
+		rp.widget:set_image(rp.random_image())
 	end
 	
+	rp.widget:set_image(rp.random_image())
+
 	-- random timer id is for possibility to
 	-- run different instance of the widget simultaneously
 	newtimer("random_pic_" .. math.random(1,65535), interval, rp.update)
-
 	return rp.widget
 end
 

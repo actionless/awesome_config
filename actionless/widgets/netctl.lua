@@ -16,6 +16,7 @@ local mono_preset	= helpers.mono_preset
 local common_widget	= require("actionless.widgets.common").widget
 local markup		= require("actionless.markup")
 local parse		= require("actionless.parse")
+local async		= require("actionless.async")
 
 
 local netctl = {
@@ -47,7 +48,7 @@ local function worker(args)
   function netctl.show_notification()
     netctl.hide_notification()
     netctl.id = naughty.notify({
-      text = output,
+      text = 'not implemented yet',
       timeout = netctl.timeout,
       preset = mono_preset
     })

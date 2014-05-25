@@ -84,8 +84,8 @@ function systray_toggle.show()
 
     -- Set position and size
     systray_toggle.wibox.visible = true
-    systray_toggle.wibox:geometry({x = geometry.x or scrgeom.x,
-                             y = geometry.y or scrgeom.y,
+    systray_toggle.wibox:geometry({x = geometry.x or systray_toggle.scrgeom.x,
+                             y = geometry.y or systray_toggle.scrgeom.y,
                              height = height,
                              width = width})
 end
@@ -105,11 +105,11 @@ end
 local function worker(args)
     local args = args or {}
     local scr = args.screen or capi.mouse.screen or 1
-    local scrgeom = capi.screen[scr].workarea
+    systray_toggle.scrgeom = capi.screen[scr].workarea
     systray_toggle.geometry = {
         scr = scr,
         icon_size = 24,
-        x = scrgeom.width - 350 ,
+        x = systray_toggle.scrgeom.width - 350 ,
         y = 18,
         lmargin = 5,
         rmargin = 5,

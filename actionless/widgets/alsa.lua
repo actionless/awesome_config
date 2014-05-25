@@ -39,7 +39,7 @@ local function worker(args)
   alsa.update_interval  = args.update_interval or 5
   alsa.channel  = args.channel or "Master"
   alsa.mic_channel = args.mic_channel or "Capture"
-  alsa.channels_toggle = args.channels_toggle or {channel, }
+  alsa.channels_toggle = args.channels_toggle or {alsa.channel, }
 
   helpers.set_map("volume in progress", false)
 
@@ -122,6 +122,7 @@ local function worker(args)
   end
 
   function alsa.post_update(str)
+    local level = nil
     level, alsa.volume.status = str:match("([%d]+)%%.*%[([%l]*)")
     alsa.volume.level = tonumber(level) or nil
 
