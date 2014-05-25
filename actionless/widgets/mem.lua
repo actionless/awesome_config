@@ -5,18 +5,19 @@
       * (c) 2010-2012, Peter Hofmann              
 --]]
 
-local naughty   = require("naughty")
-local beautiful   = require("beautiful")
+local naughty      = require("naughty")
+local beautiful    = require("beautiful")
 
-local math      = { floor  = math.floor }
-local string    = { format = string.format }
+local math         = { floor  = math.floor }
+local string       = { format = string.format }
 local setmetatable = setmetatable
 
-local helpers = require("actionless.helpers")
-local common_widget = require("actionless.widgets.common").widget
-local newtimer  = helpers.newtimer
-local font      = helpers.font
-local mono_preset =helpers.mono_preset
+local helpers      = require("actionless.helpers")
+local parse        = require("actionless.parse")
+local common_widget= require("actionless.widgets.common").widget
+local newtimer     = helpers.newtimer
+local font         = helpers.font
+local mono_preset  = helpers.mono_preset
 
 -- Memory usage (ignoring caches)
 local mem = {
@@ -57,7 +58,7 @@ local function worker(args)
   end
 
   function update()
-    mem.now = helpers.find_values_in_file(
+    mem.now = parse.find_values_in_file(
       "/proc/meminfo",
       "([%a]+):[%s]+([%d]+).+",
       { total = "MemTotal",

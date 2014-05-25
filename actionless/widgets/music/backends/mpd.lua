@@ -8,7 +8,8 @@ local string		= { format	= string.format,
                             match	= string.match }
 
 local helpers		= require("actionless.helpers")
-local async	= require("actionless.async")
+local parse		= require("actionless.parse")
+local async		= require("actionless.async")
 
 local mpd = {
   player_status = {},
@@ -50,22 +51,22 @@ function mpd.update()
                     Album:%album%
                     Date:%date%"]],
   -- "function( -- <==workaround for syntax highlighter :)   @TODO
-  function(f) mpd.parse_metadata(f) end)
+  function(str) mpd.parse_metadata(str) end)
 end
 -------------------------------------------------------------------------------
-function mpd.parse_metadata(lines)
+function mpd.parse_metadata(str)
   mpd.player_status = {}
   local state = nil
 
-  if helpers.find_in_lines(lines, "%[playing%]") then
+  if str:match("%[playing%]") then
     state  = 'play'
-  elseif helpers.find_in_lines(lines, "%[paused%]") then
+  elseif str:match("%[paused%]") then
     state = 'pause'
   end
 
   if state then
-    mpd.player_status = helpers.find_values_in_lines(
-      lines, "([%w]+):(.*)$", {
+    mpd.player_status = parse.find_values_in_string(
+      str, "([%w]+):(.*)$", {
         file='file',
         artist='Artist',
         title='Title',

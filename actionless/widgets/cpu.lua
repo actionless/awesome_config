@@ -17,7 +17,7 @@ local setmetatable = setmetatable
 
 
 local helpers = require("actionless.helpers")
-local first_line_in_file = helpers.first_line_in_file
+local parse = require("actionless.parse")
 local newtimer = helpers.newtimer
 local font = helpers.font
 local mono_preset = helpers.mono_preset
@@ -73,7 +73,7 @@ local function worker(args)
     -- Read the amount of time the CPUs have spent performing
     -- different kinds of work. Read the first line of /proc/stat
     -- which is the sum of all CPUs.
-    local times = first_line_in_file("/proc/stat")
+    local times = parse.first_line_in_file("/proc/stat")
     local at = 1
     local idle = 0
     local total = 0

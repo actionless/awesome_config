@@ -6,7 +6,6 @@
 -- wwidget.text = async.demand('wscript -Kiev', 5):read("*l") or "Error"
 
 local awful = require('awful')
-local helpers = require("actionless.helpers")
 
 async = {}
 async.request_table = {}
@@ -51,15 +50,13 @@ function async.execute(command, callback)
   echo async.pipe_multiline_done\(\"%q\", \""$(%s | %s)"\"\) | awesome-client;
     ]],
     id, command:gsub('"','\"'), "awk 1 ORS='\\\\n'"
-  )) --:-")]]))  that beardy smily helps my stupid syntax highlighter
+  )) --:-")]]))  that beardy smiley is helping my stupid syntax highlighter
   return id
 end
 
-function async.pipe_multiline_done(id, lines)
+function async.pipe_multiline_done(id, str)
   if not async.request_table[id] then return end
-  async.request_table[id].callback(
-    -- @TODO: remove split; do split in parser
-    helpers.split_string(lines, '\n'))
+  async.request_table[id].callback(str)
   async.request_table[id] = nil
 end
 

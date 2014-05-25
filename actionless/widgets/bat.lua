@@ -13,6 +13,7 @@ local setmetatable = setmetatable
 
 local async		= require("actionless.async")
 local helpers 		= require("actionless.helpers")
+local parse 		= require("actionless.parse")
 local common_widget	= require("actionless.widgets.common").widget
 
 
@@ -33,12 +34,12 @@ local function worker(args)
   function bat.update()
     async.execute(
       'upower -i /org/freedesktop/UPower/devices/' .. device,
-      function(f) bat.post_update(f) end)
+      function(str) bat.post_update(str) end)
   end
 
-  function bat.post_update(lines)
-    bat.now = helpers.find_values_in_lines(
-      lines, "[ ]+(.*):[ ]+(.*)",
+  function bat.post_update(str)
+    bat.now = parse.find_values_in_string(
+      str, "[ ]+(.*):[ ]+(.*)",
       { percentage='percentage',
         state='state',
         on_low_battery='on-low-battery' }

@@ -11,10 +11,11 @@ local naughty		= require("naughty")
 local helpers		= require("actionless.helpers")
 local newtimer		= helpers.newtimer
 local font		= helpers.font
-local beautiful = require("beautiful")
+local beautiful		 = require("beautiful")
 local mono_preset	= helpers.mono_preset
 local common_widget	= require("actionless.widgets.common").widget
 local markup		= require("actionless.markup")
+local parse		= require("actionless.parse")
 
 
 local netctl = {
@@ -63,10 +64,9 @@ local function worker(args)
   end
 
   function netctl.update_bond()
-    netctl.interface = helpers.find_value_in_file(
+    netctl.interface = parse.find_in_file(
       "/proc/net/bonding/bond0",
-      "(.*): (.*)",
-      "Currently Active Slave"
+      "Currently Active Slave: (.*)"
     ) or 'bndng.err'
     if netctl.interface == netctl.wired_if then
       netctl.update_widget('ethernet')
@@ -82,20 +82,17 @@ local function worker(args)
   function netctl.netctl_auto_update()
     async.execute(
       'netctl-auto current',
-      function(lines)
-        netctl.update_widget(
-          lines[1]
-          or 'nctl-a...')
+      function(str)
+        netctl.update_widget(str or 'nctl-a...')
       end)
   end
 
   function netctl.netctl_update()
     async.execute(
       "systemctl list-unit-files 'netctl@*'",
-      function(lines)
+      function(str)
         netctl.update_widget(
-          helpers.find_in_lines(
-            lines, "netctl@(.*)%.service.*enabled"
+          str:match("netctl@(.*)%.service.*enabled"
           ) or 'nctl...')
       end)
   end

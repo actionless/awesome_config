@@ -32,14 +32,9 @@ local function worker(args)
 		async.execute("sensors ", function (f) temp.post_update(f) end)
 	end
 
-	function temp.post_update(lines)
-		for _, line in pairs(lines) do
-			k, v = string.match(line, "(.*):[ ]+(.*)°C.*[(]")
-			if k == sensor then
-				coretemp_now = v
-				break
-			end
-		end
+	function temp.post_update(str)
+                coretemp_now = parse.find_in_multiline_string(
+                  str, sensor .. ":[ ]+(.*)°C.*[(]")
 		if tonumber(coretemp_now) >= warning then
 			temp.widget:set_bg(beautiful.error)
 			temp.widget:set_fg(beautiful.fg)

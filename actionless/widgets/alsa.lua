@@ -118,13 +118,11 @@ local function worker(args)
   function alsa.update()
     async.execute(
       'amixer get ' .. alsa.channel,
-      function(f) alsa.post_update(f) end)
+      function(str) alsa.post_update(str) end)
   end
 
-  function alsa.post_update(lines)
-    level, alsa.volume.status = string.match(
-      table.concat(lines, '\n'),
-      "([%d]+)%%.*%[([%l]*)")
+  function alsa.post_update(str)
+    level, alsa.volume.status = str:match("([%d]+)%%.*%[([%l]*)")
     alsa.volume.level = tonumber(level) or nil
 
     if alsa.volume.level == nil

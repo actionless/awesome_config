@@ -3,10 +3,11 @@
    * (c) 2014, Yauheni Kirylau
 --]]
 
-local awful		= require("awful")
+local awful = require("awful")
 
-local async	= require("actionless.async")
-local helpers           = require("actionless.helpers")
+local async = require("actionless.async")
+local helpers = require("actionless.helpers")
+local parse = require("actionless.parse")
 
 
 local clementine = {}
@@ -35,14 +36,14 @@ end
 function clementine.update()
   async.execute(
     "qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 PlaybackStatus",
-    function(f) clementine.post_update(f) end)
+    function(str) clementine.post_update(str) end)
 end
 -------------------------------------------------------------------------------
-function clementine.post_update(lines)
+function clementine.post_update(str)
   local state = nil
-  if helpers.find_in_lines(lines, "Playing") then
+  if str:match("Playing") then
     state  = 'play'
-  elseif helpers.find_in_lines(lines, "Paused") then
+  elseif str:match("Paused") then
     state = 'pause'
   end
   clementine.player_status.state = state
@@ -50,15 +51,15 @@ function clementine.post_update(lines)
   then
     async.execute(
       "qdbus org.mpris.MediaPlayer2.clementine /Player GetMetadata",
-      function(f) clementine.parse_metadata(f) end)
+      function(str) clementine.parse_metadata(str) end)
   else
     clementine.parse_status_callback(clementine.player_status)
   end
 end
 -------------------------------------------------------------------------------
-function clementine.parse_metadata(lines)
-  local player_status = helpers.find_values_in_lines(
-    lines, "([%w]+): (.*)$", {
+function clementine.parse_metadata(str)
+  local player_status = parse.find_values_in_string(
+    str, "([%w]+): (.*)$", {
       file='location',
       artist='artist',
       title='title',
