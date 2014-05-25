@@ -1,52 +1,45 @@
 --[[
      Licensed under GNU General Public License v2
       * (c) 2013-2014, Yauheni Kirylau
-      * (c) 2013,      Luke Bonham
 --]]
 
-local wibox        = require("wibox")
 local beautiful    = require("beautiful")
-local io           = io
 local tonumber     = tonumber
 local setmetatable = setmetatable
 
-local async = require("actionless.async")
-local helpers = require("actionless.helpers")
-local newtimer = helpers.newtimer
+local async        = require("actionless.async")
+local helpers      = require("actionless.helpers")
+local common_widget= require("actionless.widgets.common").widget
 
 
 -- coretemp
 local temp = {}
+temp.widget = common_widget()
 
 local function worker(args)
-	local args     = args or {}
-	local update_interval  = args.update_interval or 5
-	local warning = args.warning or 75
-    local sensor   = args.sensor or "CPU Temperature"
+  local args = args or {}
+  local update_interval = args.update_interval or 5
+  local warning = args.warning or 75
+  local sensor = args.sensor or "CPU Temperature"
 
-	temp.widget_text = wibox.widget.textbox('')
-	temp.widget = wibox.widget.background()
-	temp.widget:set_widget(temp.widget_text)
+  function temp.update()
+    async.execute("sensors ", function (str) temp.post_update(str) end)
+  end
 
-	function temp.update()
-		async.execute("sensors ", function (f) temp.post_update(f) end)
-	end
+  function temp.post_update(str)
+    coretemp_now = parse.find_in_multiline_string(
+      str, sensor .. ":[ ]+(.*)°C.*[(]")
+    if tonumber(coretemp_now) >= warning then
+      temp.widget:set_bg(beautiful.error)
+    else
+      temp.widget:set_bg(beautiful.bg)
+    end
+    temp.widget:set_fg(beautiful.fg)
+    temp.widget:set_text(string.format("%2i", coretemp_now) .. '°C')
+  end
 
-	function temp.post_update(str)
-                coretemp_now = parse.find_in_multiline_string(
-                  str, sensor .. ":[ ]+(.*)°C.*[(]")
-		if tonumber(coretemp_now) >= warning then
-			temp.widget:set_bg(beautiful.error)
-			temp.widget:set_fg(beautiful.fg)
-		else
-			temp.widget:set_bg(beautiful.bg)
-			temp.widget:set_fg(beautiful.fg)
-		end
-		temp.widget_text:set_text(string.format("%2i", coretemp_now) .. '°C')
-	end
-
-	newtimer("coretemp", update_interval, temp.update)
-	return temp.widget
+  helpers.newtimer("coretemp", update_interval, temp.update)
+  return temp.widget
 end
 
 return setmetatable(temp, { __call = function(_, ...) return worker(...) end })
