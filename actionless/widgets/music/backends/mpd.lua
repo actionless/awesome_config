@@ -71,7 +71,7 @@ function mpd.parse_metadata(str)
         artist='Artist',
         title='Title',
         album='Album',
-        date='Dear'})
+        date='Date'})
   end
   mpd.player_status.state = state
 
