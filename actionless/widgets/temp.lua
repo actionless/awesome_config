@@ -9,6 +9,7 @@ local setmetatable = setmetatable
 
 local async        = require("actionless.async")
 local helpers      = require("actionless.helpers")
+local parse        = require("actionless.parse")
 local common_widget= require("actionless.widgets.common").widget
 
 
