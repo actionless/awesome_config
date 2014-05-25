@@ -49,7 +49,7 @@ local function worker(args)
 
   function mem.show_notification()
     mem.hide_notification()
-    local output = helpers.command_to_string(mem.command)
+    local output = parse.command_to_string(mem.command)
     mem.id = naughty.notify({
       text = output,
       timeout = mem.timeout,
@@ -57,7 +57,7 @@ local function worker(args)
     })
   end
 
-  function update()
+  function mem.update()
     mem.now = parse.find_values_in_file(
       "/proc/meminfo",
       "([%a]+):[%s]+([%d]+).+",
@@ -77,7 +77,7 @@ local function worker(args)
     ))
   end
 
-  newtimer("mem", update_interval, update)
+  newtimer("mem", update_interval, mem.update)
   return setmetatable(mem, { __index = mem.widget })
 end
 return setmetatable(mem, { __call = function(_, ...) return worker(...) end })

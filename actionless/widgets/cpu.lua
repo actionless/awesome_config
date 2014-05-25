@@ -57,11 +57,7 @@ local function worker(args)
 
   function cpu.show_notification()
     cpu.hide_notification()
-    local f = io.popen(cpu.command)
-    local output = ''
-    for line in f:lines() do
-      output = output .. line .. '\n'
-    end
+    local output = parse.command_to_string(cpu.command)
     cpu.id = naughty.notify({
       text = output,
       timeout = cpu.timeout,

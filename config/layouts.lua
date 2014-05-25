@@ -3,6 +3,8 @@ local gears = require("gears")
 local beautiful = require("beautiful")
 local capi = { screen = screen }
 
+local helpers = require("actionless.helpers")
+
 local layouts = {}
 
 
@@ -25,7 +27,7 @@ if beautiful.wallpaper then
     gears.wallpaper.tiled(beautiful.wallpaper, s)
   end
 else if beautiful.wallpaper_cmd then
-  run_once(beautiful.wallpaper_cmd)
+  helpers.run_once(beautiful.wallpaper_cmd)
 end
 end
 -- }}}

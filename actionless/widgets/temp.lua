@@ -16,6 +16,7 @@ local common_widget= require("actionless.widgets.common").widget
 -- coretemp
 local temp = {}
 temp.widget = common_widget()
+temp.widget:set_image(beautiful.widget_temp)
 
 local function worker(args)
   local args = args or {}

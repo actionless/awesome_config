@@ -10,7 +10,12 @@ local theme_dir = awful.util.getdir("config") .. "/themes/actionless/theme.lua"
 beautiful.init(theme_dir)
 
 local config = require("config")
-local status = {}
+local status = {
+  widgets = {},
+  menu = {},
+  modkey = "Mod4",
+  altkey = "Mod1",
+}
 config.notify.init(status)
 config.variables.init(status)
 config.autorun.init(status)

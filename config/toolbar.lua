@@ -1,7 +1,10 @@
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 local awful = require("awful")
-local capi = { screen = screen }
+
+local screen = screen
+local client = client
+local mouse = mouse
 
 local actionless = require("actionless")
 local widgets = actionless.widgets
@@ -13,44 +16,44 @@ local toolbar = {}
 
 
 function toolbar.init(status)
-
+local modkey = status.modkey
 
 -- CLOSE button
-close_button = widgets.manage_client()
+status.widgets.close_button = widgets.manage_client()
 
 -- ALSA volume
-volumewidget = widgets.alsa({
+status.widgets.volume = widgets.alsa({
   update_interval = 5,
   channel = 'Master',
   channels_toggle = {'Master', 'Speaker', 'Headphone'},
 })
 
 -- Battery
-batwidget = widgets.bat({
+local batwidget = widgets.bat({
   update_interval = 30,
 })
 
 -- CPU
-cpuwidget = widgets.cpu({
+local cpuwidget = widgets.cpu({
   update_interval = 5,
   list_length = 20,
 })
 
 -- MEM
-memwidget = widgets.mem({
+local memwidget = widgets.mem({
   update_interval = 10,
   list_length = 20,
 })
 
 -- MUSIC
-musicwidget = widgets.music.widget({
+status.widgets.music = widgets.music.widget({
   update_interval = 5,
   backend = 'mpd',
   music_dir = '/media/terik/jessie/music/',
 })
 
 -- NetCtl
-netctlwidget = widgets.netctl({
+local netctlwidget = widgets.netctl({
   update_interval = 5,
   preset = 'bond',
   wireless_if = 'wlp12s0',
@@ -58,31 +61,34 @@ netctlwidget = widgets.netctl({
 })
 
 -- Temperature sensor
-tempicon = wibox.widget.imagebox(beautiful.widget_temp)
-tempwidget = widgets.temp({
+local tempwidget = widgets.temp({
   update_interval = 10,
   sensor = "Core 0",
   warning = 75
 })
 
 -- Textclock
-clockicon = wibox.widget.imagebox(beautiful.widget_clock)
 -- mytextclock = awful.widget.textclock(" %a %d %b  %H:%M")
-mytextclock = awful.widget.textclock(" %H:%M")
-
+local mytextclock = awful.widget.textclock(" %H:%M")
 -- calendar
 widgets.calendar:attach(mytextclock)
 
+
+-- systray_toggle
+status.widgets.systray_toggle = widgets.systray_toggle({
+  screen = 1
+})
+
 -- Separators
-separator = wibox.widget.textbox(' ')
+local separator = wibox.widget.textbox(' ')
 --arrl = wibox.widget.imagebox()
 --arrl:set_image(beautiful.arrl)
 
 -- Create a wibox for each screen and add it
-mywibox = {}
-mypromptbox = {}
-mylayoutbox = {}
-mytaglist = {}
+local mywibox = {}
+status.widgets.promptbox = {}
+local mylayoutbox = {}
+local mytaglist = {}
 mytaglist.buttons = awful.util.table.join(
   awful.button({		}, 1, awful.tag.viewonly),
   awful.button({ modkey		}, 1, awful.client.movetotag),
@@ -93,8 +99,8 @@ mytaglist.buttons = awful.util.table.join(
   awful.button({		}, 4, function(t)
     awful.tag.viewprev(awful.tag.getscreen(t)) end)
 )
-mycurrenttask = {}
-mytasklist = {}
+local mycurrenttask = {}
+local mytasklist = {}
 mytasklist.buttons = awful.util.table.join(
   awful.button({ }, 1, function (c)
     if c == client.focus then
@@ -113,12 +119,12 @@ mytasklist.buttons = awful.util.table.join(
     end
   end),
   awful.button({ }, 3, function ()
-    if status.menu_ac_instance then
-      status.menu_ac_instance:hide()
-      status.menu_ac_instance = nil
+    if status.menu.instance then
+      status.menu.instance:hide()
+      status.menu.instance = nil
     else
-      status.menu_ac_instance = awful.menu.clients({
-        theme = {width=capi.screen[mouse.screen].workarea.width},
+      status.menu.instance = awful.menu.clients({
+        theme = {width=screen[mouse.screen].workarea.width},
         coords = {x=0, y=18}})
     end
   end),
@@ -130,13 +136,12 @@ mytasklist.buttons = awful.util.table.join(
     awful.client.focus.byidx(1)
     if client.focus then client.focus:raise() end
   end))
-  systray_toggle = widgets.systray_toggle
 
 for s = 1, screen.count() do
   local i = beautiful.screen_margin
   awful.screen.padding( screen[s], {top = i, bottom = i, left = i, right = i} )
   -- Create a promptbox for each screen
-  mypromptbox[s] = awful.widget.prompt()
+  status.widgets.promptbox[s] = awful.widget.prompt()
   -- Create an imagebox widget which will contains an icon indicating which layout we're using.
   -- We need one layoutbox per screen.
   mylayoutbox[s] = awful.widget.layoutbox(s)
@@ -164,8 +169,8 @@ for s = 1, screen.count() do
   local left_layout = wibox.layout.fixed.horizontal()
   left_layout:add(separator)
   left_layout:add(mytaglist[s])
-  left_layout:add(close_button)
-  left_layout:add(mypromptbox[s])
+  left_layout:add(status.widgets.close_button)
+  left_layout:add(status.widgets.promptbox[s])
   left_layout:add(separator)
 
   -- Widgets that are aligned to the right
@@ -174,18 +179,16 @@ for s = 1, screen.count() do
   right_layout:add(separator)
   right_layout:add(netctlwidget)
   right_layout:add(separator)
-  right_layout:add(musicwidget)
+  right_layout:add(status.widgets.music)
   right_layout:add(separator)
-  right_layout:add(volumewidget)
-  if s == 1 then right_layout:add(systray_toggle()) end
+  right_layout:add(status.widgets.volume)
+  if s == 1 then right_layout:add(status.widgets.systray_toggle) end
   right_layout:add(separator)
   right_layout:add(memwidget)
   right_layout:add(separator)
   right_layout:add(cpuwidget)
-  right_layout:add(tempicon)
   right_layout:add(tempwidget)
   right_layout:add(separator)
-  --right_layout:add(fsicon)
   --right_layout:add(fswidgetbg)
   --right_layout:add(arrl)
   right_layout:add(batwidget)

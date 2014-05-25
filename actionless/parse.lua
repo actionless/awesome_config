@@ -1,6 +1,5 @@
-helpers = require("actionless.helpers")
-
-parse = {}
+local helpers = require("actionless.helpers")
+local parse = {}
 
 function parse.string_to_lines(str)
   return helpers.split_string(str, '\n')

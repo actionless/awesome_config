@@ -104,7 +104,7 @@ end
 
 local function worker(args)
     local args = args or {}
-    local scr = args.scr or capi.mouse.screen or 1
+    local scr = args.screen or capi.mouse.screen or 1
     local scrgeom = capi.screen[scr].workarea
     systray_toggle.geometry = {
         scr = scr,

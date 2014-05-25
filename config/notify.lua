@@ -1,6 +1,8 @@
 local naughty = require("naughty")
 local beautiful = require("beautiful")
 
+local awesome = awesome
+
 local notify = {}
 
 function notify.init(status)

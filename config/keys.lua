@@ -2,9 +2,11 @@
 local awful = require("awful")
 local wibox = require("wibox")
 local menubar = require("menubar")
-local capi = { screen = screen,
-               client = client,
-               mouse = mouse }
+local screen = screen
+local client = client
+local mouse = mouse
+local root = root
+local awesome = awesome
 
 local widgets = require("actionless.widgets")
 local helpers = require("actionless.helpers")
@@ -17,14 +19,14 @@ local keys = {}
 
 function keys.init(status)
 
-local modkey = "Mod4"
-local altkey = "Mod1"
+local modkey = status.modkey
+local altkey = status.altkey
 
 local cmd = status.cmds
 
 -- {{{ Mouse bindings
 root.buttons(awful.util.table.join(
-	awful.button({ }, 3, function () mymainmenu:toggle() end),
+	awful.button({ }, 3, function () status.menu.mainmenu:toggle() end),
 	awful.button({ }, 5, awful.tag.viewnext),
 	awful.button({ }, 4, awful.tag.viewprev)
 ))
@@ -33,7 +35,7 @@ root.buttons(awful.util.table.join(
 local globalkeys = awful.util.table.join(
 
 	awful.key({ modkey,	"Control"	}, "t",
-		function() systray_toggle.toggle() end),
+		function() status.widgets.systray_toggle.toggle() end),
 	awful.key({ modkey,	"Control"	}, "s",
 		function() helpers.run_once("xscreensaver-command -lock") end),
 
@@ -189,17 +191,17 @@ local globalkeys = awful.util.table.join(
 
 	-- Menus
 	awful.key({ modkey,		   }, "w",
-		function () mymainmenu:show() end),
+		function () status.menu.mainmenu:show() end),
 	awful.key({ modkey,		   }, "i",
 		function ()
-			menu_addon.clients_on_tag({
-				theme = {width=capi.screen[mouse.screen].workarea.width},
+			status.menu.instance = menu_addon.clients_on_tag({
+				theme = {width=screen[mouse.screen].workarea.width},
 				coords = {x=0, y=18}})
 		end),
 	awful.key({ modkey,		   }, "p",
 		function ()
-			instance = awful.menu.clients({
-					theme = {width=capi.screen[mouse.screen].workarea.width},
+			status.menu.instance = awful.menu.clients({
+					theme = {width=screen[mouse.screen].workarea.width},
 					coords = {x=0, y=18}})
 		end),
 	awful.key({ modkey, "Control"}, "p",
@@ -231,25 +233,25 @@ local globalkeys = awful.util.table.join(
 
 	-- Prompt
 	awful.key({ modkey }, "r",
-		function () mypromptbox[mouse.screen]:run() end),
+		function () status.widgets.promptbox[mouse.screen]:run() end),
 	awful.key({ modkey }, "x",
 		function ()
 			awful.prompt.run({ prompt = "Run Lua code: " },
-			mypromptbox[mouse.screen].widget,
+			status.widgets.promptbox[mouse.screen].widget,
 			awful.util.eval, nil,
 			awful.util.getdir("cache") .. "/history_eval")
 		end),
 
 	-- ALSA volume control
-	awful.key({}, "#123", function () volumewidget.up() end),
-	awful.key({}, "#122", function () volumewidget.down() end),
-	awful.key({}, "#121", function () volumewidget.toggle() end),
-	awful.key({}, "#198", function () volumewidget.toggle_mic() end),
+	awful.key({}, "#123", function () status.widgets.volume.up() end),
+	awful.key({}, "#122", function () status.widgets.volume.down() end),
+	awful.key({}, "#121", function () status.widgets.volume.toggle() end),
+	awful.key({}, "#198", function () status.widgets.volume.toggle_mic() end),
 
 	-- MPD control
-	awful.key({}, "#150", function () mpdwidget.prev_song() end),
-	awful.key({}, "#148", function () mpdwidget.next_song() end),
-	awful.key({}, "#172", function () mpdwidget.toggle() end),
+	awful.key({}, "#150", function () status.widgets.music.prev_song() end),
+	awful.key({}, "#148", function () status.widgets.music.next_song() end),
+	awful.key({}, "#172", function () status.widgets.music.toggle() end),
 
 	-- Copy to clipboard
 	awful.key({ modkey }, "c",
@@ -315,6 +317,7 @@ status.clientkeys = awful.util.table.join(
 		end)
 )
 
+local diff = nil
 for screen = 1, 2 do
   for i = 1, 12 do
 
