@@ -58,7 +58,6 @@ cover="$(find "$art/" -maxdepth 1 -type f | egrep -i -m1 "$IMG_REG")"
 echo DEBUG 0
 # when no cover is found, use DEFAULT_ART as cover
 cover="${cover:=$DEFAULT_ART}"
-echo DEBUG 1
 # check if art is available
 if [[ -n $cover ]]; then
    if [[ -n $COVER_RESIZE ]]; then
@@ -68,5 +67,5 @@ if [[ -n $cover ]]; then
 else
    rm $TEMP_PATH
 fi
-
+echo DEBUG 1
 exit 0

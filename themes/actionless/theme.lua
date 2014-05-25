@@ -135,7 +135,7 @@ theme.tasklist_disable_icon = true
 --theme.tasklist_maximized_horizontal = "_"
 --theme.tasklist_maximized_vertical = "|"
 
-layout_icons_dir = icons_dir .. "/icons/"
+layout_icons_dir = icons_dir .. "layout/"
 theme.layout_icons_dir = layout_icons_dir
 theme.layout_tile		= layout_icons_dir .. "tile.png"
 theme.layout_tilegaps		= layout_icons_dir .. "tilegaps.png"
