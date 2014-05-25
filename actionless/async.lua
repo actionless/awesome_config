@@ -7,6 +7,7 @@
 
 local awful = require('awful')
 
+-- !!! it should be GLOBAL
 async = {}
 async.request_table = {}
 async.id_counter = 0
@@ -42,9 +43,7 @@ function async.execute(command, callback)
   local id = next_id()
   async.request_table[id] = {
     callback = callback,
-    table = {},
-    counter = 1}
-  c = async.request_table[id].counter
+    table = {}}
   awful.util.spawn_with_shell(string.format(
     [[
   echo async.pipe_multiline_done\(\"%q\", \""$(%s | %s)"\"\) | awesome-client;
@@ -68,9 +67,7 @@ function async.execute_iter(command, callback)
   local id = next_id()
   async.request_table[id] = {
     callback = callback,
-    table = {},
-    counter = 1}
-  c = async.request_table[id].counter
+    table = {}}
   awful.util.spawn_with_shell(string.format(
     [[ sh -c '
        %s | while read line; do
@@ -88,9 +85,7 @@ end
 -- @param line The next line of the command's output
 function async.pipe_consume(id, line)
   if not async.request_table[id] then return end
-  local c = async.request_table[id].counter
-  async.request_table[id].table[c] = line
-  async.request_table[id].counter = c + 1
+  async.request_table[id].table:insert(line)
 end
 
 -- Calls the remembered callback function on the output of the shell
