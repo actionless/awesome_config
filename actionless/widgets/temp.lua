@@ -20,8 +20,8 @@ local temp = {}
 
 local function worker(args)
 	local args     = args or {}
-	local timeout  = args.timeout or 5
-	local critical = args.critical or 75
+	local update_interval  = args.update_interval or 5
+	local warning = args.warning or 75
     local sensor   = args.sensor or "CPU Temperature"
 
 	temp.widget_text = wibox.widget.textbox('')
@@ -40,7 +40,7 @@ local function worker(args)
 				break
 			end
 		end
-		if tonumber(coretemp_now) >= critical then
+		if tonumber(coretemp_now) >= warning then
 			temp.widget:set_bg(beautiful.error)
 			temp.widget:set_fg(beautiful.fg)
 		else
@@ -50,7 +50,7 @@ local function worker(args)
 		temp.widget_text:set_text(string.format("%2i", coretemp_now) .. '°C')
 	end
 
-	newtimer("coretemp", timeout, temp.update)
+	newtimer("coretemp", update_interval, temp.update)
 	return temp.widget
 end
 

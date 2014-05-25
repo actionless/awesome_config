@@ -51,16 +51,18 @@ musicwidget = widgets.music.widget({
 
 -- NetCtl
 netctlwidget = widgets.netctl({
-	preset = 'bond',
-	wireless_if = 'wlp12s0',
-	wired_if = 'enp0s25'
+  update_interval = 5,
+  preset = 'bond',
+  wireless_if = 'wlp12s0',
+  wired_if = 'enp0s25'
 })
 
--- Coretemp
+-- Temperature sensor
 tempicon = wibox.widget.imagebox(beautiful.widget_temp)
 tempwidget = widgets.temp({
-	sensor = "Core 0",
-	critical = 75
+  update_interval = 10,
+  sensor = "Core 0",
+  warning = 75
 })
 
 -- Textclock
