@@ -62,10 +62,10 @@ theme.tasklist_fg_minimize	= theme.bg
 theme.tasklist_bg_minimize	= "#6c6c6c"
 
 --theme.titlebar_font		= theme.sans_font
---theme.titlebar_font		= "PT Caption Bold 9"
-theme.titlebar_font		= "Source Sans Pro Bold 10.5"
+theme.titlebar_font		= "PT Caption Bold 10.5"
+--theme.titlebar_font		= "Source Sans Pro Bold 10.5"
 theme.titlebar_fg_focus		= theme.shiny
-theme.titlebar_fg_normal	= theme.fg
+theme.titlebar_fg_normal	= theme.bg
 theme.titlebar_bg_focus		= theme.titlebar_focus
 theme.titlebar_bg_normal	= theme.titlebar
 
@@ -151,7 +151,7 @@ theme.layout_fullscreen		= layout_icons_dir .. "fullscreen.png"
 theme.layout_magnifier		= layout_icons_dir .. "magnifier.png"
 theme.layout_floating		= layout_icons_dir .. "floating.png"
 
-titlebar_icons_dir = icons_dir .. "/icons/"
+titlebar_icons_dir = icons_dir .. "titlebar/"
 theme.titlebar_icons_dir = titlebar_icons_dir
 theme.titlebar_close_button_focus = titlebar_icons_dir .. "/close_focus.png"
 theme.titlebar_close_button_normal = titlebar_icons_dir .. "/close_normal.png"
