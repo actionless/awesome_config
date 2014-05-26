@@ -56,8 +56,8 @@ status.widgets.music = widgets.music.widget({
 local netctlwidget = widgets.netctl({
   update_interval = 5,
   preset = 'bond',
-  wireless_if = 'wlp12s0',
-  wired_if = 'enp0s25'
+  wlan_if = status.config.wlan_if,
+  eth_if = status.config.eth_if,
 })
 
 -- Temperature sensor

@@ -35,8 +35,8 @@ local function worker(args)
   netctl.font = args.font or font
 
   netctl.preset = args.preset or 'bond' -- or netctl or netctl-auto
-  netctl.wireless_if = args.wireless_if or 'wlan0'
-  netctl.wired_if = args.wired_if or 'eth0'
+  netctl.wlan_if = args.wlan_if or 'wlan0'
+  netctl.eth_if = args.eth_if or 'eth0'
 
   function netctl.hide_notification()
     if netctl.id ~= nil then
@@ -69,9 +69,9 @@ local function worker(args)
       "/proc/net/bonding/bond0",
       "Currently Active Slave: (.*)"
     ) or 'bndng.err'
-    if netctl.interface == netctl.wired_if then
+    if netctl.interface == netctl.eth_if then
       netctl.update_widget('ethernet')
-    elseif netctl.interface == netctl.wireless_if then
+    elseif netctl.interface == netctl.wlan_if then
       netctl.netctl_auto_update()
     elseif netctl.interface == "None" then
       netctl.update_widget("bndng...")
@@ -103,9 +103,9 @@ local function worker(args)
       markup.font(
         font,
         string.format("%-6s", network_name)))
-    if netctl.interface == netctl.wired_if then
+    if netctl.interface == netctl.eth_if then
       netctl.widget:set_image(beautiful.widget_net_wired)
-    elseif netctl.interface == netctl.wireless_if then
+    elseif netctl.interface == netctl.wlan_if then
       netctl.widget:set_image(beautiful.widget_net_wireless)
     else
       netctl.widget:set_image(beautiful.widget_net_searching)

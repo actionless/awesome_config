@@ -15,7 +15,19 @@ local status = {
   menu = {},
   modkey = "Mod4",
   altkey = "Mod1",
+  config = {
+    wlan_if = 'wlp12s0',
+    eth_if = 'enp0s25,'
+  },
 }
+
+pcall(function()
+  local local_config = require("config.local")
+  if local_config then
+    local_config.init(status)
+  end
+end)
+
 config.notify.init(status)
 config.variables.init(status)
 config.autorun.init(status)
