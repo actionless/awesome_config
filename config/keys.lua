@@ -1,6 +1,7 @@
 
 local awful = require("awful")
 local wibox = require("wibox")
+local beautiful = require("beautiful")
 local menubar = require("menubar")
 local screen = screen
 local client = client
@@ -10,7 +11,7 @@ local awesome = awesome
 
 local widgets = require("actionless.widgets")
 local helpers = require("actionless.helpers")
-local bars = require("actionless.bars")
+local titlebar = require("actionless.titlebar")
 local menu_addon = require("actionless.menu_addon")
 
 
@@ -213,7 +214,14 @@ local globalkeys = awful.util.table.join(
 
 	-- Layout manipulation
 	awful.key({ modkey, "Control"	}, "n",
-		awful.client.restore),
+          function()
+		c=awful.client.restore()
+                if c then
+                  -- @TODO:
+                  -- it's a workaround for some strange upstream issue
+                  client.focus = c
+                end
+          end),
 
 	awful.key({ modkey,				}, "u",
 		awful.client.urgent.jumpto),
@@ -307,7 +315,7 @@ status.clientkeys = awful.util.table.join(
 	awful.key({ modkey,				}, "t",
 		function (c) c.ontop = not c.ontop end),
 	awful.key({ modkey, "Shift"		}, "t",
-		bars.titlebar_toggle),
+		titlebar.titlebar_toggle),
 	awful.key({ modkey,				}, "n",
 		function (c) c.minimized = true end),
 	awful.key({ modkey,				}, "m",

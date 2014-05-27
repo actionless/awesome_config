@@ -8,7 +8,7 @@ local actionless = {
   -- lain
   markup = require("actionless.markup"),
   -- misc
-  bars = require("actionless.bars"),
+  titlebar = require("actionless.titlebar"),
   helpers = require("actionless.helpers"),
   settings = require("actionless.settings"),
   async = require("actionless.async"),

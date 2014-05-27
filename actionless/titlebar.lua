@@ -7,32 +7,19 @@ local widgets = require("actionless.widgets")
 local settings = require("actionless.settings")
 
 
-local bars = {}
+local titlebar = {}
 
-
-function bars.make_border(c)
-        local clients = awful.client.visible(c.screen)
-	if not settings.gtk3_app_classes[c.class] then
-		c.border_width = beautiful.border_width
-	end
-	if #clients == 1 then
-		c.border_color = beautiful.border_normal
-	else
-		c.border_color = beautiful.border_focus
-	end
-end
-
-function bars.remove_titlebar(c)
+function titlebar.remove_titlebar(c)
 	awful.titlebar(c, {size = 0})
 end
 
-function bars.remove_border(c)
-	bars.remove_titlebar(c)
+function titlebar.remove_border(c)
+	titlebar.remove_titlebar(c)
 	c.border_width = 0
 	--c.border_color = beautiful.border_normal
 end
 
-function bars.make_titlebar(c)
+function titlebar.make_titlebar(c)
 	if settings.gtk3_app_classes[c.class] then
 		return
 	end
@@ -81,13 +68,13 @@ function bars.make_titlebar(c)
 	awful.titlebar(c,{size=16}):set_widget(layout)
 end
 
-function bars.titlebar_toggle(c)
+function titlebar.titlebar_toggle(c)
 	if (c:titlebar_top():geometry()['height'] > 0) then
-		bars.remove_titlebar(c)
+		titlebar.remove_titlebar(c)
 	else
-		bars.make_titlebar(c)
+		titlebar.make_titlebar(c)
 	end
 end
 
 
-return bars
+return titlebar
