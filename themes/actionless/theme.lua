@@ -69,7 +69,7 @@ theme.titlebar_fg_normal	= theme.bg
 theme.titlebar_bg_focus		= theme.titlebar_focus
 theme.titlebar_bg_normal	= theme.titlebar
 
-theme.notification_opacity	= 0.9
+theme.notification_opacity	= 0.7
 theme.notification_font		= theme.sans_font
 theme.notification_monofont	= theme.font
 theme.notify_fg			= theme.fg_normal
