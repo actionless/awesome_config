@@ -6,7 +6,7 @@ local awful = require("awful")
 require("awful.autofocus")
 local naughty = require("naughty")
 local beautiful	= require("beautiful")
-local theme_dir = awful.util.getdir("config") .. "/themes/actionless/theme.lua"
+local theme_dir = awful.util.getdir("config") .. "/themes/actionless_light/theme.lua"
 beautiful.init(theme_dir)
 
 local config = require("config")

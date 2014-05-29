@@ -1,6 +1,6 @@
 theme = {}
 
-themes_dir = os.getenv("HOME") .. "/.config/awesome/themes/actionless"
+themes_dir = os.getenv("HOME") .. "/.config/awesome/themes/actionless_light"
 theme.dir = themes_dir
 theme.wallpaper= themes_dir .. "/vulcarona_pattern.png"
 
