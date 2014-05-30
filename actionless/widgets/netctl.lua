@@ -84,7 +84,13 @@ local function worker(args)
     async.execute(
       'netctl-auto current',
       function(str)
-        netctl.update_widget(str or 'nctl-a...')
+        if #str ~= 0 then
+          netctl.interface = netctl.wlan_if
+          netctl.update_widget(str)
+        else
+          netctl.interface = nil
+          netctl.update_widget('nctl-a...')
+        end
       end)
   end
 

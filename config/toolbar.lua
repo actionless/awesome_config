@@ -55,7 +55,7 @@ status.widgets.music = widgets.music.widget({
 -- NetCtl
 local netctlwidget = widgets.netctl({
   update_interval = 5,
-  preset = 'bond',
+  preset = 'netctl-auto',
   wlan_if = status.config.wlan_if,
   eth_if = status.config.eth_if,
 })
