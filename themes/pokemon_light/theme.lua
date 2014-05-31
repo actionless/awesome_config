@@ -1,14 +1,14 @@
 theme = {}
 
-themes_dir = os.getenv("HOME") .. "/.config/awesome/themes/actionless_dark"
+themes_dir = os.getenv("HOME") .. "/.config/awesome/themes/pokemon_light"
 theme.dir = themes_dir
-theme.wallpaper= themes_dir .. "/pattern.png"
+theme.wallpaper= themes_dir .. "/vulcarona_pattern.png"
 
-theme.fg		= "#d8d8d8"
-theme.alt_fg		= "#a8a8a8"
+theme.bg		= "#d8d8d8"
+theme.alt_bg		= "#a8a8a8"
 
-theme.bg		= "#101010"
-theme.alt_bg		= "#a562b3"
+theme.fg		= "#101010"
+theme.alt_fg		= "#a562b3"
 theme.shiny		= "#ffffff"
 
 theme.theme		= "#ad7fa8"
@@ -19,11 +19,11 @@ theme.sel_border	= "#d33862"
 theme.titlebar		= "#3c3c3c"
 theme.titlebar_focus	= "#66436C"
 
---theme.font		= "DejaVu Sans Mono 9"
+theme.font		= "DejaVu Sans Mono 9"
 --theme.font		= "Dina 8"
 --theme.font		= "Fira Mono 9"
 --theme.font		= "Meslo LG S 10"
-theme.font		= "monoOne 10"
+--theme.font		= "monoOne 10"
 --theme.font		= "PT Mono 8"
 --theme.font		= "Share Tech Mono 11"
 --theme.font		= "Source Code Pro Medium 9.4"

@@ -1,14 +1,14 @@
 theme = {}
 
-themes_dir = os.getenv("HOME") .. "/.config/awesome/themes/actionless_light"
+themes_dir = os.getenv("HOME") .. "/.config/awesome/themes/noble_dark"
 theme.dir = themes_dir
-theme.wallpaper= themes_dir .. "/vulcarona_pattern.png"
+theme.wallpaper= themes_dir .. "/pattern.png"
 
-theme.bg		= "#d8d8d8"
-theme.alt_bg		= "#a8a8a8"
+theme.fg		= "#d8d8d8"
+theme.alt_fg		= "#a8a8a8"
 
-theme.fg		= "#101010"
-theme.alt_fg		= "#a562b3"
+theme.bg		= "#101010"
+theme.alt_bg		= "#a562b3"
 theme.shiny		= "#ffffff"
 
 theme.theme		= "#ad7fa8"

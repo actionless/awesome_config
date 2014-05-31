@@ -6,15 +6,12 @@ local awful = require("awful")
 require("awful.autofocus")
 local naughty = require("naughty")
 local beautiful	= require("beautiful")
-local theme_dir = awful.util.getdir("config") .. "/themes/actionless_light/theme.lua"
-beautiful.init(theme_dir)
-
-local config = require("config")
 local status = {
   widgets = {},
   menu = {},
   modkey = "Mod4",
   altkey = "Mod1",
+  theme_dir = awful.util.getdir("config") .. "/themes/pokemon_dark/theme.lua",
   config = {
     wlan_if = 'wlp12s0',
     eth_if = 'enp0s25,'
@@ -27,6 +24,9 @@ pcall(function()
     local_config.init(status)
   end
 end)
+beautiful.init(status.theme_dir)
+
+local config = require("config")
 
 config.notify.init(status)
 config.variables.init(status)
