@@ -9,8 +9,6 @@
 --]]
 
 local beautiful    = require("beautiful")
-local tostring     = tostring
-local setmetatable = setmetatable
 
 -- Lain markup util submodule
 local markup = {}

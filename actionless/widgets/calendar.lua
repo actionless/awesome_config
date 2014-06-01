@@ -7,11 +7,6 @@ local awful = require("awful")
 local beautiful = require("beautiful")
 local naughty = require("naughty")
 
-local io = io
-local os = { date = os.date }
-local tonumber = tonumber
-local setmetatable = setmetatable
-
 local helpers = require('actionless.helpers')
 local mono_preset = helpers.mono_preset
 

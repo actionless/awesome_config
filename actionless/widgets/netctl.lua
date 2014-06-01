@@ -3,9 +3,6 @@
    * (c) 2013-2014, Yauheni Kirylau             
 --]]
 
-local string		= { format = string.format }
-local setmetatable	= setmetatable
-
 local naughty		= require("naughty")
 
 local helpers		= require("actionless.helpers")

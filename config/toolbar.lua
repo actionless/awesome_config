@@ -4,11 +4,10 @@ local awful = require("awful")
 
 local screen = screen
 local client = client
-local mouse = mouse
 
-local actionless = require("actionless")
-local widgets = actionless.widgets
-local custom_tasklist = actionless.tasklist
+local widgets = require("actionless.widgets")
+local custom_tasklist = require("actionless.tasklist")
+local helpers = require("actionless.helpers")
 --local rpic = widgets.random_pic
 
 
@@ -124,7 +123,7 @@ mytasklist.buttons = awful.util.table.join(
       status.menu.instance = nil
     else
       status.menu.instance = awful.menu.clients({
-        theme = {width=screen[mouse.screen].workarea.width},
+        theme = {width=screen[helpers.get_current_screen()].workarea.width},
         coords = {x=0, y=18}})
     end
   end),

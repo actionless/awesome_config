@@ -3,9 +3,8 @@ local awful = require("awful")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 local menubar = require("menubar")
-local screen = screen
+local capi = { screen = screen }
 local client = client
-local mouse = mouse
 local root = root
 local awesome = awesome
 
@@ -195,14 +194,15 @@ local globalkeys = awful.util.table.join(
 		function () status.menu.mainmenu:show() end),
 	awful.key({ modkey,		   }, "i",
 		function ()
+                  local naughty=require("naughty")
 			status.menu.instance = menu_addon.clients_on_tag({
-				theme = {width=screen[mouse.screen].workarea.width},
+				theme = {width=capi.screen[helpers.get_current_screen()].workarea.width},
 				coords = {x=0, y=18}})
 		end),
 	awful.key({ modkey,		   }, "p",
 		function ()
 			status.menu.instance = awful.menu.clients({
-					theme = {width=screen[mouse.screen].workarea.width},
+					theme = {width=capi.screen[helpers.get_current_screen()].workarea.width},
 					coords = {x=0, y=18}})
 		end),
 	awful.key({ modkey, "Control"}, "p",
@@ -247,11 +247,11 @@ local globalkeys = awful.util.table.join(
 
 	-- Prompt
 	awful.key({ modkey }, "r",
-		function () status.widgets.promptbox[mouse.screen]:run() end),
+		function () status.widgets.promptbox[helpers.get_current_screen()]:run() end),
 	awful.key({ modkey }, "x",
 		function ()
 			awful.prompt.run({ prompt = "Run Lua code: " },
-			status.widgets.promptbox[mouse.screen].widget,
+			status.widgets.promptbox[helpers.get_current_screen()].widget,
 			awful.util.eval, nil,
 			awful.util.getdir("cache") .. "/history_eval")
 		end),

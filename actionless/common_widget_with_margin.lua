@@ -5,7 +5,6 @@
 ---------------------------------------------------------------------------
 
 -- Grab environment we need
-local math = math
 local capi = { button = button }
 local util = require("awful.util")
 local wibox = require("wibox")

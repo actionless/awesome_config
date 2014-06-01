@@ -4,8 +4,6 @@
 --]]
 
 local beautiful    = require("beautiful")
-local tonumber     = tonumber
-local setmetatable = setmetatable
 
 local async        = require("actionless.async")
 local helpers      = require("actionless.helpers")

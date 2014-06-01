@@ -10,9 +10,6 @@ local awful = require("awful")
 local capi   = { timer = timer,
                  client = client,
                  mouse = mouse }
-local io     = { open = io.open,
-                 lines = io.lines,
-                 popen = io.popen }
 local beautiful = require("beautiful")
 
 

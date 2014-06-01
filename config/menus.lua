@@ -1,8 +1,10 @@
 local awful = require("awful")
-local screen = screen
 local awesome = awesome
 local menubar = require("menubar")
 local beautiful = require("beautiful")
+local capi = { screen = screen }
+
+local get_current_screen = require("actionless.helpers").get_current_screen
 
 local menus = {}
 
@@ -37,9 +39,9 @@ menubar.utils.terminal = status.cmds.terminal
 
 menubar.geometry = {
   height = 18,
-  width = screen[1].workarea.width,
+  width = capi.screen[get_current_screen()].workarea.width,
   x = 0,
-  y = screen[1].workarea.height - 18
+  y = capi.screen[get_current_screen()].workarea.height - 18
 }
 
 --require("freedesktop/freedesktop")

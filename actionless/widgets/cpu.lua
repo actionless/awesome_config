@@ -9,12 +9,6 @@
 --]]
 local naughty      = require("naughty")
 local beautiful    = require("beautiful")
-local math         = { ceil   = math.ceil }
-local string       = { format = string.format,
-                       gmatch = string.gmatch }
-local tostring     = tostring
-local setmetatable = setmetatable
-
 
 local helpers = require("actionless.helpers")
 local parse = require("actionless.parse")

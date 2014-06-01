@@ -1,7 +1,7 @@
 local awful = require("awful")
+local client = awful.client
 local wibox = require("wibox")
 local beautiful = require("beautiful")
-local client = client
 
 local widgets = require("actionless.widgets")
 local settings = require("actionless.settings")

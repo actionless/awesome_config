@@ -7,9 +7,6 @@
 -- Grab environment we need
 local capi = { screen = screen,
                client = client }
-local ipairs = ipairs
-local setmetatable = setmetatable
-local table = table
 local wibox = require("wibox")
 local awful = require("awful")
 local client = require("awful.client")
