@@ -234,9 +234,15 @@ local globalkeys = awful.util.table.join(
 		end),
 
 	awful.key({ altkey,				}, "space",
-		function () awful.layout.inc(status.layouts, 1) end),
+		function ()
+                  awful.layout.inc(
+                    1, helpers.get_current_screen(), status.layouts)
+                end),
 	awful.key({ altkey, "Shift"		}, "space",
-		function () awful.layout.inc(status.layouts, -1) end),
+		function ()
+                  awful.layout.inc(
+                    -1, helpers.get_current_screen(), status.layouts)
+                end),
 
 
 	-- Prompt
