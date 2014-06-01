@@ -44,8 +44,5 @@ menubar.geometry = {
   y = capi.screen[get_current_screen()].workarea.height - 18
 }
 
---require("freedesktop/freedesktop")
-
-
 end
 return menus
