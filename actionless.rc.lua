@@ -13,8 +13,9 @@ local status = {
   altkey = "Mod1",
   theme_dir = awful.util.getdir("config") .. "/themes/pokemon_dark/theme.lua",
   config = {
+    net_preset = 'netctl-auto',
     wlan_if = 'wlp12s0',
-    eth_if = 'enp0s25,'
+    eth_if = 'enp0s25',
   },
 }
 

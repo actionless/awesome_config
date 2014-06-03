@@ -69,12 +69,22 @@ local function worker(args)
     if netctl.interface == netctl.eth_if then
       netctl.update_widget('ethernet')
     elseif netctl.interface == netctl.wlan_if then
-      netctl.netctl_auto_update()
+      netctl.wpa_update()
     elseif netctl.interface == "None" then
       netctl.update_widget("bndng...")
     else
       netctl.update_widget(netctl.interface)
     end
+  end
+
+  function netctl.wpa_update()
+    async.execute(
+      "sudo wpa_cli status",
+      function(str)
+        netctl.update_widget(
+          str:match(".*ssid=(.*)\n.*"
+          ) or 'wpa...')
+      end)
   end
 
   function netctl.netctl_auto_update()
