@@ -17,6 +17,7 @@ local fixed = require("wibox.layout.fixed")
 local beautiful = require("beautiful")
 
 local common = require("actionless.common_widget_with_margin")
+local markup = require("actionless.markup")
 
 --- Tasklist widget module for awful
 -- awful.widget.tasklist
@@ -72,9 +73,9 @@ local function tasklist_label(c, args)
         bg = bg_focus
         bg_image = bg_image_focus
         if fg_focus then
-            text = text .. "<span color='"..util.color_strip_alpha(fg_focus).."'>"..name.."</span>"
+            text = text .. "<span color='"..util.color_strip_alpha(fg_focus).."'>"..markup.bold(name).."</span>"
         else
-            text = text .. "<span color='"..util.color_strip_alpha(fg_normal).."'>"..name.."</span>"
+            text = text .. "<span color='"..util.color_strip_alpha(fg_normal).."'>"..markup.bold(name).."</span>"
         end
     elseif c.urgent and fg_urgent then
         bg = bg_urgent

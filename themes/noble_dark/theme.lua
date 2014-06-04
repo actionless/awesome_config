@@ -59,7 +59,7 @@ theme.tasklist_bg_focus		= theme.bg
 theme.tasklist_fg_normal	= theme.fg
 theme.tasklist_bg_normal	= theme.bg
 theme.tasklist_fg_minimize	= theme.bg
-theme.tasklist_bg_minimize	= "#6c6c6c"
+theme.tasklist_bg_minimize	= "#818181"
 
 --theme.titlebar_font		= theme.sans_font
 theme.titlebar_font		= "PT Caption Bold 10.5"
