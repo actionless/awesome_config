@@ -2,7 +2,7 @@ theme = {}
 
 themes_dir = os.getenv("HOME") .. "/.config/awesome/themes/pokemon_light"
 theme.dir = themes_dir
-theme.wallpaper= themes_dir .. "/vulcarona_pattern.png"
+theme.wallpaper= themes_dir .. "/vulcarona_pattern_blur.png"
 
 theme.bg		= "#d8d8d8"
 theme.alt_bg		= "#a8a8a8"
@@ -47,7 +47,7 @@ theme.border_normal		= theme.border
 theme.border_focus		= theme.sel_border
 theme.border_marked		= theme.error
 
-theme.panel_opacity		= 0.9
+theme.panel_opacity		= 0.8
 
 theme.taglist_font		= theme.font
 theme.taglist_fg_focus		= theme.shiny
