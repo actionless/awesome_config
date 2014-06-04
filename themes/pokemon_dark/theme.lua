@@ -1,29 +1,29 @@
 theme = {}
 
-themes_dir = os.getenv("HOME") .. "/.config/awesome/themes/lcars"
+themes_dir = os.getenv("HOME") .. "/.config/awesome/themes/pokemon_dark"
 theme.dir = themes_dir
-theme.wallpaper_cmd     = "hsetroot"
+theme.wallpaper= themes_dir .. "/vulcarona_pattern_blur.png"
 
-theme.bg		= "#000000"
-theme.alt_bg		= "#9966ff"
+theme.fg		= "#e6e6e6"
+theme.alt_fg		= "#a8a8a8"
 
-theme.fg		= "#ffcc99"
-theme.alt_fg		= "#ffcc66"
-theme.shiny		= "#000000"
+theme.bg		= "#3c3c3c"
+theme.alt_bg		= "#a562b3"
+theme.shiny		= "#ffffff"
 
-theme.theme		= "#cc99cc"
-theme.error		= "#ff3300"
+theme.theme		= "#ad7fa8"
+theme.error		= "#f92672"
 
 theme.border		= "#000000"
-theme.sel_border	= "#cc99cc"
-theme.titlebar		= "#000000"
-theme.titlebar_focus	= "#cc6699"
+theme.sel_border	= "#d33862"
+theme.titlebar		= "#3c3c3c"
+theme.titlebar_focus	= "#66436C"
 
---theme.font		= "DejaVu Sans Mono 9"
+theme.font		= "DejaVu Sans Mono 9"
 --theme.font		= "Dina 8"
 --theme.font		= "Fira Mono 9"
 --theme.font		= "Meslo LG S 10"
-theme.font		= "monoOne 10"
+--theme.font		= "monoOne 10"
 --theme.font		= "PT Mono 8"
 --theme.font		= "Share Tech Mono 11"
 --theme.font		= "Source Code Pro Medium 9.4"
@@ -47,7 +47,7 @@ theme.border_normal		= theme.border
 theme.border_focus		= theme.sel_border
 theme.border_marked		= theme.error
 
-theme.panel_opacity		= 0.9
+theme.panel_opacity		= 1.0
 
 theme.taglist_font		= theme.font
 theme.taglist_fg_focus		= theme.shiny
@@ -59,7 +59,7 @@ theme.tasklist_bg_focus		= theme.bg
 theme.tasklist_fg_normal	= theme.fg
 theme.tasklist_bg_normal	= theme.bg
 theme.tasklist_fg_minimize	= theme.bg
-theme.tasklist_bg_minimize	= "#6c6c6c"
+theme.tasklist_bg_minimize	= "#818181"
 
 --theme.titlebar_font		= theme.sans_font
 theme.titlebar_font		= "PT Caption Bold 10.5"
