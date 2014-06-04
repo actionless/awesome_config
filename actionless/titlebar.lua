@@ -1,5 +1,5 @@
 local awful = require("awful")
-local client = awful.client
+local client = client
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 

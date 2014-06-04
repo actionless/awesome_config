@@ -1,5 +1,5 @@
 local awful = require("awful")
-local client = require("client")
+local client = client
 local beautiful = require("beautiful")
 
 local titlebar	= require("actionless.titlebar")

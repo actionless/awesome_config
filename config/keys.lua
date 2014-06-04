@@ -73,8 +73,8 @@ local globalkeys = awful.util.table.join(
 		end),
 	awful.key({ modkey				}, "Left",
 		function()
-			awful.client.focus.bydirection("left")
-			if client.focus then client.focus:raise() end
+                  awful.client.focus.bydirection("left")
+		  if client.focus then client.focus:raise() end
 		end),
 	awful.key({ modkey				}, "Right",
 		function()
@@ -376,10 +376,8 @@ end
 status.clientbuttons = awful.util.table.join(
     awful.button({ }, 1,
       function (c)
-        if c then
-          client.focus = c;
-          c:raise()
-        end
+        client.focus = c;
+        c:raise();
       end),
     awful.button({ modkey }, 1, awful.mouse.client.move),
     awful.button({ modkey }, 3, awful.mouse.client.resize))
