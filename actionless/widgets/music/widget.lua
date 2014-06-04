@@ -33,8 +33,11 @@ local function worker(args)
   local default_art     = args.default_art or ""
   local backend_name    = args.backend or "mpd"
   local cover_size      = args.cover_size or 100
-  local font            = args.font or beautiful.tasklist_font
-                          or beautiful.font
+  local font            = args.font
+                          or beautiful.tasklist_font or beautiful.font
+  local text_color      = args.fg
+                          or beautiful.player_text or beautiful.fg_normal
+
 
   local parse_status_callback = function(player_status)
     player.parse_status(player_status) end
@@ -206,7 +209,7 @@ local function worker(args)
 
     player.widget:set_markup(
       markup.font(font,
-        markup.fg.color(beautiful.player_text,
+        markup.fg.color(text_color,
           markup.bold(
             artist))
         .. " " ..
