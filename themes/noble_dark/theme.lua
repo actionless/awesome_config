@@ -19,7 +19,7 @@ theme.sel_border	= "#d33862"
 theme.titlebar		= "#3c3c3c"
 theme.titlebar_focus	= "#66436C"
 
-theme.font		= "DejaVu Sans Mono 10"
+theme.font		= "DejaVu Sans Mono 9"
 --theme.font		= "Dina 8"
 --theme.font		= "Fira Mono 9"
 --theme.font		= "Meslo LG S 10"
