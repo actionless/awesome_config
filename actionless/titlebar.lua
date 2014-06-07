@@ -9,8 +9,23 @@ local settings = require("actionless.settings")
 
 local titlebar = {}
 
+function titlebar.get_titlebar_function(c)
+  local position = beautiful.titlebar_position or 'top'
+    if position == "left" then
+        return c.titlebar_left
+    elseif position == "right" then
+        return c.titlebar_right
+    elseif position == "top" then
+        return c.titlebar_top
+    elseif position == "bottom" then
+        return c.titlebar_bottom
+    else
+        error("Invalid titlebar position '" .. position .. "'")
+    end
+end
+
 function titlebar.remove_titlebar(c)
-	awful.titlebar(c, {size = 0})
+        awful.titlebar.hide(c, beautiful.titlebar_position)
 end
 
 function titlebar.remove_border(c)
@@ -65,13 +80,20 @@ function titlebar.make_titlebar(c)
 	layout:set_right(right_layout)
 	layout:set_middle(middle_layout)
 
-	awful.titlebar(c,{size=16}):set_widget(layout)
+	awful.titlebar(
+          c,
+          { size=16,
+            position = beautiful.titlebar_position,
+            opacity = beautiful.titlebar_opacity }
+        ):set_widget(layout)
 end
 
 function titlebar.titlebar_toggle(c)
-	if (c:titlebar_top():geometry()['height'] > 0) then
+	if (titlebar.get_titlebar_function(c)(c):geometry()['height'] > 0)
+        then
 		titlebar.remove_titlebar(c)
 	else
+		titlebar.remove_titlebar(c)
 		titlebar.make_titlebar(c)
 	end
 end

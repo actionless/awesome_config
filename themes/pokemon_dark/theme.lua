@@ -2,7 +2,7 @@ theme = {}
 
 themes_dir = os.getenv("HOME") .. "/.config/awesome/themes/pokemon_dark"
 theme.dir = themes_dir
-theme.wallpaper= themes_dir .. "/vulcarona_pattern_blur.png"
+theme.wallpaper_cmd = 'nitrogen'
 
 theme.fg		= "#e6e6e6"
 theme.alt_fg		= "#a8a8a8"
@@ -68,6 +68,9 @@ theme.titlebar_fg_focus		= theme.shiny
 theme.titlebar_fg_normal	= theme.bg
 theme.titlebar_bg_focus		= theme.titlebar_focus
 theme.titlebar_bg_normal	= theme.titlebar
+
+theme.titlebar_opacity          = 0.7
+theme.titlebar_position         = 'top'
 
 theme.notification_opacity	= 0.8
 theme.notification_font		= theme.sans_font

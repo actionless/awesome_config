@@ -315,7 +315,11 @@ status.clientkeys = awful.util.table.join(
 	awful.key({ modkey,				}, "t",
 		function (c) c.ontop = not c.ontop end),
 	awful.key({ modkey, "Shift"		}, "t",
-		titlebar.titlebar_toggle),
+		function(c)
+                  titlebar.titlebar_toggle(c)
+                  --awful.titlebar.toggle(
+                  --  c, beautiful.titlebar_position or 'top')
+                end),
 	awful.key({ modkey,				}, "n",
 		function (c) c.minimized = true end),
 	awful.key({ modkey,				}, "m",
