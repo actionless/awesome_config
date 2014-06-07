@@ -32,10 +32,5 @@ awful.rules.rules = {
 }
 -- }}}
 
-for class in pairs(settings.gtk3_app_classes) do
-  local rule = { rule = {class = class}, properties = {border_width=0}}
-  table.insert(awful.rules.rules, rule)
-end
-
 end
 return rules
