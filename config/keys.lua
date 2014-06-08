@@ -115,13 +115,13 @@ local globalkeys = awful.util.table.join(
 		function () awful.client.incwfact( 0.05) end),
 
 	-- Layout tuning
-	awful.key({ modkey, altkey }, "Left",
-		function () awful.tag.incnmaster(-1) end),
-	awful.key({ modkey, altkey }, "Right",
-		function () awful.tag.incnmaster( 1) end),
 	awful.key({ modkey, altkey }, "Down",
-		function () awful.tag.incncol(-1) end),
+		function () awful.tag.incnmaster(-1) end),
 	awful.key({ modkey, altkey }, "Up",
+		function () awful.tag.incnmaster( 1) end),
+	awful.key({ modkey, altkey }, "Left",
+		function () awful.tag.incncol(-1) end),
+	awful.key({ modkey, altkey }, "Right",
 		function () awful.tag.incncol( 1) end),
 
 	-- By direction client focus (VIM style)
@@ -179,13 +179,13 @@ local globalkeys = awful.util.table.join(
 		function () awful.client.incwfact( 0.05) end),
 
 	-- Layout tuning (VIM style)
-	awful.key({ modkey, altkey }, "h",
-		function () awful.tag.incnmaster(-1) end),
-	awful.key({ modkey, altkey }, "l",
-		function () awful.tag.incnmaster( 1) end),
 	awful.key({ modkey, altkey }, "j",
-		function () awful.tag.incncol(-1) end),
+		function () awful.tag.incnmaster(-1) end),
 	awful.key({ modkey, altkey }, "k",
+		function () awful.tag.incnmaster( 1) end),
+	awful.key({ modkey, altkey }, "h",
+		function () awful.tag.incncol(-1) end),
+	awful.key({ modkey, altkey }, "l",
 		function () awful.tag.incncol( 1) end),
 
 

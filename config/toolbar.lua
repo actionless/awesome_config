@@ -59,7 +59,7 @@ local netctlwidget = widgets.netctl({
   eth_if = status.config.eth_if,
 })
 
--- Temperature sensor
+-- Sensor
 local tempwidget = widgets.temp({
   update_interval = 10,
   sensor = "Core 0",
@@ -84,9 +84,6 @@ local separator = wibox.widget.textbox(' ')
 --arrl:set_image(beautiful.arrl)
 
 -- Create a wibox for each screen and add it
-local mywibox = {}
-status.widgets.promptbox = {}
-local mylayoutbox = {}
 local mytaglist = {}
 mytaglist.buttons = awful.util.table.join(
   awful.button({		}, 1, awful.tag.viewonly),
@@ -136,14 +133,20 @@ mytasklist.buttons = awful.util.table.join(
     if client.focus then client.focus:raise() end
   end))
 
+status.widgets.promptbox = {}
+local mylayoutbox = {}
+local mywibox = {}
 for s = 1, screen.count() do
-  local i = beautiful.screen_margin
-  awful.screen.padding( screen[s], {top = i, bottom = i, left = i, right = i} )
-  -- Create a promptbox for each screen
-  status.widgets.promptbox[s] = awful.widget.prompt()
-  -- Create an imagebox widget which will contains an icon indicating which layout we're using.
-  -- We need one layoutbox per screen.
-  mylayoutbox[s] = awful.widget.layoutbox(s)
+
+  awful.screen.padding(
+    screen[s],
+    { top = beautiful.screen_margin,
+      bottom = beautiful.screen_margin,
+      left = beautiful.screen_margin,
+      right = beautiful.screen_margin })
+
+  -- layoutbox
+  mylayoutbox[s] = widgets.layoutbox(s)
   mylayoutbox[s]:buttons(awful.util.table.join(
     awful.button({ }, 1, function ()
       awful.layout.inc(awful.layout.layouts, 1) end),
@@ -153,26 +156,29 @@ for s = 1, screen.count() do
       awful.layout.inc(awful.layout.layouts, 1) end),
     awful.button({ }, 4, function ()
       awful.layout.inc(awful.layout.layouts, -1) end)))
-  -- Create a taglist widget
+
+  -- taglist
   mytaglist[s] = awful.widget.taglist(
     s, awful.widget.taglist.filter.all, mytaglist.buttons)
 
-  -- Create a tasklist widget
+  -- promptbox
+  status.widgets.promptbox[s] = awful.widget.prompt()
+
+  -- tasklist
   mytasklist[s] = custom_tasklist(
     s, custom_tasklist.filter.focused_and_minimized_current_tags, mytasklist.buttons)
 
-  -- Create the wibox
-  mywibox[s] = awful.wibox({ position = "top", screen = s, height = 18 })
-
-  -- Widgets that are aligned to the left
+  -- LEFT side
   local left_layout = wibox.layout.fixed.horizontal()
+  left_layout:add(separator)
+  left_layout:add(mylayoutbox[s])
   left_layout:add(separator)
   left_layout:add(mytaglist[s])
   left_layout:add(status.widgets.close_button)
   left_layout:add(status.widgets.promptbox[s])
   left_layout:add(separator)
 
-  -- Widgets that are aligned to the right
+  -- RIGHT side
   local right_layout = wibox.layout.fixed.horizontal()
   right_layout:add(separator)
   right_layout:add(separator)
@@ -189,21 +195,22 @@ for s = 1, screen.count() do
   right_layout:add(tempwidget)
   right_layout:add(separator)
   --right_layout:add(fswidgetbg)
-  --right_layout:add(arrl)
+  --right_layout:add(separator)
   right_layout:add(batwidget)
+  right_layout:add(separator)
   right_layout:add(mytextclock)
   right_layout:add(separator)
---  right_layout:add(arrl_ld)
-  right_layout:add(mylayoutbox[s])
+  --right_layout:add(mylayoutbox[s])
 
-  -- Now bring it all together (with the tasklist in the middle)
+  -- TOOLBAR
   local layout = wibox.layout.align.horizontal()
   layout:set_left(left_layout)
   layout:set_middle(mytasklist[s])
   layout:set_right(right_layout)
-
+  mywibox[s] = awful.wibox({ position = "top", screen = s, height = 18 })
   mywibox[s]:set_widget(layout)
   mywibox[s].opacity = beautiful.panel_opacity
+
 end
 
 

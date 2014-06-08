@@ -2,7 +2,7 @@ theme = {}
 
 themes_dir = os.getenv("HOME") .. "/.config/awesome/themes/pokemon_dark"
 theme.dir = themes_dir
-theme.wallpaper_cmd = 'nitrogen'
+theme.wallpaper_cmd = 'nitrogen --restore'
 
 theme.fg		= "#e6e6e6"
 theme.alt_fg		= "#a8a8a8"

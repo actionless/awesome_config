@@ -1,6 +1,7 @@
 local widgets = {
 	-- widgets
 	common			= require("actionless.widgets.common"),
+	layoutbox		= require("actionless.widgets.layoutbox"),
 	music			= require("actionless.widgets.music"),
 	netctl			= require("actionless.widgets.netctl"),
 	bat			= require("actionless.widgets.bat"),
