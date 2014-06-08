@@ -84,8 +84,11 @@ local iseparator_t = wibox.widget.textbox(' ')
 local iseparator = wibox.widget.background()
 iseparator:set_bg(beautiful.fg)
 iseparator:set_widget(iseparator_t)
-local arrl = wibox.widget.imagebox()
-arrl:set_image(beautiful.arrl)
+local arrl_t = wibox.widget.textbox('<span font="monospace 17"></span>')
+local arrl = wibox.widget.background()
+arrl:set_fg(beautiful.fg)
+arrl:set_bg(beautiful.bg)
+arrl:set_widget(arrl_t)
 
 -- Create a wibox for each screen and add it
 local mytaglist = {}
