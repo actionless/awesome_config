@@ -22,15 +22,30 @@ local layoutbox = { mt = {} }
 -- symbol of the current tag.
 -- @param screen The screen number that the layout will be represented for.
 -- @return An imagebox widget configured as a layoutbox.
-function layoutbox.new(screen)
-    local screen = screen or 1
+function layoutbox.new(args)
+    local args = args or {}
+    local screen = args.screen or 1
+    local fg = args.fg or beautiful.fg
+    local bg = args.bg or beautiful.bg
     layoutbox.n_master = textbox()
+    layoutbox.n_master_bg = wibox.widget.background()
+    layoutbox.n_master_bg:set_fg(fg)
+    layoutbox.n_master_bg:set_bg(bg)
+    layoutbox.n_master_bg:set_widget(layoutbox.n_master)
     layoutbox.layout = imagebox()
+    layoutbox.layout_bg = wibox.widget.background()
+    layoutbox.layout_bg:set_fg(fg)
+    layoutbox.layout_bg:set_bg(bg)
+    layoutbox.layout_bg:set_widget(layoutbox.layout)
     layoutbox.n_col = textbox()
+    layoutbox.n_col_bg = wibox.widget.background()
+    layoutbox.n_col_bg:set_fg(fg)
+    layoutbox.n_col_bg:set_bg(bg)
+    layoutbox.n_col_bg:set_widget(layoutbox.n_col)
     layoutbox.w = wibox.layout.fixed.horizontal()
-    layoutbox.w:add(layoutbox.n_master)
-    layoutbox.w:add(layoutbox.layout)
-    layoutbox.w:add(layoutbox.n_col)
+    layoutbox.w:add(layoutbox.n_master_bg)
+    layoutbox.w:add(layoutbox.layout_bg)
+    layoutbox.w:add(layoutbox.n_col_bg)
 
     local function update_layout(t)
         local layout = layout.getname(layout.get(screen))

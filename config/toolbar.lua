@@ -80,8 +80,12 @@ status.widgets.systray_toggle = widgets.systray_toggle({
 
 -- Separators
 local separator = wibox.widget.textbox(' ')
---arrl = wibox.widget.imagebox()
---arrl:set_image(beautiful.arrl)
+local iseparator_t = wibox.widget.textbox(' ')
+local iseparator = wibox.widget.background()
+iseparator:set_bg(beautiful.fg)
+iseparator:set_widget(iseparator_t)
+local arrl = wibox.widget.imagebox()
+arrl:set_image(beautiful.arrl)
 
 -- Create a wibox for each screen and add it
 local mytaglist = {}
@@ -146,7 +150,11 @@ for s = 1, screen.count() do
       right = beautiful.screen_margin })
 
   -- layoutbox
-  mylayoutbox[s] = widgets.layoutbox(s)
+  mylayoutbox[s] = widgets.layoutbox({
+    screen = s,
+    bg = beautiful.fg,
+    fg = beautiful.bg}
+  )
   mylayoutbox[s]:buttons(awful.util.table.join(
     awful.button({ }, 1, function ()
       awful.layout.inc(awful.layout.layouts, 1) end),
@@ -170,8 +178,8 @@ for s = 1, screen.count() do
 
   -- LEFT side
   local left_layout = wibox.layout.fixed.horizontal()
-  left_layout:add(separator)
-  left_layout:add(mylayoutbox[s])
+  --left_layout:add(separator)
+  --left_layout:add(mylayoutbox[s])
   left_layout:add(separator)
   left_layout:add(mytaglist[s])
   left_layout:add(status.widgets.close_button)
@@ -200,7 +208,9 @@ for s = 1, screen.count() do
   right_layout:add(separator)
   right_layout:add(mytextclock)
   right_layout:add(separator)
-  --right_layout:add(mylayoutbox[s])
+  right_layout:add(arrl)
+  right_layout:add(mylayoutbox[s])
+  right_layout:add(iseparator)
 
   -- TOOLBAR
   local layout = wibox.layout.align.horizontal()
