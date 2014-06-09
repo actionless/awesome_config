@@ -35,6 +35,7 @@ local batwidget = widgets.bat({
 -- CPU
 local cpuwidget = widgets.cpu({
   update_interval = 5,
+  max_la1 = status.config.cpu_cores_num,
   list_length = 20,
 })
 
@@ -47,7 +48,7 @@ local memwidget = widgets.mem({
 -- MUSIC
 status.widgets.music = widgets.music.widget({
   update_interval = 5,
-  backend = 'mpd',
+  backend = 'clementine',
   music_dir = '/media/terik/jessie/music/',
 })
 
