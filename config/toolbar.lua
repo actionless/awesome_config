@@ -82,12 +82,12 @@ status.widgets.systray_toggle = widgets.systray_toggle({
 local separator = wibox.widget.textbox(' ')
 local iseparator_t = wibox.widget.textbox(' ')
 local iseparator = wibox.widget.background()
-iseparator:set_bg(beautiful.fg)
+iseparator:set_bg(beautiful.panel_fg)
 iseparator:set_widget(iseparator_t)
 local arrl_t = wibox.widget.textbox('<span font="monospace 17"></span>')
 local arrl = wibox.widget.background()
-arrl:set_fg(beautiful.fg)
-arrl:set_bg(beautiful.bg)
+arrl:set_fg(beautiful.panel_fg)
+arrl:set_bg(beautiful.panel_bg)
 arrl:set_widget(arrl_t)
 
 -- Create a wibox for each screen and add it
@@ -223,6 +223,8 @@ for s = 1, screen.count() do
   mywibox[s] = awful.wibox({ position = "top", screen = s, height = 18 })
   mywibox[s]:set_widget(layout)
   mywibox[s].opacity = beautiful.panel_opacity
+  mywibox[s]:set_bg(beautiful.panel_bg)
+  mywibox[s]:set_fg(beautiful.panel_fg)
 
 end
 
