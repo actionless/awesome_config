@@ -15,21 +15,36 @@ theme.theme		= "#cc99cc"
 theme.error		= "#ff3300"
 
 theme.border		= "#000000"
-theme.sel_border	= "#cc99cc"
+theme.sel_border	= "#ff9900"
 theme.titlebar		= "#000000"
-theme.titlebar_focus	= "#cc6699"
+theme.titlebar_focus	= "#000000"
+theme.titlebar_focus_border = theme.sel_border
 
---theme.font		= "DejaVu Sans Mono 9"
+theme.color1 = '#ff9966'
+theme.color2 = '#cc99cc'
+theme.color3 = '#cc6699'
+theme.color4 = '#99ccff'
+theme.color5 = '#9999ff'
+theme.color6 = '#6666ff'
+theme.color7 = '#cc9966'
+theme.color8 = '#6699cc'
+theme.color9 = '#9966ff'
+theme.color10 = '#666699'
+
+theme.font		= "DejaVu Sans Mono 9"
 --theme.font		= "Dina 8"
 --theme.font		= "Fira Mono 9"
 --theme.font		= "Meslo LG S 10"
-theme.font		= "monoOne 10"
+--theme.font		= "monoOne 10"
+--theme.font		= "tamsyn 10.5"
+---------theme.font		= "Dina 9"
 --theme.font		= "PT Mono 8"
 --theme.font		= "Share Tech Mono 11"
 --theme.font		= "Source Code Pro Medium 9.4"
 --theme.font		= "tewi 9"
 
 theme.sans_font		= "PT Sans 10"
+--------theme.sans_font		= theme.font
 --theme.sans_font	= "Share Tech 11"
 --theme.sans_font	= "Source Sans Pro Regular 10"
 
@@ -42,24 +57,26 @@ theme.bg_urgent			= theme.error
 
 theme.screen_margin		= 0
 
-theme.border_width		= "12"
+theme.border_width		= "5"
 theme.border_normal		= theme.border
 theme.border_focus		= theme.sel_border
 theme.border_marked		= theme.error
 
-theme.panel_opacity		= 0.9
+theme.panel_bg                  = "#000000"
+theme.panel_fg                  = theme.fg
+theme.panel_opacity		= 1.0
 
 theme.taglist_font		= theme.font
 theme.taglist_fg_focus		= theme.shiny
 theme.taglist_bg_focus		= theme.theme
 
 theme.tasklist_font		= theme.sans_font
-theme.tasklist_fg_focus		= theme.fg
+theme.tasklist_fg_focus		= theme.alt_bg
 theme.tasklist_bg_focus		= theme.bg
 theme.tasklist_fg_normal	= theme.fg
 theme.tasklist_bg_normal	= theme.bg
 theme.tasklist_fg_minimize	= theme.bg
-theme.tasklist_bg_minimize	= "#6c6c6c"
+theme.tasklist_bg_minimize	= theme.alt_bg
 
 --theme.titlebar_font		= theme.sans_font
 theme.titlebar_font		= "PT Caption Bold 10.5"
@@ -84,7 +101,7 @@ theme.menu_border_width		= "3"
 theme.menu_height		= "16"
 theme.menu_width		= "140"
 
-theme.player_text		= "#8d5f88"
+theme.player_text		= theme.theme
 
 -- ICONS
 
