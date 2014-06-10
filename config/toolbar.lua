@@ -35,7 +35,7 @@ local batwidget = widgets.bat({
 -- CPU
 local cpuwidget = widgets.cpu({
   update_interval = 5,
-  max_la1 = status.config.cpu_cores_num,
+  cores_number = status.config.cpu_cores_num,
   list_length = 20,
 })
 

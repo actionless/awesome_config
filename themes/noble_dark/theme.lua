@@ -12,6 +12,7 @@ theme.alt_bg		= "#a562b3"
 theme.shiny		= "#ffffff"
 
 theme.theme		= "#ad7fa8"
+theme.warning           = theme.theme
 theme.error		= "#f92672"
 
 theme.border		= "#000000"

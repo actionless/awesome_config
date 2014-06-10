@@ -33,7 +33,7 @@ local function worker(args)
   local update_interval  = args.update_interval or 5
   local bg = args.bg or beautiful.panel_bg or beautiful.bg
   local fg = args.fg or beautiful.panel_fg or beautiful.fg
-  cpu.max_la1 = args.max_la1 or 8
+  cpu.cores_number = args.cores_number or 8
   cpu.font = args.font or font
   cpu.timeout = args.timeout or 0
 
@@ -66,9 +66,14 @@ local function worker(args)
     cpu.now.la1, cpu.now.la5, cpu.now.la15 = parse.find_in_file(
       "/proc/loadavg",
       "^([0-9.]+) ([0-9.]+) ([0-9.]+) .*")
-    if tonumber(cpu.now.la1) > cpu.max_la1 then
+    if tonumber(cpu.now.la1) > cpu.cores_number * 2 then
       cpu.widget:set_bg(beautiful.error)
+      cpu.widget:set_fg(bg)
+    elseif tonumber(cpu.now.la1) > cpu.cores_number then
+      cpu.widget:set_bg(beautiful.warning)
+      cpu.widget:set_fg(bg)
     else
+      cpu.widget:set_fg(fg)
       cpu.widget:set_bg(bg)
     end
     cpu.widget:set_text(
