@@ -53,7 +53,7 @@ theme.bg_urgent			= theme.error
 
 theme.screen_margin		= 0
 
-theme.border_width		= "5"
+theme.border_width		= "16"
 theme.border_normal		= theme.border
 theme.border_focus		= theme.sel_border
 theme.border_marked		= theme.error
