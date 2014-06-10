@@ -82,7 +82,7 @@ function titlebar.make_titlebar(c)
 
 	awful.titlebar(
           c,
-          { size=16,
+          { size=28,
             position = beautiful.titlebar_position,
             opacity = beautiful.titlebar_opacity }
         ):set_widget(layout)
