@@ -32,22 +32,17 @@ theme.color8 = '#6699cc'
 theme.color9 = '#9966ff'
 theme.color10 = '#666699'
 
-theme.font		= "DejaVu Sans Mono 9"
---theme.font		= "Dina 8"
---theme.font		= "Fira Mono 9"
+---------theme.font		= "DejaVu Sans Mono 9"
 --theme.font		= "Meslo LG S 10"
 --theme.font		= "monoOne 10"
 --theme.font		= "tamsyn 10.5"
----------theme.font		= "Dina 9"
---theme.font		= "PT Mono 8"
+theme.font		= "Dina 9"
 --theme.font		= "Share Tech Mono 11"
---theme.font		= "Source Code Pro Medium 9.4"
 --theme.font		= "tewi 9"
 
-theme.sans_font		= "PT Sans 10"
---------theme.sans_font		= theme.font
+----------theme.sans_font		= "PT Sans 10"
+theme.sans_font		= theme.font
 --theme.sans_font	= "Share Tech 11"
---theme.sans_font	= "Source Sans Pro Regular 10"
 
 theme.fg_normal			= theme.fg
 theme.bg_normal			= theme.bg

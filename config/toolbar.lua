@@ -81,15 +81,13 @@ status.widgets.systray_toggle = widgets.systray_toggle({
 
 -- Separators
 local separator = wibox.widget.textbox(' ')
-local iseparator_t = wibox.widget.textbox(' ')
 local iseparator = wibox.widget.background()
 iseparator:set_bg(beautiful.panel_fg)
-iseparator:set_widget(iseparator_t)
-local arrl_t = wibox.widget.textbox('<span font="monospace 17"></span>')
+iseparator:set_widget(wibox.widget.textbox(' '))
 local arrl = wibox.widget.background()
 arrl:set_fg(beautiful.panel_fg)
 arrl:set_bg(beautiful.panel_bg)
-arrl:set_widget(arrl_t)
+arrl:set_widget(wibox.widget.textbox('<span font="monospace 17"></span>'))
 
 -- Create a wibox for each screen and add it
 local mytaglist = {}
