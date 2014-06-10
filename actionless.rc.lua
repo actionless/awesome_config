@@ -11,11 +11,12 @@ local status = {
   menu = {},
   modkey = "Mod4",
   altkey = "Mod1",
-  theme_dir = awful.util.getdir("config") .. "/themes/pokemon_dark/theme.lua",
+  theme_dir = awful.util.getdir("config") .. "/themes/lcars/theme.lua",
   config = {
     net_preset = 'netctl-auto',
     wlan_if = 'wlp12s0',
     eth_if = 'enp0s25',
+    cpu_cores_num = 2,
   },
 }
 

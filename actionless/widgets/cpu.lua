@@ -3,8 +3,6 @@
                                                   
      Licensed under GNU General Public License v2 
       * (c) 2013-2014, Yauheni Kirylau
-      * (c) 2013,      Luke Bonham                
-      * (c) 2010-2012, Peter Hofmann              
                                                   
 --]]
 local naughty      = require("naughty")
@@ -33,13 +31,18 @@ cpu.widget:connect_signal("mouse::leave", function () cpu.hide_notification() en
 local function worker(args)
   local args     = args or {}
   local update_interval  = args.update_interval or 5
+  local bg = args.bg or beautiful.panel_bg or beautiful.bg
+  local fg = args.fg or beautiful.panel_fg or beautiful.fg
+  cpu.cores_number = args.cores_number or 8
   cpu.font = args.font or font
   cpu.timeout = args.timeout or 0
 
   cpu.list_len = args.list_length or 10
   cpu.command = args.command
-    or "COLUMNS=512 top -o \\%CPU -b -n 1" ..
-       " | head -n " .. cpu.list_len+6 .. " | tail -n " .. cpu.list_len  ..
+    or [[COLUMNS=512 ]] ..
+       [[ top -o \%CPU -b -n 1 ]] ..
+       [[ | head -n ]] .. cpu.list_len + 6 ..
+       [[ | tail -n ]] .. cpu.list_len  ..
        [[ | awk '{printf "%-5s %-4s %s\n", $1, $9, $12}' ]]
 
   function cpu.hide_notification()
@@ -60,40 +63,24 @@ local function worker(args)
   end
 
   function cpu.update()
-    -- Read the amount of time the CPUs have spent performing
-    -- different kinds of work. Read the first line of /proc/stat
-    -- which is the sum of all CPUs.
-    local times = parse.first_line_in_file("/proc/stat")
-    local at = 1
-    local idle = 0
-    local total = 0
-    for field in string.gmatch(times, "[%s]+([^%s]+)")
-    do
-        -- 3 = idle, 4 = ioWait. Essentially, the CPUs have done
-        -- nothing during these times.
-        if at == 3 or at == 4
-        then
-            idle = idle + field
-        end
-        total = total + field
-        at = at + 1
+    cpu.now.la1, cpu.now.la5, cpu.now.la15 = parse.find_in_file(
+      "/proc/loadavg",
+      "^([0-9.]+) ([0-9.]+) ([0-9.]+) .*")
+    if tonumber(cpu.now.la1) > cpu.cores_number * 2 then
+      cpu.widget:set_bg(beautiful.error)
+      cpu.widget:set_fg(bg)
+    elseif tonumber(cpu.now.la1) > cpu.cores_number then
+      cpu.widget:set_bg(beautiful.warning)
+      cpu.widget:set_fg(bg)
+    else
+      cpu.widget:set_fg(fg)
+      cpu.widget:set_bg(bg)
     end
-    local active = total - idle
-
-    -- Read current data and calculate relative values.
-    local dactive = active - cpu.last_active
-    local dtotal = total - cpu.last_total
-
-    cpu.now.usage = math.ceil((dactive / dtotal) * 100)
-
     cpu.widget:set_text(
       string.format(
-        "%-4s", cpu.now.usage .. "%"
+        "%-5s",
+        cpu.now.la1
     ))
-
-    -- Save current data for the next run.
-    cpu.last_active = active
-    cpu.last_total = total
   end
 
   newtimer("cpu", update_interval, cpu.update)

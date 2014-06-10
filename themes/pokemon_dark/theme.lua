@@ -12,6 +12,7 @@ theme.alt_bg		= "#a562b3"
 theme.shiny		= "#ffffff"
 
 theme.theme		= "#ad7fa8"
+theme.warning           = theme.theme
 theme.error		= "#f92672"
 
 theme.border		= "#000000"
@@ -48,18 +49,20 @@ theme.border_normal		= theme.border
 theme.border_focus		= theme.sel_border
 theme.border_marked		= theme.error
 
-theme.panel_opacity		= 1.0
+theme.panel_bg                  = "#000000"
+theme.panel_fg                  = theme.fg
+theme.panel_opacity		= 0.75
 
 theme.taglist_font		= theme.font
 theme.taglist_fg_focus		= theme.shiny
 theme.taglist_bg_focus		= theme.theme
 
 theme.tasklist_font		= theme.sans_font
-theme.tasklist_fg_focus		= theme.fg
-theme.tasklist_bg_focus		= theme.bg
-theme.tasklist_fg_normal	= theme.fg
-theme.tasklist_bg_normal	= theme.bg
-theme.tasklist_fg_minimize	= theme.bg
+theme.tasklist_fg_focus		= theme.panel_fg
+theme.tasklist_bg_focus		= theme.panel_bg
+theme.tasklist_fg_normal	= theme.panel_fg
+theme.tasklist_bg_normal	= theme.panel_bg
+theme.tasklist_fg_minimize	= theme.panel_bg
 theme.tasklist_bg_minimize	= "#818181"
 
 --theme.titlebar_font		= theme.sans_font

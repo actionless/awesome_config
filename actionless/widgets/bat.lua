@@ -26,6 +26,8 @@ local function worker(args)
   local args = args or {}
   local update_interval = args.update_interval or 30
   local device = args.device or "battery_BAT0"
+  local bg = args.bg or beautiful.panel_bg or beautiful.bg
+  local fg = args.fg or beautiful.panel_fg or beautiful.fg
 
   function bat.update()
     async.execute(
@@ -48,33 +50,33 @@ local function worker(args)
     -- charged:
     if bat.now.state == 'fully-charged' then
       bat.widget:set_image(beautiful.widget_ac)
-      bat.widget:set_bg(beautiful.bg)
-      bat.widget:set_fg(beautiful.fg)
+      bat.widget:set_bg(bg)
+      bat.widget:set_fg(fg)
     -- charging:
     elseif bat.now.state == 'charging' then
       if bat.now.percentage < 30 then
         bat.widget:set_image(beautiful.widget_ac_charging_low)
         bat.widget:set_bg(beautiful.theme)
-        bat.widget:set_fg(beautiful.bg)
+        bat.widget:set_fg(bg)
       else
         bat.widget:set_image(beautiful.widget_ac_charging)
-        bat.widget:set_bg(beautiful.bg)
-        bat.widget:set_fg(beautiful.fg)
+        bat.widget:set_bg(bg)
+        bat.widget:set_fg(fg)
       end
     -- on battery:
     else
       if bat.now.on_low_battery == 'yes' then
         bat.widget:set_image(beautiful.widget_battery_empty)
         bat.widget:set_bg(beautiful.error)
-        bat.widget:set_fg(beautiful.bg)
+        bat.widget:set_fg(bg)
       elseif bat.now.percentage < 30 then
         bat.widget:set_image(beautiful.widget_battery_low)
         bat.widget:set_bg(beautiful.theme)
-        bat.widget:set_fg(beautiful.fg)
+        bat.widget:set_fg(fg)
       else
         bat.widget:set_image(beautiful.widget_battery)
-        bat.widget:set_bg(beautiful.bg)
-        bat.widget:set_fg(beautiful.fg)
+        bat.widget:set_bg(bg)
+        bat.widget:set_fg(fg)
       end
     end
     -- notifications for low and critical states
