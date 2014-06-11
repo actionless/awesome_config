@@ -31,8 +31,13 @@ mem.widget:connect_signal("mouse::leave", function () mem.hide_notification() en
 local function worker(args)
   local args   = args or {}
   local update_interval  = args.update_interval or 5
+  local bg = args.bg or beautiful.panel_bg or beautiful.bg
+  local fg = args.fg or beautiful.panel_fg or beautiful.fg
   mem.timeout = args.timeout or 0
   mem.font = args.font or font
+
+  mem.widget:set_fg(fg)
+  mem.widget:set_bg(bg)
 
   mem.list_len = args.list_length or 10
   mem.command = args.command or

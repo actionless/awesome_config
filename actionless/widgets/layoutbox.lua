@@ -15,6 +15,7 @@ local imagebox = require("wibox.widget.imagebox")
 local textbox = require("wibox.widget.textbox")
 
 local helpers = require("actionless.helpers")
+local decorated = require("actionless.widgets.common").decorated
 
 --- Layoutbox widget "class".
 local layoutbox = { mt = {} }
@@ -59,10 +60,11 @@ function worker(args)
     object.n_col:set_bg(bg)
     object.n_col:set_widget(textbox())
 
-    local widget = wibox.layout.fixed.horizontal()
-    widget:add(object.n_master)
-    widget:add(object.layout)
-    widget:add(object.n_col)
+    object.widget = wibox.layout.fixed.horizontal()
+    object.widget:add(object.n_master)
+    object.widget:add(object.layout)
+    object.widget:add(object.n_col)
+    object.widget = decorated(object.widget)
 
     object:update_all(nil)
     tag.attached_connect_signal(
@@ -77,7 +79,7 @@ function worker(args)
     tag.attached_connect_signal(
         object.screen, "property::nmaster",
         function(t) object:update_nmaster(t) end)
-    return widget
+    return setmetatable(object, { __index = object.widget })
 end
 
 

@@ -24,7 +24,7 @@ local N_A = "N/A"
 -- player infos
 local player = {id=nil}
 player.cover = "/tmp/playercover.png"
-player.widget = common_widget()
+player.widget = common_widget(true)
 
 local function worker(args)
   local args            = args or {}

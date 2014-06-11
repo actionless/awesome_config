@@ -21,7 +21,7 @@ local helpers		= require("actionless.helpers")
 
 -- ALSA volume
 local alsa = {}
-alsa.widget = common_widget(beautiful.widget_vol)
+alsa.widget = common_widget()
 alsa.widget:buttons(awful.util.table.join(
   awful.button({ }, 1, function () alsa.toggle() end),
   awful.button({ }, 5, function () alsa.down() end),
@@ -35,6 +35,12 @@ alsa.volume = {
 
 local function worker(args)
   local args = args or {}
+  local bg = args.bg or beautiful.panel_bg or beautiful.bg
+  local fg = args.fg or beautiful.panel_fg or beautiful.fg
+
+  alsa.widget:set_bg(bg)
+  alsa.widget:set_fg(fg)
+
   alsa.step = args.step or 2
   alsa.update_interval  = args.update_interval or 5
   alsa.channel  = args.channel or "Master"

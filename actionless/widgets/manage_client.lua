@@ -20,14 +20,14 @@ local mono_preset = helpers.mono_preset
 
 local manage_client = {}
 
-manage_client.widget = common.widget()
+manage_client.widget = common.decorated()
 if beautiful.close_button then
   manage_client.widget:set_image(beautiful.close_button)
 else
-  manage_client.widget.text_widget:set_text(' x ')
+  manage_client.widget.widget.text_widget:set_text(' x ')
 end
-manage_client.widget.text_bg:set_bg(beautiful.fg)
-manage_client.widget.text_bg:set_fg(beautiful.bg)
+manage_client.widget.widget.text_bg:set_bg(beautiful.fg)
+manage_client.widget.widget.text_bg:set_fg(beautiful.bg)
 
 local function worker(args)
 	local args	 = args or {}

@@ -6,14 +6,12 @@ theme.dir = themes_dir
 theme.wallpaper_cmd     = "nitrogen --restore"
 
 theme.bg		= "#000000"
-theme.alt_bg		= "#9966ff"
 
 theme.fg		= "#ffcc99"
 theme.alt_fg		= "#ffcc66"
 theme.shiny		= "#000000"
 
 theme.theme		= "#cc99cc"
-theme.theme2            = "#cc6699"
 theme.warning           = "#ff9900"
 theme.error		= "#ff3300"
 
@@ -23,6 +21,7 @@ theme.titlebar		= "#000000"
 theme.titlebar_focus	= "#000000"
 theme.titlebar_focus_border = theme.sel_border
 
+theme.colorf = theme.fg
 theme.color1 = '#ff9966'
 theme.color2 = '#cc99cc'
 theme.color3 = '#cc6699'
@@ -34,17 +33,11 @@ theme.color8 = '#6699cc'
 theme.color9 = '#9966ff'
 theme.color10 = '#666699'
 
----------theme.font		= "DejaVu Sans Mono 9"
---theme.font		= "Meslo LG S 10"
---theme.font		= "monoOne 10"
---theme.font		= "tamsyn 10.5"
-theme.font		= "Dina 9"
---theme.font		= "Share Tech Mono 11"
---theme.font		= "tewi 9"
+theme.alt_bg		= theme.color9
+theme.theme2            = theme.color3
 
-----------theme.sans_font		= "PT Sans 10"
+theme.font		= "Dina 9"
 theme.sans_font		= theme.font
---theme.sans_font	= "Share Tech 11"
 
 theme.fg_normal			= theme.fg
 theme.bg_normal			= theme.bg
@@ -65,8 +58,12 @@ theme.panel_fg                  = theme.fg
 theme.panel_opacity		= 1.0
 
 theme.taglist_font		= theme.font
-theme.taglist_fg_focus		= theme.shiny
-theme.taglist_bg_focus		= theme.theme2
+theme.taglist_fg_occupied	= theme.bg
+theme.taglist_bg_occupied	= theme.theme2
+theme.taglist_fg_empty		= theme.bg
+theme.taglist_bg_empty		= theme.theme2
+theme.taglist_fg_focus		= theme.theme2
+theme.taglist_bg_focus		= theme.bg
 
 theme.tasklist_font		= theme.sans_font
 theme.tasklist_fg_focus		= theme.alt_bg
@@ -76,9 +73,7 @@ theme.tasklist_bg_normal	= theme.bg
 theme.tasklist_fg_minimize	= theme.bg
 theme.tasklist_bg_minimize	= theme.alt_bg
 
---theme.titlebar_font		= theme.sans_font
 theme.titlebar_font		= "Terminus Bold 10.5"
---theme.titlebar_font		= "Source Sans Pro Bold 10.5"
 theme.titlebar_fg_focus		= theme.tasklist_fg_focus
 theme.titlebar_fg_normal	= theme.tasklist_fg_normal
 theme.titlebar_bg_focus		= theme.titlebar_focus
@@ -103,17 +98,37 @@ theme.player_text		= theme.theme
 
 -- ICONS
 
+theme.show_widget_icon = false
+
 icons_dir = theme.dir .. "/icons/"
 theme.icons_dir = icons_dir
 
-theme.taglist_squares_sel	= icons_dir .. "square_sel.png"
-theme.taglist_squares_unsel	= icons_dir .. "square_unsel.png"
-
 theme.menu_submenu_icon		= icons_dir .. "submenu.png"
+
 theme.taglist_squares_sel	= icons_dir .. "square_sel.png"
 theme.taglist_squares_unsel	= icons_dir .. "square_unsel.png"
 
 theme.arrl			= icons_dir .. "arrl.png"
+theme.arrr			= icons_dir .. "arrr.png"
+theme.arrl_err			= icons_dir .. "arrl_err.png"
+theme.arrr_err			= icons_dir .. "arrr_err.png"
+theme.arrl_warn			= icons_dir .. "arrl_warn.png"
+theme.arrr_warn			= icons_dir .. "arrr_warn.png"
+theme.arrl1			= icons_dir .. "arrl1.png"
+theme.arrr1			= icons_dir .. "arrr1.png"
+theme.arrl2			= icons_dir .. "arrl2.png"
+theme.arrr2			= icons_dir .. "arrr2.png"
+theme.arrl3			= icons_dir .. "arrl3.png"
+theme.arrr3			= icons_dir .. "arrr3.png"
+theme.arrl4			= icons_dir .. "arrl4.png"
+theme.arrr4			= icons_dir .. "arrr4.png"
+theme.arrl5			= icons_dir .. "arrl5.png"
+theme.arrr5			= icons_dir .. "arrr5.png"
+theme.arrl6			= icons_dir .. "arrl6.png"
+theme.arrr6			= icons_dir .. "arrr6.png"
+
+theme.arrl9			= icons_dir .. "arrl9.png"
+theme.arrr9			= icons_dir .. "arrr9.png"
 
 theme.widget_ac			= icons_dir .. "ac.png"
 theme.widget_ac_charging	= icons_dir .. "ac_charging.png"

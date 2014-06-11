@@ -17,40 +17,9 @@ local toolbar = {}
 function toolbar.init(status)
 local modkey = status.modkey
 
+
 -- CLOSE button
 status.widgets.close_button = widgets.manage_client()
-
--- ALSA volume
-status.widgets.volume = widgets.alsa({
-  update_interval = 5,
-  channel = 'Master',
-  channels_toggle = {'Master', 'Speaker', 'Headphone'},
-})
-
--- Battery
-local batwidget = widgets.bat({
-  update_interval = 30,
-})
-
--- CPU
-local cpuwidget = widgets.cpu({
-  update_interval = 5,
-  cores_number = status.config.cpu_cores_num,
-  list_length = 20,
-})
-
--- MEM
-local memwidget = widgets.mem({
-  update_interval = 10,
-  list_length = 20,
-})
-
--- MUSIC
-status.widgets.music = widgets.music.widget({
-  update_interval = 5,
-  backend = 'mpd',
-  music_dir = '/media/terik/jessie/music/',
-})
 
 -- NetCtl
 local netctlwidget = widgets.netctl({
@@ -58,36 +27,88 @@ local netctlwidget = widgets.netctl({
   preset = status.config.net_preset,
   wlan_if = status.config.wlan_if,
   eth_if = status.config.eth_if,
+  fg = beautiful.panel_bg,
+  bg = beautiful.color4,
 })
-
--- Sensor
-local tempwidget = widgets.temp({
-  update_interval = 10,
-  sensor = "Core 0",
-  warning = 75
+-- MUSIC
+status.widgets.music = widgets.music.widget({
+  update_interval = 5,
+  backend = 'mpd',
+  music_dir = '/media/terik/jessie/music/',
+  fg = beautiful.panel_bg,
+  bg = beautiful.color4,
 })
-
--- Textclock
--- mytextclock = awful.widget.textclock(" %a %d %b  %H:%M")
-local mytextclock = awful.widget.textclock(" %H:%M")
--- calendar
-widgets.calendar:attach(mytextclock)
-
+-- ALSA volume
+status.widgets.volume = widgets.alsa({
+  update_interval = 5,
+  channel = 'Master',
+  channels_toggle = {'Master', 'Speaker', 'Headphone'},
+  fg = beautiful.panel_bg,
+  bg=beautiful.color4,
+})
 
 -- systray_toggle
 status.widgets.systray_toggle = widgets.systray_toggle({
   screen = 1
 })
 
+-- CPU
+local cpuwidget = widgets.cpu({
+  update_interval = 5,
+  cores_number = status.config.cpu_cores_num,
+  list_length = 20,
+  fg = beautiful.panel_bg,
+  bg=beautiful.color2,
+})
+-- MEM
+local memwidget = widgets.mem({
+  update_interval = 10,
+  list_length = 20,
+  fg = beautiful.panel_bg,
+  bg=beautiful.color2,
+})
+-- Sensor
+local tempwidget = widgets.temp({
+  update_interval = 10,
+  sensor = "Core 0",
+  warning = 75,
+  fg = beautiful.panel_bg,
+  bg=beautiful.color2,
+})
+-- Battery
+local batwidget = widgets.bat({
+  update_interval = 30,
+  fg = beautiful.panel_bg,
+  bg=beautiful.color2,
+})
+-- Textclock
+-- mytextclock = awful.widget.textclock("%a %d %b  %H:%M")
+local mytextclock = awful.widget.textclock("%H:%M")
+widgets.calendar:attach(mytextclock)
+
 -- Separators
-local separator = wibox.widget.textbox(' ')
-local iseparator = wibox.widget.background()
-iseparator:set_bg(beautiful.panel_fg)
-iseparator:set_widget(wibox.widget.textbox(' '))
-local arrl = wibox.widget.background()
-arrl:set_fg(beautiful.panel_fg)
-arrl:set_bg(beautiful.panel_bg)
-arrl:set_widget(wibox.widget.textbox('<span font="monospace 17"></span>'))
+local separator = widgets.common.make_text_separator(' ')
+local iseparator = widgets.common.make_text_separator(' ', beautiful.panel_bg)
+local separator2 = widgets.common.make_text_separator(' ', beautiful.color2)
+local separator4 = widgets.common.make_text_separator(' ', beautiful.color4)
+local arrl = widgets.common.make_separator('arrl')
+local arrr = widgets.common.make_separator('arrr')
+local arrl1 = widgets.common.make_separator('arrl1')
+local arrr1 = widgets.common.make_separator('arrr1')
+local arrl2 = widgets.common.make_separator('arrl2')
+local arrr2 = widgets.common.make_separator('arrr2')
+local arrl3 = widgets.common.make_separator('arrl3')
+local arrr3 = widgets.common.make_separator('arrr3')
+local arrl4 = widgets.common.make_separator('arrl4')
+local arrr4 = widgets.common.make_separator('arrr4')
+local arrl5 = widgets.common.make_separator('arrl5')
+local arrr5 = widgets.common.make_separator('arrr5')
+local arrl6 = widgets.common.make_separator('arrl6')
+local arrr6 = widgets.common.make_separator('arrr6')
+
+local arrl9 = widgets.common.make_separator('arrl9')
+local arrr9 = widgets.common.make_separator('arrr9')
+
 
 -- Create a wibox for each screen and add it
 local mytaglist = {}
@@ -182,37 +203,43 @@ for s = 1, screen.count() do
   local left_layout = wibox.layout.fixed.horizontal()
   --left_layout:add(separator)
   --left_layout:add(mylayoutbox[s])
-  left_layout:add(separator)
+  left_layout:add(arrl3)
   left_layout:add(mytaglist[s])
+  left_layout:add(arrr3)
+  left_layout:add(separator)
   left_layout:add(status.widgets.close_button)
   left_layout:add(status.widgets.promptbox[s])
   left_layout:add(separator)
+  left_layout:add(arrl9)
 
   -- RIGHT side
   local right_layout = wibox.layout.fixed.horizontal()
+  right_layout:add(arrr9)
   right_layout:add(separator)
-  right_layout:add(separator)
+  right_layout:add(arrl4)
   right_layout:add(netctlwidget)
-  right_layout:add(separator)
+  right_layout:add(separator4)
   right_layout:add(status.widgets.music)
-  right_layout:add(separator)
+  right_layout:add(separator4)
   right_layout:add(status.widgets.volume)
+  right_layout:add(arrr4)
   if s == 1 then right_layout:add(status.widgets.systray_toggle) end
-  right_layout:add(separator)
+
+  right_layout:add(arrl2)
   right_layout:add(memwidget)
-  right_layout:add(separator)
+  right_layout:add(separator2)
   right_layout:add(cpuwidget)
+  right_layout:add(separator2)
   right_layout:add(tempwidget)
-  right_layout:add(separator)
+  right_layout:add(separator2)
   --right_layout:add(fswidgetbg)
   --right_layout:add(separator)
   right_layout:add(batwidget)
-  right_layout:add(separator)
+  --right_layout:add(separator2)
   right_layout:add(mytextclock)
+  right_layout:add(arrr2)
   right_layout:add(separator)
-  right_layout:add(arrl)
   right_layout:add(mylayoutbox[s])
-  right_layout:add(iseparator)
 
   -- TOOLBAR
   local layout = wibox.layout.align.horizontal()
