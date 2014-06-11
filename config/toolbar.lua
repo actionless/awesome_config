@@ -201,8 +201,6 @@ for s = 1, screen.count() do
 
   -- LEFT side
   local left_layout = wibox.layout.fixed.horizontal()
-  --left_layout:add(separator)
-  --left_layout:add(mylayoutbox[s])
   left_layout:add(arrl3)
   left_layout:add(mytaglist[s])
   left_layout:add(arrr3)
@@ -242,13 +240,26 @@ for s = 1, screen.count() do
   right_layout:add(separator)
   right_layout:add(mylayoutbox[s])
 
+
   -- TOOLBAR
   local layout = wibox.layout.align.horizontal()
   layout:set_left(left_layout)
   layout:set_middle(mytasklist[s])
   layout:set_right(right_layout)
-  mywibox[s] = awful.wibox({ position = "top", screen = s, height = 18 })
-  mywibox[s]:set_widget(layout)
+
+  local margin_hack = wibox.widget.textbox(
+    '<span font="monospace ' .. beautiful.panel_margin .. '"> </span>')
+  local margined_layout = wibox.layout.align.vertical()
+  margined_layout:set_top(margin_hack)
+  margined_layout:set_middle(layout)
+  margined_layout:set_bottom(margin_hack)
+
+  mywibox[s] = awful.wibox({
+    position = "top",
+    screen = s,
+    height = 28,
+  })
+  mywibox[s]:set_widget(margined_layout)
   mywibox[s].opacity = beautiful.panel_opacity
   mywibox[s]:set_bg(beautiful.panel_bg)
   mywibox[s]:set_fg(beautiful.panel_fg)

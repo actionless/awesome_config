@@ -5,13 +5,13 @@ local beautiful = require("beautiful")
 local common = {}
 
 function common.make_text_separator(separator_character, bg, fg)
+  --'<span font="monospace 17">' .. separator_character .. '</span>'))
   local bg = bg or beautiful.panel_bg
   local fg = fg or beautiful.panel_fg
   local widget = wibox.widget.background()
   widget:set_fg(fg)
   widget:set_bg(bg)
-  widget:set_widget(wibox.widget.textbox(
-    '<span font="monospace 17">' .. separator_character .. '</span>'))
+  widget:set_widget(wibox.widget.textbox(separator_character))
   return widget
 end
 
@@ -19,7 +19,9 @@ function common.make_separator(image_name, bg)
   local bg = bg or beautiful.panel_bg
   local widget = wibox.widget.background()
   widget:set_bg(bg)
-  widget:set_widget(wibox.widget.imagebox(beautiful[image_name]))
+  local image_widget = wibox.widget.imagebox(beautiful[image_name])
+  image_widget:set_resize(false)
+  widget:set_widget(image_widget)
   return widget
 end
 
@@ -33,6 +35,7 @@ function common.widget(force_show_icon)
   widget.text_bg:set_widget(widget.text_widget)
 
   widget.icon_widget = wibox.widget.imagebox()
+  widget.icon_widget:set_resize(false)
   widget.icon_bg = wibox.widget.background()
   widget.icon_bg:set_widget(widget.icon_widget)
 

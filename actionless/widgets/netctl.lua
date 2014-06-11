@@ -98,7 +98,7 @@ local function worker(args)
       function(str)
         if #str ~= 0 then
           netctl.interface = netctl.wlan_if
-          netctl.update_widget(str)
+          netctl.update_widget(str:match("^(.*)\n.*"))
         else
           netctl.interface = nil
           netctl.update_widget('nctl-a...')

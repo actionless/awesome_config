@@ -33,10 +33,14 @@ theme.color8 = '#6699cc'
 theme.color9 = '#9966ff'
 theme.color10 = '#666699'
 
+
 theme.alt_bg		= theme.color9
 theme.theme2            = theme.color3
 
-theme.font		= "Dina 9"
+--theme.font		= "Dina 9"
+--theme.font		= "LCARS 15"
+--theme.font		= "Terminus Bold 9.8"
+theme.font		= "Fixed Bold 10.5"
 theme.sans_font		= theme.font
 
 theme.fg_normal			= theme.fg
@@ -56,6 +60,7 @@ theme.border_marked		= theme.error
 theme.panel_bg                  = "#000000"
 theme.panel_fg                  = theme.fg
 theme.panel_opacity		= 1.0
+theme.panel_margin              = 3
 
 theme.taglist_font		= theme.font
 theme.taglist_fg_occupied	= theme.bg
