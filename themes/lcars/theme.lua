@@ -13,6 +13,7 @@ theme.alt_fg		= "#ffcc66"
 theme.shiny		= "#000000"
 
 theme.theme		= "#cc99cc"
+theme.theme2            = "#cc6699"
 theme.warning           = "#ff9900"
 theme.error		= "#ff3300"
 
@@ -47,7 +48,7 @@ theme.sans_font		= theme.font
 
 theme.fg_normal			= theme.fg
 theme.bg_normal			= theme.bg
-theme.fg_focus			= theme.fg
+theme.fg_focus			= theme.shiny
 theme.bg_focus			= theme.theme
 theme.fg_urgent			= theme.bg
 theme.bg_urgent			= theme.error
@@ -65,7 +66,7 @@ theme.panel_opacity		= 1.0
 
 theme.taglist_font		= theme.font
 theme.taglist_fg_focus		= theme.shiny
-theme.taglist_bg_focus		= theme.theme
+theme.taglist_bg_focus		= theme.theme2
 
 theme.tasklist_font		= theme.sans_font
 theme.tasklist_fg_focus		= theme.alt_bg
@@ -76,10 +77,10 @@ theme.tasklist_fg_minimize	= theme.bg
 theme.tasklist_bg_minimize	= theme.alt_bg
 
 --theme.titlebar_font		= theme.sans_font
-theme.titlebar_font		= "PT Caption Bold 10.5"
+theme.titlebar_font		= "Terminus Bold 10.5"
 --theme.titlebar_font		= "Source Sans Pro Bold 10.5"
-theme.titlebar_fg_focus		= theme.shiny
-theme.titlebar_fg_normal	= theme.bg
+theme.titlebar_fg_focus		= theme.tasklist_fg_focus
+theme.titlebar_fg_normal	= theme.tasklist_fg_normal
 theme.titlebar_bg_focus		= theme.titlebar_focus
 theme.titlebar_bg_normal	= theme.titlebar
 
