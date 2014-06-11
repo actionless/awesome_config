@@ -38,9 +38,9 @@ theme.alt_bg		= theme.color9
 theme.theme2            = theme.color3
 
 --theme.font		= "Dina 9"
---theme.font		= "LCARS 15"
 --theme.font		= "Terminus Bold 9.8"
 theme.font		= "Fixed Bold 10.5"
+--theme.font		= "Meslo LG S 10"
 theme.sans_font		= theme.font
 
 theme.fg_normal			= theme.fg
@@ -57,8 +57,9 @@ theme.border_normal		= theme.border
 theme.border_focus		= theme.sel_border
 theme.border_marked		= theme.error
 
-theme.panel_bg                  = "#000000"
+theme.panel_bg                  = theme.bg
 theme.panel_fg                  = theme.fg
+theme.panel_height              = 23
 theme.panel_opacity		= 1.0
 theme.panel_margin              = 3
 

@@ -215,25 +215,26 @@ for s = 1, screen.count() do
   right_layout:add(arrr9)
   right_layout:add(separator)
   right_layout:add(arrl4)
+
   right_layout:add(netctlwidget)
   right_layout:add(separator4)
   right_layout:add(status.widgets.music)
   right_layout:add(separator4)
   right_layout:add(status.widgets.volume)
+
   right_layout:add(arrr4)
   if s == 1 then right_layout:add(status.widgets.systray_toggle) end
-
   right_layout:add(arrl2)
+
   right_layout:add(memwidget)
   right_layout:add(separator2)
   right_layout:add(cpuwidget)
   right_layout:add(separator2)
   right_layout:add(tempwidget)
   right_layout:add(separator2)
-  --right_layout:add(fswidgetbg)
-  --right_layout:add(separator)
   right_layout:add(batwidget)
   --right_layout:add(separator2)
+
   right_layout:add(arrr2)
   right_layout:add(separator)
   right_layout:add(mytextclock)
@@ -247,19 +248,22 @@ for s = 1, screen.count() do
   layout:set_middle(mytasklist[s])
   layout:set_right(right_layout)
 
-  local margin_hack = wibox.widget.textbox(
-    '<span font="monospace ' .. beautiful.panel_margin .. '"> </span>')
-  local margined_layout = wibox.layout.align.vertical()
-  margined_layout:set_top(margin_hack)
-  margined_layout:set_middle(layout)
-  margined_layout:set_bottom(margin_hack)
+  if beautiful.panel_margin then
+    local margined_layout = wibox.layout.align.vertical()
+    margined_layout:set_middle(layout)
+    margined_layout:set_bottom(
+      wibox.widget.textbox(
+        '<span font="monospace ' .. beautiful.panel_margin .. '"> </span>'
+    ))
+    layout = margined_layout
+  end
 
   mywibox[s] = awful.wibox({
     position = "top",
     screen = s,
-    height = 28,
+    height = beautiful.panel_height,
   })
-  mywibox[s]:set_widget(margined_layout)
+  mywibox[s]:set_widget(layout)
   mywibox[s].opacity = beautiful.panel_opacity
   mywibox[s]:set_bg(beautiful.panel_bg)
   mywibox[s]:set_fg(beautiful.panel_fg)
