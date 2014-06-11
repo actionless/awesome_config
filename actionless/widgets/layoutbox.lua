@@ -14,68 +14,73 @@ local wibox = require("wibox")
 local imagebox = require("wibox.widget.imagebox")
 local textbox = require("wibox.widget.textbox")
 
---- Layoutbox widget.
--- awful.widget.layoutbox
+local helpers = require("actionless.helpers")
+
+--- Layoutbox widget "class".
 local layoutbox = { mt = {} }
+function layoutbox:update_layout()
+    local layout = layout.getname(layout.get(self.screen))
+    self.layout.widget:set_image(layout and beautiful["layout_" .. layout])
+end
+function layoutbox:update_nmaster(t)
+    self.n_master.widget:set_text(tag.getnmaster(t))
+end
+function layoutbox:update_ncol(t)
+    self.n_col.widget:set_text(tag.getncol(t))
+end
+function layoutbox:update_all(t)
+    self:update_layout()
+    self:update_nmaster(t)
+    self:update_ncol(t)
+end
+
 
 --- Create a layoutbox widget. It draws a picture with the current layout
 -- symbol of the current tag.
 -- @param screen The screen number that the layout will be represented for.
 -- @return An imagebox widget configured as a layoutbox.
-function layoutbox.new(args)
+function worker(args)
     local args = args or {}
-    local screen = args.screen or 1
     local fg = args.fg or beautiful.fg
     local bg = args.bg or beautiful.bg
-    layoutbox.n_master = textbox()
-    layoutbox.n_master_bg = wibox.widget.background()
-    layoutbox.n_master_bg:set_fg(fg)
-    layoutbox.n_master_bg:set_bg(bg)
-    layoutbox.n_master_bg:set_widget(layoutbox.n_master)
-    layoutbox.layout = imagebox()
-    layoutbox.layout_bg = wibox.widget.background()
-    layoutbox.layout_bg:set_fg(fg)
-    layoutbox.layout_bg:set_bg(bg)
-    layoutbox.layout_bg:set_widget(layoutbox.layout)
-    layoutbox.n_col = textbox()
-    layoutbox.n_col_bg = wibox.widget.background()
-    layoutbox.n_col_bg:set_fg(fg)
-    layoutbox.n_col_bg:set_bg(bg)
-    layoutbox.n_col_bg:set_widget(layoutbox.n_col)
-    layoutbox.w = wibox.layout.fixed.horizontal()
-    layoutbox.w:add(layoutbox.n_master_bg)
-    layoutbox.w:add(layoutbox.layout_bg)
-    layoutbox.w:add(layoutbox.n_col_bg)
+    local object = helpers.deepcopy(layoutbox)
+    object.screen = args.screen or 1
 
-    local function update_layout(t)
-        local layout = layout.getname(layout.get(screen))
-        layoutbox.layout:set_image(layout and beautiful["layout_" .. layout])
-    end
-    local function update_nmaster(t)
-        layoutbox.n_master:set_text(tag.getnmaster(t))
-    end
-    local function update_ncol(t)
-        layoutbox.n_col:set_text(tag.getncol(t))
-    end
-    local function update_all(t)
-        update_layout(t, layoutbox)
-        update_nmaster(t, layoutbox)
-        update_ncol(t, layoutbox)
-    end
+    object.n_master = wibox.widget.background()
+    object.n_master:set_fg(fg)
+    object.n_master:set_bg(bg)
+    object.n_master:set_widget(textbox())
+    object.layout = wibox.widget.background()
+    object.layout:set_fg(fg)
+    object.layout:set_bg(bg)
+    object.layout:set_widget(imagebox())
+    object.n_col = wibox.widget.background()
+    object.n_col:set_fg(fg)
+    object.n_col:set_bg(bg)
+    object.n_col:set_widget(textbox())
 
-    update_all(nil)
-    tag.attached_connect_signal(screen, "property::selected", update_all)
-    tag.attached_connect_signal(screen, "property::layout", update_layout)
-    tag.attached_connect_signal(screen, "property::ncol", update_ncol)
-    tag.attached_connect_signal(screen, "property::nmaster", update_nmaster)
+    local widget = wibox.layout.fixed.horizontal()
+    widget:add(object.n_master)
+    widget:add(object.layout)
+    widget:add(object.n_col)
 
-    return layoutbox.w
+    object:update_all(nil)
+    tag.attached_connect_signal(
+        object.screen, "property::selected",
+        function(t) object:update_all(t) end)
+    tag.attached_connect_signal(
+        object.screen, "property::layout",
+        function(t) object:update_layout() end)
+    tag.attached_connect_signal(
+        object.screen, "property::ncol",
+        function(t) object:update_ncol(t) end)
+    tag.attached_connect_signal(
+        object.screen, "property::nmaster",
+        function(t) object:update_nmaster(t) end)
+    return widget
 end
 
-function layoutbox.mt:__call(...)
-    return layoutbox.new(...)
-end
 
-return setmetatable(layoutbox, layoutbox.mt)
+return setmetatable(layoutbox, { __call = function(_, ...) return worker(...) end })
 
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80

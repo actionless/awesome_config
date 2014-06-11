@@ -101,11 +101,21 @@ function helpers.map_table_values(t, func)
     t[k] = func(v)
   end
 end
--- {{{ Read the ... of a file or return nil.
 
-
---=============================================================================
--- }}}
+function helpers.deepcopy(orig)
+    local orig_type = type(orig)
+    local copy
+    if orig_type == 'table' then
+        copy = {}
+        for orig_key, orig_value in next, orig, nil do
+            copy[helpers.deepcopy(orig_key)] = helpers.deepcopy(orig_value)
+        end
+        setmetatable(copy, helpers.deepcopy(getmetatable(orig)))
+    else -- number, string, boolean, etc
+        copy = orig
+    end
+    return copy
+end
 
 function helpers.run_once(cmd)
   local findme = cmd
