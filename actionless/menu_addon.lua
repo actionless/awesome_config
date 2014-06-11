@@ -16,6 +16,7 @@ local menu_addon = { mt={} }
 
 function menu_addon.clients_on_tag(args, item_args)
   local cls = capi.client.focus
+  if not cls then return end
   local cls_t = {}
 
   local selected_tags = tags.selectedlist(cls.screen)
