@@ -35,8 +35,8 @@ status.widgets.music = widgets.music.widget({
   update_interval = 5,
   backend = 'mpd',
   music_dir = '/media/terik/jessie/music/',
-  fg = beautiful.panel_bg,
-  bg = beautiful.color4,
+  bg = beautiful.panel_bg,
+  fg = beautiful.color4,
 })
 -- ALSA volume
 status.widgets.volume = widgets.alsa({
@@ -221,8 +221,7 @@ for s = 1, screen.count() do
   right_layout:add(separator4)
   right_layout:add(sep)
   right_layout:add(status.widgets.music)
-  right_layout:add(separator4)
-  right_layout:add(sep)
+  right_layout:add(separator)
   right_layout:add(separator4)
   right_layout:add(status.widgets.volume)
 
