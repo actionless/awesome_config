@@ -48,7 +48,7 @@ local memwidget = widgets.mem({
 -- MUSIC
 status.widgets.music = widgets.music.widget({
   update_interval = 5,
-  backend = 'clementine',
+  backend = 'mpd',
   music_dir = '/media/terik/jessie/music/',
 })
 

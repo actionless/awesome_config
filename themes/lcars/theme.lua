@@ -2,7 +2,8 @@ theme = {}
 
 themes_dir = os.getenv("HOME") .. "/.config/awesome/themes/lcars"
 theme.dir = themes_dir
-theme.wallpaper_cmd     = "hsetroot"
+--theme.wallpaper_cmd     = "hsetroot"
+theme.wallpaper_cmd     = "nitrogen --restore"
 
 theme.bg		= "#000000"
 theme.alt_bg		= "#9966ff"
@@ -53,7 +54,7 @@ theme.bg_urgent			= theme.error
 
 theme.screen_margin		= 0
 
-theme.border_width		= "5"
+theme.border_width		= "10"
 theme.border_normal		= theme.border
 theme.border_focus		= theme.sel_border
 theme.border_marked		= theme.error
