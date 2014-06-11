@@ -48,13 +48,14 @@ function async.execute(command, callback)
     [[
   echo async.pipe_multiline_done\(\"%q\", \""$(%s | %s)"\"\) | awesome-client;
     ]],
-    id, command:gsub('"','\"'), "awk 1 ORS='\\\\n'"
-  )) --:-")]]))  that beardy smiley is helping my stupid syntax highlighter
+    id, command:gsub('"','\"'), [[awk 1 ORS='\\\\n' | sed 's/"/\\"/g']]
+  )) --:-'")]]))  that beardy smiley is helping my stupid syntax highlighter
   return id
 end
 
 function async.pipe_multiline_done(id, str)
   if not async.request_table[id] then return end
+  str = str:gsub('\\n','\n')
   async.request_table[id].callback(str)
   async.request_table[id] = nil
 end
