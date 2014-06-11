@@ -79,7 +79,7 @@ theme.tasklist_bg_normal	= theme.bg
 theme.tasklist_fg_minimize	= theme.bg
 theme.tasklist_bg_minimize	= theme.alt_bg
 
-theme.titlebar_font		= "Terminus Bold 10.5"
+theme.titlebar_font		= theme.font
 theme.titlebar_fg_focus		= theme.tasklist_fg_focus
 theme.titlebar_fg_normal	= theme.tasklist_fg_normal
 theme.titlebar_bg_focus		= theme.titlebar_focus
@@ -114,6 +114,7 @@ theme.menu_submenu_icon		= icons_dir .. "submenu.png"
 theme.taglist_squares_sel	= icons_dir .. "square_sel.png"
 theme.taglist_squares_unsel	= icons_dir .. "square_unsel.png"
 
+theme.small_separator		= icons_dir .. "small_separator.png"
 theme.arrl			= icons_dir .. "arrl.png"
 theme.arrr			= icons_dir .. "arrr.png"
 theme.arrl_err			= icons_dir .. "arrl_err.png"

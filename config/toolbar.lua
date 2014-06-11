@@ -87,6 +87,7 @@ local mytextclock = awful.widget.textclock("%H:%M")
 widgets.calendar:attach(mytextclock)
 
 -- Separators
+local sep = wibox.widget.imagebox(beautiful.small_separator)
 local separator = widgets.common.make_text_separator(' ')
 local iseparator = widgets.common.make_text_separator(' ', beautiful.panel_bg)
 local separator2 = widgets.common.make_text_separator(' ', beautiful.color2)
@@ -218,7 +219,10 @@ for s = 1, screen.count() do
 
   right_layout:add(netctlwidget)
   right_layout:add(separator4)
+  right_layout:add(sep)
   right_layout:add(status.widgets.music)
+  right_layout:add(separator4)
+  right_layout:add(sep)
   right_layout:add(separator4)
   right_layout:add(status.widgets.volume)
 
