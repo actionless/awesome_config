@@ -100,7 +100,7 @@ theme.menu_border_width		= "3"
 theme.menu_height		= "16"
 theme.menu_width		= "140"
 
-theme.player_text		= theme.theme
+theme.player_text		= theme.color2
 
 -- ICONS
 

@@ -38,9 +38,7 @@ local function worker(args)
   local bg = args.bg or beautiful.panel_bg or beautiful.bg
   local fg = args.fg or beautiful.panel_fg or beautiful.fg
   player.widget:set_bg(bg)
-  player.widget:set_fg(fg)
-  local text_color      = fg
-                          or beautiful.player_text or beautiful.fg_normal
+  local text_color      = beautiful.player_text or fg or beautiful.fg_normal
 
 
   local parse_status_callback = function(player_status)
@@ -217,7 +215,9 @@ local function worker(args)
           markup.bold(
             artist))
         .. " " ..
-        title))
+        markup.fg.color(fg,
+        title)
+    ))
   end
 -------------------------------------------------------------------------------
 function player.resize_cover()
