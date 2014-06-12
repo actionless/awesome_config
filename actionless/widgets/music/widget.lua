@@ -191,9 +191,19 @@ local function worker(args)
 
     if player_status.state == "play" then
       -- playing
-      artist = markup.fg.color(text_color, player_status.artist)
-      title  = player_status.title
+      artist = player_status.artist
+      title = player_status.title
       player.widget:set_image(beautiful.widget_music_on)
+      if #player_status.artist + #player_status.title > 40 then
+        if #player_status.artist > 15 then
+          artist = string.format("%.15s", player_status.artist) .. "…"
+        end
+        artist = markup.fg.color(text_color, artist)
+        if #player_status.title > 25 then
+          title = string.format("%.25s", player_status.title) .. "…"
+        end
+      end
+      artist = markup.fg.color(text_color, artist)
       -- playing new song
       if player_status.title ~= helpers.get_map("current player track") then
         helpers.set_map("current player track", player_status.title)
