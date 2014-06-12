@@ -19,7 +19,7 @@ local modkey = status.modkey
 
 
 -- CLOSE button
-status.widgets.close_button = widgets.manage_client()
+status.widgets.close_button = widgets.manage_client({color_n=3})
 
 -- NetCtl
 local netctlwidget = widgets.netctl({
@@ -202,9 +202,9 @@ for s = 1, screen.count() do
 
   -- LEFT side
   local left_layout = wibox.layout.fixed.horizontal()
-  left_layout:add(arrl3)
+  left_layout:add(arrl1)
   left_layout:add(mytaglist[s])
-  left_layout:add(arrr3)
+  left_layout:add(arrr1)
   left_layout:add(separator)
   left_layout:add(status.widgets.close_button)
   left_layout:add(status.widgets.promptbox[s])

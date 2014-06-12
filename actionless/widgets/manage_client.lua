@@ -26,12 +26,13 @@ if beautiful.close_button then
 else
   manage_client.widget.widget.text_widget:set_text(' x ')
 end
-manage_client.widget.widget.text_bg:set_bg(beautiful.fg)
-manage_client.widget.widget.text_bg:set_fg(beautiful.bg)
 
 local function worker(args)
 	local args	 = args or {}
 	local interval  = args.interval or 5
+        local fg = args.fg or beautiful.panel_fg or beautiful.fg
+        local bg = args.bg or beautiful.panel_bg or beautiful.bg
+        manage_client.widget:set_color(args.color_n or 1)
 
 	manage_client.widget:buttons(awful.util.table.join(
 		--awful.button({ }, 1, function () alsa.toggle() end),

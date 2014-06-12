@@ -35,7 +35,7 @@ theme.color10 = '#666699'
 
 
 theme.alt_bg		= theme.color9
-theme.theme2            = theme.color3
+theme.theme2            = theme.color1
 
 --theme.font		= "Dina 9"
 --theme.font		= "Terminus Bold 9.8"

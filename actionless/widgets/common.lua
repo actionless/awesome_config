@@ -87,7 +87,8 @@ function common.decorated(widget)
     self.arrl.widget:set_image(beautiful['arrl' .. color_number])
     self.arrr.widget:set_image(beautiful['arrr' .. color_number])
     pcall(function()
-      self.widget:set_fg(beautiful['color' .. color_number])
+      self.widget:set_bg(beautiful['color' .. color_number])
+      self.widget:set_fg(beautiful.panel_bg)
     end)
   end
 
