@@ -38,6 +38,7 @@ local function worker(args)
   local bg = args.bg or beautiful.panel_bg or beautiful.bg
   local fg = args.fg or beautiful.panel_fg or beautiful.fg
   player.widget:set_bg(bg)
+  player.widget:set_fg(fg)
   local text_color      = beautiful.player_text or fg or beautiful.fg_normal
 
 
@@ -190,7 +191,7 @@ local function worker(args)
 
     if player_status.state == "play" then
       -- playing
-      artist = player_status.artist
+      artist = markup.fg.color(text_color, player_status.artist)
       title  = player_status.title
       player.widget:set_image(beautiful.widget_music_on)
       -- playing new song
@@ -211,12 +212,11 @@ local function worker(args)
 
     player.widget:set_markup(
       markup.font(font,
-        markup.fg.color(text_color,
-          markup.bold(
-            artist))
+        markup.bold(
+          artist)
         .. " " ..
         markup.fg.color(fg,
-        title)
+          title)
     ))
   end
 -------------------------------------------------------------------------------
