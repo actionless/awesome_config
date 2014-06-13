@@ -157,6 +157,7 @@ theme.widget_net_searching	= icons_dir .. "net_searching.png"
 
 theme.widget_music		= icons_dir .. "note.png"
 theme.widget_music_on		= icons_dir .. "note_on.png"
+theme.widget_music_off		= icons_dir .. "note_off.png"
 theme.widget_vol_high		= icons_dir .. "vol_high.png"
 theme.widget_vol		= icons_dir .. "vol.png"
 theme.widget_vol_low		= icons_dir .. "vol_low.png"

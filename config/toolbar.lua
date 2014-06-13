@@ -219,9 +219,7 @@ for s = 1, screen.count() do
 
   right_layout:add(netctlwidget)
   right_layout:add(separator4)
-  right_layout:add(sep)
   right_layout:add(status.widgets.music)
-  right_layout:add(separator)
   right_layout:add(separator4)
   right_layout:add(status.widgets.volume)
 
