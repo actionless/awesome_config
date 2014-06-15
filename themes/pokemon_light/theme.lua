@@ -19,8 +19,8 @@ theme.error		= "#f92672"
 
 theme.border		= "#000000"
 theme.sel_border	= "#d33862"
-theme.titlebar		= theme.bg
-theme.titlebar_focus	= theme.bg
+theme.titlebar		= "#3c3c3c"
+theme.titlebar_focus	= theme.titlebar
 theme.titlebar_focus_border = "#66436C"
 
 theme.color1 = theme.fg
