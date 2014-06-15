@@ -4,6 +4,9 @@ themes_dir = os.getenv("HOME") .. "/.config/awesome/themes/lcars"
 theme.dir = themes_dir
 --theme.wallpaper_cmd     = "hsetroot"
 theme.wallpaper_cmd     = "nitrogen --restore"
+theme.show_widget_icon = false
+theme.show_widget_decorations = true
+theme.widget_use_text_decorations = false
 
 theme.bg		= "#000000"
 
@@ -88,6 +91,9 @@ theme.titlebar_fg_normal	= theme.tasklist_fg_normal
 theme.titlebar_bg_focus		= theme.titlebar_focus
 theme.titlebar_bg_normal	= theme.titlebar
 
+theme.titlebar_opacity          = 0.7
+theme.titlebar_position         = 'top'
+
 theme.notification_opacity	= 0.8
 theme.notification_font		= theme.sans_font
 theme.notification_monofont	= theme.font
@@ -106,8 +112,6 @@ theme.menu_width		= "140"
 theme.player_text		= theme.color2
 
 -- ICONS
-
-theme.show_widget_icon = false
 
 icons_dir = theme.dir .. "/icons/"
 theme.icons_dir = icons_dir

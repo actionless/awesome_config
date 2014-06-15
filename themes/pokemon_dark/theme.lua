@@ -2,7 +2,10 @@ theme = {}
 
 themes_dir = os.getenv("HOME") .. "/.config/awesome/themes/pokemon_dark"
 theme.dir = themes_dir
-theme.wallpaper_cmd = 'nitrogen --restore'
+--theme.wallpaper_cmd = 'nitrogen --restore'
+theme.wallpaper= themes_dir .. "/vulcarona_pattern_blur.png"
+theme.show_widget_icon = true
+theme.show_widget_decorations = false
 
 theme.fg		= "#e6e6e6"
 theme.alt_fg		= "#a8a8a8"
@@ -20,6 +23,22 @@ theme.sel_border	= "#d33862"
 theme.titlebar		= theme.bg
 theme.titlebar_focus	= theme.bg
 theme.titlebar_focus_border = "#66436C"
+
+theme.color1 = '#ff9966'
+theme.color2 = '#cc99cc'
+theme.color3 = '#cc6666'
+theme.color4 = '#99ccff'
+theme.color5 = '#9999ff'
+theme.color6 = '#6666ff'
+theme.color7 = '#cc9966'
+theme.color8 = '#6699cc'
+theme.color9 = '#9966ff'
+theme.color10 = '#666699'
+
+theme.colorf = theme.fg
+theme.colorerr = theme.error
+theme.colorwarn = theme.warning
+
 
 theme.font		= "DejaVu Sans Mono 9"
 --theme.font		= "Dina 8"
@@ -52,8 +71,14 @@ theme.border_marked		= theme.error
 theme.panel_bg                  = "#000000"
 theme.panel_fg                  = theme.fg
 theme.panel_opacity		= 0.75
+theme.panel_height              = 18
+theme.panel_margin              = 0
 
 theme.taglist_font		= theme.font
+theme.taglist_fg_occupied	= theme.fg
+theme.taglist_bg_occupied	= theme.panel_bg
+theme.taglist_fg_empty		= theme.bg
+theme.taglist_bg_empty		= theme.theme2
 theme.taglist_fg_focus		= theme.shiny
 theme.taglist_bg_focus		= theme.theme
 
@@ -93,7 +118,12 @@ theme.menu_width		= "140"
 
 theme.player_text		= "#8d5f88"
 
+theme.widget_use_text_decorations = true
+theme.widget_decoration_arrl = ''
+theme.widget_decoration_arrr = ''
+
 -- ICONS
+
 
 icons_dir = theme.dir .. "/icons/"
 theme.icons_dir = icons_dir

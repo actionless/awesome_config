@@ -3,12 +3,14 @@ theme = {}
 themes_dir = os.getenv("HOME") .. "/.config/awesome/themes/pokemon_light"
 theme.dir = themes_dir
 theme.wallpaper= themes_dir .. "/vulcarona_pattern_blur.png"
+theme.show_widget_icon = true
+theme.show_widget_decorations = false
 
-theme.bg		= "#d8d8d8"
-theme.alt_bg		= "#a8a8a8"
+theme.bg		= "#e6e6e6"
+theme.alt_fg		= "#a8a8a8"
 
-theme.fg		= "#101010"
-theme.alt_fg		= "#a562b3"
+theme.fg		= "#3c3c3c"
+theme.alt_bg		= "#a562b3"
 theme.shiny		= "#ffffff"
 
 theme.theme		= "#ad7fa8"
@@ -17,8 +19,26 @@ theme.error		= "#f92672"
 
 theme.border		= "#000000"
 theme.sel_border	= "#d33862"
-theme.titlebar		= "#3c3c3c"
-theme.titlebar_focus	= "#66436C"
+theme.titlebar		= theme.bg
+theme.titlebar_focus	= theme.bg
+theme.titlebar_focus_border = "#66436C"
+
+theme.color1 = theme.fg
+theme.color2 = theme.fg
+theme.color3 = '#cc6666'
+theme.color4 = '#5e468c'
+theme.color4 = theme.fg
+theme.color5 = '#9999ff'
+theme.color6 = '#6666ff'
+theme.color7 = '#cc9966'
+theme.color8 = '#6699cc'
+theme.color9 = '#9966ff'
+theme.color10 = '#666699'
+
+theme.colorf = theme.fg
+theme.colorerr = theme.error
+theme.colorwarn = theme.warning
+
 
 theme.font		= "DejaVu Sans Mono 9"
 --theme.font		= "Dina 8"
@@ -48,19 +68,27 @@ theme.border_normal		= theme.border
 theme.border_focus		= theme.sel_border
 theme.border_marked		= theme.error
 
-theme.panel_opacity		= 0.8
+theme.panel_bg                  = theme.bg
+theme.panel_fg                  = theme.fg
+theme.panel_opacity		= 0.75
+theme.panel_height              = 18
+theme.panel_margin              = 0
 
 theme.taglist_font		= theme.font
+theme.taglist_fg_occupied	= theme.fg
+theme.taglist_bg_occupied	= theme.panel_bg
+theme.taglist_fg_empty		= theme.bg
+theme.taglist_bg_empty		= theme.theme2
 theme.taglist_fg_focus		= theme.shiny
 theme.taglist_bg_focus		= theme.theme
 
 theme.tasklist_font		= theme.sans_font
-theme.tasklist_fg_focus		= theme.fg
-theme.tasklist_bg_focus		= theme.bg
-theme.tasklist_fg_normal	= theme.fg
-theme.tasklist_bg_normal	= theme.bg
-theme.tasklist_fg_minimize	= theme.bg
-theme.tasklist_bg_minimize	= "#6c6c6c"
+theme.tasklist_fg_focus		= theme.panel_fg
+theme.tasklist_bg_focus		= theme.panel_bg
+theme.tasklist_fg_normal	= theme.panel_fg
+theme.tasklist_bg_normal	= theme.panel_bg
+theme.tasklist_fg_minimize	= theme.panel_bg
+theme.tasklist_bg_minimize	= "#818181"
 
 --theme.titlebar_font		= theme.sans_font
 theme.titlebar_font		= "PT Caption Bold 10.5"
@@ -69,6 +97,9 @@ theme.titlebar_fg_focus		= theme.shiny
 theme.titlebar_fg_normal	= theme.bg
 theme.titlebar_bg_focus		= theme.titlebar_focus
 theme.titlebar_bg_normal	= theme.titlebar
+
+theme.titlebar_opacity          = 0.7
+theme.titlebar_position         = 'top'
 
 theme.notification_opacity	= 0.8
 theme.notification_font		= theme.sans_font
@@ -87,7 +118,12 @@ theme.menu_width		= "140"
 
 theme.player_text		= "#8d5f88"
 
+theme.widget_use_text_decorations = true
+theme.widget_decoration_arrl = ''
+theme.widget_decoration_arrr = ''
+
 -- ICONS
+
 
 icons_dir = theme.dir .. "/icons/"
 theme.icons_dir = icons_dir

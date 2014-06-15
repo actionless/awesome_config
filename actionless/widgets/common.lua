@@ -27,7 +27,12 @@ end
 
 function common.make_separator(separator_id)
   if separator_id == 'arrl' or separator_id == 'arrr' then
-    return common.make_image_separator(separator_id)
+    if beautiful.widget_use_text_decorations then
+      return common.make_text_separator(
+        beautiful['widget_decoration_' .. separator_id])
+    else
+      return common.make_image_separator(separator_id)
+    end
   elseif separator_id == 'separator' then
     return common.make_text_separator(' ')
   end
@@ -35,9 +40,14 @@ end
 
 function common.set_separator_color(widget, separator_id, color_id)
   if separator_id == 'arrl' or separator_id == 'arrr' then
+    if beautiful.widget_use_text_decorations then
+      widget:set_fg(
+        beautiful['color' .. color_id])
+    else
       widget.widget:set_image(
         beautiful[separator_id .. color_id])
-  elseif separator_id == 'separator' then
+    end
+  else
     widget:set_bg(
       beautiful['color' .. color_id])
   end
@@ -91,8 +101,12 @@ end
 
 function common.decorated(args)
   local args = args or {}
-  local left_separators = args.left or { 'arrl' }
-  local right_separators = args.right or { 'arrr' }
+  local left_separators = {}
+  local right_separators = {}
+  if beautiful.show_widget_decorations then 
+    left_separators = args.left or { 'arrl' }
+    right_separators = args.right or { 'arrr' }
+  end
   local color_n = args.color_n
 
   local decorated = {}
@@ -126,7 +140,11 @@ function common.decorated(args)
     end
     if self.widget.set_fg then
       self.widget:set_bg(beautiful['color' .. color_id])
-      self.widget:set_fg(beautiful.panel_bg)
+      if color_id == 'warn' or color_id =='err' then 
+        self.widget:set_fg(beautiful.shiny)
+      else
+        self.widget:set_fg(beautiful.panel_bg)
+      end
     end
   end
 
