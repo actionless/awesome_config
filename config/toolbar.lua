@@ -33,7 +33,8 @@ local netctlwidget = widgets.netctl({
 -- MUSIC
 status.widgets.music = widgets.music.widget({
   update_interval = 5,
-  backend = 'mpd',
+  backend = 'clementine',
+  --backend = 'mpd',
   music_dir = '/media/terik/jessie/music/',
   bg = beautiful.panel_bg,
   fg = beautiful.color4,

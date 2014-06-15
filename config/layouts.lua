@@ -27,7 +27,7 @@ if beautiful.wallpaper then
     gears.wallpaper.tiled(beautiful.wallpaper, s)
   end
 else if beautiful.wallpaper_cmd then
-  helpers.run_once(beautiful.wallpaper_cmd)
+  awful.util.spawn_with_shell(beautiful.wallpaper_cmd)
 end
 end
 -- }}}

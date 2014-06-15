@@ -51,7 +51,7 @@ local function worker(args)
       args,
       parse_status_callback,
       function() player.show_notification() end)
-    player.cmd = args.player_cmd or 'ncmpcpp'
+    player.cmd = args.player_cmd or 'st -e ncmpcpp'
   elseif backend_name == 'clementine' then
     player.backend = backends.clementine
     player.backend.init(

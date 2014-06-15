@@ -68,10 +68,10 @@ local function worker(args)
       "^([0-9.]+) ([0-9.]+) ([0-9.]+) .*")
     if tonumber(cpu.now.la1) > cpu.cores_number * 2 then
       cpu.widget:set_bg(beautiful.error)
-      cpu.widget:set_fg(bg)
+      cpu.widget:set_fg(fg)
     elseif tonumber(cpu.now.la1) > cpu.cores_number then
       cpu.widget:set_bg(beautiful.warning)
-      cpu.widget:set_fg(bg)
+      cpu.widget:set_fg(fg)
     else
       cpu.widget:set_fg(fg)
       cpu.widget:set_bg(bg)

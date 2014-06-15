@@ -194,7 +194,6 @@ local globalkeys = awful.util.table.join(
 		function () status.menu.mainmenu:show() end),
 	awful.key({ modkey,		   }, "i",
 		function ()
-                  local naughty=require("naughty")
 			status.menu.instance = menu_addon.clients_on_tag({
 				theme = {width=capi.screen[helpers.get_current_screen()].workarea.width},
 				coords = {x=0, y=18}})

@@ -67,7 +67,7 @@ theme.taglist_font		= theme.font
 theme.taglist_fg_occupied	= theme.bg
 theme.taglist_bg_occupied	= theme.theme2
 theme.taglist_fg_empty		= theme.bg
-theme.taglist_bg_empty		= theme.theme2
+theme.taglist_bg_empty		= theme.theme
 theme.taglist_fg_focus		= theme.theme2
 theme.taglist_bg_focus		= theme.bg
 

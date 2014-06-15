@@ -40,6 +40,7 @@ function clementine.update()
 end
 -------------------------------------------------------------------------------
 function clementine.post_update(str)
+  clementine.player_status = {}
   local state = nil
   if str:match("Playing") then
     state  = 'play'
