@@ -161,6 +161,8 @@ local function worker(args)
       player_status.title =
         player_status.file:match(".*[/].* [-] (.*)[.].*")
       or
+        player_status.file:match(".*[/][0-9]*[ -]*(.*)[.].*")
+      or
         player_status.file:match(".*[/](.*) [.].*")
       or
         player_status.file:match(".*[/](.*)[.].*")
@@ -196,11 +198,13 @@ local function worker(args)
       player.widget:set_image(beautiful.widget_music_on)
       if #player_status.artist + #player_status.title > 40 then
         if #player_status.artist > 15 then
-          artist = string.format("%.15s", player_status.artist) .. "…"
+          --artist = string.format("%.15s", player_status.artist) .. "…"
+          artist = helpers.unicode_max_length(player_status.artist, 15) .. "…"
         end
         artist = markup.fg.color(text_color, artist)
         if #player_status.title > 25 then
-          title = string.format("%.25s", player_status.title) .. "…"
+          --title = string.format("%.25s", player_status.title) .. "…"
+          title = helpers.unicode_max_length(player_status.title, 25) .. "…"
         end
       end
       artist = markup.fg.color(text_color, artist)

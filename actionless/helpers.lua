@@ -126,18 +126,43 @@ function helpers.run_once(cmd)
   awful.util.spawn_with_shell("pgrep -u $USER -x " .. findme .. " > /dev/null || (" .. cmd .. ")")
 end
 
-local xml_entity_names = { ["'"] = "&apos;", ["\""] = "&quot;", ["<"] = "&lt;", [">"] = "&gt;", ["&"] = "&amp;" };
-function helpers.escape(text)
-    --return text and text:gsub("['&<>\"]", xml_entity_names) or nil
-    return text and text:gsub("[&<>\"]", xml_entity_names) or nil
-end
-
 function helpers.get_current_screen()
   if capi.client.focus then
     return capi.client.focus.screen
   else
     return capi.mouse.screen
   end
+end
+
+local xml_entity_names = {
+  ["'"] = "&apos;",
+  ["\""] = "&quot;",
+  ["<"] = "&lt;",
+  [">"] = "&gt;",
+  ["&"] = "&amp;"
+}
+function helpers.escape(unicode_string)
+    local result = ''
+    for uchar in string.gmatch(unicode_string, "([%z\1-\127\194-\244][\128-\191]*)") do
+        result = result .. uchar
+    end
+    --return text and text:gsub("['&<>\"]", xml_entity_names) or nil
+    return result and result:gsub("[&<>\"]", xml_entity_names) or nil
+end
+
+function helpers.unicode_max_length(unicode_string, max_length)
+  local _, string_length = string.gsub(unicode_string, "[^\128-\193]", "")
+  if string_length <= max_length then
+    return unicode_string
+  end
+  local result = ''
+  local counter = 0
+  for uchar in string.gmatch(unicode_string, "([%z\1-\127\194-\244][\128-\191]*)") do
+      result = result .. uchar
+      counter = counter + 1
+      if counter > max_length then break end
+  end
+  return result
 end
 
 return helpers
