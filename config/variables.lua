@@ -20,7 +20,7 @@ status.cmds = {
   chrome   = "GTK2_RC_FILES=~/.gtkrc-2.0.browsers google-chrome --enable-user-stylesheet",
   firefox= "firefox -P actionless ",
   gui_editor = "/opt/sublime_text/sublime_text",
-  compositor = "compton",
+  compositor = "killall compton; compton",
   graphics   = "pinta",
   file_manager = "pcmanfm",
   --tmux   = terminal .. [[ -e "sh -c 'TERM=xterm-256color tmux'" ]],
