@@ -15,7 +15,7 @@ function common.make_text_separator(separator_character, bg, fg)
   return widget
 end
 
-function common.make_separator(image_name, bg)
+function common.make_image_separator(image_name, bg)
   local bg = bg or beautiful.panel_bg
   local widget = wibox.widget.background()
   widget:set_bg(bg)
@@ -23,6 +23,24 @@ function common.make_separator(image_name, bg)
   image_widget:set_resize(false)
   widget:set_widget(image_widget)
   return widget
+end
+
+function common.make_separator(separator_id)
+  if separator_id == 'arrl' or separator_id == 'arrr' then
+    return common.make_image_separator(separator_id)
+  elseif separator_id == 'separator' then
+    return common.make_text_separator(' ')
+  end
+end
+
+function common.set_separator_color(widget, separator_id, color_id)
+  if separator_id == 'arrl' or separator_id == 'arrr' then
+      widget.widget:set_image(
+        beautiful[separator_id .. color_id])
+  elseif separator_id == 'separator' then
+    widget:set_bg(
+      beautiful['color' .. color_id])
+  end
 end
 
 
@@ -71,47 +89,49 @@ function common.widget(force_show_icon)
 end
 
 
-function common.decorated(widget)
+function common.decorated(args)
+  local args = args or {}
+  local left_separators = args.left or { 'arrl' }
+  local right_separators = args.right or { 'arrr' }
+  local color_n = args.color_n
+
   local decorated = {}
-
-  decorated.arrl = common.make_separator('arrl')
-  decorated.widget = widget or common.widget()
-  decorated.arrr = common.make_separator('arrr')
-
+  decorated.widget = args.widget or common.widget()
   decorated.wibox = wibox.layout.fixed.horizontal()
-  decorated.wibox:add(decorated.arrl)
+
+  local separator
+  for _, separator_id in ipairs(left_separators) do
+    separator = common.make_separator(separator_id)
+    decorated.wibox:add(separator)
+  end
   decorated.wibox:add(decorated.widget)
-  decorated.wibox:add(decorated.arrr)
+  for _, separator_id in ipairs(right_separators) do
+    separator = common.make_separator(separator_id)
+    decorated.wibox:add(separator)
+  end
 
-  function decorated:set_color(color_number)
-    self.arrl.widget:set_image(beautiful['arrl' .. color_number])
-    self.arrr.widget:set_image(beautiful['arrr' .. color_number])
-    pcall(function()
-      self.widget:set_bg(beautiful['color' .. color_number])
+  function decorated:set_color(color_id)
+    local widget
+    for i, separator_id in ipairs(left_separators) do
+      common.set_separator_color(
+        decorated.wibox.widgets[i],
+        separator_id,
+        color_id)
+    end
+    for i, separator_id in ipairs(right_separators) do
+      common.set_separator_color(
+        decorated.wibox.widgets[#left_separators + 1 + i],
+        separator_id,
+        color_id)
+    end
+    if self.widget.set_fg then
+      self.widget:set_bg(beautiful['color' .. color_id])
       self.widget:set_fg(beautiful.panel_bg)
-    end)
+    end
   end
 
-  function decorated:set_warning()
-    self.arrl.widget:set_image(beautiful['arrl_warn'])
-    self.arrr.widget:set_image(beautiful['arrr_warn'])
-    pcall(function()
-      self.widget:set_fg(beautiful['shiny'])
-      self.widget:set_bg(beautiful['warning'])
-    end)
-  end
-
-  function decorated:set_error()
-    local naughty = require("naughty")
-    naughty.notify({text='err'})
-    self.arrl.widget:set_image(beautiful['arrl_err'])
-    self.arrr.widget:set_image(beautiful['arrr_err'])
-    pcall(function()
-      self.widget:set_fg(beautiful['shiny'])
-      self.widget:set_bg(beautiful['error'])
-    end)
-  end
-
+  if color_n then decorated:set_color(color_n) end
+  setmetatable(decorated.wibox, { __index = decorated.widget })
   return setmetatable(decorated, { __index = decorated.wibox })
 end
 

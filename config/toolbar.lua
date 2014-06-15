@@ -6,6 +6,7 @@ local screen = screen
 local client = client
 
 local widgets = require("actionless.widgets")
+local decorated = widgets.common.decorated
 local custom_tasklist = require("actionless.tasklist")
 local helpers = require("actionless.helpers")
 --local rpic = widgets.random_pic
@@ -44,8 +45,9 @@ status.widgets.volume = widgets.alsa({
   update_interval = 5,
   channel = 'Master',
   channels_toggle = {'Master', 'Speaker', 'Headphone'},
-  fg = beautiful.panel_bg,
-  bg=beautiful.color4,
+  color_n = 4,
+  left = { 'separator' },
+  right = { 'arrr' }
 })
 
 -- systray_toggle
@@ -93,23 +95,23 @@ local separator = widgets.common.make_text_separator(' ')
 local iseparator = widgets.common.make_text_separator(' ', beautiful.panel_bg)
 local separator2 = widgets.common.make_text_separator(' ', beautiful.color2)
 local separator4 = widgets.common.make_text_separator(' ', beautiful.color4)
-local arrl = widgets.common.make_separator('arrl')
-local arrr = widgets.common.make_separator('arrr')
-local arrl1 = widgets.common.make_separator('arrl1')
-local arrr1 = widgets.common.make_separator('arrr1')
-local arrl2 = widgets.common.make_separator('arrl2')
-local arrr2 = widgets.common.make_separator('arrr2')
-local arrl3 = widgets.common.make_separator('arrl3')
-local arrr3 = widgets.common.make_separator('arrr3')
-local arrl4 = widgets.common.make_separator('arrl4')
-local arrr4 = widgets.common.make_separator('arrr4')
-local arrl5 = widgets.common.make_separator('arrl5')
-local arrr5 = widgets.common.make_separator('arrr5')
-local arrl6 = widgets.common.make_separator('arrl6')
-local arrr6 = widgets.common.make_separator('arrr6')
+local arrl = widgets.common.make_image_separator('arrl')
+local arrr = widgets.common.make_image_separator('arrr')
+local arrl1 = widgets.common.make_image_separator('arrl1')
+local arrr1 = widgets.common.make_image_separator('arrr1')
+local arrl2 = widgets.common.make_image_separator('arrl2')
+local arrr2 = widgets.common.make_image_separator('arrr2')
+local arrl3 = widgets.common.make_image_separator('arrl3')
+local arrr3 = widgets.common.make_image_separator('arrr3')
+local arrl4 = widgets.common.make_image_separator('arrl4')
+local arrr4 = widgets.common.make_image_separator('arrr4')
+local arrl5 = widgets.common.make_image_separator('arrl5')
+local arrr5 = widgets.common.make_image_separator('arrr5')
+local arrl6 = widgets.common.make_image_separator('arrl6')
+local arrr6 = widgets.common.make_image_separator('arrr6')
 
-local arrl9 = widgets.common.make_separator('arrl9')
-local arrr9 = widgets.common.make_separator('arrr9')
+local arrl9 = widgets.common.make_image_separator('arrl9')
+local arrr9 = widgets.common.make_image_separator('arrr9')
 
 
 -- Create a wibox for each screen and add it
@@ -191,8 +193,11 @@ for s = 1, screen.count() do
       awful.layout.inc(awful.layout.layouts, -1) end)))
 
   -- taglist
-  mytaglist[s] = awful.widget.taglist(
-    s, awful.widget.taglist.filter.all, mytaglist.buttons)
+  mytaglist[s] = decorated({
+    widget = awful.widget.taglist(
+      s, awful.widget.taglist.filter.all, mytaglist.buttons),
+    color_n = 1,
+  })
 
   -- promptbox
   status.widgets.promptbox[s] = awful.widget.prompt()
@@ -203,9 +208,7 @@ for s = 1, screen.count() do
 
   -- LEFT side
   local left_layout = wibox.layout.fixed.horizontal()
-  left_layout:add(arrl1)
   left_layout:add(mytaglist[s])
-  left_layout:add(arrr1)
   left_layout:add(separator)
   left_layout:add(status.widgets.close_button)
   left_layout:add(status.widgets.promptbox[s])
@@ -216,18 +219,16 @@ for s = 1, screen.count() do
   local right_layout = wibox.layout.fixed.horizontal()
   right_layout:add(arrr9)
   right_layout:add(separator)
-  right_layout:add(arrl4)
 
+  right_layout:add(arrl4)
   right_layout:add(netctlwidget)
   right_layout:add(separator4)
   right_layout:add(status.widgets.music)
-  right_layout:add(separator4)
   right_layout:add(status.widgets.volume)
 
-  right_layout:add(arrr4)
   if s == 1 then right_layout:add(status.widgets.systray_toggle) end
-  right_layout:add(arrl2)
 
+  right_layout:add(arrl2)
   right_layout:add(memwidget)
   right_layout:add(separator2)
   right_layout:add(cpuwidget)

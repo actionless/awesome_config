@@ -21,7 +21,6 @@ theme.titlebar		= "#000000"
 theme.titlebar_focus	= "#000000"
 theme.titlebar_focus_border = theme.sel_border
 
-theme.colorf = theme.fg
 theme.color1 = '#ff9966'
 theme.color2 = '#cc99cc'
 theme.color3 = '#cc6666'
@@ -32,6 +31,10 @@ theme.color7 = '#cc9966'
 theme.color8 = '#6699cc'
 theme.color9 = '#9966ff'
 theme.color10 = '#666699'
+
+theme.colorf = theme.fg
+theme.colorerr = theme.error
+theme.colorwarn = theme.warning
 
 
 theme.alt_bg		= theme.color9
@@ -117,10 +120,10 @@ theme.taglist_squares_unsel	= icons_dir .. "square_unsel.png"
 theme.small_separator		= icons_dir .. "small_separator.png"
 theme.arrl			= icons_dir .. "arrl.png"
 theme.arrr			= icons_dir .. "arrr.png"
-theme.arrl_err			= icons_dir .. "arrl_err.png"
-theme.arrr_err			= icons_dir .. "arrr_err.png"
-theme.arrl_warn			= icons_dir .. "arrl_warn.png"
-theme.arrr_warn			= icons_dir .. "arrr_warn.png"
+theme.arrlerr			= icons_dir .. "arrl_err.png"
+theme.arrrerr			= icons_dir .. "arrr_err.png"
+theme.arrlwarn			= icons_dir .. "arrl_warn.png"
+theme.arrrwarn			= icons_dir .. "arrr_warn.png"
 theme.arrl1			= icons_dir .. "arrl1.png"
 theme.arrr1			= icons_dir .. "arrr1.png"
 theme.arrl2			= icons_dir .. "arrl2.png"

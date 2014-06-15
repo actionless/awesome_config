@@ -64,7 +64,7 @@ function worker(args)
     object.widget:add(object.n_master)
     object.widget:add(object.layout)
     object.widget:add(object.n_col)
-    object.widget = decorated(object.widget)
+    object.widget = decorated({ widget=object.widget })
 
     object:update_all(nil)
     tag.attached_connect_signal(
