@@ -208,6 +208,7 @@ for s = 1, screen.count() do
 
   -- LEFT side
   local left_layout = wibox.layout.fixed.horizontal()
+  left_layout:add(sep)
   left_layout:add(mytaglist[s])
   left_layout:add(separator)
   left_layout:add(status.widgets.close_button)
