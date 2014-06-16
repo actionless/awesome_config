@@ -124,6 +124,9 @@ local function worker(args)
   end
 -------------------------------------------------------------------------------
   function player.predict_missing_tags(player_status)
+
+    local naughty = {notify = function()end}
+
     if player_status.file then
       player_status.file = player_status.file:match("^.*://(.*)$")
         or player_status.file
@@ -142,42 +145,90 @@ local function worker(args)
       return player_status
     end
 
+    local a
+    --1
+    a = player_status.file:match("^.*[/](.*)[/]%d+[-%. ].*[/]")
+    if a then naughty.notify({text="*/(Artist Name)/Year - Album/*"}) else
+    --2
+    a = player_status.file:match("^.*[/]%d+ [-] (.*) [-] .*[.].+")
+    if a then naughty.notify({text=2}) else
+    --3
+    a = player_status.file:match("^(.*)[/]%d+ [-] .*[/]")
+    if a then naughty.notify({text=3}) else
+    --4
+    a = player_status.file:match(".*[/].*[/](.*)[/].*[.].+$")
+    if a then naughty.notify({text="/path/to/(Artist or VA)/Song name.ext"}) else
+    --5
+    a = player_status.file:match("^.*[/]([!/]*)[/][!/]*[.].+$")
+    if a then naughty.notify({text=5}) else
+    --6
+    a = player_status.file:match("^(.*)[/]%d+ [-] .*[/]")
+    if a then naughty.notify({text=6}) else
+    --7
+    a = player_status.file:match("^.*[/](.*) [-] [!/]*[.].+")
+    if a then naughty.notify({text=7}) else
+    --8
+    a = player_status.file:match("^(.*)[/]%d+ [-] .*")
+    if a then naughty.notify({text=8}) else
+    --9
+    a = player_status.file:match("^(.*)[/].*")
+    if a then a = ''; naughty.notify({text=9})
+    end --9
+    end --8
+    end --7
+    end --6
+    end --5
+    end --4
+    end --3
+    end --2
+    end --1
+
+    local t = player_status.title
+    local new_t
+    local f = player_status.file
+    naughty.notify({text=t})
+    if t:match('%.mp3') then
+      --1
+      new_t = t:match('^%d+[%. -_]+(.*)%.mp3')
+      if new_t then naughty.notify({text="10. - (Song Title).mp3"}) else
+      --2
+      new_t = t:match('(.*)%.mp3')
+      if new_t then naughty.notify({text="(Song Title).mp3"}) else
+      new_t = f; naughty.notify({text="Song Title.mp3"})
+      end --1
+      end --2
+    else
+      --1
+      new_t = f:match(".*[/].* [-] (.*)[.].+$")
+      if t then naughty.notify({text="t1"}) else
+      --2
+      new_t = f:match(".*[/]%d+[ -]+(.*)[.].+$")
+      if t then naughty.notify({text="t2"}) else
+      --3
+      new_t = f:match(".*[/](.*) [.].*")
+      if t then naughty.notify({text="t3"}) else
+      --4
+      new_t = f:match(".*[/](.*)[.].*")
+      if t then naughty.notify({text="t4"}) else
+      new_t = f; naughty.notify({text="t5"})
+      end --4
+      end --3
+      end --2
+      end --1
+    end
+
+    if not t or #t == 0 or t:match('%.mp3') then
+      player_status.title = new_t
+    end
     if not player_status.artist or #player_status.artist == 0 then
-      player_status.artist =
-        player_status.file:match("^.*[/](.*)[/]%d+ [-] .*[/]")
-      or
-        player_status.file:match("^(.*)[/]%d+ [-] .*[/]")
-      or
-        player_status.file:match("^.*[/](.*) [-] .*")
-      or
-        player_status.file:match("^(.*)[/].* ")
-      or
-        player_status.file:match("^(.*)[/]%d+ [-] .*")
-      or
-        player_status.file:match("^(.*)[/].*")
+      player_status.artist = a
     end
 
-    if not player_status.title or #player_status.title == 0 then
-      player_status.title =
-        player_status.file:match(".*[/].* [-] (.*)[.].*")
-      or
-        player_status.file:match(".*[/][0-9]*[ -]*(.*)[.].*")
-      or
-        player_status.file:match(".*[/](.*) [.].*")
-      or
-        player_status.file:match(".*[/](.*)[.].*")
-      or
-        player_status.file
-    end
-
-    -- let's escape all the bad for pango symbols
-    -- and insert placeholders for missing fields
+    -- let's insert placeholders for all the missing fields
     for _, k in ipairs({
       'file', 'locationartist', 'title', 'album', 'date', 'cover', 'artist',
     }) do
-      if player_status[k] then
-        player_status[k] = escape_f(player_status[k])
-      else
+      if not player_status[k] then
         player_status[k] = N_A
       end
     end
@@ -201,13 +252,13 @@ local function worker(args)
           --artist = string.format("%.15s", player_status.artist) .. "…"
           artist = helpers.unicode_max_length(player_status.artist, 15) .. "…"
         end
-        artist = markup.fg.color(text_color, artist)
         if #player_status.title > 25 then
           --title = string.format("%.25s", player_status.title) .. "…"
           title = helpers.unicode_max_length(player_status.title, 25) .. "…"
         end
       end
-      artist = markup.fg.color(text_color, artist)
+      artist = markup.fg.color(text_color, escape_f(artist))
+      title = escape_f(title)
       -- playing new song
       if player_status.title ~= helpers.get_map("current player track") then
         helpers.set_map("current player track", player_status.title)
@@ -224,6 +275,7 @@ local function worker(args)
       player.widget:set_image(beautiful.widget_music_off)
     end
 
+
     if player_status.state == "play" or player_status.state == "pause" then
       player.widget:set_bg(bg)
       player.widget:set_fg(fg)
@@ -234,8 +286,8 @@ local function worker(args)
           .. " " ..
           markup.fg.color(fg,
             title)
-          .. " "
-      ))
+          .. " ")
+      )
     else
       player.widget:set_text('')
       player.widget:set_bg(fg)

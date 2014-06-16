@@ -141,23 +141,32 @@ local xml_entity_names = {
   [">"] = "&gt;",
   ["&"] = "&amp;"
 }
-function helpers.escape(unicode_string)
-    local result = ''
-    for uchar in string.gmatch(unicode_string, "([%z\1-\127\194-\244][\128-\191]*)") do
-        result = result .. uchar
-    end
+function helpers.escape(result)
     --return text and text:gsub("['&<>\"]", xml_entity_names) or nil
     return result and result:gsub("[&<>\"]", xml_entity_names) or nil
 end
 
-function helpers.unicode_max_length(unicode_string, max_length)
+function helpers.unicode_length(unicode_string)
   local _, string_length = string.gsub(unicode_string, "[^\128-\193]", "")
-  if string_length <= max_length then
+  return string_length
+end
+
+function helpers.clean_unicode_string(unicode_string)
+  local result = ''
+  for uchar in string.gmatch(unicode_string, "([%z\1-\127\194-\244][\128-\191]*)") do
+      result = result .. uchar
+  end
+  return result
+end
+
+function helpers.unicode_max_length(unicode_string, max_length)
+  unicode_string = helpers.clean_unicode_string(unicode_string)
+  if #unicode_string <= max_length then
     return unicode_string
   end
   local result = ''
   local counter = 0
-  for uchar in string.gmatch(unicode_string, "([%z\1-\127\194-\244][\128-\191]*)") do
+  for uchar in string.gmatch(unicode_string, '.') do
       result = result .. uchar
       counter = counter + 1
       if counter > max_length then break end
