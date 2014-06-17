@@ -189,7 +189,7 @@ local function worker(args)
     naughty.notify({text=t})
     if t:match('%.mp3') then
       --1
-      new_t = t:match('^%d+[%. -_]+(.*)%.mp3')
+      new_t = t:match('^%d+[%. -%_]+(.*)%.mp3')
       if new_t then naughty.notify({text="10. - (Song Title).mp3"}) else
       --2
       new_t = t:match('(.*)%.mp3')
