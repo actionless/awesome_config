@@ -281,7 +281,7 @@ for s = 1, screen.count() do
     margined_layout:set_middle(layout)
     margined_layout:set_bottom(
       wibox.widget.textbox(
-        '<span font="monospace ' .. beautiful.panel_margin .. '"> </span>'
+        '<span font="DejaVu Sans Mono ' .. beautiful.panel_margin .. '"> </span>'
     ))
     layout = margined_layout
   end
