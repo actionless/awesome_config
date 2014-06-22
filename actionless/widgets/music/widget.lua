@@ -24,7 +24,7 @@ local N_A = "N/A"
 -- player infos
 local player = {id=nil}
 player.cover = "/tmp/playercover.png"
-player.widget = common_widget(true)
+player.widget = common_widget()
 
 local function worker(args)
   local args            = args or {}
@@ -281,8 +281,10 @@ local function worker(args)
       player.widget:set_fg(fg)
       player.widget:set_markup(
         markup.font(font,
-          markup.bold(
-            artist)
+           " " ..
+          (beautiful.panel_enbolden_details
+            and markup.bold(artist)
+            or artist)
           .. " " ..
           markup.fg.color(fg,
             title)

@@ -80,8 +80,12 @@ function common.list_update(w, buttons, label, data, objects, right_margin)
         end
         bgb:set_bgimage(bg_image)
         ib:set_image(icon)
-        local delimiter = wibox.layout.margin(bgb, right_margin, 0)
-        w:add(delimiter)
+        if right_margin and i~=1 then
+            local delimiter = wibox.layout.margin(bgb, right_margin, 0)
+            w:add(delimiter)
+        else
+            w:add(bgb)
+        end
    end
 end
 

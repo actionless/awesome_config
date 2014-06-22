@@ -95,6 +95,7 @@ local separator = widgets.common.make_text_separator(' ')
 local iseparator = widgets.common.make_text_separator(' ', beautiful.panel_bg)
 local separator2 = widgets.common.make_text_separator(' ', beautiful.color2)
 local separator4 = widgets.common.make_text_separator(' ', beautiful.color4)
+
 local arrl = widgets.common.make_image_separator('arrl')
 local arrr = widgets.common.make_image_separator('arrr')
 local arrl1 = widgets.common.make_image_separator('arrl1')
@@ -112,6 +113,27 @@ local arrr6 = widgets.common.make_image_separator('arrr6')
 
 local arrl9 = widgets.common.make_image_separator('arrl9')
 local arrr9 = widgets.common.make_image_separator('arrr9')
+
+if beautiful.widget_use_text_decorations then
+  local l = beautiful.widget_decoration_arrl or ''
+  local r = beautiful.widget_decoration_arrr or ''
+  arrl  = widgets.common.make_text_separator(l )
+  arrr  = widgets.common.make_text_separator(r )
+  arrl1 = widgets.common.make_text_separator(l, nil, beautiful.color1)
+  arrr1 = widgets.common.make_text_separator(r, nil, beautiful.color1)
+  arrl2 = widgets.common.make_text_separator(l, nil, beautiful.color2)
+  arrr2 = widgets.common.make_text_separator(r, nil, beautiful.color2)
+  arrl3 = widgets.common.make_text_separator(l, nil, beautiful.color3)
+  arrr3 = widgets.common.make_text_separator(r, nil, beautiful.color3)
+  arrl4 = widgets.common.make_text_separator(l, nil, beautiful.color4)
+  arrr4 = widgets.common.make_text_separator(r, nil, beautiful.color4)
+  arrl5 = widgets.common.make_text_separator(l, nil, beautiful.color5)
+  arrr5 = widgets.common.make_text_separator(r, nil, beautiful.color5)
+  arrl6 = widgets.common.make_text_separator(l, nil, beautiful.color6)
+  arrr6 = widgets.common.make_text_separator(r, nil, beautiful.color6)
+  arrl9 = widgets.common.make_text_separator(l, nil, beautiful.color9)
+  arrr9 = widgets.common.make_text_separator(r, nil, beautiful.color9)
+end
 
 
 -- Create a wibox for each screen and add it
@@ -252,7 +274,9 @@ for s = 1, screen.count() do
   layout:set_middle(mytasklist[s])
   layout:set_right(right_layout)
 
-  if beautiful.panel_margin then
+
+  -- disabled:
+  if false and beautiful.panel_margin then
     local margined_layout = wibox.layout.align.vertical()
     margined_layout:set_middle(layout)
     margined_layout:set_bottom(
@@ -266,6 +290,8 @@ for s = 1, screen.count() do
     position = "top",
     screen = s,
     height = beautiful.panel_height,
+    -- enabled: 
+    border_width = beautiful.panel_margin,
   })
   mywibox[s]:set_widget(layout)
   mywibox[s].opacity = beautiful.panel_opacity

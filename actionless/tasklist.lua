@@ -73,9 +73,17 @@ local function tasklist_label(c, args)
         bg = bg_focus
         bg_image = bg_image_focus
         if fg_focus then
-            text = text .. "<span color='"..util.color_strip_alpha(fg_focus).."'>"..markup.bold(name).."</span>"
+            text = text .. "<span color='"..util.color_strip_alpha(fg_focus).."'>"..
+                (beautiful.panel_enbolden_details
+                and markup.bold(name)
+                or name)
+            .."</span>"
         else
-            text = text .. "<span color='"..util.color_strip_alpha(fg_normal).."'>"..markup.bold(name).."</span>"
+            text = text .. "<span color='"..util.color_strip_alpha(fg_normal).."'>"..
+                (beautiful.panel_enbolden_details
+                and markup.bold(name)
+                or name)
+            .."</span>"
         end
     elseif c.urgent and fg_urgent then
         bg = bg_urgent
