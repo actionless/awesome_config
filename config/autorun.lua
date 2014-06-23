@@ -19,6 +19,9 @@ run_once("dropboxd")
 run_once("unclutter")
 run_once("gxkb")
 
+for _, item in ipairs(status.autorun) do
+  awful.util.spawn_with_shell(item)
+end
 
 end
 return autorun
