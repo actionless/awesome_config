@@ -28,6 +28,9 @@ pcall(function()
 end)
 beautiful.init(status.theme_dir)
 
+local widget_config = require("actionless.config")
+widget_config.init(status)
+
 local config = require("config")
 
 config.notify.init(status)
