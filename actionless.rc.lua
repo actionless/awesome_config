@@ -24,7 +24,7 @@ local status = {
 pcall(function()
   local local_config = require("config.local")
   if local_config then
-    status = local_config.init(status)
+    status = local_config.init(status) or status
   end
 end)
 beautiful.init(status.theme_dir)
