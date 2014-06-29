@@ -53,6 +53,13 @@ local function worker(args)
       parse_status_callback,
       function() player.show_notification() end)
     player.cmd = args.player_cmd or 'st -e ncmpcpp'
+  elseif backend_name == 'cmus' then
+    player.backend = backends.cmus
+    player.backend.init(
+      args,
+      parse_status_callback,
+      function() player.show_notification() end)
+    player.cmd = args.player_cmd or 'st -e cmus'
   elseif backend_name == 'clementine' then
     player.backend = backends.clementine
     player.backend.init(

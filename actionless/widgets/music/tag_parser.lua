@@ -60,9 +60,9 @@ local tag_parser = {}
     end --2
     end --1
 
-    local t = player_status.title
-    local new_t
-    local f = player_status.file
+    local f = player_status.file:match('.*/(.*)$')
+    local t = player_status.title or f
+    local new_t = ''
     naughty.notify({text=t})
     if t:match('%.mp3') then
       --1
