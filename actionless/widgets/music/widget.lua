@@ -20,8 +20,6 @@ local backends		= require("actionless.widgets.music.backends")
 local tag_parser	= require("actionless.widgets.music.tag_parser")
 
 
-local N_A = "N/A"
-
 -- player infos
 local player = {id=nil}
 player.cover = "/tmp/playercover.png"
@@ -44,22 +42,28 @@ local function worker(args)
 
 
   local parse_status_callback = function(player_status)
-    player.parse_status(player_status) end
+    player.parse_status(player_status)
+  end
+  local show_notification_callback = function()
+    player.show_notification()
+  end
 
   if backend_name == 'mpd' then
     player.backend = backends.mpd
     player.backend.init(
       args,
       parse_status_callback,
-      function() player.show_notification() end)
+      show_notification_callback)
     player.cmd = args.player_cmd or 'st -e ncmpcpp'
+
   elseif backend_name == 'cmus' then
     player.backend = backends.cmus
     player.backend.init(
       args,
       parse_status_callback,
-      function() player.show_notification() end)
+      show_notification_callback)
     player.cmd = args.player_cmd or 'st -e cmus'
+
   elseif backend_name == 'clementine' then
     player.backend = backends.clementine
     player.backend.init(
@@ -82,16 +86,26 @@ local function worker(args)
   end
 -------------------------------------------------------------------------------
   function player.show_notification()
+    local text
     player.hide_notification()
-    player.id = naughty.notify({
-      icon = player.cover,
-      title   = player.player_status.title,
+    if player.player_status.album or player.player_status.date then
       text = string.format(
         "%s (%s)\n%s",
         player.player_status.album,
         player.player_status.date,
         player.player_status.artist
-      ),
+      )
+    else
+      text = string.format(
+        "%s\n%s",
+        player.player_status.artist,
+        player.player_status.file
+      )
+    end
+    player.id = naughty.notify({
+      icon = player.cover,
+      title = player.player_status.title,
+      text = text,
       timeout = timeout
     })
   end
@@ -145,11 +159,9 @@ local function worker(args)
       player.widget:set_image(beautiful.widget_music_on)
       if #player_status.artist + #player_status.title > 40 then
         if #player_status.artist > 15 then
-          --artist = string.format("%.15s", player_status.artist) .. "…"
           artist = helpers.unicode_max_length(player_status.artist, 15) .. "…"
         end
         if #player_status.title > 25 then
-          --title = string.format("%.25s", player_status.title) .. "…"
           title = helpers.unicode_max_length(player_status.title, 25) .. "…"
         end
       end

@@ -1,8 +1,13 @@
+--local N_A = "N/A"
+local N_A = nil
+
+local naughty = { notify = function() end }
+--local naughty = require("naughty")
+
 local tag_parser = {}
 
   function tag_parser.predict_missing_tags(player_status)
 
-    local naughty = {notify = function()end}
 
     if player_status.file then
       player_status.file = player_status.file:match("^.*://(.*)$")
@@ -66,7 +71,7 @@ local tag_parser = {}
     naughty.notify({text=t})
     if t:match('%.mp3') then
       --1
-      new_t = t:match('^%d+[%. -%_]+(.*)%.mp3')
+      new_t = t:match('^%d+[%. %-%_]+(.*)%.mp3')
       if new_t then naughty.notify({text="10. - (Song Title).mp3"}) else
       --2
       new_t = t:match('(.*)%.mp3')
