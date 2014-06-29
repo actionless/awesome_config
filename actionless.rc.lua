@@ -18,15 +18,19 @@ local status = {
     eth_if = 'enp0s25',
     cpu_cores_num = 2,
   },
+  autorun = {},
 }
 
 pcall(function()
   local local_config = require("config.local")
   if local_config then
-    local_config.init(status)
+    status = local_config.init(status)
   end
 end)
 beautiful.init(status.theme_dir)
+
+local widget_config = require("actionless.config")
+widget_config.init(status)
 
 local config = require("config")
 

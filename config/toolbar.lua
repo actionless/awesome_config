@@ -275,8 +275,8 @@ for s = 1, screen.count() do
   layout:set_right(right_layout)
 
 
-  -- disabled:
-  if false and beautiful.panel_margin then
+  -- enabled:
+  if beautiful.panel_margin then
     local margined_layout = wibox.layout.align.vertical()
     margined_layout:set_middle(layout)
     margined_layout:set_bottom(
@@ -290,8 +290,8 @@ for s = 1, screen.count() do
     position = "top",
     screen = s,
     height = beautiful.panel_height,
-    -- enabled: 
-    border_width = beautiful.panel_margin,
+    -- disabled: 
+    --border_width = beautiful.panel_margin,
   })
   mywibox[s]:set_widget(layout)
   mywibox[s].opacity = beautiful.panel_opacity

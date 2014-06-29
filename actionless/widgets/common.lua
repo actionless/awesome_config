@@ -2,9 +2,8 @@ local wibox = require("wibox")
 local beautiful = require("beautiful")
 
 local awful = require("awful")
-local theme_dir = awful.util.getdir("config") .. "/themes/lcars_modern/theme.lua"
---local theme_dir = awful.util.getdir("config") .. "/themes/noble_dark/theme.lua"
-beautiful.init(theme_dir)
+local config = require("actionless.config")
+beautiful.init(config.status.theme_dir)
 
 
 local common = {}
