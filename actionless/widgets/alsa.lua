@@ -24,8 +24,6 @@ local alsa = {}
 
 local function worker(args)
   local args = args or {}
-  local bg = args.bg or beautiful.panel_bg or beautiful.bg
-  local fg = args.fg or beautiful.panel_fg or beautiful.fg
   local color_n = args.color_n or 1
 
   alsa.widget = decorated_widget({
