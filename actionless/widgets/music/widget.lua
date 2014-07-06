@@ -199,7 +199,11 @@ local function worker(args)
           .. " ")
       )
     else
-      player.widget:set_text('(m)')
+      if beautiful.show_widget_icon then
+        player.widget:set_image(beautiful.widget_music)
+      else
+        player.widget:set_text('(m)')
+      end
       player.widget:set_bg(fg)
       player.widget:set_fg(bg)
     end

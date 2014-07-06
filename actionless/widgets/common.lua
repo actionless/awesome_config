@@ -10,11 +10,16 @@ local common = {}
 
 function common.make_text_separator(separator_character, bg, fg)
   --'<span font="monospace 17">' .. separator_character .. '</span>'))
-  local bg = bg or beautiful.panel_bg
   local fg = fg or beautiful.panel_fg
   local widget = wibox.widget.background()
+  if separator_character == 'sq' then
+    separator_character = ' '
+    function widget:set_fg(...) widget:set_bg(...) end
+  else
+    local bg = bg or beautiful.panel_bg
+    widget:set_bg(bg)
+  end
   widget:set_fg(fg)
-  widget:set_bg(bg)
   widget:set_widget(wibox.widget.textbox(separator_character))
   return widget
 end
@@ -107,10 +112,10 @@ function common.decorated(args)
   local args = args or {}
   local left_separators = {}
   local right_separators = {}
-  if beautiful.show_widget_decorations then 
+  --if beautiful.show_widget_decorations then 
     left_separators = args.left or { 'arrl' }
     right_separators = args.right or { 'arrr' }
-  end
+  --end
   local color_n = args.color_n
 
   local decorated = {}
@@ -144,11 +149,7 @@ function common.decorated(args)
     end
     if self.widget.set_fg then
       self.widget:set_bg(beautiful['color' .. color_id])
-      if color_id == 'warn' or color_id =='err' then 
-        self.widget:set_fg(beautiful.shiny)
-      else
-        self.widget:set_fg(beautiful.panel_bg)
-      end
+      self.widget:set_fg(beautiful.colorb)
     end
   end
 

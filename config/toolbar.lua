@@ -34,8 +34,8 @@ local netctlwidget = widgets.netctl({
 -- MUSIC
 status.widgets.music = widgets.music.widget({
   update_interval = 5,
-  backend = 'cmus',
-  --backend = 'clementine',
+  --backend = 'cmus',
+  backend = 'clementine',
   --backend = 'mpd',
   music_dir = '/media/terik/jessie/music/',
   bg = beautiful.panel_bg,
@@ -132,8 +132,9 @@ if beautiful.widget_use_text_decorations then
   arrr5 = widgets.common.make_text_separator(r, nil, beautiful.color5)
   arrl6 = widgets.common.make_text_separator(l, nil, beautiful.color6)
   arrr6 = widgets.common.make_text_separator(r, nil, beautiful.color6)
-  arrl9 = widgets.common.make_text_separator(l, nil, beautiful.color9)
-  arrr9 = widgets.common.make_text_separator(r, nil, beautiful.color9)
+
+  arrl9 = widgets.common.make_text_separator('', nil, beautiful.color9)
+  arrr9 = widgets.common.make_text_separator('', nil, beautiful.color9)
 end
 
 
