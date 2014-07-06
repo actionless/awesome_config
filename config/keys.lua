@@ -1,39 +1,52 @@
+
 local awful = require("awful")
 local wibox = require("wibox")
-local capi = {
-	screen = screen
-}
+local beautiful = require("beautiful")
+local menubar = require("menubar")
+local capi = { screen = screen }
+local client = client
+local root = root
+local awesome = awesome
 
-
-local widgets = require("widgets")
-local bars = widgets.bars
+local widgets = require("actionless.widgets")
+local helpers = require("actionless.helpers")
+local titlebar = require("actionless.titlebar")
+local menu_addon = require("actionless.menu_addon")
 
 
 local keys = {}
 
 
-function keys.init()
+function keys.init(status)
 
+local modkey = status.modkey
+local altkey = status.altkey
+
+local cmd = status.cmds
 
 -- {{{ Mouse bindings
 root.buttons(awful.util.table.join(
-	awful.button({ }, 3, function () mymainmenu:toggle() end),
+	awful.button({ }, 3, function () status.menu.mainmenu:toggle() end),
 	awful.button({ }, 5, awful.tag.viewnext),
 	awful.button({ }, 4, awful.tag.viewprev)
 ))
 -- }}}
 -- {{{ Key bindings
-globalkeys = awful.util.table.join(
+local globalkeys = awful.util.table.join(
 
 	awful.key({ modkey,	"Control"	}, "t",
-		function() systray_toggle.toggle() end),
+		function() status.widgets.systray_toggle.toggle() end),
 	awful.key({ modkey,	"Control"	}, "s",
-		function() run_once("xscreensaver-command -lock") end),
+		function() helpers.run_once("xscreensaver-command -lock") end),
 
 	awful.key({ modkey,				}, ",",
-		awful.tag.viewprev),
+                function()
+                  awful.tag.viewprev(helpers.get_current_screen())
+                end),
 	awful.key({ modkey,				}, ".",
-		awful.tag.viewnext),
+                function()
+                  awful.tag.viewnext(helpers.get_current_screen())
+                end),
 	awful.key({ modkey,				}, "Escape",
 		awful.tag.history.restore),
 
@@ -60,8 +73,8 @@ globalkeys = awful.util.table.join(
 		end),
 	awful.key({ modkey				}, "Left",
 		function()
-			awful.client.focus.bydirection("left")
-			if client.focus then client.focus:raise() end
+                  awful.client.focus.bydirection("left")
+		  if client.focus then client.focus:raise() end
 		end),
 	awful.key({ modkey				}, "Right",
 		function()
@@ -102,13 +115,13 @@ globalkeys = awful.util.table.join(
 		function () awful.client.incwfact( 0.05) end),
 
 	-- Layout tuning
-	awful.key({ modkey, altkey }, "Left",
-		function () awful.tag.incnmaster(-1) end),
-	awful.key({ modkey, altkey }, "Right",
-		function () awful.tag.incnmaster( 1) end),
 	awful.key({ modkey, altkey }, "Down",
-		function () awful.tag.incncol(-1) end),
+		function () awful.tag.incnmaster(-1) end),
 	awful.key({ modkey, altkey }, "Up",
+		function () awful.tag.incnmaster( 1) end),
+	awful.key({ modkey, altkey }, "Left",
+		function () awful.tag.incncol(-1) end),
+	awful.key({ modkey, altkey }, "Right",
 		function () awful.tag.incncol( 1) end),
 
 	-- By direction client focus (VIM style)
@@ -166,29 +179,29 @@ globalkeys = awful.util.table.join(
 		function () awful.client.incwfact( 0.05) end),
 
 	-- Layout tuning (VIM style)
-	awful.key({ modkey, altkey }, "h",
-		function () awful.tag.incnmaster(-1) end),
-	awful.key({ modkey, altkey }, "l",
-		function () awful.tag.incnmaster( 1) end),
 	awful.key({ modkey, altkey }, "j",
-		function () awful.tag.incncol(-1) end),
+		function () awful.tag.incnmaster(-1) end),
 	awful.key({ modkey, altkey }, "k",
+		function () awful.tag.incnmaster( 1) end),
+	awful.key({ modkey, altkey }, "h",
+		function () awful.tag.incncol(-1) end),
+	awful.key({ modkey, altkey }, "l",
 		function () awful.tag.incncol( 1) end),
 
 
 	-- Menus
 	awful.key({ modkey,		   }, "w",
-		function () mymainmenu:show() end),
+		function () status.menu.mainmenu:show() end),
 	awful.key({ modkey,		   }, "i",
 		function ()
-			instance = widgets.menu_addon.clients_on_tag({
-				theme = {width=capi.screen[mouse.screen].workarea.width},
+			status.menu.instance = menu_addon.clients_on_tag({
+				theme = {width=capi.screen[helpers.get_current_screen()].workarea.width},
 				coords = {x=0, y=18}})
 		end),
 	awful.key({ modkey,		   }, "p",
 		function ()
-			instance = awful.menu.clients({
-					theme = {width=capi.screen[mouse.screen].workarea.width},
+			status.menu.instance = awful.menu.clients({
+					theme = {width=capi.screen[helpers.get_current_screen()].workarea.width},
 					coords = {x=0, y=18}})
 		end),
 	awful.key({ modkey, "Control"}, "p",
@@ -196,11 +209,18 @@ globalkeys = awful.util.table.join(
 	--awful.key({ modkey,        }, "space",
 	--	function() menubar.show() end),
 	awful.key({ modkey,        }, "space",
-		function() awful.util.spawn_with_shell(dmenu) end),
+		function() awful.util.spawn_with_shell(cmd.dmenu) end),
 
 	-- Layout manipulation
 	awful.key({ modkey, "Control"	}, "n",
-		awful.client.restore),
+          function()
+		c=awful.client.restore()
+                if c then
+                  -- @TODO:
+                  -- it's a workaround for some strange upstream issue
+                  client.focus = c
+                end
+          end),
 
 	awful.key({ modkey,				}, "u",
 		awful.client.urgent.jumpto),
@@ -213,32 +233,32 @@ globalkeys = awful.util.table.join(
 		end),
 
 	awful.key({ altkey,				}, "space",
-		function () awful.layout.inc(layouts, 1) end),
+		function () awful.layout.inc(status.layouts, 1) end),
 	awful.key({ altkey, "Shift"		}, "space",
-		function () awful.layout.inc(layouts, -1) end),
+		function () awful.layout.inc(status.layouts, -1) end),
 
 
 	-- Prompt
 	awful.key({ modkey }, "r",
-		function () mypromptbox[mouse.screen]:run() end),
+		function () status.widgets.promptbox[helpers.get_current_screen()]:run() end),
 	awful.key({ modkey }, "x",
 		function ()
 			awful.prompt.run({ prompt = "Run Lua code: " },
-			mypromptbox[mouse.screen].widget,
+			status.widgets.promptbox[helpers.get_current_screen()].widget,
 			awful.util.eval, nil,
 			awful.util.getdir("cache") .. "/history_eval")
 		end),
 
 	-- ALSA volume control
-	awful.key({}, "#123", function () volumewidget.up() end),
-	awful.key({}, "#122", function () volumewidget.down() end),
-	awful.key({}, "#121", function () volumewidget.toggle() end),
-	awful.key({}, "#198", function () volumewidget.toggle_mic() end),
+	awful.key({}, "#123", function () status.widgets.volume.up() end),
+	awful.key({}, "#122", function () status.widgets.volume.down() end),
+	awful.key({}, "#121", function () status.widgets.volume.toggle() end),
+	awful.key({}, "#198", function () status.widgets.volume.toggle_mic() end),
 
 	-- MPD control
-	awful.key({}, "#150", function () mpdwidget.prev_song() end),
-	awful.key({}, "#148", function () mpdwidget.next_song() end),
-	awful.key({}, "#172", function () mpdwidget.toggle() end),
+	awful.key({}, "#150", function () status.widgets.music.prev_song() end),
+	awful.key({}, "#148", function () status.widgets.music.next_song() end),
+	awful.key({}, "#172", function () status.widgets.music.toggle() end),
 
 	-- Copy to clipboard
 	awful.key({ modkey }, "c",
@@ -246,15 +266,15 @@ globalkeys = awful.util.table.join(
 
 	-- Standard program
 	awful.key({ modkey,				}, "Return",
-		function () awful.util.spawn(tmux) end),
+		function () awful.util.spawn(cmd.tmux) end),
 	awful.key({ modkey,				}, "s",
-		function () awful.util.spawn(file_manager) end),
+		function () awful.util.spawn(cmd.file_manager) end),
 	awful.key({ modkey, "Control"	}, "c",
-		function () awful.util.spawn_with_shell(chromium) end),
+		function () awful.util.spawn_with_shell(cmd.chromium) end),
 	awful.key({ modkey, "Control"	}, "g",
-		function () awful.util.spawn_with_shell(chrome) end),
+		function () awful.util.spawn_with_shell(cmd.chrome) end),
 	awful.key({ modkey, "Control"	}, "f",
-		function () awful.util.spawn_with_shell(firefox) end),
+		function () awful.util.spawn_with_shell(cmd.firefox) end),
 
 	awful.key({ modkey, "Control"	}, "r",
 		awesome.restart),
@@ -265,22 +285,22 @@ globalkeys = awful.util.table.join(
 	awful.key({ "Control"			}, "Print", 
 		function ()
 			awful.util.spawn_with_shell(
-			"scrot -ub '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. scrot_preview_cmd)
+			"scrot -ub '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. cmd.scrot_preview_cmd)
 		end),
 	awful.key({ altkey				}, "Print",
 		function ()
 			awful.util.spawn_with_shell(
-			"scrot -s '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. scrot_preview_cmd)
+			"scrot -s '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. cmd.scrot_preview_cmd)
 		end),
 	awful.key({						}, "Print",
 		function ()
 			awful.util.spawn_with_shell(
-			"scrot '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. scrot_preview_cmd)
+			"scrot '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. cmd.scrot_preview_cmd)
 		end)
 
 )
 
-clientkeys = awful.util.table.join(
+status.clientkeys = awful.util.table.join(
 	awful.key({ modkey,				}, "f",
 		function (c) c.fullscreen = not c.fullscreen end),
 	awful.key({ modkey,				}, "q",
@@ -294,7 +314,11 @@ clientkeys = awful.util.table.join(
 	awful.key({ modkey,				}, "t",
 		function (c) c.ontop = not c.ontop end),
 	awful.key({ modkey, "Shift"		}, "t",
-		bars.titlebar_toggle),
+		function(c)
+                  titlebar.titlebar_toggle(c)
+                  --awful.titlebar.toggle(
+                  --  c, beautiful.titlebar_position or 'top')
+                end),
 	awful.key({ modkey,				}, "n",
 		function (c) c.minimized = true end),
 	awful.key({ modkey,				}, "m",
@@ -304,6 +328,7 @@ clientkeys = awful.util.table.join(
 		end)
 )
 
+local diff = nil
 for screen = 1, 2 do
   for i = 1, 12 do
 
@@ -351,8 +376,12 @@ for screen = 1, 2 do
   end
 end
 
-clientbuttons = awful.util.table.join(
-    awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
+status.clientbuttons = awful.util.table.join(
+    awful.button({ }, 1,
+      function (c)
+        client.focus = c;
+        c:raise();
+      end),
     awful.button({ modkey }, 1, awful.mouse.client.move),
     awful.button({ modkey }, 3, awful.mouse.client.resize))
 

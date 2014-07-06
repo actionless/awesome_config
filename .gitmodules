@@ -1,0 +1,4 @@
+[submodule "eminent"]
+	path = eminent
+	url = https://github.com/guotsuan/eminent.git
+	branch = master
