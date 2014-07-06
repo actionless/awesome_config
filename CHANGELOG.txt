@@ -1,0 +1,23 @@
+
+===== 0.4.355.1 =====
+
+widgets:
+- added 'advanced layout box' widget
+- strip music widget output
+- moved parser of untagged media for music widget to a separate module
+- added cmus backend to music widget
+- use la in cpu widget
+
+theming:
+- added lcars_modern theme
+- updated tango_dark, pokemon_dark and LCARS themes
+- added hack for panel margin
+- added generalized widget decorations
+- placed some widgets inside decorated containers
+- added icons for big floating titlebar
+
+fix:
+- escape double quotes in async pipe receiver
+- client menu on empty tag
+- 
+- lots of minor fixes
