@@ -36,6 +36,7 @@ theme.color9 = '#9966ff'
 theme.color10 = '#666699'
 
 theme.colorf = theme.fg
+theme.colorb = theme.bg
 theme.colorerr = theme.error
 theme.colorwarn = theme.warning
 
