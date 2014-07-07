@@ -19,5 +19,4 @@ theming:
 fix:
 - escape double quotes in async pipe receiver
 - client menu on empty tag
-- 
 - lots of minor fixes

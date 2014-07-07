@@ -60,7 +60,7 @@ theme.font		= "Share Tech Mono Bold 10.5"
 --theme.font		= "Fira Mono 8"
 --theme.sans_font		= "Fira Sans Medium 10.5"
 --theme.sans_font		= "Kelly Slab Bold 10.5"
-theme.sans_font		= "Share Tech Bold 11"
+theme.sans_font		= "Share Tech Bold 10.5"
 --theme.sans_font		= theme.font
 
 theme.fg_normal			= theme.fg
