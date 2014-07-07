@@ -37,13 +37,17 @@ local function worker(args)
           manage_client.widget.text_widget:set_text(' x ')
           manage_client.widget = common.decorated({widget=manage_client.widget})
           manage_client.widget:set_color(args.color_n or 1)
+          manage_client.widget:connect_signal(
+            "mouse::enter", function () manage_client.widget:set_color('err') end)
+          manage_client.widget:connect_signal(
+            "mouse::leave", function () manage_client.widget:set_color(args.color_n or 1) end)
         end
 
 	manage_client.widget:buttons(awful.util.table.join(
 		--awful.button({ }, 1, function () alsa.toggle() end),
 		--awful.button({ }, 5, function () alsa.down() end),
 		awful.button({ }, 1, function () 
-			naughty.notify({text='DEBUG'})
+			--naughty.notify({text='DEBUG'})
 			capi.client.focus:kill()  end)
 	))
 
