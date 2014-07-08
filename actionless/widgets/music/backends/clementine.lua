@@ -10,65 +10,65 @@ local helpers = require("actionless.helpers")
 local parse = require("actionless.parse")
 
 
-local clementine = {}
-clementine.player_status = {}
-clementine.cover_path = "/tmp/playercover.png"
+local dbus_cmd = "qdbus org.mpris.MediaPlayer2.clementine "
 
-function clementine.init(parse_status_callback)
-  clementine.parse_status_callback = parse_status_callback
-end
+local clementine = {
+  player_status = {},
+}
+
 -------------------------------------------------------------------------------
 function clementine.toggle()
-  awful.util.spawn_with_shell(
-    "qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 PlayPause")
+  awful.util.spawn_with_shell(dbus_cmd .. "/org/mpris/MediaPlayer2 PlayPause")
 end
 
 function clementine.next_song()
-  awful.util.spawn_with_shell(
-    "qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 Next")
+  awful.util.spawn_with_shell(dbus_cmd .. "/org/mpris/MediaPlayer2 Next")
 end
 
 function clementine.prev_song()
-  awful.util.spawn_with_shell(
-    "qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 Previous")
+  awful.util.spawn_with_shell(dbus_cmd .. "/org/mpris/MediaPlayer2 Previous")
 end
 -------------------------------------------------------------------------------
-function clementine.update()
+function clementine.update(parse_status_callback)
   async.execute(
-    "qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 PlaybackStatus",
-    function(str) clementine.post_update(str) end)
+    dbus_cmd .. " /org/mpris/MediaPlayer2 PlaybackStatus",
+    function(str) clementine.post_update(str, parse_status_callback) end
+  )
 end
 -------------------------------------------------------------------------------
-function clementine.post_update(str)
+function clementine.post_update(result_string, parse_status_callback)
   clementine.player_status = {}
   local state = nil
-  if str:match("Playing") then
+  if result_string:match("Playing") then
     state  = 'play'
-  elseif str:match("Paused") then
+  elseif result_string:match("Paused") then
     state = 'pause'
   end
   clementine.player_status.state = state
-  if state == 'play' or state == 'pause'
-  then
+  if state == 'play' or state == 'pause' then
     async.execute(
-      "qdbus org.mpris.MediaPlayer2.clementine /Player GetMetadata",
-      function(str) clementine.parse_metadata(str) end)
+      dbus_cmd .. "/Player GetMetadata",
+      function(str) clementine.parse_metadata(str, parse_status_callback) end
+    )
   else
-    clementine.parse_status_callback(clementine.player_status)
+    parse_status_callback(clementine.player_status)
   end
 end
 -------------------------------------------------------------------------------
-function clementine.parse_metadata(str)
+function clementine.parse_metadata(result_string, parse_status_callback)
   local player_status = parse.find_values_in_string(
-    str, "([%w]+): (.*)$", {
-      file='location',
+    result_string,
+    "([%w]+): (.*)$",
+    { file='location',
       artist='artist',
       title='title',
       album='album',
       date='year',
-      cover='arturl'})
+      cover='arturl'
+    }
+  )
   helpers.merge(clementine.player_status, player_status)
-  clementine.parse_status_callback(clementine.player_status)
+  parse_status_callback(clementine.player_status)
 end
 
 return clementine
