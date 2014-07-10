@@ -8,67 +8,65 @@ theme.show_widget_icon = false
 theme.show_widget_decorations = true
 theme.widget_use_text_decorations = false
 
-theme.error = theme.color9
-theme.warning = theme.color10
 
 -- terminal colorscheme:
 theme.color = {}
-theme.color.b  = '#000000'
-theme.color.f  = '#ffffc6'
-theme.color.c  = '#cc6699'
-theme.color.err = theme.error
-theme.color.warn = theme.warning
 --black
 theme.color[0]  ='#000000'
 theme.color[8]  ='#666699'
 --red
-theme.color1  ='#cc6666'
-theme.color9  ='#ff3300'
+theme.color[1]  ='#cc6666'
+theme.color[9]  ='#ff3300'
 --green (actually orange ;) )
-theme.color2  ='#ff9966'
-theme.color10 ='#ff9900'
+theme.color[2]  ='#ff9966'
+theme.color[10] ='#ff9900'
 --yellow
-theme.color3  ='#cc9966'
-theme.color11 ='#ffcc66'
+theme.color[3]  ='#cc9966'
+theme.color[11] ='#ffcc66'
 --blue
-theme.color4  ='#9966ff'
-theme.color12 ='#9999ff'
+theme.color[4]  ='#9966ff'
+theme.color[12] ='#9999ff'
 --purple
-theme.color5  ='#cc6699'
-theme.color13 ='#cc99cc'
+theme.color[5]  ='#cc6699'
+theme.color[13] ='#cc99cc'
 --cyan
-theme.color6  ='#9999cc'
-theme.color14 ='#99ccff'
+theme.color[6]  ='#9999cc'
+theme.color[14] ='#99ccff'
 --white
-theme.color7  ='#ffcc99'
-theme.color15 ='#ccccff'
+theme.color[7]  ='#ffcc99'
+theme.color[15] ='#ccccff'
+
+theme.color.b  = '#000000'
+theme.color.f  = '#ffffc6'
+theme.color.c  = '#cc6699'
+theme.error = theme.color[9]
+theme.warning = theme.color[10]
+theme.color.err = theme.error
+theme.color.warn = theme.warning
 
 theme.bg = theme.color.b
-theme.alt_bg = theme.color4
+theme.alt_bg = theme.color[4]
 
-theme.fg = theme.color.f
-theme.alt_fg = theme.color7
+theme.fg = theme.color[7]
+theme.alt_fg = theme.color.f
 theme.shiny = theme.color.b
 
-theme.theme = theme.color13
-theme.theme2 = theme.color2
+theme.theme = theme.color[13]
+theme.theme2 = theme.color[2]
 
 theme.border = theme.color[0]
-theme.sel_border = theme.color10
+theme.sel_border = theme.color[10]
 theme.titlebar = theme.border
 theme.titlebar_focus = theme.border
 theme.titlebar_focus_border = theme.sel_border
 
-theme.color1 = '#ff9966'
-theme.color2 = '#cc99cc'
-theme.color3 = '#cc6666'
-theme.color4 = '#99ccff'
-theme.color5 = '#9999ff'
-theme.color6 = '#6666ff'
-theme.color7 = '#cc9966'
-theme.color8 = '#6699cc'
-theme.color9 = '#9966ff'
-theme.color10 = '#666699'
+theme.panel_colors = {
+  taglist=2,
+  close=1,
+  tasklist=4,
+  media=14,
+  info=13
+}
 
 --theme.font		= "Dina 9"
 --theme.font		= "Terminus Bold 9.8"
@@ -147,7 +145,7 @@ theme.menu_border_width		= "3"
 theme.menu_height		= "16"
 theme.menu_width		= "140"
 
-theme.player_text		= theme.color2
+theme.player_text		= theme.color[13]
 
 
 
@@ -162,27 +160,23 @@ theme.taglist_squares_sel	= icons_dir .. "square_sel.png"
 theme.taglist_squares_unsel	= icons_dir .. "square_unsel.png"
 
 theme.small_separator		= icons_dir .. "small_separator.png"
-theme.arrl			= icons_dir .. "arrl.png"
-theme.arrr			= icons_dir .. "arrr.png"
-theme.arrlerr			= icons_dir .. "arrl_err.png"
-theme.arrrerr			= icons_dir .. "arrr_err.png"
-theme.arrlwarn			= icons_dir .. "arrl_warn.png"
-theme.arrrwarn			= icons_dir .. "arrr_warn.png"
-theme.arrl1			= icons_dir .. "arrl1.png"
-theme.arrr1			= icons_dir .. "arrr1.png"
-theme.arrl2			= icons_dir .. "arrl2.png"
-theme.arrr2			= icons_dir .. "arrr2.png"
-theme.arrl3			= icons_dir .. "arrl3.png"
-theme.arrr3			= icons_dir .. "arrr3.png"
-theme.arrl4			= icons_dir .. "arrl4.png"
-theme.arrr4			= icons_dir .. "arrr4.png"
-theme.arrl5			= icons_dir .. "arrl5.png"
-theme.arrr5			= icons_dir .. "arrr5.png"
-theme.arrl6			= icons_dir .. "arrl6.png"
-theme.arrr6			= icons_dir .. "arrr6.png"
+theme.arrl                      = icons_dir .. "arrl.png"
+theme.arrr                      = icons_dir .. "arrr.png"
 
-theme.arrl9			= icons_dir .. "arrl9.png"
-theme.arrr9			= icons_dir .. "arrr9.png"
+theme.arr = {
+  l={}, r={}
+}
+local i
+for i=0,15 do
+  theme.arr.l[i] = icons_dir .. "arrl" .. i .. ".png"
+  theme.arr.r[i] = icons_dir .. "arrr" .. i .. ".png"
+end
+theme.arr.l.f = theme.arrl
+theme.arr.r.f = theme.arrr
+theme.arr.l.err			= icons_dir .. "arrl_err.png"
+theme.arr.r.err			= icons_dir .. "arrr_err.png"
+theme.arr.l.warn			= icons_dir .. "arrl_warn.png"
+theme.arr.r.warn			= icons_dir .. "arrr_warn.png"
 
 theme.widget_ac			= icons_dir .. "ac.png"
 theme.widget_ac_charging	= icons_dir .. "ac_charging.png"
