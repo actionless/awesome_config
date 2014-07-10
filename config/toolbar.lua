@@ -17,10 +17,10 @@ local toolbar = {}
 
 function toolbar.init(status)
 local modkey = status.modkey
-
+local bpc = beautiful.panel_colors
 
 -- CLOSE button
-status.widgets.close_button = widgets.manage_client({color_n=3})
+status.widgets.close_button = widgets.manage_client({color_n=bpc.close})
 
 -- NetCtl
 local netctlwidget = widgets.netctl({
@@ -28,8 +28,8 @@ local netctlwidget = widgets.netctl({
   preset = status.config.net_preset,
   wlan_if = status.config.wlan_if,
   eth_if = status.config.eth_if,
-  fg = beautiful.panel_bg,
-  bg = beautiful.color4,
+  bg = beautiful.color[bpc.media],
+  fg = beautiful.color.b,
 })
 -- MUSIC
 status.widgets.music = widgets.music.widget({
@@ -38,17 +38,17 @@ status.widgets.music = widgets.music.widget({
   backend = 'clementine',
   --backend = 'mpd',
   music_dir = '/media/terik/jessie/music/',
-  bg = beautiful.panel_bg,
-  fg = beautiful.color4,
+  bg = beautiful.color.b,
+  fg = beautiful.color[bpc.media],
 })
 -- ALSA volume
 status.widgets.volume = widgets.alsa({
   update_interval = 5,
   channel = 'Master',
   channels_toggle = {'Master', 'Speaker', 'Headphone'},
-  color_n = 4,
-  left = { 'separator' },
-  right = { 'arrr' }
+  color_n = bpc.media,
+  left = { 'l' },
+  right = { 'r' }
 })
 
 -- systray_toggle
@@ -61,29 +61,29 @@ local cpuwidget = widgets.cpu({
   update_interval = 5,
   cores_number = status.config.cpu_cores_num,
   list_length = 20,
-  fg = beautiful.panel_bg,
-  bg=beautiful.color2,
+  bg = beautiful.color[bpc.info],
+  fg = beautiful.color.b,
 })
 -- MEM
 local memwidget = widgets.mem({
   update_interval = 10,
   list_length = 20,
-  fg = beautiful.panel_bg,
-  bg=beautiful.color2,
+  bg = beautiful.color[bpc.info],
+  fg = beautiful.color.b,
 })
 -- Sensor
 local tempwidget = widgets.temp({
   update_interval = 10,
   sensor = "Core 0",
   warning = 75,
-  fg = beautiful.panel_bg,
-  bg=beautiful.color2,
+  bg = beautiful.color[bpc.info],
+  fg = beautiful.color.b,
 })
 -- Battery
 local batwidget = widgets.bat({
   update_interval = 30,
-  fg = beautiful.panel_bg,
-  bg=beautiful.color2,
+  bg = beautiful.color[bpc.info],
+  fg = beautiful.color.b,
 })
 -- Textclock
 -- mytextclock = awful.widget.textclock("%a %d %b  %H:%M")
@@ -91,50 +91,36 @@ local mytextclock = awful.widget.textclock("%H:%M")
 widgets.calendar:attach(mytextclock)
 
 -- Separators
+local i
 local sep = wibox.widget.imagebox(beautiful.small_separator)
-local separator = widgets.common.make_text_separator(' ')
-local iseparator = widgets.common.make_text_separator(' ', beautiful.panel_bg)
-local separator2 = widgets.common.make_text_separator(' ', beautiful.color2)
-local separator4 = widgets.common.make_text_separator(' ', beautiful.color4)
+local separator = widgets.common.make_text_separator('sq')
+local arrl = {}
+local arrr = {}
 
-local arrl = widgets.common.make_image_separator('arrl')
-local arrr = widgets.common.make_image_separator('arrr')
-local arrl1 = widgets.common.make_image_separator('arrl1')
-local arrr1 = widgets.common.make_image_separator('arrr1')
-local arrl2 = widgets.common.make_image_separator('arrl2')
-local arrr2 = widgets.common.make_image_separator('arrr2')
-local arrl3 = widgets.common.make_image_separator('arrl3')
-local arrr3 = widgets.common.make_image_separator('arrr3')
-local arrl4 = widgets.common.make_image_separator('arrl4')
-local arrr4 = widgets.common.make_image_separator('arrr4')
-local arrl5 = widgets.common.make_image_separator('arrl5')
-local arrr5 = widgets.common.make_image_separator('arrr5')
-local arrl6 = widgets.common.make_image_separator('arrl6')
-local arrr6 = widgets.common.make_image_separator('arrr6')
+local iseparator = widgets.common.make_text_separator(
+  'sq', {color_n='f'})
+local sep_info = widgets.common.make_text_separator(
+  'sq', {color_n=bpc.info})
+local sep_media = widgets.common.make_text_separator(
+  'sq', {color_n=bpc.media})
 
-local arrl9 = widgets.common.make_image_separator('arrl9')
-local arrr9 = widgets.common.make_image_separator('arrr9')
 
 if beautiful.widget_use_text_decorations then
   local l = beautiful.widget_decoration_arrl or ''
   local r = beautiful.widget_decoration_arrr or ''
-  arrl  = widgets.common.make_text_separator(l )
-  arrr  = widgets.common.make_text_separator(r )
-  arrl1 = widgets.common.make_text_separator(l, nil, beautiful.color1)
-  arrr1 = widgets.common.make_text_separator(r, nil, beautiful.color1)
-  arrl2 = widgets.common.make_text_separator(l, nil, beautiful.color2)
-  arrr2 = widgets.common.make_text_separator(r, nil, beautiful.color2)
-  arrl3 = widgets.common.make_text_separator(l, nil, beautiful.color3)
-  arrr3 = widgets.common.make_text_separator(r, nil, beautiful.color3)
-  arrl4 = widgets.common.make_text_separator(l, nil, beautiful.color4)
-  arrr4 = widgets.common.make_text_separator(r, nil, beautiful.color4)
-  arrl5 = widgets.common.make_text_separator(l, nil, beautiful.color5)
-  arrr5 = widgets.common.make_text_separator(r, nil, beautiful.color5)
-  arrl6 = widgets.common.make_text_separator(l, nil, beautiful.color6)
-  arrr6 = widgets.common.make_text_separator(r, nil, beautiful.color6)
-
-  arrl9 = widgets.common.make_text_separator('', nil, beautiful.color9)
-  arrr9 = widgets.common.make_text_separator('', nil, beautiful.color9)
+  for color_n, color_value in pairs(beautiful.color) do
+    arrl[color_n] = widgets.common.make_text_separator(l, nil, color_value)
+    arrr[color_n] = widgets.common.make_text_separator(r, nil, color_value)
+  end
+  setmetatable(arrl, { __index = widgets.common.make_text_separator(l) })
+  setmetatable(arrr, { __index = widgets.common.make_text_separator(r) })
+else
+  for i=0,15 do
+    arrl[i] = widgets.common.make_arrow_separator('l', i)
+    arrr[i] = widgets.common.make_arrow_separator('r', i)
+  end
+  setmetatable(arrl, { __index = widgets.common.make_arrow_separator('l') })
+  setmetatable(arrr, { __index = widgets.common.make_arrow_separator('r') })
 end
 
 
@@ -220,7 +206,7 @@ for s = 1, screen.count() do
   mytaglist[s] = decorated({
     widget = awful.widget.taglist(
       s, awful.widget.taglist.filter.all, mytaglist.buttons),
-    color_n = 1,
+    color_n = bpc.taglist,
   })
 
   -- promptbox
@@ -238,32 +224,32 @@ for s = 1, screen.count() do
   left_layout:add(status.widgets.close_button)
   left_layout:add(status.widgets.promptbox[s])
   left_layout:add(separator)
-  left_layout:add(arrl9)
+  left_layout:add(arrl[bpc.tasklist])
 
   -- RIGHT side
   local right_layout = wibox.layout.fixed.horizontal()
-  right_layout:add(arrr9)
+  right_layout:add(arrr[bpc.tasklist])
   right_layout:add(separator)
 
-  right_layout:add(arrl4)
+  right_layout:add(arrl[bpc.media])
   right_layout:add(netctlwidget)
-  right_layout:add(separator4)
+  right_layout:add(sep_media)
   right_layout:add(status.widgets.music)
   right_layout:add(status.widgets.volume)
 
   if s == 1 then right_layout:add(status.widgets.systray_toggle) end
 
-  right_layout:add(arrl2)
+  right_layout:add(arrl[bpc.info])
   right_layout:add(memwidget)
-  right_layout:add(separator2)
+  right_layout:add(sep_info)
   right_layout:add(cpuwidget)
-  right_layout:add(separator2)
+  right_layout:add(sep_info)
   right_layout:add(tempwidget)
-  right_layout:add(separator2)
+  right_layout:add(sep_info)
   right_layout:add(batwidget)
-  --right_layout:add(separator2)
+  --right_layout:add(sep_info)
 
-  right_layout:add(arrr2)
+  right_layout:add(arrr[bpc.info])
   right_layout:add(separator)
   right_layout:add(mytextclock)
   right_layout:add(separator)

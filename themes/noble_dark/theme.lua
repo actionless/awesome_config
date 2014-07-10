@@ -10,38 +10,48 @@ theme.widget_use_text_decorations = true
 theme.widget_decoration_arrl = 'sq'
 theme.widget_decoration_arrr = 'sq'
 
-theme.fg		= "#e6e6e6"
-theme.alt_fg		= "#a8a8a8"
+theme.error = '#ffcccc'
+theme.warning = "#ffcc66"
 
-theme.bg		= "#3c3c3c"
-theme.alt_bg		= "#a562b3"
-theme.shiny		= "#ffffff"
+-- terminal colorscheme:
+theme.color = {}
+theme.color.b  = '#3c3c3c'
+theme.color.f  = '#ffffc6'
+theme.color.c  = '#cc6699'
+theme.color.err = theme.error
+theme.color.warn = theme.warning
+theme.color[0]  = '#2E3436'
+theme.color[1]  = '#CC0000'
+theme.color[2]  = '#4E9A06'
+theme.color[3]  = '#C4A000'
+theme.color[4]  = '#3465A4'
+theme.color[5]  = '#75507B'
+theme.color[6]  = '#06989A'
+theme.color[7]  = '#D3D7CF'
+theme.color[8]  = '#555753'
+theme.color[9]  = '#EF2929'
+theme.color[10] = '#8AE234'
+theme.color[11] = '#FCE94F'
+theme.color[12] = '#729FCF'
+theme.color[13] = '#AD7FA8'
+theme.color[14] = '#34E2E2'
+theme.color[15] = '#eeeeec'
 
-theme.theme		= "#ad7fa8"
-theme.warning           = theme.theme
-theme.error		= "#cc0000"
+theme.bg = theme.color.b
+theme.alt_bg = theme.color[4]
 
-theme.border		= "#000000"
-theme.sel_border	= "#d33862"
-theme.titlebar		= theme.bg
-theme.titlebar_focus	= theme.bg
-theme.titlebar_focus_border = "#66436C"
+theme.fg = theme.color[7]
+theme.alt_fg = theme.color.f
+theme.shiny = theme.color.b
 
-theme.color1 = "#75507b"
-theme.color2 = theme.theme
-theme.color3 = '#c40000'
-theme.color4 = '#8ae234'
-theme.color5 = '#9999ff'
-theme.color6 = '#6666ff'
-theme.color7 = '#cc9966'
-theme.color8 = '#6699cc'
-theme.color9 = "#818181"
-theme.color10 = '#666699'
+theme.theme = theme.color[13]
+theme.theme2 = theme.color[2]
 
-theme.colorf = theme.fg
-theme.colorb = theme.bg
-theme.colorerr = theme.error
-theme.colorwarn = theme.warning
+theme.border = theme.color[0]
+theme.sel_border = theme.color[10]
+theme.titlebar = theme.border
+theme.titlebar_focus = theme.border
+theme.titlebar_focus_border = theme.sel_border
 
 
 theme.font		= "Meslo LG S for Powerline 10.5"
@@ -61,7 +71,14 @@ theme.border_normal		= theme.border
 theme.border_focus		= theme.sel_border
 theme.border_marked		= theme.error
 
-theme.panel_bg                  = theme.bg
+theme.panel_colors = {
+  taglist=13,
+  close=1,
+  tasklist=4,
+  media=14,
+  info=13
+}
+theme.panel_bg                  = theme.shiny
 theme.panel_fg                  = theme.fg
 theme.panel_opacity		= 0.75
 theme.panel_height              = 18
