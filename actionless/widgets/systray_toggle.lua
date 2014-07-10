@@ -108,7 +108,7 @@ local function worker(args)
     systray_toggle.scrgeom = capi.screen[scr].workarea
     systray_toggle.geometry = {
         scr = scr,
-        icon_size = 24,
+        icon_size = 32,
         x = systray_toggle.scrgeom.width - 350 ,
         y = 18,
         lmargin = 5,
