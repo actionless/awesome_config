@@ -17,7 +17,6 @@ local beautiful = require("beautiful")
 -- helper functions for internal use
 local helpers = {}
 
-
 helpers.font = string.match(beautiful.get().font, "([%a, ]+) %d+")
 
 helpers.dir    = debug.getinfo(1, 'S').source:match[[^@(.*/).*$]]

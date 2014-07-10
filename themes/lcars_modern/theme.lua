@@ -7,25 +7,56 @@ theme.wallpaper_cmd     = "nitrogen --restore"
 theme.show_widget_icon = false
 theme.show_widget_decorations = true
 theme.widget_use_text_decorations = false
---theme.widget_use_text_decorations = true
---theme.font		= "Meslo LG S for Powerline Bold 10.5"
---theme.widget_decoration_arrl = ''
---theme.widget_decoration_arrr = ''
 
-theme.bg		= "#000000"
+theme.error = theme.color9
+theme.warning = theme.color10
 
-theme.fg		= "#ffcc99"
-theme.alt_fg		= "#ffcc66"
-theme.shiny		= "#000000"
+-- terminal colorscheme:
+theme.color = {}
+theme.color.b  = '#000000'
+theme.color.f  = '#ffffc6'
+theme.color.c  = '#cc6699'
+theme.color.err = theme.error
+theme.color.warn = theme.warning
+--black
+theme.color[0]  ='#000000'
+theme.color[8]  ='#666699'
+--red
+theme.color1  ='#cc6666'
+theme.color9  ='#ff3300'
+--green (actually orange ;) )
+theme.color2  ='#ff9966'
+theme.color10 ='#ff9900'
+--yellow
+theme.color3  ='#cc9966'
+theme.color11 ='#ffcc66'
+--blue
+theme.color4  ='#9966ff'
+theme.color12 ='#9999ff'
+--purple
+theme.color5  ='#cc6699'
+theme.color13 ='#cc99cc'
+--cyan
+theme.color6  ='#9999cc'
+theme.color14 ='#99ccff'
+--white
+theme.color7  ='#ffcc99'
+theme.color15 ='#ccccff'
 
-theme.theme		= "#cc99cc"
-theme.warning           = "#ff9900"
-theme.error		= "#ff3300"
+theme.bg = theme.color.b
+theme.alt_bg = theme.color4
 
-theme.border		= "#000000"
-theme.sel_border	= "#ff9900"
-theme.titlebar		= "#000000"
-theme.titlebar_focus	= "#000000"
+theme.fg = theme.color.f
+theme.alt_fg = theme.color7
+theme.shiny = theme.color.b
+
+theme.theme = theme.color13
+theme.theme2 = theme.color2
+
+theme.border = theme.color[0]
+theme.sel_border = theme.color10
+theme.titlebar = theme.border
+theme.titlebar_focus = theme.border
 theme.titlebar_focus_border = theme.sel_border
 
 theme.color1 = '#ff9966'
@@ -38,15 +69,6 @@ theme.color7 = '#cc9966'
 theme.color8 = '#6699cc'
 theme.color9 = '#9966ff'
 theme.color10 = '#666699'
-
-theme.colorf = theme.fg
-theme.colorb = theme.bg
-theme.colorerr = theme.error
-theme.colorwarn = theme.warning
-
-
-theme.alt_bg		= theme.color9
-theme.theme2            = theme.color1
 
 --theme.font		= "Dina 9"
 --theme.font		= "Terminus Bold 9.8"
