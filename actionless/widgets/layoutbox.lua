@@ -2,6 +2,7 @@
 -- @author Julien Danjou &lt;julien@danjou.info&gt;
 -- @copyright 2009 Julien Danjou
 -- @release v3.5.5
+-- @ 2013-2014 Yauhen Kirylau
 ---------------------------------------------------------------------------
 
 local setmetatable = setmetatable
@@ -42,8 +43,9 @@ end
 -- @return An imagebox widget configured as a layoutbox.
 function worker(args)
     local args = args or {}
-    local fg = args.fg or beautiful.fg
-    local bg = args.bg or beautiful.bg
+    local color_n = args.color_n or 'f'
+    local bg = args.bg or beautiful.color[color_n]
+    local fg = args.fg or beautiful.color.b
     local object = helpers.deepcopy(layoutbox)
     object.screen = args.screen or 1
 
@@ -60,11 +62,12 @@ function worker(args)
     object.n_col:set_bg(bg)
     object.n_col:set_widget(textbox())
 
-    object.widget = wibox.layout.fixed.horizontal()
-    object.widget:add(object.n_master)
-    object.widget:add(object.layout)
-    object.widget:add(object.n_col)
-    object.widget = decorated({ widget=object.widget })
+    object.widget = decorated({
+        widgets={
+            object.n_master, object.layout, object.n_col
+        },
+        color_n = color_n
+    })
 
     object:update_all(nil)
     tag.attached_connect_signal(

@@ -191,19 +191,21 @@ local globalkeys = awful.util.table.join(
 
 	-- Menus
 	awful.key({ modkey,		   }, "w",
-		function () status.menu.mainmenu:show() end),
+          function () status.menu.mainmenu:show() end),
 	awful.key({ modkey,		   }, "i",
-		function ()
-			status.menu.instance = menu_addon.clients_on_tag({
-				theme = {width=capi.screen[helpers.get_current_screen()].workarea.width},
-				coords = {x=0, y=18}})
-		end),
+          function ()
+            status.menu.instance = menu_addon.clients_on_tag({
+              theme = {width=capi.screen[helpers.get_current_screen()].workarea.width},
+              coords = {x=0, y=18}})
+          end),
 	awful.key({ modkey,		   }, "p",
-		function ()
-			status.menu.instance = awful.menu.clients({
-					theme = {width=capi.screen[helpers.get_current_screen()].workarea.width},
-					coords = {x=0, y=18}})
-		end),
+          function ()
+            local log = require('naughty').notify
+            log({text="DEBUG"})
+            status.menu.instance = awful.menu.clients({
+              theme = {width=capi.screen[helpers.get_current_screen()].workarea.width},
+              coords = {x=0, y=18}})
+          end),
 	awful.key({ modkey, "Control"}, "p",
 		function() menubar.show() end),
 	--awful.key({ modkey,        }, "space",

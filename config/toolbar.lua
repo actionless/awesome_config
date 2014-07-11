@@ -47,7 +47,7 @@ status.widgets.volume = widgets.alsa({
   channel = 'Master',
   channels_toggle = {'Master', 'Speaker', 'Headphone'},
   color_n = bpc.media,
-  left = { 'l' },
+  left = { 'sq' },
   right = { 'r' }
 })
 
@@ -109,8 +109,8 @@ if beautiful.widget_use_text_decorations then
   local l = beautiful.widget_decoration_arrl or ''
   local r = beautiful.widget_decoration_arrr or ''
   for color_n, color_value in pairs(beautiful.color) do
-    arrl[color_n] = widgets.common.make_text_separator(l, nil, color_value)
-    arrr[color_n] = widgets.common.make_text_separator(r, nil, color_value)
+    arrl[color_n] = widgets.common.make_text_separator(l, {color_n=color_n})
+    arrr[color_n] = widgets.common.make_text_separator(r, {color_n=color_n})
   end
   setmetatable(arrl, { __index = widgets.common.make_text_separator(l) })
   setmetatable(arrr, { __index = widgets.common.make_text_separator(r) })
@@ -189,8 +189,7 @@ for s = 1, screen.count() do
   -- layoutbox
   mylayoutbox[s] = widgets.layoutbox({
     screen = s,
-    bg = beautiful.fg,
-    fg = beautiful.bg}
+    color_n = 7}
   )
   mylayoutbox[s]:buttons(awful.util.table.join(
     awful.button({ }, 1, function ()

@@ -27,7 +27,8 @@ local function worker(args)
   local color_n = args.color_n or 1
 
   alsa.widget = decorated_widget({
-    left = args.left, right = args.right, color_n = color_n })
+    left = args.left, right = args.right, color_n = color_n
+  })
   alsa.widget:buttons(awful.util.table.join(
     awful.button({ }, 1, function () alsa.toggle() end),
     awful.button({ }, 5, function () alsa.down() end),
