@@ -1,6 +1,6 @@
-theme = {}
+local themes_dir = os.getenv("HOME") .. "/.config/awesome/themes/lcars_modern"
+local theme = {}
 
-themes_dir = os.getenv("HOME") .. "/.config/awesome/themes/lcars_modern"
 theme.dir = themes_dir
 --theme.wallpaper_cmd     = "hsetroot"
 theme.wallpaper_cmd     = "nitrogen --restore"
@@ -151,17 +151,14 @@ theme.player_text		= theme.color[13]
 
 -- ICONS
 
-icons_dir = theme.dir .. "/icons/"
+local icons_dir = theme.dir .. "/icons/"
 theme.icons_dir = icons_dir
+
 
 theme.menu_submenu_icon		= icons_dir .. "submenu.png"
 
 theme.taglist_squares_sel	= icons_dir .. "square_sel.png"
 theme.taglist_squares_unsel	= icons_dir .. "square_unsel.png"
-
-theme.small_separator		= icons_dir .. "small_separator.png"
-theme.arrl                      = icons_dir .. "arrl.png"
-theme.arrr                      = icons_dir .. "arrr.png"
 
 theme.arr = {
   l={}, r={}
@@ -173,10 +170,14 @@ for i=0,15 do
 end
 theme.arr.l.f = theme.arrl
 theme.arr.r.f = theme.arrr
-theme.arr.l.err			= icons_dir .. "arrl_err.png"
-theme.arr.r.err			= icons_dir .. "arrr_err.png"
-theme.arr.l.warn			= icons_dir .. "arrl_warn.png"
-theme.arr.r.warn			= icons_dir .. "arrr_warn.png"
+theme.arr.l.err = icons_dir .. "arrl_err.png"
+theme.arr.r.err = icons_dir .. "arrr_err.png"
+theme.arr.l.warn = icons_dir .. "arrl_warn.png"
+theme.arr.r.warn = icons_dir .. "arrr_warn.png"
+
+theme.arrl                      = icons_dir .. "arrl.png"
+theme.arrr                      = icons_dir .. "arrr.png"
+theme.small_separator		= icons_dir .. "small_separator.png"
 
 theme.widget_ac			= icons_dir .. "ac.png"
 theme.widget_ac_charging	= icons_dir .. "ac_charging.png"
@@ -214,7 +215,7 @@ theme.tasklist_disable_icon = true
 --theme.tasklist_maximized_horizontal = "_"
 --theme.tasklist_maximized_vertical = "|"
 
-layout_icons_dir = icons_dir .. "layout/"
+local layout_icons_dir = icons_dir .. "layout/"
 theme.layout_icons_dir = layout_icons_dir
 theme.layout_tile		= layout_icons_dir .. "tile.png"
 theme.layout_tilegaps		= layout_icons_dir .. "tilegaps.png"
@@ -230,7 +231,7 @@ theme.layout_fullscreen		= layout_icons_dir .. "fullscreen.png"
 theme.layout_magnifier		= layout_icons_dir .. "magnifier.png"
 theme.layout_floating		= layout_icons_dir .. "floating.png"
 
-titlebar_icons_dir = icons_dir .. "titlebar/"
+local titlebar_icons_dir = icons_dir .. "titlebar/"
 theme.titlebar_icons_dir = titlebar_icons_dir
 theme.titlebar_close_button_focus = titlebar_icons_dir .. "/close_focus.png"
 theme.titlebar_close_button_normal = titlebar_icons_dir .. "/close_normal.png"

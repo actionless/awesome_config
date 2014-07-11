@@ -93,9 +93,8 @@ widgets.calendar:attach(mytextclock)
 -- Separators
 local i
 local sep = wibox.widget.imagebox(beautiful.small_separator)
-local separator = widgets.common.make_text_separator('sq')
-local arrl = {}
-local arrr = {}
+local separator = widgets.common.make_text_separator(' ')
+local arr = { l={}, r={} }
 
 local iseparator = widgets.common.make_text_separator(
   'sq', {color_n='f'})
@@ -105,23 +104,19 @@ local sep_media = widgets.common.make_text_separator(
   'sq', {color_n=bpc.media})
 
 
-if beautiful.widget_use_text_decorations then
-  local l = beautiful.widget_decoration_arrl or ''
-  local r = beautiful.widget_decoration_arrr or ''
-  for color_n, color_value in pairs(beautiful.color) do
-    arrl[color_n] = widgets.common.make_text_separator(l, {color_n=color_n})
-    arrr[color_n] = widgets.common.make_text_separator(r, {color_n=color_n})
-  end
-  setmetatable(arrl, { __index = widgets.common.make_text_separator(l) })
-  setmetatable(arrr, { __index = widgets.common.make_text_separator(r) })
-else
+for _, direction in ipairs({'l', 'r'}) do
   for i=0,15 do
-    arrl[i] = widgets.common.make_arrow_separator('l', i)
-    arrr[i] = widgets.common.make_arrow_separator('r', i)
+    arr[direction][i] = widgets.common.make_arrow_separator(direction, i)
   end
-  setmetatable(arrl, { __index = widgets.common.make_arrow_separator('l') })
-  setmetatable(arrr, { __index = widgets.common.make_arrow_separator('r') })
+  for _, i in ipairs({'b', 'f'}) do
+    arr[direction][i] = widgets.common.make_arrow_separator(direction, i)
+  end
+  setmetatable(
+    arr[direction],
+    { __index = widgets.common.make_arrow_separator(direction) }
+  )
 end
+
 
 
 -- Create a wibox for each screen and add it
@@ -223,14 +218,14 @@ for s = 1, screen.count() do
   left_layout:add(status.widgets.close_button)
   left_layout:add(status.widgets.promptbox[s])
   left_layout:add(separator)
-  left_layout:add(arrl[bpc.tasklist])
+  left_layout:add(arr.l[bpc.tasklist])
 
   -- RIGHT side
   local right_layout = wibox.layout.fixed.horizontal()
-  right_layout:add(arrr[bpc.tasklist])
+  right_layout:add(arr.r[bpc.tasklist])
   right_layout:add(separator)
 
-  right_layout:add(arrl[bpc.media])
+  right_layout:add(arr.l[bpc.media])
   right_layout:add(netctlwidget)
   right_layout:add(sep_media)
   right_layout:add(status.widgets.music)
@@ -238,7 +233,7 @@ for s = 1, screen.count() do
 
   if s == 1 then right_layout:add(status.widgets.systray_toggle) end
 
-  right_layout:add(arrl[bpc.info])
+  right_layout:add(arr.l[bpc.info])
   right_layout:add(memwidget)
   right_layout:add(sep_info)
   right_layout:add(cpuwidget)
@@ -248,7 +243,7 @@ for s = 1, screen.count() do
   right_layout:add(batwidget)
   --right_layout:add(sep_info)
 
-  right_layout:add(arrr[bpc.info])
+  right_layout:add(arr.r[bpc.info])
   right_layout:add(separator)
   right_layout:add(mytextclock)
   right_layout:add(separator)

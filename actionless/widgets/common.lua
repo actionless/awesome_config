@@ -80,18 +80,24 @@ function common.make_text_separator(separator_character, args)
   return widget
 end
 
+function common.make_image_separator(image_path, args)
+  args = args or {}
+  local bg = args.bg
+
+  local widget = wibox.widget.background()
+  local separator_widget = wibox.widget.imagebox(image_path)
+  separator_widget:set_resize(false)
+  widget:set_bg(bg)
+  widget:set_widget(separator_widget)
+  return widget
+end
+
 function common.make_arrow_separator(direction, color_n)
   -- temporary workaround for substituting missing glyphs with images
   if beautiful.widget_use_text_decorations then
     return common.make_text_separator('arr' .. direction, {color_n=color_n})
   else
-    local widget = wibox.widget.background()
-    local separator_widget
-    separator_widget = wibox.widget.imagebox(beautiful.arr[direction][color_n])
-    separator_widget:set_resize(false)
-    widget:set_bg(beautiful.color.b)
-    widget:set_widget(separator_widget)
-    return widget
+    return common.make_image_separator(beautiful.arr[direction][color_n])
   end
 end
 
@@ -104,7 +110,7 @@ function common.set_separator_color(widget, color_n, separator)
       widget.widget:set_image(beautiful.arr[separator][color_n])
     end
   else
-    widget:set_bg(beautiful.color[color_n])
+    widget:set_fg(beautiful.color[color_n])
   end
 end
 
