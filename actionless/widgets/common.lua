@@ -54,17 +54,25 @@ function common.widget(force_show_icon)
 end
 
 function common.make_text_separator(separator_character, args)
+  if separator_character == 'arrl' or separator_character == 'arrr' then
+    return common.make_text_separator(
+      beautiful['widget_decoration_' .. separator_character], args)
+  end
+
   args = args or {}
   local color_n = args.color_n
   local bg = args.bg or beautiful.color.b
-  local fg = args.fg or beautiful.color[color_n] or beautiful.color.b
-  local widget = wibox.widget.background()
+  local fg = args.fg or beautiful.color[color_n] or beautiful.color.f
+  local inverted = args.inverted or false
+
   if separator_character == 'sq' then
-    bg = fg
     separator_character = ' '
-  elseif separator_character == 'arrl' or separator_character == 'arrr' then
-    return common.make_text_separator(
-      beautiful['widget_decoration_' .. separator_character], args)
+    inverted = not inverted
+  end
+
+  local widget = wibox.widget.background()
+  if inverted then
+    widget.set_fg, widget.set_bg = widget.set_bg, widget.set_fg
   end
   widget:set_bg(bg)
   widget:set_fg(fg)
@@ -73,6 +81,7 @@ function common.make_text_separator(separator_character, args)
 end
 
 function common.make_arrow_separator(direction, color_n)
+  -- temporary workaround for substituting missing glyphs with images
   if beautiful.widget_use_text_decorations then
     return common.make_text_separator('arr' .. direction, {color_n=color_n})
   else
@@ -86,43 +95,27 @@ function common.make_arrow_separator(direction, color_n)
   end
 end
 
+function common.set_separator_color(widget, color_n, separator)
+  -- temporary workaround for substituting missing glyphs with images
+  if separator == 'l' or separator == 'r' then
+    if beautiful.widget_use_text_decorations then
+      widget:set_fg(beautiful.color[color_n])
+    else
+      widget.widget:set_image(beautiful.arr[separator][color_n])
+    end
+  else
+    widget:set_bg(beautiful.color[color_n])
+  end
+end
+
 function common.make_separator(character, color_n)
   if character == 'l' or character == 'r' then
+  -- temporary workaround for substituting missing glyphs with images
     return common.make_arrow_separator(character, color_n)
   else
-    -- @TODO:
     return common.make_text_separator(character, {color_n=color_n})
   end
 end
-
-function common.make_image_separator(separator_id)
-  local bg = bg or beautiful.panel_bg
-  local widget = wibox.widget.background()
-  widget:set_bg(bg)
-  local image_widget = wibox.widget.imagebox(beautiful[image_name])
-  image_widget:set_resize(false)
-  widget:set_widget(image_widget)
-  return widget
-end
-
-function common.set_separator_color(widget, color_id, separator_id)
-  if separator_id == 'l' or separator_id == 'r' then
-    if beautiful.widget_use_text_decorations then
-      widget:set_fg(beautiful.color[color_id])
-    else
-      if not widget.widget.set_image then
-        print(separator_id)
-        print(beautiful.widget_use_text_decorations)
-        print(beautiful.dir)
-        return
-      end
-      widget.widget:set_image(beautiful.arr[separator_id][color_id])
-    end
-  else
-    widget:set_bg(beautiful.color[color_id])
-  end
-end
-
 
 
 function common.decorated(args)
