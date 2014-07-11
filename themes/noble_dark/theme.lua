@@ -54,7 +54,7 @@ theme.titlebar_focus = theme.border
 theme.titlebar_focus_border = theme.sel_border
 
 
-theme.font		= "Meslo LG S for Powerline 10.5"
+theme.font		= "Meslo LG S for Powerline 10"
 theme.sans_font		= "PT Sans 10"
 
 theme.fg_normal			= theme.fg
@@ -72,9 +72,9 @@ theme.border_focus		= theme.sel_border
 theme.border_marked		= theme.error
 
 theme.panel_colors = {
-  taglist=13,
+  taglist='b',
   close=1,
-  tasklist=4,
+  tasklist='b',
   media=14,
   info=13
 }
@@ -90,8 +90,8 @@ theme.taglist_fg_occupied	= theme.fg
 theme.taglist_bg_occupied	= theme.panel_bg
 theme.taglist_fg_empty		= theme.bg
 theme.taglist_bg_empty		= theme.theme2
-theme.taglist_fg_focus		= theme.colorf
-theme.taglist_bg_focus		= theme.color1
+theme.taglist_fg_focus		= theme.color.b
+theme.taglist_bg_focus		= theme.theme
 
 theme.tasklist_font		= theme.sans_font
 theme.tasklist_fg_focus		= theme.panel_fg
@@ -99,12 +99,10 @@ theme.tasklist_bg_focus		= theme.panel_bg
 theme.tasklist_fg_normal	= theme.panel_fg
 theme.tasklist_bg_normal	= theme.panel_bg
 theme.tasklist_fg_minimize	= theme.panel_bg
-theme.tasklist_bg_minimize	= theme.color9
+theme.tasklist_bg_minimize	= "#000000"
 
---theme.titlebar_font		= theme.sans_font
-theme.titlebar_font		= "PT Caption Bold 10.5"
---theme.titlebar_font		= "Source Sans Pro Bold 10.5"
-theme.titlebar_fg_focus		= theme.shiny
+theme.titlebar_font		= "PT Sans Caption Bold 10"
+theme.titlebar_fg_focus		= theme.fg
 theme.titlebar_fg_normal	= theme.bg
 theme.titlebar_bg_focus		= theme.titlebar_focus
 theme.titlebar_bg_normal	= theme.titlebar
