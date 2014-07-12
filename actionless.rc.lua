@@ -1,3 +1,8 @@
+--[[
+OH HI
+--]]
+
+
 -- localization
 os.setlocale(os.getenv("LANG"))
 
@@ -6,9 +11,12 @@ local awful = require("awful")
 require("awful.autofocus")
 local naughty = require("naughty")
 local beautiful	= require("beautiful")
+
 local status = {
+
   widgets = {},
   menu = {},
+
   modkey = "Mod4",
   altkey = "Mod1",
   theme_dir = awful.util.getdir("config") .. "/themes/noble_dark/theme.lua",
@@ -17,8 +25,12 @@ local status = {
     wlan_if = 'wlp12s0',
     eth_if = 'enp0s25',
     cpu_cores_num = 2,
+    music_player = 'mpd',
+    music_dir = '~/music/',
   },
+
   autorun = {},
+
 }
 
 pcall(function()
@@ -43,3 +55,5 @@ config.toolbar.init(status)
 config.keys.init(status)
 config.rules.init(status)
 config.signals.init(status)
+
+-- vim: set shiftwidth=2:
