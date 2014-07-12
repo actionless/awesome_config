@@ -63,6 +63,93 @@ end
 
 -- }}}
 
+
+
+-----------------------------------------------------------
+
+
+
+function helpers.table_merge(container, addition)
+  container = container or {}
+  addition = addition or {}
+  for key, value in pairs(addition) do
+      container[key] = value
+  end
+  return container
+end
+
+function helpers.table_add(container, addition)
+  container = container or {}
+  addition = addition or {}
+  for index, value in pairs(addition) do
+      table.insert(container, value)
+  end
+  return container
+end
+
+function helpers.getn(dict)
+  local num_items = 0
+  for k,v in pairs(dict) do
+    num_items = num_items + 1
+  end
+  return num_items
+end
+
+function helpers.table_range(t, range_start, range_finish)
+  range_finish = range_finish or #table
+  result = {}
+  for i=range_start,range_finish do
+    table.insert(result, t[i])
+  end
+  return result
+end
+
+function helpers.table_apply(t, func)
+  for k, v in pairs(t) do
+    t[k] = func(v)
+  end
+end
+
+function helpers.table_map(t, func)
+  local result = {}
+  for k, v in pairs(t) do
+    result[k] = func(v)
+  end
+  return result
+end
+
+function helpers.table_reduce(t, func)
+  local result
+  for k, v in pairs(t) do
+    result = func(result, v)
+  end
+  return result
+end
+
+function helpers.deepcopy(orig)
+  if type(orig) == 'table' then
+      return setmetatable(
+        helpers.table_map(
+          orig,
+          function(value) return helpers.deepcopy(value) end
+        ),
+        helpers.deepcopy(getmetatable(orig))
+      )
+  else -- number, string, boolean, etc
+      return orig
+  end
+end
+
+function helpers.tables_sum(tables)
+  return helpers.table_reduce(
+    tables,
+    function(c,a) return helpers.table_add(c,a) end)
+end
+
+
+----------------------------------------
+
+
 function helpers.only_digits(str)
   if not str then return nil end
   return tonumber(str:match("%d+"))
@@ -73,74 +160,6 @@ function helpers.split_string(str, sep)
         local pattern = string.format("([^%s]+)", sep)
         str:gsub(pattern, function(c) fields[#fields+1] = c end)
         return fields
-end
-
-function helpers.imerge(container, addition)
-    for index, value in ipairs(addition) do
-        table.insert(container, value)
-    end
-    return container
-end
-
-
-function helpers.getn(dict)
-  local num_items = 0
-  for k,v in pairs(dict) do
-    num_items = num_items + 1
-  end
-  return num_items
-end
-
-function helpers.merge(t, set)
-    for k, v in pairs(set) do
-        t[k] = v
-    end
-end
-
-function helpers.map_table_values(t, func)
-  for k, v in pairs(t) do
-    t[k] = func(v)
-  end
-end
-
-function helpers.deepcopy(orig)
-    local orig_type = type(orig)
-    local copy
-    if orig_type == 'table' then
-        copy = {}
-        for orig_key, orig_value in next, orig, nil do
-            copy[helpers.deepcopy(orig_key)] = helpers.deepcopy(orig_value)
-        end
-        setmetatable(copy, helpers.deepcopy(getmetatable(orig)))
-    else -- number, string, boolean, etc
-        copy = orig
-    end
-    return copy
-end
-
-function helpers.table_sum(first_table, second_table)
-  return helpers.imerge(helpers.deepcopy(first_table), second_table)
-end
-
-
-----------------------------------------
-
-
-function helpers.run_once(cmd)
-  local findme = cmd
-  local firstspace = cmd:find(" ")
-  if firstspace then
-	findme = cmd:sub(0, firstspace-1)
-  end
-  awful.util.spawn_with_shell("pgrep -u $USER -x " .. findme .. " > /dev/null || (" .. cmd .. ")")
-end
-
-function helpers.get_current_screen()
-  if capi.client.focus then
-    return capi.client.focus.screen
-  else
-    return capi.mouse.screen
-  end
 end
 
 local xml_entity_names = {
@@ -172,6 +191,25 @@ function helpers.unicode_max_length(unicode_string, max_length)
       if counter > max_length then break end
   end
   return result
+end
+
+-----------------------------------------------
+
+function helpers.run_once(cmd)
+  local findme = cmd
+  local firstspace = cmd:find(" ")
+  if firstspace then
+	findme = cmd:sub(0, firstspace-1)
+  end
+  awful.util.spawn_with_shell("pgrep -u $USER -x " .. findme .. " > /dev/null || (" .. cmd .. ")")
+end
+
+function helpers.get_current_screen()
+  if capi.client.focus then
+    return capi.client.focus.screen
+  else
+    return capi.mouse.screen
+  end
 end
 
 return helpers

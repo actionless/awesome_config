@@ -8,7 +8,7 @@ local tags = require("awful.tag")
 local capi = { client = client }
 local escape_f = require("awful.util").escape
 
-local table_merge = require("actionless.helpers").imerge
+local table_add = require("actionless.helpers").table_add
 
 
 local menu_addon = { mt={} }
@@ -37,16 +37,16 @@ function menu_addon.clients_on_tag(args, item_args)
       })
       if item_args then
         if type(item_args) == "function" then
-          table_merge(cls_t[#cls_t], item_args(c))
+          table_add(cls_t[#cls_t], item_args(c))
         else
-          table_merge(cls_t[#cls_t], item_args)
+          table_add(cls_t[#cls_t], item_args)
         end
       end
     end
   end
   args = args or {}
   args.items = args.items or {}
-  table_merge(args.items, cls_t)
+  table_add(args.items, cls_t)
 
   local m = menu.new(args)
   m:show(args)

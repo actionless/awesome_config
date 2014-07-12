@@ -67,7 +67,7 @@ function clementine.parse_metadata(result_string, parse_status_callback)
       cover='arturl'
     }
   )
-  helpers.merge(clementine.player_status, player_status)
+  helpers.table_merge(clementine.player_status, player_status)
   parse_status_callback(clementine.player_status)
 end
 

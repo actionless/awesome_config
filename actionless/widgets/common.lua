@@ -156,18 +156,16 @@ function common.decorated(args)
   setmetatable(decorated.wibox, { __index = decorated.widget })
   setmetatable(decorated,       { __index = decorated.wibox })
   function     decorated:set_color(color_id)
-    for _, widget in ipairs(helpers.table_sum(
-      self.left_separator_widgets, self.right_separator_widgets
-    )) do
-      widget:set_color(color_id)
-    end
-
-    for _, each_widget in ipairs(decorated.widget_list) do
-      if each_widget.set_color then
-        each_widget:set_color(color_id)
+    for _, widget in ipairs(helpers.tables_sum({
+      self.left_separator_widgets,
+      self.widget_list,
+      self.right_separator_widgets
+    })) do
+      if widget.set_color then
+        widget:set_color(color_id)
       else
-        if each_widget.set_fg then each_widget:set_fg(beautiful.color.b) end
-        if each_widget.set_bg then each_widget:set_bg(beautiful.color[color_id]) end
+        if widget.set_fg then widget:set_fg(beautiful.color.b) end
+        if widget.set_bg then widget:set_bg(beautiful.color[color_id]) end
       end
     end
   end
