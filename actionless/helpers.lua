@@ -75,11 +75,13 @@ function helpers.split_string(str, sep)
         return fields
 end
 
-function helpers.imerge(t, set)
-    for _, v in ipairs(set) do
-        table.insert(t, v)
+function helpers.imerge(container, addition)
+    for index, value in ipairs(addition) do
+        table.insert(container, value)
     end
+    return container
 end
+
 
 function helpers.getn(dict)
   local num_items = 0
@@ -115,6 +117,14 @@ function helpers.deepcopy(orig)
     end
     return copy
 end
+
+function helpers.table_sum(first_table, second_table)
+  return helpers.imerge(helpers.deepcopy(first_table), second_table)
+end
+
+
+----------------------------------------
+
 
 function helpers.run_once(cmd)
   local findme = cmd

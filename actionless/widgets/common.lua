@@ -3,6 +3,7 @@ local beautiful = require("beautiful")
 
 local awful = require("awful")
 local config = require("actionless.config")
+local helpers = require("actionless.helpers")
 beautiful.init(config.status.theme_dir)
 --beautiful.init(os.getenv("HOME") .. "/.config/awesome/themes/lcars_modern/theme.lua")
 
@@ -77,6 +78,7 @@ function common.make_text_separator(separator_character, args)
   widget:set_bg(bg)
   widget:set_fg(fg)
   widget:set_widget(wibox.widget.textbox(separator_character))
+  function widget:set_color(color_n) widget:set_fg(beautiful.color[color_n]) end
   return widget
 end
 
@@ -97,20 +99,12 @@ function common.make_arrow_separator(direction, color_n)
   if beautiful.widget_use_text_decorations then
     return common.make_text_separator('arr' .. direction, {color_n=color_n})
   else
-    return common.make_image_separator(beautiful.arr[direction][color_n])
-  end
-end
-
-function common.set_separator_color(widget, color_n, separator)
-  -- temporary workaround for substituting missing glyphs with images
-  if separator == 'l' or separator == 'r' then
-    if beautiful.widget_use_text_decorations then
-      widget:set_fg(beautiful.color[color_n])
-    else
-      widget.widget:set_image(beautiful.arr[separator][color_n])
+    local widget = common.make_image_separator(
+      beautiful.arr[direction][color_n])
+    function widget:set_color(color_n)
+      widget.widget:set_image(beautiful.arr[direction][color_n])
     end
-  else
-    widget:set_fg(beautiful.color[color_n])
+    return widget
   end
 end
 
@@ -145,9 +139,8 @@ function common.decorated(args)
   decorated.widget = decorated.widget_list[1]
   decorated.wibox = wibox.layout.fixed.horizontal()
 
-  local separator
   for _, separator_id in ipairs(left_separators) do
-    separator = common.make_separator(separator_id, color_n)
+    local separator = common.make_separator(separator_id, color_n)
     table.insert(decorated.left_separator_widgets, separator)
     decorated.wibox:add(separator)
   end
@@ -155,35 +148,32 @@ function common.decorated(args)
     decorated.wibox:add(each_widget)
   end
   for _, separator_id in ipairs(right_separators) do
-    separator = common.make_separator(separator_id, color_n)
+    local separator = common.make_separator(separator_id, color_n)
     table.insert(decorated.right_separator_widgets, separator)
     decorated.wibox:add(separator)
   end
 
-  function decorated:set_color(color_id)
-    for i, separator_id in ipairs(left_separators) do
-      common.set_separator_color(
-        decorated.left_separator_widgets[i],
-        color_id,
-        separator_id)
+  setmetatable(decorated.wibox, { __index = decorated.widget })
+  setmetatable(decorated,       { __index = decorated.wibox })
+  function     decorated:set_color(color_id)
+    for _, widget in ipairs(helpers.table_sum(
+      self.left_separator_widgets, self.right_separator_widgets
+    )) do
+      widget:set_color(color_id)
     end
+
     for _, each_widget in ipairs(decorated.widget_list) do
-      if each_widget.set_fg then
-        each_widget:set_bg(beautiful.color[color_id])
-        each_widget:set_fg(beautiful.color.b)
+      if each_widget.set_color then
+        each_widget:set_color(color_id)
+      else
+        if each_widget.set_fg then each_widget:set_fg(beautiful.color.b) end
+        if each_widget.set_bg then each_widget:set_bg(beautiful.color[color_id]) end
       end
-    end
-    for i, separator_id in ipairs(right_separators) do
-      common.set_separator_color(
-        decorated.right_separator_widgets[i],
-        color_id,
-        separator_id)
     end
   end
 
   if color_n then decorated:set_color(color_n) end
-  setmetatable(decorated.wibox, { __index = decorated.widget })
-  return setmetatable(decorated, { __index = decorated.wibox })
+  return decorated
 end
 
 
