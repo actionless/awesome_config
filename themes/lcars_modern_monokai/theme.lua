@@ -65,9 +65,9 @@ theme.titlebar_focus = theme.border
 theme.titlebar_focus_border = theme.sel_border
 
 theme.panel_colors = {
-  taglist=2,
+  taglist=7,
   close=1,
-  tasklist=4,
+  tasklist='b',
   media=14,
   info=13
 }
@@ -105,6 +105,7 @@ theme.border_marked		= theme.error
 theme.panel_bg                  = theme.bg
 theme.panel_fg                  = theme.fg
 theme.panel_opacity		= 0.96
+theme.panel_opacity		= 0.92
 theme.panel_height              = 23
 --theme.panel_height              = 18
 theme.panel_margin              = 3
@@ -112,10 +113,10 @@ theme.panel_enbolden_details = false
 
 theme.taglist_font		= theme.font
 theme.taglist_fg_occupied	= theme.bg
-theme.taglist_bg_occupied	= theme.theme2
+theme.taglist_bg_occupied	= theme.color[theme.panel_colors.taglist]
 theme.taglist_fg_empty		= theme.bg
 theme.taglist_bg_empty		= theme.theme
-theme.taglist_fg_focus		= theme.theme2
+theme.taglist_fg_focus		= theme.color[theme.panel_colors.taglist]
 theme.taglist_bg_focus		= theme.bg
 
 theme.tasklist_font		= theme.sans_font
