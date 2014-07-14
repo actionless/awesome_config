@@ -6,7 +6,11 @@ theme.dir = themes_dir
 theme.wallpaper_cmd     = "nitrogen --restore"
 theme.show_widget_icon = false
 theme.show_widget_decorations = true
-theme.widget_use_text_decorations = false
+theme.widget_use_text_decorations = true
+theme.widget_decoration_arrl = ''
+theme.widget_decoration_arrr = ''
+theme.widget_decoration_arrl = ''
+theme.widget_decoration_arrr = ''
 
 
 -- terminal colorscheme:
@@ -71,8 +75,9 @@ theme.panel_colors = {
 --theme.font		= "Dina 9"
 --theme.font		= "Terminus Bold 9.8"
 --theme.font		= "Fixed Bold 10.5"
---theme.font		= "Meslo LG S Bold 10.5"
+theme.font		= "Meslo LG S for Powerline Bold 10.5"
 theme.font		= "Share Tech Mono Bold 10.5"
+theme.font		= "monospace Bold 10.5"
 --theme.font		= "Source Code Pro Bold 10.5"
 --theme.font		= "DejaVu Sans Mono Bold 9"
 --theme.font		= "LCARS 11"
@@ -160,23 +165,6 @@ theme.menu_submenu_icon		= icons_dir .. "submenu.png"
 theme.taglist_squares_sel	= icons_dir .. "square_sel.png"
 theme.taglist_squares_unsel	= icons_dir .. "square_unsel.png"
 
-theme.arr = {
-  l={}, r={}
-}
-local i
-for i=0,15 do
-  theme.arr.l[i] = icons_dir .. "arrl" .. i .. ".png"
-  theme.arr.r[i] = icons_dir .. "arrr" .. i .. ".png"
-end
-theme.arr.l.f = theme.arrl
-theme.arr.r.f = theme.arrr
-theme.arr.l.err = icons_dir .. "arrl_err.png"
-theme.arr.r.err = icons_dir .. "arrr_err.png"
-theme.arr.l.warn = icons_dir .. "arrl_warn.png"
-theme.arr.r.warn = icons_dir .. "arrr_warn.png"
-
-theme.arrl                      = icons_dir .. "arrl.png"
-theme.arrr                      = icons_dir .. "arrr.png"
 theme.small_separator		= icons_dir .. "small_separator.png"
 
 theme.widget_ac			= icons_dir .. "ac.png"

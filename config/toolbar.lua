@@ -45,8 +45,9 @@ status.widgets.volume = widgets.alsa({
   channel = 'Master',
   channels_toggle = {'Master', 'Speaker', 'Headphone'},
   color_n = bpc.media,
+  widget_inverted=true,
   left = { 'sq' },
-  right = { 'r' }
+  right = { 'arrr' }
 })
 
 -- systray_toggle
@@ -91,27 +92,29 @@ widgets.calendar:attach(mytextclock)
 -- Separators
 local i
 local sep = wibox.widget.imagebox(beautiful.small_separator)
-local separator = widgets.common.make_text_separator(' ')
+local separator = widgets.common.make_separator(' ')
 local arr = { l={}, r={} }
 
-local iseparator = widgets.common.make_text_separator(
+local iseparator = widgets.common.make_separator(
   'sq', {color_n='f'})
-local sep_info = widgets.common.make_text_separator(
+local sep_info = widgets.common.make_separator(
   'sq', {color_n=bpc.info})
-local sep_media = widgets.common.make_text_separator(
+local sep_media = widgets.common.make_separator(
   'sq', {color_n=bpc.media})
 
 
 for _, direction in ipairs({'l', 'r'}) do
   for i=0,15 do
-    arr[direction][i] = widgets.common.make_arrow_separator(direction, i)
+    arr[direction][i] = widgets.common.make_separator(
+      'arr' .. direction, { fg=beautiful.color[i] })
   end
   for _, i in ipairs({'b', 'f'}) do
-    arr[direction][i] = widgets.common.make_arrow_separator(direction, i)
+    arr[direction][i] = widgets.common.make_separator(
+      'arr' .. direction, { fg=beautiful.color[i] })
   end
   setmetatable(
     arr[direction],
-    { __index = widgets.common.make_arrow_separator(direction) }
+    { __index = widgets.common.make_separator('arr' .. direction) }
   )
 end
 
@@ -182,8 +185,8 @@ for s = 1, screen.count() do
   -- layoutbox
   mylayoutbox[s] = widgets.layoutbox({
     screen = s,
-    color_n = 7}
-  )
+    color_n = 7
+  })
   mylayoutbox[s]:buttons(awful.util.table.join(
     awful.button({ }, 1, function ()
       awful.layout.inc(awful.layout.layouts, 1) end),

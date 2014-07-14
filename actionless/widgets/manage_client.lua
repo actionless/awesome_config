@@ -35,12 +35,14 @@ local function worker(args)
             "mouse::leave", function () manage_client.widget:set_image(beautiful.close_button) end)
         else
           manage_client.widget.text_widget:set_text(' x ')
-          manage_client.widget = common.decorated({widget=manage_client.widget})
-          manage_client.widget:set_color(args.color_n or 1)
+          manage_client.widget = common.decorated({
+            widget=manage_client.widget, bg=bg, widget_inverted=true,
+          })
+          manage_client.widget:set_color({color_n=args.color_n or 1})
           manage_client.widget:connect_signal(
-            "mouse::enter", function () manage_client.widget:set_color('err') end)
+            "mouse::enter", function () manage_client.widget:set_color({color_n='err'}) end)
           manage_client.widget:connect_signal(
-            "mouse::leave", function () manage_client.widget:set_color(args.color_n or 1) end)
+            "mouse::leave", function () manage_client.widget:set_color({color_n=args.color_n or 1}) end)
         end
 
 	manage_client.widget:buttons(awful.util.table.join(

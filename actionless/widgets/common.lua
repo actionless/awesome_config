@@ -8,10 +8,18 @@ beautiful.init(config.status.theme_dir)
 --beautiful.init(os.getenv("HOME") .. "/.config/awesome/themes/lcars_modern/theme.lua")
 
 
+function get_color(color_n)
+  return beautiful.color[color_n]
+end
+
+
 local common = {}
 
-function common.widget(force_show_icon)
-  local show_icon = force_show_icon or beautiful.show_widget_icon
+
+function common.widget(args)
+  args = args or {}
+  local show_icon = args.force_show_icon or beautiful.show_widget_icon
+  --local inverted = args.inverted or false
   local widget = {}
 
   widget.text_widget = wibox.widget.textbox('')
@@ -51,19 +59,23 @@ function common.widget(force_show_icon)
     widget.icon_bg:set_fg(...)
   end
 
+  if inverted then
+    widget.set_fg, widget.set_bg = widget.set_bg, widget.set_fg
+  end
+
   return setmetatable(widget, { __index = widget.widget })
 end
 
-function common.make_text_separator(separator_character, args)
+
+function common.make_separator(separator_character, args)
   if separator_character == 'arrl' or separator_character == 'arrr' then
-    return common.make_text_separator(
+    return common.make_separator(
       beautiful['widget_decoration_' .. separator_character], args)
   end
 
   args = args or {}
-  local color_n = args.color_n
-  local bg = args.bg or beautiful.color.b
-  local fg = args.fg or beautiful.color[color_n] or beautiful.color.f
+  local bg = args.bg
+  local fg = args.fg or get_color(args.color_n) or beautiful.fg
   local inverted = args.inverted or false
 
   if separator_character == 'sq' then
@@ -78,7 +90,6 @@ function common.make_text_separator(separator_character, args)
   widget:set_bg(bg)
   widget:set_fg(fg)
   widget:set_widget(wibox.widget.textbox(separator_character))
-  function widget:set_color(color_n) widget:set_fg(beautiful.color[color_n]) end
   return widget
 end
 
@@ -94,29 +105,6 @@ function common.make_image_separator(image_path, args)
   return widget
 end
 
-function common.make_arrow_separator(direction, color_n)
-  -- temporary workaround for substituting missing glyphs with images
-  if beautiful.widget_use_text_decorations then
-    return common.make_text_separator('arr' .. direction, {color_n=color_n})
-  else
-    local widget = common.make_image_separator(
-      beautiful.arr[direction][color_n])
-    function widget:set_color(color_n)
-      widget.widget:set_image(beautiful.arr[direction][color_n])
-    end
-    return widget
-  end
-end
-
-function common.make_separator(character, color_n)
-  if character == 'l' or character == 'r' then
-  -- temporary workaround for substituting missing glyphs with images
-    return common.make_arrow_separator(character, color_n)
-  else
-    return common.make_text_separator(character, {color_n=color_n})
-  end
-end
-
 
 function common.decorated(args)
   local decorated = {
@@ -125,22 +113,28 @@ function common.decorated(args)
     right_separator_widgets = {},
   }
 
-  local args = args or {}
-  local left_separators = args.left or { 'l' }
-  local right_separators = args.right or { 'r' }
-  local color_n = args.color_n or 'f'
+  args = args or {}
+  local fg = args.fg or get_color(args.color_n)
+  local bg = args.bg or beautiful.panel_bg
+  local widget_inverted = args.widget_inverted
+  if widget_inverted then
+    args.inverted = widget_inverted
+  end
+  local left_separators = args.left or { 'arrl' }
+  local right_separators = args.right or { 'arrr' }
 
   if args.widget then
     decorated.widget_list = {args.widget}
   else
-    decorated.widget_list = args.widgets or {common.widget()}
+    decorated.widget_list = args.widgets
+      or {common.widget(args)}
   end
 
   decorated.widget = decorated.widget_list[1]
   decorated.wibox = wibox.layout.fixed.horizontal()
 
   for _, separator_id in ipairs(left_separators) do
-    local separator = common.make_separator(separator_id, color_n)
+    local separator = common.make_separator(separator_id, args)
     table.insert(decorated.left_separator_widgets, separator)
     decorated.wibox:add(separator)
   end
@@ -148,29 +142,37 @@ function common.decorated(args)
     decorated.wibox:add(each_widget)
   end
   for _, separator_id in ipairs(right_separators) do
-    local separator = common.make_separator(separator_id, color_n)
+    local separator = common.make_separator(separator_id, args)
     table.insert(decorated.right_separator_widgets, separator)
     decorated.wibox:add(separator)
   end
 
   setmetatable(decorated.wibox, { __index = decorated.widget })
   setmetatable(decorated,       { __index = decorated.wibox })
-  function     decorated:set_color(color_id)
+  function     decorated:set_color(args)
+    args = args or {}
+    local fg = args.fg or get_color(args.color_n)
+    local bg = args.bg or beautiful.panel_bg
     for _, widget in ipairs(helpers.tables_sum({
       self.left_separator_widgets,
       self.widget_list,
       self.right_separator_widgets
     })) do
-      if widget.set_color then
-        widget:set_color(color_id)
+      if widget_inverted then
+        if bg and widget.set_fg then
+          widget:set_fg(bg) end
+        if fg and widget.set_bg then
+          widget:set_bg(fg) end
       else
-        if widget.set_fg then widget:set_fg(beautiful.color.b) end
-        if widget.set_bg then widget:set_bg(beautiful.color[color_id]) end
+        if fg and widget.set_fg then
+          widget:set_fg(fg) end
+        if bg and widget.set_bg then
+          widget:set_bg(bg) end
       end
     end
   end
 
-  if color_n then decorated:set_color(color_n) end
+  decorated:set_color({fg=fg, bg=bg})
   return decorated
 end
 

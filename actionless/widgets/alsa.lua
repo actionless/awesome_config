@@ -26,9 +26,7 @@ local function worker(args)
   local args = args or {}
   local color_n = args.color_n or 1
 
-  alsa.widget = decorated_widget({
-    left = args.left, right = args.right, color_n = color_n
-  })
+  alsa.widget = decorated_widget(args)
   alsa.widget:buttons(awful.util.table.join(
     awful.button({ }, 1, function () alsa.toggle() end),
     awful.button({ }, 5, function () alsa.down() end),
@@ -103,13 +101,13 @@ local function worker(args)
 
   function alsa.update_indicator()
     if alsa.volume.status == "off" then
-      alsa.widget:set_color('warn')
+      alsa.widget:set_color({color_n='warn'})
       alsa.widget:set_image(beautiful.widget_vol_mute)
     elseif alsa.volume.level == 0 then
-      alsa.widget:set_color('err')
+      alsa.widget:set_color({color_n='err'})
       alsa.widget:set_image(beautiful.widget_vol_no)
     else
-      alsa.widget:set_color(color_n)
+      alsa.widget:set_color({color_n=color_n, fg=args.fg})
       if alsa.volume.level <= 50 then
         alsa.widget:set_image(beautiful.widget_vol_low)
       elseif alsa.volume.level <= 75 then
