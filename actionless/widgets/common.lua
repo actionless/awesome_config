@@ -68,9 +68,9 @@ end
 
 
 function common.make_separator(separator_character, args)
-  if separator_character == 'arrl' or separator_character == 'arrr' then
-    return common.make_separator(
-      beautiful['widget_decoration_' .. separator_character], args)
+  local separator_alias = beautiful['widget_decoration_' .. separator_character]
+  if separator_alias then
+    return common.make_separator(separator_alias, args)
   end
 
   args = args or {}

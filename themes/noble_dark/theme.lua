@@ -9,6 +9,8 @@ theme.show_widget_decorations = true
 theme.widget_use_text_decorations = true
 theme.widget_decoration_arrl = 'sq'
 theme.widget_decoration_arrr = 'sq'
+--theme.widget_decoration_arrl = ''
+--theme.widget_decoration_arrr = ''
 
 theme.error = '#ffcccc'
 theme.warning = "#ffcc66"

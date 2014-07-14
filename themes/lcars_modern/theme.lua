@@ -9,8 +9,6 @@ theme.show_widget_decorations = true
 theme.widget_use_text_decorations = true
 theme.widget_decoration_arrl = ''
 theme.widget_decoration_arrr = ''
-theme.widget_decoration_arrl = ''
-theme.widget_decoration_arrr = ''
 
 
 -- terminal colorscheme:
