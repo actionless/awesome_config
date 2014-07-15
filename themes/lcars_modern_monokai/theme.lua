@@ -60,8 +60,7 @@ theme.theme2 = theme.color[2]
 
 theme.border = theme.color[0]
 theme.sel_border = theme.color[10]
-theme.titlebar = theme.border
-theme.titlebar_focus = theme.border
+theme.titlebar_border = theme.border
 theme.titlebar_focus_border = theme.sel_border
 
 theme.panel_colors = {
@@ -127,14 +126,13 @@ theme.tasklist_bg_normal	= theme.bg
 theme.tasklist_fg_minimize	= theme.bg
 theme.tasklist_bg_minimize	= theme.alt_bg
 
-theme.titlebar_font		= theme.font
-theme.titlebar_fg_focus		= theme.tasklist_fg_focus
-theme.titlebar_fg_normal	= theme.tasklist_fg_normal
-theme.titlebar_bg_focus		= theme.titlebar_focus
-theme.titlebar_bg_normal	= theme.titlebar
-
 theme.titlebar_opacity          = 0.7
 theme.titlebar_position         = 'top'
+theme.titlebar_font		= theme.font
+theme.titlebar_fg_focus		= theme.tasklist_fg_focus
+theme.titlebar_bg_focus		= theme.bg
+theme.titlebar_fg_normal	= theme.tasklist_fg_normal
+theme.titlebar_bg_normal	= theme.bg
 
 theme.notification_opacity	= 0.8
 theme.notification_font		= theme.sans_font

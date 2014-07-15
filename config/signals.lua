@@ -43,10 +43,10 @@ end)
 client.connect_signal("unfocus", function(c)
   if awful.client.floating.get(c) then
     -- floating client
-    c.border_color = beautiful.titlebar
+    c.border_color = beautiful.titlebar_border
   elseif awful.layout.get(c.screen) == awful.layout.suit.floating then
     -- floating layout
-    c.border_color = beautiful.titlebar
+    c.border_color = beautiful.titlebar_border
   elseif #awful.client.tiled(c.screen) == 1 then
     -- one tiling client
     titlebar.remove_border(c)
