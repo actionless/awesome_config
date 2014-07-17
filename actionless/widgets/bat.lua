@@ -56,8 +56,8 @@ local function worker(args)
     elseif bat.now.state == 'charging' then
       if bat.now.percentage < 30 then
         bat.widget:set_image(beautiful.widget_ac_charging_low)
-        bat.widget:set_bg(beautiful.theme)
-        bat.widget:set_fg(bg)
+        bat.widget:set_bg(beautiful.warning)
+        bat.widget:set_fg(fg)
       else
         bat.widget:set_image(beautiful.widget_ac_charging)
         bat.widget:set_bg(bg)
@@ -68,10 +68,10 @@ local function worker(args)
       if bat.now.on_low_battery == 'yes' then
         bat.widget:set_image(beautiful.widget_battery_empty)
         bat.widget:set_bg(beautiful.error)
-        bat.widget:set_fg(bg)
+        bat.widget:set_fg(fg)
       elseif bat.now.percentage < 30 then
         bat.widget:set_image(beautiful.widget_battery_low)
-        bat.widget:set_bg(beautiful.theme)
+        bat.widget:set_bg(beautiful.warning)
         bat.widget:set_fg(fg)
       else
         bat.widget:set_image(beautiful.widget_battery)
