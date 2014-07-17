@@ -1,9 +1,11 @@
 local themes_dir = os.getenv("HOME") .. "/.config/awesome/themes/lcars_modern_monokai"
 local theme = {}
-
 theme.dir = themes_dir
+
 --theme.wallpaper_cmd     = "hsetroot"
 theme.wallpaper_cmd     = "nitrogen --restore"
+theme.wallpaper = themes_dir .. '/umbreon_pattern.png'
+
 theme.show_widget_icon = false
 theme.show_widget_decorations = true
 theme.widget_use_text_decorations = true
@@ -58,7 +60,7 @@ theme.shiny = theme.color.b
 theme.theme = theme.color[13]
 theme.theme2 = theme.color[2]
 
-theme.border = theme.color[0]
+theme.border = theme.bg
 theme.sel_border = theme.color[10]
 theme.titlebar_border = theme.border
 theme.titlebar_focus_border = theme.sel_border
