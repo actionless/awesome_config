@@ -7,7 +7,8 @@ local config = {
 	toolbar	= require("config.toolbar"),
 	keys	= require("config.keys"),
 	rules	= require("config.rules"),
-	signals	= require("config.signals")
+	signals	= require("config.signals"),
+	widgets	= require("config.widgets")
 }
 
 return config

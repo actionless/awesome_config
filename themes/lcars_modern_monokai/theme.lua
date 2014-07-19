@@ -107,8 +107,9 @@ theme.panel_bg                  = theme.bg
 theme.panel_fg                  = theme.fg
 theme.panel_opacity		= 0.96
 theme.panel_opacity		= 0.92
-theme.panel_height              = 23
 --theme.panel_height              = 18
+--theme.panel_margin              = 0
+theme.panel_height              = 23
 theme.panel_margin              = 3
 theme.panel_enbolden_details = false
 

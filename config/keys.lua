@@ -242,7 +242,7 @@ local globalkeys = awful.util.table.join(
 
 	-- Prompt
 	awful.key({ modkey }, "r",
-		function () status.widgets.promptbox[helpers.get_current_screen()]:run() end),
+		function () status.widgets.uniq[helpers.get_current_screen()].promptbox:run() end),
 	awful.key({ modkey }, "x",
 		function ()
 			awful.prompt.run({ prompt = "Run Lua code: " },
