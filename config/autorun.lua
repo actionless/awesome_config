@@ -16,7 +16,7 @@ awful.util.spawn_with_shell("xset b off")
 --run_once(status.cmds.compositor)
 run_once("xfce4-power-manager")
 run_once("dropboxd")
---run_once("xscreensaver -no-splash")
+run_once("xscreensaver -no-splash")
 run_once("unclutter")
 run_once("gxkb")
 
