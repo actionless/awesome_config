@@ -76,8 +76,9 @@ theme.panel_colors = {
 --theme.font		= "Dina 9"
 --theme.font		= "Terminus Bold 9.8"
 --theme.font		= "Fixed Bold 10.5"
-theme.font		= "Meslo LG S for Powerline Bold 10.5"
+--theme.font		= "Meslo LG S for Powerline Bold 10.5"
 theme.font		= "Share Tech Mono Bold 10.5"
+theme.font		= "monospace Bold 10.5"
 theme.font		= "monospace Bold 10.5"
 --theme.font		= "Source Code Pro Bold 10.5"
 --theme.font		= "DejaVu Sans Mono Bold 9"
@@ -87,6 +88,7 @@ theme.font		= "monospace Bold 10.5"
 --theme.sans_font		= "Fira Sans Medium 10.5"
 --theme.sans_font		= "Kelly Slab Bold 10.5"
 theme.sans_font		= "Share Tech Bold 10.5"
+theme.sans_font		= "Source Sans Pro Bold 10.5"
 --theme.sans_font		= theme.font
 
 theme.fg_normal			= theme.fg
@@ -105,12 +107,12 @@ theme.border_marked		= theme.error
 
 theme.panel_bg                  = theme.bg
 theme.panel_fg                  = theme.fg
-theme.panel_opacity		= 0.96
+--theme.panel_opacity		= 0.96
 theme.panel_opacity		= 0.92
 --theme.panel_height              = 18
 --theme.panel_margin              = 0
 theme.panel_height              = 23
-theme.panel_margin              = 3
+theme.panel_margin              = 4
 theme.panel_enbolden_details = false
 
 theme.taglist_font		= theme.font
