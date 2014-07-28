@@ -120,6 +120,7 @@ function toolbar.init(status)
       height = beautiful.panel_height,
       -- PANEL MARGIN on 4 sides:
       --border_width = beautiful.panel_margin,
+      --border_color = beautiful.panel_bg,
     })
     mywibox[s]:set_widget(layout)
     mywibox[s].opacity = beautiful.panel_opacity
