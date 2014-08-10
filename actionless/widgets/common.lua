@@ -120,8 +120,8 @@ function common.decorated(args)
   if widget_inverted then
     args.inverted = widget_inverted
   end
-  local left_separators = args.left or { 'arrl' }
-  local right_separators = args.right or { 'arrr' }
+  local left_separators = args.left_separators or { 'arrl' }
+  local right_separators = args.right_separators or { 'arrr' }
 
   if args.widget then
     decorated.widget_list = {args.widget}
