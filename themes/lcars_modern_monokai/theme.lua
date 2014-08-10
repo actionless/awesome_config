@@ -9,8 +9,14 @@ theme.wallpaper = themes_dir .. '/umbreon_pattern.png'
 theme.show_widget_icon = false
 theme.show_widget_decorations = true
 theme.widget_use_text_decorations = true
+
+--patched font should be installed to make it work:
 theme.widget_decoration_arrl = ''
 theme.widget_decoration_arrr = ''
+
+----hipster mode:
+--theme.widget_decoration_arrl = 'sq'
+--theme.widget_decoration_arrr = 'sq'
 
 
 -- terminal colorscheme:
