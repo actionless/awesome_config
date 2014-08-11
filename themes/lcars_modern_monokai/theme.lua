@@ -1,14 +1,16 @@
-local themes_dir = os.getenv("HOME") .. "/.config/awesome/themes/lcars_modern_monokai"
+local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/lcars_modern_monokai"
 local theme = {}
-theme.dir = themes_dir
+theme.dir = theme_dir
 
+-- Use plain color:
 --theme.wallpaper_cmd     = "hsetroot"
-theme.wallpaper_cmd     = "nitrogen --restore"
-theme.wallpaper = themes_dir .. '/umbreon_pattern.png'
+-- Use nitrogen:
+--theme.wallpaper_cmd     = "nitrogen --restore"
+-- Use wallpaper tile:
+theme.wallpaper = theme_dir .. '/umbreon_pattern.png'
 
 theme.show_widget_icon = false
 theme.show_widget_decorations = true
-theme.widget_use_text_decorations = true
 theme.widget_decoration_arrl = ''
 theme.widget_decoration_arrr = ''
 
@@ -73,11 +75,20 @@ theme.panel_colors = {
   info=13
 }
 
---theme.font		= "Monospace Bold 10.5"
-theme.font		= "Meslo LG S for Lcarsline Bold 10.5"
---theme.sans_font	= "Sans Bold 10.3"
-theme.sans_font		= "PT Sans Bold 10.3"
+
+--theme.font = "Source Code Pro Bold 10.5"
+--theme.sans_font = "Source Sans Pro Bold 10.3"
+
+--theme.font = "Meslo LG S for Lcarsline Bold 10.5"
+--theme.sans_font = "PT Sans Bold 10.3"
+
+-- use ~/.fonts.conf, Luke ;)
+theme.font = "Monospace Bold 10.5"
+theme.sans_font = "Sans Bold 10.3"
+
+-- Don't use sans font:
 --theme.sans_font	= theme.font
+
 
 theme.fg_normal			= theme.fg
 theme.bg_normal			= theme.bg
@@ -93,13 +104,13 @@ theme.border_normal		= theme.border
 theme.border_focus		= theme.sel_border
 theme.border_marked		= theme.error
 
-theme.panel_bg                  = theme.bg
-theme.panel_fg                  = theme.fg
+theme.panel_bg			= theme.bg
+theme.panel_fg			= theme.fg
 --theme.panel_opacity		= 0.96
 theme.panel_opacity		= 0.92
-theme.panel_height              = 24
-theme.panel_margin              = 3
-theme.panel_enbolden_details = false
+theme.panel_height		= 24
+theme.panel_margin		= 3
+theme.panel_enbolden_details	= false
 
 theme.taglist_font		= theme.font
 theme.taglist_fg_occupied	= theme.bg
@@ -117,8 +128,8 @@ theme.tasklist_bg_normal	= theme.bg
 theme.tasklist_fg_minimize	= theme.bg
 theme.tasklist_bg_minimize	= theme.alt_bg
 
-theme.titlebar_opacity          = 0.7
-theme.titlebar_position         = 'top'
+theme.titlebar_opacity		= 0.7
+theme.titlebar_position		= 'top'
 theme.titlebar_font		= theme.font
 theme.titlebar_fg_focus		= theme.tasklist_fg_focus
 theme.titlebar_bg_focus		= theme.bg
