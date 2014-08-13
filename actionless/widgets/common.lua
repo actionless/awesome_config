@@ -66,6 +66,21 @@ function common.widget(args)
 end
 
 
+function common.centered(widget)
+  widget = widget or wibox.widget.background()
+  local centered_widget = {}
+  centered_widget.widget = widget
+
+  local horizontal_align = wibox.layout.align.horizontal()
+  horizontal_align:set_second(widget)
+  local vertical_align = wibox.layout.align.vertical()
+  vertical_align:set_second(horizontal_align)
+
+  setmetatable(centered_widget, { __index = centered_widget.widget })
+  return setmetatable(centered_widget, { __index = vertical_align })
+end
+
+
 function common.make_separator(separator_character, args)
   local separator_alias = beautiful['widget_decoration_' .. separator_character]
   if separator_alias then

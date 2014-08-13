@@ -34,261 +34,323 @@ root.buttons(awful.util.table.join(
   awful.button({ }, 4, awful.tag.viewprev)
 ))
 -- }}}
+
 -- {{{ Key bindings
 local globalkeys = awful.util.table.join(
 
-  hk.key({ modkey,             }, "/", "show_help"),
-  hk.key({ modkey,  altkey     }, "/", "show_help"),
-  hk.key({ modkey,  "Shift"    }, "/", "show_help"),
-  hk.key({ modkey,  "Control"  }, "/", "show_help"),
+  hk.on({ modkey,             }, "/", "show_help"),
+  hk.on({ modkey,  altkey     }, "/", "show_help"),
+  hk.on({ modkey,  "Shift"    }, "/", "show_help"),
+  hk.on({ modkey,  "Control"  }, "/", "show_help"),
 
-  hk.key({ modkey,  "Control"  }, "t",
-    function() status.widgets.systray_toggle.toggle() end, nil,
-    "Toggle systray popup"
+  hk.on({ modkey,  "Control"  }, "t",
+    function() status.widgets.systray_toggle.toggle() end,
+    "toggle systray popup"
   ),
 
-  hk.key({ modkey,  "Control"  }, "s",
-    function() helpers.run_once("xscreensaver-command -lock") end, nil,
+  hk.on({ modkey,  "Control"  }, "s",
+    function() helpers.run_once("xscreensaver-command -lock") end,
     "Xscreensaver lock"
   ),
 
-  hk.key({ modkey,        }, ",",
-    function() awful.tag.viewprev(helpers.get_current_screen()) end, nil,
-    "Prev tag"
+  hk.on({ modkey,        }, ",",
+    function() awful.tag.viewprev(helpers.get_current_screen()) end,
+    "prev tag"
   ),
-  hk.key({ modkey,        }, ".",
-    function() awful.tag.viewnext(helpers.get_current_screen()) end, nil,
-    "Next tag"
+  hk.on({ modkey,        }, ".",
+    function() awful.tag.viewnext(helpers.get_current_screen()) end,
+    "next tag"
   ),
-  hk.key({ modkey,        }, "Escape",
-    awful.tag.history.restore, nil,
-    "Cycle tag"
+  hk.on({ modkey,        }, "Escape",
+    awful.tag.history.restore,
+    "cycle tags"
   ),
 
   -- By direction screen focus
-  hk.key({ modkey,        }, "Next",
-    function() awful.screen.focus_relative(1) end, nil,
-    "Next screen"
+  hk.on({ modkey,        }, "Next",
+    function() awful.screen.focus_relative(1) end,
+    "next screen"
   ),
-  hk.key({ modkey,        }, "Prior",
-    function() awful.screen.focus_relative(-1) end, nil,
-    "Prev screen"
+  hk.on({ modkey,        }, "Prior",
+    function() awful.screen.focus_relative(-1) end,
+    "prev screen"
   ),
 
   -- By direction client focus
-  hk.key({ modkey,        }, "Down",
+  hk.on({ modkey,        }, "Down",
     function()
       awful.client.focus.bydirection("down")
       if client.focus then client.focus:raise() end
-    end, nil,
+    end,
     "client focus"
   ),
-  hk.key({ modkey        }, "Up",
+  hk.on({ modkey        }, "Up",
     function()
       awful.client.focus.bydirection("up")
       if client.focus then client.focus:raise() end
-    end, nil,
+    end,
     "client focus"
   ),
-  hk.key({ modkey        }, "Left",
+  hk.on({ modkey        }, "Left",
     function()
       awful.client.focus.bydirection("left")
       if client.focus then client.focus:raise() end
-    end, nil,
+    end,
     "client focus"
   ),
-  hk.key({ modkey        }, "Right",
+  hk.on({ modkey        }, "Right",
     function()
       awful.client.focus.bydirection("right")
       if client.focus then client.focus:raise() end
-    end, nil,
+    end,
     "client focus"
   ),
 
   -- By direction client swap
-  hk.key({ modkey,  "Shift"    }, "Down",
+  hk.on({ modkey,  "Shift"    }, "Down",
     function()
       awful.client.swap.bydirection("down")
       if client.swap then client.swap:raise() end
-    end, nil,
+    end,
     "client swap"
   ),
-  hk.key({ modkey,  "Shift"    }, "Up",
+  hk.on({ modkey,  "Shift"    }, "Up",
     function()
       awful.client.swap.bydirection("up")
       if client.swap then client.swap:raise() end
-    end, nil,
+    end,
     "client swap"
   ),
-  hk.key({ modkey,  "Shift"    }, "Left",
+  hk.on({ modkey,  "Shift"    }, "Left",
     function()
       awful.client.swap.bydirection("left")
       if client.swap then client.swap:raise() end
-    end, nil,
+    end,
     "client swap"
   ),
-  hk.key({ modkey,  "Shift"    }, "Right",
+  hk.on({ modkey,  "Shift"    }, "Right",
     function()
       awful.client.swap.bydirection("right")
       if client.swap then client.swap:raise() end
-    end, nil,
+    end,
     "client swap"
   ),
 
   -- Client resize
-  hk.key({ modkey, "Control"  }, "Right",  
-    function () awful.tag.incmwfact( 0.05) end, nil,
-    "client resize"
+  hk.on({ modkey, "Control"  }, "Right",  
+    function () awful.tag.incmwfact( 0.05) end,
+    "master size+"
   ),
-  hk.key({ modkey,  "Control"  }, "Left",
-    function () awful.tag.incmwfact(-0.05) end, nil,
-    "client resize"
+  hk.on({ modkey,  "Control"  }, "Left",
+    function () awful.tag.incmwfact(-0.05) end,
+    "master size-"
   ),
-  hk.key({ modkey, "Control"  }, "Down",
-    function () awful.client.incwfact(-0.05) end, nil,
-    "client resize"
+  hk.on({ modkey, "Control"  }, "Down",
+    function () awful.client.incwfact(-0.05) end,
+    "column size-"
   ),
-  hk.key({ modkey, "Control"  }, "Up",
-    function () awful.client.incwfact( 0.05) end, nil,
-    "client resize"
+  hk.on({ modkey, "Control"  }, "Up",
+    function () awful.client.incwfact( 0.05) end,
+    "column size+"
   ),
 
   -- Layout tuning
-  awful.key({ modkey, altkey }, "Down",
-    function () awful.tag.incnmaster(-1) end),
-  awful.key({ modkey, altkey }, "Up",
-    function () awful.tag.incnmaster( 1) end),
-  awful.key({ modkey, altkey }, "Left",
-    function () awful.tag.incncol(-1) end),
-  awful.key({ modkey, altkey }, "Right",
-    function () awful.tag.incncol( 1) end),
+  hk.on({ modkey, altkey }, "Down",
+    function () awful.tag.incnmaster(-1) end,
+    "master-"
+  ),
+  hk.on({ modkey, altkey }, "Up",
+    function () awful.tag.incnmaster( 1) end,
+    "master+"
+  ),
+  hk.on({ modkey, altkey }, "Left",
+    function () awful.tag.incncol(-1) end,
+    "columns-"
+  ),
+  hk.on({ modkey, altkey }, "Right",
+    function () awful.tag.incncol( 1) end,
+    "columns+"
+  ),
 
   -- By direction client focus (VIM style)
-  awful.key({ modkey }, "j",
+  hk.on({ modkey }, "j",
     function()
       awful.client.focus.bydirection("down")
       if client.focus then client.focus:raise() end
-    end),
-  awful.key({ modkey }, "k",
+    end,
+    "client focus"
+  ),
+  hk.on({ modkey }, "k",
     function()
       awful.client.focus.bydirection("up")
       if client.focus then client.focus:raise() end
-    end),
-  awful.key({ modkey }, "h",
+    end,
+    "client focus"
+  ),
+  hk.on({ modkey }, "h",
     function()
       awful.client.focus.bydirection("left")
       if client.focus then client.focus:raise() end
-    end),
-  awful.key({ modkey }, "l",
+    end,
+    "client focus"
+  ),
+  hk.on({ modkey }, "l",
     function()
       awful.client.focus.bydirection("right")
       if client.focus then client.focus:raise() end
-    end),
+    end,
+    "client focus"
+  ),
 
   -- By direction client swap (VIM style)
-  awful.key({ modkey, "Shift" }, "j",
+  hk.on({ modkey, "Shift" }, "j",
     function()
       awful.client.swap.bydirection("down")
       if client.swap then client.swap:raise() end
-    end),
-  awful.key({ modkey, "Shift" }, "k",
+    end,
+    "client swap"
+  ),
+  hk.on({ modkey, "Shift" }, "k",
     function()
       awful.client.swap.bydirection("up")
       if client.swap then client.swap:raise() end
-    end),
-  awful.key({ modkey, "Shift" }, "h",
+    end,
+    "client swap"
+  ),
+  hk.on({ modkey, "Shift" }, "h",
     function()
       awful.client.swap.bydirection("left")
       if client.swap then client.swap:raise() end
-    end),
-  awful.key({ modkey, "Shift" }, "l",
+    end,
+    "client swap"
+  ),
+  hk.on({ modkey, "Shift" }, "l",
     function()
       awful.client.swap.bydirection("right")
       if client.swap then client.swap:raise() end
-    end),
+    end,
+    "client swap"
+  ),
 
   -- Client resize (VIM style)
-  awful.key({ modkey, "Control" }, "l",
-    function () awful.tag.incmwfact( 0.05) end),
-  awful.key({ modkey,  "Control" }, "h",
-    function () awful.tag.incmwfact(-0.05) end),
-  awful.key({ modkey, "Control" }, "j",
-    function () awful.client.incwfact(-0.05) end),
-  awful.key({ modkey, "Control" }, "k",
-    function () awful.client.incwfact( 0.05) end),
+  hk.on({ modkey, "Control" }, "l",
+    function () awful.tag.incmwfact( 0.05) end,
+    "master size+"
+  ),
+  hk.on({ modkey,  "Control" }, "h",
+    function () awful.tag.incmwfact(-0.05) end,
+    "master size-"
+  ),
+  hk.on({ modkey, "Control" }, "j",
+    function () awful.client.incwfact(-0.05) end,
+    "column size-"
+  ),
+  hk.on({ modkey, "Control" }, "k",
+    function () awful.client.incwfact( 0.05) end,
+    "column size+"
+  ),
 
   -- Layout tuning (VIM style)
-  awful.key({ modkey, altkey }, "j",
-    function () awful.tag.incnmaster(-1) end),
-  awful.key({ modkey, altkey }, "k",
-    function () awful.tag.incnmaster( 1) end),
-  awful.key({ modkey, altkey }, "h",
-    function () awful.tag.incncol(-1) end),
-  awful.key({ modkey, altkey }, "l",
-    function () awful.tag.incncol( 1) end),
+  hk.on({ modkey, altkey }, "j",
+    function () awful.tag.incnmaster(-1) end,
+    "master-"
+  ),
+  hk.on({ modkey, altkey }, "k",
+    function () awful.tag.incnmaster( 1) end,
+    "master+"
+  ),
+  hk.on({ modkey, altkey }, "h",
+    function () awful.tag.incncol(-1) end,
+    "columns-"
+  ),
+  hk.on({ modkey, altkey }, "l",
+    function () awful.tag.incncol( 1) end,
+    "columns+"
+  ),
 
 
   -- Menus
-  awful.key({ modkey,       }, "w",
-          function () status.menu.mainmenu:show() end),
-  awful.key({ modkey,       }, "i",
-          function ()
-            status.menu.instance = menu_addon.clients_on_tag({
-              theme = {width=capi.screen[helpers.get_current_screen()].workarea.width},
-              coords = {x=0, y=18}})
-          end),
-  awful.key({ modkey,       }, "p",
-          function ()
-            local log = require('naughty').notify
-            log({text="DEBUG"})
-            status.menu.instance = awful.menu.clients({
-              theme = {width=capi.screen[helpers.get_current_screen()].workarea.width},
-              coords = {x=0, y=18}})
-          end),
-  awful.key({ modkey, "Control"}, "p",
-    function() menubar.show() end),
-  --awful.key({ modkey,        }, "space",
-  --  function() menubar.show() end),
-  awful.key({ modkey,        }, "space",
-    function() awful.util.spawn_with_shell(cmd.dmenu) end),
+  hk.on({ modkey,       }, "w",
+    function () status.menu.mainmenu:show() end,
+    "awesome menu"
+  ),
+  hk.on({ modkey,       }, "i",
+    function ()
+      status.menu.instance = menu_addon.clients_on_tag({
+        theme = {width=capi.screen[helpers.get_current_screen()].workarea.width},
+        coords = {x=0, y=18}})
+    end,
+    "current clients"
+  ),
+  hk.on({ modkey,       }, "p",
+    function ()
+      local log = require('naughty').notify
+      log({text="DEBUG"})
+      status.menu.instance = awful.menu.clients({
+        theme = {width=capi.screen[helpers.get_current_screen()].workarea.width},
+        coords = {x=0, y=18}})
+    end,
+    "all clients"
+  ),
+  hk.on({ modkey, "Control"}, "p",
+    function() menubar.show() end,
+    "applications menu"
+  ),
+  hk.on({ modkey,        }, "space",
+    function() awful.util.spawn_with_shell(cmd.dmenu) end,
+    "app launcher"
+  ),
 
   -- Layout manipulation
-  awful.key({ modkey, "Control"  }, "n",
-          function()
-    c=awful.client.restore()
-                if c then
-                  -- @TODO:
-                  -- it's a workaround for some strange upstream issue
-                  client.focus = c
-                end
-          end),
+  hk.on({ modkey, "Control"  }, "n",
+    function()
+      c=awful.client.restore()
+      if c then
+        -- @TODO: it's a workaround for some strange upstream issue
+        client.focus = c
+      end
+    end,
+    "de-iconify"  
+  ),
 
-  awful.key({ modkey,        }, "u",
-    awful.client.urgent.jumpto),
-  awful.key({ modkey,        }, "Tab",
+  hk.on({ modkey,        }, "u",
+    awful.client.urgent.jumpto,
+    "jumo to urgent"
+  ),
+  hk.on({ modkey,        }, "Tab",
     function ()
       awful.client.focus.history.previous()
       if client.focus then
         client.focus:raise()
       end
-    end),
+    end,
+    "cycle clients"  
+  ),
 
-  awful.key({ altkey,        }, "space",
-    function () awful.layout.inc(status.layouts, 1) end),
-  awful.key({ altkey, "Shift"    }, "space",
-    function () awful.layout.inc(status.layouts, -1) end),
+  hk.on({ altkey,        }, "space",
+    function () awful.layout.inc(status.layouts, 1) end,
+    "next layout"
+  ),
+  hk.on({ altkey, "Shift"    }, "space",
+    function () awful.layout.inc(status.layouts, -1) end,
+    "prev layout"
+  ),
 
 
   -- Prompt
-  awful.key({ modkey }, "r",
-    function () status.widgets.uniq[helpers.get_current_screen()].promptbox:run() end),
-  awful.key({ modkey }, "x",
+  hk.on({ modkey }, "r",
+    function () status.widgets.uniq[helpers.get_current_screen()].promptbox:run() end,
+    "execute command..."
+  ),
+  hk.on({ modkey }, "x",
     function ()
       awful.prompt.run({ prompt = "Run Lua code: " },
       status.widgets.promptbox[helpers.get_current_screen()].widget,
       awful.util.eval, nil,
       awful.util.getdir("cache") .. "/history_eval")
-    end),
+    end,
+    "evaluate lua..."
+  ),
 
   -- ALSA volume control
   awful.key({}, "#123", function () status.widgets.volume.up() end),
@@ -301,25 +363,28 @@ local globalkeys = awful.util.table.join(
   awful.key({}, "#148", function () status.widgets.music.next_song() end),
   awful.key({}, "#172", function () status.widgets.music.toggle() end),
 
-  -- Copy to clipboard
-  awful.key({ modkey }, "c",
-    function () os.execute("xsel -p -o | xsel -i -b") end),
+  hk.on({ modkey }, "c",
+    function () os.execute("xsel -p -o | xsel -i -b") end,
+    "copy to clipboard"
+  ),
 
   -- Standard program
-  awful.key({ modkey,        }, "Return",
-    function () awful.util.spawn(cmd.tmux) end),
-  awful.key({ modkey,        }, "s",
+  hk.on({ modkey,        }, "Return",
+    function () awful.util.spawn(cmd.tmux) end,
+    "terminal"
+  ),
+  hk.on({ modkey,        }, "s",
     function () awful.util.spawn(cmd.file_manager) end),
-  awful.key({ modkey, "Control"  }, "c",
+  hk.on({ modkey, "Control"  }, "c",
     function () awful.util.spawn_with_shell(cmd.chromium) end),
-  awful.key({ modkey, "Control"  }, "g",
+  hk.on({ modkey, "Control"  }, "g",
     function () awful.util.spawn_with_shell(cmd.chrome) end),
-  awful.key({ modkey, "Control"  }, "f",
+  hk.on({ modkey, "Control"  }, "f",
     function () awful.util.spawn_with_shell(cmd.firefox) end),
 
-  awful.key({ modkey, "Control"  }, "r",
+  hk.on({ modkey, "Control"  }, "r",
     awesome.restart),
-  awful.key({ modkey, "Shift"    }, "q",
+  hk.on({ modkey, "Shift"    }, "q",
     awesome.quit),
 
   -- Scrot stuff
@@ -370,13 +435,13 @@ status.clientkeys = awful.util.table.join(
 )
 
 local diff = nil
-for screen = 1, 2 do
+for scr = 1, 2 do
   for i = 1, 12 do
 
-  if screen == 1 then
+  if scr == 1 then
     -- num keys:
     diff = 9
-  elseif screen == 2 then
+  elseif scr == 2 then
     -- f-keys:
     if i>10 then
       diff = 84
@@ -387,22 +452,24 @@ for screen = 1, 2 do
 
   globalkeys = awful.util.table.join(globalkeys,
     -- View tag only.
-    awful.key({ modkey }, "#" .. i + diff,
+    hk.on({ modkey }, "#" .. i + diff,
       function ()
-        local tag = awful.tag.gettags(screen)[i]
+        local tag = awful.tag.gettags(scr)[i]
         if tag then awful.tag.viewonly(tag) end
-        end),
+      end,
+      "go to tag " .. i .. " (screen #" .. scr .. ")"
+    ),
     -- Toggle tag.
     awful.key({ modkey, "Control" }, "#" .. i + diff,
       function ()
-        local tag = awful.tag.gettags(screen)[i]
+        local tag = awful.tag.gettags(scr)[i]
         if tag then awful.tag.viewtoggle(tag) end
       end),
     -- Move client to tag.
     awful.key({ modkey, "Shift" }, "#" .. i + diff,
       function ()
         if client.focus then
-          local tag = awful.tag.gettags(screen)[i]
+          local tag = awful.tag.gettags(scr)[i]
           if tag then awful.client.movetotag(tag) end
          end
       end),
@@ -410,7 +477,7 @@ for screen = 1, 2 do
     awful.key({ modkey, "Control", "Shift" }, "#" .. i + diff,
       function ()
         if client.focus then
-          local tag = awful.tag.gettags(screen)[i]
+          local tag = awful.tag.gettags(scr)[i]
           if tag then awful.client.toggletag(tag) end
         end
       end))

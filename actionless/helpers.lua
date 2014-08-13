@@ -204,6 +204,26 @@ function helpers.unicode_max_length(unicode_string, max_length)
   return result
 end
 
+function helpers.multiline_limit(unicode_string, max_length)
+  if not unicode_string then return nil end
+  local result = ''
+  local line = ''
+  local counter = 0
+  for uchar in string.gmatch(unicode_string, '([%z\1-\127\194-\244][\128-\191]*)') do
+    line = line .. uchar
+    counter = counter + 1
+    if counter == max_length then
+      result = result .. line .. "\n"
+      line = ''
+      counter = 0
+    end
+  end
+  if counter > 0 then
+      result = result .. line .. string.rep(' ', max_length-helpers.unicode_length(line))
+  end
+  return result
+end
+
 -----------------------------------------------
 
 function helpers.run_once(cmd)
