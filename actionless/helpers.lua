@@ -10,18 +10,18 @@ local awful = require("awful")
 local capi   = { timer = timer,
                  client = client,
                  mouse = mouse }
+
 local beautiful = require("beautiful")
 local config = require("actionless.config")
 beautiful.init(config.awesome.theme_dir)
 
 
 
-
 -- helper functions for internal use
 local helpers = {}
 
--- @TODO: debug that:
---helpers.font = string.match(beautiful.get().font, "([%a, ]+) %d+")
+helpers.font = string.match(beautiful.get().font or "monospace", "([%a, ]+) %d+")
+
 
 helpers.dir    = debug.getinfo(1, 'S').source:match[[^@(.*/).*$]]
 helpers.scripts_dir = helpers.dir .. 'scripts/'
