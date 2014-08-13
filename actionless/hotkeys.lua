@@ -10,11 +10,14 @@ local hotkeys = {
   bindings = {
     Mod4 = {
     }
-  }
+  },
+  last_modifiers = nil,
+  last_visible = false,
 }
-local popup
+local keyboard = {
+  {'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', '['},
+}
 local bindings = hotkeys.bindings
-
 
 function get_mod_table_name(modifiers)
   table.sort(modifiers)
@@ -22,19 +25,25 @@ function get_mod_table_name(modifiers)
 end
 
 
-local keyboard = {
-  {'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', '['},
-}
+local new_keybutton = function () end
 
 
 function init_keyboard()
-
-    local layout = wibox.layout.align.horizontal()
+    local layout
+    for i1,row in ipairs(keyboard) do
+      local layout = wibox.layout.align.horizontal()
+      for i2,key in ipairs(keyboard) do
+        naughty.notify({text=key})
+      end
+    end
 end
 
 
 function init_popup()
-    local mywibox = wibox({})
+    local mywibox = wibox({
+      border_width = beautiful.border_width,
+      border_color = beautiful.error
+    })
     mywibox.ontop = true
     mywibox.opacity = beautiful.notification_opacity
 
@@ -50,21 +59,20 @@ function init_popup()
         tmargin = 2,
         bmargin = 2,
     }
-
-    local lmargin = wibox.layout.margin(
+    local lmargin_widget = wibox.layout.margin(
         wibox.widget.textbox(''),
         sg['lmargin'], 0,
         sg['tmargin'], sg['bmargin']
     )
-    local rmargin = wibox.layout.margin(
+    local rmargin_widget = wibox.layout.margin(
         wibox.widget.textbox(''),
         0, sg['rmargin'],
         sg['tmargin'], sg['bmargin']
     )
     local layout = wibox.layout.align.horizontal()
-    layout:set_left(lmargin)
+    layout:set_left(lmargin_widget)
     layout:set_middle(flex_layout)
-    layout:set_right(rmargin)
+    layout:set_right(rmargin_widget)
 
     mywibox:set_widget(layout)
     local width = 380 + sg.lmargin + sg.rmargin
@@ -76,7 +84,7 @@ function init_popup()
       x = sg.x or systray_toggle.scrgeom.x,
       y = sg.y or systray_toggle.scrgeom.y,
       height = height,
-      width = width
+      width = width,
     })
 
     return mywibox, widget
@@ -114,13 +122,19 @@ end
 function hotkeys.show_by_modifiers(modifiers)
   local mod_table = get_mod_table_name(modifiers)
   local output = ''
-  local line
   for k, v in pairs(bindings[mod_table]) do
-    line = string.format("%12s",k) .. "  " .. v .. "\n"
-    output = output .. line
+    output = output .. string.format("%12s",k) .. "  " .. v .. "\n"
   end
-  hotkeys.popup_content:set_markup(markup.small(output))
-  hotkeys.popup.visible = not hotkeys.popup.visible
+  if hotkeys.last_visible == hotkeys.popup.visible and
+    (hotkeys.last_modifiers == modifiers or not hotkeys.popup.visible)
+  then
+      hotkeys.popup.visible = not hotkeys.popup.visible
+  end
+  if hotkeys.last_modifiers ~= modifiers then 
+    hotkeys.popup_content:set_markup(markup.small(output))
+  end
+  hotkeys.last_visible = hotkeys.popup.visible
+  hotkeys.last_modifiers = modifiers
 end
 
 return hotkeys
