@@ -4,6 +4,7 @@ local naughty = require("naughty")
 local beautiful = require("beautiful")
 
 local markup  = require("actionless.markup")
+local decorated_widget  = require("actionless.widgets.common").decorated
 local mono_preset  = require("actionless.helpers").mono_preset
 
 local hotkeys = {
@@ -15,7 +16,10 @@ local hotkeys = {
   last_visible = false,
 }
 local keyboard = {
-  {'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', '['},
+  { '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace' },
+  { 'Tab',  'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', '[' },
+  { 'Caps',  'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", '\\' },
+  { 'Shift',  'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/' },
 }
 local bindings = hotkeys.bindings
 
@@ -25,17 +29,47 @@ function get_mod_table_name(modifiers)
 end
 
 
-local new_keybutton = function () end
+local function new_keybutton(key, modifiers)
+  local obj = {}
+  
+  obj.key = key
+  obj.comment = hotkeys.bindings[get_mod_table_name(modifiers)][key]
+
+  local key_widget = wibox.widget.textbox()
+  key_widget:set_markup(markup.big(obj.key))
+  local comment_widget = wibox.widget.textbox()
+  comment_widget:set_markup(markup.small(obj.comment))
+  local layout = wibox.layout.fixed.vertical()
+  layout:add(key_widget)
+  layout:add(comment_widget)
+  local padding = wibox.layout.margin()
+  padding:set_widget(layout)
+  padding:set_margins(5)
+  local background = wibox.widget.background()
+  background:set_widget(padding)
+  if obj.comment then
+    background:set_bg('#ffdd00')
+  end
+  local margin = wibox.layout.margin()
+  margin:set_widget(background)
+  margin:set_margins(5)
+
+  setmetatable(obj,       { __index = margin })
+  return obj
+end
 
 
-function init_keyboard()
-    local layout
+function init_keyboard(widget, modifiers)
+    local layout = wibox.layout.fixed.vertical()
+    local row_layout
     for i1,row in ipairs(keyboard) do
-      local layout = wibox.layout.align.horizontal()
-      for i2,key in ipairs(keyboard) do
-        naughty.notify({text=key})
+      row_layout = wibox.layout.fixed.horizontal()
+      for i2,key in ipairs(row) do
+        row_layout:add(new_keybutton(key, modifiers))
       end
+      layout:add(row_layout)
     end
+    return layout
 end
 
 
@@ -47,7 +81,7 @@ function init_popup()
     mywibox.ontop = true
     mywibox.opacity = beautiful.notification_opacity
 
-    local widget = wibox.widget.textbox('test\ntest\ntest\ntest')
+    local widget = wibox.widget.textbox('placeholder')
     local flex_layout = wibox.layout.flex.horizontal()
     flex_layout:add(widget)
 
@@ -59,30 +93,16 @@ function init_popup()
         tmargin = 2,
         bmargin = 2,
     }
-    local lmargin_widget = wibox.layout.margin(
-        wibox.widget.textbox(''),
-        sg['lmargin'], 0,
-        sg['tmargin'], sg['bmargin']
-    )
-    local rmargin_widget = wibox.layout.margin(
-        wibox.widget.textbox(''),
-        0, sg['rmargin'],
-        sg['tmargin'], sg['bmargin']
-    )
-    local layout = wibox.layout.align.horizontal()
-    layout:set_left(lmargin_widget)
-    layout:set_middle(flex_layout)
-    layout:set_right(rmargin_widget)
 
     mywibox:set_widget(layout)
-    local width = 380 + sg.lmargin + sg.rmargin
-    local height = 380 + sg.tmargin + sg.bmargin
+    local width = 900
+    local height = 400
 
     -- Set position and size
     mywibox.visible = false
     mywibox:geometry({
-      x = sg.x or systray_toggle.scrgeom.x,
-      y = sg.y or systray_toggle.scrgeom.y,
+      x = sg.x,
+      y = sg.y,
       height = height,
       width = width,
     })
@@ -121,17 +141,15 @@ end
 
 function hotkeys.show_by_modifiers(modifiers)
   local mod_table = get_mod_table_name(modifiers)
-  local output = ''
-  for k, v in pairs(bindings[mod_table]) do
-    output = output .. string.format("%12s",k) .. "  " .. v .. "\n"
-  end
   if hotkeys.last_visible == hotkeys.popup.visible and
     (hotkeys.last_modifiers == modifiers or not hotkeys.popup.visible)
   then
       hotkeys.popup.visible = not hotkeys.popup.visible
   end
   if hotkeys.last_modifiers ~= modifiers then 
+    local keyboard = init_keyboard(hotkeys.popup_content, modifiers)
     hotkeys.popup_content:set_markup(markup.small(output))
+    hotkeys.popup:set_widget(keyboard)
   end
   hotkeys.last_visible = hotkeys.popup.visible
   hotkeys.last_modifiers = modifiers
