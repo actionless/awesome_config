@@ -4,8 +4,7 @@ local beautiful = require("beautiful")
 local awful = require("awful")
 local config = require("actionless.config")
 local helpers = require("actionless.helpers")
-beautiful.init(config.status.theme_dir)
---beautiful.init(os.getenv("HOME") .. "/.config/awesome/themes/lcars_modern/theme.lua")
+beautiful.init(config.awesome.theme_dir)
 
 
 function get_color(color_n)

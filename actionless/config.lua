@@ -1,8 +1,8 @@
 local config = {}
 
-function config.init(status)
+function config.init(awesome_context)
 
-  config.status = status
+  config.awesome = awesome_context
 
 end
 
