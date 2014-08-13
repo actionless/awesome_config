@@ -7,7 +7,6 @@ local helpers  = require("actionless.helpers")
 local markup  = require("actionless.markup")
 local decorated_widget  = require("actionless.widgets.common").decorated
 local centered_widget  = require("actionless.widgets.common").centered
-local mono_preset  = helpers.mono_preset
 
 local hotkeys = {
   bindings = {
