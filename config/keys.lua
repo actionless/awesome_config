@@ -38,19 +38,22 @@ root.buttons(awful.util.table.join(
 -- {{{ Key bindings
 local globalkeys = awful.util.table.join(
 
-  hk.on({ modkey,             }, "/", "show_help"),
-  hk.on({ modkey,  altkey     }, "/", "show_help"),
-  hk.on({ modkey,  "Shift"    }, "/", "show_help"),
-  hk.on({ modkey,  "Control"  }, "/", "show_help"),
+  hk.on({ modkey, }, "/", "show_help"),
+  hk.on({ modkey, altkey }, "/", "show_help"),
+  hk.on({ modkey, altkey, "Shift" }, "/", "show_help"),
+  hk.on({ modkey, altkey, "Control" }, "/", "show_help"),
+  hk.on({ modkey, "Shift"    }, "/", "show_help"),
+  hk.on({ modkey, "Control"  }, "/", "show_help"),
+  hk.on({ modkey, "Shift", "Control" }, "/", "show_help"),
 
   hk.on({ modkey,  "Control"  }, "t",
     function() status.widgets.systray_toggle.toggle() end,
-    "toggle systray popup"
+    "toggle sysTray popup"
   ),
 
   hk.on({ modkey,  "Control"  }, "s",
     function() helpers.run_once("xscreensaver-command -lock") end,
-    "Xscreensaver lock"
+    "xScreensaver lock"
   ),
 
   hk.on({ modkey,        }, ",",
@@ -137,7 +140,7 @@ local globalkeys = awful.util.table.join(
   ),
 
   -- Client resize
-  hk.on({ modkey, "Control"  }, "Right",  
+  hk.on({ modkey, "Control"  }, "Right",
     function () awful.tag.incmwfact( 0.05) end,
     "master size+"
   ),
@@ -272,7 +275,7 @@ local globalkeys = awful.util.table.join(
   -- Menus
   hk.on({ modkey,       }, "w",
     function () status.menu.mainmenu:show() end,
-    "awesome menu"
+    "aWesome menu"
   ),
   hk.on({ modkey,       }, "i",
     function ()
@@ -294,7 +297,7 @@ local globalkeys = awful.util.table.join(
   ),
   hk.on({ modkey, "Control"}, "p",
     function() menubar.show() end,
-    "applications menu"
+    "aPPlications menu"
   ),
   hk.on({ modkey,        }, "space",
     function() awful.util.spawn_with_shell(cmd.dmenu) end,
@@ -310,12 +313,12 @@ local globalkeys = awful.util.table.join(
         client.focus = c
       end
     end,
-    "de-iconify"  
+    "de-icoNify"
   ),
 
   hk.on({ modkey,        }, "u",
     awful.client.urgent.jumpto,
-    "jumo to urgent"
+    "jumo to Urgent"
   ),
   hk.on({ modkey,        }, "Tab",
     function ()
@@ -324,7 +327,7 @@ local globalkeys = awful.util.table.join(
         client.focus:raise()
       end
     end,
-    "cycle clients"  
+    "cycle clients"
   ),
 
   hk.on({ altkey,        }, "space",
@@ -340,7 +343,7 @@ local globalkeys = awful.util.table.join(
   -- Prompt
   hk.on({ modkey }, "r",
     function () status.widgets.uniq[helpers.get_current_screen()].promptbox:run() end,
-    "execute command..."
+    "Run command..."
   ),
   hk.on({ modkey }, "x",
     function ()
@@ -349,7 +352,7 @@ local globalkeys = awful.util.table.join(
       awful.util.eval, nil,
       awful.util.getdir("cache") .. "/history_eval")
     end,
-    "evaluate lua..."
+    "eXecute lua code..."
   ),
 
   -- ALSA volume control
@@ -365,7 +368,7 @@ local globalkeys = awful.util.table.join(
 
   hk.on({ modkey }, "c",
     function () os.execute("xsel -p -o | xsel -i -b") end,
-    "copy to clipboard"
+    "copy to Clipboard"
   ),
 
   -- Standard program
@@ -374,64 +377,88 @@ local globalkeys = awful.util.table.join(
     "terminal"
   ),
   hk.on({ modkey,        }, "s",
-    function () awful.util.spawn(cmd.file_manager) end),
-  hk.on({ modkey, "Control"  }, "c",
-    function () awful.util.spawn_with_shell(cmd.chromium) end),
-  hk.on({ modkey, "Control"  }, "g",
-    function () awful.util.spawn_with_shell(cmd.chrome) end),
-  hk.on({ modkey, "Control"  }, "f",
-    function () awful.util.spawn_with_shell(cmd.firefox) end),
+    function () awful.util.spawn(cmd.file_manager) end,
+    "file manager"
+  ),
 
   hk.on({ modkey, "Control"  }, "r",
-    awesome.restart),
+    awesome.restart,
+    "Reload awesome wm"
+  ),
   hk.on({ modkey, "Shift"    }, "q",
-    awesome.quit),
+    awesome.quit,
+    "Quit awesome wm"
+  ),
 
   -- Scrot stuff
-  awful.key({ "Control"      }, "Print", 
+  hk.on({ "Control"      }, "Print",
     function ()
       awful.util.spawn_with_shell(
       "scrot -ub '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. cmd.scrot_preview_cmd)
-    end),
-  awful.key({ altkey        }, "Print",
+    end,
+    "screenshot focused"
+  ),
+  hk.on({ altkey        }, "Print",
     function ()
       awful.util.spawn_with_shell(
       "scrot -s '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. cmd.scrot_preview_cmd)
-    end),
-  awful.key({            }, "Print",
+    end,
+    "screenshot selected"
+  ),
+  hk.on({            }, "Print",
     function ()
       awful.util.spawn_with_shell(
       "scrot '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. cmd.scrot_preview_cmd)
-    end)
+    end,
+    "screenshot all"
+  )
 
 )
 
 status.clientkeys = awful.util.table.join(
-  awful.key({ modkey,        }, "f",
-    function (c) c.fullscreen = not c.fullscreen end),
-  awful.key({ modkey,        }, "q",
-    function (c) c:kill() end),
-  awful.key({ modkey, "Control"  }, "space",
-    awful.client.floating.toggle),
-  awful.key({ modkey, "Control"  }, "Return",
-    function (c) c:swap(awful.client.getmaster()) end),
-  awful.key({ modkey,        }, "o",
-    awful.client.movetoscreen),
-  awful.key({ modkey,        }, "t",
-    function (c) c.ontop = not c.ontop end),
-  awful.key({ modkey, "Shift"    }, "t",
+  hk.on({ modkey,        }, "f",
+    function (c) c.fullscreen = not c.fullscreen end,
+    "Fullscreen"
+  ),
+  hk.on({ modkey,        }, "q",
+    function (c) c:kill() end,
+    "Quit app"
+  ),
+  hk.on({ modkey, "Control"  }, "space",
+    awful.client.floating.toggle,
+    "client float"
+  ),
+  hk.on({ modkey, "Control"  }, "Return",
+    function (c) c:swap(awful.client.getmaster()) end,
+    "put client on master"
+  ),
+  hk.on({ modkey,        }, "o",
+    awful.client.movetoscreen,
+    "move client to Other screen"
+  ),
+  hk.on({ modkey,        }, "t",
+    function (c) c.ontop = not c.ontop end,
+    "toggle client on Top"
+  ),
+  hk.on({ modkey, "Shift"    }, "t",
     function(c)
-                  titlebar.titlebar_toggle(c)
-                  --awful.titlebar.toggle(
-                  --  c, beautiful.titlebar_position or 'top')
-                end),
-  awful.key({ modkey,        }, "n",
-    function (c) c.minimized = true end),
-  awful.key({ modkey,        }, "m",
+      titlebar.titlebar_toggle(c)
+      --awful.titlebar.toggle(
+      --  c, beautiful.titlebar_position or 'top')
+    end,
+    "toggle Titlebar"
+  ),
+  hk.on({ modkey,        }, "n",
+    function (c) c.minimized = true end,
+    "icoNify client"
+  ),
+  hk.on({ modkey,        }, "m",
     function (c)
       c.maximized_horizontal = not c.maximized_horizontal
       c.maximized_vertical   = not c.maximized_vertical
-    end)
+    end,
+    "Maximize client"
+  )
 )
 
 local diff = nil
@@ -451,7 +478,6 @@ for scr = 1, 2 do
   end
 
   globalkeys = awful.util.table.join(globalkeys,
-    -- View tag only.
     hk.on({ modkey }, "#" .. i + diff,
       function ()
         local tag = awful.tag.gettags(scr)[i]
@@ -459,28 +485,33 @@ for scr = 1, 2 do
       end,
       "go to tag " .. i .. " (screen #" .. scr .. ")"
     ),
-    -- Toggle tag.
-    awful.key({ modkey, "Control" }, "#" .. i + diff,
+    hk.on({ modkey, "Control" }, "#" .. i + diff,
       function ()
         local tag = awful.tag.gettags(scr)[i]
         if tag then awful.tag.viewtoggle(tag) end
-      end),
-    -- Move client to tag.
-    awful.key({ modkey, "Shift" }, "#" .. i + diff,
+      end,
+      "toggle tag " .. i .. " (screen #" .. scr .. ")"
+    ),
+    hk.on({ modkey, "Shift" }, "#" .. i + diff,
       function ()
         if client.focus then
           local tag = awful.tag.gettags(scr)[i]
           if tag then awful.client.movetotag(tag) end
          end
-      end),
-    -- Toggle tag.
-    awful.key({ modkey, "Control", "Shift" }, "#" .. i + diff,
+      end,
+      "move client to tag " .. i .. " (screen #" .. scr .. ")"
+    ),
+    hk.on({ modkey, "Control", "Shift" }, "#" .. i + diff,
       function ()
         if client.focus then
           local tag = awful.tag.gettags(scr)[i]
           if tag then awful.client.toggletag(tag) end
         end
-      end))
+
+      end,
+      "toggle client on tag " .. i .. " (screen #" .. scr .. ")"
+    )
+  )
   end
 end
 
