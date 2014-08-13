@@ -108,6 +108,13 @@ function helpers.table_range(t, range_start, range_finish)
   return result
 end
 
+function helpers.table_contains(t, e)
+  for k, v in pairs(t) do
+    if v == e then return true end
+  end
+  return false
+end
+
 function helpers.table_apply(t, func)
   for k, v in pairs(t) do
     t[k] = func(v)
