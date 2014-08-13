@@ -20,9 +20,7 @@ local keys = {}
 
 function keys.init(status)
 
-local globalkeys = {}
-
-hk.init(status, globalkeys)
+hk.init(status)
 
 local modkey = status.modkey
 local altkey = status.altkey
@@ -37,7 +35,7 @@ root.buttons(awful.util.table.join(
 ))
 -- }}}
 -- {{{ Key bindings
-globalkeys = awful.util.table.join(globalkeys,
+local globalkeys = awful.util.table.join(
 
   hk.key({ modkey,             }, "/", "show_help"),
   hk.key({ modkey,  altkey     }, "/", "show_help"),
