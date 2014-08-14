@@ -1,3 +1,4 @@
+local capi = { screen = screen }
 local awful = require("awful")
 local wibox = require("wibox")
 local naughty = require("naughty")
@@ -5,8 +6,10 @@ local beautiful = require("beautiful")
 
 local helpers  = require("actionless.helpers")
 local markup  = require("actionless.markup")
-local decorated_widget  = require("actionless.widgets.common").decorated
-local centered_widget  = require("actionless.widgets.common").centered
+local common_widgets = require("actionless.widgets.common")
+local decorated_widget = common_widgets.decorated
+local centered_widget  = common_widgets.centered
+local bordered_widget  = common_widgets.bordered
 
 local hotkeys = {
   bindings = {
@@ -17,7 +20,15 @@ local hotkeys = {
   last_modifiers = nil,
   last_visible = false,
 }
-local keyboard = {
+local APPEARANCE = {
+  width = 1400,
+  height = 600,
+  key_padding = 5,
+  key_margin = 5,
+  comment_font_size = 8,
+  comment_width_chars = 10
+}
+local KEYBOARD = {
   { 'Escape', '#67', '#68', '#69', '#70', '#71', '#72', '#73', '#74', '#75', '#76', '#95', '#96', 'Home', 'End'},
   { '`', '#10', '#11', '#12', '#13', '#14', '#15', '#16', '#17', '#18', '#19', '#20', '#21', 'Insert', 'Delete' },
   { 'Tab',  'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 'Backspace'  },
@@ -25,7 +36,7 @@ local keyboard = {
   { 'Shift',  'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 'Next', 'Up' , 'Prior' },
   { 'Fn', 'Control', 'Mod4', 'Mod1', '    ','space', '         ', 'Alt Gr', 'Print', 'Control', 'Left', 'Down', 'Right'},
 }
-local keyboard_labels = {
+local KEYBOARD_LABELS = {
   { 'Esc', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12', 'Home', 'End'},
   { '~', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Insert', 'Delete'},
   { 'Tab',  'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']',  'Backspace' },
@@ -34,68 +45,68 @@ local keyboard_labels = {
   { 'Fn', 'Ctrl', 'Super', 'Alt', '    ','Space', '            ', 'Alt Gr', 'PrtScr', 'Ctrl', 'Left', 'Down', 'Right'},
 }
 
-function get_mod_table_name(modifiers)
+local function get_mod_table_name(modifiers)
   table.sort(modifiers)
   return table.concat(modifiers)
 end
 
 
-local function new_keybutton(key, modifiers, key_label)
+local function new_keybutton(key_label, comment)
   local obj = {}
-  
-  local comment = hotkeys.bindings[get_mod_table_name(modifiers)][key]
 
-  local key_widget = wibox.widget.textbox()
-  key_widget:set_markup(markup.big(
+  local letter_widget = wibox.widget.textbox()
+  letter_widget:set_markup(markup.big(
       key_label
   ))
   local comment_widget = wibox.widget.textbox()
+  comment_widget:set_font(helpers.font .. " " .. APPEARANCE.comment_font_size)
   comment_widget:set_text(
       comment
-      and helpers.multiline_limit(comment, 10)
-      or string.rep(' ', 10)
+      and helpers.multiline_limit(comment, APPEARANCE.comment_width_chars)
+      or string.rep(" ", APPEARANCE.comment_width_chars)
   )
-  comment_widget:set_font(helpers.font .. " 8")
-  local layout = wibox.layout.fixed.vertical()
-  layout:add(key_widget)
-  layout:add(comment_widget)
-  local padding = wibox.layout.margin()
-  padding:set_widget(layout)
-  padding:set_margins(5)
-  local background = wibox.widget.background()
-  background:set_widget(padding)
-  if comment then
-    background:set_bg(beautiful.theme)
-    background:set_fg(beautiful.bg)
-  end
-  local margin = wibox.layout.margin()
-  margin:set_widget(background)
-  margin:set_margins(5)
 
-  setmetatable(obj,       { __index = margin })
+  local button_layout = wibox.layout.fixed.vertical()
+  button_layout:add(letter_widget)
+  button_layout:add(comment_widget)
+
+  local button_widget = bordered_widget(
+    button_layout, {
+      padding = APPEARANCE.key_padding,
+      margin = APPEARANCE.key_margin,
+  })
+
+  if comment then
+    button_widget:set_bg(beautiful.theme)
+    button_widget:set_fg(beautiful.bg)
+  end
+
+  setmetatable(obj, { __index = button_widget })
   return obj
 end
 
 
-function init_keyboard(modifiers)
-    local layout = wibox.layout.fixed.vertical()
-    local row_layout
-    for i1,row in ipairs(keyboard) do
-      row_layout = wibox.layout.fixed.horizontal()
-      for i2,key in ipairs(row) do
-        row_layout:add(new_keybutton(key, modifiers, keyboard_labels[i1][i2]))
-      end
-      layout:add(row_layout)
+local function init_keyboard(modifiers)
+  local modifiers_table_name = get_mod_table_name(modifiers)
+  local keyboard_layout = wibox.layout.fixed.vertical()
+  for i1,row in ipairs(KEYBOARD) do
+    local row_layout = wibox.layout.fixed.horizontal()
+    for i2,key in ipairs(row) do
+      local comment = hotkeys.bindings[modifiers_table_name][key]
+      row_layout:add(new_keybutton(
+        KEYBOARD_LABELS[i1][i2], comment
+      ))
     end
-    return layout
+    keyboard_layout:add(row_layout)
+  end
+  return keyboard_layout
 end
 
 
-function init_popup()
-  local scr = helpers.get_current_screen()
-  local scrgeom = screen[scr].workarea
-  local width = 1400
-  local height = 600
+local function init_popup()
+  local scrgeom = capi.screen[helpers.get_current_screen()].workarea
+  local width = APPEARANCE.width
+  local height = APPEARANCE.height
   local x = (scrgeom.width - width)/2
   local y = (scrgeom.height - height)/2
 
@@ -152,7 +163,7 @@ function hotkeys.show_by_modifiers(modifiers)
   then
       hotkeys.popup.visible = not hotkeys.popup.visible
   end
-  if hotkeys.last_modifiers ~= modifiers then 
+  if hotkeys.last_modifiers ~= modifiers then
     local mod_table = get_mod_table_name(modifiers)
     if not hotkeys.cached_keyboards[mod_table] then
       hotkeys.cached_keyboards[mod_table] = init_keyboard(modifiers)

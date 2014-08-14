@@ -7,7 +7,7 @@ local helpers = require("actionless.helpers")
 beautiful.init(config.awesome.theme_dir)
 
 
-function get_color(color_n)
+local function get_color(color_n)
   return beautiful.color[color_n]
 end
 
@@ -18,7 +18,6 @@ local common = {}
 function common.widget(args)
   args = args or {}
   local show_icon = args.force_show_icon or beautiful.show_widget_icon
-  --local inverted = args.inverted or false
   local widget = {}
 
   widget.text_widget = wibox.widget.textbox('')
@@ -58,16 +57,12 @@ function common.widget(args)
     widget.icon_bg:set_fg(...)
   end
 
-  if inverted then
-    widget.set_fg, widget.set_bg = widget.set_bg, widget.set_fg
-  end
-
   return setmetatable(widget, { __index = widget.widget })
 end
 
 
 function common.centered(widget)
-  widget = widget or wibox.widget.background()
+  if not widget then widget=wibox.widget.background() end
   local centered_widget = {}
   centered_widget.widget = widget
 
@@ -78,6 +73,35 @@ function common.centered(widget)
 
   setmetatable(centered_widget, { __index = centered_widget.widget })
   return setmetatable(centered_widget, { __index = vertical_align })
+end
+
+
+function common.bordered(widget, args)
+  if not widget then return nil end
+  local margin = args.margin or 0
+  local padding = args.padding or 0
+  local obj = {}
+
+  obj.padding = wibox.layout.margin()
+  obj.padding:set_widget(widget)
+  obj.padding:set_margins(padding)
+
+  obj.background = wibox.widget.background()
+  obj.background:set_widget(obj.padding)
+
+  obj.margin = wibox.layout.margin()
+  obj.margin:set_widget(obj.background)
+  obj.margin:set_margins(margin)
+
+  setmetatable(obj, { __index = obj.margin })
+  function obj:set_bg(...)
+    obj.background:set_bg(...)
+  end
+
+  function obj:set_fg(...)
+    obj.background:set_fg(...)
+  end
+  return obj
 end
 
 
