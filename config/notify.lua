@@ -5,7 +5,7 @@ local awesome = awesome
 
 local notify = {}
 
-function notify.init(status)
+function notify.init(awesome_context)
   naughty.config.presets.normal.opacity = beautiful.notification_opacity
   naughty.config.presets.low.opacity = beautiful.notification_opacity
   naughty.config.presets.critical.opacity = beautiful.notification_opacity

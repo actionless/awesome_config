@@ -3,10 +3,12 @@ local awful = require("awful")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 local menubar = require("menubar")
-local capi = { screen = screen }
-local client = client
-local root = root
-local awesome = awesome
+local capi = {
+  screen = screen,
+  client = client,
+  root = root,
+  awesome = awesome,
+}
 
 local widgets = require("actionless.widgets")
 local helpers = require("actionless.helpers")
@@ -24,11 +26,12 @@ hk.init(status)
 
 local modkey = status.modkey
 local altkey = status.altkey
+local client = capi.client
 
 local cmd = status.cmds
 
 -- {{{ Mouse bindings
-root.buttons(awful.util.table.join(
+capi.root.buttons(awful.util.table.join(
   awful.button({ }, 3, function () status.menu.mainmenu:toggle() end),
   awful.button({ }, 5, awful.tag.viewnext),
   awful.button({ }, 4, awful.tag.viewprev)
@@ -307,11 +310,9 @@ local globalkeys = awful.util.table.join(
   -- Layout manipulation
   hk.on({ modkey, "Control"  }, "n",
     function()
-      c=awful.client.restore()
-      if c then
-        -- @TODO: it's a workaround for some strange upstream issue
-        client.focus = c
-      end
+      local c = awful.client.restore()
+      -- @TODO: it's a workaround for some strange upstream issue
+      if c then client.focus = c end
     end,
     "de-icoNify"
   ),
@@ -382,11 +383,11 @@ local globalkeys = awful.util.table.join(
   ),
 
   hk.on({ modkey, "Control"  }, "r",
-    awesome.restart,
+    capi.awesome.restart,
     "Reload awesome wm"
   ),
   hk.on({ modkey, "Shift"    }, "q",
-    awesome.quit,
+    capi.awesome.quit,
     "Quit awesome wm"
   ),
 
@@ -525,7 +526,7 @@ status.clientbuttons = awful.util.table.join(
     awful.button({ modkey }, 3, awful.mouse.client.resize))
 
 -- Set keys
-root.keys(globalkeys)
+capi.root.keys(globalkeys)
 -- }}}
 
 

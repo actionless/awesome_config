@@ -2,8 +2,10 @@ local wibox = require("wibox")
 local beautiful = require("beautiful")
 local awful = require("awful")
 
-local screen = screen
-local client = client
+local capi = {
+  screen = screen,
+  client = client,
+}
 
 local make_separator = require("actionless.widgets.common").make_separator
 local current_font = require("actionless.helpers").font
@@ -46,7 +48,7 @@ function toolbar.init(status)
 
   -- Create a wibox for each screen and add it
   local mywibox = {}
-  for s = 1, screen.count() do
+  for s = 1, capi.screen.count() do
 
     -- LEFT side
     local left_layout = wibox.layout.fixed.horizontal()
@@ -129,7 +131,7 @@ function toolbar.init(status)
 
     -- padding for clients' area
     awful.screen.padding(
-      screen[s], {
+      capi.screen[s], {
         top = beautiful.screen_margin,
         bottom = beautiful.screen_margin,
         left = beautiful.screen_margin,

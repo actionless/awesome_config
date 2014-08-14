@@ -2,17 +2,17 @@
 local variables = {}
 
 
-function variables.init(status)
+function variables.init(awesome_context)
 
 local terminal = "st" or "urxvt -lsp 1 -geometry 120x30" or "xterm"
 local editor = "vim" or os.getenv("EDITOR") or "nano" or "vi"
 
-status.vars = {
+awesome_context.vars = {
   terminal = terminal,
   editor = editor,
 }
 
-status.cmds = {
+awesome_context.cmds = {
   terminal = terminal,
   editor_cmd = terminal .. " -e " .. editor,
   --browser= "dwb",
