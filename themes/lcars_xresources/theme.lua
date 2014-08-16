@@ -1,4 +1,7 @@
-local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/lcars_modern_monokai"
+local os = os
+local xresources = require("actionless.xresources")
+
+local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/lcars_xresources"
 local theme = {}
 theme.dir = theme_dir
 
@@ -11,45 +14,14 @@ theme.wallpaper = theme_dir .. '/umbreon_pattern.png'
 
 theme.show_widget_icon = false
 theme.show_widget_decorations = true
---patched font should be installed to make it work:
 theme.widget_decoration_arrl = ''
 theme.widget_decoration_arrr = ''
 
-----hipster mode:
---theme.widget_decoration_arrl = 'sq'
---theme.widget_decoration_arrr = 'sq'
-
 
 -- terminal colorscheme:
-theme.color = {}
---black
-theme.color[0] = '#000000'
-theme.color[8] = '#465457'
---red
-theme.color[1] = '#960050'
-theme.color[9] = '#F92672'
---green
-theme.color[2] = '#008877'
-theme.color[10] = '#A6E22E'
---yellow
-theme.color[3] = '#FD971F'
-theme.color[11] = '#e6db74'
---blue
-theme.color[4] = '#7711dd'
-theme.color[12] = '#8432ff'
---purple
-theme.color[5] = '#890089'
-theme.color[13] = '#85509b'
---cyan
-theme.color[6] = '#00d6b5'
-theme.color[14] = '#51edbc'
---white
-theme.color[7] = '#888a85'
-theme.color[15] = '#ffffff'
-
-theme.color.b  = '#0e0021'
-theme.color.f  = '#bcbcbc'
-theme.color.c  = '#ae81ff'
+theme.color = xresources.read_theme(
+  os.getenv('HOME') .. '/.Xcolours/monovedek'
+)
 
 
 theme.error = theme.color[9]

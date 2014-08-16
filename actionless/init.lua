@@ -13,6 +13,8 @@ local actionless = {
   helpers = require("actionless.helpers"),
   settings = require("actionless.settings"),
   async = require("actionless.async"),
+  xresources = require("actionless.xresources"),
+  hotkeys = require("actionless.hotkeys"),
 }
 
 return actionless

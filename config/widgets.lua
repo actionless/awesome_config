@@ -1,7 +1,10 @@
 local beautiful = require("beautiful")
 local awful = require("awful")
 
-local screen = screen
+local capi = {
+  screen = screen,
+  client = client,
+}
 
 local helpers = require("actionless.helpers")
 local widgets = require("actionless.widgets")
@@ -14,6 +17,7 @@ function widget_loader.init(awesome_context)
   local w = awesome_context.widgets
   local conf = awesome_context.config
   local bpc = beautiful.panel_colors
+  local modkey = awesome_context.modkey
 
   -- CLOSE button
   w.close_button = widgets.manage_client({color_n=bpc.close})
@@ -87,7 +91,7 @@ function widget_loader.init(awesome_context)
 
 
   w.uniq = {}
-  for s = 1, screen.count() do
+  for s = 1, capi.screen.count() do
     w.uniq[s] = {}
     local sw = w.uniq[s]
 
@@ -117,7 +121,7 @@ function widget_loader.init(awesome_context)
     sw.tasklist = {}
     sw.tasklist.buttons = awful.util.table.join(
       awful.button({ }, 1, function (c)
-        if c == client.focus then
+        if c == capi.client.focus then
           c.minimized = true
         else
           c.minimized = false
@@ -126,7 +130,7 @@ function widget_loader.init(awesome_context)
           end
           -- This will also un-minimize
           -- the client, if needed
-          client.focus = c
+          capi.client.focus = c
           c:raise()
         end
       end),
@@ -136,18 +140,22 @@ function widget_loader.init(awesome_context)
           awesome_context.menu.instance = nil
         else
           awesome_context.menu.instance = awful.menu.clients({
-            theme = {width=screen[helpers.get_current_screen()].workarea.width},
-            coords = {x=0, y=18}
+            theme = {
+              width=capi.screen[helpers.get_current_screen()].workarea.width
+            },
+            coords = {
+              x=0, y=18
+            }
           })
         end
       end),
       awful.button({ }, 4, function ()
         awful.client.focus.byidx(-1)
-        if client.focus then client.focus:raise() end
+        if capi.client.focus then capi.client.focus:raise() end
       end),
       awful.button({ }, 5, function ()
         awful.client.focus.byidx(1)
-        if client.focus then client.focus:raise() end
+        if capi.client.focus then capi.client.focus:raise() end
       end)
     )
     sw.tasklist = custom_tasklist(

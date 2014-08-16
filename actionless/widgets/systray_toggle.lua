@@ -40,14 +40,17 @@ function systray_toggle.initialize()
     local systray = systray_widget()
     local flayout = wibox.layout.flex.horizontal()
     flayout:add(systray)
-    local lmargin = wibox.layout.margin(wibox.widget.textbox(''),
-                                       systray_toggle.geometry['lmargin'], 0,
-                                       systray_toggle.geometry['tmargin'], systray_toggle.geometry['bmargin']
-                                       )
-    local rmargin = wibox.layout.margin(wibox.widget.textbox(''),
-                                       0, systray_toggle.geometry['rmargin'],
-                                       systray_toggle.geometry['tmargin'], systray_toggle.geometry['bmargin']
-                                       )
+    local sg = systray_toggle.geometry
+    local lmargin = wibox.layout.margin(
+        wibox.widget.textbox(''),
+        sg['lmargin'], 0,
+        sg['tmargin'], sg['bmargin']
+    )
+    local rmargin = wibox.layout.margin(
+        wibox.widget.textbox(''),
+        0, sg['rmargin'],
+        sg['tmargin'], sg['bmargin']
+    )
     local layout = wibox.layout.align.horizontal()
     layout:set_left(lmargin)
     layout:set_middle(flayout)

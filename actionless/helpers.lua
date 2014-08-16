@@ -10,14 +10,18 @@ local awful = require("awful")
 local capi   = { timer = timer,
                  client = client,
                  mouse = mouse }
+
 local beautiful = require("beautiful")
+local config = require("actionless.config")
+beautiful.init(config.awesome.theme_dir)
 
 
 
 -- helper functions for internal use
 local helpers = {}
 
-helpers.font = string.match(beautiful.get().font, "([%a, ]+) %d+")
+helpers.font = string.match(beautiful.get().font or "monospace", "([%a, ]+) %d+")
+
 
 helpers.dir    = debug.getinfo(1, 'S').source:match[[^@(.*/).*$]]
 helpers.scripts_dir = helpers.dir .. 'scripts/'
@@ -102,6 +106,13 @@ function helpers.table_range(t, range_start, range_finish)
     table.insert(result, t[i])
   end
   return result
+end
+
+function helpers.table_contains(t, e)
+  for k, v in pairs(t) do
+    if v == e then return true end
+  end
+  return false
 end
 
 function helpers.table_apply(t, func)
@@ -189,6 +200,26 @@ function helpers.unicode_max_length(unicode_string, max_length)
       result = result .. uchar
       counter = counter + 1
       if counter > max_length then break end
+  end
+  return result
+end
+
+function helpers.multiline_limit(unicode_string, max_length)
+  if not unicode_string then return nil end
+  local result = ''
+  local line = ''
+  local counter = 0
+  for uchar in string.gmatch(unicode_string, '([%z\1-\127\194-\244][\128-\191]*)') do
+    line = line .. uchar
+    counter = counter + 1
+    if counter == max_length then
+      result = result .. line .. "\n"
+      line = ''
+      counter = 0
+    end
+  end
+  if counter > 0 then
+      result = result .. line .. string.rep(' ', max_length-helpers.unicode_length(line))
   end
   return result
 end

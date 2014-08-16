@@ -9,10 +9,9 @@ os.setlocale(os.getenv("LANG"))
 require("eminent")
 local awful = require("awful")
 require("awful.autofocus")
-local naughty = require("naughty")
 local beautiful	= require("beautiful")
 
-local status = {
+local context = {
 
   widgets = {},
   menu = {},
@@ -36,25 +35,25 @@ local status = {
 pcall(function()
   local local_config = require("config.local")
   if local_config then
-    status = local_config.init(status) or status
+    context = local_config.init(context) or context
   end
 end)
-beautiful.init(status.theme_dir)
+beautiful.init(context.theme_dir)
 
 local widget_config = require("actionless.config")
-widget_config.init(status)
+widget_config.init(context)
 
 local config = require("config")
 
-config.notify.init(status)
-config.variables.init(status)
-config.autorun.init(status)
-config.layouts.init(status)
-config.menus.init(status)
-config.widgets.init(status)
-config.toolbar.init(status)
-config.keys.init(status)
-config.rules.init(status)
-config.signals.init(status)
+config.notify.init(context)
+config.variables.init(context)
+config.autorun.init(context)
+config.layouts.init(context)
+config.menus.init(context)
+config.widgets.init(context)
+config.toolbar.init(context)
+config.keys.init(context)
+config.rules.init(context)
+config.signals.init(context)
 
 -- vim: set shiftwidth=2:
