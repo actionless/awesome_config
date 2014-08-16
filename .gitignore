@@ -1,3 +1,12 @@
 *.bak
 .~
 local.lua
+
+runtest.sh
+
+awful/
+beautiful.lua
+gears/
+menubar/
+naughty.lua
+wibox/
