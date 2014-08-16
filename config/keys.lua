@@ -1,7 +1,5 @@
 
 local awful = require("awful")
-local wibox = require("wibox")
-local beautiful = require("beautiful")
 local menubar = require("menubar")
 local capi = {
   screen = screen,

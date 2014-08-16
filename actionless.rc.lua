@@ -9,7 +9,6 @@ os.setlocale(os.getenv("LANG"))
 require("eminent")
 local awful = require("awful")
 require("awful.autofocus")
-local naughty = require("naughty")
 local beautiful	= require("beautiful")
 
 local context = {
