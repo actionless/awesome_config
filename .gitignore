@@ -4,9 +4,9 @@ local.lua
 
 runtest.sh
 
-awful/
+awful
 beautiful.lua
-gears/
-menubar/
+gears
+menubar
 naughty.lua
-wibox/
+wibox
