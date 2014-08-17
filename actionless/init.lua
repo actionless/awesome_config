@@ -15,6 +15,7 @@ local actionless = {
   async = require("actionless.async"),
   xresources = require("actionless.xresources"),
   hotkeys = require("actionless.hotkeys"),
+  common_theme = require("actionless.common_theme"),
 }
 
 return actionless
