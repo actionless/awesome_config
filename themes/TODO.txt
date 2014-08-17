@@ -1,0 +1,3 @@
+lcars/
+noble_dark/
+pokemon_*/
