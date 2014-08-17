@@ -28,6 +28,12 @@ local client = capi.client
 
 local cmd = status.cmds
 
+local TAG_COLOR = 4
+local CLIENT_COLOR = 3
+local MENU_COLOR = 5
+local IMPORTANT_COLOR = 9
+local CLIENT_MANIPULATION = 10
+
 -- {{{ Mouse bindings
 capi.root.buttons(awful.util.table.join(
   awful.button({ }, 3, function () status.menu.mainmenu:toggle() end),
@@ -59,15 +65,15 @@ local globalkeys = awful.util.table.join(
 
   hk.on({ modkey,        }, ",",
     function() awful.tag.viewprev(helpers.get_current_screen()) end,
-    "prev tag"
+    "prev tag", TAG_COLOR
   ),
   hk.on({ modkey,        }, ".",
     function() awful.tag.viewnext(helpers.get_current_screen()) end,
-    "next tag"
+    "next tag", TAG_COLOR
   ),
   hk.on({ modkey,        }, "Escape",
     awful.tag.history.restore,
-    "cycle tags"
+    "cycle tags", TAG_COLOR
   ),
 
   -- By direction screen focus
@@ -86,28 +92,28 @@ local globalkeys = awful.util.table.join(
       awful.client.focus.bydirection("down")
       if client.focus then client.focus:raise() end
     end,
-    "client focus"
+    "client focus", CLIENT_COLOR
   ),
   hk.on({ modkey        }, "Up",
     function()
       awful.client.focus.bydirection("up")
       if client.focus then client.focus:raise() end
     end,
-    "client focus"
+    "client focus", CLIENT_COLOR
   ),
   hk.on({ modkey        }, "Left",
     function()
       awful.client.focus.bydirection("left")
       if client.focus then client.focus:raise() end
     end,
-    "client focus"
+    "client focus", CLIENT_COLOR
   ),
   hk.on({ modkey        }, "Right",
     function()
       awful.client.focus.bydirection("right")
       if client.focus then client.focus:raise() end
     end,
-    "client focus"
+    "client focus", CLIENT_COLOR
   ),
 
   -- By direction client swap
@@ -182,28 +188,28 @@ local globalkeys = awful.util.table.join(
       awful.client.focus.bydirection("down")
       if client.focus then client.focus:raise() end
     end,
-    "client focus"
+    "client focus", CLIENT_COLOR
   ),
   hk.on({ modkey }, "k",
     function()
       awful.client.focus.bydirection("up")
       if client.focus then client.focus:raise() end
     end,
-    "client focus"
+    "client focus", CLIENT_COLOR
   ),
   hk.on({ modkey }, "h",
     function()
       awful.client.focus.bydirection("left")
       if client.focus then client.focus:raise() end
     end,
-    "client focus"
+    "client focus", CLIENT_COLOR
   ),
   hk.on({ modkey }, "l",
     function()
       awful.client.focus.bydirection("right")
       if client.focus then client.focus:raise() end
     end,
-    "client focus"
+    "client focus", CLIENT_COLOR
   ),
 
   -- By direction client swap (VIM style)
@@ -276,7 +282,7 @@ local globalkeys = awful.util.table.join(
   -- Menus
   hk.on({ modkey,       }, "w",
     function () status.menu.mainmenu:show() end,
-    "aWesome menu"
+    "aWesome menu", MENU_COLOR
   ),
   hk.on({ modkey,       }, "i",
     function ()
@@ -284,7 +290,7 @@ local globalkeys = awful.util.table.join(
         theme = {width=capi.screen[helpers.get_current_screen()].workarea.width},
         coords = {x=0, y=18}})
     end,
-    "current clients"
+    "current clients", MENU_COLOR
   ),
   hk.on({ modkey,       }, "p",
     function ()
@@ -294,15 +300,15 @@ local globalkeys = awful.util.table.join(
         theme = {width=capi.screen[helpers.get_current_screen()].workarea.width},
         coords = {x=0, y=18}})
     end,
-    "all clients"
+    "all clients", MENU_COLOR
   ),
   hk.on({ modkey, "Control"}, "p",
     function() menubar.show() end,
-    "aPPlications menu"
+    "aPPlications menu", MENU_COLOR
   ),
   hk.on({ modkey,        }, "space",
     function() awful.util.spawn_with_shell(cmd.dmenu) end,
-    "app launcher"
+    "app launcher", IMPORTANT_COLOR
   ),
 
   -- Layout manipulation
@@ -317,7 +323,7 @@ local globalkeys = awful.util.table.join(
 
   hk.on({ modkey,        }, "u",
     awful.client.urgent.jumpto,
-    "jumo to Urgent"
+    "jumo to Urgent", IMPORTANT_COLOR
   ),
   hk.on({ modkey,        }, "Tab",
     function ()
@@ -326,7 +332,7 @@ local globalkeys = awful.util.table.join(
         client.focus:raise()
       end
     end,
-    "cycle clients"
+    "cycle clients", CLIENT_COLOR
   ),
 
   hk.on({ altkey,        }, "space",
@@ -373,7 +379,7 @@ local globalkeys = awful.util.table.join(
   -- Standard program
   hk.on({ modkey,        }, "Return",
     function () awful.util.spawn(cmd.tmux) end,
-    "terminal"
+    "terminal", IMPORTANT_COLOR
   ),
   hk.on({ modkey,        }, "s",
     function () awful.util.spawn(cmd.file_manager) end,
@@ -417,11 +423,11 @@ local globalkeys = awful.util.table.join(
 status.clientkeys = awful.util.table.join(
   hk.on({ modkey,        }, "f",
     function (c) c.fullscreen = not c.fullscreen end,
-    "Fullscreen"
+    "Fullscreen", CLIENT_MANIPULATION
   ),
   hk.on({ modkey,        }, "q",
     function (c) c:kill() end,
-    "Quit app"
+    "Quit app", IMPORTANT_COLOR
   ),
   hk.on({ modkey, "Control"  }, "space",
     awful.client.floating.toggle,
@@ -433,11 +439,11 @@ status.clientkeys = awful.util.table.join(
   ),
   hk.on({ modkey,        }, "o",
     awful.client.movetoscreen,
-    "move client to Other screen"
+    "move client to Other screen", CLIENT_MANIPULATION
   ),
   hk.on({ modkey,        }, "t",
     function (c) c.ontop = not c.ontop end,
-    "toggle client on Top"
+    "toggle client on Top", CLIENT_MANIPULATION
   ),
   hk.on({ modkey, "Shift"    }, "t",
     function(c)
@@ -449,14 +455,14 @@ status.clientkeys = awful.util.table.join(
   ),
   hk.on({ modkey,        }, "n",
     function (c) c.minimized = true end,
-    "icoNify client"
+    "icoNify client", CLIENT_MANIPULATION
   ),
   hk.on({ modkey,        }, "m",
     function (c)
       c.maximized_horizontal = not c.maximized_horizontal
       c.maximized_vertical   = not c.maximized_vertical
     end,
-    "Maximize client"
+    "Maximize client", CLIENT_MANIPULATION
   )
 )
 
@@ -482,7 +488,7 @@ for scr = 1, 2 do
         local tag = awful.tag.gettags(scr)[i]
         if tag then awful.tag.viewonly(tag) end
       end,
-      "go to tag " .. i .. " (screen #" .. scr .. ")"
+      "go to tag " .. i .. " (screen #" .. scr .. ")", TAG_COLOR
     ),
     hk.on({ modkey, "Control" }, "#" .. i + diff,
       function ()

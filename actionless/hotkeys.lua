@@ -1,13 +1,11 @@
 local capi = { screen = screen }
 local awful = require("awful")
 local wibox = require("wibox")
-local naughty = require("naughty")
 local beautiful = require("beautiful")
 
 local helpers  = require("actionless.helpers")
 local markup  = require("actionless.markup")
 local common_widgets = require("actionless.widgets.common")
-local decorated_widget = common_widgets.decorated
 local centered_widget  = common_widgets.centered
 local bordered_widget  = common_widgets.bordered
 
@@ -34,24 +32,48 @@ local KEYBOARD = {
   { 'Tab',  'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 'Backspace'  },
   { 'Caps',  'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", '\\', 'Return' },
   { 'Shift',  'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 'Next', 'Up' , 'Prior' },
-  { 'Fn', 'Control', 'Mod4', 'Mod1', '    ','space', '         ', 'Alt Gr', 'Print', 'Control', 'Left', 'Down', 'Right'},
+  { 'Fn', 'Control', 'Mod4', 'Mod1', '    ', 'space', '   ', '    ', 'Alt Gr', 'Print', 'Control', 'Left', 'Down', 'Right'},
 }
 local KEYBOARD_LABELS = {
   { 'Esc', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12', 'Home', 'End'},
-  { '~', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Insert', 'Delete'},
-  { 'Tab',  'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']',  'Backspace' },
-  { 'Caps',  'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", '\\', 'Enter' },
+  { '~', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Ins', 'Del'},
+  { 'Tab',  'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']',   'Backspace    ' },
+  { 'Caps',  'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", '\\', 'Enter        ' },
   { 'Shift',  'z', 'x', 'c', 'v', 'b', 'n', 'm', '&lt;', '&gt;', '?', 'PgUp', 'Up' , 'PgDn' },
-  { 'Fn', 'Ctrl', 'Super', 'Alt', '    ','Space', '            ', 'Alt Gr', 'PrtScr', 'Ctrl', 'Left', 'Down', 'Right'},
+  { 'Fn', 'Ctrl', 'Super', 'Alt', '    ', 'Space', '    ', '    ', 'Alt G', 'PrScr', 'Ctrl', 'Left', 'Down', 'Right'},
+}
+local SPECIAL_KEYBUTTONS = {
+  'Esc',
+  'Tab',
+  'Caps',
+  'Shift',
+  'Ctrl',
+  'Super',
+  'Alt',
+  'Alt G',
+  'PrScr',
+  'PgUp',
+  'PgDn',
+  'Backspace    ',
+  'Enter        ',
+  'Ins',
+  'Del',
+  'Home',
+  'End'
 }
 
 local function get_mod_table_name(modifiers)
-  table.sort(modifiers)
-  return table.concat(modifiers)
+  local copied = helpers.deepcopy(modifiers)
+  table.sort(copied)
+  return table.concat(copied)
+end
+
+local function human_readable_modifiers(modifiers)
+  return table.concat(modifiers, '+')
 end
 
 
-local function new_keybutton(key_label, comment)
+local function new_keybutton(key_label, comment, key_group)
   local obj = {}
 
   local letter_widget = wibox.widget.textbox()
@@ -76,9 +98,19 @@ local function new_keybutton(key_label, comment)
       margin = APPEARANCE.key_margin,
   })
 
-  if comment then
-    button_widget:set_bg(beautiful.theme)
-    button_widget:set_fg(beautiful.bg)
+  local key_group_bg = nil
+  local key_group_fg = beautiful.bg
+  if key_group then
+    key_group_bg = beautiful.color[key_group]
+  elseif comment then
+    key_group_bg = beautiful.theme
+  elseif helpers.table_contains(SPECIAL_KEYBUTTONS, key_label) then
+    key_group_bg = "#333333"
+    key_group_fg = "#000000"
+  end
+  if key_group_bg then
+    button_widget:set_bg(key_group_bg)
+    button_widget:set_fg(key_group_fg)
   end
 
   setmetatable(obj, { __index = button_widget })
@@ -89,12 +121,19 @@ end
 local function init_keyboard(modifiers)
   local modifiers_table_name = get_mod_table_name(modifiers)
   local keyboard_layout = wibox.layout.fixed.vertical()
+  local modifiers_title_row = wibox.layout.fixed.horizontal()
+  modifiers_title_row:add(wibox.widget.textbox(
+    markup.big(
+      human_readable_modifiers(modifiers) .. '+__'
+  )))
+  keyboard_layout:add(modifiers_title_row)
   for i1,row in ipairs(KEYBOARD) do
     local row_layout = wibox.layout.fixed.horizontal()
     for i2,key in ipairs(row) do
-      local comment = hotkeys.bindings[modifiers_table_name][key]
+      local hotkey_record = hotkeys.bindings[modifiers_table_name][key] or
+                            { comment=nil, group=nil}
       row_layout:add(new_keybutton(
-        KEYBOARD_LABELS[i1][i2], comment
+        KEYBOARD_LABELS[i1][i2], hotkey_record.comment, hotkey_record.group
       ))
     end
     keyboard_layout:add(row_layout)
@@ -137,7 +176,7 @@ end
 
 
 function hotkeys.key(modifiers, key, key_press_function, key_release_function,
-                     comment)
+                     comment, key_group)
   if key_press_function == 'show_help' then
     key_press_function = function()
       hotkeys.show_by_modifiers(modifiers)
@@ -147,14 +186,17 @@ function hotkeys.key(modifiers, key, key_press_function, key_release_function,
 
   local mod_table = get_mod_table_name(modifiers)
   if not hotkeys.bindings[mod_table] then hotkeys.bindings[mod_table] = {} end
-  hotkeys.bindings[mod_table][key] = comment
+  hotkeys.bindings[mod_table][key] = {
+    comment=comment,
+    group=key_group,
+  }
   modifiers = modifiers or {}
 
   return awful.key(modifiers, key, key_press_function, key_release_function)
 end
 
-function hotkeys.on(modifiers, key, key_press_function, comment)
-  return hotkeys.key(modifiers, key, key_press_function, nil, comment)
+function hotkeys.on(modifiers, key, key_press_function, comment, key_group)
+  return hotkeys.key(modifiers, key, key_press_function, nil, comment, key_group)
 end
 
 function hotkeys.show_by_modifiers(modifiers)
