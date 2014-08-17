@@ -1,6 +1,7 @@
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 
+local awful = require("awful")
 local config = require("actionless.config")
 local helpers = require("actionless.helpers")
 beautiful.init(config.awesome.theme_dir)
