@@ -18,7 +18,7 @@ local setmetatable = setmetatable
 local error = error
 local abs = math.abs
 
-local async = require("actionless.async")
+local helpers = require("actionless.helpers")
 
 --- widgets.systray_toggle
 local systray_toggle = { mt = {}, arrow=false, popup=false }
@@ -63,7 +63,7 @@ function systray_toggle.initialize()
 end
 
 function systray_toggle.check()
-    async.wait(0.3, systray_toggle.post_check)
+    helpers.newdelay('systray_toggle', 0.3, systray_toggle.post_check)
 end
 function systray_toggle.post_check()
     if not systray_toggle.popup and not systray_toggle.arrow then

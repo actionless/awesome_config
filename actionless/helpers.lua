@@ -42,13 +42,37 @@ end
 
 helpers.timer_table = {}
 
-function helpers.newtimer(name, timeout, fun, nostart)
+function helpers.newinterval(name, timeout, fun, nostart)
     helpers.timer_table[name] = capi.timer({ timeout = timeout })
     helpers.timer_table[name]:connect_signal("timeout", fun)
     helpers.timer_table[name]:start()
     if not nostart then
         helpers.timer_table[name]:emit_signal("timeout")
     end
+end
+
+function helpers.newtimer(name, timeout, fun, nostart)
+    helpers.timer_table[name] = capi.timer({ timeout = timeout })
+    local patched_function = function(...)
+      helpers.timer_table[name]:stop()
+      fun(...)
+      helpers.timer_table[name]:again()
+    end
+    helpers.timer_table[name]:connect_signal("timeout", patched_function)
+    helpers.timer_table[name]:start()
+    if not nostart then
+        helpers.timer_table[name]:emit_signal("timeout")
+    end
+end
+
+function helpers.newdelay(name, timeout, fun)
+    helpers.timer_table[name] = capi.timer({ timeout = timeout })
+    local patched_function = function(...)
+      helpers.timer_table[name]:stop()
+      fun(...)
+    end
+    helpers.timer_table[name]:connect_signal("timeout", patched_function)
+    helpers.timer_table[name]:start()
 end
 
 -- }}}
