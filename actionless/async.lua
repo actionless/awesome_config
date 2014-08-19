@@ -100,6 +100,7 @@ function async.pipe_finish(id)
 end
 
 ------------------------------------------------------------------------------
+--DEPRECATED:
 
 async.folder = "/tmp/async"
 async.file_template = async.folder .. '/req'
