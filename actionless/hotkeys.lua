@@ -61,6 +61,16 @@ local SPECIAL_KEYBUTTONS = {
   'Home',
   'End'
 }
+local MODIFIERS = {
+  Control = '#37'
+}
+
+local function keyname_to_keycode(keyname)
+  for k, v in pairs(MODIFIERS) do
+    if k == keyname then return v end
+  end
+  return nil
+end
 
 local function get_mod_table_name(modifiers)
   local copied = helpers.deepcopy(modifiers)
@@ -177,11 +187,23 @@ end
 
 function hotkeys.key(modifiers, key, key_press_function, key_release_function,
                      comment, key_group)
+  local patched_key_press_function
   if key_press_function == 'show_help' then
-    key_press_function = function()
-      hotkeys.show_by_modifiers(modifiers)
+    local modifiers_to_show = helpers.deepcopy(modifiers)
+    if helpers.table_contains_key(MODIFIERS, key) then
+      table.insert(modifiers_to_show, key)
+      key = keyname_to_keycode(key)
+    end
+    patched_key_press_function = function()
+      hotkeys.show_by_modifiers(modifiers_to_show)
     end
     comment = "show this help"
+  else
+    patched_key_press_function = function(...)
+      hotkeys.popup.visible = false
+      hotkeys.last_visible = false
+      key_press_function(...)
+    end
   end
 
   local mod_table = get_mod_table_name(modifiers)
@@ -192,7 +214,7 @@ function hotkeys.key(modifiers, key, key_press_function, key_release_function,
   }
   modifiers = modifiers or {}
 
-  return awful.key(modifiers, key, key_press_function, key_release_function)
+  return awful.key(modifiers, key, patched_key_press_function, key_release_function)
 end
 
 function hotkeys.on(modifiers, key, key_press_function, comment, key_group)
@@ -200,6 +222,7 @@ function hotkeys.on(modifiers, key, key_press_function, comment, key_group)
 end
 
 function hotkeys.show_by_modifiers(modifiers)
+
   if hotkeys.last_visible == hotkeys.popup.visible and
     (hotkeys.last_modifiers == modifiers or not hotkeys.popup.visible)
   then

@@ -20,7 +20,7 @@ beautiful.init(config.awesome.theme_dir)
 -- helper functions for internal use
 local helpers = {}
 
-helpers.font = string.match(beautiful.get().font or "monospace", "([%a, ]+) %d+")
+helpers.font = string.match(beautiful.get().font or "monospace 8", "([%a, ]+) %d+")
 
 
 helpers.dir    = debug.getinfo(1, 'S').source:match[[^@(.*/).*$]]
@@ -111,6 +111,13 @@ end
 function helpers.table_contains(t, e)
   for k, v in pairs(t) do
     if v == e then return true end
+  end
+  return false
+end
+
+function helpers.table_contains_key(t, e)
+  for k, v in pairs(t) do
+    if k == e then return true end
   end
   return false
 end
