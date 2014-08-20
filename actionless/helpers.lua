@@ -12,9 +12,6 @@ local capi   = { timer = timer,
                  mouse = mouse }
 
 local beautiful = require("beautiful")
-local config = require("actionless.config")
-beautiful.init(config.awesome.theme_dir)
-
 
 
 -- helper functions for internal use

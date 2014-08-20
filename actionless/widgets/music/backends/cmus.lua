@@ -29,8 +29,7 @@ function cmus.prev_song()
 end
 -------------------------------------------------------------------------------
 function cmus.update(parse_status_callback)
-  async.execute
-  (
+  async.execute(
     "cmus-remote --query",
     function(str)
       cmus.parse_metadata(str, parse_status_callback)
