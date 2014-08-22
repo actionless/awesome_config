@@ -17,6 +17,9 @@ local hotkeys = {
   cached_keyboards = {},
   last_modifiers = nil,
   last_visible = false,
+  popup = {
+    visible = false,
+  }
 }
 local APPEARANCE = {
   width = 1400,
@@ -152,7 +155,7 @@ local function init_keyboard(modifiers)
 end
 
 
-local function init_popup()
+local function init_popup(modifiers)
   local scrgeom = capi.screen[helpers.get_current_screen()].workarea
   local width = APPEARANCE.width
   local height = APPEARANCE.height
@@ -165,6 +168,7 @@ local function init_popup()
 
   local content_widget = wibox.widget.background()
   mywibox:set_widget(centered_widget(content_widget))
+  content_widget:set_widget(init_keyboard(modifiers))
 
   mywibox.visible = false
   mywibox:geometry({
@@ -174,14 +178,13 @@ local function init_popup()
     width = width,
   })
 
-  return mywibox, content_widget
+  return mywibox
 end
 
 
 function hotkeys.init(awesome_context)
   hotkeys.modkey = awesome_context.modkey
   hotkeys.altkey = awesome_context.altkey
-  hotkeys.popup, hotkeys.popup_content = init_popup()
 end
 
 
@@ -222,18 +225,16 @@ function hotkeys.on(modifiers, key, key_press_function, comment, key_group)
 end
 
 function hotkeys.show_by_modifiers(modifiers)
-
-  if hotkeys.last_visible == hotkeys.popup.visible and
-    (hotkeys.last_modifiers == modifiers or not hotkeys.popup.visible)
-  then
-      hotkeys.popup.visible = not hotkeys.popup.visible
-  end
   if hotkeys.last_modifiers ~= modifiers then
     local mod_table = get_mod_table_name(modifiers)
     if not hotkeys.cached_keyboards[mod_table] then
-      hotkeys.cached_keyboards[mod_table] = init_keyboard(modifiers)
+      hotkeys.cached_keyboards[mod_table] = init_popup(modifiers)
     end
-    hotkeys.popup_content:set_widget(hotkeys.cached_keyboards[mod_table])
+    hotkeys.popup.visible=false
+    hotkeys.popup = hotkeys.cached_keyboards[mod_table]
+    hotkeys.popup.visible=true
+  else
+    hotkeys.popup.visible = not hotkeys.popup.visible
   end
   hotkeys.last_visible = hotkeys.popup.visible
   hotkeys.last_modifiers = modifiers
