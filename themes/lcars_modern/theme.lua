@@ -1,10 +1,6 @@
-local load_default_theme= require("actionless.common_theme").init
+local generate_theme = require("actionless.common_theme").generate_theme
 
 local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/lcars_modern"
-local theme = {}
-theme.dir = theme_dir
-
--- BEFORE applyting defakt theme-----------------------------------------------
 
 -- TERMINAL COLORSCHEME:
 --
@@ -48,12 +44,15 @@ theme.panel_colors = {
   info=13
 }
 
--- LOAD DEFAULT THEME:
+-- GENERATE DEFAULT THEME:
 --
-theme = load_default_theme(theme)
+local theme = generate_theme(
+  theme_dir,
+  color,
+  panel_colors
+)
 
-
--- AFTER applying default theme:-----------------------------------------------
+-- CUSTOMIZE default theme:-----------------------------------------------
 
 -- WALLPAPER:
 --

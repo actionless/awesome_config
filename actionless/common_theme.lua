@@ -1,8 +1,12 @@
-
-
 local common_theme = {}
 
-function common_theme.init(theme)
+function common_theme.generate_theme(theme_dir, colors16, panel_colors)
+
+local theme = {}
+theme.color = colors16
+theme.panel_colors = panel_colors
+theme.dir = theme_dir
+
 
 -- Use plain color:
 theme.wallpaper_cmd     = "hsetroot"
@@ -210,5 +214,59 @@ theme.titlebar_minimize_button_normal_inactive = titlebar_icons_dir .. "/minimiz
 
 return theme
 end
+
+
+function common_theme.generate_default_theme(theme_dir)
+-- TERMINAL COLORSCHEME:
+--
+color = {}
+--black
+color[0] = '#000000'
+color[8] = '#465457'
+--red
+color[1] = '#960050'
+color[9] = '#F92672'
+--green
+color[2] = '#008877'
+color[10] = '#A6E22E'
+--yellow
+color[3] = '#FD971F'
+color[11] = '#e6db74'
+--blue
+color[4] = '#7711dd'
+color[12] = '#8432ff'
+--purple
+color[5] = '#890089'
+color[13] = '#85509b'
+--cyan
+color[6] = '#00d6b5'
+color[14] = '#51edbc'
+--white
+color[7] = '#888a85'
+color[15] = '#ffffff'
+
+color.b  = '#0e0021'
+color.f  = '#bcbcbc'
+color.c  = '#ae81ff'
+
+-- PANEL COLORS:
+--
+panel_colors = {
+  taglist=7,
+  close=1,
+  tasklist='b',
+  media=14,
+  info=13
+}
+
+-- GENERATE DEFAULT THEME:
+--
+return generate_theme(
+  theme_dir,
+  color,
+  panel_colors
+)
+end
+
 
 return common_theme

@@ -1,21 +1,17 @@
 local xresources = require("actionless.xresources")
-local load_default_theme = require("actionless.common_theme").init
+local generate_theme = require("actionless.common_theme").generate_theme
 
 local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/lcars_xresources"
-local theme = {}
-theme.dir = theme_dir
-
--- BEFORE applyting defakt theme-----------------------------------------------
 
 -- TERMINAL COLORSCHEME:
 --
-theme.color = xresources.read_theme(
+local colors = xresources.read_theme(
   os.getenv('HOME') .. '/.Xcolours/monovedek'
 )
 
 -- PANEL COLORS:
 --
-theme.panel_colors = {
+local panel_colors = {
   taglist=7,
   close=1,
   tasklist='b',
@@ -25,10 +21,14 @@ theme.panel_colors = {
 
 -- LOAD DEFAULT THEME:
 --
-theme = load_default_theme(theme)
+local theme = generate_theme(
+  theme_dir,
+  colors,
+  panel_colors
+)
 
 
--- AFTER applying default theme:-----------------------------------------------
+-- CUSTOMIZE default theme:-----------------------------------------------
 
 -- WALLPAPER:
 --

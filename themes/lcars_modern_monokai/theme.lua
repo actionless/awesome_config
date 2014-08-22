@@ -1,46 +1,42 @@
-local load_default_theme= require("actionless.common_theme").init
+local generate_theme = require("actionless.common_theme").generate_theme
 
 local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/lcars_modern_monokai"
-local theme = {}
-theme.dir = theme_dir
-
--- BEFORE applyting defakt theme-----------------------------------------------
 
 -- TERMINAL COLORSCHEME:
 --
-theme.color = {}
+color = {}
 --black
-theme.color[0] = '#000000'
-theme.color[8] = '#465457'
+color[0] = '#000000'
+color[8] = '#465457'
 --red
-theme.color[1] = '#960050'
-theme.color[9] = '#F92672'
+color[1] = '#960050'
+color[9] = '#F92672'
 --green
-theme.color[2] = '#008877'
-theme.color[10] = '#A6E22E'
+color[2] = '#008877'
+color[10] = '#A6E22E'
 --yellow
-theme.color[3] = '#FD971F'
-theme.color[11] = '#e6db74'
+color[3] = '#FD971F'
+color[11] = '#e6db74'
 --blue
-theme.color[4] = '#7711dd'
-theme.color[12] = '#8432ff'
+color[4] = '#7711dd'
+color[12] = '#8432ff'
 --purple
-theme.color[5] = '#890089'
-theme.color[13] = '#85509b'
+color[5] = '#890089'
+color[13] = '#85509b'
 --cyan
-theme.color[6] = '#00d6b5'
-theme.color[14] = '#51edbc'
+color[6] = '#00d6b5'
+color[14] = '#51edbc'
 --white
-theme.color[7] = '#888a85'
-theme.color[15] = '#ffffff'
+color[7] = '#888a85'
+color[15] = '#ffffff'
 
-theme.color.b  = '#0e0021'
-theme.color.f  = '#bcbcbc'
-theme.color.c  = '#ae81ff'
+color.b  = '#0e0021'
+color.f  = '#bcbcbc'
+color.c  = '#ae81ff'
 
 -- PANEL COLORS:
 --
-theme.panel_colors = {
+panel_colors = {
   taglist=7,
   close=1,
   tasklist='b',
@@ -48,12 +44,15 @@ theme.panel_colors = {
   info=13
 }
 
--- LOAD DEFAULT THEME:
+-- GENERATE DEFAULT THEME:
 --
-theme = load_default_theme(theme)
+local theme = generate_theme(
+  theme_dir,
+  color,
+  panel_colors
+)
 
-
--- AFTER applying default theme:-----------------------------------------------
+-- CUSTOMIZE default theme:-----------------------------------------------
 
 -- WALLPAPER:
 --
