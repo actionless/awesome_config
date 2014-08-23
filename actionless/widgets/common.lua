@@ -3,6 +3,7 @@ local beautiful = require("beautiful")
 
 local config = require("actionless.config")
 local helpers = require("actionless.helpers")
+local h_table = require("actionless.table")
 beautiful.init(config.awesome.theme_dir)
 
 
@@ -190,7 +191,7 @@ function common.decorated(args)
     args = args or {}
     local fg = args.fg or get_color(args.color_n)
     local bg = args.bg or beautiful.panel_bg
-    for _, widget in ipairs(helpers.tables_sum({
+    for _, widget in ipairs(h_table.sum({
       self.left_separator_widgets,
       self.widget_list,
       self.right_separator_widgets

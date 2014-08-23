@@ -6,7 +6,7 @@
 local awful = require("awful")
 
 local async = require("actionless.async")
-local helpers = require("actionless.helpers")
+local h_table = require("actionless.table")
 local parse = require("actionless.parse")
 
 
@@ -67,7 +67,7 @@ function clementine.parse_metadata(result_string, parse_status_callback)
       cover='arturl'
     }
   )
-  helpers.table_merge(clementine.player_status, player_status)
+  h_table.merge(clementine.player_status, player_status)
   parse_status_callback(clementine.player_status)
 end
 

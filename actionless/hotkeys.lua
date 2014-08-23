@@ -4,6 +4,7 @@ local wibox = require("wibox")
 local beautiful = require("beautiful")
 
 local helpers  = require("actionless.helpers")
+local h_table  = require("actionless.table")
 local markup  = require("actionless.markup")
 local common_widgets = require("actionless.widgets.common")
 local centered_widget  = common_widgets.centered
@@ -76,7 +77,7 @@ local function keyname_to_keycode(keyname)
 end
 
 local function get_mod_table_name(modifiers)
-  local copied = helpers.deepcopy(modifiers)
+  local copied = h_table.deepcopy(modifiers)
   table.sort(copied)
   return table.concat(copied)
 end
@@ -117,7 +118,7 @@ local function new_keybutton(key_label, comment, key_group)
     key_group_bg = beautiful.color[key_group]
   elseif comment then
     key_group_bg = beautiful.theme
-  elseif helpers.table_contains(SPECIAL_KEYBUTTONS, key_label) then
+  elseif h_table.contains(SPECIAL_KEYBUTTONS, key_label) then
     key_group_bg = "#333333"
     key_group_fg = "#000000"
   end
@@ -192,8 +193,8 @@ function hotkeys.key(modifiers, key, key_press_function, key_release_function,
                      comment, key_group)
   local patched_key_press_function
   if key_press_function == 'show_help' then
-    local modifiers_to_show = helpers.deepcopy(modifiers)
-    if helpers.table_contains_key(MODIFIERS, key) then
+    local modifiers_to_show = h_table.deepcopy(modifiers)
+    if h_table.contains_key(MODIFIERS, key) then
       table.insert(modifiers_to_show, key)
       key = keyname_to_keycode(key)
     end

@@ -11,6 +11,7 @@ local actionless = {
   -- misc
   titlebar = require("actionless.titlebar"),
   helpers = require("actionless.helpers"),
+  table = require("actionless.table"),
   settings = require("actionless.settings"),
   async = require("actionless.async"),
   xresources = require("actionless.xresources"),
