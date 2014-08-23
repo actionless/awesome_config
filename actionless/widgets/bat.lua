@@ -9,6 +9,7 @@ local beautiful		= require("beautiful")
 
 local async		= require("actionless.async")
 local helpers 		= require("actionless.helpers")
+local h_string 		= require("actionless.string")
 local parse 		= require("actionless.parse")
 local common_widget	= require("actionless.widgets.common").widget
 
@@ -42,7 +43,7 @@ local function worker(args)
         state='state',
         on_low_battery='on-low-battery' }
     )
-    bat.now.percentage = helpers.only_digits(bat.now.percentage)
+    bat.now.percentage = h_string.only_digits(bat.now.percentage)
 
     bat.widget:set_markup(
       string.format("%-4s", bat.now.percentage .. "%"))

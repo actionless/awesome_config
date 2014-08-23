@@ -3,12 +3,13 @@ local awful = require("awful")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 
-local helpers  = require("actionless.helpers")
-local h_table  = require("actionless.table")
-local markup  = require("actionless.markup")
+local helpers = require("actionless.helpers")
+local h_table = require("actionless.table")
+local h_string = require("actionless.string")
+local markup = require("actionless.markup")
 local common_widgets = require("actionless.widgets.common")
-local centered_widget  = common_widgets.centered
-local bordered_widget  = common_widgets.bordered
+local centered_widget = common_widgets.centered
+local bordered_widget = common_widgets.bordered
 
 local hotkeys = {
   bindings = {
@@ -98,7 +99,7 @@ local function new_keybutton(key_label, comment, key_group)
   comment_widget:set_font(helpers.font .. " " .. APPEARANCE.comment_font_size)
   comment_widget:set_text(
       comment
-      and helpers.multiline_limit(comment, APPEARANCE.comment_width_chars)
+      and h_string.multiline_limit(comment, APPEARANCE.comment_width_chars)
       or string.rep(" ", APPEARANCE.comment_width_chars)
   )
 

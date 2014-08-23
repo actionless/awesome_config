@@ -11,7 +11,7 @@ local string		= { format	= string.format }
 local setmetatable	= setmetatable
 
 local helpers		= require("actionless.helpers")
-local escape_f		= helpers.escape
+local h_string		= require("actionless.string")
 local common_widget	= require("actionless.widgets.common").widget
 local markup		= require("actionless.markup")
 local async		= require("actionless.async")
@@ -173,14 +173,14 @@ local function worker(args)
       player.widget:set_image(beautiful.widget_music_on)
       if #player_status.artist + #player_status.title > 40 then
         if #player_status.artist > 15 then
-          artist = helpers.unicode_max_length(player_status.artist, 15) .. "…"
+          artist = h_string.max_length(player_status.artist, 15) .. "…"
         end
         if #player_status.title > 25 then
-          title = helpers.unicode_max_length(player_status.title, 25) .. "…"
+          title = h_string.max_length(player_status.title, 25) .. "…"
         end
       end
-      artist = markup.fg.color(text_color, escape_f(artist))
-      title = escape_f(title)
+      artist = markup.fg.color(text_color, h_string.escape(artist))
+      title = h_string.escape(title)
       -- playing new song
       if player_status.title ~= helpers.get_map("current player track") then
         helpers.set_map("current player track", player_status.title)
