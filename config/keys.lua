@@ -337,11 +337,11 @@ local globalkeys = awful.util.table.join(
   ),
 
   hk.on({ altkey,        }, "space",
-    function () awful.layout.inc(status.layouts, 1) end,
+    function () awful.layout.inc(1) end,
     "next layout"
   ),
   hk.on({ altkey, "Shift"    }, "space",
-    function () awful.layout.inc(status.layouts, -1) end,
+    function () awful.layout.inc(-1) end,
     "prev layout"
   ),
 
