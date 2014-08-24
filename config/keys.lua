@@ -296,11 +296,10 @@ local globalkeys = awful.util.table.join(
   ),
   hk.on({ modkey,       }, "p",
     function ()
-      local log = require('naughty').notify
-      log({text="DEBUG"})
       status.menu.instance = awful.menu.clients({
         theme = {width=capi.screen[helpers.get_current_screen()].workarea.width},
-        coords = {x=0, y=18}})
+        coords = {x=0, y=18}
+      })
     end,
     "all clients", MENU_COLOR
   ),
