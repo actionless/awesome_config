@@ -30,6 +30,9 @@ local tag_parser = {}
 -------------------------------------------------------------------------------
   if not player_status.artist or not player_status.title then
   -- @TODO: rewrite this big piece of whatever it is
+  --
+    --local inspect = require("inspect")
+    --naughty.notify({text=inspect(player_status)})
 
     local a
     --1
@@ -69,7 +72,7 @@ local tag_parser = {}
     end --2
     end --1
 
-    local f = player_status.file:match('.*/(.*)$')
+    local f = player_status.file:match('.*/(.*)$') or ''
     local t = player_status.title or f
     local new_t = ''
     naughty.notify({text=t})

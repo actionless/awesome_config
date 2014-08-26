@@ -170,15 +170,15 @@ local function worker(args)
 
     if player_status.state == "play" then
       -- playing
-      artist = player_status.artist
-      title = player_status.title
+      artist = player_status.artist or "playing"
+      title = player_status.title or " "
       player.widget:set_image(beautiful.widget_music_on)
-      if #player_status.artist + #player_status.title > 40 then
-        if #player_status.artist > 15 then
-          artist = h_string.max_length(player_status.artist, 15) .. "…"
+      if #artist + #title > 40 then
+        if #artist > 15 then
+          artist = h_string.max_length(artist, 15) .. "…"
         end
         if #player_status.title > 25 then
-          title = h_string.max_length(player_status.title, 25) .. "…"
+          title = h_string.max_length(title, 25) .. "…"
         end
       end
       artist = markup.fg.color(text_color, h_string.escape(artist))
