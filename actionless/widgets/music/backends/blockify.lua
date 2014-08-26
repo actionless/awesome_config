@@ -53,7 +53,8 @@ function blockify.parse_metadata(result_string, parse_status_callback)
         artist='artist',
         title='title',
         album='album',
-        date='Date'})
+        cover_url='artUrl',
+        date='contentCreated'})
     player_status.file = "spotify stream"
   end
   player_status.state = state
@@ -61,4 +62,17 @@ function blockify.parse_metadata(result_string, parse_status_callback)
   parse_status_callback(player_status)
 end
 -------------------------------------------------------------------------------
+function blockify.resize_cover(
+  player_status, cover_size, default_art, notification_callback
+)
+  player_status.cover = "/tmp/spotifycover.png"
+  async.execute(
+    string.format(
+      "wget %s -O %s",
+      player_status.cover_url,
+      player_status.cover
+    ),
+    function(f) notification_callback() end
+  )
+end
 return blockify
