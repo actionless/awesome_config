@@ -27,6 +27,10 @@ local tag_parser = {}
       return player_status
     end
 
+-------------------------------------------------------------------------------
+  if not player_status.artist or not player_status.title then
+  -- @TODO: rewrite this big piece of whatever it is
+
     local a
     --1
     a = player_status.file:match("^.*[/](.*)[/]%d+[-%. ].*[/]")
@@ -105,6 +109,9 @@ local tag_parser = {}
     if not player_status.artist or #player_status.artist == 0 then
       player_status.artist = a
     end
+
+  end -- </>
+------------------------------------------------------------------------------
 
     -- let's insert placeholders for all the missing fields
     for _, k in ipairs({
