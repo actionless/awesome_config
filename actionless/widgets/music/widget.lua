@@ -33,6 +33,7 @@ local player = {
     date=nil,
     file=nil
   },
+  cover="/tmp/awesome_cover.png"
 }
 
 local parse_status_callback = function(player_status)
@@ -119,7 +120,7 @@ local function worker(args)
       )
     end
     player.id = naughty.notify({
-      icon = player.player_status.cover,
+      icon = player.cover,
       title = player.player_status.title,
       text = text,
       timeout = timeout
@@ -229,7 +230,7 @@ function player.resize_cover()
   -- backend supports it:
   if player.backend.resize_cover then
     return player.backend.resize_cover(
-      player.player_status, cover_size, default_art, show_notification_callback
+      player.player_status, cover_size, player.cover, show_notification_callback
     )
   end
   -- fallback:
@@ -243,7 +244,7 @@ function player.resize_cover()
       player.player_status.cover,
       resize,
       resize,
-      player.player_status.cover
+      player.cover
     ),
     function(f) player.show_notification() end
   )

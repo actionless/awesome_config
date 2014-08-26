@@ -30,7 +30,7 @@ end
 -------------------------------------------------------------------------------
 function blockify.update(parse_status_callback)
   async.execute(
-    "blockify-dbus get all",
+    "LC_ALL=C LANG=C blockify-dbus get all",
     function(str)
       blockify.parse_metadata(str, parse_status_callback)
     end
@@ -63,14 +63,13 @@ function blockify.parse_metadata(result_string, parse_status_callback)
 end
 -------------------------------------------------------------------------------
 function blockify.resize_cover(
-  player_status, cover_size, default_art, notification_callback
+  player_status, cover_size, output_coverart_path, notification_callback
 )
-  player_status.cover = "/tmp/spotifycover.png"
   async.execute(
     string.format(
       "wget %s -O %s",
       player_status.cover_url,
-      player_status.cover
+      output_coverart_path
     ),
     function(f) notification_callback() end
   )
