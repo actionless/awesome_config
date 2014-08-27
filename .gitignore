@@ -3,6 +3,7 @@
 local.lua
 
 runtest.sh
+inspect.lua
 
 awful
 beautiful.lua
