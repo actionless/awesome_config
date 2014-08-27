@@ -83,9 +83,9 @@ local function worker(args)
   elseif backend_name == 'clementine' then
     player.backend = backends.clementine
     player.cmd = args.player_cmd or 'clementine'
-  elseif backend_name == 'blockify' then
-    player.backend = backends.blockify
-    player.cmd = args.player_cmd or 'blockify'
+  elseif backend_name == 'spotify' then
+    player.backend = backends.spotify
+    player.cmd = args.player_cmd or 'spotify'
   end
 
   helpers.set_map("current player track", nil)
