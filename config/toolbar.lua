@@ -73,7 +73,10 @@ function toolbar.init(status)
     right_layout:add(loaded_widgets.music)
     right_layout:add(loaded_widgets.volume)
 
+    -- a) systray_toggle
     if s == 1 then right_layout:add(loaded_widgets.systray_toggle) end
+    -- b) static systray
+    --right_layout:add(separator)
 
     right_layout:add(arr.l[bpc.info])
     right_layout:add(loaded_widgets.mem)
@@ -84,6 +87,15 @@ function toolbar.init(status)
     right_layout:add(sep_info)
     right_layout:add(loaded_widgets.bat)
     right_layout:add(arr.r[bpc.info])
+
+    -- b) static systray
+    --[[
+    if s == 1 then
+      right_layout:add(separator)
+      right_layout:add(wibox.widget.systray())
+      right_layout:add(sep)
+    end
+    --]]
 
     right_layout:add(separator)
 
