@@ -19,8 +19,14 @@ local APPEARANCE = {
 }
 local hotkeys = {
   bindings = {
+    --[[
     Mod4 = {
-    }
+      Space = {
+        comment = 'app launcher',
+        group = 5
+      },
+    },
+    --]]
   },
   cached_keyboards = {},
   last_modifiers = nil,
