@@ -57,6 +57,8 @@ theme.widget_decoration_arrr = ''
 -- use ~/.fonts.conf, Luke ;)
 theme.font = "Monospace Bold 10.5"
 theme.sans_font = "Sans Bold 10.3"
+theme.taglist_font = theme.font
+theme.tasklist_font = theme.sans_font
 --
 -- Don't use sans font:
 --theme.sans_font	= theme.font
