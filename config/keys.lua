@@ -17,6 +17,15 @@ local hk = require("actionless.hotkeys")
 
 local keys = {}
 
+local RESIZE_STEP = 15
+
+local function floats(c)
+  local l = awful.layout.get(c.screen)
+  if awful.layout.getname(l) == 'floating' or awful.client.floating.get(c) then
+    return true
+  end
+  return false
+end
 
 function keys.init(status)
 
@@ -33,6 +42,7 @@ local CLIENT_COLOR = 3
 local MENU_COLOR = 5
 local IMPORTANT_COLOR = 9
 local CLIENT_MANIPULATION = 10
+local LAYOUT_MANIPULATION = 12
 
 -- {{{ Mouse bindings
 capi.root.buttons(awful.util.table.join(
@@ -118,71 +128,6 @@ local globalkeys = awful.util.table.join(
     "client focus", CLIENT_COLOR
   ),
 
-  -- By direction client swap
-  hk.on({ modkey,  "Shift"    }, "Down",
-    function()
-      awful.client.swap.bydirection("down")
-      if client.swap then client.swap:raise() end
-    end,
-    "client swap"
-  ),
-  hk.on({ modkey,  "Shift"    }, "Up",
-    function()
-      awful.client.swap.bydirection("up")
-      if client.swap then client.swap:raise() end
-    end,
-    "client swap"
-  ),
-  hk.on({ modkey,  "Shift"    }, "Left",
-    function()
-      awful.client.swap.bydirection("left")
-      if client.swap then client.swap:raise() end
-    end,
-    "client swap"
-  ),
-  hk.on({ modkey,  "Shift"    }, "Right",
-    function()
-      awful.client.swap.bydirection("right")
-      if client.swap then client.swap:raise() end
-    end,
-    "client swap"
-  ),
-
-  -- Client resize
-  hk.on({ modkey, "Control"  }, "Right",
-    function () awful.tag.incmwfact( 0.05) end,
-    "master size+"
-  ),
-  hk.on({ modkey,  "Control"  }, "Left",
-    function () awful.tag.incmwfact(-0.05) end,
-    "master size-"
-  ),
-  hk.on({ modkey, "Control"  }, "Down",
-    function () awful.client.incwfact(-0.05) end,
-    "column size-"
-  ),
-  hk.on({ modkey, "Control"  }, "Up",
-    function () awful.client.incwfact( 0.05) end,
-    "column size+"
-  ),
-
-  -- Layout tuning
-  hk.on({ modkey, altkey }, "Down",
-    function () awful.tag.incnmaster(-1) end,
-    "master-"
-  ),
-  hk.on({ modkey, altkey }, "Up",
-    function () awful.tag.incnmaster( 1) end,
-    "master+"
-  ),
-  hk.on({ modkey, altkey }, "Left",
-    function () awful.tag.incncol(-1) end,
-    "columns-"
-  ),
-  hk.on({ modkey, altkey }, "Right",
-    function () awful.tag.incncol( 1) end,
-    "columns+"
-  ),
 
   -- By direction client focus (VIM style)
   hk.on({ modkey }, "j",
@@ -212,72 +157,6 @@ local globalkeys = awful.util.table.join(
       if client.focus then client.focus:raise() end
     end,
     "client focus", CLIENT_COLOR
-  ),
-
-  -- By direction client swap (VIM style)
-  hk.on({ modkey, "Shift" }, "j",
-    function()
-      awful.client.swap.bydirection("down")
-      if client.swap then client.swap:raise() end
-    end,
-    "client swap"
-  ),
-  hk.on({ modkey, "Shift" }, "k",
-    function()
-      awful.client.swap.bydirection("up")
-      if client.swap then client.swap:raise() end
-    end,
-    "client swap"
-  ),
-  hk.on({ modkey, "Shift" }, "h",
-    function()
-      awful.client.swap.bydirection("left")
-      if client.swap then client.swap:raise() end
-    end,
-    "client swap"
-  ),
-  hk.on({ modkey, "Shift" }, "l",
-    function()
-      awful.client.swap.bydirection("right")
-      if client.swap then client.swap:raise() end
-    end,
-    "client swap"
-  ),
-
-  -- Client resize (VIM style)
-  hk.on({ modkey, "Control" }, "l",
-    function () awful.tag.incmwfact( 0.05) end,
-    "master size+"
-  ),
-  hk.on({ modkey,  "Control" }, "h",
-    function () awful.tag.incmwfact(-0.05) end,
-    "master size-"
-  ),
-  hk.on({ modkey, "Control" }, "j",
-    function () awful.client.incwfact(-0.05) end,
-    "column size-"
-  ),
-  hk.on({ modkey, "Control" }, "k",
-    function () awful.client.incwfact( 0.05) end,
-    "column size+"
-  ),
-
-  -- Layout tuning (VIM style)
-  hk.on({ modkey, altkey }, "j",
-    function () awful.tag.incnmaster(-1) end,
-    "master-"
-  ),
-  hk.on({ modkey, altkey }, "k",
-    function () awful.tag.incnmaster( 1) end,
-    "master+"
-  ),
-  hk.on({ modkey, altkey }, "h",
-    function () awful.tag.incncol(-1) end,
-    "columns-"
-  ),
-  hk.on({ modkey, altkey }, "l",
-    function () awful.tag.incncol( 1) end,
-    "columns+"
   ),
 
 
@@ -336,6 +215,7 @@ local globalkeys = awful.util.table.join(
     "cycle clients", CLIENT_COLOR
   ),
 
+  -- Layouts
   hk.on({ altkey,        }, "space",
     function () awful.layout.inc(1) end,
     "next layout"
@@ -343,6 +223,44 @@ local globalkeys = awful.util.table.join(
   hk.on({ altkey, "Shift"    }, "space",
     function () awful.layout.inc(-1) end,
     "prev layout"
+  ),
+
+  -- Layout tuning
+  hk.on({ modkey, altkey }, "Down",
+    function ()
+      awful.tag.incnmaster(-1)
+    end,
+    "master-"
+  ),
+  hk.on({ modkey, altkey }, "Up",
+    function () awful.tag.incnmaster( 1) end,
+    "master+"
+  ),
+  hk.on({ modkey, altkey }, "Left",
+    function () awful.tag.incncol(-1) end,
+    "columns-"
+  ),
+  hk.on({ modkey, altkey }, "Right",
+    function () awful.tag.incncol( 1) end,
+    "columns+"
+  ),
+
+  -- Layout tuning (VIM style)
+  hk.on({ modkey, altkey }, "j",
+    function () awful.tag.incnmaster(-1) end,
+    "master-"
+  ),
+  hk.on({ modkey, altkey }, "k",
+    function () awful.tag.incnmaster( 1) end,
+    "master+"
+  ),
+  hk.on({ modkey, altkey }, "h",
+    function () awful.tag.incncol(-1) end,
+    "columns-"
+  ),
+  hk.on({ modkey, altkey }, "l",
+    function () awful.tag.incncol( 1) end,
+    "columns+"
   ),
 
 
@@ -422,6 +340,217 @@ local globalkeys = awful.util.table.join(
 )
 
 status.clientkeys = awful.util.table.join(
+
+  -- By direction client swap/move
+  hk.on({ modkey,  "Shift"    }, "Down",
+    function (c)
+      if floats(c) then
+        local g = c:geometry()
+        g.y = g.y + RESIZE_STEP
+        c:geometry(g)
+      else
+        awful.client.swap.bydirection("down")
+        if client.swap then client.swap:raise() end
+      end
+    end,
+    "client swap", CLIENT_MANIPULATION
+  ),
+  hk.on({ modkey,  "Shift"    }, "Up",
+    function (c)
+      if floats(c) then
+        local g = c:geometry()
+        g.y = g.y - RESIZE_STEP
+        c:geometry(g)
+      else
+        awful.client.swap.bydirection("up")
+        if client.swap then client.swap:raise() end
+      end
+    end,
+    "client swap", CLIENT_MANIPULATION
+  ),
+  hk.on({ modkey,  "Shift"    }, "Left",
+    function (c)
+      if floats(c) then
+        local g = c:geometry()
+        g.x = g.x - RESIZE_STEP
+        c:geometry(g)
+      else
+        awful.client.swap.bydirection("left")
+        if client.swap then client.swap:raise() end
+      end
+    end,
+    "client swap", CLIENT_MANIPULATION
+  ),
+  hk.on({ modkey,  "Shift"    }, "Right",
+    function (c)
+      if floats(c) then
+        local g = c:geometry()
+        g.x = g.x + RESIZE_STEP
+        c:geometry(g)
+      else
+        awful.client.swap.bydirection("right")
+        if client.swap then client.swap:raise() end
+      end
+    end,
+    "client swap", CLIENT_MANIPULATION
+  ),
+
+  -- By direction client swap (VIM style)
+  hk.on({ modkey, "Shift" }, "j",
+    function (c)
+      if floats(c) then
+        local g = c:geometry()
+        g.y = g.y + RESIZE_STEP
+        c:geometry(g)
+      else
+        awful.client.swap.bydirection("down")
+        if client.swap then client.swap:raise() end
+      end
+    end,
+    "client swap", CLIENT_MANIPULATION
+  ),
+  hk.on({ modkey, "Shift" }, "k",
+    function (c)
+      if floats(c) then
+        local g = c:geometry()
+        g.y = g.y - RESIZE_STEP
+        c:geometry(g)
+      else
+        awful.client.swap.bydirection("up")
+        if client.swap then client.swap:raise() end
+      end
+    end,
+    "client swap", CLIENT_MANIPULATION
+  ),
+  hk.on({ modkey, "Shift" }, "h",
+    function (c)
+      if floats(c) then
+        local g = c:geometry()
+        g.x = g.x - RESIZE_STEP
+        c:geometry(g)
+      else
+        awful.client.swap.bydirection("left")
+        if client.swap then client.swap:raise() end
+      end
+    end,
+    "client swap", CLIENT_MANIPULATION
+  ),
+  hk.on({ modkey, "Shift" }, "l",
+    function (c)
+      if floats(c) then
+        local g = c:geometry()
+        g.x = g.x + RESIZE_STEP
+        c:geometry(g)
+      else
+        awful.client.swap.bydirection("right")
+        if client.swap then client.swap:raise() end
+      end
+    end,
+    "client swap", CLIENT_MANIPULATION
+  ),
+
+  -- Client resize
+  hk.on({ modkey, "Control"  }, "Right",
+    function (c)
+      if floats(c) then
+        local g = c:geometry()
+        g.width = g.width + RESIZE_STEP
+        c:geometry(g)
+      else
+        awful.tag.incmwfact( 0.05)
+      end
+    end,
+    "master size+", LAYOUT_MANIPULATION
+  ),
+  hk.on({ modkey,  "Control"  }, "Left",
+    function (c)
+      if floats(c) then
+        local g = c:geometry()
+        g.width = g.width - RESIZE_STEP
+        c:geometry(g)
+      else
+        awful.tag.incmwfact(-0.05)
+      end
+    end,
+    "master size-", LAYOUT_MANIPULATION
+  ),
+  hk.on({ modkey, "Control"  }, "Down",
+    function (c)
+      if floats(c) then
+        local g = c:geometry()
+        g.height = g.height + RESIZE_STEP
+        c:geometry(g)
+      else
+        awful.client.incwfact(-0.05)
+      end
+    end,
+    "column size-", LAYOUT_MANIPULATION
+  ),
+  hk.on({ modkey, "Control"  }, "Up",
+    function (c)
+      if floats(c) then
+        local g = c:geometry()
+        g.height = g.height - RESIZE_STEP
+        c:geometry(g)
+      else
+        awful.client.incwfact( 0.05)
+      end
+    end,
+    "column size+", LAYOUT_MANIPULATION
+  ),
+
+  -- Client resize (VIM style)
+  hk.on({ modkey, "Control" }, "l",
+    function (c)
+      if floats(c) then
+        local g = c:geometry()
+        g.width = g.width + RESIZE_STEP
+        c:geometry(g)
+      else
+        awful.tag.incmwfact( 0.05)
+      end
+    end,
+    "master size+", LAYOUT_MANIPULATION
+  ),
+  hk.on({ modkey,  "Control" }, "h",
+    function (c)
+      if floats(c) then
+        local g = c:geometry()
+        g.width = g.width - RESIZE_STEP
+        c:geometry(g)
+      else
+        awful.tag.incmwfact(-0.05)
+      end
+    end,
+    "master size-", LAYOUT_MANIPULATION
+  ),
+  hk.on({ modkey, "Control" }, "j",
+    function (c)
+      if floats(c) then
+        local g = c:geometry()
+        g.height = g.height + RESIZE_STEP
+        c:geometry(g)
+      else
+        awful.client.incwfact(-0.05)
+      end
+    end,
+    "column size-", LAYOUT_MANIPULATION
+  ),
+
+  hk.on({ modkey, "Control" }, "k",
+    function (c)
+      if floats(c) then
+        local g = c:geometry()
+        g.height = g.height - RESIZE_STEP
+        c:geometry(g)
+      else
+        awful.client.incwfact( 0.05)
+      end
+    end,
+    "column size+"
+  ),
+
+
   hk.on({ modkey,        }, "f",
     function (c) c.fullscreen = not c.fullscreen end,
     "Fullscreen", CLIENT_MANIPULATION
@@ -432,7 +561,7 @@ status.clientkeys = awful.util.table.join(
   ),
   hk.on({ modkey, "Control"  }, "space",
     awful.client.floating.toggle,
-    "client float"
+    "client float", CLIENT_MANIPULATION
   ),
   hk.on({ modkey, "Control"  }, "Return",
     function (c) c:swap(awful.client.getmaster()) end,
