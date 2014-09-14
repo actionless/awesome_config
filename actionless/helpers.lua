@@ -108,4 +108,14 @@ function helpers.get_current_screen()
   end
 end
 
+
+function helpers.client_floats(c)
+  local l = awful.layout.get(c.screen)
+  if awful.layout.getname(l) == 'floating' or awful.client.floating.get(c) then
+    return true
+  end
+  return false
+end
+
+
 return helpers
