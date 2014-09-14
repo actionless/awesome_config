@@ -10,7 +10,6 @@ local capi = {
 local helpers = require("actionless.helpers")
 local widgets = require("actionless.widgets")
 local tasklist_addon = require("actionless.tasklist_addon")
-local custom_tasklist = require("actionless.tasklist")
 
 
 local widget_loader = {}
