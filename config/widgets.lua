@@ -91,10 +91,10 @@ function widget_loader.init(awesome_context)
   widgets.calendar:attach(w.textclock)
 
 
-  w.uniq = {}
+  w.screen = {}
   for s = 1, capi.screen.count() do
-    w.uniq[s] = {}
-    local sw = w.uniq[s]
+    w.screen[s] = {}
+    local sw = w.screen[s]
 
     -- taglist
     sw.taglist = {}

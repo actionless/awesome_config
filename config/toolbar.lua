@@ -54,12 +54,12 @@ function toolbar.init(status)
     local left_layout = wibox.layout.fixed.horizontal()
 
     left_layout:add(sep)
-    left_layout:add(loaded_widgets.uniq[s].taglist)
+    left_layout:add(loaded_widgets.screen[s].taglist)
 
     left_layout:add(separator)
     left_layout:add(loaded_widgets.close_button)
     left_layout:add(separator)
-    left_layout:add(loaded_widgets.uniq[s].promptbox)
+    left_layout:add(loaded_widgets.screen[s].promptbox)
     left_layout:add(arr.l[bpc.tasklist])
     -- RIGHT side
     local right_layout = wibox.layout.fixed.horizontal()
@@ -103,17 +103,16 @@ function toolbar.init(status)
 
     right_layout:add(separator)
 
-    right_layout:add(loaded_widgets.uniq[s].layoutbox)
+    right_layout:add(loaded_widgets.screen[s].layoutbox)
 
 
     -- TOOLBAR
     local layout = wibox.layout.align.horizontal()
     layout:set_left(left_layout)
-    layout:set_middle(loaded_widgets.uniq[s].tasklist)
+    layout:set_middle(loaded_widgets.screen[s].tasklist)
     layout:set_right(right_layout)
 
-
-    -- only bottom panel MARGIN:
+    -- bottom panel MARGIN:
     if beautiful.panel_margin then
       local margined_layout = wibox.layout.align.vertical()
       margined_layout:set_middle(layout)
@@ -132,9 +131,6 @@ function toolbar.init(status)
       position = "top",
       screen = s,
       height = beautiful.panel_height,
-      -- PANEL MARGIN on 4 sides:
-      --border_width = beautiful.panel_margin,
-      --border_color = beautiful.panel_bg,
     })
     mywibox[s]:set_widget(layout)
     mywibox[s].opacity = beautiful.panel_opacity
