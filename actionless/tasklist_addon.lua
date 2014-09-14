@@ -1,20 +1,22 @@
 ---------------------------------------------------------------------------
 -- @author Julien Danjou &lt;julien@danjou.info&gt;
 -- @copyright 2008-2009 Julien Danjou
--- @release v3.5.5
+-- 2013-2014 Yauhen Kirylau
 ---------------------------------------------------------------------------
 
 -- Grab environment we need
-local capi = { button = button }
+local capi = { button = button,
+               client = client }
 local util = require("awful.util")
+local tag = require("awful.tag")
 local wibox = require("wibox")
 local imagebox = require("wibox.widget.imagebox")
 local textbox = require("wibox.widget.textbox")
 
---- Common utilities for awful widgets
-local common = {}
+--- Additions for awful tasklist widget
+local tasklist_addon = {}
 
-function common.create_buttons(buttons, object)
+function tasklist_addon.create_buttons(buttons, object)
     if buttons then
         local btns = {}
         for kb, b in ipairs(buttons) do
@@ -32,9 +34,9 @@ function common.create_buttons(buttons, object)
     end
 end
 
-function common.list_update(w, buttons, label, data, objects, right_margin)
+function tasklist_addon.list_update(w, buttons, label, data, objects, right_margin)
     -- update the widgets, creating them if needed
-    right_margin = right_margin or 0
+    right_margin = right_margin or 3
     w:reset()
     for i, o in ipairs(objects) do
         local cache = data[o]
@@ -59,7 +61,7 @@ function common.list_update(w, buttons, label, data, objects, right_margin)
             -- And all of this gets a background
             bgb:set_widget(l)
 
-            bgb:buttons(common.create_buttons(buttons, o))
+            bgb:buttons(tasklist_addon.create_buttons(buttons, o))
 
             data[o] = {
                 ib = ib,
@@ -89,6 +91,32 @@ function common.list_update(w, buttons, label, data, objects, right_margin)
    end
 end
 
-return common
+function tasklist_addon.focused_and_minimized_current_tag_filter(c, screen)
+    -- Print client on the same screen as this widget
+    if c.screen == screen and capi.client.focus == c then
+        return true
+    end
+    -- Only print client on the same screen as this widget
+    if c.screen ~= screen then return false end
+    -- Check client is minimized
+    if not c.minimized then return false end
+    -- Include sticky client
+    if c.sticky then return true end
+    local tags = tag.gettags(screen)
+    for k, t in ipairs(tags) do
+        -- Select only minimized clients
+        if t.selected then
+            local ctags = c:tags()
+            for _, v in ipairs(ctags) do
+                if v == t then
+                    return true
+                end
+            end
+        end
+    end
+    return false
+end
+
+return tasklist_addon
 
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80

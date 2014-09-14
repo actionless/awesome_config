@@ -3,9 +3,7 @@ local actionless = {
   widgets = require("actionless.widgets"),
   -- awesome addons
   menu_addon = require("actionless.menu_addon"),
-  -- awesome forks
-  tasklist = require("actionless.tasklist"),
-  common_widget_with_margin = require("actionless.common_widget_with_margin"),
+  tasklist_addon = require("actionless.tasklist_addon"),
   -- lain
   markup = require("actionless.markup"),
   -- misc

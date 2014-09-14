@@ -1,5 +1,6 @@
 local beautiful = require("beautiful")
 local awful = require("awful")
+local wibox = require("wibox")
 
 local capi = {
   screen = screen,
@@ -8,6 +9,7 @@ local capi = {
 
 local helpers = require("actionless.helpers")
 local widgets = require("actionless.widgets")
+local tasklist_addon = require("actionless.tasklist_addon")
 local custom_tasklist = require("actionless.tasklist")
 
 
@@ -118,8 +120,7 @@ function widget_loader.init(awesome_context)
     sw.promptbox = awful.widget.prompt()
 
     -- tasklist
-    sw.tasklist = {}
-    sw.tasklist.buttons = awful.util.table.join(
+    local tasklist_buttons = awful.util.table.join(
       awful.button({ }, 1, function (c)
         if c == capi.client.focus then
           c.minimized = true
@@ -158,11 +159,23 @@ function widget_loader.init(awesome_context)
         if capi.client.focus then capi.client.focus:raise() end
       end)
     )
-    sw.tasklist = custom_tasklist(
+    local active_client_widget = awful.widget.tasklist(
       s,
-      custom_tasklist.filter.focused_and_minimized_current_tags,
-      sw.tasklist.buttons
+      awful.widget.tasklist.filter.focused,
+      tasklist_buttons,
+      nil,
+      tasklist_addon.list_update
     )
+    local minimized_clients_widget = awful.widget.tasklist(
+      s,
+      awful.widget.tasklist.filter.minimizedcurrenttags,
+      tasklist_buttons,
+      nil,
+      tasklist_addon.list_update
+    )
+    sw.tasklist = wibox.layout.align.horizontal()
+    sw.tasklist:set_second(active_client_widget)
+    sw.tasklist:set_third(minimized_clients_widget)
 
     -- layoutbox
     sw.layoutbox = widgets.layoutbox({
