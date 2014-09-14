@@ -161,9 +161,7 @@ function widget_loader.init(awesome_context)
     local active_client_widget = awful.widget.tasklist(
       s,
       awful.widget.tasklist.filter.focused,
-      tasklist_buttons,
-      nil,
-      tasklist_addon.list_update
+      tasklist_buttons
     )
     local minimized_clients_widget = awful.widget.tasklist(
       s,

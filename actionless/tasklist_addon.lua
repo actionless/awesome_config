@@ -34,9 +34,9 @@ function tasklist_addon.create_buttons(buttons, object)
     end
 end
 
-function tasklist_addon.list_update(w, buttons, label, data, objects, right_margin)
+function tasklist_addon.list_update(w, buttons, label, data, objects, spacing_length)
     -- update the widgets, creating them if needed
-    right_margin = right_margin or 3
+    spacing_length = spacing_length or 3
     w:reset()
     for i, o in ipairs(objects) do
         local cache = data[o]
@@ -67,7 +67,7 @@ function tasklist_addon.list_update(w, buttons, label, data, objects, right_marg
                 ib = ib,
                 tb = tb,
                 bgb = bgb,
-                m   = m
+                m   = m,
             }
         end
 
@@ -82,39 +82,11 @@ function tasklist_addon.list_update(w, buttons, label, data, objects, right_marg
         end
         bgb:set_bgimage(bg_image)
         ib:set_image(icon)
-        if right_margin and i~=1 then
-            local delimiter = wibox.layout.margin(bgb, right_margin, 0)
-            w:add(delimiter)
-        else
-            w:add(bgb)
+        if spacing_length then
+            bgb = wibox.layout.margin(bgb, spacing_length, 0)
         end
+        w:add(bgb)
    end
-end
-
-function tasklist_addon.focused_and_minimized_current_tag_filter(c, screen)
-    -- Print client on the same screen as this widget
-    if c.screen == screen and capi.client.focus == c then
-        return true
-    end
-    -- Only print client on the same screen as this widget
-    if c.screen ~= screen then return false end
-    -- Check client is minimized
-    if not c.minimized then return false end
-    -- Include sticky client
-    if c.sticky then return true end
-    local tags = tag.gettags(screen)
-    for k, t in ipairs(tags) do
-        -- Select only minimized clients
-        if t.selected then
-            local ctags = c:tags()
-            for _, v in ipairs(ctags) do
-                if v == t then
-                    return true
-                end
-            end
-        end
-    end
-    return false
 end
 
 return tasklist_addon
