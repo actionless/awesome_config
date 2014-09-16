@@ -28,8 +28,8 @@ function async.execute(command, callback)
   awful.util.spawn_with_shell(string.format(
     [[
   echo async.pipe_multiline_done\(\"%q\", \""$(%s | %s)"\"\) | awesome-client;
-    --")-- syntax highlighter fix
     ]],
+    --"]]-- syntax highlighter fix
     id,
     command:gsub('"','\"'),
     [[awk 1 ORS='\\\\n' | sed 's/"/\\"/g']]
