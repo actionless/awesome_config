@@ -1,3 +1,9 @@
+--[[
+	Licensed under GNU General Public License v2
+	20?? Alexander Yakushev
+	2014 Yauheni Kirylau
+--]]
+
 -- Asynchronous io.popen for Awesome WM.
 -- How to use:
 -- async.execute('echo hello!', function(str) widget.text = str end)

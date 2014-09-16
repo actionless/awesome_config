@@ -1,3 +1,8 @@
+--[[
+	Licensed under GNU General Public License v2
+	* (c) 2014 Yauheni Kirylau
+--]]
+
 local common_theme = {}
 
 function common_theme.generate_theme(theme_dir, colors16, panel_colors)

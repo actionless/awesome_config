@@ -1,3 +1,8 @@
+--[[
+     Licensed under GNU General Public License v2
+      * (c) 2014  Yauheni Kirylau
+--]]
+
 local helpers = require("actionless.helpers")
 local h_table = require("actionless.table")
 local h_string = require("actionless.string")

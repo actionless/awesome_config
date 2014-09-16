@@ -1,3 +1,8 @@
+--[[
+     Licensed under GNU General Public License v2
+      * (c) 2014  Yauheni Kirylau
+--]]
+
 local os = os
 local parse = require("actionless.parse")
 

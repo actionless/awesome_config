@@ -1,5 +1,5 @@
 --[[
-     Licensed under GNU General Public License v2 
+     Licensed under GNU General Public License v2
       * (c) 2014  Yauheni Kirylau
 --]]
 
