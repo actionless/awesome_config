@@ -1,42 +1,42 @@
 local generate_theme = require("actionless.common_theme").generate_theme
 
-local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/lcars_modern"
+local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/monovedek"
 
 -- TERMINAL COLORSCHEME:
 --
-theme.color = {}
+color = {}
 --black
-theme.color[0]  ='#000000'
-theme.color[8]  ='#666699'
+color[0]  ='#000000'
+color[8]  ='#666699'
 --red
-theme.color[1]  ='#cc6666'
-theme.color[9]  ='#ff3300'
+color[1]  ='#cc6666'
+color[9]  ='#ff3300'
 --green (actually orange ;) )
-theme.color[2]  ='#ff9966'
-theme.color[10] ='#ff9900'
+color[2]  ='#ff9966'
+color[10] ='#ff9900'
 --yellow
-theme.color[3]  ='#cc9966'
-theme.color[11] ='#ffcc66'
+color[3]  ='#cc9966'
+color[11] ='#ffcc66'
 --blue
-theme.color[4]  ='#9966ff'
-theme.color[12] ='#9999ff'
+color[4]  ='#9966ff'
+color[12] ='#9999ff'
 --purple
-theme.color[5]  ='#cc6699'
-theme.color[13] ='#cc99cc'
+color[5]  ='#cc6699'
+color[13] ='#cc99cc'
 --cyan
-theme.color[6]  ='#9999cc'
-theme.color[14] ='#99ccff'
+color[6]  ='#9999cc'
+color[14] ='#99ccff'
 --white
-theme.color[7]  ='#ffcc99'
-theme.color[15] ='#ccccff'
+color[7]  ='#ffcc99'
+color[15] ='#ccccff'
 
-theme.color.b  = '#000000'
-theme.color.f  = '#ffffc6'
-theme.color.c  = '#cc6699'
+color.b  = '#000000'
+color.f  = '#ffffc6'
+color.c  = '#cc6699'
 
 -- PANEL COLORS:
 --
-theme.panel_colors = {
+panel_colors = {
   taglist=2,
   close=1,
   tasklist=4,

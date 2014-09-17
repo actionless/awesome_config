@@ -1,6 +1,6 @@
 local generate_theme = require("actionless.common_theme").generate_theme
 
-local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/lcars_modern_monokai"
+local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/monovedek"
 
 -- TERMINAL COLORSCHEME:
 --
