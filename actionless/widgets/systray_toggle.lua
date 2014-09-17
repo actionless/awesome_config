@@ -18,7 +18,7 @@ local setmetatable = setmetatable
 local error = error
 local abs = math.abs
 
-local async = require("actionless.async")
+local helpers = require("actionless.helpers")
 
 --- widgets.systray_toggle
 local systray_toggle = { mt = {}, arrow=false, popup=false }
@@ -40,14 +40,17 @@ function systray_toggle.initialize()
     local systray = systray_widget()
     local flayout = wibox.layout.flex.horizontal()
     flayout:add(systray)
-    local lmargin = wibox.layout.margin(wibox.widget.textbox(''),
-                                       systray_toggle.geometry['lmargin'], 0,
-                                       systray_toggle.geometry['tmargin'], systray_toggle.geometry['bmargin']
-                                       )
-    local rmargin = wibox.layout.margin(wibox.widget.textbox(''),
-                                       0, systray_toggle.geometry['rmargin'],
-                                       systray_toggle.geometry['tmargin'], systray_toggle.geometry['bmargin']
-                                       )
+    local sg = systray_toggle.geometry
+    local lmargin = wibox.layout.margin(
+        wibox.widget.textbox(''),
+        sg['lmargin'], 0,
+        sg['tmargin'], sg['bmargin']
+    )
+    local rmargin = wibox.layout.margin(
+        wibox.widget.textbox(''),
+        0, sg['rmargin'],
+        sg['tmargin'], sg['bmargin']
+    )
     local layout = wibox.layout.align.horizontal()
     layout:set_left(lmargin)
     layout:set_middle(flayout)
@@ -60,7 +63,7 @@ function systray_toggle.initialize()
 end
 
 function systray_toggle.check()
-    async.wait(0.3, systray_toggle.post_check)
+    helpers.newdelay('systray_toggle', 0.3, systray_toggle.post_check)
 end
 function systray_toggle.post_check()
     if not systray_toggle.popup and not systray_toggle.arrow then
@@ -108,7 +111,7 @@ local function worker(args)
     systray_toggle.scrgeom = capi.screen[scr].workarea
     systray_toggle.geometry = {
         scr = scr,
-        icon_size = 24,
+        icon_size = 32,
         x = systray_toggle.scrgeom.width - 350 ,
         y = 18,
         lmargin = 5,

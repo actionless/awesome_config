@@ -1,5 +1,5 @@
 --[[
-     Licensed under GNU General Public License v2 
+     Licensed under GNU General Public License v2
       * (c) 2013-2014  Yauheni Kirylau
       * (c) 2013,      Luke Bonham                
       * (c) 2010-2012, Peter Hofmann              
@@ -10,15 +10,15 @@ local awful = require("awful")
 local capi   = { timer = timer,
                  client = client,
                  mouse = mouse }
-local beautiful = require("beautiful")
 
+local beautiful = require("beautiful")
 
 
 -- helper functions for internal use
 local helpers = {}
 
+helpers.font = string.match(beautiful.get().font or "monospace 8", "([%a, ]+) %d+")
 
-helpers.font = string.match(beautiful.get().font, "([%a, ]+) %d+")
 
 helpers.dir    = debug.getinfo(1, 'S').source:match[[^@(.*/).*$]]
 helpers.scripts_dir = helpers.dir .. 'scripts/'
@@ -39,13 +39,40 @@ end
 
 helpers.timer_table = {}
 
+function helpers.newinterval(name, timeout, fun, nostart)
+  local timer = capi.timer({ timeout = timeout })
+  timer:connect_signal("timeout", patched_function)
+  timer:start()
+  if not nostart then
+    timer:emit_signal("timeout")
+  end
+  helpers.timer_table[name] = timer
+end
+
 function helpers.newtimer(name, timeout, fun, nostart)
-    helpers.timer_table[name] = capi.timer({ timeout = timeout })
-    helpers.timer_table[name]:connect_signal("timeout", fun)
-    helpers.timer_table[name]:start()
-    if not nostart then
-        helpers.timer_table[name]:emit_signal("timeout")
-    end
+  local timer = capi.timer({ timeout = timeout })
+  local patched_function = function(...)
+    timer:stop()
+    fun(...)
+    timer:again()
+  end
+  timer:connect_signal("timeout", patched_function)
+  timer:start()
+  if not nostart then
+    timer:emit_signal("timeout")
+  end
+  helpers.timer_table[name] = timer
+end
+
+function helpers.newdelay(name, timeout, fun)
+  local timer = capi.timer({ timeout = timeout })
+  local patched_function = function(...)
+    timer:stop()
+    fun(...)
+  end
+  timer:connect_signal("timeout", patched_function)
+  timer:start()
+  helpers.timer_table[name] = timer
 end
 
 -- }}}
@@ -64,59 +91,6 @@ end
 
 -- }}}
 
-function helpers.only_digits(str)
-  if not str then return nil end
-  return tonumber(str:match("%d+"))
-end
-
-function helpers.split_string(str, sep)
-        local sep, fields = sep or ":", {}
-        local pattern = string.format("([^%s]+)", sep)
-        str:gsub(pattern, function(c) fields[#fields+1] = c end)
-        return fields
-end
-
-function helpers.imerge(t, set)
-    for _, v in ipairs(set) do
-        table.insert(t, v)
-    end
-end
-
-function helpers.getn(dict)
-  local num_items = 0
-  for k,v in pairs(dict) do
-    num_items = num_items + 1
-  end
-  return num_items
-end
-
-function helpers.merge(t, set)
-    for k, v in pairs(set) do
-        t[k] = v
-    end
-end
-
-function helpers.map_table_values(t, func)
-  for k, v in pairs(t) do
-    t[k] = func(v)
-  end
-end
-
-function helpers.deepcopy(orig)
-    local orig_type = type(orig)
-    local copy
-    if orig_type == 'table' then
-        copy = {}
-        for orig_key, orig_value in next, orig, nil do
-            copy[helpers.deepcopy(orig_key)] = helpers.deepcopy(orig_value)
-        end
-        setmetatable(copy, helpers.deepcopy(getmetatable(orig)))
-    else -- number, string, boolean, etc
-        copy = orig
-    end
-    return copy
-end
-
 function helpers.run_once(cmd)
   local findme = cmd
   local firstspace = cmd:find(" ")
@@ -134,35 +108,14 @@ function helpers.get_current_screen()
   end
 end
 
-local xml_entity_names = {
-  ["'"] = "&apos;",
-  ["\""] = "&quot;",
-  ["<"] = "&lt;",
-  [">"] = "&gt;",
-  ["&"] = "&amp;"
-}
-function helpers.escape(result)
-    --return text and text:gsub("['&<>\"]", xml_entity_names) or nil
-    return result and result:gsub("[&<>\"]", xml_entity_names) or nil
+
+function helpers.client_floats(c)
+  local l = awful.layout.get(c.screen)
+  if awful.layout.getname(l) == 'floating' or awful.client.floating.get(c) then
+    return true
+  end
+  return false
 end
 
-function helpers.unicode_length(unicode_string)
-  local _, string_length = string.gsub(unicode_string, "[^\128-\193]", "")
-  return string_length
-end
-
-function helpers.unicode_max_length(unicode_string, max_length)
-  if #unicode_string <= max_length then
-    return unicode_string
-  end
-  local result = ''
-  local counter = 0
-  for uchar in string.gmatch(unicode_string, '([%z\1-\127\194-\244][\128-\191]*)') do
-      result = result .. uchar
-      counter = counter + 1
-      if counter > max_length then break end
-  end
-  return result
-end
 
 return helpers

@@ -3,16 +3,17 @@ local actionless = {
   widgets = require("actionless.widgets"),
   -- awesome addons
   menu_addon = require("actionless.menu_addon"),
-  -- awesome forks
-  tasklist = require("actionless.tasklist"),
-  common_widget_with_margin = require("actionless.common_widget_with_margin"),
+  tasklist_addon = require("actionless.tasklist_addon"),
   -- lain
   markup = require("actionless.markup"),
   -- misc
   titlebar = require("actionless.titlebar"),
   helpers = require("actionless.helpers"),
-  settings = require("actionless.settings"),
+  table = require("actionless.table"),
   async = require("actionless.async"),
+  xresources = require("actionless.xresources"),
+  hotkeys = require("actionless.hotkeys"),
+  common_theme = require("actionless.common_theme"),
 }
 
 return actionless

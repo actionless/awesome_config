@@ -1,33 +1,20 @@
+local xresources = require("actionless.xresources")
 local generate_theme = require("actionless.common_theme").generate_theme
 
-local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/noble_dark"
+local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/lcars_xresources"
 
 -- TERMINAL COLORSCHEME:
 --
-color = {}
-color.b  = '#3c3c3c'
-color.f  = '#ffffc6'
-color.c  = '#cc6699'
-color[0]  = '#2E3436'
-color[1]  = '#CC0000'
-color[2]  = '#4E9A06'
-color[3]  = '#C4A000'
-color[4]  = '#3465A4'
-color[5]  = '#75507B'
-color[6]  = '#06989A'
-color[7]  = '#D3D7CF'
-color[8]  = '#555753'
-color[9]  = '#EF2929'
-color[10] = '#8AE234'
-color[11] = '#FCE94F'
-color[12] = '#729FCF'
-color[13] = '#AD7FA8'
-color[14] = '#34E2E2'
-color[15] = '#eeeeec'
+local colors = xresources.read_theme(
+  os.getenv('HOME') .. '/.Xcolours/monovedek'
+)
+--local colors = xresources.read_theme(
+--  os.getenv('HOME') .. '/.Xcolours/jwr_dark'
+--  )
 
 -- PANEL COLORS:
 --
-panel_colors = {
+local panel_colors = {
   taglist=7,
   close=1,
   tasklist='b',
@@ -35,13 +22,14 @@ panel_colors = {
   info=13
 }
 
--- GENERATE DEFAULT THEME:
+-- LOAD DEFAULT THEME:
 --
 local theme = generate_theme(
   theme_dir,
-  color,
+  colors,
   panel_colors
 )
+
 
 -- CUSTOMIZE default theme:-----------------------------------------------
 
@@ -52,13 +40,13 @@ local theme = generate_theme(
 -- Use nitrogen:
 --theme.wallpaper_cmd     = "nitrogen --restore"
 -- Use wallpaper tile:
-theme.wallpaper = theme_dir .. '/pattern.png'
+theme.wallpaper = theme_dir .. '/umbreon_pattern.png'
 
 -- PANEL DECORATIONS:
 --
-theme.widget_decoration_arrl = 'sq'
-theme.widget_decoration_arrr = 'sq'
-theme.show_widget_icon = true
+theme.show_widget_icon = false
+theme.widget_decoration_arrl = ''
+theme.widget_decoration_arrr = ''
 
 -- FONTS:
 --
@@ -71,9 +59,10 @@ theme.show_widget_icon = true
 -- use ~/.fonts.conf, Luke ;)
 theme.font = "Monospace Bold 10.5"
 theme.sans_font = "Sans Bold 10.3"
+theme.taglist_font = theme.font
+theme.tasklist_font = theme.sans_font
 --
 -- Don't use sans font:
 --theme.sans_font	= theme.font
-
 
 return theme

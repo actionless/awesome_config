@@ -1,4 +1,4 @@
-[submodule "eminent"]
-	path = eminent
+[submodule "third_party/eminent"]
+	path = third_party/eminent
 	url = https://github.com/guotsuan/eminent.git
 	branch = master

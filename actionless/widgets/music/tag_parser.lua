@@ -1,3 +1,8 @@
+--[[
+     Licensed under GNU General Public License v2
+      * (c) 2014  Yauheni Kirylau
+--]]
+
 --local N_A = "N/A"
 local N_A = nil
 
@@ -26,6 +31,13 @@ local tag_parser = {}
     then
       return player_status
     end
+
+-------------------------------------------------------------------------------
+  if not player_status.artist or not player_status.title then
+  -- @TODO: rewrite this big piece of whatever it is
+  --
+    --local inspect = require("inspect")
+    --naughty.notify({text=inspect(player_status)})
 
     local a
     --1
@@ -65,7 +77,7 @@ local tag_parser = {}
     end --2
     end --1
 
-    local f = player_status.file:match('.*/(.*)$')
+    local f = player_status.file:match('.*/(.*)$') or ''
     local t = player_status.title or f
     local new_t = ''
     naughty.notify({text=t})
@@ -105,6 +117,9 @@ local tag_parser = {}
     if not player_status.artist or #player_status.artist == 0 then
       player_status.artist = a
     end
+
+  end -- </>
+------------------------------------------------------------------------------
 
     -- let's insert placeholders for all the missing fields
     for _, k in ipairs({

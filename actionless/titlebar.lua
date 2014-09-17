@@ -1,10 +1,14 @@
+--[[
+     Licensed under GNU General Public License v2
+      * (c) 2014  Yauheni Kirylau
+--]]
+
 local awful = require("awful")
 local client = client
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 
 local widgets = require("actionless.widgets")
-local settings = require("actionless.settings")
 
 
 local titlebar = {}
@@ -36,9 +40,6 @@ end
 
 function titlebar.make_titlebar(c)
 	c.border_color = beautiful.titlebar_focus_border
-	if settings.gtk3_app_classes[c.class] then
-		return
-	end
 	-- buttons for the titlebar
 	local buttons = awful.util.table.join(
 		awful.button({ }, 1, function()

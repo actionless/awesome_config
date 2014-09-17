@@ -1,73 +1,108 @@
-theme = {}
+--[[
+	Licensed under GNU General Public License v2
+	* (c) 2014 Yauheni Kirylau
+--]]
 
-themes_dir = os.getenv("HOME") .. "/.config/awesome/themes/ceti"
-theme.dir = themes_dir
-theme.wallpaper= themes_dir .. "/pattern.png"
+local common_theme = {}
 
-theme.fg		= "#F5FBFF"
-theme.alt_fg		= "#a8a8a8"
+function common_theme.generate_theme(theme_dir, colors16, panel_colors)
 
-theme.bg		= "#303942"
-theme.alt_bg		= "#a562b3"
-theme.shiny		= "#ffffff"
+local theme = {}
+theme.color = colors16
+theme.panel_colors = panel_colors
+theme.dir = theme_dir
 
-theme.theme		= "#265D8A"
-theme.error		= "#f92672"
 
-theme.border		= "#000000"
-theme.sel_border	= "#d33862"
-theme.titlebar		= "#3c3c3c"
-theme.titlebar_focus	= "#66436C"
+-- Use plain color:
+theme.wallpaper_cmd     = "hsetroot"
+-- Use nitrogen:
+--theme.wallpaper_cmd     = "nitrogen --restore"
+-- Use wallpaper tile:
+--theme.wallpaper = theme.dir .. '/pattern.png'
 
-theme.font		= "DejaVu Sans Mono 9"
---theme.font		= "Dina 8"
---theme.font		= "Fira Mono 9"
---theme.font		= "Meslo LG S 10"
---theme.font		= "monoOne 10"
---theme.font		= "PT Mono 8"
---theme.font		= "Share Tech Mono 11"
---theme.font		= "Source Code Pro Medium 9.4"
---theme.font		= "tewi 9"
+theme.show_widget_icon = false
+theme.widget_decoration_arrl = ''
+theme.widget_decoration_arrr = ''
 
-theme.sans_font		= "PT Sans 10"
---theme.sans_font	= "Share Tech 11"
---theme.sans_font	= "Source Sans Pro Regular 10"
+--Source*Pro:
+--theme.font = "Source Code Pro Bold 10.5"
+--theme.sans_font = "Source Sans Pro Bold 10.3"
+--Meslo+Paratype:
+--theme.font = "Meslo LG S for Lcarsline Bold 10.5"
+--theme.sans_font = "PT Sans Bold 10.3"
+-- use ~/.fonts.conf, Luke ;)
+theme.font = "Monospace Bold 10.5"
+theme.sans_font = "Sans Bold 10.3"
+-- Don't use sans font:
+--theme.sans_font	= theme.font
+
+-- COLORS:
+
+theme.error = theme.color[9]
+theme.warning = theme.color[10]
+theme.color.err = theme.error
+theme.color.warn = theme.warning
+
+theme.bg = theme.color.b
+theme.alt_bg = theme.color[4]
+
+theme.fg = theme.color[7]
+theme.alt_fg = theme.color.f
+theme.shiny = theme.color.b
+
+theme.theme = theme.color[13]
+theme.theme2 = theme.color[2]
+
+theme.border = theme.bg
+theme.sel_border = theme.color[10]
+theme.titlebar_border = theme.border
+theme.titlebar_focus_border = theme.sel_border
 
 theme.fg_normal			= theme.fg
 theme.bg_normal			= theme.bg
-theme.fg_focus			= theme.fg
+theme.fg_focus			= theme.shiny
 theme.bg_focus			= theme.theme
 theme.fg_urgent			= theme.bg
 theme.bg_urgent			= theme.error
 
 theme.screen_margin		= 0
 
-theme.border_width		= "12"
+theme.border_width		= "10"
 theme.border_normal		= theme.border
 theme.border_focus		= theme.sel_border
 theme.border_marked		= theme.error
 
-theme.panel_opacity		= 1.0
+theme.panel_bg			= theme.bg
+theme.panel_fg			= theme.fg
+--theme.panel_opacity		= 0.96
+theme.panel_opacity		= 0.92
+theme.panel_height		= 24
+theme.panel_margin		= 3
+theme.panel_enbolden_details	= false
 
 theme.taglist_font		= theme.font
-theme.taglist_fg_focus		= theme.shiny
-theme.taglist_bg_focus		= theme.theme
+theme.taglist_fg_occupied	= theme.bg
+theme.taglist_bg_occupied	= theme.color[theme.panel_colors.taglist]
+theme.taglist_fg_empty		= theme.bg
+theme.taglist_bg_empty		= theme.theme
+theme.taglist_fg_focus		= theme.color[theme.panel_colors.taglist]
+theme.taglist_bg_focus		= theme.bg
 
 theme.tasklist_font		= theme.sans_font
-theme.tasklist_fg_focus		= theme.fg
+theme.tasklist_fg_focus		= theme.alt_bg
 theme.tasklist_bg_focus		= theme.bg
 theme.tasklist_fg_normal	= theme.fg
 theme.tasklist_bg_normal	= theme.bg
 theme.tasklist_fg_minimize	= theme.bg
-theme.tasklist_bg_minimize	= "#818181"
+theme.tasklist_bg_minimize	= theme.alt_bg
 
---theme.titlebar_font		= theme.sans_font
-theme.titlebar_font		= "PT Caption Bold 10.5"
---theme.titlebar_font		= "Source Sans Pro Bold 10.5"
-theme.titlebar_fg_focus		= theme.shiny
-theme.titlebar_fg_normal	= theme.bg
-theme.titlebar_bg_focus		= theme.titlebar_focus
-theme.titlebar_bg_normal	= theme.titlebar
+theme.titlebar_opacity		= 0.7
+theme.titlebar_position		= 'top'
+theme.titlebar_font		= theme.font
+theme.titlebar_fg_focus		= theme.tasklist_fg_focus
+theme.titlebar_bg_focus		= theme.bg
+theme.titlebar_fg_normal	= theme.tasklist_fg_normal
+theme.titlebar_bg_normal	= theme.bg
 
 theme.notification_opacity	= 0.8
 theme.notification_font		= theme.sans_font
@@ -84,24 +119,20 @@ theme.menu_border_width		= "3"
 theme.menu_height		= "16"
 theme.menu_width		= "140"
 
-theme.player_text		= "#8d5f88"
+theme.player_text		= theme.color[13]
 
 -- ICONS
 
-icons_dir = theme.dir .. "/icons/"
+local icons_dir = theme.dir .. "/icons/"
 theme.icons_dir = icons_dir
 
-theme.close_button      	= icons_dir .. "close.png"
-theme.close_button_hover      	= icons_dir .. "close_hover.png"
-
-theme.taglist_squares_sel	= icons_dir .. "square_sel.png"
-theme.taglist_squares_unsel	= icons_dir .. "square_unsel.png"
 
 theme.menu_submenu_icon		= icons_dir .. "submenu.png"
+
 theme.taglist_squares_sel	= icons_dir .. "square_sel.png"
 theme.taglist_squares_unsel	= icons_dir .. "square_unsel.png"
 
-theme.arrl			= icons_dir .. "arrl.png"
+theme.small_separator		= icons_dir .. "small_separator.png"
 
 theme.widget_ac			= icons_dir .. "ac.png"
 theme.widget_ac_charging	= icons_dir .. "ac_charging.png"
@@ -123,6 +154,7 @@ theme.widget_net_searching	= icons_dir .. "net_searching.png"
 
 theme.widget_music		= icons_dir .. "note.png"
 theme.widget_music_on		= icons_dir .. "note_on.png"
+theme.widget_music_off		= icons_dir .. "note_off.png"
 theme.widget_vol_high		= icons_dir .. "vol_high.png"
 theme.widget_vol		= icons_dir .. "vol.png"
 theme.widget_vol_low		= icons_dir .. "vol_low.png"
@@ -138,7 +170,7 @@ theme.tasklist_disable_icon = true
 --theme.tasklist_maximized_horizontal = "_"
 --theme.tasklist_maximized_vertical = "|"
 
-layout_icons_dir = icons_dir .. "layout/"
+local layout_icons_dir = icons_dir .. "layout/"
 theme.layout_icons_dir = layout_icons_dir
 theme.layout_tile		= layout_icons_dir .. "tile.png"
 theme.layout_tilegaps		= layout_icons_dir .. "tilegaps.png"
@@ -154,7 +186,7 @@ theme.layout_fullscreen		= layout_icons_dir .. "fullscreen.png"
 theme.layout_magnifier		= layout_icons_dir .. "magnifier.png"
 theme.layout_floating		= layout_icons_dir .. "floating.png"
 
-titlebar_icons_dir = icons_dir .. "titlebar/"
+local titlebar_icons_dir = icons_dir .. "titlebar/"
 theme.titlebar_icons_dir = titlebar_icons_dir
 theme.titlebar_close_button_focus = titlebar_icons_dir .. "/close_focus.png"
 theme.titlebar_close_button_normal = titlebar_icons_dir .. "/close_normal.png"
@@ -185,3 +217,60 @@ theme.titlebar_minimize_button_focus_inactive = titlebar_icons_dir .. "/minimize
 theme.titlebar_minimize_button_normal_inactive = titlebar_icons_dir .. "/minimized_normal.png"
 
 return theme
+end
+
+
+function common_theme.generate_default_theme(theme_dir)
+-- TERMINAL COLORSCHEME:
+--
+color = {}
+--black
+color[0] = '#000000'
+color[8] = '#465457'
+--red
+color[1] = '#960050'
+color[9] = '#F92672'
+--green
+color[2] = '#008877'
+color[10] = '#A6E22E'
+--yellow
+color[3] = '#FD971F'
+color[11] = '#e6db74'
+--blue
+color[4] = '#7711dd'
+color[12] = '#8432ff'
+--purple
+color[5] = '#890089'
+color[13] = '#85509b'
+--cyan
+color[6] = '#00d6b5'
+color[14] = '#51edbc'
+--white
+color[7] = '#888a85'
+color[15] = '#ffffff'
+
+color.b  = '#0e0021'
+color.f  = '#bcbcbc'
+color.c  = '#ae81ff'
+
+-- PANEL COLORS:
+--
+panel_colors = {
+  taglist=7,
+  close=1,
+  tasklist='b',
+  media=14,
+  info=13
+}
+
+-- GENERATE DEFAULT THEME:
+--
+return generate_theme(
+  theme_dir,
+  color,
+  panel_colors
+)
+end
+
+
+return common_theme

@@ -1,1 +1,1 @@
-eminent/eminent.lua
+third_party/eminent/eminent.lua

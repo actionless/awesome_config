@@ -1,29 +1,38 @@
 local generate_theme = require("actionless.common_theme").generate_theme
 
-local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/noble_dark"
+local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/monovedek"
 
 -- TERMINAL COLORSCHEME:
 --
 color = {}
-color.b  = '#3c3c3c'
-color.f  = '#ffffc6'
-color.c  = '#cc6699'
-color[0]  = '#2E3436'
-color[1]  = '#CC0000'
-color[2]  = '#4E9A06'
-color[3]  = '#C4A000'
-color[4]  = '#3465A4'
-color[5]  = '#75507B'
-color[6]  = '#06989A'
-color[7]  = '#D3D7CF'
-color[8]  = '#555753'
-color[9]  = '#EF2929'
-color[10] = '#8AE234'
-color[11] = '#FCE94F'
-color[12] = '#729FCF'
-color[13] = '#AD7FA8'
-color[14] = '#34E2E2'
-color[15] = '#eeeeec'
+--black
+color[0] = '#000000'
+color[8] = '#465457'
+--red
+color[1] = '#960050'
+color[9] = '#F92672'
+--green
+color[2] = '#008877'
+color[10] = '#A6E22E'
+--yellow
+color[3] = '#FD971F'
+color[11] = '#e6db74'
+--blue
+color[4] = '#7711dd'
+color[12] = '#8432ff'
+--purple
+color[5] = '#890089'
+color[13] = '#85509b'
+--cyan
+color[6] = '#00d6b5'
+color[14] = '#51edbc'
+--white
+color[7] = '#888a85'
+color[15] = '#ffffff'
+
+color.b  = '#0e0021'
+color.f  = '#bcbcbc'
+color.c  = '#ae81ff'
 
 -- PANEL COLORS:
 --
@@ -52,13 +61,13 @@ local theme = generate_theme(
 -- Use nitrogen:
 --theme.wallpaper_cmd     = "nitrogen --restore"
 -- Use wallpaper tile:
-theme.wallpaper = theme_dir .. '/pattern.png'
+--theme.wallpaper = theme_dir .. '/pattern.png'
 
 -- PANEL DECORATIONS:
 --
-theme.widget_decoration_arrl = 'sq'
-theme.widget_decoration_arrr = 'sq'
-theme.show_widget_icon = true
+theme.show_widget_icon = false
+theme.widget_decoration_arrl = ''
+theme.widget_decoration_arrr = ''
 
 -- FONTS:
 --

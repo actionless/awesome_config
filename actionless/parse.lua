@@ -1,8 +1,17 @@
+--[[
+     Licensed under GNU General Public License v2
+      * (c) 2014  Yauheni Kirylau
+--]]
+
 local helpers = require("actionless.helpers")
+local h_table = require("actionless.table")
+local h_string = require("actionless.string")
+
+
 local parse = {}
 
 function parse.string_to_lines(str)
-  return helpers.split_string(str, '\n')
+  return h_string.split(str, '\n')
 end
 
 function parse.lines_to_string(lines)
@@ -65,7 +74,7 @@ end
 function parse.find_values_in_lines(lines, regex, match_keys, post_func)
   local key, value = nil, nil
   local result_values = {}
-  local match_keys_length = helpers.getn(match_keys)
+  local match_keys_length = h_table.getn(match_keys)
   for _, line in ipairs(lines) do
     if match_keys_length <= 0 then
       return result_values

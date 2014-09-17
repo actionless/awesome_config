@@ -1,5 +1,5 @@
 --[[            
-  Licensed under GNU General Public License v2 
+  Licensed under GNU General Public License v2
    * (c) 2013-2014, Yauheni Kirylau             
 --]]
 
@@ -94,7 +94,7 @@ local function worker(args)
 
   function netctl.netctl_auto_update()
     async.execute(
-      'netctl-auto current',
+      'sudo netctl-auto current',
       function(str)
         if #str ~= 0 then
           netctl.interface = netctl.wlan_if

@@ -1,3 +1,3 @@
-pokemon_light
-lcars_modern_monokai
-ceti
+lcars/
+noble_dark/
+pokemon_*/

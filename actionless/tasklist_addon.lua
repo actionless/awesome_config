@@ -1,20 +1,22 @@
 ---------------------------------------------------------------------------
 -- @author Julien Danjou &lt;julien@danjou.info&gt;
 -- @copyright 2008-2009 Julien Danjou
--- @release v3.5.5
+-- 2013-2014 Yauhen Kirylau
 ---------------------------------------------------------------------------
 
 -- Grab environment we need
-local capi = { button = button }
+local capi = { button = button,
+               client = client }
 local util = require("awful.util")
+local tag = require("awful.tag")
 local wibox = require("wibox")
 local imagebox = require("wibox.widget.imagebox")
 local textbox = require("wibox.widget.textbox")
 
---- Common utilities for awful widgets
-local common = {}
+--- Additions for awful tasklist widget
+local tasklist_addon = {}
 
-function common.create_buttons(buttons, object)
+function tasklist_addon.create_buttons(buttons, object)
     if buttons then
         local btns = {}
         for kb, b in ipairs(buttons) do
@@ -32,9 +34,9 @@ function common.create_buttons(buttons, object)
     end
 end
 
-function common.list_update(w, buttons, label, data, objects, right_margin)
+function tasklist_addon.list_update(w, buttons, label, data, objects, spacing_length)
     -- update the widgets, creating them if needed
-    right_margin = right_margin or 0
+    spacing_length = spacing_length or 3
     w:reset()
     for i, o in ipairs(objects) do
         local cache = data[o]
@@ -59,13 +61,13 @@ function common.list_update(w, buttons, label, data, objects, right_margin)
             -- And all of this gets a background
             bgb:set_widget(l)
 
-            bgb:buttons(common.create_buttons(buttons, o))
+            bgb:buttons(tasklist_addon.create_buttons(buttons, o))
 
             data[o] = {
                 ib = ib,
                 tb = tb,
                 bgb = bgb,
-                m   = m
+                m   = m,
             }
         end
 
@@ -80,15 +82,13 @@ function common.list_update(w, buttons, label, data, objects, right_margin)
         end
         bgb:set_bgimage(bg_image)
         ib:set_image(icon)
-        if right_margin and i~=1 then
-            local delimiter = wibox.layout.margin(bgb, right_margin, 0)
-            w:add(delimiter)
-        else
-            w:add(bgb)
+        if spacing_length then
+            bgb = wibox.layout.margin(bgb, spacing_length, 0)
         end
+        w:add(bgb)
    end
 end
 
-return common
+return tasklist_addon
 
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80

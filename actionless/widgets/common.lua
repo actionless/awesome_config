@@ -1,70 +1,28 @@
+--[[
+     Licensed under GNU General Public License v2
+      * (c) 2014  Yauheni Kirylau
+--]]
+
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 
-local awful = require("awful")
 local config = require("actionless.config")
-beautiful.init(config.status.theme_dir)
+local helpers = require("actionless.helpers")
+local h_table = require("actionless.table")
+beautiful.init(config.awesome.theme_dir)
+
+
+local function get_color(color_n)
+  return beautiful.color[color_n]
+end
 
 
 local common = {}
 
-function common.make_text_separator(separator_character, bg, fg)
-  --'<span font="monospace 17">' .. separator_character .. '</span>'))
-  local fg = fg or beautiful.panel_fg
-  local widget = wibox.widget.background()
-  if separator_character == 'sq' then
-    separator_character = ' '
-    function widget:set_fg(...) widget:set_bg(...) end
-  else
-    local bg = bg or beautiful.panel_bg
-    widget:set_bg(bg)
-  end
-  widget:set_fg(fg)
-  widget:set_widget(wibox.widget.textbox(separator_character))
-  return widget
-end
 
-function common.make_image_separator(image_name, bg)
-  local bg = bg or beautiful.panel_bg
-  local widget = wibox.widget.background()
-  widget:set_bg(bg)
-  local image_widget = wibox.widget.imagebox(beautiful[image_name])
-  image_widget:set_resize(false)
-  widget:set_widget(image_widget)
-  return widget
-end
-
-function common.make_separator(separator_id)
-  if separator_id == 'arrl' or separator_id == 'arrr' then
-    if beautiful.widget_use_text_decorations then
-      return common.make_text_separator(
-        beautiful['widget_decoration_' .. separator_id])
-    else
-      return common.make_image_separator(separator_id)
-    end
-  elseif separator_id == 'separator' then
-    return common.make_text_separator(' ')
-  end
-end
-
-function common.set_separator_color(widget, separator_id, color_id)
-  if separator_id == 'arrl' or separator_id == 'arrr' then
-    if beautiful.widget_use_text_decorations then
-      widget:set_fg(
-        beautiful['color' .. color_id])
-    else
-      widget.widget:set_image(
-        beautiful[separator_id .. color_id])
-    end
-  else
-    widget:set_bg(
-      beautiful['color' .. color_id])
-  end
-end
-
-
-function common.widget(force_show_icon)
-  local show_icon = force_show_icon or beautiful.show_widget_icon
+function common.widget(args)
+  args = args or {}
+  local show_icon = args.force_show_icon or beautiful.show_widget_icon
   local widget = {}
 
   widget.text_widget = wibox.widget.textbox('')
@@ -108,54 +66,157 @@ function common.widget(force_show_icon)
 end
 
 
-function common.decorated(args)
-  local args = args or {}
-  local left_separators = {}
-  local right_separators = {}
-  --if beautiful.show_widget_decorations then 
-    left_separators = args.left or { 'arrl' }
-    right_separators = args.right or { 'arrr' }
-  --end
-  local color_n = args.color_n
+function common.centered(widget)
+  if not widget then widget=wibox.widget.background() end
+  local centered_widget = {}
+  centered_widget.widget = widget
 
-  local decorated = {}
-  decorated.widget = args.widget or common.widget()
+  local horizontal_align = wibox.layout.align.horizontal()
+  horizontal_align:set_second(widget)
+  local vertical_align = wibox.layout.align.vertical()
+  vertical_align:set_second(horizontal_align)
+
+  setmetatable(centered_widget, { __index = centered_widget.widget })
+  return setmetatable(centered_widget, { __index = vertical_align })
+end
+
+
+function common.bordered(widget, args)
+  if not widget then return nil end
+  local margin = args.margin or 0
+  local padding = args.padding or 0
+  local obj = {}
+
+  obj.padding = wibox.layout.margin()
+  obj.padding:set_widget(widget)
+  obj.padding:set_margins(padding)
+
+  obj.background = wibox.widget.background()
+  obj.background:set_widget(obj.padding)
+
+  obj.margin = wibox.layout.margin()
+  obj.margin:set_widget(obj.background)
+  obj.margin:set_margins(margin)
+
+  setmetatable(obj, { __index = obj.margin })
+  function obj:set_bg(...)
+    obj.background:set_bg(...)
+  end
+
+  function obj:set_fg(...)
+    obj.background:set_fg(...)
+  end
+  return obj
+end
+
+
+function common.make_separator(separator_character, args)
+  local separator_alias = beautiful['widget_decoration_' .. separator_character]
+  if separator_alias then
+    return common.make_separator(separator_alias, args)
+  end
+
+  args = args or {}
+  local bg = args.bg
+  local fg = args.fg or get_color(args.color_n) or beautiful.fg
+  local inverted = args.inverted or false
+
+  if separator_character == 'sq' then
+    separator_character = ' '
+    inverted = not inverted
+  end
+
+  local widget = wibox.widget.background()
+  if inverted then
+    widget.set_fg, widget.set_bg = widget.set_bg, widget.set_fg
+  end
+  widget:set_bg(bg)
+  widget:set_fg(fg)
+  widget:set_widget(wibox.widget.textbox(separator_character))
+  return widget
+end
+
+function common.make_image_separator(image_path, args)
+  args = args or {}
+  local bg = args.bg
+
+  local widget = wibox.widget.background()
+  local separator_widget = wibox.widget.imagebox(image_path)
+  separator_widget:set_resize(false)
+  widget:set_bg(bg)
+  widget:set_widget(separator_widget)
+  return widget
+end
+
+
+function common.decorated(args)
+  local decorated = {
+    left_separator_widgets = {},
+    widget_list = {},
+    right_separator_widgets = {},
+  }
+
+  args = args or {}
+  local fg = args.fg or get_color(args.color_n)
+  local bg = args.bg or beautiful.panel_bg
+  local widget_inverted = args.widget_inverted
+  if widget_inverted then
+    args.inverted = widget_inverted
+  end
+  local left_separators = args.left_separators or { 'arrl' }
+  local right_separators = args.right_separators or { 'arrr' }
+
+  if args.widget then
+    decorated.widget_list = {args.widget}
+  else
+    decorated.widget_list = args.widgets
+      or {common.widget(args)}
+  end
+
+  decorated.widget = decorated.widget_list[1]
   decorated.wibox = wibox.layout.fixed.horizontal()
 
-  local separator
   for _, separator_id in ipairs(left_separators) do
-    separator = common.make_separator(separator_id)
+    local separator = common.make_separator(separator_id, args)
+    table.insert(decorated.left_separator_widgets, separator)
     decorated.wibox:add(separator)
   end
-  decorated.wibox:add(decorated.widget)
+  for _, each_widget in ipairs(decorated.widget_list) do
+    decorated.wibox:add(each_widget)
+  end
   for _, separator_id in ipairs(right_separators) do
-    separator = common.make_separator(separator_id)
+    local separator = common.make_separator(separator_id, args)
+    table.insert(decorated.right_separator_widgets, separator)
     decorated.wibox:add(separator)
   end
 
-  function decorated:set_color(color_id)
-    local widget
-    for i, separator_id in ipairs(left_separators) do
-      common.set_separator_color(
-        decorated.wibox.widgets[i],
-        separator_id,
-        color_id)
-    end
-    for i, separator_id in ipairs(right_separators) do
-      common.set_separator_color(
-        decorated.wibox.widgets[#left_separators + 1 + i],
-        separator_id,
-        color_id)
-    end
-    if self.widget.set_fg then
-      self.widget:set_bg(beautiful['color' .. color_id])
-      self.widget:set_fg(beautiful.colorb)
+  setmetatable(decorated.wibox, { __index = decorated.widget })
+  setmetatable(decorated,       { __index = decorated.wibox })
+  function     decorated:set_color(args)
+    args = args or {}
+    local fg = args.fg or get_color(args.color_n)
+    local bg = args.bg or beautiful.panel_bg
+    for _, widget in ipairs(h_table.sum({
+      self.left_separator_widgets,
+      self.widget_list,
+      self.right_separator_widgets
+    })) do
+      if widget_inverted then
+        if bg and widget.set_fg then
+          widget:set_fg(bg) end
+        if fg and widget.set_bg then
+          widget:set_bg(fg) end
+      else
+        if fg and widget.set_fg then
+          widget:set_fg(fg) end
+        if bg and widget.set_bg then
+          widget:set_bg(bg) end
+      end
     end
   end
 
-  if color_n then decorated:set_color(color_n) end
-  setmetatable(decorated.wibox, { __index = decorated.widget })
-  return setmetatable(decorated, { __index = decorated.wibox })
+  decorated:set_color({fg=fg, bg=bg})
+  return decorated
 end
 
 

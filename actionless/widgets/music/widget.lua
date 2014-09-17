@@ -11,7 +11,7 @@ local string		= { format	= string.format }
 local setmetatable	= setmetatable
 
 local helpers		= require("actionless.helpers")
-local escape_f		= helpers.escape
+local h_string		= require("actionless.string")
 local common_widget	= require("actionless.widgets.common").widget
 local markup		= require("actionless.markup")
 local async		= require("actionless.async")
@@ -21,9 +21,28 @@ local tag_parser	= require("actionless.widgets.music.tag_parser")
 
 
 -- player infos
-local player = {id=nil}
-player.cover = "/tmp/playercover.png"
-player.widget = common_widget()
+local player = {
+  widget=common_widget(),
+  id=nil,
+  cmd=nil,
+  player_status = {
+    state=nil,
+    title=nil,
+    artist=nil,
+    album=nil,
+    date=nil,
+    file=nil
+  },
+  cover="/tmp/awesome_cover.png"
+}
+
+local parse_status_callback = function(player_status)
+  player.parse_status(player_status)
+end
+
+local show_notification_callback = function()
+  player.show_notification()
+end
 
 local function worker(args)
   local args            = args or {}
@@ -41,34 +60,32 @@ local function worker(args)
   local text_color      = beautiful.player_text or fg or beautiful.fg_normal
 
 
-  local parse_status_callback = function(player_status)
-    player.parse_status(player_status)
-  end
-  local show_notification_callback = function()
-    player.show_notification()
-  end
+  --[[
+      music player backends:
+
+      backend should have methods:
+      * .toggle ()
+      * .next_song ()
+      * .prev_song ()
+      * .update (parse_status_callback)
+      optional:
+      * .init(args)
+      * .resize_cover(coversize, default_art, show_notification_callback)
+  --]]
 
   if backend_name == 'mpd' then
     player.backend = backends.mpd
-    player.backend.init(
-      args,
-      parse_status_callback,
-      show_notification_callback)
+    player.backend.init(args)
     player.cmd = args.player_cmd or 'st -e ncmpcpp'
-
   elseif backend_name == 'cmus' then
     player.backend = backends.cmus
-    player.backend.init(
-      args,
-      parse_status_callback,
-      show_notification_callback)
     player.cmd = args.player_cmd or 'st -e cmus'
-
   elseif backend_name == 'clementine' then
     player.backend = backends.clementine
-    player.backend.init(
-      parse_status_callback)
     player.cmd = args.player_cmd or 'clementine'
+  elseif backend_name == 'spotify' then
+    player.backend = backends.spotify
+    player.cmd = args.player_cmd or 'spotify'
   end
 
   helpers.set_map("current player track", nil)
@@ -142,7 +159,7 @@ local function worker(args)
   ))
 -------------------------------------------------------------------------------
   function player.update()
-    player.backend.update()
+    player.backend.update(parse_status_callback)
   end
 -------------------------------------------------------------------------------
   function player.parse_status(player_status)
@@ -154,19 +171,19 @@ local function worker(args)
 
     if player_status.state == "play" then
       -- playing
-      artist = player_status.artist
-      title = player_status.title
+      artist = player_status.artist or "playing"
+      title = player_status.title or " "
       player.widget:set_image(beautiful.widget_music_on)
-      if #player_status.artist + #player_status.title > 40 then
-        if #player_status.artist > 15 then
-          artist = helpers.unicode_max_length(player_status.artist, 15) .. "…"
+      if #artist + #title > 40 then
+        if #artist > 15 then
+          artist = h_string.max_length(artist, 15) .. "…"
         end
         if #player_status.title > 25 then
-          title = helpers.unicode_max_length(player_status.title, 25) .. "…"
+          title = h_string.max_length(title, 25) .. "…"
         end
       end
-      artist = markup.fg.color(text_color, escape_f(artist))
-      title = escape_f(title)
+      artist = markup.fg.color(text_color, h_string.escape(artist))
+      title = h_string.escape(title)
       -- playing new song
       if player_status.title ~= helpers.get_map("current player track") then
         helpers.set_map("current player track", player_status.title)
@@ -210,18 +227,27 @@ local function worker(args)
   end
 -------------------------------------------------------------------------------
 function player.resize_cover()
+  -- backend supports it:
   if player.backend.resize_cover then
-    return player.backend.resize_cover(cover_size, default_art)
+    return player.backend.resize_cover(
+      player.player_status, cover_size, player.cover, show_notification_callback
+    )
   end
+  -- fallback:
   local resize = string.format('%sx%s', cover_size, cover_size)
+  if not player.player_status.cover then
+    player.player_status.cover = default_art
+  end
   async.execute(
     string.format(
       [[convert %q -thumbnail %q -gravity center -background "none" -extent %q %q]],
       player.player_status.cover,
       resize,
       resize,
-      player.cover),
-    function(f) player.show_notification() end)
+      player.cover
+    ),
+    function(f) player.show_notification() end
+  )
 end
 -------------------------------------------------------------------------------
   helpers.newtimer("player", update_interval, player.update)
@@ -232,5 +258,6 @@ return setmetatable(
   player,
   { __call = function(_, ...)
       return worker(...)
-    end }
+    end
+  }
 )
