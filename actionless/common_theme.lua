@@ -21,7 +21,6 @@ theme.wallpaper_cmd     = "hsetroot"
 --theme.wallpaper = theme.dir .. '/pattern.png'
 
 theme.show_widget_icon = false
-theme.show_widget_decorations = true
 theme.widget_decoration_arrl = ''
 theme.widget_decoration_arrr = ''
 

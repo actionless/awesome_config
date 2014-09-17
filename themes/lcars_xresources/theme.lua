@@ -8,6 +8,9 @@ local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/lcars_xresources
 local colors = xresources.read_theme(
   os.getenv('HOME') .. '/.Xcolours/monovedek'
 )
+--local colors = xresources.read_theme(
+--  os.getenv('HOME') .. '/.Xcolours/jwr_dark'
+--  )
 
 -- PANEL COLORS:
 --
@@ -42,7 +45,6 @@ theme.wallpaper = theme_dir .. '/umbreon_pattern.png'
 -- PANEL DECORATIONS:
 --
 theme.show_widget_icon = false
-theme.show_widget_decorations = true
 theme.widget_decoration_arrl = ''
 theme.widget_decoration_arrr = ''
 
