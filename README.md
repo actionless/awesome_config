@@ -25,7 +25,7 @@ example of config/local.lua: https://gist.github.com/actionless/229eef7795915068
 ![cal](http://i.imgur.com/pB5n12b.png "cal")
 
 ##### Music (supports mpd, cmus, clementine, spotify)
-![music](http://i.imgur.com/2NMzB3i.png "music")
+![music](http://i.imgur.com/W7ur5SQ.png "music")
 
 
 
