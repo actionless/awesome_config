@@ -5,7 +5,6 @@ theme.dir = themes_dir
 --theme.wallpaper_cmd     = "hsetroot"
 theme.wallpaper_cmd     = "nitrogen --restore"
 theme.show_widget_icon = false
-theme.show_widget_decorations = true
 theme.widget_use_text_decorations = false
 
 theme.bg		= "#000000"

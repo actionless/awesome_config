@@ -66,7 +66,6 @@ local theme = generate_theme(
 -- PANEL DECORATIONS:
 --
 theme.show_widget_icon = false
-theme.show_widget_decorations = true
 theme.widget_decoration_arrl = ''
 theme.widget_decoration_arrr = ''
 

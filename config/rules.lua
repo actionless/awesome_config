@@ -20,13 +20,19 @@ function rules.init(awesome_context)
                      size_hints_honor = false},
     callback = awful.client.setslave },
 
-    { rule = { class = "MPlayer" },
-      properties = { floating=true } },
-    { rule = { class = "Chromium" },
-      properties = { tag=awesome_context.tags[1][2], raise=false } },
     { rule = { class = "Skype" },
       properties = { tag=awesome_context.tags[1][4], raise=false } },
 
+    { rule = { name = "Terminator Preferences" },
+      properties = { floating = true } },
+    { rule = { name = "Pinterest / Pin it. - Mozilla Firefox" },
+      properties = { floating = true } },
+    { rule_any = { class = { "pinentry", "Guake", "feh" } },
+      properties = { floating = true } },
+
+    { rule_any = { class = { "Transmission-gtk",  } },
+      properties = { floating = false } },
+      
   }
 end
 return rules
