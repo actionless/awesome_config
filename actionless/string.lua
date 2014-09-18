@@ -41,7 +41,7 @@ function string_helpers.max_length(unicode_string, max_length)
     return unicode_string
   end
   local result = ''
-  local counter = 0
+  local counter = 1
   for uchar in string.gmatch(unicode_string, '([%z\1-\127\194-\244][\128-\191]*)') do
       result = result .. uchar
       counter = counter + 1

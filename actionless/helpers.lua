@@ -23,8 +23,12 @@ helpers.font = string.match(beautiful.get().font or "monospace 8", "([%a, ]+) %d
 helpers.dir    = debug.getinfo(1, 'S').source:match[[^@(.*/).*$]]
 helpers.scripts_dir = helpers.dir .. 'scripts/'
 
-helpers.mono_preset = { font=beautiful.get().notification_monofont,
-			opacity=beautiful.get().notification_opacity }
+helpers.mono_preset = function()
+  return {
+    font=beautiful.get().notification_monofont,
+    opacity=beautiful.get().notification_opacity
+  }
+end
 
 -- {{{ Modules loader
 

@@ -12,7 +12,7 @@ local helpers = require("actionless.helpers")
 local parse = require("actionless.parse")
 local newtimer = helpers.newtimer
 local font = helpers.font
-local mono_preset = helpers.mono_preset
+local mono_preset = helpers.mono_preset()
 local common_widget = require("actionless.widgets.common").widget
 
 
