@@ -135,17 +135,18 @@ function widget_loader.init(awesome_context)
         end
       end),
       awful.button({ }, 3, function ()
-        if awesome_context.menu.instance then
+        if awesome_context.menu.instance and awesome_context.menu.instance.wibox.visible then
           awesome_context.menu.instance:hide()
           awesome_context.menu.instance = nil
         else
+          if awesome_context.menu.instance then
+            awesome_context.menu.instance:hide()
+          end
           awesome_context.menu.instance = awful.menu.clients({
             theme = {
               width=capi.screen[helpers.get_current_screen()].workarea.width
             },
-            coords = {
-              x=0, y=18
-            }
+            coords = { x=0, y=18 }
           })
         end
       end),
