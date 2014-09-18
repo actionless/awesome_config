@@ -8,7 +8,7 @@ local beautiful = require("beautiful")
 local naughty = require("naughty")
 
 local helpers = require('actionless.helpers')
-local mono_preset = helpers.mono_preset
+local mono_preset = helpers.mono_preset()
 
 
 -- Calendar notification

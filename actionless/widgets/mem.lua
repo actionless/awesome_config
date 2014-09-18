@@ -17,7 +17,7 @@ local parse        = require("actionless.parse")
 local common_widget= require("actionless.widgets.common").widget
 local newtimer     = helpers.newtimer
 local font         = helpers.font
-local mono_preset  = helpers.mono_preset
+local mono_preset  = helpers.mono_preset()
 
 -- Memory usage (ignoring caches)
 local mem = {
