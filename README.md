@@ -7,33 +7,53 @@ example of config/local.lua: https://gist.github.com/actionless/229eef7795915068
 
 ![Screenshot](http://fc08.deviantart.net/fs70/f/2014/213/7/0/monovedek_set_____by_actionless-d7sr317.png "Screenshot")
 
-### Keyboard widget appearance (with different themes)
+### Widget popups
 
-#### Monovedek theme with transparency and blur:
+##### Systray toggle
+![st](http://i.imgur.com/Q4KjyfP.png "st")
+
+##### Memory
+![mem](http://i.imgur.com/cg4dq17.png "mem")
+
+##### CPU
+![cpu](http://i.imgur.com/4G94o8i.png "cpu")
+
+##### Calendar (taken from Lain widgetkit)
+![cal](http://i.imgur.com/pB5n12b.png "cal")
+
+##### Music (supports mpd, cmus, clementine, spotify)
+![music](http://i.imgur.com/2NMzB3i.png "music")
+
+
+
+### Hotkey- and other widgets appearance (with different themes)
+
+##### Monovedek theme with transparency and blur:
 
 ![hotkeys_monovedek](http://i.imgur.com/auQdZC5.png "hotkeys_monovedek")
 
-#### Monovedek theme without transparency and blur:
+##### Monovedek theme without transparency and blur:
 
 ![hotkeys_monovedek](http://i.imgur.com/ygsVm7E.png "hotkeys_monovedek")
 
-#### "LCARS modern" theme without transparency and blur:
+##### "LCARS modern" theme without transparency and blur:
 
 ![hotkeys_lm](http://i.imgur.com/t6XRD7m.png "hotkeys_lm")
 
-#### "LCARS xresources" with "jwr_dark" xresources theme without transparency and blur:
+##### "LCARS xresources" with "jwr_dark" xresources theme without transparency and blur:
 
-![hotkeys_xjwr](http://i.imgur.com/y4o3vY0.png "hotkeys_xjwr")
+![hotkeys_xjwr](http://i.imgur.com/y4o3vY0.png "hotkeys_xjw
+r")
 
-#### "Pokemon Light" theme without transparency and blur:
+##### "Pokemon Light" theme without transparency and blur:
 
 ![hotkeys_pokemon_light](http://i.imgur.com/hgijuIo.png "hotkeys_pokemon_light")
 
-#### "Pokemon Dark" theme without transparency and blur:
+##### "Pokemon Dark" theme without transparency and blur:
 
 ![pokemon_dark](http://i.imgur.com/BWnzpfh.png?1 "pokemon_dark")
 
-#### "Gnome Noble Dark" theme without transparency and blur:
+##### "Gnome Noble Dark" theme without transparency and blur:
 
 ![hotkeys_noble_dark](http://i.imgur.com/XfpBqrV.png "hotkeys_noble_dark")
 
