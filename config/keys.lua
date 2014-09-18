@@ -47,6 +47,12 @@ capi.root.buttons(awful.util.table.join(
 ))
 -- }}}
 
+awful.menu.menu_keys.back = { "Left", "h" }
+awful.menu.menu_keys.down = { "Down", "j" }
+awful.menu.menu_keys.up = { "Up", "k" }
+awful.menu.menu_keys.enter = { "Right", "l" }
+awful.menu.menu_keys.close = { "Escape", '#133', 'q' }
+
 -- {{{ Key bindings
 local globalkeys = awful.util.table.join(
 
@@ -164,7 +170,8 @@ local globalkeys = awful.util.table.join(
     function ()
       awesome_context.menu.instance = menu_addon.clients_on_tag({
         theme = {width=capi.screen[helpers.get_current_screen()].workarea.width},
-        coords = {x=0, y=18}})
+        coords = {x=0, y=18}
+      })
     end,
     "current clients", MENU_COLOR
   ),
