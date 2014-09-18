@@ -7,6 +7,7 @@ local awful = require("awful")
 
 local async = require("actionless.async")
 local h_table = require("actionless.table")
+local h_string = require("actionless.string")
 local parse = require("actionless.parse")
 
 -- @TODO: change to native dbus implementation instead of calling qdbus
@@ -66,6 +67,7 @@ function spotify.parse_metadata(result_string, parse_status_callback)
       cover_url='artUrl'
     }
   )
+  player_status.date = h_string.max_length(player_status.date, 4)
   player_status.file = 'spotify stream'
   h_table.merge(spotify.player_status, player_status)
   parse_status_callback(spotify.player_status)
