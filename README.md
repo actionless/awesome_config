@@ -9,14 +9,17 @@ example of config/local.lua: https://gist.github.com/actionless/229eef7795915068
 
 ### Widget popups
 
-##### Systray toggle
-![st](http://i.imgur.com/Q4KjyfP.png "st")
+##### CPU (with transparency and blur)
+![cpu_tb](http://i.imgur.com/JlRkAIm.png "cpu_tb")
+
+##### CPU
+![cpu](http://i.imgur.com/4G94o8i.png "cpu")
 
 ##### Memory
 ![mem](http://i.imgur.com/cg4dq17.png "mem")
 
-##### CPU
-![cpu](http://i.imgur.com/4G94o8i.png "cpu")
+##### Systray toggle
+![st](http://i.imgur.com/Q4KjyfP.png "st")
 
 ##### Calendar (taken from Lain widgetkit)
 ![cal](http://i.imgur.com/pB5n12b.png "cal")
