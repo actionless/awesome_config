@@ -2,7 +2,6 @@
 OH HI
 --]]
 
-
 -- localization
 os.setlocale(os.getenv("LANG"))
 
@@ -11,7 +10,7 @@ local awful = require("awful")
 require("awful.autofocus")
 local beautiful	= require("beautiful")
 
-local context = {
+context = {
 
   widgets = {},
   menu = {},

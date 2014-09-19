@@ -20,6 +20,9 @@ function widget_loader.init(awesome_context)
   local bpc = beautiful.panel_colors
   local modkey = awesome_context.modkey
 
+  -- Keyboard layout widget
+  w.kbd = widgets.kbd({})
+
   -- CLOSE button
   w.close_button = widgets.manage_client({color_n=bpc.close})
 

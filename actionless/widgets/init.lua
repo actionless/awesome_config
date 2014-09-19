@@ -14,6 +14,8 @@ local widgets = {
 	cpu			= require("actionless.widgets.cpu"),
 	mem			= require("actionless.widgets.mem"),
 	calendar		= require("actionless.widgets.calendar"),
+        -- other forks
+        kbd                     = require("actionless.widgets.kbd"),
 }
 
 return widgets

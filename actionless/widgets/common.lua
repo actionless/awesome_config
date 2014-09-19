@@ -174,24 +174,10 @@ function common.decorated(args)
   end
 
   decorated.widget = decorated.widget_list[1]
-  decorated.wibox = wibox.layout.fixed.horizontal()
+  decorated.layout = wibox.layout.fixed.horizontal()
 
-  for _, separator_id in ipairs(left_separators) do
-    local separator = common.make_separator(separator_id, args)
-    table.insert(decorated.left_separator_widgets, separator)
-    decorated.wibox:add(separator)
-  end
-  for _, each_widget in ipairs(decorated.widget_list) do
-    decorated.wibox:add(each_widget)
-  end
-  for _, separator_id in ipairs(right_separators) do
-    local separator = common.make_separator(separator_id, args)
-    table.insert(decorated.right_separator_widgets, separator)
-    decorated.wibox:add(separator)
-  end
-
-  setmetatable(decorated.wibox, { __index = decorated.widget })
-  setmetatable(decorated,       { __index = decorated.wibox })
+  setmetatable(decorated.layout, { __index = decorated.widget })
+  setmetatable(decorated,        { __index = decorated.layout })
   function     decorated:set_color(args)
     args = args or {}
     local fg = args.fg or get_color(args.color_n)
@@ -214,8 +200,27 @@ function common.decorated(args)
       end
     end
   end
+  function decorated:hide()
+    self.layout:reset()
+  end
+  function decorated:show()
+    for _, separator_id in ipairs(left_separators) do
+      local separator = common.make_separator(separator_id, args)
+      table.insert(self.left_separator_widgets, separator)
+      self.layout:add(separator)
+    end
+    for _, each_widget in ipairs(self.widget_list) do
+      self.layout:add(each_widget)
+    end
+    for _, separator_id in ipairs(right_separators) do
+      local separator = common.make_separator(separator_id, args)
+      table.insert(self.right_separator_widgets, separator)
+      self.layout:add(separator)
+    end
+    self:set_color({fg=fg, bg=bg})
+  end
 
-  decorated:set_color({fg=fg, bg=bg})
+  decorated:show()
   return decorated
 end
 
