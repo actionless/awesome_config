@@ -18,7 +18,7 @@ function autorun.init(awesome_context)
   run_once("dropboxd")
   --run_once("xscreensaver -no-splash")
   run_once("unclutter")
-  run_once("gxkb")
+  run_once("kbdd")
 
   for _, item in ipairs(awesome_context.autorun) do
     awful.util.spawn_with_shell(item)
