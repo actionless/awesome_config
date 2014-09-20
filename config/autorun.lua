@@ -18,6 +18,7 @@ function autorun.init(awesome_context)
   run_once("dropboxd")
   --run_once("xscreensaver -no-splash")
   run_once("unclutter")
+  run_once("setxkbmap -layout us,ru -variant ,winkeys -option grp:caps_toggle,grp_led:scroll,terminate:ctrl_alt_bksp,compose:ralt")
   run_once("kbdd")
 
   for _, item in ipairs(awesome_context.autorun) do
