@@ -21,8 +21,8 @@ local function worker(args)
   local update_interval = args.update_interval or 5
   local warning = args.warning or 75
   local sensor = args.sensor or "CPU Temperature"
-  local bg = args.bg or beautiful.panel_bg or beautiful.bg
-  local fg = args.fg or beautiful.panel_fg or beautiful.fg
+  local bg = args.bg or beautiful.panel_fg or beautiful.fg
+  local fg = args.fg or beautiful.panel_bg or beautiful.bg
 
   function temp.update()
     async.execute("sensors ", function (str) temp.post_update(str) end)

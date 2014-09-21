@@ -260,7 +260,8 @@ panel_colors = {
   close=1,
   tasklist='b',
   media=14,
-  info=13
+  info=13,
+  layoutbox=7,
 }
 
 -- GENERATE DEFAULT THEME:

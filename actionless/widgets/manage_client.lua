@@ -21,12 +21,13 @@ local mono_preset = helpers.mono_preset()
 local manage_client = {}
 
 manage_client.widget = common.widget()
+manage_client.widget:set_text(' x ')
 
 local function worker(args)
 	local args	 = args or {}
 	local interval  = args.interval or 5
-        local fg = args.fg or beautiful.panel_fg or beautiful.fg
-        local bg = args.bg or beautiful.panel_bg or beautiful.bg
+        local bg = args.bg or beautiful.panel_fg or beautiful.fg
+        local fg = args.fg or beautiful.panel_bg or beautiful.bg
         if beautiful.close_button then
           manage_client.widget:set_image(beautiful.close_button)
           manage_client.widget:connect_signal(
@@ -34,23 +35,22 @@ local function worker(args)
           manage_client.widget:connect_signal(
             "mouse::leave", function () manage_client.widget:set_image(beautiful.close_button) end)
         else
-          manage_client.widget.text_widget:set_text(' x ')
           manage_client.widget = common.decorated({
-            widget=manage_client.widget, bg=bg, widget_inverted=true,
+            widget=manage_client.widget, bg=bg, fg=fg,
           })
-          manage_client.widget:set_color({color_n=args.color_n or 1})
           manage_client.widget:connect_signal(
-            "mouse::enter", function () manage_client.widget:set_color({color_n='err'}) end)
+            "mouse::enter", function () manage_client.widget:set_color({name='err'}) end)
           manage_client.widget:connect_signal(
-            "mouse::leave", function () manage_client.widget:set_color({color_n=args.color_n or 1}) end)
+            "mouse::leave", function () manage_client.widget:set_color({bg=bg}) end)
         end
 
 	manage_client.widget:buttons(awful.util.table.join(
 		--awful.button({ }, 1, function () alsa.toggle() end),
 		--awful.button({ }, 5, function () alsa.down() end),
 		awful.button({ }, 1, function () 
-			--naughty.notify({text='DEBUG'})
-			capi.client.focus:kill()  end)
+                  --naughty.notify({text='DEBUG'})
+                  capi.client.focus:kill()
+                end)
 	))
 
     return setmetatable(manage_client, { __index = manage_client.widget })

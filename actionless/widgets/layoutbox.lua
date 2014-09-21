@@ -30,9 +30,8 @@ function worker(args)
     local layoutbox = { mt = {} }
 
     local args = args or {}
-    local color_n = args.color_n or 'f'
-    local bg = args.bg or beautiful.color[color_n]
-    local fg = args.fg or beautiful.panel_bg
+    local fg = args.fg or beautiful.panel_bg or beautiful.bg or "#000000"
+    local bg = args.bg or beautiful.panel_fg or beautiful.fg or "#ffffff"
     layoutbox.screen = args.screen or 1
 
     layoutbox.n_master = wibox.widget.background()
@@ -46,8 +45,7 @@ function worker(args)
         widgets={
             layoutbox.n_master, layoutbox.layout, layoutbox.n_col
         },
-        color_n = color_n,
-        widget_inverted=true,
+        bg=bg, fg=fg,
     })
 
     function layoutbox:update_layout()

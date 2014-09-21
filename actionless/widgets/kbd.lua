@@ -23,13 +23,12 @@ kbd.widget = common.widget()
 
 local function worker(args)
   local args	 = args or {}
-  local fg = args.fg or beautiful.panel_fg or beautiful.fg
-  local bg = args.bg or beautiful.panel_bg or beautiful.bg
-  local color_n = args.color_n or 9
+  local bg = args.bg or beautiful.error or beautiful.fg
+  local fg = args.fg or beautiful.panel_bg or beautiful.bg
   local layouts = args.layouts or {"eng", "rus"}
   local default_layout = args.default_layout or "eng"
   kbd.widget = common.decorated({
-    widget=kbd.widget, bg=bg, widget_inverted=true, color_n=color_n
+    widget=kbd.widget, bg=bg, fg=fg, widget_inverted=true,
   })
   kbd.widget:hide()
 

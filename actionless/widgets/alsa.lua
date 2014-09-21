@@ -20,11 +20,22 @@ local helpers		= require("actionless.helpers")
 
 
 -- ALSA volume
-local alsa = {}
+local alsa = {
+  volume = {
+    status = "N/A",
+    level = "0"
+  }
+}
 
 local function worker(args)
   local args = args or {}
-  local color_n = args.color_n or 1
+
+  local bg = args.bg or beautiful.panel_fg or beautiful.fg or '#ffffff'
+  alsa.step = args.step or 2
+  alsa.update_interval  = args.update_interval or 5
+  alsa.channel  = args.channel or "Master"
+  alsa.mic_channel = args.mic_channel or "Capture"
+  alsa.channels_toggle = args.channels_toggle or {alsa.channel, }
 
   alsa.widget = decorated_widget(args)
   alsa.widget:buttons(awful.util.table.join(
@@ -32,17 +43,6 @@ local function worker(args)
     awful.button({ }, 5, function () alsa.down() end),
     awful.button({ }, 4, function () alsa.up() end)
   ))
-
-  alsa.volume = {
-    status = "N/A",
-    level = "0"
-  }
-
-  alsa.step = args.step or 2
-  alsa.update_interval  = args.update_interval or 5
-  alsa.channel  = args.channel or "Master"
-  alsa.mic_channel = args.mic_channel or "Capture"
-  alsa.channels_toggle = args.channels_toggle or {alsa.channel, }
 
   helpers.set_map("volume in progress", false)
 
@@ -101,13 +101,13 @@ local function worker(args)
 
   function alsa.update_indicator()
     if alsa.volume.status == "off" then
-      alsa.widget:set_color({color_n='warn'})
+      alsa.widget:set_color({name='warn'})
       alsa.widget:set_image(beautiful.widget_vol_mute)
     elseif alsa.volume.level == 0 then
-      alsa.widget:set_color({color_n='err'})
+      alsa.widget:set_color({name='err'})
       alsa.widget:set_image(beautiful.widget_vol_no)
     else
-      alsa.widget:set_color({color_n=color_n, fg=args.fg})
+      alsa.widget:set_color({bg=bg})
       if alsa.volume.level <= 50 then
         alsa.widget:set_image(beautiful.widget_vol_low)
       elseif alsa.volume.level <= 75 then

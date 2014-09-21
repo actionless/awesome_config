@@ -117,7 +117,7 @@ function common.make_separator(separator_character, args)
   end
 
   args = args or {}
-  local bg = args.bg
+  local bg = args.bg or beautiful.panel_bg or beautiful.bg or "#000000"
   local fg = args.fg or get_color(args.color_n) or beautiful.fg
   local inverted = args.inverted or false
 
@@ -157,69 +157,77 @@ function common.decorated(args)
   }
 
   args = args or {}
-  local fg = args.fg or get_color(args.color_n)
-  local bg = args.bg or beautiful.panel_bg
-  local widget_inverted = args.widget_inverted
-  if widget_inverted then
-    args.inverted = widget_inverted
-  end
+  local bg = args.bg or beautiful.panel_fg or beautiful.fg or "#ffffff"
+  local fg = args.fg or beautiful.panel_bg or beautiful.bg or "#000000"
   local left_separators = args.left_separators or { 'arrl' }
   local right_separators = args.right_separators or { 'arrr' }
 
   if args.widget then
     decorated.widget_list = {args.widget}
   else
-    decorated.widget_list = args.widgets
-      or {common.widget(args)}
+    decorated.widget_list = args.widgets or {common.widget(args)}
   end
 
   decorated.widget = decorated.widget_list[1]
   decorated.layout = wibox.layout.fixed.horizontal()
 
+  for _, separator_id in ipairs(left_separators) do
+    table.insert(
+      decorated.left_separator_widgets,
+      common.make_separator(separator_id, {inverted=true}))
+  end
+  for _, separator_id in ipairs(right_separators) do
+    table.insert(
+      decorated.right_separator_widgets,
+      common.make_separator(separator_id, {inverted=true}))
+  end
+
   setmetatable(decorated.layout, { __index = decorated.widget })
   setmetatable(decorated,        { __index = decorated.layout })
-  function     decorated:set_color(args)
+
+  --- Set widget color
+  -- @param args. "fg", "bg", "name" - "err", "warn", "b", "f" or 1..16
+  function decorated:set_color(args)
     args = args or {}
-    local fg = args.fg or get_color(args.color_n)
-    local bg = args.bg or beautiful.panel_bg
+    local fg = args.fg
+    local bg
+    if args.name then
+      bg = get_color(args.name)
+    else
+      bg = args.bg
+    end
+
     for _, widget in ipairs(h_table.sum({
       self.left_separator_widgets,
       self.widget_list,
       self.right_separator_widgets
     })) do
-      if widget_inverted then
-        if bg and widget.set_fg then
-          widget:set_fg(bg) end
-        if fg and widget.set_bg then
-          widget:set_bg(fg) end
-      else
-        if fg and widget.set_fg then
-          widget:set_fg(fg) end
-        if bg and widget.set_bg then
-          widget:set_bg(bg) end
-      end
+      if fg and widget.set_fg then
+        widget:set_fg(fg) end
+      if bg and widget.set_bg then
+        widget:set_bg(bg) end
     end
   end
+
+  --- Make widget invisible
   function decorated:hide()
     self.layout:reset()
   end
+
+  --- Make widget visible again
   function decorated:show()
-    for _, separator_id in ipairs(left_separators) do
-      local separator = common.make_separator(separator_id, args)
-      table.insert(self.left_separator_widgets, separator)
+    for _, separator in ipairs(self.left_separator_widgets) do
       self.layout:add(separator)
     end
     for _, each_widget in ipairs(self.widget_list) do
       self.layout:add(each_widget)
     end
-    for _, separator_id in ipairs(right_separators) do
-      local separator = common.make_separator(separator_id, args)
-      table.insert(self.right_separator_widgets, separator)
+    for _, separator in ipairs(self.right_separator_widgets) do
       self.layout:add(separator)
     end
-    self:set_color({fg=fg, bg=bg})
   end
 
+  decorated:set_color({fg=fg, bg=bg})
   decorated:show()
   return decorated
 end

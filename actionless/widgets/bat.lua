@@ -27,8 +27,8 @@ local function worker(args)
   local args = args or {}
   local update_interval = args.update_interval or 30
   local device = args.device or "battery_BAT0"
-  local bg = args.bg or beautiful.panel_bg or beautiful.bg
-  local fg = args.fg or beautiful.panel_fg or beautiful.fg
+  local bg = args.bg or beautiful.panel_fg or beautiful.fg
+  local fg = args.fg or beautiful.panel_bg or beautiful.bg
 
   function bat.update()
     async.execute(
