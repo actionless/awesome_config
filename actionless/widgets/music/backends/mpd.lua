@@ -12,9 +12,12 @@ local parse		= require("actionless.parse")
 local async		= require("actionless.async")
 
 
-local mpd = {}
+local mpd = {
+  player_cmd = 'st -e ncmpcpp'
+}
 
-cover_script = helpers.scripts_dir .. "mpdcover"
+local cover_script = helpers.scripts_dir .. "mpdcover"
+
 
 function mpd.init(args)
   local args = args or {} 
@@ -45,7 +48,8 @@ function mpd.update(parse_status_callback)
                     Artist:%artist%
                     Title:%title%
                     Album:%album%
-                    Date:%date%"]],
+                    Date:%date%"
+    ]],
   -- "function( -- <==workaround for syntax highlighter :)   @TODO
   function(str) mpd.parse_metadata(str, parse_status_callback) end)
 end

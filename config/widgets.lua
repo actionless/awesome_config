@@ -42,7 +42,7 @@ function widget_loader.init(awesome_context)
   -- MUSIC
   w.music = widgets.music.widget({
     update_interval = 5,
-    backend = conf.music_player,
+    backends = conf.music_players,
     music_dir = conf.music_dir,
     bg = beautiful.panel_bg,
     fg = term16[bpc.media],

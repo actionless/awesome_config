@@ -14,6 +14,7 @@ local dbus_cmd = "qdbus org.mpris.MediaPlayer2.clementine "
 
 local clementine = {
   player_status = {},
+  player_cmd = 'clementine'
 }
 
 -------------------------------------------------------------------------------

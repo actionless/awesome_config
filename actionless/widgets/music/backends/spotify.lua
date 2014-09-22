@@ -15,6 +15,7 @@ local dbus_cmd = "qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 "
 
 local spotify = {
   player_status = {},
+  player_cmd = 'spotify'
 }
 
 -------------------------------------------------------------------------------

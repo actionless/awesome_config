@@ -16,7 +16,7 @@ local common_widget	= require("actionless.widgets.common").widget
 local markup		= require("actionless.markup")
 local async		= require("actionless.async")
 
-local backends		= require("actionless.widgets.music.backends")
+local backend_modules	= require("actionless.widgets.music.backends")
 local tag_parser	= require("actionless.widgets.music.tag_parser")
 
 
@@ -36,23 +36,16 @@ local player = {
   cover="/tmp/awesome_cover.png"
 }
 
-local parse_status_callback = function(player_status)
-  player.parse_status(player_status)
-end
-
-local show_notification_callback = function()
-  player.show_notification()
-end
 
 local function worker(args)
-  local args            = args or {}
+  local args = args or {}
   local update_interval = args.update_interval or 2
-  local timeout         = args.timeout or 5
-  local default_art     = args.default_art or ""
-  local backend_name    = args.backend or "mpd"
-  local cover_size      = args.cover_size or 100
-  local font            = args.font
-                          or beautiful.tasklist_font or beautiful.font
+  local timeout = args.timeout or 5
+  local default_art = args.default_art or ""
+  local enabled_backends = args.backends
+                           or { 'mpd', 'cmus', 'spotify', 'clementine', }
+  local cover_size = args.cover_size or 100
+  local font = args.font or beautiful.tasklist_font or beautiful.font
   local bg = args.bg or beautiful.panel_bg or beautiful.bg
   local fg = args.fg or beautiful.panel_fg or beautiful.fg
   player.widget:set_bg(bg)
@@ -60,8 +53,11 @@ local function worker(args)
   local text_color      = beautiful.player_text or fg or beautiful.fg_normal
 
 
-  --[[
-      music player backends:
+  local backend_id = 0
+  local cached_backends = {}
+
+  function player.use_next_backend()
+  --[[ music player backends:
 
       backend should have methods:
       * .toggle ()
@@ -72,22 +68,17 @@ local function worker(args)
       * .init(args)
       * .resize_cover(coversize, default_art, show_notification_callback)
   --]]
-
-  if backend_name == 'mpd' then
-    player.backend = backends.mpd
-    player.backend.init(args)
-    player.cmd = args.player_cmd or 'st -e ncmpcpp'
-  elseif backend_name == 'cmus' then
-    player.backend = backends.cmus
-    player.cmd = args.player_cmd or 'st -e cmus'
-  elseif backend_name == 'clementine' then
-    player.backend = backends.clementine
-    player.cmd = args.player_cmd or 'clementine'
-  elseif backend_name == 'spotify' then
-    player.backend = backends.spotify
-    player.cmd = args.player_cmd or 'spotify'
+    backend_id = backend_id + 1
+    if backend_id > #enabled_backends then backend_id = 1 end
+    if backend_id > #cached_backends then
+      cached_backends[backend_id] = backend_modules[enabled_backends[backend_id]]
+      if cached_backends[backend_id].init then cached_backends[backend_id].init() end
+    end
+    player.backend = cached_backends[backend_id]
+    player.cmd = args.player_cmd or player.backend.player_cmd
   end
 
+  player.use_next_backend()
   helpers.set_map("current player track", nil)
 
 -------------------------------------------------------------------------------
@@ -159,7 +150,9 @@ local function worker(args)
   ))
 -------------------------------------------------------------------------------
   function player.update()
-    player.backend.update(parse_status_callback)
+    player.backend.update(function(player_status)
+        player.parse_status(player_status)
+    end)
   end
 -------------------------------------------------------------------------------
   function player.parse_status(player_status)
@@ -198,8 +191,8 @@ local function worker(args)
     else
       -- stop
       player.widget:set_icon('music_off')
+      player.use_next_backend()
     end
-
 
     if player_status.state == "play" or player_status.state == "pause" then
       player.widget:set_bg(bg)
@@ -230,7 +223,10 @@ function player.resize_cover()
   -- backend supports it:
   if player.backend.resize_cover then
     return player.backend.resize_cover(
-      player.player_status, cover_size, player.cover, show_notification_callback
+      player.player_status, cover_size, player.cover,
+      function()
+        player.show_notification()
+      end
     )
   end
   -- fallback:

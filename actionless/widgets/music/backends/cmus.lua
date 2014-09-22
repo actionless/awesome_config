@@ -10,7 +10,9 @@ local string		= { format	= string.format,
 local parse		= require("actionless.parse")
 local async		= require("actionless.async")
 
-local cmus = {}
+local cmus = {
+  player_cmd = 'st -e cmus'
+}
 
 -------------------------------------------------------------------------------
 function cmus.toggle()
