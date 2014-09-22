@@ -102,18 +102,18 @@ local function worker(args)
   function alsa.update_indicator()
     if alsa.volume.status == "off" then
       alsa.widget:set_color({name='warn'})
-      alsa.widget:set_image(beautiful.widget_vol_mute)
+      alsa.widget:set_icon('vol_mute')
     elseif alsa.volume.level == 0 then
       alsa.widget:set_color({name='err'})
-      alsa.widget:set_image(beautiful.widget_vol_no)
+      alsa.widget:set_icon('vol')
     else
       alsa.widget:set_color({bg=bg})
-      if alsa.volume.level <= 50 then
-        alsa.widget:set_image(beautiful.widget_vol_low)
+      if alsa.volume.level <= 25 then
+        alsa.widget:set_icon('vol_low')
       elseif alsa.volume.level <= 75 then
-        alsa.widget:set_image(beautiful.widget_vol)
+        alsa.widget:set_icon('vol')
       else
-        alsa.widget:set_image(beautiful.widget_vol_high)
+        alsa.widget:set_icon('vol_high')
       end
     end
     alsa.widget:set_text(

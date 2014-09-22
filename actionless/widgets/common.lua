@@ -9,6 +9,8 @@ local beautiful = require("beautiful")
 local config = require("actionless.config")
 local helpers = require("actionless.helpers")
 local h_table = require("actionless.table")
+local iconfont = require("actionless.iconfont")
+
 beautiful.init(config.awesome.theme_dir)
 
 
@@ -22,47 +24,65 @@ local common = {}
 
 function common.widget(args)
   args = args or {}
-  local show_icon = args.force_show_icon or beautiful.show_widget_icon
+  local show_icon = args.show_icon or beautiful.show_widget_icon
+  local use_iconfont = args.use_iconfont or beautiful.use_iconfont
   local widget = {}
-
-  widget.text_widget = wibox.widget.textbox('')
-  widget.text_bg = wibox.widget.background()
-  widget.text_bg:set_widget(widget.text_widget)
-
-  widget.icon_widget = wibox.widget.imagebox()
-  widget.icon_widget:set_resize(false)
-  widget.icon_bg = wibox.widget.background()
-  widget.icon_bg:set_widget(widget.icon_widget)
 
   widget.widget = wibox.layout.fixed.horizontal()
   if show_icon then
-    widget.widget:add(widget.icon_bg)
+    if use_iconfont then
+      widget.iconfont_widget = wibox.widget.textbox()
+      widget.iconfont_widget:set_font(beautiful.iconfont)
+      widget.widget:add(widget.iconfont_widget)
+    else
+      widget.icon_widget = wibox.widget.imagebox()
+      widget.icon_widget:set_resize(false)
+      widget.widget:add(widget.icon_widget)
+    end
   end
-  widget.widget:add(widget.text_bg)
+  widget.text_widget = wibox.widget.textbox('')
+  widget.widget:add(widget.text_widget)
+  widget.widget_bg = wibox.widget.background()
+  widget.widget_bg:set_widget(widget.widget)
 
   function widget:set_image(...)
-    return widget.icon_widget:set_image(...)
+    if self.icon_widget then
+      return self.icon_widget:set_image(...)
+    end
   end
 
   function widget:set_text(...)
-    return widget.text_widget:set_text(...)
+    return self.text_widget:set_text(...)
   end
 
   function widget:set_markup(...)
-    return widget.text_widget:set_markup(...)
+    return self.text_widget:set_markup(...)
   end
 
   function widget:set_bg(...)
-    widget.text_bg:set_bg(...)
-    widget.icon_bg:set_bg(...)
+    self.widget_bg:set_bg(...)
   end
 
   function widget:set_fg(...)
-    widget.text_bg:set_fg(...)
-    widget.icon_bg:set_fg(...)
+    self.widget_bg:set_fg(...)
   end
 
-  return setmetatable(widget, { __index = widget.widget })
+  function widget:set_icon(name)
+    if show_icon and use_iconfont then
+      local symbol = iconfont.get_symbol(name)
+      if symbol then
+        return self.iconfont_widget:set_text(" " .. symbol .. " ")
+      else
+        return self.icon_widget:set_image(beautiful.get()['widget_' .. name])
+      end
+    end
+  end
+
+  function widget:buttons(...)
+    return self.widget:buttons(...)
+  end
+
+  return setmetatable(widget, { __index = widget.widget_bg })
 end
 
 

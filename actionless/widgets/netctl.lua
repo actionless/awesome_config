@@ -124,7 +124,7 @@ local function worker(args)
     if netctl.interface == netctl.eth_if then
       netctl.widget:set_image(beautiful.widget_net_wired)
     elseif netctl.interface == netctl.wlan_if then
-      netctl.widget:set_image(beautiful.widget_net_wireless)
+      netctl.widget:set_icon('wifi')
     else
       netctl.widget:set_image(beautiful.widget_net_searching)
     end

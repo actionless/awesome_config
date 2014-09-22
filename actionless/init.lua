@@ -14,6 +14,7 @@ local actionless = {
   xresources = require("actionless.xresources"),
   hotkeys = require("actionless.hotkeys"),
   common_theme = require("actionless.common_theme"),
+  iconfont = require("actionless.iconfont"),
 }
 
 return actionless

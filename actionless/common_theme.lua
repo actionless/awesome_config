@@ -20,6 +20,8 @@ theme.wallpaper_cmd     = "hsetroot"
 -- Use wallpaper tile:
 --theme.wallpaper = theme.dir .. '/pattern.png'
 
+theme.iconfont = "FontAwesome 10"
+theme.use_iconfont = false
 theme.show_widget_icon = false
 theme.widget_decoration_arrl = ''
 theme.widget_decoration_arrr = ''
@@ -148,7 +150,7 @@ theme.widget_temp		= icons_dir .. "temp.png"
 theme.widget_net		= icons_dir .. "net.png"
 theme.widget_hdd		= icons_dir .. "hdd.png"
 
-theme.widget_net_wireless	= icons_dir .. "net_wireless.png"
+theme.widget_net_wifi	        = icons_dir .. "net_wireless.png"
 theme.widget_net_wired		= icons_dir .. "net_wired.png"
 theme.widget_net_searching	= icons_dir .. "net_searching.png"
 

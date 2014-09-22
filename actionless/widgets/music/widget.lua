@@ -173,7 +173,7 @@ local function worker(args)
       -- playing
       artist = player_status.artist or "playing"
       title = player_status.title or " "
-      player.widget:set_image(beautiful.widget_music_on)
+      player.widget:set_icon('music_on')
       if #artist + #title > 40 then
         if #artist > 15 then
           artist = h_string.max_length(artist, 15) .. "…"
@@ -194,10 +194,10 @@ local function worker(args)
       artist = "player"
       title  = "paused"
       helpers.set_map("current player track", nil)
-      player.widget:set_image(beautiful.widget_music)
+      player.widget:set_icon('music')
     else
       -- stop
-      player.widget:set_image(beautiful.widget_music_off)
+      player.widget:set_icon('music_off')
     end
 
 
@@ -217,7 +217,7 @@ local function worker(args)
       )
     else
       if beautiful.show_widget_icon then
-        player.widget:set_image(beautiful.widget_music)
+        player.widget:set_icon('music')
       else
         player.widget:set_text('(m)')
       end
