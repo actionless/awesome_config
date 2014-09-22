@@ -88,6 +88,24 @@ local globalkeys = awful.util.table.join(
     awful.tag.history.restore,
     "cycle tags", TAG_COLOR
   ),
+  hk.on({ modkey, altkey }, "r",
+    function ()
+      awful.prompt.run(
+        { prompt = "new tag name: " },
+        awesome_context.widgets.screen[helpers.get_current_screen()].promptbox.widget,
+        function(new_name)
+          if not new_name or #new_name == 0 then
+            return
+          else
+            local tag = awful.tag.selected(helpers.get_current_screen())
+            if tag then
+               tag.name = new_name
+            end
+          end
+        end)
+    end,
+    "Rename tag", TAG_COLOR
+  ),
 
   -- By direction screen focus
   hk.on({ modkey,        }, "Next",
@@ -274,7 +292,7 @@ local globalkeys = awful.util.table.join(
   hk.on({ modkey }, "x",
     function ()
       awful.prompt.run({ prompt = "Run Lua code: " },
-      awesome_context.widgets.promptbox[helpers.get_current_screen()].widget,
+      awesome_context.widgets.screen[helpers.get_current_screen()].promptbox.widget,
       awful.util.eval, nil,
       awful.util.getdir("cache") .. "/history_eval")
     end,
