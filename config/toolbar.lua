@@ -54,15 +54,16 @@ function toolbar.init(status)
     local left_layout = wibox.layout.fixed.horizontal()
 
     left_layout:add(sep)
-    left_layout:add(loaded_widgets.kbd)
-
     left_layout:add(sep)
     left_layout:add(loaded_widgets.screen[s].taglist)
 
     left_layout:add(separator)
     left_layout:add(loaded_widgets.close_button)
+
     left_layout:add(separator)
+    left_layout:add(loaded_widgets.kbd)
     left_layout:add(loaded_widgets.screen[s].promptbox)
+
     left_layout:add(arr.l[bpc.tasklist])
     -- RIGHT side
     local right_layout = wibox.layout.fixed.horizontal()

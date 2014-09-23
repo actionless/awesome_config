@@ -23,6 +23,7 @@ function widget_loader.init(awesome_context)
 
   -- Keyboard layout widget
   w.kbd = widgets.kbd({
+    bg = beautiful.warning
   })
 
   -- CLOSE button
