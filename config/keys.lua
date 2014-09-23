@@ -286,7 +286,7 @@ local globalkeys = awful.util.table.join(
 
   -- Prompt
   hk.on({ modkey }, "r",
-    function () awesome_context.widgets.uniq[helpers.get_current_screen()].promptbox:run() end,
+    function () awesome_context.widgets.screen[helpers.get_current_screen()].promptbox:run() end,
     "Run command...", TO_DEFINE_COLOR
   ),
   hk.on({ modkey }, "x",
