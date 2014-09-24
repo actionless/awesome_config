@@ -90,19 +90,20 @@ local globalkeys = awful.util.table.join(
   ),
   hk.on({ modkey, altkey }, "r",
     function ()
-      awful.prompt.run(
-        { prompt = "new tag name: " },
-        awesome_context.widgets.screen[helpers.get_current_screen()].promptbox.widget,
-        function(new_name)
-          if not new_name or #new_name == 0 then
-            return
-          else
-            local tag = awful.tag.selected(helpers.get_current_screen())
-            if tag then
+      local tag = awful.tag.selected(helpers.get_current_screen())
+      if tag then
+        awful.prompt.run(
+          { prompt = "new tag name: ",
+            text = awful.tag.getidx(tag) .. ":" },
+          awesome_context.widgets.screen[helpers.get_current_screen()].promptbox.widget,
+          function(new_name)
+            if not new_name or #new_name == 0 then
+              return
+            else
                tag.name = new_name
             end
-          end
-        end)
+          end)
+      end
     end,
     "Rename tag", TAG_COLOR
   ),
