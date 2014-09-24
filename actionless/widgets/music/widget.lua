@@ -145,6 +145,10 @@ local function worker(args)
     "mouse::leave", function () player.hide_notification() end)
   player.widget:buttons(awful.util.table.join(
     awful.button({ }, 1, player.toggle),
+    awful.button({ }, 3, function()
+      player.use_next_backend()
+      player.update()
+    end),
     awful.button({ }, 5, player.next_song),
     awful.button({ }, 4, player.prev_song)
   ))
