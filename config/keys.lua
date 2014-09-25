@@ -56,6 +56,9 @@ awful.menu.menu_keys.close = { "Escape", '#133', 'q' }
 -- {{{ Key bindings
 local globalkeys = awful.util.table.join(
 
+  hk.on({  }, "Print", "show_help"),
+  hk.on({ modkey, }, "Print", "show_help"),
+
   hk.on({ modkey, }, "/", "show_help"),
   hk.on({ modkey, altkey }, "/", "show_help"),
   hk.on({ modkey, altkey, "Shift" }, "/", "show_help"),
@@ -350,7 +353,7 @@ local globalkeys = awful.util.table.join(
     end,
     "screenshot selected", TO_DEFINE_COLOR
   ),
-  hk.on({            }, "Print",
+  hk.on({"Shift",            }, "Print",
     function ()
       awful.util.spawn_with_shell(
       "scrot '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. cmd.scrot_preview_cmd)
