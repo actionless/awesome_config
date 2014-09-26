@@ -29,6 +29,7 @@ local function worker(args)
   local device = args.device or "battery_BAT0"
   local bg = args.bg or beautiful.panel_fg or beautiful.fg
   local fg = args.fg or beautiful.panel_bg or beautiful.bg
+  local hide_if_charged = args.hide_if_charged or true
 
   function bat.update()
     async.execute(
@@ -45,39 +46,43 @@ local function worker(args)
     )
     bat.now.percentage = h_string.only_digits(bat.now.percentage)
 
-    bat.widget:set_markup(
-      string.format("%-4s", bat.now.percentage .. "%"))
-
-    -- charged:
-    if bat.now.state == 'fully-charged' then
-      bat.widget:set_image(beautiful.widget_ac)
-      bat.widget:set_bg(bg)
-      bat.widget:set_fg(fg)
-    -- charging:
-    elseif bat.now.state == 'charging' then
-      if bat.now.percentage < 30 then
-        bat.widget:set_image(beautiful.widget_ac_charging_low)
-        bat.widget:set_bg(beautiful.warning)
-        bat.widget:set_fg(fg)
-      else
-        bat.widget:set_image(beautiful.widget_ac_charging)
-        bat.widget:set_bg(bg)
-        bat.widget:set_fg(fg)
-      end
-    -- on battery:
+    if hide_if_charged and bat.now.state == 'fully-charged' then
+      bat.widget:set_text('')
     else
-      if bat.now.on_low_battery == 'yes' then
-        bat.widget:set_image(beautiful.widget_battery_empty)
-        bat.widget:set_bg(beautiful.error)
-        bat.widget:set_fg(fg)
-      elseif bat.now.percentage < 30 then
-        bat.widget:set_image(beautiful.widget_battery_low)
-        bat.widget:set_bg(beautiful.warning)
-        bat.widget:set_fg(fg)
-      else
-        bat.widget:set_image(beautiful.widget_battery)
+      bat.widget:set_markup(
+        string.format("%-4s", bat.now.percentage .. "%")
+      )
+      -- charged:
+      if bat.now.state == 'fully-charged' then
+        bat.widget:set_image(beautiful.widget_ac)
         bat.widget:set_bg(bg)
         bat.widget:set_fg(fg)
+      -- charging:
+      elseif bat.now.state == 'charging' then
+        if bat.now.percentage < 30 then
+          bat.widget:set_image(beautiful.widget_ac_charging_low)
+          bat.widget:set_bg(beautiful.warning)
+          bat.widget:set_fg(fg)
+        else
+          bat.widget:set_image(beautiful.widget_ac_charging)
+          bat.widget:set_bg(bg)
+          bat.widget:set_fg(fg)
+        end
+      -- on battery:
+      else
+        if bat.now.on_low_battery == 'yes' then
+          bat.widget:set_image(beautiful.widget_battery_empty)
+          bat.widget:set_bg(beautiful.error)
+          bat.widget:set_fg(fg)
+        elseif bat.now.percentage < 30 then
+          bat.widget:set_image(beautiful.widget_battery_low)
+          bat.widget:set_bg(beautiful.warning)
+          bat.widget:set_fg(fg)
+        else
+          bat.widget:set_image(beautiful.widget_battery)
+          bat.widget:set_bg(bg)
+          bat.widget:set_fg(fg)
+        end
       end
     end
     -- notifications for low and critical states
