@@ -61,7 +61,7 @@ local theme = generate_theme(
 -- Use nitrogen:
 --theme.wallpaper_cmd     = "nitrogen --restore"
 -- Use wallpaper tile:
---theme.wallpaper = theme_dir .. '/pattern.png'
+theme.wallpaper = theme_dir .. '/pattern.png'
 
 -- PANEL DECORATIONS:
 --
@@ -80,6 +80,7 @@ theme.widget_decoration_arrr = ''
 -- use ~/.fonts.conf, Luke ;)
 theme.font = "Monospace Bold 10.5"
 theme.sans_font = "Sans Bold 10.3"
+
 --
 -- Don't use sans font:
 --theme.sans_font	= theme.font
