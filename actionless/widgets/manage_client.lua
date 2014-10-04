@@ -21,7 +21,9 @@ local mono_preset = helpers.mono_preset()
 local manage_client = {}
 
 manage_client.widget = common.widget()
-manage_client.widget:set_text(' x ')
+if not beautiful.close_button then
+  manage_client.widget:set_text(' x ')
+end
 
 local function worker(args)
 	local args	 = args or {}
