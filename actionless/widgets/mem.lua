@@ -13,6 +13,7 @@ local string       = { format = string.format }
 local setmetatable = setmetatable
 
 local helpers      = require("actionless.helpers")
+local h_table      = require("actionless.table")
 local parse        = require("actionless.parse")
 local common_widget= require("actionless.widgets.common").widget
 local newtimer     = helpers.newtimer
@@ -42,7 +43,6 @@ local function worker(args)
   mem.list_len = args.list_length or 10
   mem.command = args.command or
     "COLUMNS=512 top -o \\%MEM -b -n 1" .. 
-    " | head -n " .. mem.list_len +6 .. "| tail -n " .. mem.list_len  .. 
     [[ | awk '{printf "%-5s %-4s %s\n", $1, $10, $12}']]
 
   function mem.hide_notification()
@@ -52,11 +52,38 @@ local function worker(args)
     end
   end
 
+
+
   function mem.show_notification()
     mem.hide_notification()
-    local output = parse.command_to_string(mem.command)
+    local result = {}
+    local output = parse.command_to_lines(mem.command)
+    for _, line in ipairs(output) do
+      local pid, percent, name = line:match("^(%d+)%s+(.+)%s+(.*)")
+      if percent then
+        percent = percent + 0
+        if result[name] then
+          result[name] = result[name] + percent
+        elseif name then
+          result[name] = percent
+        end
+      end
+    end
+    
+    local result_string = ''
+    local counter = 0
+    for k, v in h_table.spairs(result, function(t,a,b) return t[b] < t[a] end) do
+      result_string = result_string .. string.format("%5.1f %s", v, k)
+      counter = counter + 1
+      if counter == mem.list_len then
+        break
+      else
+        result_string = result_string .. '\n'
+      end
+    end
+
     mem.id = naughty.notify({
-      text = output,
+      text = result_string,
       timeout = mem.timeout,
       preset = mono_preset
     })
