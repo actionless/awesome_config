@@ -45,6 +45,7 @@ theme.wallpaper = theme_dir .. '/umbreon_pattern.png'
 -- PANEL DECORATIONS:
 --
 theme.show_widget_icon = false
+theme.use_iconfont = true
 theme.widget_decoration_arrl = ''
 theme.widget_decoration_arrr = ''
 
@@ -53,16 +54,21 @@ theme.widget_decoration_arrr = ''
 --theme.font = "Source Code Pro Bold 10.5"
 --theme.sans_font = "Source Sans Pro Bold 10.3"
 --
---theme.font = "Meslo LG S for Lcarsline Bold 10.5"
+--theme.font = "Meslo LG S for Lcarsline Bold 10.5" -- 10.7
 --theme.sans_font = "PT Sans Bold 10.3"
 --
 -- use ~/.fonts.conf, Luke ;)
-theme.font = "Monospace Bold 10.5"
-theme.sans_font = "Sans Bold 10.3"
+
+--infinality:
+--theme.font = "Monospace Bold 10.6" -- pt mono
+--theme.font = "Monospace Bold 11.2" -- ubuntu mono
+--theme.font = "Monospace Bold 10.7" -- meslo lg s
+--theme.sans_font = "Sans Bold 10.3" -- ubuntu sans
 theme.taglist_font = theme.font
 theme.tasklist_font = theme.sans_font
 --
 -- Don't use sans font:
 --theme.sans_font	= theme.font
+--theme.tasklist_font = theme.sans_font
 
 return theme
