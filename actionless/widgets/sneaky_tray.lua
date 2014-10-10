@@ -27,29 +27,29 @@ local sneaky_tray = { mt = {}, arrow=false, popup=false }
 
 
 function sneaky_tray.initialize()
-    sneaky_tray.stupid_bug = drawin({})
-    sneaky_tray.systrayvisible = true
-    sneaky_tray.systray = wibox.layout.fixed.horizontal()
-    sneaky_tray.systray:add(wibox.widget.systray())
-    sneaky_tray.systray:add(wibox.widget.textbox(' ')) -- right margin
-    sneaky_tray.container = wibox.layout.constraint()
-    sneaky_tray.container:set_widget(sneaky_tray.systray)
-    sneaky_tray.container:set_strategy("min")
-    sneaky_tray.container:set_width(4)
-    sneaky_tray.widget = wibox.layout.fixed.horizontal()
-    sneaky_tray.widget:connect_signal(
+    local st = sneaky_tray
+    st.stupid_bug = drawin({})
+    st.systrayvisible = true
+    st.systray = wibox.layout.fixed.horizontal()
+    st.systray:add(wibox.widget.textbox(' ')) -- left margin
+    st.systray:add(wibox.widget.systray())
+    st.container = wibox.layout.constraint()
+    st.container:set_widget(st.systray)
+    st.container:set_strategy("min")
+    st.widget = wibox.layout.fixed.horizontal()
+    st.widget:connect_signal(
         "mouse::enter", function ()
-            sneaky_tray.toggle()
+            st.toggle()
     end)
-    sneaky_tray.widget:connect_signal(
+    st.widget:connect_signal(
         "mouse::leave", function ()
     end)
-    sneaky_tray.arrow = wibox.widget.imagebox(beautiful.dropdown_icon)
-    sneaky_tray.widget:add(sneaky_tray.arrow)
-    sneaky_tray.widget:add(sneaky_tray.container)
+    st.arrow = wibox.widget.imagebox(beautiful.dropdown_icon)
+    st.widget:add(st.container)
+    st.widget:add(st.arrow)
 
-    if sneaky_tray.show_on_start == false then
-        sneaky_tray.toggle()
+    if st.show_on_start == false then
+        st.toggle()
     end
 end
 
