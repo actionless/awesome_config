@@ -5,12 +5,13 @@ local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/lcars_xresources
 
 -- TERMINAL COLORSCHEME:
 --
-local colors = xresources.read_theme(
-  os.getenv('HOME') .. '/.Xcolours/monovedek'
-)
+--local colors = xresources.read_theme(
+  --os.getenv('HOME') .. '/.Xcolours/monovedek'
+--)
 --local colors = xresources.read_theme(
 --  os.getenv('HOME') .. '/.Xcolours/jwr_dark'
 --  )
+local colors = xresources.get_current_theme()
 
 -- PANEL COLORS:
 --
