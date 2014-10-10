@@ -59,9 +59,10 @@ function widget_loader.init(awesome_context)
   })
 
   -- systray_toggle
-  w.systray_toggle = widgets.systray_toggle({
-    screen = 1
-  })
+  --w.systray_toggle = widgets.systray_toggle({
+    --screen = 1
+  --})
+  w.systray_toggle = widgets.sneaky_tray({})
 
   -- MEM
   w.mem = widgets.mem({

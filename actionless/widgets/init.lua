@@ -7,6 +7,7 @@ local widgets = {
 	bat			= require("actionless.widgets.bat"),
 	manage_client		= require("actionless.widgets.manage_client"),
 	systray_toggle		= require("actionless.widgets.systray_toggle"),
+	sneaky_tray		= require("actionless.widgets.sneaky_tray"),
 	random_pic		= require("actionless.widgets.random_pic"),
 	alsa			= require("actionless.widgets.alsa"),
 	temp			= require("actionless.widgets.temp"),
