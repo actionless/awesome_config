@@ -69,7 +69,7 @@ local function worker(args)
         end
       end
     end
-    
+
     local result_string = ''
     local counter = 0
     for k, v in h_table.spairs(result, function(t,a,b) return t[b] < t[a] end) do

@@ -11,6 +11,23 @@ local menus = {}
 
 function menus.init(context)
 
+  local applications_menu = {
+    { "Graphics", {
+      { "Viewnior", "viewnior" },
+      { "Nomacs",   "nomacs" },
+      { "GIMP",     "gimp" },
+    }},
+    { "Multimedia", {
+      { "Clementine", "clementine" },
+      { "mpv", "mpv" },
+    }},
+    { "Text", {
+      { "mEdit", "medit" },
+      { "Geany", "geany" },
+    }},
+    { "terminal", "xterm" }
+  }
+
   -- {{{ Menu
   -- Create a laucher widget and a main menu
   local myawesomemenu = {
@@ -22,6 +39,7 @@ function menus.init(context)
 
   context.menu.mainmenu = awful.menu({items = {
     { "awesome", myawesomemenu, beautiful.awesome_icon },
+    { "applications", applications_menu, beautiful.applications_icon },
     { "kill compositor", "killall compton" },
     { "start compositor", context.cmds.compositor },
     { "open terminal", context.cmds.terminal }

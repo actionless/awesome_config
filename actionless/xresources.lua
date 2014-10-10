@@ -57,4 +57,17 @@ function xresources.read_theme(path)
   )
 end
 
+function xresources.get_current_theme()
+  local colors = {}
+  local file = io.popen("xrdb -query")
+  local query = file:read('*a')
+  file:close()
+  for i,color in string.gmatch(query, "%*color(%d+):[^#]*(#[%a%d]+)") do
+    colors[tonumber(i)] = color
+  end
+  colors.b = string.match(query, "*background:[^#]*(#[%a%d]+)")
+  colors.f = string.match(query, "*foreground:[^#]*(#[%a%d]+)")
+  return colors
+end
+
 return xresources
