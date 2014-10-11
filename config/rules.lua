@@ -22,6 +22,8 @@ function rules.init(awesome_context)
 
     { rule = { class = "Skype" },
       properties = { tag=awesome_context.tags[1][4], raise=false } },
+    { rule = { class = "Spotify" },
+      properties = { tag=awesome_context.tags[1][7], raise=false } },
 
     { rule = { name = "Terminator Preferences" },
       properties = { floating = true } },
