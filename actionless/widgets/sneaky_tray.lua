@@ -37,13 +37,14 @@ function sneaky_tray.initialize()
     st.container:set_widget(st.systray)
     st.container:set_strategy("min")
     st.widget = wibox.layout.fixed.horizontal()
-    st.widget:connect_signal(
-        "mouse::enter", function ()
-            st.toggle()
-    end)
-    st.widget:connect_signal(
-        "mouse::leave", function ()
-    end)
+    --st.widget:connect_signal(
+        --"mouse::enter", function ()
+            --st.toggle()
+    --end)
+    st.widget:buttons(awful.util.table.join(
+        awful.button({ }, 1, st.toggle),
+        awful.button({ }, 3, function() end)
+    ))
     st.arrow = wibox.widget.imagebox(beautiful.dropdown_icon)
     st.widget:add(st.container)
     st.widget:add(st.arrow)
