@@ -54,6 +54,7 @@ function menus.init(context)
     x = 0,
     y = capi.screen[get_current_screen()].workarea.height - 18
   }
+  menubar.start_scroll_on_item = 10
   -- }}}
 
 end
