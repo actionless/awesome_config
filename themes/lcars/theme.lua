@@ -67,7 +67,7 @@ theme.panel_bg                  = theme.bg
 theme.panel_fg                  = theme.fg
 theme.panel_height              = 23
 theme.panel_opacity		= 1.0
-theme.panel_margin              = 3
+theme.panel_padding_bottom              = 6
 
 theme.taglist_font		= theme.font
 theme.taglist_fg_occupied	= theme.bg

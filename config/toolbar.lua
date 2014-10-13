@@ -116,18 +116,22 @@ function toolbar.init(status)
     layout:set_middle(loaded_widgets.screen[s].tasklist)
     layout:set_right(right_layout)
 
-    -- bottom panel MARGIN:
-    if beautiful.panel_margin then
+    -- background image:
+    if beautiful.panel_bg_image then
+      local layout_bg = wibox.widget.background()
+      layout_bg:set_bgimage(beautiful.panel_bg_image)
+      layout_bg:set_widget(layout)
+      layout = layout_bg
+    end
+
+    -- bottom panel padding:
+    if beautiful.panel_padding_bottom then
+      local const = wibox.layout.constraint()
+      const:set_strategy("exact")
+      const:set_height(beautiful.panel_padding_bottom)
       local margined_layout = wibox.layout.align.vertical()
       margined_layout:set_middle(layout)
-      margined_layout:set_bottom(
-        wibox.widget.textbox(
-          string.format(
-            '<span font="%s %s"> </span>',
-            current_font,
-            beautiful.panel_margin
-          )
-      ))
+      margined_layout:set_bottom(const)
       layout = margined_layout
     end
 
@@ -144,10 +148,10 @@ function toolbar.init(status)
     -- padding for clients' area
     awful.screen.padding(
       capi.screen[s], {
-        top = beautiful.screen_margin,
-        bottom = beautiful.screen_margin,
-        left = beautiful.screen_margin,
-        right = beautiful.screen_margin
+        top = beautiful.screen_padding,
+        bottom = beautiful.screen_padding,
+        left = beautiful.screen_padding,
+        right = beautiful.screen_padding
       }
     )
 

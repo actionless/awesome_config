@@ -67,7 +67,7 @@ theme.bg_focus			= theme.theme
 theme.fg_urgent			= theme.bg
 theme.bg_urgent			= theme.error
 
-theme.screen_margin		= 0
+theme.screen_padding		= 0
 
 theme.border_width		= "10"
 theme.border_normal		= theme.border
@@ -79,7 +79,7 @@ theme.panel_fg			= theme.fg
 --theme.panel_opacity		= 0.96
 theme.panel_opacity		= 0.92
 theme.panel_height		= 24
-theme.panel_margin		= 3
+theme.panel_padding_bottom		= 6
 theme.panel_enbolden_details	= false
 
 theme.taglist_font		= theme.font
