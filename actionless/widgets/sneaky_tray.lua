@@ -45,7 +45,8 @@ function sneaky_tray.initialize()
         awful.button({ }, 1, st.toggle),
         awful.button({ }, 3, function() end)
     ))
-    st.arrow = wibox.widget.imagebox(beautiful.dropdown_icon)
+    st.arrow = wibox.widget.imagebox(beautiful.icon_left)
+    st.arrow:set_resize(false)
     st.widget:add(st.container)
     st.widget:add(st.arrow)
 
@@ -60,10 +61,12 @@ function sneaky_tray.toggle()
         sneaky_tray.container:set_widget(nil)
         sneaky_tray.container:set_strategy("exact")
         sneaky_tray.systrayvisible = false
+        sneaky_tray.arrow:set_image(beautiful.icon_left)
     else
         sneaky_tray.container:set_strategy("min")
         sneaky_tray.container:set_widget(sneaky_tray.systray)
         sneaky_tray.systrayvisible = true
+        sneaky_tray.arrow:set_image(beautiful.icon_right)
     end
 end
 

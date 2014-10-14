@@ -129,7 +129,12 @@ local icons_dir = theme.dir .. "/icons/"
 theme.icons_dir = icons_dir
 
 
-theme.menu_submenu_icon		= icons_dir .. "submenu.png"
+theme.icon_down 		= icons_dir .. "arrow_down.png"
+theme.icon_left 		= icons_dir .. "arrow_left.png"
+theme.icon_right 		= icons_dir .. "arrow_right.png"
+
+theme.menu_submenu_icon		= theme.icon_right
+theme.dropdown_icon		= theme.icon_down
 
 theme.taglist_squares_sel	= icons_dir .. "square_sel.png"
 theme.taglist_squares_unsel	= icons_dir .. "square_unsel.png"
@@ -164,8 +169,6 @@ theme.widget_vol_no		= icons_dir .. "vol_no.png"
 theme.widget_vol_mute		= icons_dir .. "vol_mute.png"
 theme.widget_mail		= icons_dir .. "mail.png"
 theme.widget_mail_on		= icons_dir .. "mail_on.png"
-
-theme.dropdown_icon		= icons_dir .. "dropdown.png"
 
 theme.tasklist_disable_icon = true
 --theme.tasklist_floating = "*"
