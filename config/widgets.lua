@@ -26,11 +26,6 @@ function widget_loader.init(awesome_context)
     bg = beautiful.warning
   })
 
-  -- CLOSE button
-  w.close_button = widgets.manage_client({
-    bg=term16[bpc.close]
-  })
-
   -- NetCtl
   w.netctl = widgets.netctl({
     update_interval = 5,
@@ -103,6 +98,11 @@ function widget_loader.init(awesome_context)
   for s = 1, capi.screen.count() do
     w.screen[s] = {}
     local sw = w.screen[s]
+
+    -- CLOSE button
+    sw.close_button = widgets.manage_client(
+      s, { bg=term16[bpc.close] }
+    )
 
     -- taglist
     sw.taglist = {}

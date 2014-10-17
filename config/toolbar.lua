@@ -58,7 +58,7 @@ function toolbar.init(status)
     left_layout:add(loaded_widgets.screen[s].taglist)
 
     left_layout:add(separator)
-    left_layout:add(loaded_widgets.close_button)
+    left_layout:add(loaded_widgets.screen[s].close_button)
 
     left_layout:add(separator)
     left_layout:add(loaded_widgets.kbd)
@@ -77,10 +77,12 @@ function toolbar.init(status)
     right_layout:add(loaded_widgets.music)
     right_layout:add(loaded_widgets.volume)
 
-    -- a) systray_toggle
-    if s == 1 then right_layout:add(loaded_widgets.systray_toggle) end
-    -- b) static systray
-    --right_layout:add(separator)
+    -- systray_toggle
+    if s == 1 then
+      right_layout:add(loaded_widgets.systray_toggle)
+    else
+      right_layout:add(separator)
+    end
 
     right_layout:add(arr.l[bpc.info])
     right_layout:add(loaded_widgets.mem)
@@ -92,19 +94,8 @@ function toolbar.init(status)
     right_layout:add(loaded_widgets.bat)
     right_layout:add(arr.r[bpc.info])
 
-    -- b) static systray
-    --[[
-    if s == 1 then
-      right_layout:add(separator)
-      right_layout:add(wibox.widget.systray())
-      right_layout:add(sep)
-    end
-    --]]
-
     right_layout:add(separator)
-
     right_layout:add(loaded_widgets.textclock)
-
     right_layout:add(separator)
 
     right_layout:add(loaded_widgets.screen[s].layoutbox)

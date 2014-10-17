@@ -82,6 +82,14 @@ function common.widget(args)
     return self.widget:buttons(...)
   end
 
+  function widget:show()
+    self.widget_bg:set_widget(self.widget)
+  end
+
+  function widget:hide()
+    self.widget_bg:set_widget(nil)
+  end
+
   return setmetatable(widget, { __index = widget.widget_bg })
 end
 
