@@ -70,7 +70,7 @@ local function worker(args)
       end
     end
 
-    local result_string = ''
+    local result_string = ' %MEM COMMAND\n'
     local counter = 0
     for k, v in h_table.spairs(result, function(t,a,b) return t[b] < t[a] end) do
       result_string = result_string .. string.format("%5.1f %s", v, k)
