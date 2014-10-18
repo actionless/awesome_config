@@ -4,6 +4,7 @@
 --]]
 
 local wibox = require("wibox")
+local gears = require("gears")
 local beautiful = require("beautiful")
 
 local config = require("actionless.config")
@@ -73,7 +74,7 @@ function common.widget(args)
       if symbol and use_iconfont then
         return self.iconfont_widget:set_text(" " .. symbol .. " ")
       else
-          debug.assert(
+          gears.debug.assert(
             beautiful.get()['widget_' .. name],
             ":set_icon failed: icon is missing: " .. name)
         return self.icon_widget:set_image(beautiful.get()['widget_' .. name])
