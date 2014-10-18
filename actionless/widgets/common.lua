@@ -162,21 +162,10 @@ function common.make_separator(separator_character, args)
   if inverted then
     widget.set_fg, widget.set_bg = widget.set_bg, widget.set_fg
   end
-  widget:set_bg(bg)
+  --@TODO: fix that:
+  --widget:set_bg(bg)
   widget:set_fg(fg)
   widget:set_widget(wibox.widget.textbox(separator_character))
-  return widget
-end
-
-function common.make_image_separator(image_path, args)
-  args = args or {}
-  local bg = args.bg
-
-  local widget = wibox.widget.background()
-  local separator_widget = wibox.widget.imagebox(image_path)
-  separator_widget:set_resize(false)
-  widget:set_bg(bg)
-  widget:set_widget(separator_widget)
   return widget
 end
 
@@ -189,8 +178,8 @@ function common.decorated(args)
   }
 
   args = args or {}
-  local bg = args.bg or beautiful.panel_fg or beautiful.fg or "#ffffff"
-  local fg = args.fg or beautiful.panel_bg or beautiful.bg or "#000000"
+  local bg = args.bg or beautiful.panel_widget_bg or beautiful.fg or "#ffffff"
+  local fg = args.fg or beautiful.panel_widget_fg or beautiful.bg or "#000000"
   local left_separators = args.left_separators or { 'arrl' }
   local right_separators = args.right_separators or { 'arrr' }
 
@@ -228,12 +217,18 @@ function common.decorated(args)
     else
       bg = args.bg
     end
-
     for _, widget in ipairs(h_table.sum({
       self.left_separator_widgets,
-      self.widget_list,
       self.right_separator_widgets
     })) do
+      if fg and widget.set_fg then
+        widget:set_fg(beautiful.panel_bg)
+      end
+      if bg and widget.set_bg then
+        widget:set_bg(bg)
+      end
+    end
+    for _, widget in ipairs(self.widget_list) do
       if fg and widget.set_fg then
         widget:set_fg(fg) end
       if bg and widget.set_bg then

@@ -61,6 +61,7 @@ theme.border_focus              = vertex.select
 theme.titlebar_focus_border     = vertex.select
 
 theme.panel_widget_fg = vertex.fg
+theme.panel_widget_bg = vertex.bg
 theme.taglist_fg_occupied	= vertex.fg
 theme.taglist_fg_empty		= vertex.fg
 theme.taglist_fg_focus		= vertex.fg
@@ -88,6 +89,9 @@ theme.wallpaper_cmd     = "nitrogen --restore"
 --
 theme.widget_decoration_arrl = 'sq'
 theme.widget_decoration_arrr = 'sq'
+--theme.widget_decoration_arrl = ''
+--theme.widget_decoration_arrr = ''
+
 theme.show_widget_icon = true
 
 -- FONTS:
