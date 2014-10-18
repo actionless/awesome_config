@@ -48,9 +48,10 @@ local function worker(args)
   local font = args.font or beautiful.tasklist_font or beautiful.font
   local bg = args.bg or beautiful.panel_bg or beautiful.bg
   local fg = args.fg or beautiful.panel_fg or beautiful.fg
+  local artist_color      = beautiful.player_artist or fg or beautiful.fg_normal
+  local title_color      = beautiful.player_title or fg or beautiful.fg_normal
   player.widget:set_bg(bg)
   player.widget:set_fg(fg)
-  local text_color      = beautiful.player_text or fg or beautiful.fg_normal
 
 
   local backend_id = 0
@@ -179,7 +180,7 @@ local function worker(args)
           title = h_string.max_length(title, 25) .. "…"
         end
       end
-      artist = markup.fg.color(text_color, h_string.escape(artist))
+      artist = markup.fg.color(artist_color, h_string.escape(artist))
       title = h_string.escape(title)
       -- playing new song
       if player_status.title ~= helpers.get_map("current player track") then
@@ -208,7 +209,7 @@ local function worker(args)
             and markup.bold(artist)
             or artist)
           .. " " ..
-          markup.fg.color(fg,
+          markup.fg.color(title_color,
             title)
           .. " ")
       )

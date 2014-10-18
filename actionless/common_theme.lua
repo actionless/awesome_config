@@ -76,6 +76,8 @@ theme.border_marked		= theme.error
 
 theme.panel_bg			= theme.bg
 theme.panel_fg			= theme.fg
+theme.panel_widget_bg			= theme.fg
+theme.panel_widget_fg			= theme.bg
 --theme.panel_opacity		= 0.96
 theme.panel_opacity		= 0.92
 theme.panel_height		= 24
@@ -121,7 +123,8 @@ theme.menu_border_width		= "3"
 theme.menu_height		= "16"
 theme.menu_width		= "140"
 
-theme.player_text		= theme.color[13]
+theme.player_artist		= theme.color[13]
+theme.player_title      = theme.color[theme.panel_colors.media]
 
 -- ICONS
 

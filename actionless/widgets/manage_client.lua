@@ -23,8 +23,8 @@ local manage_client = {}
 local function worker(widget_screen, args)
   local args	 = args or {}
   local interval  = args.interval or 5
-  local bg = args.bg or beautiful.panel_fg or beautiful.fg
-  local fg = args.fg or beautiful.panel_bg or beautiful.bg
+  local bg = args.bg or beautiful.panel_widget_bg or beautiful.fg
+  local fg = args.fg or beautiful.panel_widget_fg or beautiful.bg
 
   local object = {}
   local widget = common.widget()

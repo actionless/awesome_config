@@ -33,7 +33,7 @@ function widget_loader.init(awesome_context)
     wlan_if = conf.wlan_if,
     eth_if = conf.eth_if,
     bg = term16[bpc.media],
-    fg = beautiful.panel_bg,
+    fg = beautiful.panel_widget_fg,
   })
   -- MUSIC
   w.music = widgets.music.widget({
@@ -49,6 +49,7 @@ function widget_loader.init(awesome_context)
     channel = 'Master',
     channels_toggle = {'Master', 'Speaker', 'Headphone'},
     bg = term16[bpc.media],
+    fg = beautiful.panel_widget_fg,
     left_separators = { 'sq' },
     right_separators = { 'arrr' }
   })
@@ -64,7 +65,7 @@ function widget_loader.init(awesome_context)
     update_interval = 10,
     list_length = 20,
     bg = term16[bpc.info],
-    fg = beautiful.panel_bg,
+    fg = beautiful.panel_widget_fg,
   })
   -- CPU
   w.cpu = widgets.cpu({
@@ -72,7 +73,7 @@ function widget_loader.init(awesome_context)
     cores_number = conf.cpu_cores_num,
     list_length = 20,
     bg = term16[bpc.info],
-    fg = beautiful.panel_bg,
+    fg = beautiful.panel_widget_fg,
   })
   -- Sensor
   w.temp = widgets.temp({
@@ -80,13 +81,13 @@ function widget_loader.init(awesome_context)
     sensor = "Core 0",
     warning = 75,
     bg = term16[bpc.info],
-    fg = beautiful.panel_bg,
+    fg = beautiful.panel_widget_fg,
   })
   -- Battery
   w.bat = widgets.bat({
     update_interval = 30,
     bg = term16[bpc.info],
-    fg = beautiful.panel_bg,
+    fg = beautiful.panel_widget_fg,
   })
 
   -- Textclock
@@ -121,6 +122,7 @@ function widget_loader.init(awesome_context)
         s, awful.widget.taglist.filter.all, sw.taglist.buttons
       ),
       bg = term16[bpc.taglist],
+      fg = beautiful.panel_widget_fg,
     })
 
     -- promptbox
