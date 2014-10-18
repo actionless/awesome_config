@@ -60,6 +60,10 @@ r")
 
 ![hotkeys_noble_dark](http://i.imgur.com/XfpBqrV.png "hotkeys_noble_dark")
 
-![noble_dark](http://i.imgur.com/AXGAT3Q.png "noble_dark")
+### Other screenshots
+
+##### With Vertex GTK theme
+
+![vertex](http://i.imgur.com/EVo5arD.png "vertex")
 
 
