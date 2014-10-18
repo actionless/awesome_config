@@ -73,7 +73,9 @@ function common.widget(args)
       if symbol and use_iconfont then
         return self.iconfont_widget:set_text(" " .. symbol .. " ")
       else
-        if not beautiful.get()['widget_' .. name] then print(name) end
+          debug.assert(
+            beautiful.get()['widget_' .. name],
+            ":set_icon failed: icon is missing: " .. name)
         return self.icon_widget:set_image(beautiful.get()['widget_' .. name])
       end
     end
