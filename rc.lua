@@ -5,7 +5,8 @@ OH HI
 -- localization
 os.setlocale(os.getenv("LANG"))
 
-require("eminent")
+local eminent = require("eminent")
+eminent.create_new_tag = false
 local awful = require("awful")
 require("awful.autofocus")
 local beautiful	= require("beautiful")

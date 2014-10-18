@@ -1,4 +1,4 @@
 [submodule "third_party/eminent"]
 	path = third_party/eminent
-	url = https://github.com/guotsuan/eminent.git
+	url = https://github.com/actionless/eminent.git
 	branch = master
