@@ -24,7 +24,7 @@ example of config/local.lua: https://gist.github.com/actionless/229eef7795915068
 ##### Calendar (taken from Lain widgetkit)
 ![cal](http://i.imgur.com/pB5n12b.png "cal")
 
-##### Music (supports mpd, cmus, clementine, spotify)
+##### Music (supports mpd, cmus, clementine, spotify at the _same_ time)
 ![music](http://i.imgur.com/W7ur5SQ.png "music")
 
 
