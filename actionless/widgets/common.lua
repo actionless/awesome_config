@@ -68,11 +68,12 @@ function common.widget(args)
   end
 
   function widget:set_icon(name)
-    if show_icon and use_iconfont then
+    if show_icon then
       local symbol = iconfont.get_symbol(name)
-      if symbol then
+      if symbol and use_iconfont then
         return self.iconfont_widget:set_text(" " .. symbol .. " ")
       else
+        if not beautiful.get()['widget_' .. name] then print(name) end
         return self.icon_widget:set_image(beautiful.get()['widget_' .. name])
       end
     end
