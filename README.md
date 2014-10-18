@@ -64,6 +64,6 @@ r")
 
 ##### With Vertex GTK theme
 
-![vertex](http://i.imgur.com/EVo5arD.png "vertex")
+![vertex](http://i.imgur.com/7UCqnhb.png "vertex")
 
 
