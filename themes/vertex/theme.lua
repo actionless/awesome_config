@@ -54,6 +54,7 @@ theme.panel_enbolden_details	= true
 
 
 theme.theme = vertex.select
+theme.warning = vertex.select
 
 theme.border_width              = "4"
 theme.border_focus              = vertex.select
