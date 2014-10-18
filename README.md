@@ -19,7 +19,7 @@ example of config/local.lua: https://gist.github.com/actionless/229eef7795915068
 ![mem](http://i.imgur.com/cg4dq17.png "mem")
 
 ##### Systray toggle
-![st](http://i.imgur.com/Q4KjyfP.png "st")
+![st](http://i.imgur.com/HFfERGC.png "st")
 
 ##### Calendar (taken from Lain widgetkit)
 ![cal](http://i.imgur.com/pB5n12b.png "cal")
