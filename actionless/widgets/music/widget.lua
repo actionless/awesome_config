@@ -96,24 +96,27 @@ local function worker(args)
 -------------------------------------------------------------------------------
   function player.show_notification()
     local text
+    local ps = player.player_status
     player.hide_notification()
-    if player.player_status.album or player.player_status.date then
+    if ps.album or ps.date then
       text = string.format(
         "%s (%s)\n%s",
-        player.player_status.album,
-        player.player_status.date,
-        player.player_status.artist
+        ps.album,
+        ps.date,
+        ps.artist
       )
-    else
+    elseif ps.artist then
       text = string.format(
         "%s\n%s",
-        player.player_status.artist,
-        player.player_status.file
+        ps.artist,
+        ps.file or enabled_backends[backend_id]
       )
+    else
+      text = enabled_backends[backend_id]
     end
     player.id = naughty.notify({
       icon = player.cover,
-      title = player.player_status.title,
+      title = ps.title,
       text = text,
       timeout = timeout
     })
@@ -148,19 +151,21 @@ local function worker(args)
     awful.button({ }, 1, player.toggle),
     awful.button({ }, 3, function()
       player.use_next_backend()
-      player.update()
+      player.update({dont_switch_backend=true})
     end),
     awful.button({ }, 5, player.next_song),
     awful.button({ }, 4, player.prev_song)
   ))
 -------------------------------------------------------------------------------
-  function player.update()
+  function player.update(args)
     player.backend.update(function(player_status)
-        player.parse_status(player_status)
+        player.parse_status(player_status, args)
     end)
   end
 -------------------------------------------------------------------------------
-  function player.parse_status(player_status)
+  function player.parse_status(player_status, args)
+    args = args or {}
+    local dont_switch_backend = args.dont_switch_backend or false
     player_status = tag_parser.predict_missing_tags(player_status)
     player.player_status = player_status
 
@@ -171,7 +176,7 @@ local function worker(args)
       -- playing
       artist = player_status.artist or "playing"
       title = player_status.title or " "
-      player.widget:set_icon('music_on')
+      player.widget:set_icon('music_play')
       if #artist + #title > 40 then
         if #artist > 15 then
           artist = h_string.max_length(artist, 15) .. "…"
@@ -180,7 +185,7 @@ local function worker(args)
           title = h_string.max_length(title, 25) .. "…"
         end
       end
-      artist = markup.fg.color(artist_color, h_string.escape(artist))
+      artist = h_string.escape(artist)
       title = h_string.escape(title)
       -- playing new song
       if player_status.title ~= helpers.get_map("current player track") then
@@ -189,17 +194,19 @@ local function worker(args)
       end
     elseif player_status.state == "pause" then
       -- paused
-      artist = "player"
+      artist = enabled_backends[backend_id]
       title  = "paused"
-      helpers.set_map("current player track", nil)
-      player.widget:set_icon('music')
+      --@TODO: can it be safely deleted? :
+      --helpers.set_map("current player track", nil)
+      player.widget:set_icon('music_pause')
     else
       -- stop
-      player.widget:set_icon('music_off')
-      player.use_next_backend()
+      helpers.set_map("current player track", nil)
+      if not dont_switch_backend then player.use_next_backend() end
     end
 
     if player_status.state == "play" or player_status.state == "pause" then
+      artist = markup.fg.color(artist_color, artist)
       player.widget:set_bg(bg)
       player.widget:set_fg(fg)
       player.widget:set_markup(
@@ -215,7 +222,8 @@ local function worker(args)
       )
     else
       if beautiful.show_widget_icon then
-        player.widget:set_icon('music')
+        player.widget:set_icon('music_stop')
+        player.widget:set_text('')
       else
         player.widget:set_text('(m)')
       end
