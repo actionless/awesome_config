@@ -50,10 +50,8 @@ theme.alt_bg = theme.color[4]
 
 theme.fg = theme.color[7]
 theme.alt_fg = theme.color.f
-theme.shiny = theme.color.b
 
 theme.theme = theme.color[13]
-theme.theme2 = theme.color[2]
 
 theme.border = theme.bg
 theme.sel_border = theme.color[10]
@@ -62,7 +60,7 @@ theme.titlebar_focus_border = theme.sel_border
 
 theme.fg_normal			= theme.fg
 theme.bg_normal			= theme.bg
-theme.fg_focus			= theme.shiny
+theme.fg_focus			= theme.bg
 theme.bg_focus			= theme.theme
 theme.fg_urgent			= theme.bg
 theme.bg_urgent			= theme.error
@@ -76,12 +74,12 @@ theme.border_marked		= theme.error
 
 theme.panel_bg			= theme.bg
 theme.panel_fg			= theme.fg
-theme.panel_widget_bg			= theme.fg
-theme.panel_widget_fg			= theme.bg
+theme.panel_widget_bg		= theme.fg
+theme.panel_widget_fg		= theme.bg
 --theme.panel_opacity		= 0.96
 theme.panel_opacity		= 0.92
 theme.panel_height		= 24
-theme.panel_padding_bottom		= 6
+theme.panel_padding_bottom	= 6
 theme.panel_enbolden_details	= false
 
 theme.taglist_font		= theme.font
@@ -111,17 +109,28 @@ theme.titlebar_bg_normal	= theme.bg
 theme.notification_opacity	= 0.8
 theme.notification_font		= theme.sans_font
 theme.notification_monofont	= theme.font
-theme.notify_fg			= theme.fg_normal
-theme.notify_bg			= theme.bg_normal
-theme.notify_border		= theme.border_focus
+theme.naughty_preset = {
+  bg=theme.bg_normal,
+  fg=theme.fg_normal,
+  border_color=theme.theme,
+  opacity=theme.notification_opacity,
+  font=theme.notification_font
+}
+theme.naughty_mono_preset = {
+  bg=theme.bg_normal,
+  fg=theme.fg_normal,
+  border_color=theme.theme,
+  opacity=theme.notification_opacity,
+  font=theme.notification_monofont
+}
 
 theme.textbox_widget_margin_top	= 1
 theme.awful_widget_height	= 14
 theme.awful_widget_margin_top	= 2
 theme.mouse_finder_color	= theme.error
-theme.menu_border_width		= "3"
-theme.menu_height		= "16"
-theme.menu_width		= "140"
+theme.menu_border_width		= 3
+theme.menu_height		= 16
+theme.menu_width		= 140
 
 theme.player_artist		= theme.color[13]
 theme.player_title      = theme.color[theme.panel_colors.media]

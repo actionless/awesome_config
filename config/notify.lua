@@ -6,14 +6,15 @@ local awesome = awesome
 local notify = {}
 
 function notify.init(awesome_context)
-  naughty.config.presets.normal.opacity = beautiful.notification_opacity
-  naughty.config.presets.low.opacity = beautiful.notification_opacity
-  naughty.config.presets.critical.opacity = beautiful.notification_opacity
 
-  naughty.config.presets.normal.font = beautiful.notification_font
+  naughty.config.presets.low.opacity = beautiful.notification_opacity
   naughty.config.presets.low.font = beautiful.notification_font
+
+  naughty.config.presets.critical.opacity = beautiful.notification_opacity
   naughty.config.presets.critical.font = beautiful.notification_font
 
+  naughty.config.presets.normal = beautiful.naughty_preset
+  naughty.config.presets.normal.font = beautiful.notification_font
 
   -- {{{ Error handling
   -- Check if awesome encountered an error during startup and fell back to

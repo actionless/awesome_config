@@ -17,8 +17,6 @@ local h_table      = require("actionless.table")
 local parse        = require("actionless.parse")
 local common_widget= require("actionless.widgets.common").widget
 local newtimer     = helpers.newtimer
-local font         = helpers.font
-local mono_preset  = helpers.mono_preset()
 
 -- Memory usage (ignoring caches)
 local mem = {
@@ -35,7 +33,6 @@ local function worker(args)
   local bg = args.bg or beautiful.panel_fg or beautiful.fg
   local fg = args.fg or beautiful.panel_bg or beautiful.bg
   mem.timeout = args.timeout or 0
-  mem.font = args.font or font
 
   mem.widget:set_fg(fg)
   mem.widget:set_bg(bg)
@@ -85,7 +82,7 @@ local function worker(args)
     mem.id = naughty.notify({
       text = result_string,
       timeout = mem.timeout,
-      preset = mono_preset
+      preset = beautiful.naughty_mono_preset
     })
   end
 

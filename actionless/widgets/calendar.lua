@@ -8,7 +8,6 @@ local beautiful = require("beautiful")
 local naughty = require("naughty")
 
 local helpers = require('actionless.helpers')
-local mono_preset = helpers.mono_preset()
 
 
 -- Calendar notification
@@ -83,7 +82,7 @@ function calendar:show(t_out, inc_offset)
     fg = self.fg,
     bg = self.bg,
     timeout = tims,
-    preset = mono_preset
+    preset = beautiful.naughty_mono_preset
   })
 end
 

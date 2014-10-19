@@ -9,7 +9,6 @@ local helpers		= require("actionless.helpers")
 local newtimer		= helpers.newtimer
 local font		= helpers.font
 local beautiful		 = require("beautiful")
-local mono_preset	= helpers.mono_preset()
 local common_widget	= require("actionless.widgets.common").widget
 local markup		= require("actionless.markup")
 local parse		= require("actionless.parse")
@@ -52,7 +51,7 @@ local function worker(args)
     netctl.id = naughty.notify({
       text = 'not implemented yet',
       timeout = netctl.timeout,
-      preset = mono_preset
+      preset = beautiful.naughty_mono_preset
     })
   end
 
