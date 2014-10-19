@@ -63,8 +63,11 @@ theme.widget_decoration_arrr = ''
 --infinality:
 --theme.font = "Monospace Bold 10.6" -- pt mono
 --theme.font = "Monospace Bold 11.2" -- ubuntu mono
-theme.font = "Monospace Bold 10.7" -- meslo lg s
-theme.sans_font = "Sans Bold 10.3" -- ubuntu sans
+--theme.font = "Monospace Bold 10.7" -- meslo lg s
+--theme.sans_font = "Sans Bold 10.3" -- ubuntu sans
+
+theme.font = "Monospace Bold 10" -- meslo lg s
+theme.sans_font = "Sans Bold 10" -- ubuntu sans
 
 theme.taglist_font = theme.font
 theme.tasklist_font = theme.sans_font

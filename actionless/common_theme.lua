@@ -138,47 +138,51 @@ theme.player_title      = theme.color[theme.panel_colors.media]
 local icons_dir = theme.dir .. "/icons/"
 theme.icons_dir = icons_dir
 
+local common_icons_dir = icons_dir .. "common/"
 
-theme.icon_down 		= icons_dir .. "arrow_down.png"
-theme.icon_left 		= icons_dir .. "arrow_left.png"
-theme.icon_right 		= icons_dir .. "arrow_right.png"
+theme.icon_down 		= common_icons_dir .. "arrow_down.png"
+theme.icon_left 		= common_icons_dir .. "arrow_left.png"
+theme.icon_right 		= common_icons_dir .. "arrow_right.png"
 
 theme.menu_submenu_icon		= theme.icon_right
 theme.dropdown_icon		= theme.icon_down
 
-theme.taglist_squares_sel	= icons_dir .. "square_sel.png"
-theme.taglist_squares_unsel	= icons_dir .. "square_unsel.png"
+theme.taglist_squares_sel	= common_icons_dir .. "square_sel.png"
+theme.taglist_squares_unsel	= common_icons_dir .. "square_unsel.png"
 
-theme.small_separator		= icons_dir .. "small_separator.png"
+theme.small_separator		= common_icons_dir .. "small_separator.png"
 
-theme.widget_ac			= icons_dir .. "ac.png"
-theme.widget_ac_charging	= icons_dir .. "ac_charging.png"
-theme.widget_ac_charging_low	= icons_dir .. "ac_charging_low.png"
 
-theme.widget_battery		= icons_dir .. "battery.png"
-theme.widget_battery_low	= icons_dir .. "battery_low.png"
-theme.widget_battery_empty	= icons_dir .. "battery_empty.png"
+local widgets_icons_dir = icons_dir .. "widgets/"
 
-theme.widget_mem		= icons_dir .. "mem.png"
-theme.widget_cpu		= icons_dir .. "cpu.png"
-theme.widget_temp		= icons_dir .. "temp.png"
-theme.widget_net		= icons_dir .. "net.png"
-theme.widget_hdd		= icons_dir .. "hdd.png"
+theme.widget_ac			= widgets_icons_dir .. "ac.png"
+theme.widget_ac_charging	= widgets_icons_dir .. "ac_charging.png"
+theme.widget_ac_charging_low	= widgets_icons_dir .. "ac_charging_low.png"
 
-theme.widget_net_wifi	        = icons_dir .. "net_wireless.png"
-theme.widget_net_wired		= icons_dir .. "net_wired.png"
-theme.widget_net_searching	= icons_dir .. "net_searching.png"
+theme.widget_battery		= widgets_icons_dir .. "battery.png"
+theme.widget_battery_low	= widgets_icons_dir .. "battery_low.png"
+theme.widget_battery_empty	= widgets_icons_dir .. "battery_empty.png"
 
-theme.widget_music		= icons_dir .. "note.png"
-theme.widget_music_on		= icons_dir .. "note_on.png"
-theme.widget_music_off		= icons_dir .. "note_off.png"
-theme.widget_vol_high		= icons_dir .. "vol_high.png"
-theme.widget_vol		= icons_dir .. "vol.png"
-theme.widget_vol_low		= icons_dir .. "vol_low.png"
-theme.widget_vol_no		= icons_dir .. "vol_no.png"
-theme.widget_vol_mute		= icons_dir .. "vol_mute.png"
-theme.widget_mail		= icons_dir .. "mail.png"
-theme.widget_mail_on		= icons_dir .. "mail_on.png"
+theme.widget_mem		= widgets_icons_dir .. "mem.png"
+theme.widget_cpu		= widgets_icons_dir .. "cpu.png"
+theme.widget_temp		= widgets_icons_dir .. "temp.png"
+theme.widget_net		= widgets_icons_dir .. "net.png"
+theme.widget_hdd		= widgets_icons_dir .. "hdd.png"
+
+theme.widget_net_wifi	        = widgets_icons_dir .. "net_wireless.png"
+theme.widget_net_wired		= widgets_icons_dir .. "net_wired.png"
+theme.widget_net_searching	= widgets_icons_dir .. "net_searching.png"
+
+theme.widget_music		= widgets_icons_dir .. "note.png"
+theme.widget_music_on		= widgets_icons_dir .. "note_on.png"
+theme.widget_music_off		= widgets_icons_dir .. "note_off.png"
+theme.widget_vol_high		= widgets_icons_dir .. "vol_high.png"
+theme.widget_vol		= widgets_icons_dir .. "vol.png"
+theme.widget_vol_low		= widgets_icons_dir .. "vol_low.png"
+theme.widget_vol_no		= widgets_icons_dir .. "vol_no.png"
+theme.widget_vol_mute		= widgets_icons_dir .. "vol_mute.png"
+theme.widget_mail		= widgets_icons_dir .. "mail.png"
+theme.widget_mail_on		= widgets_icons_dir .. "mail_on.png"
 
 theme.tasklist_disable_icon = true
 --theme.tasklist_floating = "*"

@@ -1,38 +1,33 @@
 local generate_theme = require("actionless.common_theme").generate_theme
+local xresources = require("actionless.xresources")
+local h_table = require("actionless.table")
 
 local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/noble_dark"
 
+local gtk = {}
+
+gtk.bg = "#3d3e40"
+gtk.fg = "#f3f3f5"
+gtk.base = "#2b2b2c"
+gtk.select = "#ad7fa8"
+
 -- TERMINAL COLORSCHEME:
 --
-color = {}
-color.b  = '#3c3c3c'
-color.f  = '#ffffc6'
-color.c  = '#cc6699'
-color[0]  = '#2E3436'
-color[1]  = '#CC0000'
-color[2]  = '#4E9A06'
-color[3]  = '#C4A000'
-color[4]  = '#3465A4'
-color[5]  = '#75507B'
-color[6]  = '#06989A'
-color[7]  = '#D3D7CF'
-color[8]  = '#555753'
-color[9]  = '#EF2929'
-color[10] = '#8AE234'
-color[11] = '#FCE94F'
-color[12] = '#729FCF'
-color[13] = '#AD7FA8'
-color[14] = '#34E2E2'
-color[15] = '#eeeeec'
+local color = xresources.get_current_theme()
+color.b  = gtk.bg
+color.f  = gtk.fg
+color[0]  = gtk.base
+color[4]  = gtk.select
+color[7]  = gtk.fg
 
 -- PANEL COLORS:
 --
 panel_colors = {
-  taglist=7,
-  close=1,
+  taglist='b',
+  close=0,
   tasklist='b',
-  media=14,
-  info=13
+  media=0,
+  info=0
 }
 
 -- GENERATE DEFAULT THEME:
@@ -43,37 +38,70 @@ local theme = generate_theme(
   panel_colors
 )
 
+theme.panel_enbolden_details	= true
+
+theme.theme = gtk.select
+theme.warning = gtk.select
+
+theme.border_width              = "8"
+theme.border_focus              = "#94a870"
+theme.titlebar_focus_border     = theme.border_focus
+
+
+theme.panel_widget_fg = gtk.fg
+theme.panel_widget_bg = gtk.bg
+theme.taglist_fg_occupied	= gtk.fg
+theme.taglist_fg_empty		= gtk.fg
+theme.taglist_fg_focus		= gtk.fg
+
+theme.taglist_bg_focus		= gtk.base
+theme.tasklist_fg_focus		= gtk.fg
+theme.tasklist_fg_minimize	= color[8]
+theme.tasklist_bg_minimize	= gtk.base
+
+theme.titlebar_fg_focus         = theme.tasklist_fg_focus
+theme.titlebar_fg_normal        = color[8]
+
+theme.naughty_preset.bg = gtk.base
+theme.naughty_preset.bg = "#111111"
+theme.naughty_preset.border_color = theme.naughty_preset.bg
+theme.naughty_mono_preset = h_table.deepcopy(theme.naughty_preset)
+
+theme.player_artist = gtk.select
+theme.player_title = gtk.fg
+
 -- CUSTOMIZE default theme:-----------------------------------------------
 
 -- WALLPAPER:
---
--- Use plain color:
---theme.wallpaper_cmd     = "hsetroot"
 -- Use nitrogen:
---theme.wallpaper_cmd     = "nitrogen --restore"
+theme.wallpaper_cmd     = "nitrogen --restore"
 -- Use wallpaper tile:
-theme.wallpaper = theme_dir .. '/pattern.png'
+--theme.wallpaper = theme_dir .. '/pattern.png'
 
 -- PANEL DECORATIONS:
 --
 theme.widget_decoration_arrl = 'sq'
 theme.widget_decoration_arrr = 'sq'
-theme.show_widget_icon = true
+--theme.widget_decoration_arrl = ''
+--theme.widget_decoration_arrr = ''
 
+theme.show_widget_icon = true
+------------------------------------------------------------------------------
 -- FONTS:
---
---theme.font = "Source Code Pro Bold 10.5"
---theme.sans_font = "Source Sans Pro Bold 10.3"
---
---theme.font = "Meslo LG S for Lcarsline Bold 10.5"
---theme.sans_font = "PT Sans Bold 10.3"
---
--- use ~/.fonts.conf, Luke ;)
-theme.font = "Monospace Bold 10.5"
-theme.sans_font = "Sans Bold 10.3"
---
+--Ubuntu patches:
+--theme.font = "Monospace 10.5"
+--theme.sans_font = "Sans 10.3"
+--theme.tasklist_font = "Sans Bold 10.3"
+
+theme.font = "Monospace 10"
+theme.sans_font = "Sans 10"
 -- Don't use sans font:
 --theme.sans_font	= theme.font
-
+--
+theme.tasklist_font = "Sans Bold 10"
+theme.titlebar_font = theme.tasklist_font
+theme.taglist_font = theme.font
+theme.naughty_preset.font = theme.sans_font
+theme.naughty_mono_preset.font = theme.font
 
 return theme
