@@ -1,4 +1,5 @@
 local generate_theme = require("actionless.common_theme").generate_theme
+local h_table = require("actionless.table")
 
 local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/vertex"
 
@@ -51,7 +52,8 @@ local theme = generate_theme(
 )
 
 theme.panel_enbolden_details	= true
-
+--theme.panel_height              = 18
+--theme.panel_padding_bottom              = 0
 
 theme.theme = vertex.select
 theme.warning = vertex.select
@@ -74,6 +76,11 @@ theme.tasklist_bg_minimize	= vertex.base
 theme.titlebar_fg_focus         = theme.tasklist_fg_focus
 theme.titlebar_fg_normal        = color[8]
 
+theme.naughty_preset.bg = vertex.base
+theme.naughty_preset.bg = "#111111"
+theme.naughty_preset.border_color = theme.naughty_preset.bg
+theme.naughty_mono_preset = h_table.deepcopy(theme.naughty_preset)
+
 theme.player_artist = vertex.select
 theme.player_title = vertex.fg
 
@@ -93,24 +100,23 @@ theme.widget_decoration_arrr = 'sq'
 --theme.widget_decoration_arrr = ''
 
 theme.show_widget_icon = true
-
+------------------------------------------------------------------------------
 -- FONTS:
---
---theme.font = "Source Code Pro Bold 10.5"
---theme.sans_font = "Source Sans Pro Bold 10.3"
---
---theme.font = "Meslo LG S for Lcarsline Bold 10.5"
---theme.sans_font = "PT Sans Bold 10.3"
---
--- use ~/.fonts.conf, Luke ;)
-theme.font = "Monospace 10.5"
-theme.sans_font = "Sans 10.3"
+--Ubuntu patches:
+--theme.font = "Monospace 10.5"
+--theme.sans_font = "Sans 10.3"
+--theme.tasklist_font = "Sans Bold 10.3"
 
-theme.tasklist_font = "Sans Bold 10.3"
-theme.titlebar_font = theme.tasklist_font
-theme.taglist_font = theme.font
---
+theme.font = "Monospace 10"
+theme.sans_font = "Sans 10"
 -- Don't use sans font:
 --theme.sans_font	= theme.font
+--
+theme.tasklist_font = "Sans Bold 10"
+theme.titlebar_font = theme.tasklist_font
+theme.taglist_font = theme.font
+theme.naughty_preset.font = theme.sans_font
+theme.naughty_mono_preset.font = theme.font
+print(theme.naughty_mono_preset.font)
 
 return theme
