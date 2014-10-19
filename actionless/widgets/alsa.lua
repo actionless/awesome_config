@@ -101,10 +101,10 @@ local function worker(args)
 
   function alsa.update_indicator()
     if alsa.volume.status == "off" then
-      alsa.widget:set_color({name='warn'})
+      alsa.widget:set_color({name='warning'})
       alsa.widget:set_icon('vol_mute')
     elseif alsa.volume.level == 0 then
-      alsa.widget:set_color({name='err'})
+      alsa.widget:set_color({name='error'})
       alsa.widget:set_icon('vol')
     else
       alsa.widget:set_color({bg=bg})

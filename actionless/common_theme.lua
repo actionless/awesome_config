@@ -42,8 +42,6 @@ theme.sans_font = "Sans Bold 10.3"
 
 theme.error = theme.color[9]
 theme.warning = theme.color[10]
-theme.color.err = theme.error
-theme.color.warn = theme.warning
 
 theme.bg = theme.color.b
 theme.alt_bg = theme.color[4]

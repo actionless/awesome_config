@@ -45,7 +45,7 @@ local function worker(widget_screen, args)
     widget:set_text(' x ')
     widget:connect_signal(
       "mouse::enter", function ()
-        widget:set_color({name='err'})
+        widget:set_color({name='error'})
       end)
     widget:connect_signal(
       "mouse::leave", function ()

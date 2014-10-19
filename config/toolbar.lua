@@ -22,9 +22,9 @@ function toolbar.init(status)
   -- Separators
   local sep = wibox.widget.imagebox(beautiful.small_separator)
   local separator  = make_separator(' ')
-  local iseparator = make_separator('sq', {color_n='f'})
-  local sep_info   = make_separator('sq', {color_n=bpc.info})
-  local sep_media  = make_separator('sq', {color_n=bpc.media})
+  local iseparator = make_separator('sq', {fg=beautiful.panel_bg})
+  local sep_info   = make_separator('sq', {fg=beautiful.color[bpc.info]})
+  local sep_media  = make_separator('sq', {fg=beautiful.color[bpc.media]})
 
 
   local arr = { l={}, r={} }

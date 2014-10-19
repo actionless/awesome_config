@@ -16,7 +16,7 @@ beautiful.init(config.awesome.theme_dir)
 
 
 local function get_color(color_n)
-  return beautiful.color[color_n]
+  return beautiful[color_n]
 end
 
 
