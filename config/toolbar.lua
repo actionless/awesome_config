@@ -72,13 +72,14 @@ function toolbar.init(status)
     right_layout:add(separator)
 
     right_layout:add(loaded_widgets.music)
+    right_layout:add(separator)
     right_layout:add(loaded_widgets.volume)
 
     -- sneaky_toggle
     if s == 1 then
       loaded_widgets.systray_toggle = widgets.sneaky_toggle({
           widgets={
-            arr.l[bpc.media],
+            sep_media,
             loaded_widgets.netctl,
             sep_media,
           }, enable_sneaky_tray = true,
@@ -88,7 +89,7 @@ function toolbar.init(status)
       right_layout:add(separator)
     end
 
-    right_layout:add(arr.l[bpc.info])
+    right_layout:add(sep_info)
     right_layout:add(loaded_widgets.mem)
     right_layout:add(loaded_widgets.cpu)
     right_layout:add(loaded_widgets.temp)

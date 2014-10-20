@@ -207,8 +207,8 @@ local function worker(args)
 
     if player_status.state == "play" or player_status.state == "pause" then
       artist = markup.fg.color(artist_color, artist)
-      player.widget:set_bg(bg)
-      player.widget:set_fg(fg)
+      --player.widget:set_bg(bg)
+      --player.widget:set_fg(fg)
       player.widget:set_markup(
         markup.font(font,
            " " ..
@@ -227,8 +227,8 @@ local function worker(args)
       else
         player.widget:set_text('(m)')
       end
-      player.widget:set_bg(fg)
-      player.widget:set_fg(bg)
+      --player.widget:set_bg(fg)
+      --player.widget:set_fg(bg)
     end
   end
 -------------------------------------------------------------------------------

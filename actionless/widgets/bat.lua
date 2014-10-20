@@ -51,7 +51,7 @@ local function worker(args)
     else
       bat.widget:show()
       bat.widget:set_markup(
-        string.format("%-4s", bat.now.percentage .. "% ")
+        string.format("%-2s%% ", bat.now.percentage)
       )
       -- charged:
       if bat.now.state == 'fully-charged' then

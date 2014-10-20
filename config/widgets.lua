@@ -50,8 +50,8 @@ function widget_loader.init(awesome_context)
     channels_toggle = {'Master', 'Speaker', 'Headphone'},
     bg = term16[bpc.media],
     fg = beautiful.panel_widget_fg,
-    left_separators = { 'sq' },
-    right_separators = { 'arrr' }
+    left_separators = { 'arrl' },
+    right_separators = { 'sq' }
   })
 
   -- systray_toggle
