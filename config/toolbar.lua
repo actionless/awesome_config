@@ -74,16 +74,16 @@ function toolbar.init(status)
     right_layout:add(loaded_widgets.music)
     right_layout:add(loaded_widgets.volume)
 
-    -- systray_toggle
+    -- sneaky_toggle
     if s == 1 then
-      right_layout:add(
-        widgets.sneaky_toggle({
+      loaded_widgets.systray_toggle = widgets.sneaky_toggle({
           widgets={
             arr.l[bpc.media],
             loaded_widgets.netctl,
             sep_media,
           }, enable_sneaky_tray = true,
-      }))
+      })
+      right_layout:add(loaded_widgets.systray_toggle)
     else
       right_layout:add(separator)
     end

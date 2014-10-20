@@ -36,12 +36,12 @@ function sneaky_toggle.initialize()
     end
     st.widgetvisible = true
 
-    st.widget = wibox.layout.fixed.horizontal()
+    st.export_widget = wibox.layout.fixed.horizontal()
     --st.widget:connect_signal(
         --"mouse::enter", function ()
             --st.toggle()
     --end)
-    st.widget:buttons(awful.util.table.join(
+    st.export_widget:buttons(awful.util.table.join(
         awful.button({ }, 1, st.toggle),
         awful.button({ }, 3, function() end)
     ))
@@ -49,19 +49,19 @@ function sneaky_toggle.initialize()
         st.container = wibox.layout.constraint()
             st.layout = wibox.layout.fixed.horizontal()
             st.layout:add(wibox.widget.textbox(' ')) -- left margin
-            for _, widget in ipairs(sneaky_toggle.widgets) do
+            for _, widget in ipairs(sneaky_toggle.loaded_widgets) do
                 st.layout:add(widget)
             end
         st.container:set_widget(st.layout)
         st.container:set_strategy("min")
-    st.widget:add(st.container)
+    st.export_widget:add(st.container)
     if st.sneaky_tray_container then
-        st.widget:add(st.sneaky_tray_container)
+        st.export_widget:add(st.sneaky_tray_container)
     end
 
         st.arrow = wibox.widget.imagebox(beautiful.icon_left)
         st.arrow:set_resize(false)
-    st.widget:add(st.arrow)
+    st.export_widget:add(st.arrow)
 
     if not st.show_on_start then
         st.toggle()
@@ -89,11 +89,10 @@ end
 local function worker(args)
     local args = args or {}
     sneaky_toggle.enable_sneaky_tray = args.enable_sneaky_tray
-    sneaky_toggle.widgets = args.widgets
+    sneaky_toggle.loaded_widgets = args.widgets
     sneaky_toggle.show_on_start = args.show_on_start or false
     sneaky_toggle.initialize()
-    --return setmetatable(sneaky_toggle, { __index = sneaky_toggle.widget})
-    return sneaky_toggle.widget
+    return setmetatable(sneaky_toggle, { __index = sneaky_toggle.export_widget})
 end
 
 return setmetatable(
