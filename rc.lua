@@ -56,4 +56,12 @@ config.keys.init(context)
 config.rules.init(context)
 config.signals.init(context)
 
+    --require("collision") {
+        ----        Normal    Xephyr       Vim      G510
+        --up    = { "Up"    , "&"        , "ak"   , "F15" },
+        --down  = { "Down"  , "KP_Enter" , "aj"   , "F14" },
+        --left  = { "Left"  , "#"        , "ah"   , "F13" },
+        --right = { "Right" , "\""       , "al"   , "F17" },
+    --}
+
 -- vim: set shiftwidth=2:

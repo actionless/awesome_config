@@ -47,10 +47,11 @@ local function worker(args)
     bat.now.percentage = h_string.only_digits(bat.now.percentage)
 
     if hide_if_charged and bat.now.state == 'fully-charged' then
-      bat.widget:set_text('')
+      bat.widget:hide()
     else
+      bat.widget:show()
       bat.widget:set_markup(
-        string.format("%-4s", bat.now.percentage .. "%")
+        string.format("%-4s", bat.now.percentage .. "% ")
       )
       -- charged:
       if bat.now.state == 'fully-charged' then

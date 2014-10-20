@@ -7,6 +7,7 @@ local capi = {
   client = client,
 }
 
+local widgets = require("actionless.widgets")
 local make_separator = require("actionless.widgets.common").make_separator
 local current_font = require("actionless.helpers").font
 
@@ -54,15 +55,14 @@ function toolbar.init(status)
     local left_layout = wibox.layout.fixed.horizontal()
 
     left_layout:add(sep)
+    left_layout:add(loaded_widgets.screen[s].promptbox)
     left_layout:add(sep)
     left_layout:add(loaded_widgets.screen[s].taglist)
-
     left_layout:add(separator)
-    left_layout:add(loaded_widgets.screen[s].close_button)
 
+    left_layout:add(loaded_widgets.screen[s].close_button)
     left_layout:add(separator)
     left_layout:add(loaded_widgets.kbd)
-    left_layout:add(loaded_widgets.screen[s].promptbox)
 
     left_layout:add(arr.l[bpc.tasklist])
     -- RIGHT side
@@ -71,26 +71,27 @@ function toolbar.init(status)
 
     right_layout:add(separator)
 
-    right_layout:add(arr.l[bpc.media])
-    right_layout:add(loaded_widgets.netctl)
-    right_layout:add(sep_media)
     right_layout:add(loaded_widgets.music)
     right_layout:add(loaded_widgets.volume)
 
     -- systray_toggle
     if s == 1 then
-      right_layout:add(loaded_widgets.systray_toggle)
+      right_layout:add(
+        widgets.sneaky_toggle({
+          widgets={
+            arr.l[bpc.media],
+            loaded_widgets.netctl,
+            sep_media,
+          }, enable_sneaky_tray = true,
+      }))
     else
       right_layout:add(separator)
     end
 
     right_layout:add(arr.l[bpc.info])
     right_layout:add(loaded_widgets.mem)
-    right_layout:add(sep_info)
     right_layout:add(loaded_widgets.cpu)
-    right_layout:add(sep_info)
     right_layout:add(loaded_widgets.temp)
-    right_layout:add(sep_info)
     right_layout:add(loaded_widgets.bat)
     right_layout:add(arr.r[bpc.info])
 

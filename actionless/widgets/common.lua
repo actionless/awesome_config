@@ -28,23 +28,22 @@ function common.widget(args)
   local show_icon = args.show_icon or beautiful.show_widget_icon
   local use_iconfont = args.use_iconfont or beautiful.use_iconfont
   local widget = {}
-
-  widget.widget = wibox.layout.fixed.horizontal()
-  if show_icon then
-    if use_iconfont then
-      widget.iconfont_widget = wibox.widget.textbox()
-      widget.iconfont_widget:set_font(beautiful.iconfont)
-      widget.widget:add(widget.iconfont_widget)
-    else
-      widget.icon_widget = wibox.widget.imagebox()
-      widget.icon_widget:set_resize(false)
-      widget.widget:add(widget.icon_widget)
+    widget.layout = wibox.layout.fixed.horizontal()
+    if show_icon then
+      if use_iconfont then
+        widget.iconfont_widget = wibox.widget.textbox()
+        widget.iconfont_widget:set_font(beautiful.iconfont)
+        widget.layout:add(widget.iconfont_widget)
+      else
+        widget.icon_widget = wibox.widget.imagebox()
+        widget.icon_widget:set_resize(false)
+        widget.layout:add(widget.icon_widget)
+      end
     end
-  end
-  widget.text_widget = wibox.widget.textbox('')
-  widget.widget:add(widget.text_widget)
+      widget.text_widget = wibox.widget.textbox('')
+    widget.layout:add(widget.text_widget)
   widget.widget_bg = wibox.widget.background()
-  widget.widget_bg:set_widget(widget.widget)
+  widget.widget_bg:set_widget(widget.layout)
 
   function widget:set_image(...)
     if self.icon_widget then
@@ -70,15 +69,15 @@ function common.widget(args)
 
   function widget:set_icon(name)
     if show_icon then
-      local symbol = iconfont.get_symbol(name)
-      if symbol and use_iconfont then
-        return self.iconfont_widget:set_text(" " .. symbol .. " ")
-      else
-          gears.debug.assert(
-            beautiful.get()['widget_' .. name],
-            ":set_icon failed: icon is missing: " .. name)
-        return self.icon_widget:set_image(beautiful.get()['widget_' .. name])
+      if use_iconfont then
+        local symbol = iconfont.get_symbol(name)
+        if symbol then
+          return self.iconfont_widget:set_text(" " .. symbol .. " ")
+        end
       end
+      local icon = beautiful.get()['widget_' .. name]
+      gears.debug.assert(icon, ":set_icon failed: icon is missing: " .. name)
+      return self.icon_widget:set_image(icon)
     end
   end
 
@@ -118,19 +117,16 @@ function common.bordered(widget, args)
   local margin = args.margin or 0
   local padding = args.padding or 0
   local obj = {}
-
-  obj.padding = wibox.layout.margin()
-  obj.padding:set_widget(widget)
-  obj.padding:set_margins(padding)
-
-  obj.background = wibox.widget.background()
-  obj.background:set_widget(obj.padding)
-
+      obj.padding = wibox.layout.margin()
+      obj.padding:set_widget(widget)
+      obj.padding:set_margins(padding)
+    obj.background = wibox.widget.background()
+    obj.background:set_widget(obj.padding)
   obj.margin = wibox.layout.margin()
   obj.margin:set_widget(obj.background)
   obj.margin:set_margins(margin)
-
   setmetatable(obj, { __index = obj.margin })
+
   function obj:set_bg(...)
     obj.background:set_bg(...)
   end
@@ -138,6 +134,7 @@ function common.bordered(widget, args)
   function obj:set_fg(...)
     obj.background:set_fg(...)
   end
+
   return obj
 end
 

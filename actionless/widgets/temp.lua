@@ -32,12 +32,14 @@ local function worker(args)
     local coretemp_now = parse.find_in_multiline_string(
       str, sensor .. ":[ ]+(.*)°C.*[(]")
     if tonumber(coretemp_now) >= warning then
+      temp.widget:show()
       temp.widget:set_bg(beautiful.error)
     else
+      temp.widget:hide()
       temp.widget:set_bg(bg)
     end
     temp.widget:set_fg(fg)
-    temp.widget:set_text(string.format("%2i", coretemp_now) .. '°C')
+    temp.widget:set_text(string.format("%2i", coretemp_now) .. '°C ')
   end
 
   helpers.newtimer("coretemp", update_interval, temp.update)

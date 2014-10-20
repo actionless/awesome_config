@@ -58,7 +58,8 @@ function widget_loader.init(awesome_context)
   --w.systray_toggle = widgets.systray_toggle({
     --screen = 1
   --})
-  w.systray_toggle = widgets.sneaky_tray({})
+  --w.systray_toggle = widgets.sneaky_tray({})
+  --w.systray = wibox.widget.systray()
 
   -- MEM
   w.mem = widgets.mem({
@@ -79,7 +80,8 @@ function widget_loader.init(awesome_context)
   w.temp = widgets.temp({
     update_interval = 10,
     sensor = "Core 0",
-    warning = 75,
+    --warning = 75,
+    warning = 50,
     bg = term16[bpc.info],
     fg = beautiful.panel_widget_fg,
   })
