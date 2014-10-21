@@ -80,8 +80,7 @@ function widget_loader.init(awesome_context)
   w.temp = widgets.temp({
     update_interval = 10,
     sensor = "Core 0",
-    --warning = 75,
-    warning = 50,
+    warning = 75,
     bg = term16[bpc.info],
     fg = beautiful.panel_widget_fg,
   })
