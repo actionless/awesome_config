@@ -177,11 +177,11 @@ local function worker(args)
       artist = player_status.artist or "playing"
       title = player_status.title or " "
       player.widget:set_icon('music_play')
-      if #artist + #title > 40 then
-        if #artist > 15 then
+      if #artist + #title > 60 then
+        if #artist > 25 then
           artist = h_string.max_length(artist, 15) .. "…"
         end
-        if #player_status.title > 25 then
+        if #player_status.title > 35 then
           title = h_string.max_length(title, 25) .. "…"
         end
       end
