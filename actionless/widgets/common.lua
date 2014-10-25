@@ -86,7 +86,7 @@ function common.widget(args)
   end
 
   function widget:show()
-    self.widget_bg:set_widget(self.widget)
+    self.widget_bg:set_widget(self.layout)
   end
 
   function widget:hide()
