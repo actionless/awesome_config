@@ -89,6 +89,7 @@ function widget_loader.init(awesome_context)
     update_interval = 30,
     bg = term16[bpc.info],
     fg = beautiful.panel_widget_fg,
+    show_when_charged=false,
   })
 
   -- Textclock
