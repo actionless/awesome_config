@@ -118,7 +118,7 @@ local function worker(args)
     end
     alsa.widget:set_text(
       string.format(
-        "%-4s",
+        "%4s",
         alsa.volume.level .. "%"
     ))
   end
