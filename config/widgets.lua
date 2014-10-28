@@ -42,6 +42,7 @@ function widget_loader.init(awesome_context)
     music_dir = conf.music_dir,
     bg = beautiful.panel_bg,
     fg = term16[bpc.media],
+    force_no_bgimage=true,
   })
   -- ALSA volume
   w.volume = widgets.alsa({

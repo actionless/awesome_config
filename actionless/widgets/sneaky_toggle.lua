@@ -48,7 +48,7 @@ function sneaky_toggle.initialize()
 
         st.container = wibox.layout.constraint()
             st.layout = wibox.layout.fixed.horizontal()
-            st.layout:add(wibox.widget.textbox(' ')) -- left margin
+            --st.layout:add(wibox.widget.textbox(' ')) -- left margin
             for _, widget in ipairs(sneaky_toggle.loaded_widgets) do
                 st.layout:add(widget)
             end

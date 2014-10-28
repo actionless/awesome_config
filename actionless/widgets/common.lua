@@ -27,6 +27,7 @@ function common.widget(args)
   args = args or {}
   local show_icon = args.show_icon or beautiful.show_widget_icon
   local use_iconfont = args.use_iconfont or beautiful.use_iconfont
+  local force_no_bgimage = args.force_no_bgimage or false
   local widget = {}
     widget.layout = wibox.layout.fixed.horizontal()
     if show_icon then
@@ -93,6 +94,11 @@ function common.widget(args)
     self.widget_bg:set_widget(nil)
   end
 
+  local widget_bgimage_path = beautiful['widget_decoration_image_bg']
+  if widget_bgimage_path and not force_no_bgimage then
+    widget.widget_bg:set_bgimage(widget_bgimage_path)
+  end
+
   return setmetatable(widget, { __index = widget.widget_bg })
 end
 
@@ -139,7 +145,25 @@ function common.bordered(widget, args)
 end
 
 
+
+function common.make_image_separator(image_path, args)
+  if not image_path then return false end
+  args = args or {}
+  local bg = args.bg
+  local widget = wibox.widget.background()
+  local separator_widget = wibox.widget.imagebox(image_path)
+  separator_widget:set_resize(false)
+  widget:set_bg(bg)
+  widget:set_widget(separator_widget)
+  return widget
+end
+
+
 function common.make_separator(separator_character, args)
+  local image_path = beautiful['widget_decoration_image_' .. separator_character]
+  if image_path then
+    return common.make_image_separator(image_path, args)
+  end
   local separator_alias = beautiful['widget_decoration_' .. separator_character]
   if separator_alias then
     return common.make_separator(separator_alias, args)
@@ -150,7 +174,7 @@ function common.make_separator(separator_character, args)
   local fg = args.fg or get_color(args.color_n) or beautiful.fg
   local inverted = args.inverted or false
 
-  if separator_character == 'sq' then
+  if separator_character == 'sq' or bg==fg then
     separator_character = ' '
     inverted = not inverted
   end

@@ -22,7 +22,6 @@ local tag_parser	= require("actionless.widgets.music.tag_parser")
 
 -- player infos
 local player = {
-  widget=common_widget(),
   id=nil,
   cmd=nil,
   player_status = {
@@ -50,8 +49,7 @@ local function worker(args)
   local fg = args.fg or beautiful.panel_fg or beautiful.fg
   local artist_color      = beautiful.player_artist or fg or beautiful.fg_normal
   local title_color      = beautiful.player_title or fg or beautiful.fg_normal
-  player.widget:set_bg(bg)
-  player.widget:set_fg(fg)
+  player.widget = common_widget(args)
 
 
   local backend_id = 0
