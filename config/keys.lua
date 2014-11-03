@@ -309,7 +309,17 @@ local globalkeys = awful.util.table.join(
   awful.key({}, "#121", function () awesome_context.widgets.volume.toggle() end),
   awful.key({}, "#198", function () awesome_context.widgets.volume.toggle_mic() end),
 
-  -- MPD control
+  -- Music player control
+  hk.on({modkey, altkey}, ",",
+    function () awesome_context.widgets.music.prev_song() end,
+    "prev song", TO_DEFINE_COLOR),
+  hk.on({modkey, altkey}, ".",
+    function () awesome_context.widgets.music.next_song() end,
+    "next song", TO_DEFINE_COLOR),
+  hk.on({modkey, altkey}, "p",
+    function () awesome_context.widgets.music.toggle() end,
+    "Pause", TO_DEFINE_COLOR),
+
   awful.key({}, "#150", function () awesome_context.widgets.music.prev_song() end),
   awful.key({}, "#148", function () awesome_context.widgets.music.next_song() end),
   awful.key({}, "#172", function () awesome_context.widgets.music.toggle() end),
