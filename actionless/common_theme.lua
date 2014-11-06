@@ -144,7 +144,7 @@ theme.icon_down 		= common_icons_dir .. "arrow_down.png"
 theme.icon_left 		= common_icons_dir .. "arrow_left.png"
 theme.icon_right 		= common_icons_dir .. "arrow_right.png"
 
-theme.menu_submenu_icon		= theme.icon_right
+theme.menu_submenu_icon		= common_icons_dir .. "submenu.png"
 theme.dropdown_icon		= theme.icon_down
 
 theme.taglist_squares_sel	= common_icons_dir .. "square_sel.png"
