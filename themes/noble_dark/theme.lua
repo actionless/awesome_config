@@ -6,9 +6,13 @@ local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/noble_dark"
 
 local gtk = {}
 
-gtk.bg = "#3d3e40"
-gtk.fg = "#f3f3f5"
+--gtk.bg = "#3d3e40"
+--gtk.base = "#2b2b2c"
+
+gtk.bg = "#454749"
 gtk.base = "#2b2b2c"
+
+gtk.fg = "#f3f3f5"
 gtk.select = "#ad7fa8"
 
 -- TERMINAL COLORSCHEME:
@@ -45,11 +49,14 @@ theme.warning = gtk.select
 
 theme.border_width              = "8"
 theme.border_focus              = "#94a870"
+theme.border_focus              = "#a6e22e"
+theme.border_focus              = "#a3c24e"
 theme.titlebar_focus_border     = theme.border_focus
 
 
 theme.panel_widget_fg = gtk.fg
 theme.panel_widget_bg = gtk.bg
+theme.panel_opacity = 1
 theme.taglist_fg_occupied	= gtk.fg
 theme.taglist_fg_empty		= gtk.fg
 theme.taglist_fg_focus		= gtk.fg
