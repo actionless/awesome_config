@@ -75,4 +75,11 @@ theme.tasklist_font = theme.sans_font
 --theme.sans_font	= theme.font
 --theme.tasklist_font = theme.sans_font
 
+--
+--MISC:
+--
+
+theme.taglist_squares_sel       = nil
+theme.taglist_squares_unsel     = nil
+
 return theme
