@@ -59,12 +59,12 @@ theme.panel_widget_bg = gtk.bg
 theme.panel_opacity = 1
 
 theme.taglist_fg_occupied	= gtk.fg
-theme.taglist_fg_empty		= gtk.fg
-theme.taglist_fg_focus		= gtk.base
+theme.taglist_fg_empty		= gtk.select
+theme.taglist_fg_focus		= gtk.fg
 
-theme.taglist_bg_occupied		= gtk.base
+theme.taglist_bg_occupied	= gtk.bg
 theme.taglist_bg_empty		= gtk.bg
-theme.taglist_bg_focus		= gtk.select
+theme.taglist_bg_focus		= gtk.base
 
 theme.taglist_squares_sel       = nil
 theme.taglist_squares_unsel     = nil
