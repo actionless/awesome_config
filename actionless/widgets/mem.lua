@@ -40,7 +40,7 @@ local function worker(args)
   mem.list_len = args.list_length or 10
   mem.command = args.command or
     "COLUMNS=512 top -o \\%MEM -b -n 1" .. 
-    [[ | awk '{printf "%-5s %-4s %s\n", $1, $10, $12}']]
+    [[ | awk '{printf "%-5s %-4s %s\n", $1, $8, $11}']]
 
   function mem.hide_notification()
     if mem.id ~= nil then
