@@ -38,10 +38,8 @@ local function worker(args)
 
   cpu.list_len = args.list_length or 10
   cpu.command = args.command
-    or [[COLUMNS=512 ]] ..
-       [[ top -o \%CPU -b -n 1 ]] ..
-       [[ | head -n ]] .. cpu.list_len + 13 ..
-       [[ | tail -n ]] .. cpu.list_len  ..
+    or [[ top -o \%CPU -b -n 1 -w 512 ]] ..
+       [[ | grep " PID" -A ]] .. cpu.list_len + 1 ..
        [[ | awk '{printf "%-5s %-4s %s\n", $1, $7, $11}' ]]
 
   function cpu.hide_notification()
