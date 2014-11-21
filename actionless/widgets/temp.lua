@@ -33,12 +33,13 @@ local function worker(args)
       str, sensor .. ":[ ]+(.*)°C.*[(]")
     if tonumber(coretemp_now) >= warning then
       temp.widget:show()
-      temp.widget:set_bg(beautiful.error)
+      temp.widget:set_bg(beautiful.panel_widget_bg_error)
+      temp.widget:set_fg(beautiful.panel_widget_fg_error)
     else
       temp.widget:hide()
       temp.widget:set_bg(bg)
+      temp.widget:set_fg(fg)
     end
-    temp.widget:set_fg(fg)
     temp.widget:set_text(string.format("%2i°C ", coretemp_now))
   end
 

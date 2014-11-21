@@ -45,11 +45,13 @@ local function worker(widget_screen, args)
     widget:set_text(' x ')
     widget:connect_signal(
       "mouse::enter", function ()
-        widget:set_color({name='error'})
+        widget:set_fg(beautiful.panel_widget_fg_error)
+        widget:set_bg(beautiful.panel_widget_bg_error)
       end)
     widget:connect_signal(
       "mouse::leave", function ()
-        widget:set_color({bg=bg})
+        widget:set_fg(fg)
+        widget:set_bg(bg)
       end)
   end
 

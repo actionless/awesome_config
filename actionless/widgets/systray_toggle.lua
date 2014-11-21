@@ -15,7 +15,6 @@ local capi = { client = client,
                screen = screen,
                awesome = awesome }
 local setmetatable = setmetatable
-local error = error
 local abs = math.abs
 
 local helpers = require("actionless.helpers")

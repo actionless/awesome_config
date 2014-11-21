@@ -54,6 +54,10 @@ theme.titlebar_focus_border     = theme.border_focus
 
 theme.panel_widget_fg = gtk.fg
 theme.panel_widget_bg = gtk.bg
+theme.panel_widget_fg_warning = gtk.fg
+theme.panel_widget_bg_warning = theme.warning
+theme.panel_widget_fg_error = gtk.fg
+theme.panel_widget_bg_error = theme.error
 theme.panel_opacity = 1
 
 theme.taglist_fg_occupied	= gtk.bg

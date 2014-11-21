@@ -64,11 +64,11 @@ local function worker(args)
       "/proc/loadavg",
       "^([0-9.]+) ([0-9.]+) ([0-9.]+) .*")
     if tonumber(cpu.now.la1) > cpu.cores_number * 2 then
-      cpu.widget:set_bg(beautiful.error)
-      cpu.widget:set_fg(fg)
+      cpu.widget:set_bg(beautiful.panel_widget_bg_error)
+      cpu.widget:set_fg(beautiful.panel_widget_fg_error)
     elseif tonumber(cpu.now.la1) > cpu.cores_number then
-      cpu.widget:set_bg(beautiful.warning)
-      cpu.widget:set_fg(fg)
+      cpu.widget:set_bg(beautiful.panel_widget_bg_warning)
+      cpu.widget:set_fg(beautiful.panel_widget_fg_warning)
     else
       cpu.widget:set_fg(fg)
       cpu.widget:set_bg(bg)
