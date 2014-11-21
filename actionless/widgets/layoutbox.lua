@@ -29,8 +29,8 @@ function worker(args)
     local layoutbox = { mt = {} }
 
     local args = args or {}
-    local fg = args.fg or beautiful.panel_bg or beautiful.bg or "#000000"
-    local bg = args.bg or beautiful.panel_fg or beautiful.fg or "#ffffff"
+    local fg = args.fg or beautiful.panel_widget_fg or beautiful.bg or "#000000"
+    local bg = args.bg or beautiful.panel_widget_bg or beautiful.fg or "#ffffff"
     layoutbox.screen = args.screen or 1
 
     layoutbox.n_master = wibox.widget.background()
