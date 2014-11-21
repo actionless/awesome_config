@@ -7,8 +7,7 @@
 
 local setmetatable = setmetatable
 local ipairs = ipairs
-local button = require("awful.button")
-local layout = require("awful.layout")
+local awful = require("awful")
 local tag = require("awful.tag")
 local beautiful = require("beautiful")
 local wibox = require("wibox")
@@ -16,7 +15,7 @@ local imagebox = require("wibox.widget.imagebox")
 local textbox = require("wibox.widget.textbox")
 
 local helpers = require("actionless.helpers")
-local decorated = require("actionless.widgets.common").decorated
+local common = require("actionless.widgets.common")
 
 --- Layoutbox widget "class".
 
@@ -43,15 +42,19 @@ function worker(args)
     layoutbox.n_col = wibox.widget.background()
     layoutbox.n_col:set_widget(textbox())
 
-    layoutbox.widget = decorated({
-        widgets={
-            layoutbox.n_master, layoutbox.layout, layoutbox.n_col
-        },
+    local widget = common.widget()
+    widget.layout:reset()
+    widget.layout:add(layoutbox.n_master)
+    widget.layout:add(layoutbox.layout)
+    widget.layout:add(layoutbox.n_col)
+    layoutbox.widget = common.decorated({
+        widget = widget,
         bg=bg, fg=fg,
     })
 
+
     function layoutbox:update_layout()
-        local layout = layout.getname(layout.get(self.screen))
+        local layout = awful.layout.getname(awful.layout.get(self.screen))
         self.layout.widget:set_image(layout and beautiful["layout_" .. layout])
     end
     function layoutbox:update_nmaster(t)
