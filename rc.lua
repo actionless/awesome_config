@@ -32,19 +32,24 @@ context = {
 
 }
 
-pcall(function()
+local local_settings_result, local_settings_details = pcall(function()
   local local_config = require("config.local")
   if local_config then
     context = local_config.init(context) or context
   end
 end)
+if local_settings_result ~= true then
+  local naughty = require("naughty")
+  naughty.notify({ preset = naughty.config.presets.critical,
+                   title = "Oops, there were errors during loading local config!",
+                   text = local_settings_details })
+end
 beautiful.init(context.theme_dir)
 
 local widget_config = require("actionless.config")
 widget_config.init(context)
 
 local config = require("config")
-
 config.notify.init(context)
 config.variables.init(context)
 config.autorun.init(context)
