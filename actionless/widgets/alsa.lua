@@ -109,7 +109,8 @@ local function worker(args)
       alsa.widget:set_fg(beautiful.panel_widget_fg_error)
       alsa.widget:set_icon('vol')
     else
-      alsa.widget:set_color({bg=bg})
+      alsa.widget:set_bg(bg)
+      alsa.widget:set_fg(fg)
       if alsa.volume.level <= 25 then
         alsa.widget:set_icon('vol_low')
       elseif alsa.volume.level <= 75 then

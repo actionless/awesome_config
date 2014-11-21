@@ -257,6 +257,14 @@ function common.decorated(args)
     end
   end
 
+  function decorated:set_bg(bg)
+    return self:set_color({bg=bg})
+  end
+
+  function decorated:set_fg(fg)
+    return self:set_color({fg=fg})
+  end
+
   --- Make widget invisible
   function decorated:hide()
     self.layout:reset()
