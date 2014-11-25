@@ -20,18 +20,20 @@ gtk.select = "#ad7fa8"
 local color = xresources.get_current_theme()
 color.b  = gtk.bg
 color.f  = gtk.fg
-color[0]  = gtk.base
+color[8]  = gtk.base
 color[4]  = gtk.select
 color[7]  = gtk.fg
+color[0] = gtk.bg
 
 -- PANEL COLORS:
 --
 panel_colors = {
   taglist=nil,
-  close=0,
+  close=8,
   tasklist=nil,
-  media=0,
-  info=0
+  media=8,
+  info=8,
+  layoutbox=8
 }
 
 -- GENERATE DEFAULT THEME:
