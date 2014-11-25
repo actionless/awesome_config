@@ -6,10 +6,10 @@ local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/noble_dark"
 
 local gtk = {}
 
---gtk.bg = "#3d3e40"
---gtk.base = "#2b2b2c"
 
-gtk.bg = "#454749"
+--gtk.bg = "#454749"
+--gtk.base = "#2b2b2c"
+gtk.bg = "#3d3e40"
 gtk.base = "#2b2b2c"
 
 gtk.fg = "#f3f3f5"
