@@ -73,7 +73,7 @@ theme.taglist_squares_unsel     = nil
 
 
 theme.tasklist_fg_focus		= gtk.fg
-theme.tasklist_fg_minimize	= color[8]
+theme.tasklist_fg_minimize	= gtk.bg
 theme.tasklist_bg_minimize	= gtk.base
 
 theme.titlebar_fg_focus         = theme.tasklist_fg_focus
