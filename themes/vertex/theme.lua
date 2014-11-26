@@ -129,10 +129,11 @@ theme.tasklist_font = "Sans Bold 10"
 
 --131dpi:
 -- {{{
-theme.font = "Monospace Bold 10.2" -- meslo lg s
-theme.font = "Monospace Bold 12" -- Fantasque Sans Mono
+--theme.font = "Meslo LG S Bold 10.2"
+theme.font = "Fantasque Sans Mono Bold 12"
 
-theme.sans_font = "Sans Bold 10.3" -- ubuntu sans
+theme.sans_font = "Ubuntu Sans Bold 10.3"
+theme.sans_font = "Sans Bold 9"
 --theme.sans_font      = theme.font
 
 theme.tasklist_font = theme.sans_font
