@@ -47,6 +47,7 @@ function widget_loader.init(awesome_context)
   -- ALSA volume
   w.volume = widgets.alsa({
     update_interval = 5,
+    step=5,
     channel = 'Master',
     channels_toggle = {'Master', 'Speaker', 'Headphone'},
     bg = term16[bpc.media],
@@ -197,13 +198,13 @@ function widget_loader.init(awesome_context)
     })
     sw.layoutbox:buttons(awful.util.table.join(
       awful.button({ }, 1, function ()
-        awful.layout.inc(awful.layout.layouts, 1) end),
+        awful.layout.inc(1) end),
       awful.button({ }, 3, function ()
-        awful.layout.inc(awful.layout.layouts, -1) end),
+        awful.layout.inc(-1) end),
       awful.button({ }, 5, function ()
-        awful.layout.inc(awful.layout.layouts, 1) end),
+        awful.layout.inc(1) end),
       awful.button({ }, 4, function ()
-        awful.layout.inc(awful.layout.layouts, -1) end)
+        awful.layout.inc(-1) end)
     ))
 
   end
