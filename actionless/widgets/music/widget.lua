@@ -149,7 +149,7 @@ local function worker(args)
     awful.button({ }, 1, player.toggle),
     awful.button({ }, 3, function()
       player.use_next_backend()
-      player.update({dont_switch_backend=true})
+      player.update()
     end),
     awful.button({ }, 5, player.next_song),
     awful.button({ }, 4, player.prev_song)
@@ -163,7 +163,6 @@ local function worker(args)
 -------------------------------------------------------------------------------
   function player.parse_status(player_status, args)
     args = args or {}
-    local dont_switch_backend = args.dont_switch_backend or false
     player_status = tag_parser.predict_missing_tags(player_status)
     player.player_status = player_status
 
@@ -199,8 +198,8 @@ local function worker(args)
       player.widget:set_icon('music_pause')
     else
       -- stop
+      artist = enabled_backends[backend_id]
       helpers.set_map("current player track", nil)
-      if not dont_switch_backend then player.use_next_backend() end
     end
 
     if player_status.state == "play" or player_status.state == "pause" then

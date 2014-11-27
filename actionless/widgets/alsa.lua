@@ -30,7 +30,8 @@ local alsa = {
 local function worker(args)
   local args = args or {}
 
-  local bg = args.bg or beautiful.panel_fg or beautiful.fg or '#ffffff'
+  local fg = args.fg or beautiful.panel_widget_fg or beautiful.bg or '#000000'
+  local bg = args.bg or beautiful.panel_widget_bg or beautiful.fg or '#ffffff'
   alsa.step = args.step or 2
   alsa.update_interval  = args.update_interval or 5
   alsa.channel  = args.channel or "Master"

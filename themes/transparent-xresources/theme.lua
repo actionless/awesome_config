@@ -2,7 +2,7 @@ local generate_theme = require("actionless.common_theme").generate_theme
 local xresources = require("actionless.xresources")
 local h_table = require("actionless.table")
 
-local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/new"
+local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/transparent-xresources"
 
 local gtk = {}
 

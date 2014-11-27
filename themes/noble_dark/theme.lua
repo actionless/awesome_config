@@ -6,10 +6,10 @@ local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/noble_dark"
 
 local gtk = {}
 
---gtk.bg = "#3d3e40"
---gtk.base = "#2b2b2c"
 
-gtk.bg = "#454749"
+--gtk.bg = "#454749"
+--gtk.base = "#2b2b2c"
+gtk.bg = "#3d3e40"
 gtk.base = "#2b2b2c"
 
 gtk.fg = "#f3f3f5"
@@ -20,18 +20,20 @@ gtk.select = "#ad7fa8"
 local color = xresources.get_current_theme()
 color.b  = gtk.bg
 color.f  = gtk.fg
-color[0]  = gtk.base
+color[8]  = gtk.base
 color[4]  = gtk.select
 color[7]  = gtk.fg
+color[0] = gtk.bg
 
 -- PANEL COLORS:
 --
 panel_colors = {
   taglist=nil,
-  close=0,
+  close=8,
   tasklist=nil,
-  media=0,
-  info=0
+  media=8,
+  info=8,
+  layoutbox=8
 }
 
 -- GENERATE DEFAULT THEME:
@@ -71,7 +73,7 @@ theme.taglist_squares_unsel     = nil
 
 
 theme.tasklist_fg_focus		= gtk.fg
-theme.tasklist_fg_minimize	= color[8]
+theme.tasklist_fg_minimize	= gtk.bg
 theme.tasklist_bg_minimize	= gtk.base
 
 theme.titlebar_fg_focus         = theme.tasklist_fg_focus
