@@ -50,7 +50,7 @@ local function worker(args)
       widget:set_fg(fg)
     -- charging:
     elseif bat.now.state == 'charging' then
-      if bat.now.percentage < 30 then
+      if bat.now.percentage and bat.now.percentage < 30 then
         widget:set_image(beautiful.widget_ac_charging_low)
         widget:set_bg(beautiful.panel_widget_bg_warning)
         widget:set_fg(beautiful.panel_widget_fg_warning)
@@ -65,7 +65,7 @@ local function worker(args)
         widget:set_image(beautiful.widget_battery_empty)
         widget:set_bg(beautiful.panel_widget_bg_error)
         widget:set_fg(beautiful.panel_widget_fg_error)
-      elseif bat.now.percentage < 30 then
+      elseif bat.now.percentage and bat.now.percentage < 30 then
         widget:set_image(beautiful.widget_battery_low)
         widget:set_bg(beautiful.panel_widget_bg_warning)
         widget:set_fg(beautiful.panel_widget_fg_warning)
