@@ -133,7 +133,7 @@ theme.tasklist_font = "Sans Bold 10"
 theme.font = "Fantasque Sans Mono Bold 12"
 
 theme.sans_font = "Ubuntu Sans Bold 10.3"
-theme.sans_font = "Sans Bold 9"
+theme.sans_font = "Sans Bold 9.6"
 --theme.sans_font      = theme.font
 
 theme.tasklist_font = theme.sans_font
