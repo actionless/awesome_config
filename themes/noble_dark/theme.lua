@@ -119,4 +119,20 @@ theme.taglist_font = theme.font
 theme.naughty_preset.font = theme.sans_font
 theme.naughty_mono_preset.font = theme.font
 
+--131dpi:
+-- {{{
+theme.font = "Monospace Bold 10.2" -- meslo lg s
+theme.font = "Monospace Bold 12" -- Fantasque Sans Mono
+
+theme.sans_font = "Sans Bold 10.3" -- ubuntu sans
+--theme.sans_font      = theme.font
+
+theme.tasklist_font = theme.sans_font
+theme.taglist_font = theme.font
+
+theme.panel_height             = 26
+theme.panel_padding_bottom     = 6
+-- }}}
+
+
 return theme
