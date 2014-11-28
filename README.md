@@ -56,14 +56,10 @@ r")
 
 ![pokemon_dark](http://i.imgur.com/BWnzpfh.png?1 "pokemon_dark")
 
-##### "Gnome Noble Dark" theme without transparency and blur:
-
-![hotkeys_noble_dark](http://i.imgur.com/XfpBqrV.png "hotkeys_noble_dark")
-
 ### Other screenshots
 
 ##### With Vertex GTK theme
 
 ![vertex](http://fc04.deviantart.net/fs71/f/2014/332/3/4/trying_to_fit_awesome_wm_to_vertex_gtk_theme_by_actionless-d87xrfp.png "vertex")
 
-
+![noble_dark](https://raw.githubusercontent.com/actionless/awesome_config/devel/screenshots/2014-10-24--1414187184_1440x900_scrot.png "noble dark")
