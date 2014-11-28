@@ -27,7 +27,9 @@ example of config/local.lua: https://gist.github.com/actionless/229eef7795915068
 ##### Music (supports mpd, cmus, clementine, spotify at the _same_ time)
 ![music](http://i.imgur.com/W7ur5SQ.png "music")
 
-battery widget shows up only when it draining/charging.
+Battery widget shows up only when it draining/charging.
+Indicators are changing color to brighter one to show changed state (like too big load average or too low battery).
+@TODO: upload screens.
 
 
 #### Hotkey- and other widgets appearance (with different themes)
