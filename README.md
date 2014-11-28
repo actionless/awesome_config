@@ -35,24 +35,19 @@ Indicators are changing color to brighter one to show changed state (like too bi
 #### Hotkey- and other widgets appearance (with different themes)
 
 Monovedek theme with transparency and blur:
-
 ![hotkeys_monovedek](http://i.imgur.com/auQdZC5.png "hotkeys_monovedek")
 
 Monovedek theme without transparency and blur:
-
 ![hotkeys_monovedek](http://i.imgur.com/ygsVm7E.png "hotkeys_monovedek")
 
 "LCARS modern" theme without transparency and blur:
-
 ![hotkeys_lm](http://i.imgur.com/t6XRD7m.png "hotkeys_lm")
 
 "LCARS xresources" with "jwr_dark" xresources theme without transparency and blur:
-
 ![hotkeys_xjwr](http://i.imgur.com/y4o3vY0.png "hotkeys_xjw
 r")
 
 "Pokemon Light" theme without transparency and blur:
-
 ![hotkeys_pokemon_light](http://i.imgur.com/hgijuIo.png "hotkeys_pokemon_light")
 
 "Pokemon Dark" theme without transparency and blur:
@@ -61,9 +56,7 @@ r")
 #### Other screenshots
 
 With Vertex GTK theme:
-
 ![vertex](http://fc04.deviantart.net/fs71/f/2014/332/3/4/trying_to_fit_awesome_wm_to_vertex_gtk_theme_by_actionless-d87xrfp.png "vertex")
 
 With oomox monovedek2 GTK theme:
-
 ![noble_dark](https://raw.githubusercontent.com/actionless/awesome_config/devel/screenshots/2014-10-24--1414187184_1440x900_scrot.png "noble dark")
