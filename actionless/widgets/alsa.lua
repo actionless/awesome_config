@@ -46,38 +46,58 @@ local function worker(args)
   ))
 
   helpers.set_map("volume in progress", false)
+  helpers.set_map("volume_delta", 0)
 
-  function alsa.up()
+  function alsa.apply_volume()
     if helpers.get_map("volume in progress") then
       return
     end
     helpers.set_map("volume in progress", true)
-
-    if alsa.volume.level < 100 then
-      alsa.volume.level = alsa.volume.level + alsa.step
+    local volume_delta = helpers.get_map("volume_delta")
+    local direction = "%+"
+    local volume_delta_command = volume_delta
+    if volume_delta < 0 then
+      direction = "%-"
+      volume_delta_command = -volume_delta
     end
     async.execute(
-      "amixer -q set " .. alsa.channel .. ",0 " .. alsa.step .. "%+",
-      function(f) alsa.post_volume() end)
+      "amixer -q set " .. alsa.channel ..
+      ",0 " .. volume_delta_command .. direction,
+      function(f)
+        helpers.set_map("volume in progress", false)
+        alsa.volume.level = alsa.volume.level + volume_delta
+        alsa.update_indicator()
+
+        local new_volume_delta = helpers.get_map("volume_delta")
+        helpers.set_map("volume_delta", new_volume_delta - volume_delta)
+        if new_volume_delta ~= 0 then alsa.apply_volume() end
+      end)
+  end
+
+  function alsa.get_step()
+    if helpers.get_map("volume in progress") then
+      return alsa.step * 2
+    else
+      return alsa.step
+    end
+  end
+
+  function alsa.up()
+    if alsa.volume.level < 100 then
+      helpers.set_map(
+        "volume_delta",
+        helpers.get_map("volume_delta") + alsa.get_step())
+    end
+    alsa.apply_volume()
   end
 
   function alsa.down()
-    if helpers.get_map("volume in progress") then
-      return
-    end
-    helpers.set_map("volume in progress", true)
-
     if alsa.volume.level > 0 then
-      alsa.volume.level = alsa.volume.level - alsa.step
+      helpers.set_map(
+        "volume_delta",
+        helpers.get_map("volume_delta") - alsa.get_step())
     end
-    async.execute(
-      "amixer -q set " .. alsa.channel .. ",0 " .. alsa.step .. "%-",
-      function(f) alsa.post_volume() end)
-  end
-
-  function alsa.post_volume()
-    helpers.set_map("volume in progress", false)
-    alsa.update_indicator()
+    alsa.apply_volume()
   end
 
   function alsa.toggle()
