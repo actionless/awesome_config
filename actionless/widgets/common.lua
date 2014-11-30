@@ -8,7 +8,6 @@ local gears = require("gears")
 local beautiful = require("beautiful")
 
 local config = require("actionless.config")
-local helpers = require("actionless.helpers")
 local h_table = require("actionless.table")
 local iconfont = require("actionless.iconfont")
 
@@ -134,11 +133,11 @@ function common.bordered(widget, args)
   setmetatable(obj, { __index = obj.margin })
 
   function obj:set_bg(...)
-    obj.background:set_bg(...)
+    self.background:set_bg(...)
   end
 
   function obj:set_fg(...)
-    obj.background:set_fg(...)
+    self.background:set_fg(...)
   end
 
   return obj

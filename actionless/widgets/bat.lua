@@ -3,8 +3,6 @@
    * (c) 2014, Yauheni Kirylau
 --]]
 
-local naughty		= require("naughty")
-local wibox		= require("wibox")
 local awful		= require("awful")
 local beautiful		= require("beautiful")
 

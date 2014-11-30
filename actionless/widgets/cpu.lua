@@ -64,7 +64,7 @@ local function worker(args)
       end
     end
 
-    result_string = ''
+    local result_string = ''
     local counter = 0
     for pid, percent in h_table.spairs(result, function(t,a,b) return t[b] < t[a] end) do
       result_string = result_string .. string.format("%5s %5.2f %s", pid, percent, names[pid])
