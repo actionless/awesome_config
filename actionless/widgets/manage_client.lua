@@ -13,7 +13,6 @@ local capi = { client = client }
 
 local common	= require("actionless.widgets.common")
 local helpers	= require("actionless.helpers")
-local newtimer	= helpers.newtimer
 local font		= helpers.font
 
 
