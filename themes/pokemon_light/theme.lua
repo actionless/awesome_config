@@ -4,7 +4,7 @@ local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/pokemon_light"
 
 -- TERMINAL COLORSCHEME:
 --
-color = {}
+local color = {}
 --black
 color[0] = '#000000'
 color[8] = '#465457'
@@ -36,7 +36,7 @@ color.c  = '#ae81ff'
 
 -- PANEL COLORS:
 --
-panel_colors = {
+local panel_colors = {
   taglist=7,
   close=1,
   tasklist='b',

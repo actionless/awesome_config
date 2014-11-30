@@ -4,7 +4,7 @@ local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/monovedek"
 
 -- TERMINAL COLORSCHEME:
 --
-color = {}
+local color = {}
 --black
 color[0]  ='#000000'
 color[8]  ='#666699'
@@ -36,7 +36,7 @@ color.c  = '#cc6699'
 
 -- PANEL COLORS:
 --
-panel_colors = {
+local panel_colors = {
   taglist=2,
   close=1,
   tasklist=4,

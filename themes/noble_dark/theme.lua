@@ -27,7 +27,7 @@ color[0] = gtk.bg
 
 -- PANEL COLORS:
 --
-panel_colors = {
+local panel_colors = {
   taglist=nil,
   close=8,
   tasklist=nil,
