@@ -11,7 +11,7 @@ local awful = require("awful")
 require("awful.autofocus")
 local beautiful	= require("beautiful")
 
-context = {
+local context = {
 
   widgets = {},
   menu = {},

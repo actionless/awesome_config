@@ -9,21 +9,18 @@ local capi = {
 
 local widgets = require("actionless.widgets")
 local make_separator = require("actionless.widgets.common").make_separator
-local current_font = require("actionless.helpers").font
 
 
 local toolbar = {}
 
 
-function toolbar.init(status)
-  local modkey = status.modkey
+function toolbar.init(awesome_context)
   local bpc = beautiful.panel_colors
-  local loaded_widgets = status.widgets
+  local loaded_widgets = awesome_context.widgets
 
   -- Separators
   local sep = wibox.widget.imagebox(beautiful.small_separator)
   local separator  = make_separator(' ')
-  local iseparator = make_separator('sq', {fg=beautiful.panel_bg})
   local sep_info   = make_separator('sq', {fg=beautiful.color[bpc.info]})
   local sep_media  = make_separator('sq', {fg=beautiful.color[bpc.media]})
 

@@ -3,8 +3,6 @@ local gears = require("gears")
 local beautiful = require("beautiful")
 local capi = { screen = screen }
 
-local helpers = require("actionless.helpers")
-
 local layouts = {}
 
 
