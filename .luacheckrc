@@ -6,6 +6,13 @@ globals = {
   "mouse",
   "screen",
   "async",
+  "timer",
+  "button",
+  "root",
+  "tag",
+  "keygrabber",
+  "wibox",
+
 }
 ignore = {
   "...",

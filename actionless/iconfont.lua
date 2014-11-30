@@ -1,5 +1,3 @@
-beautiful = require("beautiful")
-
 local iconfont = {}
 
 local symbols = {

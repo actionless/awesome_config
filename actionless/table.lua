@@ -44,7 +44,7 @@ end
 function table_helpers.add(container, addition)
   container = container or {}
   addition = addition or {}
-  for index, value in pairs(addition) do
+  for _, value in pairs(addition) do
       table.insert(container, value)
   end
   return container
@@ -52,7 +52,7 @@ end
 
 function table_helpers.getn(container_table)
   local number_of_items = 0
-  for key, value in pairs(container_table) do
+  for _, _ in pairs(container_table) do
     number_of_items = number_of_items + 1
   end
   return number_of_items
@@ -68,14 +68,14 @@ function table_helpers.range(original_table, range_start, range_finish)
 end
 
 function table_helpers.contains(container_table, desired_value)
-  for key, value in pairs(container_table) do
+  for _, value in pairs(container_table) do
     if value == desired_value then return true end
   end
   return false
 end
 
 function table_helpers.contains_key(container_table, desired_key)
-  for key, value in pairs(container_table) do
+  for key, _ in pairs(container_table) do
     if key == desired_key then return true end
   end
   return false
@@ -97,7 +97,7 @@ end
 
 function table_helpers.reduce(container_table, func)
   local result
-  for key, value in pairs(container_table) do
+  for _, value in pairs(container_table) do
     result = func(result, value)
   end
   return result

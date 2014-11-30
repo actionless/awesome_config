@@ -54,7 +54,7 @@ function menu_addon.clients_on_tag(args, item_args)
 end
 
 function menu_addon.mt:__call(...)
-  return menu.new(...)
+  return self.new(...)
 end
 
-return setmetatable(menu_addon, menu_addon.mt)
+return setmetatable(menu_addon, menu)
