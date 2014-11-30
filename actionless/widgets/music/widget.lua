@@ -10,7 +10,6 @@ local os		= { getenv	= os.getenv }
 local string		= { format	= string.format }
 local setmetatable	= setmetatable
 
-local helpers		= require("actionless.helpers")
 local h_string		= require("actionless.string")
 local common_widget	= require("actionless.widgets.common").widget
 local markup		= require("actionless.markup")
@@ -71,14 +70,12 @@ local function worker(args)
     if backend_id > #enabled_backends then backend_id = 1 end
     if backend_id > #cached_backends then
       cached_backends[backend_id] = backend_modules[enabled_backends[backend_id]]
-      if cached_backends[backend_id].init then cached_backends[backend_id].init() end
+      if cached_backends[backend_id].init then cached_backends[backend_id].init(player) end
     end
     player.backend = cached_backends[backend_id]
     player.cmd = args.player_cmd or player.backend.player_cmd
+    player.update()
   end
-
-  player.use_next_backend()
-  helpers.set_map("current player track", nil)
 
 -------------------------------------------------------------------------------
   function player.run_player()
@@ -128,17 +125,14 @@ local function worker(args)
       return
     end
     player.backend.toggle()
-    player.update()
   end
 
   function player.next_song()
     player.backend.next_song()
-    player.update()
   end
 
   function player.prev_song()
     player.backend.prev_song()
-    player.update()
   end
 
   player.widget:connect_signal(
@@ -149,7 +143,6 @@ local function worker(args)
     awful.button({ }, 1, player.toggle),
     awful.button({ }, 3, function()
       player.use_next_backend()
-      player.update()
     end),
     awful.button({ }, 5, player.next_song),
     awful.button({ }, 4, player.prev_song)
@@ -164,7 +157,6 @@ local function worker(args)
   function player.parse_status(player_status, args)
     args = args or {}
     player_status = tag_parser.predict_missing_tags(player_status)
-    player.player_status = player_status
 
     local artist = ""
     local title = ""
@@ -185,21 +177,17 @@ local function worker(args)
       artist = h_string.escape(artist)
       title = h_string.escape(title)
       -- playing new song
-      if player_status.title ~= helpers.get_map("current player track") then
-        helpers.set_map("current player track", player_status.title)
+      if player_status.title ~= player.player_status.title then
         player.resize_cover()
       end
     elseif player_status.state == "pause" then
       -- paused
       artist = enabled_backends[backend_id]
       title  = "paused"
-      --@TODO: can it be safely deleted? :
-      --helpers.set_map("current player track", nil)
       player.widget:set_icon('music_pause')
     else
       -- stop
       artist = enabled_backends[backend_id]
-      helpers.set_map("current player track", nil)
     end
 
     if player_status.state == "play" or player_status.state == "pause" then
@@ -227,6 +215,7 @@ local function worker(args)
       --player.widget:set_bg(fg)
       --player.widget:set_fg(bg)
     end
+    player.player_status = player_status
   end
 -------------------------------------------------------------------------------
 function player.resize_cover()
@@ -256,7 +245,7 @@ function player.resize_cover()
   )
 end
 -------------------------------------------------------------------------------
-  helpers.newtimer("player", update_interval, player.update)
+  player.use_next_backend()
   return setmetatable(player, { __index = player.widget })
 end
 

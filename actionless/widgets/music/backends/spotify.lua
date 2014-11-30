@@ -3,6 +3,7 @@
    * (c) 2014, Yauheni Kirylau
 --]]
 
+local dbus = dbus
 local awful = require("awful")
 
 local async = require("actionless.async")
@@ -17,6 +18,15 @@ local spotify = {
   player_status = {},
   player_cmd = 'spotify'
 }
+
+function spotify.init(widget)
+  dbus.add_match("session", "path='/org/mpris/MediaPlayer2',interface='org.freedesktop.DBus.Properties',member='PropertiesChanged'")
+  dbus.connect_signal(
+    "org.freedesktop.DBus.Properties",
+    function(...)
+      widget.update()
+    end)
+end
 
 -------------------------------------------------------------------------------
 function spotify.toggle()
