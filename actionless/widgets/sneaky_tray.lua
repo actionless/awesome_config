@@ -7,19 +7,9 @@
 
 local wibox = require("wibox")
 local awful = require("awful")
-local wbase = require("wibox.widget.base")
-local lbase = require("wibox.layout.base")
-local systray_widget = require("wibox.widget.systray")
 local beautiful = require("beautiful")
 
-local capi = { client = client,
-               mouse = mouse,
-               screen = screen,
-               awesome = awesome }
 local setmetatable = setmetatable
-local abs = math.abs
-
-local helpers = require("actionless.helpers")
 
 --- widgets.sneaky_tray
 local sneaky_tray = { mt = {}, arrow=false, popup=false }
