@@ -1,9 +1,6 @@
-
 --[[
-                                                  
      Licensed under GNU General Public License v2
       * (c) 2013-2014, Yauheni Kirylau
-                                                  
 --]]
 local naughty      = require("naughty")
 local beautiful    = require("beautiful")
