@@ -86,7 +86,7 @@ end
 
 -------------------------------------------------------------------------------
 function spotify.resize_cover(
-  player_status, cover_size, output_coverart_path, notification_callback
+  player_status, _, output_coverart_path, notification_callback
 )
   async.execute(
     string.format(
@@ -94,7 +94,7 @@ function spotify.resize_cover(
       player_status.cover_url,
       output_coverart_path
     ),
-    function(f) notification_callback() end
+    function() notification_callback() end
   )
 end
 

@@ -4,8 +4,6 @@
 --]]
 
 local awful		= require("awful")
-local string		= { format	= string.format,
-                            match	= string.match }
 
 local parse		= require("actionless.parse")
 local async		= require("actionless.async")

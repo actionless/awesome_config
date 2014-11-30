@@ -6,7 +6,6 @@
 local awful		= require("awful")
 local naughty		= require("naughty")
 local beautiful		= require("beautiful")
-local os		= { getenv	= os.getenv }
 local string		= { format	= string.format }
 local setmetatable	= setmetatable
 
@@ -45,7 +44,6 @@ local function worker(args)
                            or { 'mpd', 'cmus', 'spotify', 'clementine', }
   local cover_size = args.cover_size or 100
   local font = args.font or beautiful.tasklist_font or beautiful.font
-  local bg = args.bg or beautiful.panel_bg or beautiful.bg
   local fg = args.fg or beautiful.panel_fg or beautiful.fg
   local artist_color      = beautiful.player_artist or fg or beautiful.fg_normal
   local title_color      = beautiful.player_title or fg or beautiful.fg_normal
@@ -155,14 +153,13 @@ local function worker(args)
     awful.button({ }, 4, player.prev_song)
   ))
 -------------------------------------------------------------------------------
-  function player.update(args)
+  function player.update()
     player.backend.update(function(player_status)
-        player.parse_status(player_status, args)
+        player.parse_status(player_status)
     end)
   end
 -------------------------------------------------------------------------------
-  function player.parse_status(player_status, args)
-    args = args or {}
+  function player.parse_status(player_status)
     player_status = tag_parser.predict_missing_tags(player_status)
     player.player_status = player_status
 
@@ -252,7 +249,7 @@ function player.resize_cover()
       resize,
       player.cover
     ),
-    function(f) player.show_notification() end
+    function() player.show_notification() end
   )
 end
 -------------------------------------------------------------------------------

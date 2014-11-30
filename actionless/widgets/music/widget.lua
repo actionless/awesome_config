@@ -6,7 +6,6 @@
 local awful		= require("awful")
 local naughty		= require("naughty")
 local beautiful		= require("beautiful")
-local os		= { getenv	= os.getenv }
 local string		= { format	= string.format }
 local setmetatable	= setmetatable
 
@@ -37,14 +36,12 @@ local player = {
 
 local function worker(args)
   local args = args or {}
-  local update_interval = args.update_interval or 2
   local timeout = args.timeout or 5
   local default_art = args.default_art or ""
   local enabled_backends = args.backends
                            or { 'mpd', 'cmus', 'spotify', 'clementine', }
   local cover_size = args.cover_size or 100
   local font = args.font or beautiful.tasklist_font or beautiful.font
-  local bg = args.bg or beautiful.panel_bg or beautiful.bg
   local fg = args.fg or beautiful.panel_fg or beautiful.fg
   local artist_color      = beautiful.player_artist or fg or beautiful.fg_normal
   local title_color      = beautiful.player_title or fg or beautiful.fg_normal
@@ -148,14 +145,13 @@ local function worker(args)
     awful.button({ }, 4, player.prev_song)
   ))
 -------------------------------------------------------------------------------
-  function player.update(args)
+  function player.update()
     player.backend.update(function(player_status)
-        player.parse_status(player_status, args)
+        player.parse_status(player_status)
     end)
   end
 -------------------------------------------------------------------------------
-  function player.parse_status(player_status, args)
-    args = args or {}
+  function player.parse_status(player_status)
     player_status = tag_parser.predict_missing_tags(player_status)
 
     local artist = ""
@@ -192,8 +188,6 @@ local function worker(args)
 
     if player_status.state == "play" or player_status.state == "pause" then
       artist = markup.fg.color(artist_color, artist)
-      --player.widget:set_bg(bg)
-      --player.widget:set_fg(fg)
       player.widget:set_markup(
         markup.font(font,
            " " ..
@@ -212,8 +206,6 @@ local function worker(args)
       else
         player.widget:set_text('(m)')
       end
-      --player.widget:set_bg(fg)
-      --player.widget:set_fg(bg)
     end
     player.player_status = player_status
   end
@@ -241,7 +233,7 @@ function player.resize_cover()
       resize,
       player.cover
     ),
-    function(f) player.show_notification() end
+    player.show_notification
   )
 end
 -------------------------------------------------------------------------------
