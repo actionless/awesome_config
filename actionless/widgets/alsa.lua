@@ -5,11 +5,9 @@
    * (c) 2010, Adrian C. <anrxc@sysphere.org>  
 --]]
 
-local wibox		= require("wibox")
 local awful		= require("awful")
 local beautiful		= require("beautiful")
 
-local io		= { popen  = io.popen }
 local string		= { match  = string.match,
                             format = string.format }
 local setmetatable	= setmetatable
@@ -63,7 +61,7 @@ local function worker(args)
     async.execute(
       "amixer -q set " .. alsa.channel ..
       ",0 " .. volume_delta_command .. direction,
-      function(f)
+      function()
         helpers.set_map("volume in progress", false)
         alsa.volume.level = alsa.volume.level + volume_delta
         alsa.update_indicator()
@@ -150,31 +148,30 @@ local function worker(args)
   function alsa.update()
     async.execute(
       'amixer get ' .. alsa.channel,
-      function(str) alsa.post_update(str) end)
-  end
+      function(str)
+        local level, status = str:match("([%d]+)%%.*%[([%l]*)")
+        level = tonumber(level) or nil
 
-  function alsa.post_update(str)
-    local level = nil
-    level, alsa.volume.status = str:match("([%d]+)%%.*%[([%l]*)")
-    alsa.volume.level = tonumber(level) or nil
+        if level == nil
+        then
+          level  = 0
+          status = "off"
+        end
 
-    if alsa.volume.level == nil
-    then
-      alsa.volume.level  = 0
-      alsa.volume.status = "off"
-    end
+        if status == ""
+        then
+          if level == 0
+          then
+            status = "off"
+          else
+            status = "on"
+          end
+        end
 
-    if alsa.volume.status == ""
-    then
-      if alsa.volume.level == 0
-      then
-        alsa.volume.status = "off"
-      else
-        alsa.volume.status = "on"
+        alsa.volume = { level=level, status=status }
+        alsa.update_indicator()
       end
-    end
-
-    alsa.update_indicator()
+    )
   end
 
   helpers.newtimer("alsa", alsa.update_interval, alsa.update)
