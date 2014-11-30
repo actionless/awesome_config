@@ -40,7 +40,7 @@ local function worker(args)
   cpu.command = args.command
     or [[ top -o \%CPU -b -n 1 -w 512 ]] ..
        [[ | grep " PID" -A ]] .. cpu.list_len + 1 ..
-       [[ | awk '{printf "%-5s %-4s %s\n", $1, $7, $11}' ]]
+       [[ | awk '{if ($7 > 0.0) {printf "%5s %4s %s\n", $1, $7, $11}}' ]]
 
   function cpu.hide_notification()
     if cpu.id ~= nil then
@@ -52,6 +52,11 @@ local function worker(args)
   function cpu.show_notification()
     cpu.hide_notification()
     local output = parse.command_to_string(cpu.command)
+    if output ~= '' then
+      output = "  PID %CPU COMMAND\n" .. output
+    else
+      output = "no running processes atm"
+    end
     cpu.id = naughty.notify({
       text = output,
       timeout = cpu.timeout,
