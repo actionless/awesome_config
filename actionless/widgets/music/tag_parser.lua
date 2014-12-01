@@ -23,8 +23,6 @@ local tag_parser = {}
     if player_status.cover then
       player_status.cover = player_status.cover:match("^file://(.*)$")
         or player_status.file
-    else
-      player_status.cover = default_art or N_A
     end
 
     if player_status.file == N_A or player_status.file == ''

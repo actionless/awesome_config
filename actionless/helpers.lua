@@ -38,7 +38,7 @@ helpers.timer_table = {}
 
 function helpers.newinterval(name, timeout, fun, nostart)
   local timer = capi.timer({ timeout = timeout })
-  timer:connect_signal("timeout", patched_function)
+  timer:connect_signal("timeout", fun)
   timer:start()
   if not nostart then
     timer:emit_signal("timeout")

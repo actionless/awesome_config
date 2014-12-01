@@ -47,7 +47,7 @@ function widget_loader.init(awesome_context)
   -- ALSA volume
   w.volume = widgets.alsa({
     update_interval = 5,
-    step=5,
+    step=2,
     channel = 'Master',
     channels_toggle = {'Master', 'Speaker', 'Headphone'},
     bg = term16[bpc.media],

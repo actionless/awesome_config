@@ -9,7 +9,6 @@ local capi = {
   awesome = awesome,
 }
 
-local widgets = require("actionless.widgets")
 local helpers = require("actionless.helpers")
 local titlebar = require("actionless.titlebar")
 local menu_addon = require("actionless.menu_addon")

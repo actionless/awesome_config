@@ -6,7 +6,6 @@
 ---------------------------------------------------------------------------
 
 local setmetatable = setmetatable
-local ipairs = ipairs
 local awful = require("awful")
 local tag = require("awful.tag")
 local beautiful = require("beautiful")
@@ -14,7 +13,6 @@ local wibox = require("wibox")
 local imagebox = require("wibox.widget.imagebox")
 local textbox = require("wibox.widget.textbox")
 
-local helpers = require("actionless.helpers")
 local common = require("actionless.widgets.common")
 
 --- Layoutbox widget "class".
@@ -24,7 +22,7 @@ local common = require("actionless.widgets.common")
 -- symbol of the current tag.
 -- @param screen The screen number that the layout will be represented for.
 -- @return An imagebox widget configured as a layoutbox.
-function worker(args)
+local function worker(args)
 
     local layoutbox = { mt = {} }
 
@@ -75,7 +73,7 @@ function worker(args)
         function(t) layoutbox:update_all(t) end)
     tag.attached_connect_signal(
         layoutbox.screen, "property::layout",
-        function(t) layoutbox:update_layout() end)
+        function(_) layoutbox:update_layout() end)
     tag.attached_connect_signal(
         layoutbox.screen, "property::ncol",
         function(t) layoutbox:update_ncol(t) end)

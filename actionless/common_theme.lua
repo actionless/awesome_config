@@ -246,7 +246,7 @@ end
 function common_theme.generate_default_theme(theme_dir)
 -- TERMINAL COLORSCHEME:
 --
-color = {}
+local color = {}
 --black
 color[0] = '#000000'
 color[8] = '#465457'
@@ -278,7 +278,7 @@ color.c  = '#ae81ff'
 
 -- PANEL COLORS:
 --
-panel_colors = {
+local panel_colors = {
   taglist=7,
   close=1,
   tasklist='b',
@@ -289,7 +289,7 @@ panel_colors = {
 
 -- GENERATE DEFAULT THEME:
 --
-return generate_theme(
+return common_theme.generate_theme(
   theme_dir,
   color,
   panel_colors

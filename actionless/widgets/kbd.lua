@@ -3,21 +3,12 @@
       * (c) 2013-2014, Yauheni Kirylau             
 --]]
 
-local awful		= require("awful")
-local naughty	= require("naughty")
 local beautiful = require("beautiful")
-local string    = { format = string.format }
 local setmetatable = setmetatable
-local capi = { client = client }
-
 local common	= require("actionless.widgets.common")
-local helpers	= require("actionless.helpers")
-local newtimer	= helpers.newtimer
-local font		= helpers.font
 
 
 local kbd = {}
-
 kbd.widget = common.widget()
 
 local function worker(args)

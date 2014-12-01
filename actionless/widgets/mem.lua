@@ -56,7 +56,7 @@ local function worker(args)
     local result = {}
     local output = parse.command_to_lines(mem.command)
     for _, line in ipairs(output) do
-      local pid, percent, name = line:match("^(%d+)%s+(.+)%s+(.*)")
+      local percent, name = line:match("^%d+%s+(.+)%s+(.*)")
       if percent then
         percent = percent + 0
         if result[name] then

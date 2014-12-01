@@ -8,8 +8,6 @@ local client = client
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 
-local widgets = require("actionless.widgets")
-
 
 local titlebar = {}
 

@@ -7,7 +7,6 @@ local naughty		= require("naughty")
 
 local helpers		= require("actionless.helpers")
 local newtimer		= helpers.newtimer
-local font		= helpers.font
 local beautiful		 = require("beautiful")
 local common_widget	= require("actionless.widgets.common").widget
 local markup		= require("actionless.markup")

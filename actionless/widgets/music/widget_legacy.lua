@@ -9,12 +9,13 @@ local beautiful		= require("beautiful")
 local string		= { format	= string.format }
 local setmetatable	= setmetatable
 
+local helpers		= require("actionless.helpers")
 local h_string		= require("actionless.string")
 local common_widget	= require("actionless.widgets.common").widget
 local markup		= require("actionless.markup")
 local async		= require("actionless.async")
 
-local backend_modules	= require("actionless.widgets.music.backends")
+local backend_modules	= require("actionless.widgets.music.backends_legacy")
 local tag_parser	= require("actionless.widgets.music.tag_parser")
 
 
@@ -36,6 +37,7 @@ local player = {
 
 local function worker(args)
   local args = args or {}
+  local update_interval = args.update_interval or 2
   local timeout = args.timeout or 5
   local default_art = args.default_art or ""
   local enabled_backends = args.backends
@@ -67,12 +69,14 @@ local function worker(args)
     if backend_id > #enabled_backends then backend_id = 1 end
     if backend_id > #cached_backends then
       cached_backends[backend_id] = backend_modules[enabled_backends[backend_id]]
-      if cached_backends[backend_id].init then cached_backends[backend_id].init(player) end
+      if cached_backends[backend_id].init then cached_backends[backend_id].init() end
     end
     player.backend = cached_backends[backend_id]
     player.cmd = args.player_cmd or player.backend.player_cmd
-    player.update()
   end
+
+  player.use_next_backend()
+  helpers.set_map("current player track", nil)
 
 -------------------------------------------------------------------------------
   function player.run_player()
@@ -122,14 +126,17 @@ local function worker(args)
       return
     end
     player.backend.toggle()
+    player.update()
   end
 
   function player.next_song()
     player.backend.next_song()
+    player.update()
   end
 
   function player.prev_song()
     player.backend.prev_song()
+    player.update()
   end
 
   player.widget:connect_signal(
@@ -140,6 +147,7 @@ local function worker(args)
     awful.button({ }, 1, player.toggle),
     awful.button({ }, 3, function()
       player.use_next_backend()
+      player.update()
     end),
     awful.button({ }, 5, player.next_song),
     awful.button({ }, 4, player.prev_song)
@@ -153,6 +161,7 @@ local function worker(args)
 -------------------------------------------------------------------------------
   function player.parse_status(player_status)
     player_status = tag_parser.predict_missing_tags(player_status)
+    player.player_status = player_status
 
     local artist = ""
     local title = ""
@@ -173,21 +182,27 @@ local function worker(args)
       artist = h_string.escape(artist)
       title = h_string.escape(title)
       -- playing new song
-      if player_status.title ~= player.player_status.title then
+      if player_status.title ~= helpers.get_map("current player track") then
+        helpers.set_map("current player track", player_status.title)
         player.resize_cover()
       end
     elseif player_status.state == "pause" then
       -- paused
       artist = enabled_backends[backend_id]
       title  = "paused"
+      --@TODO: can it be safely deleted? :
+      --helpers.set_map("current player track", nil)
       player.widget:set_icon('music_pause')
     else
       -- stop
       artist = enabled_backends[backend_id]
+      helpers.set_map("current player track", nil)
     end
 
     if player_status.state == "play" or player_status.state == "pause" then
       artist = markup.fg.color(artist_color, artist)
+      --player.widget:set_bg(bg)
+      --player.widget:set_fg(fg)
       player.widget:set_markup(
         markup.font(font,
            " " ..
@@ -206,8 +221,9 @@ local function worker(args)
       else
         player.widget:set_text('(m)')
       end
+      --player.widget:set_bg(fg)
+      --player.widget:set_fg(bg)
     end
-    player.player_status = player_status
   end
 -------------------------------------------------------------------------------
 function player.resize_cover()
@@ -233,11 +249,11 @@ function player.resize_cover()
       resize,
       player.cover
     ),
-    player.show_notification
+    function() player.show_notification() end
   )
 end
 -------------------------------------------------------------------------------
-  player.use_next_backend()
+  helpers.newtimer("player", update_interval, player.update)
   return setmetatable(player, { __index = player.widget })
 end
 

@@ -7,8 +7,6 @@ local awful = require("awful")
 local beautiful = require("beautiful")
 local naughty = require("naughty")
 
-local helpers = require('actionless.helpers')
-
 
 -- Calendar notification
 local calendar = {}
@@ -102,4 +100,4 @@ function calendar:attach(widget, args)
   ))
 end
 
-return setmetatable(calendar, { __call = function(_, ...) return create(...) end })
+return calendar

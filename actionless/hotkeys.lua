@@ -154,7 +154,7 @@ end
 local function init_keyboard(modifiers)
   local modifiers_table_name = get_mod_table_name(modifiers)
 
-  for i, modifier in ipairs(modifiers) do
+  for _, modifier in ipairs(modifiers) do
     hotkeys.bindings[modifiers_table_name][modifier] = {
       comment='pressed',
       group=APPEARANCE.pressed_color_group,

@@ -28,7 +28,7 @@ local color = xresources.get_current_theme()
 
 -- PANEL COLORS:
 --
-panel_colors = {
+local panel_colors = {
   taglist=nil,
   close='b',
   tasklist=nil,

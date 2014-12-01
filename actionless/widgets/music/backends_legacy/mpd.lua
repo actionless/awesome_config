@@ -90,7 +90,7 @@ function mpd.resize_cover(
       cover_size,
       default_art
     ),
-    function(f) notification_callback() end
+    notification_callback
   )
 end
 

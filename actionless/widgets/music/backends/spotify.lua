@@ -3,6 +3,7 @@
    * (c) 2014, Yauheni Kirylau
 --]]
 
+local dbus = dbus
 local awful = require("awful")
 
 local async = require("actionless.async")
@@ -17,6 +18,15 @@ local spotify = {
   player_status = {},
   player_cmd = 'spotify'
 }
+
+function spotify.init(widget)
+  dbus.add_match("session", "path='/org/mpris/MediaPlayer2',interface='org.freedesktop.DBus.Properties',member='PropertiesChanged'")
+  dbus.connect_signal(
+    "org.freedesktop.DBus.Properties",
+    function(...)
+      widget.update()
+    end)
+end
 
 -------------------------------------------------------------------------------
 function spotify.toggle()
@@ -76,7 +86,7 @@ end
 
 -------------------------------------------------------------------------------
 function spotify.resize_cover(
-  player_status, cover_size, output_coverart_path, notification_callback
+  player_status, _, output_coverart_path, notification_callback
 )
   async.execute(
     string.format(
@@ -84,7 +94,7 @@ function spotify.resize_cover(
       player_status.cover_url,
       output_coverart_path
     ),
-    function(f) notification_callback() end
+    function() notification_callback() end
   )
 end
 

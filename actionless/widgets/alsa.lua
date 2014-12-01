@@ -5,11 +5,9 @@
    * (c) 2010, Adrian C. <anrxc@sysphere.org>  
 --]]
 
-local wibox		= require("wibox")
 local awful		= require("awful")
 local beautiful		= require("beautiful")
 
-local io		= { popen  = io.popen }
 local string		= { match  = string.match,
                             format = string.format }
 local setmetatable	= setmetatable
@@ -46,38 +44,58 @@ local function worker(args)
   ))
 
   helpers.set_map("volume in progress", false)
+  helpers.set_map("volume_delta", 0)
 
-  function alsa.up()
+  function alsa.apply_volume()
     if helpers.get_map("volume in progress") then
       return
     end
     helpers.set_map("volume in progress", true)
-
-    if alsa.volume.level < 100 then
-      alsa.volume.level = alsa.volume.level + alsa.step
+    local volume_delta = helpers.get_map("volume_delta")
+    local direction = "%+"
+    local volume_delta_command = volume_delta
+    if volume_delta < 0 then
+      direction = "%-"
+      volume_delta_command = -volume_delta
     end
     async.execute(
-      "amixer -q set " .. alsa.channel .. ",0 " .. alsa.step .. "%+",
-      function(f) alsa.post_volume() end)
+      "amixer -q set " .. alsa.channel ..
+      ",0 " .. volume_delta_command .. direction,
+      function()
+        helpers.set_map("volume in progress", false)
+        alsa.volume.level = alsa.volume.level + volume_delta
+        alsa.update_indicator()
+
+        local new_volume_delta = helpers.get_map("volume_delta")
+        helpers.set_map("volume_delta", new_volume_delta - volume_delta)
+        if new_volume_delta ~= 0 then alsa.apply_volume() end
+      end)
+  end
+
+  function alsa.get_step()
+    if helpers.get_map("volume in progress") then
+      return alsa.step * 2
+    else
+      return alsa.step
+    end
+  end
+
+  function alsa.up()
+    if alsa.volume.level < 100 then
+      helpers.set_map(
+        "volume_delta",
+        helpers.get_map("volume_delta") + alsa.get_step())
+    end
+    alsa.apply_volume()
   end
 
   function alsa.down()
-    if helpers.get_map("volume in progress") then
-      return
-    end
-    helpers.set_map("volume in progress", true)
-
     if alsa.volume.level > 0 then
-      alsa.volume.level = alsa.volume.level - alsa.step
+      helpers.set_map(
+        "volume_delta",
+        helpers.get_map("volume_delta") - alsa.get_step())
     end
-    async.execute(
-      "amixer -q set " .. alsa.channel .. ",0 " .. alsa.step .. "%-",
-      function(f) alsa.post_volume() end)
-  end
-
-  function alsa.post_volume()
-    helpers.set_map("volume in progress", false)
-    alsa.update_indicator()
+    alsa.apply_volume()
   end
 
   function alsa.toggle()
@@ -130,31 +148,30 @@ local function worker(args)
   function alsa.update()
     async.execute(
       'amixer get ' .. alsa.channel,
-      function(str) alsa.post_update(str) end)
-  end
+      function(str)
+        local level, status = str:match("([%d]+)%%.*%[([%l]*)")
+        level = tonumber(level) or nil
 
-  function alsa.post_update(str)
-    local level = nil
-    level, alsa.volume.status = str:match("([%d]+)%%.*%[([%l]*)")
-    alsa.volume.level = tonumber(level) or nil
+        if level == nil
+        then
+          level  = 0
+          status = "off"
+        end
 
-    if alsa.volume.level == nil
-    then
-      alsa.volume.level  = 0
-      alsa.volume.status = "off"
-    end
+        if status == ""
+        then
+          if level == 0
+          then
+            status = "off"
+          else
+            status = "on"
+          end
+        end
 
-    if alsa.volume.status == ""
-    then
-      if alsa.volume.level == 0
-      then
-        alsa.volume.status = "off"
-      else
-        alsa.volume.status = "on"
+        alsa.volume = { level=level, status=status }
+        alsa.update_indicator()
       end
-    end
-
-    alsa.update_indicator()
+    )
   end
 
   helpers.newtimer("alsa", alsa.update_interval, alsa.update)

@@ -7,7 +7,7 @@ local titlebar	= require("actionless.titlebar")
 
 local signals = {}
 
-function signals.init(status)
+function signals.init(awesome_context)
 
 -- New client appears
 client.connect_signal("manage", function (c, startup)

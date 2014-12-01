@@ -3,25 +3,19 @@
       * (c) 2013-2014, Yauheni Kirylau             
 --]]
 
-local awful		= require("awful")
-local naughty	= require("naughty")
+local awful = require("awful")
 local beautiful = require("beautiful")
-local io		= { popen = io.popen }
-local string    = { format = string.format }
-local setmetatable = setmetatable
-local capi = { client = client }
 
-local common	= require("actionless.widgets.common")
-local helpers	= require("actionless.helpers")
-local newtimer	= helpers.newtimer
-local font		= helpers.font
+local capi = { client = client }
+local setmetatable = setmetatable
+
+local common = require("actionless.widgets.common")
 
 
 local manage_client = {}
 
 local function worker(widget_screen, args)
   local args	 = args or {}
-  local interval  = args.interval or 5
   local bg = args.bg or beautiful.panel_widget_bg or beautiful.fg
   local fg = args.fg or beautiful.panel_widget_fg or beautiful.bg
 
