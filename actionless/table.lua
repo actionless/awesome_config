@@ -79,6 +79,7 @@ function table_helpers.range(original_table, range_start, range_finish)
 end
 
 function table_helpers.contains(container_table, desired_value)
+  container_table = container_table or {}
   for _, value in pairs(container_table) do
     if value == desired_value then return true end
   end
@@ -86,6 +87,7 @@ function table_helpers.contains(container_table, desired_value)
 end
 
 function table_helpers.contains_key(container_table, desired_key)
+  container_table = container_table or {}
   for key, _ in pairs(container_table) do
     if key == desired_key then return true end
   end
