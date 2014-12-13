@@ -146,9 +146,13 @@ end
 local function create_legend(groups, modifiers)
   local modifiers_table_name = get_mod_table_name(modifiers)
   local legend_layout = wibox.layout.flex.horizontal()
+  local alt_fg = beautiful.color and beautiful.color[0] or beautiful.bg
   for group_id, group in pairs(hotkeys.groups) do
     if h_table.contains(groups, group_id) then
-        group_pretty_display = markup.bg(group.color, group.name)
+        group_pretty_display = markup.fg(
+          alt_fg,
+          markup.bg(group.color, group.name)
+        )
     else
         group_pretty_display = markup.fg(group.color, group.name)
     end
@@ -159,7 +163,10 @@ local function create_legend(groups, modifiers)
     for _, modifier in ipairs(group.modifiers) do
       local modifier_pretty_display
       if modifier==modifiers_table_name then
-          modifier_pretty_display = markup.bg(group.color, modifier)
+          modifier_pretty_display = markup.fg(
+            alt_fg,
+            markup.bg(group.color, modifier)
+          )
       else
           modifier_pretty_display = modifier
       end
