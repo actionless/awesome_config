@@ -1,5 +1,6 @@
 
 local awful = require("awful")
+local beautiful = require("beautiful")
 local menubar = require("menubar")
 local client = client
 local capi = {
@@ -21,8 +22,6 @@ local hk = require("actionless.hotkeys")
 local keys = {}
 function keys.init(awesome_context)
 
-hk.init(awesome_context)
-
 local modkey = awesome_context.modkey
 local altkey = awesome_context.altkey
 local cmd = awesome_context.cmds
@@ -31,12 +30,23 @@ local RESIZE_STEP = 15
 
 local TO_DEFINE_COLOR = nil
 
-local TAG_COLOR = 4
+--local TAG_COLOR = 4
+local TAG_COLOR = 6
 local CLIENT_COLOR = 3
 local MENU_COLOR = 5
 local IMPORTANT_COLOR = 9
 local CLIENT_MANIPULATION = 10
 local LAYOUT_MANIPULATION = 12
+
+hk.add_groups({
+  [TAG_COLOR]={name="tags",color=beautiful.color[TAG_COLOR]},
+  [CLIENT_COLOR]={name="client focus",color=beautiful.color[CLIENT_COLOR]},
+  [MENU_COLOR]={name="menu",color=beautiful.color[MENU_COLOR]},
+  [IMPORTANT_COLOR]={name="important",color=beautiful.color[IMPORTANT_COLOR]},
+  [CLIENT_MANIPULATION]={name="client",color=beautiful.color[CLIENT_MANIPULATION]},
+  [LAYOUT_MANIPULATION]={name="layout",color=beautiful.color[LAYOUT_MANIPULATION]},
+})
+
 
 -- {{{ Mouse bindings
 capi.root.buttons(awful.util.table.join(

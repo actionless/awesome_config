@@ -15,12 +15,11 @@ local bordered_widget = require("actionless.widgets.common").bordered
 
 local APPEARANCE = {
   width = 1400,
-  height = 600,
+  height = 620,
   key_padding = 5,
   key_margin = 5,
   comment_font_size = 8,
   comment_width_chars = 10,
-  pressed_color_group = 2,
 }
 local hotkeys = {
   bindings = {
@@ -38,7 +37,10 @@ local hotkeys = {
   last_visible = false,
   popup = {
     visible = false,
-  }
+  },
+  groups = {
+    pressed={name="hold", color=beautiful.color[2]}
+  },
 }
 local KEYBOARD = {
   { 'Escape', '#67', '#68', '#69', '#70', '#71', '#72', '#73', '#74', '#75', '#76', '#95', '#96', 'Home', 'End'},
@@ -133,9 +135,11 @@ local function new_keybutton(key_label, comment, key_group)
 
   local key_group_bg = nil
   local key_group_fg = beautiful.bg
-  if key_group then
-    key_group_bg = beautiful.color[key_group]
+  if key_group and hotkeys.groups[key_group] then
+    key_group_bg = hotkeys.groups[key_group].color
   elseif comment then
+    print(comment)
+    print(key_group)
     key_group_bg = beautiful.theme
   elseif h_table.contains(SPECIAL_KEYBUTTONS, key_label) then
     key_group_bg = "#333333"
@@ -151,17 +155,34 @@ local function new_keybutton(key_label, comment, key_group)
 end
 
 
+local function create_legend(groups)
+  local legend_layout = wibox.layout.flex.horizontal()
+  for i1, group_id in ipairs(groups) do
+    if group_id then
+      local group = hotkeys.groups[group_id]
+      legend_layout:add(
+        wibox.widget.textbox(
+          markup.fg(group.color, group.name)
+        )
+      )
+    end
+  end
+  return legend_layout
+end
+
+
 local function init_keyboard(modifiers)
   local modifiers_table_name = get_mod_table_name(modifiers)
 
   for _, modifier in ipairs(modifiers) do
     hotkeys.bindings[modifiers_table_name][modifier] = {
       comment='pressed',
-      group=APPEARANCE.pressed_color_group,
+      group="pressed",
     }
   end
 
   local keyboard_layout = wibox.layout.flex.vertical()
+  local groups = {}
   for i1, row in ipairs(KEYBOARD) do
     local row_layout = wibox.layout.flex.horizontal()
     for i2, key in ipairs(row) do
@@ -170,9 +191,11 @@ local function init_keyboard(modifiers)
       row_layout:add(new_keybutton(
         KEYBOARD_LABELS[i1][i2], hotkey_record.comment, hotkey_record.group
       ))
+      h_table.list_merge(groups, {hotkey_record.group})
     end
     keyboard_layout:add(row_layout)
   end
+  keyboard_layout:add(create_legend(groups))
 
   return keyboard_layout
 end
@@ -205,9 +228,8 @@ local function init_popup(modifiers)
 end
 
 
-function hotkeys.init(awesome_context)
-  hotkeys.modkey = awesome_context.modkey
-  hotkeys.altkey = awesome_context.altkey
+function hotkeys.add_groups(groups)
+  h_table.merge(hotkeys.groups, groups)
 end
 
 

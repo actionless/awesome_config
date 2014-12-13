@@ -41,6 +41,17 @@ function table_helpers.merge(container, addition)
   return container
 end
 
+function table_helpers.list_merge(container, addition)
+  container = container or {}
+  addition = addition or {}
+  for _, item in ipairs(addition) do
+    if not table_helpers.contains(container, item) then
+      table.insert(container, item)
+    end
+  end
+  return container
+end
+
 function table_helpers.add(container, addition)
   container = container or {}
   addition = addition or {}
