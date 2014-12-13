@@ -6,7 +6,7 @@
 local naughty		= require("naughty")
 
 local helpers		= require("actionless.helpers")
-local newtimer		= helpers.newtimer
+local newinterval		= helpers.newinterval
 local beautiful		 = require("beautiful")
 local common_widget	= require("actionless.widgets.common").widget
 local markup		= require("actionless.markup")
@@ -128,7 +128,7 @@ local function worker(args)
     end
   end
 
-  newtimer("netctl", update_interval, netctl.update)
+  newinterval("netctl", update_interval, netctl.update)
 
   return setmetatable(
     netctl,

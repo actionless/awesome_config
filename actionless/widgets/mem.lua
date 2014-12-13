@@ -16,7 +16,7 @@ local helpers      = require("actionless.helpers")
 local h_table      = require("actionless.table")
 local parse        = require("actionless.parse")
 local common_widget= require("actionless.widgets.common").widget
-local newtimer     = helpers.newtimer
+local newinterval     = helpers.newinterval
 
 -- Memory usage (ignoring caches)
 local mem = {
@@ -106,7 +106,7 @@ local function worker(args)
     ))
   end
 
-  newtimer("mem", update_interval, mem.update)
+  newinterval("mem", update_interval, mem.update)
   return setmetatable(mem, { __index = mem.widget })
 end
 return setmetatable(mem, { __call = function(_, ...) return worker(...) end })

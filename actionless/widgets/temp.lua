@@ -43,7 +43,7 @@ local function worker(args)
     temp.widget:set_text(string.format("%2i°C ", coretemp_now))
   end
 
-  helpers.newtimer("coretemp", update_interval, temp.update)
+  helpers.newinterval("coretemp", update_interval, temp.update)
   return temp.widget
 end
 
