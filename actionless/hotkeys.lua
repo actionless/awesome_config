@@ -95,6 +95,7 @@ local MODIFIERS = {
 }
 
 local function get_mod_table_name(modifiers)
+  if #modifiers<1 then return "no modifiers" end
   local copied = h_table.deepcopy(modifiers)
   table.sort(copied)
   return table.concat(copied, '+')
@@ -160,7 +161,7 @@ local function create_legend(groups, modifiers)
     item_layout:add(
       wibox.widget.textbox(group_pretty_display)
     )
-    for _, modifier in ipairs(group.modifiers) do
+    for _, modifier in pairs(group.modifiers) do
       local modifier_pretty_display
       if modifier==modifiers_table_name then
           modifier_pretty_display = markup.fg(
