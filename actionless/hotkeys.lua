@@ -17,6 +17,7 @@ local h_table = require("actionless.table")
 local markup = require("actionless.markup")
 local bordered_widget = require("actionless.widgets.common").bordered
 
+local press_color = beautiful.color and beautiful.color[2] or "#aaaabb"
 local hotkeys = {
   appearance = {
     width = 1400,
@@ -44,7 +45,7 @@ local hotkeys = {
     visible = false,
   },
   groups = {
-    pressed={name="hold", color=beautiful.color[2], modifiers={}}
+    pressed={name="hold", color=press_color, modifiers={}}
   },
 }
 local APPEARANCE = hotkeys.appearance

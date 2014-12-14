@@ -1,4 +1,4 @@
-local config = {}
+local config = {awesome={}}
 
 function config.init(awesome_context)
 
