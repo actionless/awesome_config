@@ -48,7 +48,7 @@ local KEYBOARD = {
   { 'Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 'Backspace' },
   { 'Caps', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", '\\', 'Return' },
   { 'Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 'Next', 'Up' , 'Prior' },
-  { 'Fn', 'Control', 'Mod4', 'Mod1', '', 'space', '', '', 'Alt Gr', 'Print', 'Control', 'Left', 'Down', 'Right'},
+  { 'Fn', 'Control', 'Mod4', 'Mod1', '', 'space', '', '', '#108', 'Print', 'Control', 'Left', 'Down', 'Right'},
 }
 local KEYBOARD_LABELS = {
   { 'Esc', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12', 'Home', 'End'},
@@ -148,7 +148,7 @@ local function create_legend(groups, modifiers)
   local modifiers_table_name = get_mod_table_name(modifiers)
   local legend_layout = wibox.layout.flex.horizontal()
   local alt_fg = beautiful.color and beautiful.color[0] or beautiful.bg
-  for group_id, group in pairs(hotkeys.groups) do
+  for group_id, group in h_table.spairs(hotkeys.groups) do
     if h_table.contains(groups, group_id) then
         group_pretty_display = markup.fg(
           alt_fg,
@@ -161,19 +161,21 @@ local function create_legend(groups, modifiers)
     item_layout:add(
       wibox.widget.textbox(group_pretty_display)
     )
-    for _, modifier in pairs(group.modifiers) do
-      local modifier_pretty_display
-      if modifier==modifiers_table_name then
-          modifier_pretty_display = markup.fg(
-            alt_fg,
-            markup.bg(group.color, modifier)
-          )
-      else
-          modifier_pretty_display = modifier
+    if group.modifiers then
+      for _, modifier in pairs(group.modifiers) do
+        local modifier_pretty_display
+        if modifier==modifiers_table_name then
+            modifier_pretty_display = markup.fg(
+              alt_fg,
+              markup.bg(group.color, modifier)
+            )
+        else
+            modifier_pretty_display = modifier
+        end
+        item_layout:add(
+          wibox.widget.textbox(modifier_pretty_display)
+        )
       end
-      item_layout:add(
-        wibox.widget.textbox(modifier_pretty_display)
-      )
     end
     legend_layout:add(item_layout)
   end

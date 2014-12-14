@@ -70,3 +70,4 @@ config.signals.init(context)
     --}
 
 -- vim: set shiftwidth=2:
+local hotkeys	= require("hotkeys")
