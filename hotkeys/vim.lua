@@ -3,10 +3,10 @@ local hk = require("actionless.hotkeys")
 
 
 hk.add_groups({
-  vim_motion={name="vim motion",color="#009F00"},
-  vim_command={name="vim command",color="#aFaF00"},
-  vim_command_insert={name="vim cmd and ins",color="#cF4F40"},
-  vim_operator={name="vim operator",color="#aF6F00"},
+  vim_motion={name="vim motion",color="#009F00", client_name="vim"},
+  vim_command={name="vim command",color="#aFaF00", client_name="vim"},
+  vim_command_insert={name="vim cmd and ins",color="#cF4F40", client_name="vim"},
+  vim_operator={name="vim operator",color="#aF6F00", client_name="vim"},
 })
 
 local vim_keys = {

@@ -38,6 +38,7 @@ local hotkeys = {
   },
   cached_keyboards = {},
   last_modifiers = nil,
+  last_groups = nil,
   last_visible = false,
   popup = {
     visible = false,
@@ -148,11 +149,12 @@ local function create_keybutton(key_label, comment, key_group)
   return obj
 end
 
-local function create_legend(groups, modifiers)
+local function create_legend(groups, modifiers, available_groups)
   local modifiers_table_name = join_modifiers(modifiers)
   local legend_layout = wibox.layout.flex.horizontal()
   local alt_fg = beautiful.color and beautiful.color[0] or beautiful.bg
   for group_id, group in h_table.spairs(hotkeys.groups) do
+    if not h_table.contains(available_groups, group_id) then break end
     local group_pretty_display
     if h_table.contains(groups, group_id) then
         group_pretty_display = markup.fg(
@@ -188,7 +190,7 @@ local function create_legend(groups, modifiers)
 end
 
 
-local function create_keyboard(modifiers)
+local function create_keyboard(modifiers, available_groups)
   local modifiers_table_name = join_modifiers(modifiers)
 
   for _, modifier in ipairs(modifiers) do
@@ -203,22 +205,31 @@ local function create_keyboard(modifiers)
   for i1, row in ipairs(KEYBOARD) do
     local row_layout = wibox.layout.flex.horizontal()
     for i2, key in ipairs(row) do
-      local hotkey_record = hotkeys.bindings[modifiers_table_name][key] or
-                            { comment=nil, group=nil }
-      row_layout:add(create_keybutton(
-        KEYBOARD_LABELS[i1][i2], hotkey_record.comment, hotkey_record.group
-      ))
-      h_table.list_merge(groups, {hotkey_record.group})
+      local hotkey_record = hotkeys.bindings[modifiers_table_name][key]
+      if hotkey_record
+        and hotkey_record.group
+        and not h_table.contains(available_groups, hotkey_record.group)
+      then
+        hotkey_record = nil
+      end
+      if hotkey_record then
+        row_layout:add(create_keybutton(
+          KEYBOARD_LABELS[i1][i2], hotkey_record.comment, hotkey_record.group
+        ))
+        h_table.list_merge(groups, {hotkey_record.group})
+      else
+        row_layout:add(create_keybutton(KEYBOARD_LABELS[i1][i2], nil, nil))
+      end
     end
     keyboard_layout:add(row_layout)
   end
-  keyboard_layout:add(create_legend(groups, modifiers))
+  keyboard_layout:add(create_legend(groups, modifiers, available_groups))
 
   return keyboard_layout
 end
 
 
-local function create_wibox(modifiers)
+local function create_wibox(modifiers, available_groups)
   local scrgeom = capi.screen[helpers.get_current_screen()].workarea
   local width = APPEARANCE.width
   local height = APPEARANCE.height
@@ -237,7 +248,7 @@ local function create_wibox(modifiers)
   })
   mywibox:set_widget(
     bordered_widget(
-      create_keyboard(modifiers),
+      create_keyboard(modifiers, available_groups),
       {
         padding = APPEARANCE.key_padding,
         margin = APPEARANCE.key_margin,
@@ -285,30 +296,53 @@ function hotkeys.key(modifiers, key, key_press_function, key_release_function,
   end
 end
 
+
 function hotkeys.on(modifiers, key, key_press_function, comment, key_group)
   return hotkeys.key(modifiers, key, key_press_function, nil, comment, key_group)
 end
 
+
 function hotkeys.show_by_modifiers(modifiers)
-  if hotkeys.last_modifiers ~= modifiers then
-    local mod_table = join_modifiers(modifiers)
-    if not hotkeys.cached_keyboards[mod_table] then
-      hotkeys.cached_keyboards[mod_table] = create_wibox(modifiers)
+  local client_name = capi.client.focus.name
+  local available_groups = {}
+  for group_name, group in pairs(hotkeys.groups) do
+    if not group.client_name
+      or (group.client_name and client_name:match(group.client_name))
+    then
+      table.insert(available_groups, group_name)
     end
+  end
+  local joined_groups = join_modifiers(available_groups)
+  local mod_table = join_modifiers(modifiers)
+
+  if hotkeys.last_modifiers ~= mod_table
+    or hotkeys.last_groups ~= joined_groups
+  then
+    if not hotkeys.cached_keyboards[mod_table] then
+      hotkeys.cached_keyboards[mod_table] = {}
+    end
+    if not hotkeys.cached_keyboards[mod_table][joined_groups] then
+      hotkeys.cached_keyboards[mod_table][joined_groups] = create_wibox(modifiers, available_groups)
+    end
+    -- old-popup -- is to prevent flickering when switching between them:
     local old_popup = hotkeys.popup
-    hotkeys.popup = hotkeys.cached_keyboards[mod_table]
+    hotkeys.popup = hotkeys.cached_keyboards[mod_table][joined_groups]
     hotkeys.popup.visible = true
     old_popup.visible = false
   else
     hotkeys.popup.visible = not hotkeys.popup.visible
   end
+
+  hotkeys.last_groups = joined_groups
   hotkeys.last_visible = hotkeys.popup.visible
-  hotkeys.last_modifiers = modifiers
+  hotkeys.last_modifiers = mod_table
+
   local function hide_popup()
     capi.keygrabber.stop()
     hotkeys.popup.visible = false
     hotkeys.last_visible = false
   end
+
   capi.keygrabber.run(function(mod, key, event)
     if APPEARANCE.hide_on_key_release then
       if event == "release" then hide_popup() end
