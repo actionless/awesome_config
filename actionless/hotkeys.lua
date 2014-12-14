@@ -303,7 +303,12 @@ end
 
 
 function hotkeys.show_by_modifiers(modifiers)
-  local client_name = capi.client.focus.name
+  local client_name
+  if capi.client.focus then
+    client_name = capi.client.focus.name
+  else
+    client_name = 'no client'
+  end
   local available_groups = {}
   for group_name, group in pairs(hotkeys.groups) do
     if not group.client_name

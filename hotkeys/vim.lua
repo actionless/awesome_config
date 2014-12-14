@@ -56,7 +56,7 @@ local vim_keys = {
 for action_type, keys in pairs(vim_keys) do
   for key, description in pairs(keys) do
     hk.on({}, key,
-      function() print("TESST") end,
+      nil,
       description,
       "vim_"..action_type
     )
@@ -125,7 +125,7 @@ local vim_shift_keys = {
 for action_type, keys in pairs(vim_shift_keys) do
   for key, description in pairs(keys) do
     hk.on({"Shift"}, key,
-      function() print("TESST") end,
+      nil,
       description,
       "vim_"..action_type
     )
