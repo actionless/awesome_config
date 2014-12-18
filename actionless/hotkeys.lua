@@ -292,7 +292,7 @@ function hotkeys.key(modifiers, key, key_press_function, key_release_function,
     hotkeys.groups[key_group].modifiers = h_table.list_merge(hotkeys.groups[key_group].modifiers, {mod_table})
   end
 
-  if not key_press_function or not key_release_function then
+  if key_press_function or key_release_function then
     return awful.key(modifiers, key, key_press_function, key_release_function)
   end
 end
