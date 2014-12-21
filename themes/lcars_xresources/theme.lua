@@ -39,9 +39,9 @@ local theme = generate_theme(
 -- Use plain color:
 --theme.wallpaper_cmd     = "hsetroot"
 -- Use nitrogen:
---theme.wallpaper_cmd     = "nitrogen --restore"
+theme.wallpaper_cmd     = "nitrogen --restore"
 -- Use wallpaper tile:
-theme.wallpaper = theme_dir .. '/umbreon_pattern.png'
+--theme.wallpaper = theme_dir .. '/umbreon_pattern.png'
 
 -- PANEL DECORATIONS:
 --
