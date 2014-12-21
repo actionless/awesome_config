@@ -38,7 +38,22 @@ function layouts.init(context)
     -- Each screen has its own tag table.
     context.tags[s] = awful.tag(
       { '1:bs', '2:web', '3:ww', '4:im', '5:mm', 6, 7, 8, '9:sd', '10:nl', '11', '12' },
-      s, awful.layout.layouts[1])
+      s,
+      {
+        awful.layout.layouts[1],
+        awful.layout.layouts[1],
+        awful.layout.layouts[1],
+        awful.layout.layouts[1],
+        awful.layout.layouts[1],
+        awful.layout.layouts[1],
+        awful.layout.layouts[1],
+        awful.layout.layouts[1],
+        awful.layout.layouts[1],
+        awful.layout.layouts[3],
+        awful.layout.layouts[1],
+        awful.layout.layouts[1],
+      }
+    )
   end
   -- }}}
 
