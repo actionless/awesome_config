@@ -81,6 +81,7 @@ function toolbar.init(awesome_context)
     right_layout:add(separator)
 
     right_layout:add(loaded_widgets.screen[s].layoutbox)
+    right_layout:add(sep)
 
 
     -- TOOLBAR
