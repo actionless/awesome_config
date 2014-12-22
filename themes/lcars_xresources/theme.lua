@@ -1,7 +1,8 @@
 local xresources = require("actionless.xresources")
 local generate_theme = require("actionless.common_theme").generate_theme
 
-local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/lcars_xresources"
+local awful = require("awful")
+local theme_dir = awful.util.getdir("config").."/themes/lcars_xresources"
 
 -- TERMINAL COLORSCHEME:
 --
@@ -20,7 +21,8 @@ local panel_colors = {
   close=1,
   tasklist='b',
   media=14,
-  info=13
+  info=13,
+  layoutbox=7,
 }
 
 -- LOAD DEFAULT THEME:

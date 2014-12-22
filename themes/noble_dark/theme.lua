@@ -2,7 +2,8 @@ local generate_theme = require("actionless.common_theme").generate_theme
 local xresources = require("actionless.xresources")
 local h_table = require("actionless.table")
 
-local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/noble_dark"
+local awful = require("awful")
+local theme_dir = awful.util.getdir("config").."/themes/noble_dark"
 
 local gtk = {}
 

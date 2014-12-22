@@ -1,7 +1,8 @@
 local theme = {}
 
-local themes_dir = os.getenv("HOME") .. "/.config/awesome/themes/lcars"
-theme.dir = themes_dir
+local awful = require("awful")
+local theme_dir = awful.util.getdir("config").."/themes/lcars"
+theme.dir = theme_dir
 --theme.wallpaper_cmd     = "hsetroot"
 theme.wallpaper_cmd     = "nitrogen --restore"
 theme.show_widget_icon = false
