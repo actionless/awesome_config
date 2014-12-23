@@ -58,8 +58,11 @@ client.connect_signal("manage", function (c, startup)
   and
     not c.size_hints.program_position
   then
-      awful.placement.no_overlap(c)
-      awful.placement.no_offscreen(c)
+    awful.placement.no_overlap(c)
+    awful.placement.no_offscreen(c)
+  elseif not c.size_hints.user_position and not c.size_hints.program_position then
+    -- Prevent clients from being unreachable after screen count change
+    awful.placement.no_offscreen(c)
   end
 end)
 
