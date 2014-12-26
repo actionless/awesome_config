@@ -24,7 +24,7 @@ local context = {
     wlan_if = 'wlp12s0',
     eth_if = 'enp0s25',
     cpu_cores_num = 2,
-    music_players = { 'mpd' },
+    music_players = { 'spotify', 'clementine' },
     music_dir = '~/music/',
   },
 
