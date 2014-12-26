@@ -20,7 +20,7 @@ function autorun.init(awesome_context)
   run_once("unclutter")
   run_once("setxkbmap -layout us,ru -variant ,winkeys -option grp:caps_toggle,grp_led:scroll,terminate:ctrl_alt_bksp,compose:ralt")
   run_once("kbdd")
-  run_once("urxvtd")
+  --run_once("urxvtd")
 
   for _, item in ipairs(awesome_context.autorun) do
     awful.util.spawn_with_shell(item)
