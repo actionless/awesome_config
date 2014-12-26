@@ -88,5 +88,6 @@ theme.taglist_squares_unsel     = nil
   theme.titlebar_bg_focus		= theme.titlebar_focus_border
   theme.titlebar_fg_normal	= theme.tasklist_fg_normal
   theme.titlebar_bg_normal	= theme.titlebar_border
+theme.border_width = 6
 
 return theme
