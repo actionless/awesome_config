@@ -31,6 +31,7 @@ local function on_client_focus(c)
     c.border_width = beautiful.border_width
     c.border_color = beautiful.border_focus
   end
+  --print(c:get_xproperty('_GTK_APP_MENU_OBJECT_PATH'))
 end
 
 local function on_client_unfocus (c)
