@@ -100,6 +100,7 @@ function common_theme.generate_theme(theme_dir, colors16, panel_colors)
   theme.tasklist_fg_minimize	= theme.bg
   theme.tasklist_bg_minimize	= theme.alt_bg
 
+  theme.titlebar_height		= 28
   theme.titlebar_opacity		= 0.7
   theme.titlebar_position		= 'top'
   theme.titlebar_font		= theme.font
