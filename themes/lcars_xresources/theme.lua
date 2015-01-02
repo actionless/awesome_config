@@ -84,10 +84,12 @@ theme.tasklist_font = theme.sans_font
 theme.taglist_squares_sel       = nil
 theme.taglist_squares_unsel     = nil
 
-  theme.titlebar_fg_focus		= theme.titlebar_border
-  theme.titlebar_bg_focus		= theme.titlebar_focus_border
-  theme.titlebar_fg_normal	= theme.tasklist_fg_normal
-  theme.titlebar_bg_normal	= theme.titlebar_border
+theme.titlebar_fg_focus		= theme.titlebar_border
+theme.titlebar_bg_focus		= theme.titlebar_focus_border
+theme.titlebar_fg_normal	= theme.tasklist_fg_normal
+theme.titlebar_bg_normal	= theme.titlebar_border
 theme.border_width = 6
+theme.titlebar_height = 24
+
 
 return theme
