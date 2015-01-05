@@ -10,7 +10,7 @@ local beautiful = require("beautiful")
 local setmetatable = setmetatable
 
 local helpers = require("actionless.helpers")
-local newtimer     = helpers.newtimer
+local newinterval     = helpers.newinterval
 
 
 local function scandir(directory)
@@ -49,7 +49,7 @@ local function worker(args)
 
 	-- random timer id is for possibility to
 	-- run different instance of the widget simultaneously
-	newtimer("random_pic_" .. math.random(1,65535), interval, rp.update)
+	newinterval("random_pic_" .. math.random(1,65535), interval, rp.update)
 	return rp.widget
 end
 

@@ -152,10 +152,11 @@ local function worker(args)
   end
 -------------------------------------------------------------------------------
   function player.parse_status(player_status)
-    player_status = tag_parser.predict_missing_tags(player_status)
-
     local artist = ""
     local title = ""
+    local old_title = player.player_status.title
+    player_status = tag_parser.predict_missing_tags(player_status)
+    player.player_status = player_status
 
     if player_status.state == "play" then
       -- playing
@@ -173,7 +174,7 @@ local function worker(args)
       artist = h_string.escape(artist)
       title = h_string.escape(title)
       -- playing new song
-      if player_status.title ~= player.player_status.title then
+      if player_status.title ~= old_title then
         player.resize_cover()
       end
     elseif player_status.state == "pause" then
@@ -207,7 +208,6 @@ local function worker(args)
         player.widget:set_text('(m)')
       end
     end
-    player.player_status = player_status
   end
 -------------------------------------------------------------------------------
 function player.resize_cover()

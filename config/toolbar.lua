@@ -24,26 +24,6 @@ function toolbar.init(awesome_context)
   local sep_info   = make_separator('sq', {fg=beautiful.color[bpc.info]})
   local sep_media  = make_separator('sq', {fg=beautiful.color[bpc.media]})
 
-
-  local arr = { l={}, r={} }
-  for _, direction in ipairs({'l', 'r'}) do
-    for i=0,15 do
-      arr[direction][i] = make_separator(
-        'arr' .. direction, { fg=beautiful.color[i] })
-    end
-    for _, i in ipairs({'b', 'f'}) do
-      arr[direction][i] = make_separator(
-        'arr' .. direction, { fg=beautiful.color[i] })
-    end
-    setmetatable(
-      arr[direction],
-      { __index = make_separator('arr' .. direction) }
-    )
-  end
-
-
-
-
   -- Create a wibox for each screen and add it
   local mywibox = {}
   for s = 1, capi.screen.count() do
@@ -65,8 +45,8 @@ function toolbar.init(awesome_context)
     local right_layout = wibox.layout.fixed.horizontal()
 
     if bpc.tasklist then
-      left_layout:add(arr.l[bpc.tasklist])
-      right_layout:add(arr.r[bpc.tasklist])
+      left_layout:add(make_separator('arrl', {fg=beautiful.color[bpc.tasklist]}))
+      right_layout:add(make_separator('arrr', {fg=beautiful.color[bpc.tasklist]}))
     end
 
     right_layout:add(separator)
@@ -94,13 +74,14 @@ function toolbar.init(awesome_context)
     right_layout:add(loaded_widgets.cpu)
     right_layout:add(loaded_widgets.temp)
     right_layout:add(loaded_widgets.bat)
-    right_layout:add(arr.r[bpc.info])
+    right_layout:add(make_separator('arrr', {fg=beautiful.color[bpc.info]}))
 
     right_layout:add(separator)
     right_layout:add(loaded_widgets.textclock)
     right_layout:add(separator)
 
     right_layout:add(loaded_widgets.screen[s].layoutbox)
+    right_layout:add(sep)
 
 
     -- TOOLBAR

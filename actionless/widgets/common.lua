@@ -7,11 +7,8 @@ local wibox = require("wibox")
 local gears = require("gears")
 local beautiful = require("beautiful")
 
-local config = require("actionless.config")
 local h_table = require("actionless.table")
 local iconfont = require("actionless.iconfont")
-
-beautiful.init(config.awesome.theme_dir)
 
 
 local function get_color(color_n)

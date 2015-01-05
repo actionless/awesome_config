@@ -97,7 +97,7 @@ local function worker(args)
       function(str) post_update(str) end)
   end
 
-  helpers.newtimer("widget_bat_" .. device, update_interval, update)
+  helpers.newinterval("widget_bat_" .. device, update_interval, update)
 
   return widget
 end

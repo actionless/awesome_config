@@ -174,7 +174,7 @@ local function worker(args)
     )
   end
 
-  helpers.newtimer("alsa", alsa.update_interval, alsa.update)
+  helpers.newinterval("alsa", alsa.update_interval, alsa.update)
   return setmetatable(alsa, { __index = alsa.widget })
 end
 

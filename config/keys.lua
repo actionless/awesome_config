@@ -1,5 +1,6 @@
 
 local awful = require("awful")
+local beautiful = require("beautiful")
 local menubar = require("menubar")
 local client = client
 local capi = {
@@ -21,8 +22,6 @@ local hk = require("actionless.hotkeys")
 local keys = {}
 function keys.init(awesome_context)
 
-hk.init(awesome_context)
-
 local modkey = awesome_context.modkey
 local altkey = awesome_context.altkey
 local cmd = awesome_context.cmds
@@ -31,12 +30,23 @@ local RESIZE_STEP = 15
 
 local TO_DEFINE_COLOR = nil
 
-local TAG_COLOR = 4
-local CLIENT_COLOR = 3
-local MENU_COLOR = 5
-local IMPORTANT_COLOR = 9
-local CLIENT_MANIPULATION = 10
-local LAYOUT_MANIPULATION = 12
+--local TAG_COLOR = 4
+local TAG_COLOR = "tag"
+local CLIENT_COLOR = "client_focus"
+local MENU_COLOR = "menu"
+local IMPORTANT_COLOR = "important"
+local CLIENT_MANIPULATION = "client"
+local LAYOUT_MANIPULATION = "layout"
+
+hk.add_groups({
+  [TAG_COLOR]={name="tags",color=beautiful.color[6]},
+  [CLIENT_COLOR]={name="client focus",color=beautiful.color[3]},
+  [MENU_COLOR]={name="menu",color=beautiful.color[5]},
+  [IMPORTANT_COLOR]={name="important",color=beautiful.color[9]},
+  [CLIENT_MANIPULATION]={name="client",color=beautiful.color[10]},
+  [LAYOUT_MANIPULATION]={name="layout",color=beautiful.color[12]},
+})
+
 
 -- {{{ Mouse bindings
 capi.root.buttons(awful.util.table.join(
@@ -52,19 +62,24 @@ awful.menu.menu_keys.up = { "Up", "k" }
 awful.menu.menu_keys.enter = { "Right", "l" }
 awful.menu.menu_keys.close = { "Escape", '#133', 'q' }
 
+
+--local HELPKEY = "Print"
+local HELPKEY = "#108"
+
 -- {{{ Key bindings
 local globalkeys = awful.util.table.join(
 
-  hk.on({  }, "Print", "show_help"),
-  hk.on({ modkey, }, "Print", "show_help"),
-
-  hk.on({ modkey, }, "/", "show_help"),
-  hk.on({ modkey, altkey }, "/", "show_help"),
-  hk.on({ modkey, altkey, "Shift" }, "/", "show_help"),
-  hk.on({ modkey, altkey, "Control" }, "/", "show_help"),
-  hk.on({ modkey, "Shift"    }, "/", "show_help"),
-  hk.on({ modkey, "Control"  }, "/", "show_help"),
-  hk.on({ modkey, "Shift", "Control" }, "/", "show_help"),
+  hk.on({  }, HELPKEY, "show_help"),
+  hk.on({ "Shift" }, HELPKEY, "show_help"),
+  hk.on({ "Control" }, HELPKEY, "show_help"),
+  hk.on({ altkey }, HELPKEY, "show_help"),
+  hk.on({ modkey, }, HELPKEY, "show_help"),
+  hk.on({ modkey, altkey }, HELPKEY, "show_help"),
+  hk.on({ modkey, altkey, "Shift" }, HELPKEY, "show_help"),
+  hk.on({ modkey, altkey, "Control" }, HELPKEY, "show_help"),
+  hk.on({ modkey, "Shift"    }, HELPKEY, "show_help"),
+  hk.on({ modkey, "Control"  }, HELPKEY, "show_help"),
+  hk.on({ modkey, "Shift", "Control" }, HELPKEY, "show_help"),
 
   -- hk.on({ modkey,  }, "Control", "show_help"), -- show hotkey on hold
 

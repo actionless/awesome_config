@@ -1,5 +1,4 @@
 local actionless = {
-  config = require("actionless.config"),
   widgets = require("actionless.widgets"),
   -- awesome addons
   menu_addon = require("actionless.menu_addon"),

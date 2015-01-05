@@ -1,7 +1,8 @@
 local xresources = require("actionless.xresources")
 local generate_theme = require("actionless.common_theme").generate_theme
 
-local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/lcars_xresources"
+local awful = require("awful")
+local theme_dir = awful.util.getdir("config").."/themes/lcars_xresources"
 
 -- TERMINAL COLORSCHEME:
 --
@@ -20,7 +21,8 @@ local panel_colors = {
   close=1,
   tasklist='b',
   media=14,
-  info=13
+  info=13,
+  layoutbox=7,
 }
 
 -- LOAD DEFAULT THEME:
@@ -39,9 +41,9 @@ local theme = generate_theme(
 -- Use plain color:
 --theme.wallpaper_cmd     = "hsetroot"
 -- Use nitrogen:
---theme.wallpaper_cmd     = "nitrogen --restore"
+theme.wallpaper_cmd     = "nitrogen --restore"
 -- Use wallpaper tile:
-theme.wallpaper = theme_dir .. '/umbreon_pattern.png'
+--theme.wallpaper = theme_dir .. '/umbreon_pattern.png'
 
 -- PANEL DECORATIONS:
 --
@@ -81,5 +83,13 @@ theme.tasklist_font = theme.sans_font
 
 theme.taglist_squares_sel       = nil
 theme.taglist_squares_unsel     = nil
+
+theme.titlebar_fg_focus		= theme.titlebar_border
+theme.titlebar_bg_focus		= theme.titlebar_focus_border
+theme.titlebar_fg_normal	= theme.tasklist_fg_normal
+theme.titlebar_bg_normal	= theme.titlebar_border
+theme.border_width = 6
+theme.titlebar_height = 24
+
 
 return theme

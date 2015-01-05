@@ -253,7 +253,7 @@ function player.resize_cover()
   )
 end
 -------------------------------------------------------------------------------
-  helpers.newtimer("player", update_interval, player.update)
+  helpers.newinterval("player", update_interval, player.update)
   return setmetatable(player, { __index = player.widget })
 end
 

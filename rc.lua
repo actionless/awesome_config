@@ -4,54 +4,58 @@ OH HI
 
 -- localization
 os.setlocale(os.getenv("LANG"))
+local terminal = "st" or "urxvt -lsp 1 -geometry 120x30" or "xterm"
+local editor = "vim" or os.getenv("EDITOR") or "nano" or "vi"
 
 local eminent = require("eminent")
 eminent.create_new_tag = false
 local awful = require("awful")
 require("awful.autofocus")
-local beautiful	= require("beautiful")
 
 local context = {
 
-  widgets = {},
-  menu = {},
-
   modkey = "Mod4",
   altkey = "Mod1",
+
   theme_dir = awful.util.getdir("config") .. "/themes/noble_dark/theme.lua",
+
   config = {
     net_preset = 'netctl-auto',
     wlan_if = 'wlp12s0',
     eth_if = 'enp0s25',
     cpu_cores_num = 2,
-    music_players = { 'mpd' },
-    music_dir = '~/music/',
+    music_players = { 'spotify', 'clementine' },
+  },
+
+  cmds = {
+    terminal = terminal,
+    editor_cmd = terminal .. " -e " .. editor,
+    compositor = "killall compton; compton",
+    file_manager = "pcmanfm",
+    tmux = terminal .. " -e tmux",
+    tmux_run   = terminal .. " -e tmux new-session",
+    dmenu = "~/.config/dmenu/dmenu-recent.sh",
+    scrot_preview_cmd = [['mv $f ~/images/ &amp;&amp; viewnior ~/images/$f']],
   },
 
   autorun = {},
-
+  widgets = {},
+  menu = {},
 }
 
 local local_settings_result, local_settings_details = pcall(function()
-  local local_config = require("config.local")
-  if local_config then
-    context = local_config.init(context) or context
-  end
+  context = require("config.local").init(context) or context
 end)
 if local_settings_result ~= true then
-  local naughty = require("naughty")
-  naughty.notify({ preset = naughty.config.presets.critical,
-                   title = "Oops, there were errors during loading local config!",
-                   text = local_settings_details })
+  print("!!!WARNING: local settings not found")
+  print(local_settings_details)
 end
-beautiful.init(context.theme_dir)
 
-local widget_config = require("actionless.config")
-widget_config.init(context)
+local beautiful	= require("beautiful")
+beautiful.init(context.theme_dir)
 
 local config = require("config")
 config.notify.init(context)
-config.variables.init(context)
 config.autorun.init(context)
 config.layouts.init(context)
 config.menus.init(context)
@@ -60,13 +64,14 @@ config.toolbar.init(context)
 config.keys.init(context)
 config.rules.init(context)
 config.signals.init(context)
+require("hotkeys")
 
-    --require("collision") {
-        ----        Normal    Xephyr       Vim      G510
-        --up    = { "Up"    , "&"        , "ak"   , "F15" },
-        --down  = { "Down"  , "KP_Enter" , "aj"   , "F14" },
-        --left  = { "Left"  , "#"        , "ah"   , "F13" },
-        --right = { "Right" , "\""       , "al"   , "F17" },
-    --}
+--require("collision") {
+    ----        Normal    Xephyr       Vim      G510
+    --up    = { "Up"    , "&"        , "ak"   , "F15" },
+    --down  = { "Down"  , "KP_Enter" , "aj"   , "F14" },
+    --left  = { "Left"  , "#"        , "ah"   , "F13" },
+    --right = { "Right" , "\""       , "al"   , "F17" },
+--}
 
 -- vim: set shiftwidth=2:

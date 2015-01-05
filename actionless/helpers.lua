@@ -1,14 +1,14 @@
 --[[
      Licensed under GNU General Public License v2
       * (c) 2013-2014  Yauheni Kirylau
-      * (c) 2013,      Luke Bonham                
-      * (c) 2010-2012, Peter Hofmann              
+      * (c) 2013,      Luke Bonham
+      * (c) 2010-2012, Peter Hofmann
 --]]
 
 local debug  = require("debug")
 local awful = require("awful")
-local capi   = { timer = timer,
-                 client = client,
+local gears = require("gears")
+local capi   = { client = client,
                  mouse = mouse }
 
 local beautiful = require("beautiful")
@@ -36,8 +36,8 @@ end
 
 helpers.timer_table = {}
 
-function helpers.newinterval(name, timeout, fun, nostart)
-  local timer = capi.timer({ timeout = timeout })
+function helpers.newtimer(name, timeout, fun, nostart)
+  local timer = gears.timer({ timeout = timeout })
   timer:connect_signal("timeout", fun)
   timer:start()
   if not nostart then
@@ -46,8 +46,8 @@ function helpers.newinterval(name, timeout, fun, nostart)
   helpers.timer_table[name] = timer
 end
 
-function helpers.newtimer(name, timeout, fun, nostart)
-  local timer = capi.timer({ timeout = timeout })
+function helpers.newinterval(name, timeout, fun, nostart)
+  local timer = gears.timer({ timeout = timeout })
   local patched_function = function(...)
     timer:stop()
     fun(...)
@@ -62,7 +62,7 @@ function helpers.newtimer(name, timeout, fun, nostart)
 end
 
 function helpers.newdelay(name, timeout, fun)
-  local timer = capi.timer({ timeout = timeout })
+  local timer = gears.timer({ timeout = timeout })
   local patched_function = function(...)
     timer:stop()
     fun(...)

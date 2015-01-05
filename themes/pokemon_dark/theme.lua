@@ -1,6 +1,7 @@
 local generate_theme = require("actionless.common_theme").generate_theme
 
-local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/pokemon_dark"
+local awful = require("awful")
+local theme_dir = awful.util.getdir("config").."/themes/pokemon_dark"
 
 -- TERMINAL COLORSCHEME:
 --

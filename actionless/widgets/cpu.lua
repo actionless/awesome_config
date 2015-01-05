@@ -8,7 +8,7 @@ local beautiful    = require("beautiful")
 local helpers = require("actionless.helpers")
 local h_table      = require("actionless.table")
 local parse = require("actionless.parse")
-local newtimer = helpers.newtimer
+local newinterval = helpers.newinterval
 local font = helpers.font
 local common_widget = require("actionless.widgets.common").widget
 
@@ -108,7 +108,7 @@ local function worker(args)
     ))
   end
 
-  newtimer("cpu", update_interval, cpu.update)
+  newinterval("cpu", update_interval, cpu.update)
 
   return setmetatable(cpu, { __index = cpu.widget })
 end
