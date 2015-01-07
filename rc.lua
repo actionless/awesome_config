@@ -35,7 +35,7 @@ local context = {
     tmux = terminal .. " -e tmux",
     tmux_run   = terminal .. " -e tmux new-session",
     dmenu = "~/.config/dmenu/dmenu-recent.sh",
-    scrot_preview_cmd = [['mv $f ~/images/ &amp;&amp; viewnior ~/images/$f']],
+    scrot_preview_cmd = [['mv $f ~/images/ && viewnior ~/images/$f']],
   },
 
   autorun = {},
