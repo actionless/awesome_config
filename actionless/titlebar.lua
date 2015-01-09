@@ -89,8 +89,16 @@ function titlebar.make_titlebar(c)
         c.skip_taskbar = true
 end
 
+function titlebar.is_enabled(c)
+    if (titlebar.get_titlebar_function(c)(c):geometry()['height'] > 0) then
+      return true
+    else
+      return false
+    end
+end
+
 function titlebar.titlebar_toggle(c)
-	if (titlebar.get_titlebar_function(c)(c):geometry()['height'] > 0)
+	if titlebar.is_enabled(c)
         then
 		titlebar.remove_titlebar(c)
 	else
