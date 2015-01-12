@@ -81,6 +81,14 @@ client.connect_signal("property::maximized_vertical", function (c)
   return on_client_focus(c)
 end)
 
+client.connect_signal("property::minimized", function (c)
+  if c.minimized then
+    c.skip_taskbar = false
+  elseif titlebar.is_enabled(c) then
+    c.skip_taskbar = true
+  end
+end)
+
 client.connect_signal("focus", function(c)
   return on_client_focus(c)
 end)

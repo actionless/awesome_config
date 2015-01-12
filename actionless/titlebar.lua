@@ -28,6 +28,7 @@ end
 
 function titlebar.remove_titlebar(c)
         awful.titlebar.hide(c, beautiful.titlebar_position)
+        c.skip_taskbar = false
 end
 
 function titlebar.remove_border(c)
@@ -85,10 +86,19 @@ function titlebar.make_titlebar(c)
             position = beautiful.titlebar_position,
             opacity = beautiful.titlebar_opacity }
         ):set_widget(layout)
+        c.skip_taskbar = true
+end
+
+function titlebar.is_enabled(c)
+    if (titlebar.get_titlebar_function(c)(c):geometry()['height'] > 0) then
+      return true
+    else
+      return false
+    end
 end
 
 function titlebar.titlebar_toggle(c)
-	if (titlebar.get_titlebar_function(c)(c):geometry()['height'] > 0)
+	if titlebar.is_enabled(c)
         then
 		titlebar.remove_titlebar(c)
 	else
