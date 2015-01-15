@@ -1,7 +1,7 @@
 
 local awful = require("awful")
 local beautiful = require("beautiful")
-local menubar = require("menubar")
+local menubar = require("actionless.menubar")
 local client = client
 local capi = {
   screen = screen,
