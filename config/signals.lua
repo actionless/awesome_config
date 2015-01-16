@@ -65,6 +65,15 @@ client.connect_signal("manage", function (c, startup)
     -- Prevent clients from being unreachable after screen count change
     awful.placement.no_offscreen(c)
   end
+  client.focus = c
+end)
+
+client.connect_signal("focus", function(c)
+  return on_client_focus(c)
+end)
+
+client.connect_signal("unfocus", function(c)
+  return on_client_unfocus(c)
 end)
 
 tag.connect_signal("property::layout", function (t)
@@ -87,14 +96,6 @@ client.connect_signal("property::minimized", function (c)
   elseif titlebar.is_enabled(c) then
     c.skip_taskbar = true
   end
-end)
-
-client.connect_signal("focus", function(c)
-  return on_client_focus(c)
-end)
-
-client.connect_signal("unfocus", function(c)
-  return on_client_unfocus(c)
 end)
 
 end
