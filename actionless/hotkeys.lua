@@ -65,6 +65,12 @@ local KEYBOARD = {
   { 'Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 'Next', 'Up' , 'Prior' },
   { 'Fn', 'Control', 'Mod4', 'Mod1', '', 'space', '', '', '#108', 'Print', 'Control', 'Left', 'Down', 'Right'},
 }
+local LABELS = {
+  Mod4="Super",
+  Mod1="Alt",
+--  Control="Ctrl"
+}
+-- @TODO: remove this table
 local KEYBOARD_LABELS = {
   { 'Esc', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12', 'Home', 'End'},
   { '~', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Ins', 'Del'},
@@ -111,9 +117,12 @@ local MODIFIERS = {
 
 local function join_modifiers(modifiers)
   if #modifiers<1 then return "no modifiers" end
-  local copied = h_table.deepcopy(modifiers)
-  table.sort(copied)
-  return table.concat(copied, '+')
+  local result = {}
+  for _, modifier in pairs(modifiers) do
+    table.insert(result, LABELS[modifier] or modifier)
+  end
+  table.sort(result, function(a,b) return a>b end)
+  return table.concat(result, '+')
 end
 
 -------------------------------------------------------------------------------
