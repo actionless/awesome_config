@@ -236,7 +236,7 @@ local globalkeys = awful.util.table.join(
       -- @TODO: it's a workaround for some strange upstream issue
       if c then client.focus = c end
     end,
-    "de-icoNify", CLIENT_MANIPULATION
+    "de-iconify", CLIENT_MANIPULATION
   ),
 
   hk.on({ modkey,        }, "u",
@@ -254,11 +254,11 @@ local globalkeys = awful.util.table.join(
   ),
 
   -- Layouts
-  hk.on({ modkey, "Control" }, "space",
+  hk.on({ modkey, altkey }, "space",
     function () awful.layout.inc(1) end,
     "next layout", LAYOUT_MANIPULATION
   ),
-  hk.on({ modkey, "Shift"    }, "space",
+  hk.on({ modkey, "Control" }, "space",
     function () awful.layout.inc(-1) end,
     "prev layout", LAYOUT_MANIPULATION
   ),
@@ -607,11 +607,11 @@ awesome_context.clientkeys = awful.util.table.join(
     function (c) c:kill() end,
     "Quit app", IMPORTANT_COLOR
   ),
-  hk.on({ modkey, "Control"  }, "f",
+  hk.on({ modkey, "Shift"  }, "f",
     awful.client.floating.toggle,
     "toggle client Float", CLIENT_MANIPULATION
   ),
-  hk.on({ modkey, "Control"  }, "Return",
+  hk.on({ modkey, "Shift"  }, "Return",
     function (c) c:swap(awful.client.getmaster()) end,
     "put client on master", CLIENT_MANIPULATION
   ),
