@@ -1,4 +1,3 @@
-local beautiful = require("beautiful")
 local awful = require("awful")
 awful.rules = require("awful.rules")
 
@@ -11,14 +10,17 @@ function rules.init(awesome_context)
 
     -- All clients will match this rule.
     { rule = { },
-      properties = { border_width = beautiful.border_width,
-                     border_color = beautiful.border_normal,
-                     focus = awful.client.focus.filter,
-                     raise = true,
-                     keys = awesome_context.clientkeys,
-                     buttons = awesome_context.clientbuttons,
-                     size_hints_honor = false},
-    callback = awful.client.setslave },
+      properties = {
+        --border_width = beautiful.border_width,
+        --border_color = beautiful.border_normal,
+        focus = awful.client.focus.filter,
+        raise = true,
+        keys = awesome_context.clientkeys,
+        buttons = awesome_context.clientbuttons,
+        size_hints_honor = false
+      },
+      callback = awful.client.setslave
+    },
 
     { rule = { class = "Skype" },
       properties = { tag=awesome_context.tags[1][4], raise=false } },

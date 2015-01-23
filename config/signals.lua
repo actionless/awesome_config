@@ -65,10 +65,6 @@ client.connect_signal("manage", function (c, startup)
     -- Prevent clients from being unreachable after screen count change
     awful.placement.no_offscreen(c)
   end
-  if #c:tags() == 0 then
-    awful.tag.withcurrent(c)
-    client.focus = c
-  end
 end)
 
 client.connect_signal("focus", function(c)
