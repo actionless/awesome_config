@@ -35,7 +35,7 @@ function rules.init(awesome_context)
       properties = { floating = true } },
 
     { rule_any = { class = { "Transmission-gtk",  } },
-      properties = { floating = false } },
+      properties = { tag=awesome_context.tags[1][6], floating = false } },
       
   }
 end
