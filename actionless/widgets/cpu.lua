@@ -83,7 +83,7 @@ local function worker(args)
     cpu.id = naughty.notify({
       text = result_string,
       timeout = cpu.timeout,
-      preset = beautiful.naughty_mono_preset
+      font = beautiful.notification_monofont,
     })
   end
 

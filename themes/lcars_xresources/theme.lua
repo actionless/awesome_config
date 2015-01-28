@@ -89,8 +89,5 @@ theme.titlebar_height = 24
 --theme.panel_padding_bottom     = 6
 -- }}}
 
-theme.naughty_preset.font = theme.sans_font
-theme.naughty_mono_preset.font = theme.font
-
 theme = require("actionless.common_theme").fill_theme(theme)
 return theme

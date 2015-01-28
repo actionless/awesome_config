@@ -1,6 +1,5 @@
 local generate_theme = require("actionless.common_theme").generate_theme
 local xresources = require("actionless.xresources")
-local h_table = require("actionless.table")
 
 local awful = require("awful")
 local theme_dir = awful.util.getdir("config").."/themes/noble_dark"
@@ -79,10 +78,8 @@ theme.tasklist_bg_minimize	= gtk.base
 theme.titlebar_fg_focus         = "theme.tasklist_fg_focus"
 theme.titlebar_fg_normal        = "theme.color.8"
 
-theme.naughty_preset.bg = gtk.base
-theme.naughty_preset.bg = "#111111"
-theme.naughty_preset.border_color = theme.naughty_preset.bg
-theme.naughty_mono_preset = h_table.deepcopy(theme.naughty_preset)
+theme.notification_bg = gtk.base
+theme.notification_bg = "#111111"
 
 theme.player_artist = gtk.select
 theme.player_title = gtk.fg

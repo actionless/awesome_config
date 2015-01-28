@@ -50,7 +50,7 @@ local function worker(args)
     netctl.id = naughty.notify({
       text = 'not implemented yet',
       timeout = netctl.timeout,
-      preset = beautiful.naughty_mono_preset
+      font = beautiful.notification_monofont,
     })
   end
 

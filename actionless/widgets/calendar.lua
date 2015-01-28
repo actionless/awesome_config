@@ -78,7 +78,7 @@ function calendar:show(t_out, inc_offset)
     icon = self.notify_icon,
     position = self.position,
     timeout = tims,
-    preset = beautiful.naughty_mono_preset
+    font = beautiful.notification_monofont,
   })
 end
 

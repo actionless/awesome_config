@@ -178,22 +178,11 @@ function common_theme.generate_theme(theme_dir)
   theme.titlebar_bg_normal	= "theme.bg"
 
   theme.notification_opacity	= 0.8
-  theme.notification_font		= "theme.sans_font"
+  theme.notification_font	= "theme.sans_font"
   theme.notification_monofont	= "theme.font"
-  theme.naughty_preset = {
-    bg=theme.bg_normal,
-    fg=theme.fg_normal,
-    border_color=theme.theme,
-    opacity=theme.notification_opacity,
-    font=theme.notification_font
-  }
-  theme.naughty_mono_preset = {
-    bg=theme.bg_normal,
-    fg=theme.fg_normal,
-    border_color=theme.theme,
-    opacity=theme.notification_opacity,
-    font=theme.notification_monofont
-  }
+  theme.notification_bg = "theme.bg_normal"
+  theme.notification_fg = "theme.fg_normal"
+  theme.notification_border_color = "theme.theme"
 
   theme.textbox_widget_margin_top	= 1
   theme.awful_widget_height	= 14

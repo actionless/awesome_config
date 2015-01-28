@@ -82,7 +82,7 @@ local function worker(args)
     mem.id = naughty.notify({
       text = result_string,
       timeout = mem.timeout,
-      preset = beautiful.naughty_mono_preset
+      font = beautiful.notification_monofont,
     })
   end
 
