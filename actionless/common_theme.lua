@@ -3,7 +3,11 @@
 	* (c) 2014 Yauheni Kirylau
 --]]
 
+local awful = require("awful")
+
 local h_string = require("actionless.string")
+local h_table = require("actionless.table")
+
 
 local common_theme = {}
 
@@ -322,6 +326,32 @@ function common_theme.fill_theme(theme)
     new_theme = common_theme.fill_theme(new_theme)
   end
   return new_theme
+end
+
+function common_theme.create_theme(args)
+  args = args or {}
+  local theme_dir = args.theme_dir
+  local theme_name = args.theme_name
+  local theme = args.theme
+
+  if not theme then
+    error("theme is not provided")
+  end
+
+  if not theme_dir then
+    if theme_name then
+      theme_dir = awful.util.getdir("config").."/themes/"..theme_name
+    else
+      error("theme_name or theme_dir are not provided")
+    end
+  end
+
+  return common_theme.fill_theme(
+    h_table.merge(
+      common_theme.generate_theme(theme_dir),
+      theme
+    )
+  )
 end
 
 return common_theme
