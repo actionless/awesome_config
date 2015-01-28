@@ -1,5 +1,6 @@
 local xresources = require("actionless.xresources")
 local create_theme = require("actionless.common_theme").create_theme
+local dpi = require("actionless.helpers").compute_fontsize
 
 local theme_name = "lcars_xresources"
 
@@ -50,8 +51,8 @@ theme.widget_decoration_arrr = ''
 --theme.font = "Monospace Bold 10.7" -- meslo lg s
 --theme.sans_font = "Sans Bold 10.3" -- ubuntu sans
 
-theme.font = "Monospace Bold 10" -- meslo lg s
-theme.sans_font = "Sans Bold 10" -- ubuntu sans
+theme.font = "Monospace Bold "..tostring(dpi(8)) -- meslo lg s
+theme.sans_font = "Sans Bold "..tostring(dpi(8)) -- ubuntu sans
 
 -- Don't use sans font:
 --theme.sans_font	= "theme.font"
