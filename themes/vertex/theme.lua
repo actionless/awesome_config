@@ -41,12 +41,12 @@ theme.sel_border                = "#a3c24e"
 theme.panel_opacity = 1
 theme.panel_enbolden_details = true
 
-theme.panel_taglist=theme.bg
-theme.panel_close=theme.bg
+theme.panel_taglist="theme.bg"
+theme.panel_close="theme.bg"
 theme.panel_tasklist=nil
-theme.panel_media=theme.bg
-theme.panel_info=theme.bg
-theme.panel_layoutbox=theme.bg
+theme.panel_media="theme.bg"
+theme.panel_info="theme.bg"
+theme.panel_layoutbox="theme.bg"
 
 theme.panel_widget_fg = gtk.fg
 theme.panel_widget_fg_warning = gtk.fg
