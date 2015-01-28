@@ -17,7 +17,6 @@ local widget_loader = {}
 function widget_loader.init(awesome_context)
   local w = awesome_context.widgets
   local conf = awesome_context.config
-  local bpc = beautiful.panel_colors
   local modkey = awesome_context.modkey
   local term16 = beautiful.color
 
@@ -32,16 +31,16 @@ function widget_loader.init(awesome_context)
     preset = conf.net_preset,
     wlan_if = conf.wlan_if,
     eth_if = conf.eth_if,
-    bg = term16[bpc.media],
-    fg = beautiful.panel_widget_fg,
+    bg = beautiful.widget_netctl_bg,
+    fg = beautiful.widget_netctl_fg,
   })
   -- MUSIC
   w.music = widgets.music.widget({
     update_interval = 5,
     backends = conf.music_players,
     music_dir = conf.music_dir,
-    bg = beautiful.panel_bg,
-    fg = term16[bpc.media],
+    bg = beautiful.widget_music_bg,
+    fg = beautiful.widget_music_fg,
     force_no_bgimage=true,
   })
   -- ALSA volume
@@ -50,8 +49,8 @@ function widget_loader.init(awesome_context)
     step=2,
     channel = 'Master',
     channels_toggle = {'Master', 'Speaker', 'Headphone'},
-    bg = term16[bpc.media],
-    fg = beautiful.panel_widget_fg,
+    bg = beautiful.widget_alsa_bg,
+    fg = beautiful.widget_alsa_fg,
     left_separators = { 'arrl' },
     right_separators = { 'sq' }
   })
@@ -67,30 +66,30 @@ function widget_loader.init(awesome_context)
   w.mem = widgets.mem({
     update_interval = 10,
     list_length = 20,
-    bg = term16[bpc.info],
-    fg = beautiful.panel_widget_fg,
+    bg = beautiful.widget_mem_bg,
+    fg = beautiful.widget_mem_fg,
   })
   -- CPU
   w.cpu = widgets.cpu({
     update_interval = 5,
     cores_number = conf.cpu_cores_num,
     list_length = 20,
-    bg = term16[bpc.info],
-    fg = beautiful.panel_widget_fg,
+    bg = beautiful.widget_cpu_bg,
+    fg = beautiful.widget_cpu_fg,
   })
   -- Sensor
   w.temp = widgets.temp({
     update_interval = 10,
     sensor = "Core 0",
     warning = 75,
-    bg = term16[bpc.info],
-    fg = beautiful.panel_widget_fg,
+    bg = beautiful.widget_temp_bg,
+    fg = beautiful.widget_temp_fg,
   })
   -- Battery
   w.bat = widgets.bat({
     update_interval = 30,
-    bg = term16[bpc.info],
-    fg = beautiful.panel_widget_fg,
+    bg = beautiful.widget_bat_bg,
+    fg = beautiful.widget_bat_fg,
     show_when_charged=false,
   })
 
@@ -106,7 +105,10 @@ function widget_loader.init(awesome_context)
 
     -- CLOSE button
     sw.close_button = widgets.manage_client(
-      s, { bg=term16[bpc.close] }
+      s, {
+        bg = beautiful.widget_close_bg,
+        fg = beautiful.widget_close_fg,
+      }
     )
 
     -- taglist
@@ -125,8 +127,8 @@ function widget_loader.init(awesome_context)
       widget = awful.widget.taglist(
         s, awful.widget.taglist.filter.all, sw.taglist.buttons
       ),
-      bg = term16[bpc.taglist],
-      fg = beautiful.panel_widget_fg,
+      bg = beautiful.widget_taglist_bg,
+      fg = beautiful.widget_taglist_fg,
     })
 
     -- promptbox
@@ -191,10 +193,10 @@ function widget_loader.init(awesome_context)
 
     -- layoutbox
     -- @TODO: remove it
-    local layoutbox_color = bpc.layoutbox or 7
     sw.layoutbox = widgets.layoutbox({
       screen = s,
-      bg = term16[layoutbox_color]
+      bg = beautiful.widget_layoutbox_bg,
+      fg = beautiful.widget_layoutbox_fg,
     })
     sw.layoutbox:buttons(awful.util.table.join(
       awful.button({ }, 1, function ()

@@ -3,57 +3,13 @@ local generate_theme = require("actionless.common_theme").generate_theme
 local awful = require("awful")
 local theme_dir = awful.util.getdir("config").."/themes/monovedek"
 
--- TERMINAL COLORSCHEME:
---
-local color = {}
---black
-color[0] = '#000000'
-color[8] = '#465457'
---red
-color[1] = '#960050'
-color[9] = '#F92672'
---green
-color[2] = '#008877'
-color[10] = '#A6E22E'
---yellow
-color[3] = '#FD971F'
-color[11] = '#e6db74'
---blue
-color[4] = '#7711dd'
-color[12] = '#8432ff'
---purple
-color[5] = '#890089'
-color[13] = '#85509b'
---cyan
-color[6] = '#00d6b5'
-color[14] = '#51edbc'
---white
-color[7] = '#888a85'
-color[15] = '#ffffff'
-
-color.b  = '#0e0021'
-color.f  = '#bcbcbc'
-color.c  = '#ae81ff'
-
--- PANEL COLORS:
---
-local panel_colors = {
-  taglist=7,
-  close=1,
-  tasklist='b',
-  media=14,
-  info=13
-}
 
 -- GENERATE DEFAULT THEME:
 --
-local theme = generate_theme(
-  theme_dir,
-  color,
-  panel_colors
-)
+local theme = generate_theme(theme_dir)
 
 -- CUSTOMIZE default theme:-----------------------------------------------
+
 
 -- WALLPAPER:
 --
@@ -87,4 +43,5 @@ theme.sans_font = "Sans Bold 10.3"
 --theme.sans_font	= theme.font
 
 
+theme = require("actionless.common_theme").fill_theme(theme)
 return theme

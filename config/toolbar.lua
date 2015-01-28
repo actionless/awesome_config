@@ -15,14 +15,13 @@ local toolbar = {}
 
 
 function toolbar.init(awesome_context)
-  local bpc = beautiful.panel_colors
   local loaded_widgets = awesome_context.widgets
 
   -- Separators
   local sep = wibox.widget.imagebox(beautiful.small_separator)
   local separator  = make_separator(' ')
-  local sep_info   = make_separator('sq', {fg=beautiful.color[bpc.info]})
-  local sep_media  = make_separator('sq', {fg=beautiful.color[bpc.media]})
+  local sep_info   = make_separator('sq', {fg=beautiful.panel_info})
+  local sep_media  = make_separator('sq', {fg=beautiful.panel_media})
 
   -- Create a wibox for each screen and add it
   local mywibox = {}
@@ -44,9 +43,9 @@ function toolbar.init(awesome_context)
     -- RIGHT side
     local right_layout = wibox.layout.fixed.horizontal()
 
-    if bpc.tasklist then
-      left_layout:add(make_separator('arrl', {fg=beautiful.color[bpc.tasklist]}))
-      right_layout:add(make_separator('arrr', {fg=beautiful.color[bpc.tasklist]}))
+    if beautiful.panel_tasklist then
+      left_layout:add(make_separator('arrl', {fg=beautiful.panel_tasklist}))
+      right_layout:add(make_separator('arrr', {fg=beautiful.panel_tasklist}))
     end
 
     right_layout:add(separator)
@@ -74,7 +73,7 @@ function toolbar.init(awesome_context)
     right_layout:add(loaded_widgets.cpu)
     right_layout:add(loaded_widgets.temp)
     right_layout:add(loaded_widgets.bat)
-    right_layout:add(make_separator('arrr', {fg=beautiful.color[bpc.info]}))
+    right_layout:add(make_separator('arrr', {fg=beautiful.panel_info}))
 
     right_layout:add(separator)
     right_layout:add(loaded_widgets.textclock)

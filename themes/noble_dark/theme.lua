@@ -9,43 +9,43 @@ local gtk = {}
 
 
 --gtk.bg = "#454749"
---gtk.base = "#2b2b2c"
 gtk.bg = "#3d3e40"
 gtk.base = "#2b2b2c"
-
 gtk.fg = "#f3f3f5"
 gtk.select = "#ad7fa8"
+
+
+-- GENERATE DEFAULT THEME:
+--
+local theme = generate_theme(theme_dir)
+
+theme.bg = gtk.bg
+theme.fg = gtk.fg
+
 
 -- TERMINAL COLORSCHEME:
 --
 local color = xresources.get_current_theme()
 color.b  = gtk.bg
 color.f  = gtk.fg
-color[8]  = gtk.base
-color[4]  = gtk.select
-color[7]  = gtk.fg
-color[0] = gtk.bg
-
--- PANEL COLORS:
---
-local panel_colors = {
-  taglist=nil,
-  close=8,
-  tasklist=nil,
-  media=8,
-  info=8,
-  layoutbox=8
-}
-
--- GENERATE DEFAULT THEME:
---
-local theme = generate_theme(
-  theme_dir,
-  color,
-  panel_colors
-)
+color["8"]  = gtk.base
+color["4"]  = gtk.select
+color["7"]  = gtk.fg
+color["0"] = gtk.bg
+theme.color = color
 
 theme.panel_enbolden_details	= true
+
+-- PANEL COLORS:
+theme.panel_taglist = "theme.bg"
+theme.panel_close = "theme.color.8"
+theme.panel_tasklist = nil
+theme.panel_media = "theme.color.8"
+theme.panel_info = "theme.color.8"
+
+theme.panel_layoutbox = "theme.color.8"
+theme.widget_layoutbox_fg = "theme.panel_layoutbox"
+theme.widget_layoutbox_bg = "theme.panel_widget_fg"
 
 theme.theme = gtk.select
 theme.warning = gtk.select
@@ -54,7 +54,6 @@ theme.border_width              = "8"
 theme.border_focus              = "#94a870"
 theme.border_focus              = "#a6e22e"
 theme.border_focus              = "#a3c24e"
-theme.titlebar_focus_border     = theme.border_focus
 
 
 theme.panel_widget_fg = gtk.fg
@@ -77,8 +76,8 @@ theme.tasklist_fg_focus		= gtk.fg
 theme.tasklist_fg_minimize	= gtk.bg
 theme.tasklist_bg_minimize	= gtk.base
 
-theme.titlebar_fg_focus         = theme.tasklist_fg_focus
-theme.titlebar_fg_normal        = color[8]
+theme.titlebar_fg_focus         = "theme.tasklist_fg_focus"
+theme.titlebar_fg_normal        = "theme.color.8"
 
 theme.naughty_preset.bg = gtk.base
 theme.naughty_preset.bg = "#111111"
@@ -114,13 +113,9 @@ theme.show_widget_icon = true
 theme.font = "Monospace 10"
 theme.sans_font = "Sans 10"
 -- Don't use sans font:
---theme.sans_font	= theme.font
+--theme.sans_font	= "theme.font"
 --
 theme.tasklist_font = "Sans Bold 10"
-theme.titlebar_font = theme.tasklist_font
-theme.taglist_font = theme.font
-theme.naughty_preset.font = theme.sans_font
-theme.naughty_mono_preset.font = theme.font
 
 --131dpi:
 -- {{{
@@ -128,14 +123,14 @@ theme.font = "Monospace Bold 10.2" -- meslo lg s
 theme.font = "Monospace Bold 12" -- Fantasque Sans Mono
 
 theme.sans_font = "Sans Bold 10.3" -- ubuntu sans
---theme.sans_font      = theme.font
 
-theme.tasklist_font = theme.sans_font
-theme.taglist_font = theme.font
+-- Don't use sans font:
+--theme.sans_font	= "theme.font"
 
 theme.panel_height             = 26
 theme.panel_padding_bottom     = 6
 -- }}}
 
 
+theme = require("actionless.common_theme").fill_theme(theme)
 return theme

@@ -3,15 +3,49 @@
 	* (c) 2014 Yauheni Kirylau
 --]]
 
+local h_string = require("actionless.string")
+
 local common_theme = {}
 
-function common_theme.generate_theme(theme_dir, colors16, panel_colors)
+function common_theme.generate_theme(theme_dir)
 
   local theme = {}
-  theme.color = colors16
-  theme.panel_colors = panel_colors
-  theme.dir = theme_dir
+  -- TERMINAL COLORSCHEME:
+  --
+  theme.color = {
+    --black
+    ["0"] = '#000000',
+    ["8"] = '#465457',
+    --red
+    ["1"] = '#960050',
+    ["9"] = '#F92672',
+    --green
+    ["2"] = '#008877',
+    ["10"] = '#A6E22E',
+    --yellow
+    ["3"] = '#FD971F',
+    ["11"] = '#e6db74',
+    --blue
+    ["4"] = '#7711dd',
+    ["12"] = '#8432ff',
+    --purple
+    ["5"] = '#890089',
+    ["13"] = '#85509b',
+    --cyan
+    ["6"] = '#00d6b5',
+    ["14"] = '#51edbc',
+    --white
+    ["7"] = '#888a85',
+    ["15"] = '#ffffff',
+    --
+    c  = '#ae81ff',
+    bg  = '#0e0021',
+    fg  = '#bcbcbc',
+  }
 
+  theme.color.b = theme.color.bg
+  theme.color.f = theme.color.fg
+  theme.dir = theme_dir
 
   -- Use plain color:
   theme.wallpaper_cmd     = "hsetroot"
@@ -40,78 +74,112 @@ function common_theme.generate_theme(theme_dir, colors16, panel_colors)
 
   -- COLORS:
 
-  theme.error = theme.color[9]
-  theme.warning = theme.color[10]
+  theme.error = "theme.color.9"
+  theme.warning = "theme.color.10"
+  theme.theme = "theme.color.13"
 
-  theme.bg = theme.color.b
-  theme.alt_bg = theme.color[4]
+  theme.bg = "theme.color.bg"
+  theme.alt_bg = "theme.color.4"
 
-  theme.fg = theme.color[7]
-  theme.alt_fg = theme.color.f
+  theme.fg = "theme.color.7"
+  theme.alt_fg = "theme.color.fg"
 
-  theme.theme = theme.color[13]
 
-  theme.border = theme.bg
-  theme.sel_border = theme.color[10]
-  theme.titlebar_border = theme.border
-  theme.titlebar_focus_border = theme.sel_border
+  theme.border                  = "theme.bg"
+  theme.sel_border              = "theme.color.10"
+  theme.titlebar_border         = "theme.border"
+  theme.titlebar_focus_border   = "theme.sel_border"
+  theme.border_width		= "10"
+  theme.border_normal		= "theme.border"
+  theme.border_focus		= "theme.sel_border"
+  theme.border_marked		= "theme.error"
 
-  theme.fg_normal			= theme.fg
-  theme.bg_normal			= theme.bg
-  theme.fg_focus			= theme.bg
-  theme.bg_focus			= theme.theme
-  theme.fg_urgent			= theme.bg
-  theme.bg_urgent			= theme.error
+  theme.fg_normal		= "theme.fg"
+  theme.bg_normal		= "theme.bg"
+  theme.fg_focus		= "theme.bg"
+  theme.bg_focus		= "theme.theme"
+  theme.fg_urgent		= "theme.bg"
+  theme.bg_urgent		= "theme.error"
 
   theme.screen_padding		= 0
 
-  theme.border_width		= "10"
-  theme.border_normal		= theme.border
-  theme.border_focus		= theme.sel_border
-  theme.border_marked		= theme.error
-
-  theme.panel_bg			= theme.bg
-  theme.panel_fg			= theme.fg
-  theme.panel_widget_bg		= theme.fg
-  theme.panel_widget_fg		= theme.bg
-  theme.panel_widget_bg_warning 	= theme.warning
-  theme.panel_widget_fg_warning 	= theme.bg
-  theme.panel_widget_bg_error 	= theme.error
-  theme.panel_widget_fg_error 	= theme.bg
+  theme.panel_bg		= "theme.bg"
+  theme.panel_fg		= "theme.fg"
+  theme.panel_widget_bg		= "theme.fg"
+  theme.panel_widget_fg		= "theme.bg"
+  theme.panel_widget_bg_warning	= "theme.warning"
+  theme.panel_widget_fg_warning	= "theme.bg"
+  theme.panel_widget_bg_error 	= "theme.error"
+  theme.panel_widget_fg_error 	= "theme.bg"
   --theme.panel_opacity		= 0.96
   theme.panel_opacity		= 0.92
   theme.panel_height		= 24
   theme.panel_padding_bottom	= 6
   theme.panel_enbolden_details	= false
 
-  theme.taglist_font		= theme.font
-  theme.taglist_fg_occupied	= theme.bg
-  theme.taglist_bg_occupied	= theme.color[theme.panel_colors.taglist]
-  theme.taglist_fg_empty		= theme.bg
-  theme.taglist_bg_empty		= theme.theme
-  theme.taglist_fg_focus		= theme.color[theme.panel_colors.taglist]
-  theme.taglist_bg_focus		= theme.bg
+  -- PANEL COLORS:
+  --
+  theme.panel_taglist = "theme.color.7"
+  theme.panel_close = "theme.color.1"
+  theme.panel_tasklist = "theme.color.bg"
+  theme.panel_media = "theme.color.14"
+  theme.panel_info = "theme.color.13"
+  theme.panel_layoutbox = "theme.alt_bg"
 
-  theme.tasklist_font		= theme.sans_font
-  theme.tasklist_fg_focus		= theme.alt_bg
-  theme.tasklist_bg_focus		= theme.bg
-  theme.tasklist_fg_normal	= theme.fg
-  theme.tasklist_bg_normal	= theme.bg
-  theme.tasklist_fg_minimize	= theme.bg
-  theme.tasklist_bg_minimize	= theme.alt_bg
+  theme.widget_taglist_bg = "theme.panel_taglist"
+  theme.widget_taglist_fg = "theme.panel_widget_fg"
+
+  theme.taglist_font		= "theme.font"
+  theme.taglist_fg_occupied	= "theme.bg"
+  theme.taglist_bg_occupied	= "theme.panel_taglist"
+  theme.taglist_fg_empty	= "theme.bg"
+  theme.taglist_bg_empty	= "theme.theme"
+  theme.taglist_fg_focus	= "theme.panel_taglist"
+  theme.taglist_bg_focus	= "theme.bg"
+
+  theme.widget_close_bg = "theme.panel_close"
+  theme.widget_close_fg = "theme.panel_widget_fg"
+
+  theme.tasklist_font		= "theme.sans_font"
+  theme.tasklist_fg_focus	= "theme.alt_bg"
+  theme.tasklist_bg_focus	= "theme.bg"
+  theme.tasklist_fg_normal	= "theme.fg"
+  theme.tasklist_bg_normal	= "theme.bg"
+  theme.tasklist_fg_minimize	= "theme.bg"
+  theme.tasklist_bg_minimize	= "theme.alt_bg"
+
+  theme.widget_netctl_bg = "theme.panel_media"
+  theme.widget_netctl_fg = "theme.panel_widget_fg"
+  theme.widget_music_bg = "theme.panel_media"
+  theme.widget_music_fg = "theme.panel_widget_fg"
+  theme.widget_alsa_bg = "theme.panel_media"
+  theme.widget_alsa_fg = "theme.panel_widget_fg"
+
+  theme.widget_mem_bg  = "theme.panel_info"
+  theme.widget_mem_fg  = "theme.panel_widget_fg"
+  theme.widget_cpu_bg  = "theme.panel_info"
+  theme.widget_cpu_fg  = "theme.panel_widget_fg"
+  theme.widget_temp_bg = "theme.panel_info"
+  theme.widget_temp_fg = "theme.panel_widget_fg"
+  theme.widget_bat_bg  = "theme.panel_info"
+  theme.widget_bat_fg  = "theme.panel_widget_fg"
+
+  theme.widget_layoutbox_bg = "theme.panel_layoutbox"
+  theme.widget_layoutbox_fg = "theme.panel_widget_fg"
+
 
   theme.titlebar_height		= 28
-  theme.titlebar_opacity		= 0.7
-  theme.titlebar_position		= 'top'
-  theme.titlebar_font		= theme.font
-  theme.titlebar_fg_focus		= theme.tasklist_fg_focus
-  theme.titlebar_bg_focus		= theme.bg
-  theme.titlebar_fg_normal	= theme.tasklist_fg_normal
-  theme.titlebar_bg_normal	= theme.bg
+  theme.titlebar_opacity	= 0.7
+  theme.titlebar_position	= 'top'
+  theme.titlebar_font		= "theme.font"
+  theme.titlebar_fg_focus	= "theme.tasklist_fg_focus"
+  theme.titlebar_bg_focus	= "theme.bg"
+  theme.titlebar_fg_normal	= "theme.tasklist_fg_normal"
+  theme.titlebar_bg_normal	= "theme.bg"
 
   theme.notification_opacity	= 0.8
-  theme.notification_font		= theme.sans_font
-  theme.notification_monofont	= theme.font
+  theme.notification_font		= "theme.sans_font"
+  theme.notification_monofont	= "theme.font"
   theme.naughty_preset = {
     bg=theme.bg_normal,
     fg=theme.fg_normal,
@@ -130,13 +198,13 @@ function common_theme.generate_theme(theme_dir, colors16, panel_colors)
   theme.textbox_widget_margin_top	= 1
   theme.awful_widget_height	= 14
   theme.awful_widget_margin_top	= 2
-  theme.mouse_finder_color	= theme.error
+  theme.mouse_finder_color	= "theme.error"
   theme.menu_border_width		= 3
   theme.menu_height		= 16
   theme.menu_width		= 140
 
-  theme.player_artist		= theme.color[13]
-  theme.player_title      = theme.color[theme.panel_colors.media]
+  theme.player_artist		= "theme.color.13"
+  theme.player_title      = "theme.panel_media"
 
   -- ICONS
 
@@ -243,58 +311,30 @@ function common_theme.generate_theme(theme_dir, colors16, panel_colors)
 return theme
 end
 
-
-function common_theme.generate_default_theme(theme_dir)
-  -- TERMINAL COLORSCHEME:
-  --
-  local color = {}
-  --black
-  color[0] = '#000000'
-  color[8] = '#465457'
-  --red
-  color[1] = '#960050'
-  color[9] = '#F92672'
-  --green
-  color[2] = '#008877'
-  color[10] = '#A6E22E'
-  --yellow
-  color[3] = '#FD971F'
-  color[11] = '#e6db74'
-  --blue
-  color[4] = '#7711dd'
-  color[12] = '#8432ff'
-  --purple
-  color[5] = '#890089'
-  color[13] = '#85509b'
-  --cyan
-  color[6] = '#00d6b5'
-  color[14] = '#51edbc'
-  --white
-  color[7] = '#888a85'
-  color[15] = '#ffffff'
-
-  color.b  = '#0e0021'
-  color.f  = '#bcbcbc'
-  color.c  = '#ae81ff'
-
-  -- PANEL COLORS:
-  --
-  local panel_colors = {
-    taglist=7,
-    close=1,
-    tasklist='b',
-    media=14,
-    info=13,
-    layoutbox=7,
-  }
-
-  -- GENERATE DEFAULT THEME:
-  --
-  return common_theme.generate_theme(
-    theme_dir,
-    color,
-    panel_colors
-  )
+function common_theme.fill_theme(theme)
+  local new_theme = {}
+  local templates_found = false
+  for key, value in pairs(theme) do
+    if type(value)=="string" and h_string.starts(value, "theme.") then
+      local actual_key_path = h_string.split(value, ".")
+      local actual_value = theme
+      for i=2,#actual_key_path do
+        actual_value = actual_value[actual_key_path[i]]
+      end
+      new_theme[key] = actual_value
+      print(key)
+      print(actual_value)
+      if h_string.starts(actual_value, "theme.") then
+        templates_found = true
+      end
+    else
+      new_theme[key] = value
+    end
+  end
+  if templates_found then
+    new_theme = common_theme.fill_theme(new_theme)
+  end
+  return new_theme
 end
 
 return common_theme

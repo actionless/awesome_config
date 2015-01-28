@@ -39,12 +39,12 @@ local CLIENT_MANIPULATION = "client"
 local LAYOUT_MANIPULATION = "layout"
 
 hk.add_groups({
-  [TAG_COLOR]={name="tags",color=beautiful.color[6]},
-  [CLIENT_COLOR]={name="client focus",color=beautiful.color[3]},
-  [MENU_COLOR]={name="menu",color=beautiful.color[5]},
-  [IMPORTANT_COLOR]={name="important",color=beautiful.color[9]},
-  [CLIENT_MANIPULATION]={name="client",color=beautiful.color[10]},
-  [LAYOUT_MANIPULATION]={name="layout",color=beautiful.color[12]},
+  [TAG_COLOR]={name="tags",color=beautiful.color["6"]},
+  [CLIENT_COLOR]={name="client focus",color=beautiful.color["3"]},
+  [MENU_COLOR]={name="menu",color=beautiful.color["5"]},
+  [IMPORTANT_COLOR]={name="important",color=beautiful.color["9"]},
+  [CLIENT_MANIPULATION]={name="client",color=beautiful.color["10"]},
+  [LAYOUT_MANIPULATION]={name="layout",color=beautiful.color["12"]},
 })
 
 

@@ -63,10 +63,10 @@ function xresources.get_current_theme()
   local query = file:read('*a')
   file:close()
   for i,color in string.gmatch(query, "%*color(%d+):[^#]*(#[%a%d]+)") do
-    colors[tonumber(i)] = color
+    colors[i] = color
   end
-  colors.b = string.match(query, "*background:[^#]*(#[%a%d]+)")
-  colors.f = string.match(query, "*foreground:[^#]*(#[%a%d]+)")
+  colors.bg = string.match(query, "*background:[^#]*(#[%a%d]+)")
+  colors.fg = string.match(query, "*foreground:[^#]*(#[%a%d]+)")
   return colors
 end
 

@@ -7,53 +7,44 @@ local theme_dir = awful.util.getdir("config").."/themes/pokemon_light"
 --
 local color = {}
 --black
-color[0] = '#000000'
-color[8] = '#465457'
+color["0"] = '#000000'
+color["8"] = '#465457'
 --red
-color[1] = '#b60050'
-color[9] = '#F92672'
+color["1"] = '#b60050'
+color["9"] = '#F92672'
 --green
-color[2] = '#008877'
-color[10] = '#86c22e'
+color["2"] = '#008877'
+color["10"] = '#86c22e'
 --yellow
-color[3] = '#fc882b'
-color[11] = '#ffea32'
+color["3"] = '#fc882b'
+color["11"] = '#ffea32'
 --blue
-color[4] = '#ad7fa8'
-color[12] = '#ad5fc8'
+color["4"] = '#ad7fa8'
+color["12"] = '#ad5fc8'
 --purple
-color[5] = '#890089'
-color[13] = '#e733b4'
+color["5"] = '#890089'
+color["13"] = '#e733b4'
 --cyan
-color[6] = '#00a685'
-color[14] = '#51bd8c'
+color["6"] = '#00a685'
+color["14"] = '#51bd8c'
 --white
-color[7] = '#888a85'
-color[15] = '#ffffff'
+color["7"] = '#888a85'
+color["15"] = '#ffffff'
 
-color.b  = '#ffffff'
-color.f  = '#1a1a1a'
+color.bg  = '#ffffff'
+color.fg  = '#1a1a1a'
 color.c  = '#ae81ff'
 
--- PANEL COLORS:
---
-local panel_colors = {
-  taglist=7,
-  close=1,
-  tasklist='b',
-  media=14,
-  info=13
-}
 
 -- GENERATE DEFAULT THEME:
 --
 local theme = generate_theme(
-  theme_dir,
-  color,
-  panel_colors
+  theme_dir
 )
 
 -- CUSTOMIZE default theme:-----------------------------------------------
+
+theme.color = color
 
 -- WALLPAPER:
 --
@@ -86,4 +77,5 @@ theme.sans_font = "Sans Bold 10.3"
 --theme.sans_font	= theme.font
 
 
+theme = require("actionless.common_theme").fill_theme(theme)
 return theme

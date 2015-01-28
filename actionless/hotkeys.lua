@@ -28,7 +28,7 @@ local hotkeys = {
     special_button_bg = "#333333",
     special_button_fg = "#000000",
     default_button_bg = beautiful.theme,
-    alt_fg = beautiful.color and beautiful.color[0] or beautiful.bg,
+    alt_fg = beautiful.color and beautiful.color["0"] or beautiful.bg,
   },
   bindings = {
     --[[
@@ -50,7 +50,7 @@ local hotkeys = {
   groups = {
     pressed={
       name="hold",
-      color=beautiful.color and beautiful.color[2] or "#aaaabb",
+      color=beautiful.color and beautiful.color["2"] or "#aaaabb",
       modifiers={}
     }
   },
@@ -173,9 +173,11 @@ local function create_wibox(modifiers, available_groups)
           group_is_active
           and markup.fg(
             APPEARANCE.alt_fg,
-            markup.bg(group.color, group.name))
+            markup.bg(group.color, group.name)
+          )
           or markup.fg(group.color, group.name)
-      ))
+        )
+      )
       if group.modifiers then
         for _, modifier in pairs(group.modifiers) do
           group_layout:add(

@@ -6,35 +6,25 @@ local theme_dir = awful.util.getdir("config").."/themes/lcars_xresources"
 
 -- TERMINAL COLORSCHEME:
 --
---local colors = xresources.read_theme(
-  --os.getenv('HOME') .. '/.Xcolours/monovedek'
---)
---local colors = xresources.read_theme(
---  os.getenv('HOME') .. '/.Xcolours/jwr_dark'
---  )
-local colors = xresources.get_current_theme()
-
--- PANEL COLORS:
---
-local panel_colors = {
-  taglist=7,
-  close=1,
-  tasklist='b',
-  media=14,
-  info=13,
-  layoutbox=7,
-}
-
 -- LOAD DEFAULT THEME:
 --
 local theme = generate_theme(
-  theme_dir,
-  colors,
-  panel_colors
+  theme_dir
 )
 
 
 -- CUSTOMIZE default theme:-----------------------------------------------
+
+theme.color = xresources.get_current_theme()
+
+-- PANEL COLORS:
+--
+theme.panel_taglist=theme.color["7"]
+theme.panel_close=theme.color["1"]
+theme.panel_tasklist=theme.color.bg
+theme.panel_media=theme.color["14"]
+theme.panel_info=theme.color["13"]
+theme.panel_layoutbox=theme.color["7"]
 
 -- WALLPAPER:
 --
@@ -71,11 +61,8 @@ theme.widget_decoration_arrr = ''
 theme.font = "Monospace Bold 10" -- meslo lg s
 theme.sans_font = "Sans Bold 10" -- ubuntu sans
 
-theme.taglist_font = theme.font
-theme.tasklist_font = theme.sans_font
 -- Don't use sans font:
---theme.sans_font	= theme.font
---theme.tasklist_font = theme.sans_font
+--theme.sans_font	= "theme.font"
 
 --
 --MISC:
@@ -84,12 +71,26 @@ theme.tasklist_font = theme.sans_font
 theme.taglist_squares_sel       = nil
 theme.taglist_squares_unsel     = nil
 
-theme.titlebar_fg_focus		= theme.titlebar_border
-theme.titlebar_bg_focus		= theme.titlebar_focus_border
-theme.titlebar_fg_normal	= theme.tasklist_fg_normal
-theme.titlebar_bg_normal	= theme.titlebar_border
+theme.titlebar_fg_focus		= "theme.titlebar_border"
+theme.titlebar_bg_focus		= "theme.titlebar_focus_border"
+theme.titlebar_fg_normal	= "theme.tasklist_fg_normal"
+theme.titlebar_bg_normal	= "theme.titlebar_border"
 theme.border_width = 6
 theme.titlebar_height = 24
 
+--131dpi:
+-- {{{
+--theme.font = "Meslo LG S Bold 10.2"
+theme.font = "Monospace Bold 12" -- Fantasque Sans Mono
+--theme.sans_font = "Ubuntu Sans Bold 10.3"
+theme.sans_font = "Sans Bold 9.6"
+--theme.sans_font      = "theme.font"
+--theme.panel_height             = 26
+--theme.panel_padding_bottom     = 6
+-- }}}
 
+theme.naughty_preset.font = theme.sans_font
+theme.naughty_mono_preset.font = theme.font
+
+theme = require("actionless.common_theme").fill_theme(theme)
 return theme
