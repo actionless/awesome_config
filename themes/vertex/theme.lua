@@ -38,6 +38,7 @@ theme.sel_border                = "#a3c24e"
 
 -- PANEL COLORS:
 --
+theme.panel_opacity = 1
 theme.panel_enbolden_details = true
 
 theme.panel_taglist=theme.bg
