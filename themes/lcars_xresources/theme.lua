@@ -81,9 +81,9 @@ theme.titlebar_height = 24
 --131dpi:
 -- {{{
 --theme.font = "Meslo LG S Bold 10.2"
-theme.font = "Monospace Bold 12" -- Fantasque Sans Mono
+--theme.font = "Monospace Bold 12" -- Fantasque Sans Mono
 --theme.sans_font = "Ubuntu Sans Bold 10.3"
-theme.sans_font = "Sans Bold 9.6"
+--theme.sans_font = "Sans Bold 9.6" -- Ubuntu Sans
 --theme.sans_font      = "theme.font"
 --theme.panel_height             = 26
 --theme.panel_padding_bottom     = 6
