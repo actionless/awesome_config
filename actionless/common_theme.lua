@@ -322,8 +322,6 @@ function common_theme.fill_theme(theme)
         actual_value = actual_value[actual_key_path[i]]
       end
       new_theme[key] = actual_value
-      print(key)
-      print(actual_value)
       if h_string.starts(actual_value, "theme.") then
         templates_found = true
       end
