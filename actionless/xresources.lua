@@ -70,4 +70,19 @@ function xresources.get_current_theme()
   return colors
 end
 
+
+function xresources.compute_fontsize(size)
+  if not xresources.dpi then
+    local file = io.popen(
+      "xrdb -query"
+    )
+    local query = file:read('*a')
+    xresources.dpi = tonumber(string.match(query, "dpi:[%s]+([%d]+)"))
+    file:close()
+  end
+  return size/96*xresources.dpi
+end
+
+
+
 return xresources

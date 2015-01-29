@@ -115,16 +115,4 @@ function helpers.client_floats(c)
 end
 
 
-function helpers.compute_fontsize(size)
-  if not helpers.dpi then
-    local file = io.popen(
-      "xdpyinfo | grep resolution | sed -r 's/.* ([0-9]+)x.*/\\1/g'"
-    )
-    helpers.dpi = tonumber(file:read('*a'))
-    file:close()
-  end
-  return size/96*helpers.dpi
-end
-
-
 return helpers

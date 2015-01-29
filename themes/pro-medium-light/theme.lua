@@ -4,6 +4,7 @@ imported from here: https://github.com/barwinco/pro
 
 local generate_theme = require("actionless.common_theme").generate_theme
 local xresources = require("actionless.xresources")
+local dpi = require("actionless.xresources").compute_fontsize
 
 local awful = require("awful")
 local theme_dir = awful.util.getdir("config").."/themes/pro-medium-light"
@@ -109,12 +110,12 @@ theme.show_widget_icon = true
 --theme.sans_font = "Sans 10.3"
 --theme.tasklist_font = "Sans Bold 10.3"
 
-theme.font = "Monospace 10"
-theme.sans_font = "Sans 10"
+theme.font = "Monospace " .. tostring(dpi(8))
+theme.sans_font = "Sans " .. tostring(dpi(8))
 -- Don't use sans font:
 --theme.sans_font	= theme.font
 --
-theme.tasklist_font = "Sans Bold 10"
+theme.tasklist_font = "Sans Bold " .. tostring(dpi(8))
 
 theme = require("actionless.common_theme").fill_theme(theme)
 return theme

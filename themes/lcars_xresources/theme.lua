@@ -1,6 +1,6 @@
 local xresources = require("actionless.xresources")
 local create_theme = require("actionless.common_theme").create_theme
-local dpi = require("actionless.helpers").compute_fontsize
+local dpi = require("actionless.xresources").compute_fontsize
 
 local theme_name = "lcars_xresources"
 
