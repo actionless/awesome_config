@@ -14,6 +14,8 @@ local common_theme = {}
 function common_theme.generate_theme(theme_dir)
 
   local theme = {}
+
+  theme.null = nil
   -- TERMINAL COLORSCHEME:
   --
   theme.color = {
@@ -315,7 +317,7 @@ function common_theme.fill_theme(theme)
         actual_value = actual_value[actual_key_path[i]]
       end
       new_theme[key] = actual_value
-      if h_string.starts(actual_value, "theme.") then
+      if actual_value and h_string.starts(actual_value, "theme.") then
         templates_found = true
       end
     else
