@@ -2,9 +2,9 @@
 imported from here: https://github.com/barwinco/pro
 ]]--
 
-local generate_theme = require("actionless.common_theme").generate_theme
+local create_theme = require("actionless.common_theme").create_theme
 local xresources = require("actionless.xresources")
-local dpi = require("actionless.xresources").compute_fontsize
+local dpi = xresources.compute_fontsize
 
 local awful = require("awful")
 local theme_dir = awful.util.getdir("config").."/themes/pro-medium-light"
@@ -18,9 +18,7 @@ gtk.select = "#7d4f78"
 
 -- GENERATE DEFAULT THEME:
 --
-local theme = generate_theme(
-  theme_dir
-)
+local theme = {}
 
 -- TERMINAL COLORSCHEME:
 --
@@ -40,7 +38,7 @@ theme.panel_enbolden_details	= true
 --
 theme.panel_taglist="theme.bg"
 theme.panel_close="theme.bg"
-theme.panel_tasklist=nil
+theme.panel_tasklist="theme.null"
 theme.panel_media="theme.bg"
 theme.panel_info="theme.bg"
 theme.panel_layoutbox="theme.bg"
@@ -110,12 +108,12 @@ theme.show_widget_icon = true
 --theme.sans_font = "Sans 10.3"
 --theme.tasklist_font = "Sans Bold 10.3"
 
-theme.font = "Monospace " .. tostring(dpi(8))
-theme.sans_font = "Sans " .. tostring(dpi(8))
+theme.font = "Monospace Bold " .. tostring(dpi(8))
+theme.sans_font = "Sans Bold " .. tostring(dpi(8))
 -- Don't use sans font:
 --theme.sans_font	= theme.font
 --
-theme.tasklist_font = "Sans Bold " .. tostring(dpi(8))
 
-theme = require("actionless.common_theme").fill_theme(theme)
-return theme
+return create_theme({
+  theme=theme, theme_dir=theme_dir
+})
