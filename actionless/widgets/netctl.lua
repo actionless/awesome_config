@@ -118,7 +118,7 @@ local function worker(args)
     netctl.widget:set_markup(
       markup.font(
         font,
-        string.format("%-6s", network_name)))
+        network_name))
     if netctl.interface == netctl.eth_if then
       netctl.widget:set_image(beautiful.widget_net_wired)
     elseif netctl.interface == netctl.wlan_if then
