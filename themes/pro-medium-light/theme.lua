@@ -57,8 +57,10 @@ theme.border_focus              = "#34a890"
 theme.titlebar_focus_border     = "theme.border_focus"
 
 
-theme.widget_close_fg = gtk.fg
-theme.panel_widget_fg  = "#f3f3f5"
+theme.panel_widget_fg_warning	= "theme.warning"
+theme.panel_widget_fg_error 	= "theme.error"
+theme.fg_urgent		= "theme.error"
+theme.panel_widget_fg = gtk.fg
 theme.panel_widget_bg = gtk.bg
 
 theme.taglist_fg_occupied	= gtk.fg
@@ -99,6 +101,7 @@ theme.widget_decoration_image_sq = theme_dir .. '/icons/common/decoration_sq.png
 --theme.widget_decoration_arrl = ''
 --theme.widget_decoration_arrr = ''
 
+  theme.titlebar_height		= 24
 theme.panel_height		= 22
 theme.panel_padding_bottom	= 0
 
