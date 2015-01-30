@@ -35,8 +35,8 @@ theme.widget_decoration_arrl = ''
 theme.widget_decoration_arrr = ''
 
 -- FONTS:
-theme.font = "Monospace Bold "..tostring(dpi(9)) -- meslo lg s
-theme.sans_font = "Sans Bold "..tostring(dpi(9)) -- ubuntu sans
+theme.font = "Monospace Bold "..tostring(dpi(8)) -- meslo lg s
+theme.sans_font = "Sans Bold "..tostring(dpi(8)) -- ubuntu sans
 -- Don't use sans font:
 theme.sans_font	= "theme.font"
 
