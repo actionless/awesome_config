@@ -77,6 +77,8 @@ theme.titlebar_fg_normal        = gtk.fg
 
 theme.notification_bg = gtk.base
 theme.notification_bg = "#111111"
+theme.notification_fg = "#111109"
+theme.notification_fg = gtk.bg
 
 theme.player_artist = gtk.select
 theme.player_title = gtk.fg
