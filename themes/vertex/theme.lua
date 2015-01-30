@@ -1,6 +1,7 @@
 local generate_theme = require("actionless.common_theme").generate_theme
 local fill_theme = require("actionless.common_theme").fill_theme
 local xresources = require("actionless.xresources")
+local dpi = xresources.compute_fontsize
 
 local awful = require("awful")
 local theme_dir = awful.util.getdir("config").."/themes/vertex"
@@ -69,11 +70,11 @@ theme.player_title = gtk.fg
 -- CUSTOMIZE default theme:-----------------------------------------------
 
 -- WALLPAPER:
--- Use nitrogen:
---theme.wallpaper_cmd     = "nitrogen --restore"
 -- Use wallpaper tile:
-theme.wallpaper = theme_dir .. '/vortex.jpg'
-theme.wallpaper_layout = 'centered'
+--theme.wallpaper = theme_dir .. '/vortex.jpg'
+--theme.wallpaper_layout = 'centered'
+-- Use nitrogen:
+theme.wallpaper_cmd     = "nitrogen --restore"
 
 -- PANEL DECORATIONS:
 --
@@ -91,26 +92,8 @@ theme.show_widget_icon = true
 
 ------------------------------------------------------------------------------
 -- FONTS:
---Ubuntu patches:
---theme.font = "Monospace 10.5"
---theme.sans_font = "Sans 10.3"
---theme.tasklist_font = "Sans Bold 10.3"
-
-theme.font = "Monospace 10"
-theme.sans_font = "Sans 10"
--- Don't use sans font:
---theme.sans_font	= theme.font
---
-theme.tasklist_font = "Sans Bold 10"
-
-
---131dpi:
--- {{{
---theme.font = "Meslo LG S Bold 10.2"
-theme.font = "Fantasque Sans Mono Bold 12"
-
-theme.sans_font = "Ubuntu Sans Bold 10.3"
-theme.sans_font = "Sans Bold 9.6"
+theme.font = "Fantasque Sans Mono Bold "..dpi(9)
+theme.sans_font = "Sans Bold "..dpi(7)
 --theme.sans_font      = "theme.font"
 -- }}}
 
