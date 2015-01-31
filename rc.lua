@@ -41,6 +41,8 @@ local context = {
   autorun = {},
   widgets = {},
   menu = {},
+
+  volume_widget = "noapw",
 }
 
 local local_settings_result, local_settings_details = pcall(function()

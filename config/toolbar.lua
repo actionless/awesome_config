@@ -52,7 +52,13 @@ function toolbar.init(awesome_context)
 
     right_layout:add(loaded_widgets.music)
     right_layout:add(separator)
-    right_layout:add(loaded_widgets.volume)
+
+    if awesome_context.volume_widget == "apw" then
+      right_layout:add(make_separator('arrl', {fg=beautiful.panel_media}))
+      right_layout:add(require("apw/widget"))
+    else
+      right_layout:add(loaded_widgets.volume)
+    end
 
     -- sneaky_toggle
     if s == 1 then
@@ -118,15 +124,17 @@ function toolbar.init(awesome_context)
     mywibox[s]:set_bg(beautiful.panel_bg)
     mywibox[s]:set_fg(beautiful.panel_fg)
 
-    -- padding for clients' area
-    awful.screen.padding(
-      capi.screen[s], {
-        top = beautiful.screen_padding,
-        bottom = beautiful.screen_padding,
-        left = beautiful.screen_padding,
-        right = beautiful.screen_padding
-      }
-    )
+    if beautiful.screen_padding and beautiful.screen_padding > 0 then
+      -- padding for clients' area
+      awful.screen.padding(
+        capi.screen[s], {
+          top = beautiful.screen_padding,
+          bottom = beautiful.screen_padding,
+          left = beautiful.screen_padding,
+          right = beautiful.screen_padding
+        }
+      )
+    end
 
   end
 

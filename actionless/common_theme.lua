@@ -201,6 +201,9 @@ function common_theme.generate_theme(theme_dir)
   theme.player_artist		= "theme.color.13"
   theme.player_title      = "theme.panel_media"
 
+  theme.apw_bg_color = "theme.panel_bg"
+  theme.apw_fg_color = "theme.panel_media"
+
   -- ICONS
 
   local icons_dir = theme.dir .. "/icons/"
