@@ -38,7 +38,7 @@ theme.widget_decoration_arrr = ''
 theme.font = "Monospace Bold "..tostring(dpi(8)) -- meslo lg s
 theme.sans_font = "Sans Bold "..tostring(dpi(8)) -- ubuntu sans
 -- Don't use sans font:
-theme.sans_font	= "theme.font"
+--theme.sans_font	= "theme.font"
 
 --
 --MISC:
