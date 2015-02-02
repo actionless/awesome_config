@@ -13,8 +13,8 @@ kbd.widget = common.widget()
 
 local function worker(args)
   local args	 = args or {}
-  local bg = args.bg or beautiful.panel_widget_bg_error or beautiful.fg
-  local fg = args.fg or beautiful.panel_widget_fg_error or beautiful.bg
+  local bg = args.bg or beautiful.panel_widget_bg_warning or beautiful.fg
+  local fg = args.fg or beautiful.panel_widget_fg_warning or beautiful.bg
   local layouts = args.layouts or {"eng", "rus"}
   local default_layout = args.default_layout or "eng"
   kbd.widget = common.decorated({
