@@ -25,11 +25,18 @@ local theme = {}
 local color = xresources.get_current_theme()
 color.bg    = gtk.bg
 color.fg    = gtk.fg
-color["0"]  = gtk.base
-color["4"]  = gtk.select
-color["7"]  = gtk.fg
-
 theme.color = color
+
+theme.fg      = gtk.fg
+theme.bg      = gtk.bg
+theme.alt_bg  = gtk.base
+theme.theme   = gtk.select
+theme.warning = "theme.color.2"
+theme.error   = "theme.color.1"
+
+theme.border_width              = "8"
+theme.border_focus              = "#34a890"
+theme.titlebar_focus_border     = "theme.border_focus"
 
 theme.panel_opacity = 1
 theme.panel_enbolden_details	= true
@@ -43,24 +50,13 @@ theme.panel_media="theme.bg"
 theme.panel_info="theme.bg"
 theme.panel_layoutbox="theme.bg"
 
-theme.fg      = gtk.fg
-theme.bg      = gtk.bg
-theme.alt_bg  = gtk.base
-theme.theme   = gtk.select
-theme.warning = gtk.select
-theme.error   = "#cc4433"
+--theme.panel_widget_fg_warning	= "theme.warning"
+--theme.panel_widget_fg_error 	= "theme.error"
+theme.panel_widget_fg_warning	= "theme.fg"
+theme.panel_widget_fg_error 	= "theme.fg"
 
-
-theme.border_width              = "8"
-theme.border_focus              = "#94a870"
-theme.border_focus              = "#34a890"
-theme.titlebar_focus_border     = "theme.border_focus"
-
-theme.hotkey_widget_fg = "theme.fg"
-
-theme.panel_widget_fg_warning	= "theme.warning"
-theme.panel_widget_fg_error 	= "theme.error"
 theme.fg_urgent		= "theme.error"
+
 theme.panel_widget_fg = gtk.fg
 theme.panel_widget_bg = gtk.bg
 
@@ -68,7 +64,6 @@ theme.taglist_fg_occupied	= gtk.fg
 theme.taglist_fg_empty		= gtk.fg
 theme.taglist_fg_focus		= "#ddbb99"
 
-theme.taglist_bg_focus		= gtk.base
 theme.tasklist_fg_focus		= gtk.fg
 theme.tasklist_fg_minimize	= gtk.fg
 theme.tasklist_bg_minimize	= gtk.base
@@ -83,6 +78,8 @@ theme.notification_fg = gtk.bg
 
 theme.player_artist = gtk.select
 theme.player_title = gtk.fg
+
+theme.hotkey_widget_fg = "theme.fg"
 
 -- CUSTOMIZE default theme:-----------------------------------------------
 
@@ -101,6 +98,11 @@ theme.widget_decoration_image_arrl = theme_dir .. '/icons/common/decoration_l.pn
 theme.widget_decoration_image_arrr = theme_dir .. '/icons/common/decoration_r.png'
 theme.widget_decoration_image_bg = theme_dir .. '/icons/common/decoration_bg.png'
 theme.widget_decoration_image_sq = theme_dir .. '/icons/common/decoration_sq.png'
+
+local common_icons_dir = theme_dir .. '/icons/common/'
+  theme.taglist_squares_sel_empty	= common_icons_dir .. "square_empty.png"
+  theme.taglist_squares_unsel_empty	= common_icons_dir .. "square_empty.png"
+
 --theme.widget_decoration_arrl = ''
 --theme.widget_decoration_arrr = ''
 
