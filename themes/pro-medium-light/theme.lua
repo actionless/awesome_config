@@ -56,6 +56,7 @@ theme.border_focus              = "#94a870"
 theme.border_focus              = "#34a890"
 theme.titlebar_focus_border     = "theme.border_focus"
 
+theme.hotkey_widget_fg = "theme.fg"
 
 theme.panel_widget_fg_warning	= "theme.warning"
 theme.panel_widget_fg_error 	= "theme.error"

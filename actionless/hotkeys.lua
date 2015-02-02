@@ -29,6 +29,7 @@ local hotkeys = {
     special_button_fg = "#000000",
     default_button_bg = beautiful.theme,
     alt_fg = beautiful.color and beautiful.color["0"] or beautiful.bg,
+    button_fg = beautiful.hotkeys_widget_fg or beautiful.fg,
   },
   bindings = {
     --[[
@@ -146,7 +147,7 @@ local function create_wibox(modifiers, available_groups)
         margin = APPEARANCE.key_margin,
     })
     local key_group_bg = nil
-    local key_group_fg = beautiful.bg
+    local key_group_fg = APPEARANCE.button_fg
     if key_group and hotkeys.groups[key_group] then
       key_group_bg = hotkeys.groups[key_group].color
     elseif comment then

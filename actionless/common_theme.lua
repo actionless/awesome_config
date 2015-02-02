@@ -183,6 +183,8 @@ function common_theme.generate_theme(theme_dir)
   theme.titlebar_fg_normal	= "theme.tasklist_fg_normal"
   theme.titlebar_bg_normal	= "theme.bg"
 
+  theme.hotkey_widget_fg = "theme.bg"
+
   theme.notification_opacity	= 0.8
   theme.notification_font	= "theme.sans_font"
   theme.notification_monofont	= "theme.font"
