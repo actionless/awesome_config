@@ -223,6 +223,9 @@ function common_theme.generate_theme(theme_dir)
   theme.taglist_squares_sel	= common_icons_dir .. "square_sel.png"
   theme.taglist_squares_unsel	= common_icons_dir .. "square_unsel.png"
 
+  theme.taglist_squares_sel_empty	= common_icons_dir .. "square_sel.png"
+  theme.taglist_squares_unsel_empty	= common_icons_dir .. "square_unsel.png"
+
   theme.small_separator		= common_icons_dir .. "small_separator.png"
 
 
