@@ -41,6 +41,9 @@ theme.titlebar_focus_border     = "theme.border_focus"
 theme.panel_opacity = 1
 theme.panel_enbolden_details	= true
 
+theme.widget_close_left_decorators = { 'arrl', 'sq', 'sq' }
+theme.widget_close_right_decorators = { 'sq', 'sq', 'arrr', }
+
 -- PANEL COLORS:
 --
 theme.panel_taglist="theme.bg"

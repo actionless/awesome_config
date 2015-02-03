@@ -16,8 +16,8 @@ local manage_client = {}
 
 local function worker(widget_screen, args)
   local args	 = args or {}
-  local bg = args.bg or beautiful.panel_widget_bg or beautiful.fg
-  local fg = args.fg or beautiful.panel_widget_fg or beautiful.bg
+  args.bg = args.bg or beautiful.panel_widget_bg or beautiful.fg
+  args.fg = args.fg or beautiful.panel_widget_fg or beautiful.bg
 
   local object = {}
   local widget = common.widget()
@@ -33,10 +33,9 @@ local function worker(widget_screen, args)
         widget:set_image(beautiful.close_button)
       end)
   else
-    widget = common.decorated({
-      widget=manage_client.widget, bg=bg, fg=fg,
-    })
-    widget:set_text(' x ')
+    args.widget = widget
+    widget = common.decorated(args)
+    widget:set_text('x')
     widget:connect_signal(
       "mouse::enter", function ()
         widget:set_fg(beautiful.panel_widget_fg_error)
@@ -44,8 +43,8 @@ local function worker(widget_screen, args)
       end)
     widget:connect_signal(
       "mouse::leave", function ()
-        widget:set_fg(fg)
-        widget:set_bg(bg)
+        widget:set_fg(args.fg)
+        widget:set_bg(args.bg)
       end)
   end
 

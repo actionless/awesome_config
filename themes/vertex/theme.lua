@@ -41,6 +41,9 @@ theme.sel_border                = "#a3c24e"
 theme.panel_opacity = 1
 theme.panel_enbolden_details = true
 
+theme.widget_close_left_decorators = { 'arrl', 'sq', 'sq' }
+theme.widget_close_right_decorators = { 'sq', 'sq', 'arrr', }
+
 theme.panel_taglist="theme.bg"
 theme.panel_close="theme.bg"
 theme.panel_tasklist=nil

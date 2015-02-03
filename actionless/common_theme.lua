@@ -95,7 +95,7 @@ function common_theme.generate_theme(theme_dir)
   theme.sel_border              = "theme.color.10"
   theme.titlebar_border         = "theme.border"
   theme.titlebar_focus_border   = "theme.sel_border"
-  theme.border_width		= "10"
+  theme.border_width		= "6"
   theme.border_normal		= "theme.border"
   theme.border_focus		= "theme.sel_border"
   theme.border_marked		= "theme.error"
@@ -145,6 +145,8 @@ function common_theme.generate_theme(theme_dir)
 
   theme.widget_close_bg = "theme.panel_close"
   theme.widget_close_fg = "theme.panel_widget_fg"
+  theme.widget_close_left_decorators = { 'arrl' }
+  theme.widget_close_right_decorators = { 'sq' }
 
   theme.tasklist_font		= "theme.sans_font"
   theme.tasklist_fg_focus	= "theme.alt_bg"

@@ -34,17 +34,19 @@ function toolbar.init(awesome_context)
     left_layout:add(loaded_widgets.screen[s].promptbox)
     left_layout:add(sep)
     left_layout:add(loaded_widgets.screen[s].taglist)
-    left_layout:add(separator)
+    left_layout:add(sep)
 
-    left_layout:add(loaded_widgets.screen[s].close_button)
-    left_layout:add(separator)
+    left_layout:add(sep)
     left_layout:add(loaded_widgets.kbd)
+    left_layout:add(sep)
+    left_layout:add(sep)
+    left_layout:add(loaded_widgets.screen[s].close_button)
+    left_layout:add(sep)
 
     -- RIGHT side
     local right_layout = wibox.layout.fixed.horizontal()
 
     if beautiful.panel_tasklist then
-      left_layout:add(make_separator('arrl', {fg=beautiful.panel_tasklist}))
       right_layout:add(make_separator('arrr', {fg=beautiful.panel_tasklist}))
     end
 

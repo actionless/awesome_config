@@ -109,6 +109,8 @@ function widget_loader.init(awesome_context)
       s, {
         bg = beautiful.widget_close_bg,
         fg = beautiful.widget_close_fg,
+        left_separators = beautiful.widget_close_left_decorators,
+        right_separators = beautiful.widget_close_right_decorators,
       }
     )
 
