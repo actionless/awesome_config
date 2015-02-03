@@ -20,7 +20,8 @@ local bordered_widget = require("actionless.widgets.common").bordered
 local hotkeys = {
   appearance = {
     width = 1400,
-    height = 650,
+    height = 720,
+    keyboard_height = 580,
     key_padding = 5,
     key_margin = 5,
     comment_font_size = 8,
@@ -183,7 +184,10 @@ local function create_wibox(modifiers, available_groups)
         )
       )
       if group.modifiers then
-        for _, modifier in pairs(group.modifiers) do
+        for _, modifier in h_table.spairs(
+            group.modifiers,
+            function(t, a, b) return t[a] < t[b] end
+        ) do
           group_layout:add(
             wibox.widget.textbox(
               modifier == active_modifiers_string
@@ -240,9 +244,15 @@ local function create_wibox(modifiers, available_groups)
       end
       keyboard_layout:add(row_layout)
     end
-    keyboard_layout:add(
+    local keyboard_wrapper_layout = wibox.layout.constraint()
+    keyboard_wrapper_layout:set_widget(keyboard_layout)
+    keyboard_wrapper_layout:set_height(APPEARANCE.keyboard_height)
+    keyboard_wrapper_layout:set_strategy('exact')
+    local all_layout = wibox.layout.fixed.vertical()
+    all_layout:add(keyboard_wrapper_layout)
+    all_layout:add(
       create_legend(active_modifiers_string, available_groups, active_groups))
-    return keyboard_layout
+    return all_layout
   end
 
   local scrgeom = capi.screen[helpers.get_current_screen()].workarea
