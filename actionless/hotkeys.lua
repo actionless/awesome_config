@@ -30,6 +30,9 @@ local hotkeys = {
     default_button_bg = beautiful.theme,
     alt_fg = beautiful.color and beautiful.color["0"] or beautiful.bg,
     button_fg = beautiful.hotkeys_widget_fg or beautiful.fg,
+    border_width = 2,
+    border_color = beautiful.fg,
+    widget_padding = 8,
   },
   bindings = {
     --[[
@@ -191,15 +194,21 @@ local function create_wibox(modifiers, available_groups)
           ))
         end
       end
-      return group_layout
+      return bordered_widget(
+        group_layout,
+        { padding=APPEARANCE.key_padding }
+      )
     end
 
-    local legend_layout = wibox.layout.flex.horizontal()
+    local legend_layout = wibox.layout.fixed.horizontal()
     for _, group_id in ipairs(available_groups) do
       local group_is_active = h_table.contains(active_groups, group_id)
       legend_layout:add(create_layout_for_group(group_id, group_is_active, active_modifiers_string))
     end
-    return legend_layout
+    local legend_align = wibox.layout.align.horizontal()
+    legend_align:set_second(legend_layout)
+    legend_align:set_expand('outside')
+    return legend_align
   end
 
   local function create_keyboard(active_modifiers, available_groups)
@@ -255,8 +264,9 @@ local function create_wibox(modifiers, available_groups)
     bordered_widget(
       create_keyboard(modifiers, available_groups),
       {
-        padding = APPEARANCE.key_padding,
-        margin = APPEARANCE.key_margin,
+        padding = APPEARANCE.widget_padding,
+        margin = APPEARANCE.border_width,
+        margin_color = APPEARANCE.border_color,
       }
     )
   )

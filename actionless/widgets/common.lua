@@ -118,6 +118,7 @@ function common.bordered(widget, args)
   if not widget then return nil end
   local margin = args.margin or 0
   local padding = args.padding or 0
+  local margin_color = args.margin_color
   local obj = {}
       obj.padding = wibox.layout.margin()
       obj.padding:set_widget(widget)
@@ -127,6 +128,7 @@ function common.bordered(widget, args)
   obj.margin = wibox.layout.margin()
   obj.margin:set_widget(obj.background)
   obj.margin:set_margins(margin)
+  if margin_color then obj.margin:set_color(margin_color) end
   setmetatable(obj, { __index = obj.margin })
 
   function obj:set_bg(...)

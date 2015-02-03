@@ -183,7 +183,7 @@ function common_theme.generate_theme(theme_dir)
   theme.titlebar_fg_normal	= "theme.tasklist_fg_normal"
   theme.titlebar_bg_normal	= "theme.bg"
 
-  theme.hotkey_widget_fg = "theme.bg"
+  theme.hotkeys_widget_fg = "theme.bg"
 
   theme.notification_opacity	= 0.8
   theme.notification_font	= "theme.sans_font"
@@ -223,8 +223,8 @@ function common_theme.generate_theme(theme_dir)
   theme.taglist_squares_sel	= common_icons_dir .. "square_sel.png"
   theme.taglist_squares_unsel	= common_icons_dir .. "square_unsel.png"
 
-  theme.taglist_squares_sel_empty	= common_icons_dir .. "square_sel.png"
-  theme.taglist_squares_unsel_empty	= common_icons_dir .. "square_unsel.png"
+  theme.taglist_squares_sel_empty	= nil
+  theme.taglist_squares_unsel_empty	= nil
 
   theme.small_separator		= common_icons_dir .. "small_separator.png"
 
