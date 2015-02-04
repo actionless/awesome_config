@@ -12,8 +12,10 @@ local theme_dir = awful.util.getdir("config").."/themes/pro-medium-light"
 local gtk = {}
 gtk.bg = "#B8B8B8"
 gtk.fg = "#404040"
+gtk.fg = "#202020"
 gtk.base = "#888888"
 gtk.select = "#7d4f78"
+gtk.select = "#6d3f68"
 
 
 -- GENERATE DEFAULT THEME:
@@ -34,7 +36,7 @@ theme.theme   = gtk.select
 theme.warning = "theme.color.2"
 theme.error   = "theme.color.1"
 
-theme.border_width              = "8"
+theme.border_width              = "6"
 theme.border_focus              = "#34a890"
 theme.titlebar_focus_border     = "theme.border_focus"
 
@@ -53,19 +55,23 @@ theme.panel_media="theme.bg"
 theme.panel_info="theme.bg"
 theme.panel_layoutbox="theme.bg"
 
---theme.panel_widget_fg_warning	= "theme.warning"
---theme.panel_widget_fg_error 	= "theme.error"
-theme.panel_widget_fg_warning	= "theme.fg"
-theme.panel_widget_fg_error 	= "theme.fg"
+local red_light = "#f1cbfb"
+local green_light = "#cbf1fb"
+local blue_light = "#cbfbf1"
 
-theme.fg_urgent		= "theme.error"
-
+theme.panel_widget_fg_warning	= green_light
+theme.panel_widget_fg_error	= red_light
 theme.panel_widget_fg = gtk.fg
 theme.panel_widget_bg = gtk.bg
 
+theme.fg_urgent		= red_light
+
 theme.taglist_fg_occupied	= gtk.fg
 theme.taglist_fg_empty		= gtk.fg
-theme.taglist_fg_focus		= "#ddbb99"
+--theme.taglist_fg_focus		= "#ddbb99"
+theme.taglist_fg_focus		= blue_light
+--theme.taglist_fg_focus		= gtk.fg
+--theme.taglist_bg_focus		= theme.border_focus
 
 theme.tasklist_fg_focus		= gtk.fg
 theme.tasklist_fg_minimize	= gtk.fg
@@ -74,15 +80,13 @@ theme.tasklist_bg_minimize	= gtk.base
 theme.titlebar_fg_focus         = "theme.tasklist_fg_focus"
 theme.titlebar_fg_normal        = gtk.fg
 
-theme.notification_bg = gtk.base
-theme.notification_bg = "#111111"
-theme.notification_fg = "#111109"
+theme.notification_bg = gtk.fg
 theme.notification_fg = gtk.bg
 
 theme.player_artist = gtk.select
 theme.player_title = gtk.fg
 
-theme.hotkey_widget_fg = "theme.fg"
+theme.hotkeys_widget_fg = "theme.fg"
 
 -- CUSTOMIZE default theme:-----------------------------------------------
 
