@@ -9,6 +9,7 @@ local capi = {
   keygrabber = keygrabber,
 }
 local awful = require("awful")
+local a_table = awful.util.table
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 
@@ -156,7 +157,7 @@ local function create_wibox(modifiers, available_groups)
       key_group_bg = hotkeys.groups[key_group].color
     elseif comment then
       key_group_bg = APPEARANCE.default_button_bg
-    elseif h_table.contains(SPECIAL_KEYBUTTONS, key_label) then
+    elseif a_table.hasitem(SPECIAL_KEYBUTTONS, key_label) then
       key_group_bg = APPEARANCE.special_button_bg
       key_group_fg = APPEARANCE.special_button_fg
     end
@@ -206,7 +207,7 @@ local function create_wibox(modifiers, available_groups)
 
     local legend_layout = wibox.layout.fixed.horizontal()
     for _, group_id in ipairs(available_groups) do
-      local group_is_active = h_table.contains(active_groups, group_id)
+      local group_is_active = a_table.hasitem(active_groups, group_id)
       legend_layout:add(create_layout_for_group(group_id, group_is_active, active_modifiers_string))
     end
     local legend_align = wibox.layout.align.horizontal()
@@ -232,7 +233,7 @@ local function create_wibox(modifiers, available_groups)
         local hotkey_record = hotkeys_for_current_modifier[key]
         if hotkey_record
           and hotkey_record.group
-          and h_table.contains(available_groups, hotkey_record.group)
+          and a_table.hasitem(available_groups, hotkey_record.group)
         then
           row_layout:add(create_keybutton(
             KEYBOARD_LABELS[i1][i2], hotkey_record.comment, hotkey_record.group
@@ -296,8 +297,8 @@ function hotkeys.key(modifiers, key, key_press_function, key_release_function,
 
   if key_press_function == 'show_help' then
     -- {{ that needed if popup is called by modifier itself:
-    local modifiers_to_show = h_table.deepcopy(modifiers)
-    if h_table.contains_key(MODIFIERS, key) then
+    local modifiers_to_show = a_table.clone(modifiers)
+    if h_table.haskey(MODIFIERS, key) then
       table.insert(modifiers_to_show, key)
       key = MODIFIERS[key]
     end

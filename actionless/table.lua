@@ -2,6 +2,7 @@
      Licensed under GNU General Public License v2
 --]]
 
+local a_table = require("awful.util").table
 
 -- helper functions for internal use
 local table_helpers = {}
@@ -45,7 +46,7 @@ function table_helpers.list_merge(container, addition)
   container = container or {}
   addition = addition or {}
   for _, item in ipairs(addition) do
-    if not table_helpers.contains(container, item) then
+    if not a_table.hasitem(container, item) then
       table.insert(container, item)
     end
   end
@@ -78,26 +79,12 @@ function table_helpers.range(original_table, range_start, range_finish)
   return result
 end
 
-function table_helpers.contains(container_table, desired_value)
-  container_table = container_table or {}
-  for _, value in pairs(container_table) do
-    if value == desired_value then return true end
-  end
-  return false
-end
-
-function table_helpers.contains_key(container_table, desired_key)
+function table_helpers.haskey(container_table, desired_key)
   container_table = container_table or {}
   for key, _ in pairs(container_table) do
     if key == desired_key then return true end
   end
   return false
-end
-
-function table_helpers.apply(container_table, func)
-  for key, value in pairs(container_table) do
-    container_table[key] = func(value)
-  end
 end
 
 function table_helpers.map(container_table, func)
@@ -116,21 +103,7 @@ function table_helpers.reduce(container_table, func)
   return result
 end
 
-function table_helpers.deepcopy(obj)
-  if type(obj) == 'table' then
-      return setmetatable(
-        table_helpers.map(
-          obj,
-          function(value) return table_helpers.deepcopy(value) end
-        ),
-        table_helpers.deepcopy(getmetatable(obj))
-      )
-  else -- number, string, boolean, etc
-      return obj
-  end
-end
-
-function table_helpers.sum(tables)
+function table_helpers.flat(tables)
   return table_helpers.reduce(
     tables,
     function(container, addition)

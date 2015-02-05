@@ -236,7 +236,7 @@ function common.decorated(args)
     else
       bg = args.bg
     end
-    for _, widget in ipairs(h_table.sum({
+    for _, widget in ipairs(h_table.flat({
       self.left_separator_widgets,
       self.right_separator_widgets
     })) do
