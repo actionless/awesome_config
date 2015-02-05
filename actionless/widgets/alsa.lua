@@ -2,7 +2,7 @@
   Licensed under GNU General Public License v2
    * (c) 2013-2014, Yauhen Kirylau
    * (c) 2013, Luke Bonham
-   * (c) 2010, Adrian C. <anrxc@sysphere.org>  
+   * (c) 2010, Adrian C. <anrxc@sysphere.org>
 --]]
 
 local awful		= require("awful")
@@ -28,8 +28,8 @@ local alsa = {
 local function worker(args)
   local args = args or {}
 
-  local fg = args.fg or beautiful.panel_widget_fg or beautiful.bg or '#000000'
-  local bg = args.bg or beautiful.panel_widget_bg or beautiful.fg or '#ffffff'
+  args.fg = args.fg or beautiful.panel_widget_fg or beautiful.bg or '#000000'
+  args.bg = args.bg or beautiful.panel_widget_bg or beautiful.fg or '#ffffff'
   alsa.step = args.step or 2
   alsa.update_interval  = args.update_interval or 5
   alsa.channel  = args.channel or "Master"
@@ -100,7 +100,7 @@ local function worker(args)
 
   function alsa.toggle()
     if alsa.volume.status == 'off' then
-      for _, channel in pairs(alsa.channels_toggle) do 
+      for _, channel in pairs(alsa.channels_toggle) do
         awful.util.spawn_with_shell("amixer -q set " .. channel .. ",0 on")
       end
     else
@@ -120,16 +120,13 @@ local function worker(args)
 
   function alsa.update_indicator()
     if alsa.volume.status == "off" then
-      alsa.widget:set_bg(beautiful.panel_widget_bg_warning)
-      alsa.widget:set_fg(beautiful.panel_widget_fg_warning)
+      alsa.widget:set_warning()
       alsa.widget:set_icon('vol_mute')
     elseif alsa.volume.level == 0 then
-      alsa.widget:set_bg(beautiful.panel_widget_bg_error)
-      alsa.widget:set_fg(beautiful.panel_widget_fg_error)
+      alsa.widget:set_error()
       alsa.widget:set_icon('vol')
     else
-      alsa.widget:set_bg(bg)
-      alsa.widget:set_fg(fg)
+      alsa.widget:set_normal()
       if alsa.volume.level <= 25 then
         alsa.widget:set_icon('vol_low')
       elseif alsa.volume.level <= 75 then

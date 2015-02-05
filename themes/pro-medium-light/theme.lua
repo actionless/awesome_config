@@ -101,10 +101,22 @@ theme.wallpaper_layout = "centered"
 --
 theme.widget_decoration_arrl = 'sq'
 theme.widget_decoration_arrr = 'sq'
+
 theme.widget_decoration_image_arrl = theme_dir .. '/icons/common/decoration_l.png'
+theme.widget_decoration_image_arrl_warning = theme_dir .. '/icons/common/decoration_l_warn.png'
+theme.widget_decoration_image_arrl_error = theme_dir .. '/icons/common/decoration_l_err.png'
+
 theme.widget_decoration_image_arrr = theme_dir .. '/icons/common/decoration_r.png'
-theme.widget_decoration_image_bg = theme_dir .. '/icons/common/decoration_bg.png'
+theme.widget_decoration_image_arrr_warning = theme_dir .. '/icons/common/decoration_r_warn.png'
+theme.widget_decoration_image_arrr_error = theme_dir .. '/icons/common/decoration_r_err.png'
+
 theme.widget_decoration_image_sq = theme_dir .. '/icons/common/decoration_sq.png'
+theme.widget_decoration_image_sq_warning = theme_dir .. '/icons/common/decoration_sq_warn.png'
+theme.widget_decoration_image_sq_error = theme_dir .. '/icons/common/decoration_sq_err.png'
+
+theme.widget_decoration_image_bg = theme_dir .. '/icons/common/decoration_bg.png'
+theme.widget_decoration_image_bg_warning = theme_dir .. '/icons/common/decoration_bg_warn.png'
+theme.widget_decoration_image_bg_error = theme_dir .. '/icons/common/decoration_bg_err.png'
 
 local common_icons_dir = theme_dir .. '/icons/common/'
   theme.taglist_squares_sel_empty	= common_icons_dir .. "square_empty.png"

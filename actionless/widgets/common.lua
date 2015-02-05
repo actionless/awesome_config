@@ -4,7 +4,7 @@
 --]]
 
 local wibox = require("wibox")
-local gears = require("gears")
+--local gears = require("gears")
 local beautiful = require("beautiful")
 
 local h_table = require("actionless.table")
@@ -21,6 +21,11 @@ local common = {}
 
 function common.widget(args)
   args = args or {}
+
+  local bgimage_normal = beautiful.widget_decoration_image_bg
+  local bgimage_warning = beautiful.widget_decoration_image_bg_warning
+  local bgimage_error = beautiful.widget_decoration_image_bg_error
+
   local show_icon = args.show_icon or beautiful.show_widget_icon
   local use_iconfont = args.use_iconfont or beautiful.use_iconfont
   local force_no_bgimage = args.force_no_bgimage or false
@@ -57,6 +62,22 @@ function common.widget(args)
   end
 
   function widget:set_bg(...)
+    if not force_no_bgimage then
+      local bg = select(1, ...)
+      if bg == beautiful.panel_widget_bg_warning and bgimage_warning then
+        self:set_bgimage(bgimage_warning)
+        return
+      elseif bg == beautiful.panel_widget_bg_error and bgimage_error then
+        self:set_bgimage(bgimage_error)
+        return
+      elseif
+        bg ~= beautiful.panel_widget_bg_warning and
+        bg ~= beautiful.panel_widget_bg_error and
+        bgimage_normal
+      then
+        self:set_bgimage(bgimage_normal)
+      end
+    end
     self.widget_bg:set_bg(...)
   end
 
@@ -73,7 +94,7 @@ function common.widget(args)
         end
       end
       local icon = beautiful.get()['widget_' .. name]
-      gears.debug.assert(icon, ":set_icon failed: icon is missing: " .. name)
+      --gears.debug.assert(icon, ":set_icon failed: icon is missing: " .. name)
       return self.icon_widget:set_image(icon)
     end
   end
@@ -90,9 +111,8 @@ function common.widget(args)
     self.widget_bg:set_widget(nil)
   end
 
-  local widget_bgimage_path = beautiful['widget_decoration_image_bg']
-  if widget_bgimage_path and not force_no_bgimage then
-    widget.widget_bg:set_bgimage(widget_bgimage_path)
+  if bgimage_normal and not force_no_bgimage then
+    widget.widget_bg:set_bgimage(bgimage_normal)
   end
 
   return setmetatable(widget, { __index = widget.widget_bg })
@@ -144,23 +164,57 @@ end
 
 
 
-function common.make_image_separator(image_path, args)
-  if not image_path then return false end
+function common.make_image_separator(separator_character, args)
+
+  local bgimage_normal = beautiful[
+    'widget_decoration_image_' .. separator_character]
+  local bgimage_warning = beautiful[
+    'widget_decoration_image_' .. separator_character .. '_warning']
+  local bgimage_error = beautiful[
+    'widget_decoration_image_' .. separator_character .. '_error']
+
+  if not bgimage_normal then return false end
   args = args or {}
   local bg = args.bg
-  local widget = wibox.widget.background()
-  local separator_widget = wibox.widget.imagebox(image_path)
+  local widget = {}
+  local separator_widget = wibox.widget.imagebox(bgimage_normal)
   separator_widget:set_resize(false)
-  widget:set_bg(bg)
-  widget:set_widget(separator_widget)
+  local widget_bg = wibox.widget.background()
+  widget_bg:set_bg(bg)
+  widget_bg:set_widget(separator_widget)
+
+  widget.widget_bg = widget_bg
+  widget.separator = separator_widget
+
+  setmetatable(widget, { __index = widget.widget_bg })
+  function widget:set_bg(...)
+    local bg = select(1, ...)
+    if bg == beautiful.panel_widget_bg_warning and bgimage_warning then
+      self.separator:set_image(bgimage_warning)
+      return
+    elseif bg == beautiful.panel_widget_bg_error and bgimage_error then
+      self.separator:set_image(bgimage_error)
+      return
+    elseif
+      bg ~= beautiful.panel_widget_bg_warning and
+      bg ~= beautiful.panel_widget_bg_error and
+      bgimage_normal
+    then
+      self.separator:set_image(bgimage_normal)
+    end
+    self.widget_bg:set_bg(...)
+  end
   return widget
 end
 
 
 function common.make_separator(separator_character, args)
-  local image_path = beautiful['widget_decoration_image_' .. separator_character]
-  if image_path then
-    return common.make_image_separator(image_path, args)
+
+  local bgimage_normal = beautiful[
+    'widget_decoration_image_' .. separator_character]
+
+  if bgimage_normal then
+    return common.make_image_separator(separator_character, args)
   end
   local separator_alias = beautiful['widget_decoration_' .. separator_character]
   if separator_alias then
@@ -185,6 +239,8 @@ function common.make_separator(separator_character, args)
   --widget:set_bg(bg)
   widget:set_fg(fg)
   widget:set_widget(wibox.widget.textbox(separator_character))
+
+
   return widget
 end
 
@@ -281,7 +337,25 @@ function common.decorated(args)
     end
   end
 
-  decorated:set_color({fg=fg, bg=bg})
+  function decorated:set_normal()
+    self:set_color({fg=fg, bg=bg})
+  end
+
+  function decorated:set_warning()
+    self:set_color({
+      bg=beautiful.panel_widget_bg_warning,
+      fg=beautiful.panel_widget_fg_warning
+    })
+  end
+
+  function decorated:set_error()
+    self:set_color({
+      bg=beautiful.panel_widget_bg_error,
+      fg=beautiful.panel_widget_fg_error
+    })
+  end
+
+  decorated:set_normal()
   decorated:show()
   return decorated
 end
