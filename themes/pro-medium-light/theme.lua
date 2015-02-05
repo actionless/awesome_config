@@ -11,12 +11,15 @@ local theme_dir = awful.util.getdir("config").."/themes/pro-medium-light"
 
 local gtk = {}
 gtk.bg = "#B8B8B8"
-gtk.fg = "#404040"
 gtk.fg = "#202020"
 gtk.base = "#888888"
-gtk.select = "#7d4f78"
 gtk.select = "#6d3f68"
 
+local main_theme_color = "#34a890"
+
+local red_light = "#f1cbfb"
+local green_light = "#cbf1fb"
+local blue_light = "#cbfbf1"
 
 -- GENERATE DEFAULT THEME:
 --
@@ -37,7 +40,7 @@ theme.warning = "theme.color.2"
 theme.error   = "theme.color.1"
 
 theme.border_width              = "6"
-theme.border_focus              = "#34a890"
+theme.border_focus              = main_theme_color
 theme.titlebar_focus_border     = "theme.border_focus"
 
 theme.panel_opacity = 1
@@ -55,10 +58,6 @@ theme.panel_media="theme.bg"
 theme.panel_info="theme.bg"
 theme.panel_layoutbox="theme.bg"
 
-local red_light = "#f1cbfb"
-local green_light = "#cbf1fb"
-local blue_light = "#cbfbf1"
-
 theme.panel_widget_fg_warning	= green_light
 theme.panel_widget_fg_error	= red_light
 theme.panel_widget_fg = gtk.fg
@@ -68,7 +67,6 @@ theme.fg_urgent		= red_light
 
 theme.taglist_fg_occupied	= gtk.fg
 theme.taglist_fg_empty		= gtk.fg
---theme.taglist_fg_focus		= "#ddbb99"
 theme.taglist_fg_focus		= blue_light
 --theme.taglist_fg_focus		= gtk.fg
 --theme.taglist_bg_focus		= theme.border_focus
