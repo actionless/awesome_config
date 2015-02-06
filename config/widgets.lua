@@ -96,7 +96,7 @@ function widget_loader.init(awesome_context)
 
   -- Textclock
   w.textclock = awful.widget.textclock("%H:%M")
-  widgets.calendar:attach(w.textclock)
+  widgets.calendar:attach(w.textclock, {fg=beautiful.theme})
 
 
   w.screen = {}
