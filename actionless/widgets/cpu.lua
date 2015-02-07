@@ -104,7 +104,7 @@ local function worker(args)
     end
     cpu.widget:set_text(
       string.format(
-        "%-4s ",
+        " %-4s ",
         cpu.now.la1
     ))
   end

@@ -99,7 +99,7 @@ local function worker(args)
 
     mem.widget:set_text(
       string.format(
-        "%6s ", mem.now.used .. "MB"
+        "%6s", mem.now.used .. "MB"
     ))
   end
 
