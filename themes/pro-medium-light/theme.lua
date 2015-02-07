@@ -43,6 +43,9 @@ theme.border_width              = "6"
 theme.border_focus              = main_theme_color
 theme.titlebar_focus_border     = "theme.border_focus"
 
+--theme.border_normal		= gtk.base
+theme.titlebar_border         = gtk.base
+
 theme.panel_opacity = 1
 theme.panel_enbolden_details	= true
 
