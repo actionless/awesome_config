@@ -1,4 +1,5 @@
 --[[
+helpers.scripts_dir = helpers.dir .. 'scripts/'
   Licensed under GNU General Public License v2
    * (c) 2014, Yauheni Kirylau
 --]]
@@ -31,7 +32,8 @@ local player = {
     date=nil,
     file=nil
   },
-  cover="/tmp/awesome_cover.png"
+  cover="/tmp/awesome_cover.png",
+  current_track = nil,
 }
 
 
@@ -76,7 +78,7 @@ local function worker(args)
   end
 
   player.use_next_backend()
-  helpers.set_map("current player track", nil)
+  player.current_track = nil
 
 -------------------------------------------------------------------------------
   function player.run_player()
@@ -182,21 +184,19 @@ local function worker(args)
       artist = h_string.escape(artist)
       title = h_string.escape(title)
       -- playing new song
-      if player_status.title ~= helpers.get_map("current player track") then
-        helpers.set_map("current player track", player_status.title)
+      if player_status.title ~= player.current_track then
+        player.current_track = player_status.title
         player.resize_cover()
       end
     elseif player_status.state == "pause" then
       -- paused
       artist = enabled_backends[backend_id]
       title  = "paused"
-      --@TODO: can it be safely deleted? :
-      --helpers.set_map("current player track", nil)
       player.widget:set_icon('music_pause')
     else
       -- stop
       artist = enabled_backends[backend_id]
-      helpers.set_map("current player track", nil)
+        player.current_track = nil
     end
 
     if player_status.state == "play" or player_status.state == "pause" then

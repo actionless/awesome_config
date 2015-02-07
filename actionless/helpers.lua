@@ -18,18 +18,7 @@ local beautiful = require("beautiful")
 local helpers = {}
 
 helpers.font = string.match(beautiful.get().font or "monospace 8", "([%a, ]+) %d+")
-
-
 helpers.dir    = debug.getinfo(1, 'S').source:match[[^@(.*/).*$]]
-
--- {{{ Modules loader
-
-function helpers.wrequire(table, key)
-    local module = rawget(table, key)
-    return module or require(table._NAME .. '.' .. key)
-end
-
--- }}}
 
 -- {{{ Timer maker
 
@@ -69,20 +58,6 @@ function helpers.newdelay(name, timeout, fun)
   timer:connect_signal("timeout", patched_function)
   timer:start()
   helpers.timer_table[name] = timer
-end
-
--- }}}
-
--- {{{ A map utility
-
-helpers.map_table = {}
-
-function helpers.set_map(element, value)
-    helpers.map_table[element] = value
-end
-
-function helpers.get_map(element)
-    return helpers.map_table[element]
 end
 
 -- }}}
