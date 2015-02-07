@@ -8,21 +8,19 @@
 local awful		= require("awful")
 local beautiful		= require("beautiful")
 
-local string		= { match  = string.match,
-                            format = string.format }
-local setmetatable	= setmetatable
-
 local async	        = require("actionless.async")
 local decorated_widget	= require("actionless.widgets.common").decorated
-local helpers		= require("actionless.helpers")
+local newinterval	= require("actionless.helpers").newinterval
 
 
 -- ALSA volume
 local alsa = {
   volume = {
     status = "N/A",
-    level = "0"
-  }
+    level = "0",
+    in_progress = false,
+    delta = 0
+  },
 }
 
 local function worker(args)
@@ -43,15 +41,12 @@ local function worker(args)
     awful.button({ }, 4, function () alsa.up() end)
   ))
 
-  helpers.set_map("volume in progress", false)
-  helpers.set_map("volume_delta", 0)
-
   function alsa.apply_volume()
-    if helpers.get_map("volume in progress") then
+    if alsa.volume.in_progress then
       return
     end
-    helpers.set_map("volume in progress", true)
-    local volume_delta = helpers.get_map("volume_delta")
+    alsa.volume.in_progress = true
+    local volume_delta = alsa.volume.delta
     local direction = "%+"
     local volume_delta_command = volume_delta
     if volume_delta < 0 then
@@ -62,18 +57,18 @@ local function worker(args)
       "amixer -q set " .. alsa.channel ..
       ",0 " .. volume_delta_command .. direction,
       function()
-        helpers.set_map("volume in progress", false)
+        alsa.volume.in_progress = false
         alsa.volume.level = alsa.volume.level + volume_delta
         alsa.update_indicator()
 
-        local new_volume_delta = helpers.get_map("volume_delta")
-        helpers.set_map("volume_delta", new_volume_delta - volume_delta)
+        local new_volume_delta = alsa.volume.delta
+        alsa.volume.delta =  new_volume_delta - volume_delta
         if new_volume_delta ~= 0 then alsa.apply_volume() end
       end)
   end
 
   function alsa.get_step()
-    if helpers.get_map("volume in progress") then
+    if alsa.volume.in_progress then
       return alsa.step * 2
     else
       return alsa.step
@@ -82,18 +77,14 @@ local function worker(args)
 
   function alsa.up()
     if alsa.volume.level < 100 then
-      helpers.set_map(
-        "volume_delta",
-        helpers.get_map("volume_delta") + alsa.get_step())
+      alsa.volume.delta = alsa.volume.delta + alsa.get_step()
     end
     alsa.apply_volume()
   end
 
   function alsa.down()
     if alsa.volume.level > 0 then
-      helpers.set_map(
-        "volume_delta",
-        helpers.get_map("volume_delta") - alsa.get_step())
+      alsa.volume.delta = alsa.volume.delta - alsa.get_step()
     end
     alsa.apply_volume()
   end
@@ -165,13 +156,14 @@ local function worker(args)
           end
         end
 
-        alsa.volume = { level=level, status=status }
+        alsa.volume.level = level
+        alsa.volume.status = status
         alsa.update_indicator()
       end
     )
   end
 
-  helpers.newinterval("alsa", alsa.update_interval, alsa.update)
+  newinterval("alsa", alsa.update_interval, alsa.update)
   return setmetatable(alsa, { __index = alsa.widget })
 end
 
