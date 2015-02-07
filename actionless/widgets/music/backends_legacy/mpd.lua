@@ -16,7 +16,7 @@ local mpd = {
   player_cmd = 'st -e ncmpcpp'
 }
 
-local cover_script = helpers.scripts_dir .. "mpdcover"
+local cover_script = helpers.dir .. "widgets/music/backends_legacy/mpdcover"
 
 
 function mpd.init(args)

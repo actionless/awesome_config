@@ -21,7 +21,6 @@ helpers.font = string.match(beautiful.get().font or "monospace 8", "([%a, ]+) %d
 
 
 helpers.dir    = debug.getinfo(1, 'S').source:match[[^@(.*/).*$]]
-helpers.scripts_dir = helpers.dir .. 'scripts/'
 
 -- {{{ Modules loader
 
