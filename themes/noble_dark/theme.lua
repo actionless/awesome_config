@@ -1,5 +1,6 @@
 local generate_theme = require("actionless.common_theme").generate_theme
 local xresources = require("actionless.xresources")
+local dpi = require("actionless.xresources").compute_fontsize
 
 local awful = require("awful")
 local theme_dir = awful.util.getdir("config").."/themes/noble_dark"
@@ -102,32 +103,9 @@ theme.widget_decoration_arrr = 'sq'
 theme.show_widget_icon = true
 ------------------------------------------------------------------------------
 -- FONTS:
---Ubuntu patches:
---theme.font = "Monospace 10.5"
---theme.sans_font = "Sans 10.3"
---theme.tasklist_font = "Sans Bold 10.3"
 
-theme.font = "Monospace 10"
-theme.sans_font = "Sans 10"
--- Don't use sans font:
---theme.sans_font	= "theme.font"
---
-theme.tasklist_font = "Sans Bold 10"
-
---131dpi:
--- {{{
-theme.font = "Monospace Bold 10.2" -- meslo lg s
-theme.font = "Monospace Bold 12" -- Fantasque Sans Mono
-
-theme.sans_font = "Sans Bold 10.3" -- ubuntu sans
-
--- Don't use sans font:
---theme.sans_font	= "theme.font"
-
-theme.panel_height             = 26
-theme.panel_padding_bottom     = 6
--- }}}
-
+theme.font = "Monospace Bold "..tostring(dpi(8)) -- meslo lg s
+theme.sans_font = "Sans Bold "..tostring(dpi(8)) -- ubuntu sans
 
 theme = require("actionless.common_theme").fill_theme(theme)
 return theme
