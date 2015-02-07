@@ -29,13 +29,13 @@ local function worker(args)
 
   args.widget = widget
   widget = common.decorated(args)
-  widget:set_text('M')
+  widget:set_text('X')
   widget:connect_signal(
     "mouse::enter", function ()
       if not widget.is_managing then
-        widget:set_warning()
-      else
         widget:set_error()
+      else
+        widget:set_warning()
       end
     end)
   widget:connect_signal(
@@ -47,23 +47,25 @@ local function worker(args)
 
   widget:buttons(awful.util.table.join(
     awful.button({ }, 1, function ()
+      capi.client.focus:kill()
+    end),
+    awful.button({ }, 3, function ()
       local cls = capi.client.get()
       if not widget.is_managing then
         widget.is_managing = true
-        widget:set_error()
+        widget:set_warning()
+        widget:set_text('M')
         for _, c in pairs(cls) do
           c:buttons(clientbuttons_manage)
         end
       else
         widget.is_managing = false
-        widget:set_warning()
+        widget:set_error()
+        widget:set_text('X')
         for _, c in pairs(cls) do
           c:buttons(clientbuttons)
         end
       end
-    end),
-    awful.button({ }, 3, function ()
-      capi.client.focus:kill()
     end)
   ))
 
