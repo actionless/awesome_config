@@ -18,7 +18,8 @@ gtk.select = "#6d3f68"
 local main_theme_color = "#34a890"
 
 local red_light = "#f1cbfb"
-local green_light = "#cbf1fb"
+--local green_light = "#cbf1fb"
+local green_light = "#eeffbc"
 local blue_light = "#cbfbf1"
 
 -- GENERATE DEFAULT THEME:
