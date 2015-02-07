@@ -27,24 +27,17 @@ function sneaky_toggle.initialize()
     end
     st.widgetvisible = true
 
-    st.export_widget = wibox.layout.fixed.horizontal()
-    --st.widget:connect_signal(
-        --"mouse::enter", function ()
-            --st.toggle()
-    --end)
-    st.export_widget:buttons(awful.util.table.join(
-        awful.button({ }, 1, st.toggle),
-        awful.button({ }, 3, function() end)
-    ))
-
         st.container = wibox.layout.constraint()
             st.layout = wibox.layout.fixed.horizontal()
-            --st.layout:add(wibox.widget.textbox(' ')) -- left margin
             for _, widget in ipairs(sneaky_toggle.loaded_widgets) do
                 st.layout:add(widget)
             end
         st.container:set_widget(st.layout)
         st.container:set_strategy("min")
+    st.export_widget = wibox.layout.fixed.horizontal()
+    st.export_widget:buttons(awful.util.table.join(
+        awful.button({ }, 1, st.toggle)
+    ))
     st.export_widget:add(st.container)
     if st.sneaky_tray_container then
         st.export_widget:add(st.sneaky_tray_container)

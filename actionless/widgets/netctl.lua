@@ -1,15 +1,12 @@
---[[            
+--[[
   Licensed under GNU General Public License v2
-   * (c) 2013-2014, Yauheni Kirylau             
+   * (c) 2013-2014, Yauheni Kirylau
 --]]
 
-local naughty		= require("naughty")
+local beautiful		= require("beautiful")
 
-local helpers		= require("actionless.helpers")
-local newinterval		= helpers.newinterval
-local beautiful		 = require("beautiful")
+local newinterval	= require("actionless.helpers").newinterval
 local common_widget	= require("actionless.widgets.common").widget
-local markup		= require("actionless.markup")
 local parse		= require("actionless.parse")
 local async		= require("actionless.async")
 
@@ -17,10 +14,6 @@ local async		= require("actionless.async")
 local netctl = {
   widget = common_widget()
 }
---netctl.widget:connect_signal(
---  "mouse::enter", function () netctl.show_notification() end)
---netctl.widget:connect_signal(
---  "mouse::leave", function () netctl.hide_notification() end)
 
 local function worker(args)
   local args = args or {}
@@ -37,22 +30,6 @@ local function worker(args)
   netctl.preset = args.preset or 'bond' -- or netctl or netctl-auto
   netctl.wlan_if = args.wlan_if or 'wlan0'
   netctl.eth_if = args.eth_if or 'eth0'
-
-  function netctl.hide_notification()
-    if netctl.id ~= nil then
-      naughty.destroy(netctl.id)
-      netctl.id = nil
-    end
-  end
-
-  function netctl.show_notification()
-    netctl.hide_notification()
-    netctl.id = naughty.notify({
-      text = 'not implemented yet',
-      timeout = netctl.timeout,
-      font = beautiful.notification_monofont,
-    })
-  end
 
   function netctl.update()
     if netctl.preset == 'bond' then
@@ -115,10 +92,7 @@ local function worker(args)
   end
 
   function netctl.update_widget(network_name)
-    netctl.widget:set_markup(
-      markup.font(
-        font,
-        network_name))
+    netctl.widget:set_text(network_name)
     if netctl.interface == netctl.eth_if then
       netctl.widget:set_image(beautiful.widget_net_wired)
     elseif netctl.interface == netctl.wlan_if then

@@ -9,7 +9,6 @@ local helpers = require("actionless.helpers")
 local h_table      = require("actionless.table")
 local parse = require("actionless.parse")
 local newinterval = helpers.newinterval
-local font = helpers.font
 local common_widget = require("actionless.widgets.common").widget
 
 
@@ -20,10 +19,6 @@ local cpu = {
   last_active = 0,
   now = {}
 }
-cpu.widget = common_widget()
-cpu.widget:set_image(beautiful.widget_cpu)
-cpu.widget:connect_signal("mouse::enter", function () cpu.show_notification() end)
-cpu.widget:connect_signal("mouse::leave", function () cpu.hide_notification() end)
 
 local function worker(args)
   local args     = args or {}
@@ -31,8 +26,14 @@ local function worker(args)
   local bg = args.bg or beautiful.panel_fg or beautiful.fg
   local fg = args.fg or beautiful.panel_bg or beautiful.bg
   cpu.cores_number = args.cores_number or 8
-  cpu.font = args.font or font
   cpu.timeout = args.timeout or 0
+
+  cpu.widget = common_widget()
+  cpu.widget:set_image(beautiful.widget_cpu)
+  cpu.widget:connect_signal(
+    "mouse::enter", function () cpu.show_notification() end)
+  cpu.widget:connect_signal(
+    "mouse::leave", function () cpu.hide_notification() end)
 
   cpu.list_len = args.list_length or 10
   cpu.command = args.command

@@ -8,24 +8,15 @@
 local naughty      = require("naughty")
 local beautiful    = require("beautiful")
 
-local math         = { floor  = math.floor }
-local string       = { format = string.format }
-local setmetatable = setmetatable
-
-local helpers      = require("actionless.helpers")
 local h_table      = require("actionless.table")
 local parse        = require("actionless.parse")
 local common_widget= require("actionless.widgets.common").widget
-local newinterval     = helpers.newinterval
+local newinterval  = require("actionless.helpers").newinterval
 
 -- Memory usage (ignoring caches)
 local mem = {
   now = {},
 }
-mem.widget = common_widget()
-mem.widget:set_image(beautiful.widget_mem)
-mem.widget:connect_signal("mouse::enter", function () mem.show_notification() end)
-mem.widget:connect_signal("mouse::leave", function () mem.hide_notification() end)
 
 local function worker(args)
   local args   = args or {}
@@ -34,8 +25,14 @@ local function worker(args)
   local fg = args.fg or beautiful.panel_bg or beautiful.bg
   mem.timeout = args.timeout or 0
 
+  mem.widget = common_widget()
+  mem.widget:set_image(beautiful.widget_mem)
   mem.widget:set_fg(fg)
   mem.widget:set_bg(bg)
+  mem.widget:connect_signal(
+    "mouse::enter", function () mem.show_notification() end)
+  mem.widget:connect_signal(
+    "mouse::leave", function () mem.hide_notification() end)
 
   mem.list_len = args.list_length or 10
   mem.command = args.command or
