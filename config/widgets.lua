@@ -106,11 +106,14 @@ function widget_loader.init(awesome_context)
 
     -- CLOSE button
     sw.close_button = widgets.manage_client(
-      s, {
+      {
+        screen = s,
         bg = beautiful.widget_close_bg,
         fg = beautiful.widget_close_fg,
         left_separators = beautiful.widget_close_left_decorators,
         right_separators = beautiful.widget_close_right_decorators,
+        clientbuttons = awesome_context.clientbuttons,
+        clientbuttons_manage = awesome_context.clientbuttons_manage,
       }
     )
 

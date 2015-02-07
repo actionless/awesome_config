@@ -1,6 +1,6 @@
---[[            
+--[[
      Licensed under GNU General Public License v2
-      * (c) 2013-2014, Yauheni Kirylau             
+      * (c) 2013-2014, Yauheni Kirylau
 --]]
 
 local awful = require("awful")
@@ -14,44 +14,55 @@ local common = require("actionless.widgets.common")
 
 local manage_client = {}
 
-local function worker(widget_screen, args)
+local function worker(args)
   local args	 = args or {}
   args.bg = args.bg or beautiful.panel_widget_bg or beautiful.fg
   args.fg = args.fg or beautiful.panel_widget_fg or beautiful.bg
+  local widget_screen = args.screen or 1
+  local clientbuttons = args.clientbuttons
+  local clientbuttons_manage = args.clientbuttons_manage
 
   local object = {}
   local widget = common.widget()
 
-  if beautiful.close_button then
-    widget:set_image(beautiful.close_button)
-    widget:connect_signal(
-      "mouse::enter", function ()
-        widget:set_image(beautiful.close_button_hover)
-      end)
-    widget:connect_signal(
-      "mouse::leave", function ()
-        widget:set_image(beautiful.close_button)
-      end)
-  else
-    args.widget = widget
-    widget = common.decorated(args)
-    widget:set_text('x')
-    widget:connect_signal(
-      "mouse::enter", function ()
-        widget:set_fg(beautiful.panel_widget_fg_error)
-        widget:set_bg(beautiful.panel_widget_bg_error)
-      end)
-    widget:connect_signal(
-      "mouse::leave", function ()
-        widget:set_fg(args.fg)
-        widget:set_bg(args.bg)
-      end)
-  end
+  widget.is_managing = false
+
+  args.widget = widget
+  widget = common.decorated(args)
+  widget:set_text('M')
+  widget:connect_signal(
+    "mouse::enter", function ()
+      if not widget.is_managing then
+        widget:set_warning()
+      else
+        widget:set_error()
+      end
+    end)
+  widget:connect_signal(
+    "mouse::leave", function ()
+      if not widget.is_managing then
+        widget:set_normal()
+      end
+    end)
 
   widget:buttons(awful.util.table.join(
-    --awful.button({ }, 1, function () alsa.toggle() end),
-    --awful.button({ }, 5, function () alsa.down() end),
     awful.button({ }, 1, function ()
+      local cls = capi.client.get()
+      if not widget.is_managing then
+        widget.is_managing = true
+        widget:set_error()
+        for _, c in pairs(cls) do
+          c:buttons(clientbuttons_manage)
+        end
+      else
+        widget.is_managing = false
+        widget:set_warning()
+        for _, c in pairs(cls) do
+          c:buttons(clientbuttons)
+        end
+      end
+    end),
+    awful.button({ }, 3, function ()
       capi.client.focus:kill()
     end)
   ))
