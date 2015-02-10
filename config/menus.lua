@@ -5,6 +5,7 @@ local beautiful = require("beautiful")
 local capi = { screen = screen }
 
 local get_current_screen = require("actionless.helpers").get_current_screen
+local menugen = require("utils.menugen")
 
 local menus = {}
 
@@ -37,14 +38,19 @@ function menus.init(context)
     { "quit", awesome.quit }
   }
 
-  context.menu.mainmenu = awful.menu({items = {
-    { "awesome", myawesomemenu, beautiful.awesome_icon },
-    { "applications", applications_menu, beautiful.applications_icon },
-    { "kill compositor", "killall compton" },
-    { "start compositor", context.cmds.compositor },
-    { "open terminal", context.cmds.terminal }
-  }})
+  context.menu.mainmenu = awful.menu({
+    items = {
+      { "freedesktop", menugen.build_menu(), beautiful.awesome_icon },
+      { "awesome", myawesomemenu, beautiful.awesome_icon },
+      { "applications", applications_menu, beautiful.applications_icon },
+      { "kill compositor", "killall compton" },
+      { "start compositor", context.cmds.compositor },
+      { "open terminal", context.cmds.terminal }
+    },
+    theme = { height = 16}
+  })
   -- }}}
+  --
 
   -- Menubar configuration
   menubar.utils.terminal = context.cmds.terminal
