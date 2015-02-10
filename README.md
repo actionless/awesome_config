@@ -3,6 +3,8 @@ awesome_config
 
 example of config/local.lua: https://gist.github.com/actionless/229eef7795915068bad9
 
+in `*-xresources` themes panel [adapts](http://imgur.com/a/qIAAa) for current xrdb theme.
+
 ![Screenshot](https://raw.githubusercontent.com/actionless/awesome_config/devel/screenshots/screenshot.png "Screenshot")
 
 ![pokemon_dark](http://i.imgur.com/BWnzpfh.png?1 "pokemon_dark")
