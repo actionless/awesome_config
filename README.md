@@ -11,14 +11,13 @@ in `*-xresources` themes panel [adapts](http://imgur.com/a/qIAAa) for current xr
 
 #### Widget popups
 
-##### CPU (with transparency and blur)
-![cpu_tb](http://i.imgur.com/JlRkAIm.png "cpu_tb")
-
 ##### CPU
-![cpu](http://i.imgur.com/4G94o8i.png "cpu")
+Shows results from top for last second
+![cpu](https://raw.githubusercontent.com/actionless/awesome_config/devel/screenshots/cpu.png "cpu")
 
 ##### Memory
-![mem](http://i.imgur.com/cg4dq17.png "mem")
+Shows unified percentage of used memory for all applications' processes
+![mem](https://raw.githubusercontent.com/actionless/awesome_config/devel/screenshots/mem.png "mem")
 
 ##### Systray toggle (like in windows xp :) )
 ![st](http://i.imgur.com/HFfERGC.png "st")
