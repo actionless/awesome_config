@@ -8,8 +8,6 @@ local actionless = {
   tasklist_addon = require("actionless.tasklist_addon"),
   -- misc
   helpers = require("actionless.helpers"),
-  table = require("actionless.table"),
-  string = require("actionless.string"),
   xresources = require("actionless.xresources"),
   common_theme = require("actionless.common_theme"),
   iconfont = require("actionless.iconfont"),
