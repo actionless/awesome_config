@@ -15,7 +15,7 @@ local beautiful = require("beautiful")
 
 local helpers = require("actionless.helpers")
 local h_table = require("actionless.table")
-local markup = require("actionless.markup")
+local markup = require("utils.markup")
 local bordered_widget = require("actionless.widgets.common").bordered
 
 local hotkeys = {

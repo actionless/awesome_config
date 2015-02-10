@@ -11,7 +11,7 @@ local setmetatable	= setmetatable
 
 local h_string		= require("actionless.string")
 local common_widget	= require("actionless.widgets.common").widget
-local markup		= require("actionless.markup")
+local markup		= require("utils.markup")
 local async		= require("utils.async")
 
 local backend_modules	= require("actionless.widgets.music.backends")

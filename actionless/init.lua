@@ -6,8 +6,6 @@ local actionless = {
   titlebar = require("actionless.titlebar"),
   menu_addon = require("actionless.menu_addon"),
   tasklist_addon = require("actionless.tasklist_addon"),
-  -- lain
-  markup = require("actionless.markup"),
   -- misc
   helpers = require("actionless.helpers"),
   parse = require("actionless.parse"),
