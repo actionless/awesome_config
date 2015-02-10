@@ -6,7 +6,7 @@
 local awful		= require("awful")
 local beautiful		= require("beautiful")
 
-local async		= require("actionless.async")
+local async		= require("utils.async")
 local helpers 		= require("actionless.helpers")
 local h_string 		= require("actionless.string")
 local parse 		= require("actionless.parse")

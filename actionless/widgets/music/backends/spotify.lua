@@ -6,7 +6,7 @@
 local dbus = dbus
 local awful = require("awful")
 
-local async = require("actionless.async")
+local async = require("utils.async")
 local h_table = require("actionless.table")
 local h_string = require("actionless.string")
 local parse = require("actionless.parse")
@@ -46,6 +46,17 @@ function spotify.update(parse_status_callback)
     dbus_cmd .. "PlaybackStatus",
     function(str) spotify.post_update(str, parse_status_callback) end
   )
+  local a, b, c = dbus.emit_signal(
+    "session",
+    '/org/mpris/MediaPlayer2',
+    'org.mpris.MediaPlayer2.spotify',
+    --'Get',
+    --'',
+    --'PlaybackStatus'
+    'Next'
+  )
+  print(a, b, c)
+
 end
 -------------------------------------------------------------------------------
 function spotify.post_update(result_string, parse_status_callback)

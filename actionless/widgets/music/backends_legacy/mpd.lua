@@ -9,7 +9,7 @@ local string		= { format	= string.format,
 
 local helpers		= require("actionless.helpers")
 local parse		= require("actionless.parse")
-local async		= require("actionless.async")
+local async		= require("utils.async")
 
 
 local mpd = {

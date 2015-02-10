@@ -6,7 +6,7 @@
 local awful		= require("awful")
 
 local parse		= require("actionless.parse")
-local async		= require("actionless.async")
+local async		= require("utils.async")
 
 local cmus = {
   player_cmd = 'st -e cmus'

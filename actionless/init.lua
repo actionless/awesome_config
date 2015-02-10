@@ -13,7 +13,6 @@ local actionless = {
   parse = require("actionless.parse"),
   table = require("actionless.table"),
   string = require("actionless.string"),
-  async = require("actionless.async"),
   xresources = require("actionless.xresources"),
   common_theme = require("actionless.common_theme"),
   iconfont = require("actionless.iconfont"),

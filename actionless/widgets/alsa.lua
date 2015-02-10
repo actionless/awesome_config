@@ -8,7 +8,7 @@
 local awful		= require("awful")
 local beautiful		= require("beautiful")
 
-local async	        = require("actionless.async")
+local async	        = require("utils.async")
 local decorated_widget	= require("actionless.widgets.common").decorated
 local newinterval	= require("actionless.helpers").newinterval
 

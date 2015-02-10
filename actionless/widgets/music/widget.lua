@@ -12,7 +12,7 @@ local setmetatable	= setmetatable
 local h_string		= require("actionless.string")
 local common_widget	= require("actionless.widgets.common").widget
 local markup		= require("actionless.markup")
-local async		= require("actionless.async")
+local async		= require("utils.async")
 
 local backend_modules	= require("actionless.widgets.music.backends")
 local tag_parser	= require("actionless.widgets.music.tag_parser")
