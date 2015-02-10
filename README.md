@@ -53,10 +53,3 @@ r")
 "Pokemon Dark" theme without transparency and blur:
 ![pokemon_dark](http://i.imgur.com/BWnzpfh.png?1 "pokemon_dark")
 
-#### Other screenshots
-
-With Vertex GTK theme:
-![vertex](http://fc04.deviantart.net/fs71/f/2014/332/3/4/trying_to_fit_awesome_wm_to_vertex_gtk_theme_by_actionless-d87xrfp.png "vertex")
-
-With oomox monovedek2 GTK theme:
-![noble_dark](https://raw.githubusercontent.com/actionless/awesome_config/devel/screenshots/2014-10-24--1414187184_1440x900_scrot.png "noble dark")
