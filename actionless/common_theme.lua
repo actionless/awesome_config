@@ -6,7 +6,7 @@
 local awful = require("awful")
 
 local h_string = require("utils.string")
-local h_table = require("actionless.table")
+local h_table = require("utils.table")
 
 
 local common_theme = {}

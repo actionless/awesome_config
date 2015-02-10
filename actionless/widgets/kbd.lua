@@ -4,7 +4,7 @@
 --]]
 
 local beautiful = require("beautiful")
-local setmetatable = setmetatable
+
 local common	= require("actionless.widgets.common")
 
 

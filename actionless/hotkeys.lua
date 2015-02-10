@@ -14,7 +14,7 @@ local wibox = require("wibox")
 local beautiful = require("beautiful")
 
 local helpers = require("actionless.helpers")
-local h_table = require("actionless.table")
+local h_table = require("utils.table")
 local markup = require("utils.markup")
 local bordered_widget = require("actionless.widgets.common").bordered
 

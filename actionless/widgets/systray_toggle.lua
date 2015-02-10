@@ -11,7 +11,7 @@ local capi = { client = client,
                mouse = mouse,
                screen = screen,
                awesome = awesome }
-local setmetatable = setmetatable
+
 
 local helpers = require("actionless.helpers")
 

@@ -6,7 +6,7 @@ local naughty      = require("naughty")
 local beautiful    = require("beautiful")
 
 local helpers = require("actionless.helpers")
-local h_table      = require("actionless.table")
+local h_table      = require("utils.table")
 local parse = require("utils.parse")
 local newinterval = helpers.newinterval
 local common_widget = require("actionless.widgets.common").widget

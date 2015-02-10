@@ -7,7 +7,7 @@ local dbus = dbus
 local awful = require("awful")
 
 local async = require("utils.async")
-local h_table = require("actionless.table")
+local h_table = require("utils.table")
 local parse = require("utils.parse")
 
 

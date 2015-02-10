@@ -9,7 +9,7 @@ local wibox = require("wibox")
 local awful = require("awful")
 local beautiful = require("beautiful")
 
-local setmetatable = setmetatable
+
 
 local sneaky_tray = require("actionless.widgets.sneaky_tray")
 

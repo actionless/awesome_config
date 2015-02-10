@@ -1,6 +1,6 @@
 local generate_theme = require("actionless.common_theme").generate_theme
 local xresources = require("actionless.xresources")
-local h_table = require("actionless.table")
+local h_table = require("utils.table")
 
 local awful = require("awful")
 local theme_dir = awful.util.getdir("config").."/themes/transparent-xresources"

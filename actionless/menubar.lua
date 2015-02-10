@@ -20,7 +20,7 @@ local menubar = { mt = {} }
 menubar.menu_gen = require("menubar.menu_gen")
 menubar.utils = require("menubar.utils")
 
-local htable = require("actionless.table")
+local htable = require("utils.table")
 
 --- List of menubar keybindings:
 -- <p><ul>

@@ -5,7 +5,7 @@
 -- @ 2013-2014 Yauhen Kirylau
 ---------------------------------------------------------------------------
 
-local setmetatable = setmetatable
+
 local awful = require("awful")
 local tag = require("awful.tag")
 local beautiful = require("beautiful")

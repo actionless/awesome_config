@@ -7,7 +7,7 @@ local wibox        = require("wibox")
 local math         = require("math")
 local beautiful = require("beautiful")
 
-local setmetatable = setmetatable
+
 
 local helpers = require("actionless.helpers")
 local newinterval     = helpers.newinterval

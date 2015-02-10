@@ -7,7 +7,7 @@ local awful = require("awful")
 local beautiful = require("beautiful")
 
 local capi = { client = client }
-local setmetatable = setmetatable
+
 
 local common = require("actionless.widgets.common")
 
