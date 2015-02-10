@@ -3,9 +3,9 @@ awesome_config
 
 example of config/local.lua: https://gist.github.com/actionless/229eef7795915068bad9
 
-### Default theme appearance:
-
 ![Screenshot](https://raw.githubusercontent.com/actionless/awesome_config/devel/screenshots/screenshot.png "Screenshot")
+
+![pokemon_dark](http://i.imgur.com/BWnzpfh.png?1 "pokemon_dark")
 
 #### Widget popups
 
@@ -30,26 +30,3 @@ example of config/local.lua: https://gist.github.com/actionless/229eef7795915068
 Battery widget shows up only when it draining/charging.
 Indicators are changing color to brighter one to show changed state (like too big load average or too low battery).
 @TODO: upload screens.
-
-
-#### Hotkey- and other widgets appearance (with different themes)
-
-Monovedek theme with transparency and blur:
-![hotkeys_monovedek](http://i.imgur.com/auQdZC5.png "hotkeys_monovedek")
-
-Monovedek theme without transparency and blur:
-![hotkeys_monovedek](http://i.imgur.com/ygsVm7E.png "hotkeys_monovedek")
-
-"LCARS modern" theme without transparency and blur:
-![hotkeys_lm](http://i.imgur.com/t6XRD7m.png "hotkeys_lm")
-
-"LCARS xresources" with "jwr_dark" xresources theme without transparency and blur:
-![hotkeys_xjwr](http://i.imgur.com/y4o3vY0.png "hotkeys_xjw
-r")
-
-"Pokemon Light" theme without transparency and blur:
-![hotkeys_pokemon_light](http://i.imgur.com/hgijuIo.png "hotkeys_pokemon_light")
-
-"Pokemon Dark" theme without transparency and blur:
-![pokemon_dark](http://i.imgur.com/BWnzpfh.png?1 "pokemon_dark")
-
