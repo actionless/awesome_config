@@ -13,10 +13,12 @@ in `*-xresources` themes panel [adapts](http://imgur.com/a/qIAAa) for current xr
 
 ##### CPU
 Shows results from top for last second
+
 ![cpu](https://raw.githubusercontent.com/actionless/awesome_config/devel/screenshots/cpu.png "cpu")
 
 ##### Memory
 Shows unified percentage of used memory for all applications' processes
+
 ![mem](https://raw.githubusercontent.com/actionless/awesome_config/devel/screenshots/mem.png "mem")
 
 ##### Systray toggle (like in windows xp :) )
