@@ -8,7 +8,7 @@ local awful = require("awful")
 
 local async = require("utils.async")
 local h_table = require("actionless.table")
-local h_string = require("actionless.string")
+local h_string = require("utils.string")
 local parse = require("utils.parse")
 
 -- @TODO: change to native dbus implementation instead of calling qdbus

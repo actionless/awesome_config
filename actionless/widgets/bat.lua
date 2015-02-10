@@ -8,7 +8,7 @@ local beautiful		= require("beautiful")
 
 local async		= require("utils.async")
 local helpers 		= require("actionless.helpers")
-local h_string 		= require("actionless.string")
+local h_string 		= require("utils.string")
 local parse 		= require("utils.parse")
 local common_widget	= require("actionless.widgets.common").widget
 

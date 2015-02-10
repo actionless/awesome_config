@@ -9,7 +9,7 @@ local beautiful		= require("beautiful")
 local string		= { format	= string.format }
 local setmetatable	= setmetatable
 
-local h_string		= require("actionless.string")
+local h_string		= require("utils.string")
 local common_widget	= require("actionless.widgets.common").widget
 local markup		= require("utils.markup")
 local async		= require("utils.async")
