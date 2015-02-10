@@ -9,7 +9,7 @@ local naughty      = require("naughty")
 local beautiful    = require("beautiful")
 
 local h_table      = require("actionless.table")
-local parse        = require("actionless.parse")
+local parse        = require("utils.parse")
 local common_widget= require("actionless.widgets.common").widget
 local newinterval  = require("actionless.helpers").newinterval
 

@@ -8,7 +8,6 @@ local actionless = {
   tasklist_addon = require("actionless.tasklist_addon"),
   -- misc
   helpers = require("actionless.helpers"),
-  parse = require("actionless.parse"),
   table = require("actionless.table"),
   string = require("actionless.string"),
   xresources = require("actionless.xresources"),

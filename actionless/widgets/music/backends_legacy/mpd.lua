@@ -8,7 +8,7 @@ local string		= { format	= string.format,
                             match	= string.match }
 
 local helpers		= require("actionless.helpers")
-local parse		= require("actionless.parse")
+local parse		= require("utils.parse")
 local async		= require("utils.async")
 
 

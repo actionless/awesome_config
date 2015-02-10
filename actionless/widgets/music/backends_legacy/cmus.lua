@@ -5,7 +5,7 @@
 
 local awful		= require("awful")
 
-local parse		= require("actionless.parse")
+local parse		= require("utils.parse")
 local async		= require("utils.async")
 
 local cmus = {

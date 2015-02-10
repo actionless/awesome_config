@@ -9,7 +9,7 @@ local awful = require("awful")
 local async = require("utils.async")
 local h_table = require("actionless.table")
 local h_string = require("actionless.string")
-local parse = require("actionless.parse")
+local parse = require("utils.parse")
 
 -- @TODO: change to native dbus implementation instead of calling qdbus
 local dbus_cmd = "qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 "

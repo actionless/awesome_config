@@ -7,7 +7,7 @@ local beautiful    = require("beautiful")
 
 local async        = require("utils.async")
 local helpers      = require("actionless.helpers")
-local parse        = require("actionless.parse")
+local parse        = require("utils.parse")
 local common_widget= require("actionless.widgets.common").widget
 
 

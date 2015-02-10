@@ -4,7 +4,7 @@
 --]]
 
 local os = os
-local parse = require("actionless.parse")
+local parse = require("utils.parse")
 
 local xresources = {}
 

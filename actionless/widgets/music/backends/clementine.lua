@@ -8,7 +8,7 @@ local awful = require("awful")
 
 local async = require("utils.async")
 local h_table = require("actionless.table")
-local parse = require("actionless.parse")
+local parse = require("utils.parse")
 
 
 local dbus_cmd = "qdbus org.mpris.MediaPlayer2.clementine "
