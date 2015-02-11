@@ -11,6 +11,10 @@ local h_table = require("utils.table")
 local h_string = require("utils.string")
 local parse = require("utils.parse")
 
+local lgi = require 'lgi'
+local Gio = lgi.require 'Gio'
+local inspect = require("inspect")
+
 -- @TODO: change to native dbus implementation instead of calling qdbus
 local dbus_cmd = "qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 "
 
@@ -33,6 +37,56 @@ function spotify.toggle()
   awful.util.spawn_with_shell(dbus_cmd .. "PlayPause")
 end
 
+
+function spotify.toggle2()
+  spotify.bus = Gio.bus_get_sync(Gio.BusType.SESSION)
+  local result, err = spotify.bus:call_sync(
+    'org.mpris.MediaPlayer2.spotify',
+
+    --'/',
+    '/org/mpris/MediaPlayer2',
+
+    --'org.freedesktop.MediaPlayer2',
+    'org.mpris.MediaPlayer2.Player',
+
+    --'GetMetadata',
+    'PlayPause',
+
+    nil,
+    nil,
+    Gio.DBusConnectionFlags.NONE,
+    -1
+  )
+  spotify.bus:flush()
+  result, err = spotify.bus:call_sync(
+    'org.mpris.MediaPlayer2.spotify',
+
+    --'/',
+    '/org/mpris/MediaPlayer2',
+
+    --'org.freedesktop.MediaPlayer2',
+    'org.mpris.MediaPlayer2.Player',
+
+    --'GetMetadata',
+    'PlayPause',
+
+    nil,
+    nil,
+    Gio.DBusConnectionFlags.NONE,
+    -1
+  )
+  --if result then
+    --for a, b in pairs(result.value) do
+      --print('---')
+      --print(a)
+      ----print(inspect(b))
+    --end
+  --else
+    --print('error:')
+    --print(inspect(err))
+  --end
+end
+
 function spotify.next_song()
   awful.util.spawn_with_shell(dbus_cmd .. "Next")
 end
@@ -46,17 +100,6 @@ function spotify.update(parse_status_callback)
     dbus_cmd .. "PlaybackStatus",
     function(str) spotify.post_update(str, parse_status_callback) end
   )
-  local a, b, c = dbus.emit_signal(
-    "session",
-    '/org/mpris/MediaPlayer2',
-    'org.mpris.MediaPlayer2.spotify',
-    --'Get',
-    --'',
-    --'PlaybackStatus'
-    'Next'
-  )
-  print(a, b, c)
-
 end
 -------------------------------------------------------------------------------
 function spotify.post_update(result_string, parse_status_callback)
