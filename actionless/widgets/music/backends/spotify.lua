@@ -13,7 +13,7 @@ local parse = require("utils.parse")
 
 local lgi = require 'lgi'
 local Gio = lgi.require 'Gio'
-local inspect = require("inspect")
+--local inspect = require("inspect")
 
 -- @TODO: change to native dbus implementation instead of calling qdbus
 local dbus_cmd = "qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 "
