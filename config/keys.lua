@@ -199,7 +199,7 @@ local globalkeys = awful.util.table.join(
 
   -- Menus
   hk.on({ modkey,       }, "w",
-    function () awesome_context.menu.mainmenu:show() end,
+    function () awesome_context.menu.mainmenu_show() end,
     "aWesome menu", MENU_COLOR
   ),
   hk.on({ modkey,       }, "i",

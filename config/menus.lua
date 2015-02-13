@@ -38,17 +38,21 @@ function menus.init(context)
     { "quit", awesome.quit }
   }
 
-  context.menu.mainmenu = awful.menu({
-    items = {
-      { "freedesktop", menugen.build_menu(), beautiful.awesome_icon },
-      { "awesome", myawesomemenu, beautiful.awesome_icon },
-      { "applications", applications_menu, beautiful.applications_icon },
-      { "kill compositor", "killall compton" },
-      { "start compositor", context.cmds.compositor },
-      { "open terminal", context.cmds.terminal }
-    },
-    theme = { height = 16}
-  })
+  function context.menu.mainmenu_show()
+    if not context.menu.mainmenu then
+      context.menu.mainmenu = awful.menu({
+        items = {
+          { "freedesktop", menugen.build_menu(), beautiful.awesome_icon },
+          { "awesome", myawesomemenu, beautiful.awesome_icon },
+          { "applications", applications_menu, beautiful.applications_icon },
+          { "kill compositor", "killall compton" },
+          { "start compositor", context.cmds.compositor },
+          { "open terminal", context.cmds.terminal }
+        },
+      })
+    end
+    context.menu.mainmenu:show()
+  end
   -- }}}
   --
 
