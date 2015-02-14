@@ -11,30 +11,17 @@ local beautiful = require("beautiful")
 
 local titlebar = {}
 
-function titlebar.get_titlebar_function(c)
-  local position = beautiful.titlebar_position or 'top'
-    if position == "left" then
-        return c.titlebar_left
-    elseif position == "right" then
-        return c.titlebar_right
-    elseif position == "top" then
-        return c.titlebar_top
-    elseif position == "bottom" then
-        return c.titlebar_bottom
-    else
-        error("Invalid titlebar position '" .. position .. "'")
-    end
-end
-
 function titlebar.remove_titlebar(c)
-        awful.titlebar.hide(c, beautiful.titlebar_position)
-        c.skip_taskbar = false
+  if titlebar.is_enabled(c) then
+    awful.titlebar.hide(c, beautiful.titlebar_position)
+    c.skip_taskbar = false
+  end
 end
 
 function titlebar.remove_border(c)
-	titlebar.remove_titlebar(c)
-	c.border_width = 0
-	--c.border_color = beautiful.border_normal
+  titlebar.remove_titlebar(c)
+  c.border_width = 0
+  --c.border_color = beautiful.border_normal
 end
 
 function titlebar.make_titlebar(c)
@@ -89,22 +76,25 @@ function titlebar.make_titlebar(c)
         c.skip_taskbar = true
 end
 
+
 function titlebar.is_enabled(c)
-    if (titlebar.get_titlebar_function(c)(c):geometry()['height'] > 0) then
-      return true
-    else
-      return false
-    end
+  if (
+    c["titlebar_" .. beautiful.titlebar_position or 'top'
+    ](c):geometry()['height'] > 0
+  ) then
+    return true
+  else
+    return false
+  end
 end
 
 function titlebar.titlebar_toggle(c)
-	if titlebar.is_enabled(c)
-        then
-		titlebar.remove_titlebar(c)
-	else
-		titlebar.remove_titlebar(c)
-		titlebar.make_titlebar(c)
-	end
+  if titlebar.is_enabled(c) then
+    titlebar.remove_titlebar(c)
+  else
+    titlebar.remove_titlebar(c)
+    titlebar.make_titlebar(c)
+  end
 end
 
 

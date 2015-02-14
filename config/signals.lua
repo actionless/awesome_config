@@ -13,7 +13,6 @@ local function on_client_focus(c)
   if c.maximized_horizontal == true and c.maximized_vertical == true then
     -- maximized
     titlebar.remove_border(c)
-    titlebar.remove_titlebar(c)
   elseif awful.client.floating.get(c) then
     -- floating client
     c.border_width = beautiful.border_width
