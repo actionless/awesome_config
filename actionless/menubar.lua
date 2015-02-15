@@ -191,8 +191,8 @@ local function menulist_update(query)
 
     shownitems = {}
     for i, item in ipairs(all_items) do
-        local text_width = item.width or compute_text_width(item.name)
-        if width_sum + text_width > menubar.geometry.width - right_margin then
+        item.width = item.width or compute_text_width(item.name)
+        if width_sum + item.width > menubar.geometry.width - right_margin then
             if current_item < i then
                 table.insert(shownitems, { name = "&gt;&gt;", icon = nil })
                 break
@@ -200,7 +200,7 @@ local function menulist_update(query)
             shownitems = {{ name = "&lt;&lt;", icon = nil }, }
             width_sum = 0
         else
-            width_sum = width_sum + text_width
+            width_sum = width_sum + item.width
             table.insert(shownitems, item)
         end
     end
@@ -224,11 +224,7 @@ end
 
 --- Refresh menubar's cache by reloading .desktop files.
 function menubar.refresh()
-    local menu_entries = menubar.menu_gen.generate()
-    for _, item in ipairs(menu_entries) do
-        item.width = compute_text_width(item.name)
-    end
-    menubar.menu_entries = menu_entries
+    menubar.menu_entries = menubar.menu_gen.generate()
 end
 
 -- Awful.prompt keypressed callback to be used when the user presses a key.
