@@ -16,11 +16,14 @@ local theme = require("beautiful")
 local wibox = require("wibox")
 
 -- menubar
-local menubar = { mt = {} }
+local menubar = { mt = {}, menu_entries = {} }
 menubar.menu_gen = require("menubar.menu_gen")
 menubar.utils = require("menubar.utils")
 
-local htable = require("utils.table")
+local function compute_text_width(text)
+    local _, logical = wibox.widget.textbox(awful.util.escape(text))._layout:get_pixel_extents()
+    return logical.width + menubar.geometry.height
+end
 
 --- List of menubar keybindings:
 -- <p><ul>
@@ -39,10 +42,6 @@ local htable = require("utils.table")
 -- @name Menubar keybindings
 
 -- Options section
-
---- When variable set to number then list will start to "scrolL"
--- after focusing on item #N in the menu.
-menubar.start_scroll_on_item = nil
 
 --- When true the .desktop files will be reparsed only when the
 -- extension is initialized. Use this if menubar takes much time to
@@ -131,11 +130,11 @@ end
 -- @param query The text to filter entries by.
 local function menulist_update(query)
     local query = query or ""
-    shownitems = {}
+    local all_items = {}
     local match_inside = {}
 
     -- First we add entries which names match the command from the
-    -- beginning to the table shownitems, and the ones that contain
+    -- beginning to the table all_items, and the ones that contain
     -- command in the middle to the table match_inside.
 
     -- Add the categories
@@ -145,7 +144,7 @@ local function menulist_update(query)
             if not current_category and v.use then
                 if string.match(v.name, nocase(query)) then
                     if string.match(v.name, "^" .. nocase(query)) then
-                        table.insert(shownitems, v)
+                        table.insert(all_items, v)
                     else
                         table.insert(match_inside, v)
                     end
@@ -155,14 +154,14 @@ local function menulist_update(query)
     end
 
     -- Add the applications according to their name and cmdline
-    for i, v in ipairs(menu_entries) do
+    for i, v in ipairs(menubar.menu_entries) do
         v.focused = false
         if not current_category or v.category == current_category then
             if string.match(v.name, nocase(query))
                 or string.match(v.cmdline, nocase(query)) then
                 if string.match(v.name, "^" .. nocase(query))
                     or string.match(v.cmdline, "^" .. nocase(query)) then
-                    table.insert(shownitems, v)
+                    table.insert(all_items, v)
                 else
                     table.insert(match_inside, v)
                 end
@@ -170,37 +169,39 @@ local function menulist_update(query)
         end
     end
 
-    -- Now add items from match_inside to shownitems
+    -- Now add items from match_inside to all_items
     for i, v in ipairs(match_inside) do
-        table.insert(shownitems, v)
+        table.insert(all_items, v)
     end
 
-    if #shownitems > 0 then
+    if #all_items > 0 then
         -- Insert a run item value as the last choice
-        table.insert(shownitems, { name = "Exec: " .. query, cmdline = query, icon = nil })
+        table.insert(all_items, { name = "Exec: " .. query, cmdline = query, icon = nil })
 
-        if current_item > #shownitems then
-            current_item = #shownitems
+        if current_item > #all_items then
+            current_item = #all_items
         end
-        shownitems[current_item].focused = true
+        all_items[current_item].focused = true
     else
-        table.insert(shownitems, { name = "", cmdline = query, icon = nil })
+        table.insert(all_items, { name = "", cmdline = query, icon = nil })
     end
 
-    if menubar.start_scroll_on_item then
-        -- limit number of items before drawing them
-        if current_item > menubar.start_scroll_on_item then
-            shownitems = htable.range(
-                shownitems,
-                current_item - math.floor(menubar.start_scroll_on_item/2)
-            )
-        end
-        if #shownitems > menubar.start_scroll_on_item * 2 then
-            shownitems = htable.range(
-                shownitems,
-                1,
-                menubar.start_scroll_on_item * 2
-            )
+    local right_margin = 300
+    local width_sum = 0
+
+    shownitems = {}
+    for i, item in ipairs(all_items) do
+        local text_width = item.width or compute_text_width(item.name)
+        if width_sum + text_width > menubar.geometry.width - right_margin then
+            if current_item < i then
+                table.insert(shownitems, { name = "&gt;&gt;", icon = nil })
+                break
+            end
+            shownitems = {{ name = "&lt;&lt;", icon = nil }, }
+            width_sum = 0
+        else
+            width_sum = width_sum + text_width
+            table.insert(shownitems, item)
         end
     end
 
@@ -223,7 +224,11 @@ end
 
 --- Refresh menubar's cache by reloading .desktop files.
 function menubar.refresh()
-    menu_entries = menubar.menu_gen.generate()
+    local menu_entries = menubar.menu_gen.generate()
+    for _, item in ipairs(menu_entries) do
+        item.width = compute_text_width(item.name)
+    end
+    menubar.menu_entries = menu_entries
 end
 
 -- Awful.prompt keypressed callback to be used when the user presses a key.
@@ -313,9 +318,6 @@ end
 --- Get a menubar wibox.
 -- @return menubar wibox.
 function menubar.get()
-    if app_folders then
-        menubar.menu_gen.all_menu_dirs = app_folders
-    end
     menubar.refresh()
     -- Add to each category the name of its key in all_categories
     for k, v in pairs(menubar.menu_gen.all_categories) do
