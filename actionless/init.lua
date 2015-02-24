@@ -2,7 +2,6 @@ local actionless = {
   widgets = require("actionless.widgets"),
   hotkeys = require("actionless.hotkeys"),
   -- awesome addons
-  menubar = require("actionless.menubar"),
   titlebar = require("actionless.titlebar"),
   menu_addon = require("actionless.menu_addon"),
   tasklist_addon = require("actionless.tasklist_addon"),

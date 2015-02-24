@@ -1,6 +1,6 @@
 local awful = require("awful")
 local awesome = awesome
-local menubar = require("actionless.menubar")
+local menubar = require("menubar")
 local beautiful = require("beautiful")
 local capi = { screen = screen }
 
@@ -59,12 +59,11 @@ function menus.init(context)
   -- Menubar configuration
   menubar.utils.terminal = context.cmds.terminal
   menubar.geometry = {
-    height = 18,
+    height = beautiful.panel_height,
     width = capi.screen[get_current_screen()].workarea.width,
     x = 0,
-    y = capi.screen[get_current_screen()].workarea.height - 18
+    y = capi.screen[get_current_screen()].workarea.height - beautiful.panel_height
   }
-  menubar.start_scroll_on_item = 10
   -- }}}
 
 end

@@ -1,7 +1,7 @@
 
 local awful = require("awful")
 local beautiful = require("beautiful")
-local menubar = require("actionless.menubar")
+local menubar = require("menubar")
 local client = client
 local capi = {
   screen = screen,
@@ -15,8 +15,6 @@ local titlebar = require("actionless.titlebar")
 local menu_addon = require("actionless.menu_addon")
 local floats = require("actionless.helpers").client_floats
 local hk = require("actionless.hotkeys")
-
-
 
 
 local keys = {}
