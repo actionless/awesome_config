@@ -671,14 +671,16 @@ for scr = 1, 2 do
         local tag = awful.tag.gettags(scr)[i]
         if tag then awful.tag.viewonly(tag) end
       end,
-      "go to tag " .. i .. " (screen #" .. scr .. ")", TAG_COLOR
+      i==1 and "go to tag " .. i .. "\n(screen #" .. scr .. ")" or "",
+      TAG_COLOR
     ),
     hk.on({ modkey, "Control" }, "#" .. i + diff,
       function ()
         local tag = awful.tag.gettags(scr)[i]
         if tag then awful.tag.viewtoggle(tag) end
       end,
-      "toggle tag " .. i .. " (screen #" .. scr .. ")", TAG_COLOR
+      i==1 and "toggle tag " .. i .. "\n(screen #" .. scr .. ")" or "",
+      TAG_COLOR
     ),
     hk.on({ modkey, "Shift" }, "#" .. i + diff,
       function ()
@@ -687,7 +689,8 @@ for scr = 1, 2 do
           if tag then awful.client.movetotag(tag) end
          end
       end,
-      "move client to tag " .. i .. " (screen #" .. scr .. ")", CLIENT_MANIPULATION
+      i==1 and "move client to tag " .. i .. "\n(screen #" .. scr .. ")" or "",
+      CLIENT_MANIPULATION
     ),
     hk.on({ modkey, "Control", "Shift" }, "#" .. i + diff,
       function ()
@@ -697,7 +700,8 @@ for scr = 1, 2 do
         end
 
       end,
-      "toggle client on tag " .. i .. " (screen #" .. scr .. ")", CLIENT_MANIPULATION
+      i==1 and "toggle client to tag " .. i .. "\n(screen #" .. scr .. ")" or "",
+      CLIENT_MANIPULATION
     )
   )
   end

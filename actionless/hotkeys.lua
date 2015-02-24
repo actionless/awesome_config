@@ -210,10 +210,12 @@ local function create_wibox(modifiers, available_groups)
       local group_is_active = a_table.hasitem(active_groups, group_id)
       legend_layout:add(create_layout_for_group(group_id, group_is_active, active_modifiers_string))
     end
-    local legend_align = wibox.layout.align.horizontal()
-    legend_align:set_second(legend_layout)
-    legend_align:set_expand('outside')
-    return legend_align
+    -- @TODO: fix it:
+    --local legend_align = wibox.layout.align.horizontal()
+    --legend_align:set_second(legend_layout)
+    --legend_align:set_expand('outside')
+    --return legend_align
+    return legend_layout
   end
 
   local function create_keyboard(active_modifiers, available_groups)
