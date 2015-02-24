@@ -17,6 +17,10 @@ local floats = require("actionless.helpers").client_floats
 local hk = require("actionless.hotkeys")
 
 
+local revelation = require("revelation")
+revelation.init()
+
+
 local keys = {}
 function keys.init(awesome_context)
 
@@ -26,9 +30,8 @@ local cmd = awesome_context.cmds
 
 local RESIZE_STEP = 15
 
-local TO_DEFINE_COLOR = nil
+local TO_DEFINE_COLOR = "wip"
 
---local TAG_COLOR = 4
 local TAG_COLOR = "tag"
 local CLIENT_COLOR = "client_focus"
 local MENU_COLOR = "menu"
@@ -43,6 +46,7 @@ hk.add_groups({
   [IMPORTANT_COLOR]={name="important",color=beautiful.color["9"]},
   [CLIENT_MANIPULATION]={name="client",color=beautiful.color["10"]},
   [LAYOUT_MANIPULATION]={name="layout",color=beautiful.color["12"]},
+  [TO_DEFINE_COLOR]={name="wip",color=beautiful.color["7"]},
 })
 
 
@@ -381,6 +385,11 @@ local globalkeys = awful.util.table.join(
       "scrot '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. cmd.scrot_preview_cmd)
     end,
     "screenshot all", TO_DEFINE_COLOR
+  ),
+
+  hk.on({modkey}, "a",
+    revelation,
+    "Revelation", TO_DEFINE_COLOR
   )
 
 )
