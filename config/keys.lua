@@ -34,7 +34,7 @@ local TO_DEFINE_COLOR = "wip"
 
 local TAG_COLOR = "tag"
 local CLIENT_COLOR = "client_focus"
-local MENU_COLOR = "menu"
+local UTILS = "menu"
 local IMPORTANT_COLOR = "important"
 local CLIENT_MANIPULATION = "client"
 local LAYOUT_MANIPULATION = "layout"
@@ -42,7 +42,7 @@ local LAYOUT_MANIPULATION = "layout"
 hk.add_groups({
   [TAG_COLOR]={name="tags",color=beautiful.color["6"]},
   [CLIENT_COLOR]={name="client focus",color=beautiful.color["3"]},
-  [MENU_COLOR]={name="menu",color=beautiful.color["5"]},
+  [UTILS]={name="utils",color=beautiful.color["5"]},
   [IMPORTANT_COLOR]={name="important",color=beautiful.color["9"]},
   [CLIENT_MANIPULATION]={name="client",color=beautiful.color["10"]},
   [LAYOUT_MANIPULATION]={name="layout",color=beautiful.color["12"]},
@@ -87,12 +87,12 @@ local globalkeys = awful.util.table.join(
 
   hk.on({ modkey,  "Control"  }, "t",
     function() awesome_context.widgets.systray_toggle.toggle() end,
-    "toggle sysTray popup", MENU_COLOR
+    "toggle sysTray popup", UTILS
   ),
 
   hk.on({ modkey,  "Control"  }, "s",
     function() helpers.run_once("xscreensaver-command -lock") end,
-    "xScreensaver lock", IMPORTANT_COLOR
+    "xscreensaver lock", UTILS
   ),
 
   hk.on({ modkey,        }, ",",
@@ -130,11 +130,11 @@ local globalkeys = awful.util.table.join(
   -- By direction screen focus
   hk.on({ modkey,        }, "Next",
     function() awful.screen.focus_relative(1) end,
-    "next screen", TO_DEFINE_COLOR
+    "next screen", TAG_COLOR
   ),
   hk.on({ modkey,        }, "Prior",
     function() awful.screen.focus_relative(-1) end,
-    "prev screen", TO_DEFINE_COLOR
+    "prev screen", TAG_COLOR
   ),
 
   -- By direction client focus
@@ -202,7 +202,7 @@ local globalkeys = awful.util.table.join(
   -- Menus
   hk.on({ modkey,       }, "w",
     function () awesome_context.menu.mainmenu_show() end,
-    "aWesome menu", MENU_COLOR
+    "aWesome menu", UTILS
   ),
   hk.on({ modkey,       }, "i",
     function ()
@@ -211,7 +211,7 @@ local globalkeys = awful.util.table.join(
         coords = {x=0, y=18}
       })
     end,
-    "current clients", MENU_COLOR
+    "clients on current tag menu", UTILS
   ),
   hk.on({ modkey,       }, "p",
     function ()
@@ -220,25 +220,24 @@ local globalkeys = awful.util.table.join(
         coords = {x=0, y=18}
       })
     end,
-    "all clients", MENU_COLOR
+    "all clients menu", UTILS
   ),
   hk.on({ modkey, "Control"}, "p",
     function() menubar.show() end,
-    "aPPlications menu", MENU_COLOR
+    "applications menu", UTILS
   ),
   hk.on({ modkey,        }, "space",
     function() awful.util.spawn_with_shell(cmd.dmenu) end,
-    "app launcher", IMPORTANT_COLOR
+    "app launcher", UTILS
   ),
 
-  -- Layout manipulation
   hk.on({ modkey, "Control"  }, "n",
     function()
       local c = awful.client.restore()
       -- @TODO: it's a workaround for some strange upstream issue
       if c then client.focus = c end
     end,
-    "de-iconify", CLIENT_MANIPULATION
+    "de-iconify client", TAG_COLOR
   ),
 
   hk.on({ modkey,        }, "u",
@@ -255,7 +254,6 @@ local globalkeys = awful.util.table.join(
     "cycle clients", CLIENT_COLOR
   ),
 
-  -- Layouts
   hk.on({ modkey, altkey }, "space",
     function () awful.layout.inc(1) end,
     "next layout", LAYOUT_MANIPULATION
@@ -307,7 +305,7 @@ local globalkeys = awful.util.table.join(
   -- Prompt
   hk.on({ modkey }, "r",
     function () awesome_context.widgets.screen[helpers.get_current_screen()].promptbox:run() end,
-    "Run command...", TO_DEFINE_COLOR
+    "Run command...", UTILS
   ),
   hk.on({ modkey }, "x",
     function ()
@@ -316,7 +314,7 @@ local globalkeys = awful.util.table.join(
       awful.util.eval, nil,
       awful.util.getdir("cache") .. "/history_eval")
     end,
-    "eXecute lua code...", TO_DEFINE_COLOR
+    "eXecute lua code...", UTILS
   ),
 
   -- ALSA volume control
@@ -326,15 +324,15 @@ local globalkeys = awful.util.table.join(
   awful.key({}, "#198", function () awesome_context.widgets.volume.toggle_mic() end),
 
   -- Music player control
-  hk.on({modkey, altkey}, ",",
+  hk.on({modkey, "Control"}, ",",
     function () awesome_context.widgets.music.prev_song() end,
-    "prev song", TO_DEFINE_COLOR),
-  hk.on({modkey, altkey}, ".",
+    "prev song", UTILS),
+  hk.on({modkey, "Control"}, ".",
     function () awesome_context.widgets.music.next_song() end,
-    "next song", TO_DEFINE_COLOR),
-  hk.on({modkey, altkey}, "p",
+    "next song", UTILS),
+  hk.on({modkey, "Control"}, "/",
     function () awesome_context.widgets.music.toggle() end,
-    "Pause", TO_DEFINE_COLOR),
+    "Pause", UTILS),
 
   awful.key({}, "#150", function () awesome_context.widgets.music.prev_song() end),
   awful.key({}, "#148", function () awesome_context.widgets.music.next_song() end),
@@ -342,7 +340,7 @@ local globalkeys = awful.util.table.join(
 
   hk.on({ modkey }, "c",
     function () os.execute("xsel -p -o | xsel -i -b") end,
-    "copy to Clipboard", TO_DEFINE_COLOR
+    "copy to clipboard", UTILS
   ),
 
   -- Standard program
@@ -352,14 +350,14 @@ local globalkeys = awful.util.table.join(
   ),
   hk.on({ modkey,        }, "s",
     function () awful.util.spawn(cmd.file_manager) end,
-    "file manager", TO_DEFINE_COLOR
+    "file manager", UTILS
   ),
 
   hk.on({ modkey, "Control"  }, "r",
     capi.awesome.restart,
     "Reload awesome wm", IMPORTANT_COLOR
   ),
-  hk.on({ modkey, "Shift"    }, "q",
+  hk.on({ modkey, "Control"    }, "q",
     capi.awesome.quit,
     "Quit awesome wm", IMPORTANT_COLOR
   ),
@@ -379,7 +377,7 @@ local globalkeys = awful.util.table.join(
     end,
     "screenshot selected", TO_DEFINE_COLOR
   ),
-  hk.on({ modkey, "Shift" }, "p",
+  hk.on({  }, "Print",
     function ()
       awful.util.spawn_with_shell(
       "scrot '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. cmd.scrot_preview_cmd)
@@ -389,7 +387,7 @@ local globalkeys = awful.util.table.join(
 
   hk.on({modkey}, "a",
     revelation,
-    "Revelation", TO_DEFINE_COLOR
+    "Revelation", UTILS
   )
 
 )
