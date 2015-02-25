@@ -324,13 +324,13 @@ local globalkeys = awful.util.table.join(
   awful.key({}, "#198", function () awesome_context.widgets.volume.toggle_mic() end),
 
   -- Music player control
-  hk.on({modkey, "Control"}, ",",
+  hk.on({modkey, altkey}, ",",
     function () awesome_context.widgets.music.prev_song() end,
     "prev song", UTILS),
-  hk.on({modkey, "Control"}, ".",
+  hk.on({modkey, altkey}, ".",
     function () awesome_context.widgets.music.next_song() end,
     "next song", UTILS),
-  hk.on({modkey, "Control"}, "/",
+  hk.on({modkey, altkey}, "/",
     function () awesome_context.widgets.music.toggle() end,
     "Pause", UTILS),
 
