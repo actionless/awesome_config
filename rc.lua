@@ -5,14 +5,16 @@ OH HI
 -- localization
 os.setlocale(os.getenv("LANG"))
 local terminal = "st" or "urxvt -lsp 1 -geometry 120x30" or "xterm"
+local terminal_light = "stl"
 local editor = "vim" or os.getenv("EDITOR") or "nano" or "vi"
 
-local eminent = require("eminent")
+local eminent = require("third_party").eminent
 eminent.create_new_tag = false
+
 local awful = require("awful")
 require("awful.autofocus")
 
-local context = {
+context = {
 
   modkey = "Mod4",
   altkey = "Mod1",
@@ -29,10 +31,12 @@ local context = {
 
   cmds = {
     terminal = terminal,
+    terminal_light = 'stl',
     editor_cmd = terminal .. " -e " .. editor,
     compositor = "killall compton; compton",
     file_manager = "pcmanfm",
     tmux = terminal .. " -e tmux",
+    tmux_light = terminal_light .. " -e tmux",
     tmux_run   = terminal .. " -e tmux new-session",
     dmenu = "~/.config/dmenu/dmenu-recent.sh",
     scrot_preview_cmd = [['mv $f ~/images/ && viewnior ~/images/$f']],
@@ -69,7 +73,7 @@ config.rules.init(context)
 config.signals.init(context)
 require("hotkeys")
 
---require("collision") {
+--require("third_party").collision {
     ----        Normal    Xephyr       Vim      G510
     --up    = { "Up"    , "&"        , "ak"   , "F15" },
     --down  = { "Down"  , "KP_Enter" , "aj"   , "F14" },

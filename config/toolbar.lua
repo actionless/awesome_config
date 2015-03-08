@@ -57,7 +57,7 @@ function toolbar.init(awesome_context)
 
     if awesome_context.volume_widget == "apw" then
       right_layout:add(make_separator('arrl', {fg=beautiful.panel_media}))
-      right_layout:add(require("apw/widget"))
+      right_layout:add(require("third_party/apw/widget"))
     else
       right_layout:add(loaded_widgets.volume)
     end

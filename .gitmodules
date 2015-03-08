@@ -8,3 +8,6 @@
 [submodule "third_party/revelation"]
 	path = third_party/revelation
 	url = https://github.com/guotsuan/awesome-revelation
+[submodule "third_party/collision"]
+	path = third_party/collision
+	url = https://github.com/Elv13/collision

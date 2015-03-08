@@ -17,7 +17,7 @@ local floats = require("actionless.helpers").client_floats
 local hk = require("actionless.hotkeys")
 
 
-local revelation = require("revelation")
+local revelation = require("third_party.revelation")
 revelation.init()
 
 
@@ -346,6 +346,10 @@ local globalkeys = awful.util.table.join(
   -- Standard program
   hk.on({ modkey,        }, "Return",
     function () awful.util.spawn(cmd.tmux) end,
+    "terminal", IMPORTANT_COLOR
+  ),
+  hk.on({ modkey, altkey }, "Return",
+    function () awful.util.spawn(cmd.tmux_light) end,
     "terminal", IMPORTANT_COLOR
   ),
   hk.on({ modkey,        }, "s",
