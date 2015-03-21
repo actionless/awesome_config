@@ -14,6 +14,7 @@ local wibox = require("wibox")
 local beautiful = require("beautiful")
 
 local helpers = require("actionless.helpers")
+local hotkey_resources = require("actionless.hotkey_resources")
 local h_table = require("utils.table")
 local markup = require("utils.markup")
 local bordered_widget = require("actionless.widgets.common").bordered
@@ -62,64 +63,12 @@ local hotkeys = {
   },
 }
 local APPEARANCE = hotkeys.appearance
+local LABELS = hotkey_resources.LABELS
+local SPECIAL_KEYBUTTONS = hotkey_resources.SPECIAL_KEYBUTTONS
+local KEYBOARD = hotkey_resources.KEYBOARD
+local SHIFTED = hotkey_resources.SHIFTED
+local MODIFIERS = hotkey_resources.MODIFIERS
 
-local KEYBOARD = {
-  { 'Escape', '#67', '#68', '#69', '#70', '#71', '#72', '#73', '#74', '#75', '#76', '#95', '#96', 'Home', 'End'},
-  { '`', '#10', '#11', '#12', '#13', '#14', '#15', '#16', '#17', '#18', '#19', '#20', '#21', 'Insert', 'Delete' },
-  { 'Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 'Backspace' },
-  { 'Caps', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", '\\', 'Return' },
-  { 'Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 'Next', 'Up' , 'Prior' },
-  { 'Fn', 'Control', 'Mod4', 'Mod1', '', 'space', '', '', '#108', 'Print', 'Control', 'Left', 'Down', 'Right'},
-}
-local LABELS = {
-  Mod4="Super",
-  Mod1="Alt",
---  Control="Ctrl"
-}
--- @TODO: remove this table
-local KEYBOARD_LABELS = {
-  { 'Esc', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12', 'Home', 'End'},
-  { '~', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Ins', 'Del'},
-  { 'Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 'BackSpc' },
-  { 'Caps', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", '\\', 'Enter' },
-  { 'Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '&lt;', '&gt;', '?', 'PgUp', 'Up' , 'PgDn' },
-  { 'Fn', 'Ctrl', 'Super', 'Alt', '', 'Space', '', '', 'Alt Gr', 'PrScr', 'Ctrl', 'Left', 'Down', 'Right'},
-}
-local SPECIAL_KEYBUTTONS = {
-  'Esc',
-  'Tab',
-  'Caps',
-  'Shift',
-  'Ctrl',
-  'Super',
-  'Alt',
-  'Alt G',
-  'PrScr',
-  'PgUp',
-  'PgDn',
-  'BackSpc',
-  'Enter',
-  'Ins',
-  'Del',
-  'Home',
-  'End',
-  'F1',
-  'F2',
-  'F3',
-  'F4',
-  'F5',
-  'F6',
-  'F7',
-  'F8',
-  'F9',
-  'F10',
-  'F11',
-  'F12',
-}
-
-local MODIFIERS = {
-  Control = '#37'
-}
 
 local function join_modifiers(modifiers)
   if #modifiers<1 then return "no modifiers" end
@@ -221,28 +170,32 @@ local function create_wibox(modifiers, available_groups)
   local function create_keyboard(active_modifiers, available_groups)
     local active_modifiers_string = join_modifiers(active_modifiers)
     local hotkeys_for_current_modifier = hotkeys.bindings[active_modifiers_string]
+    local is_shifted = false
     for _, modifier in ipairs(active_modifiers) do
       hotkeys_for_current_modifier[modifier] = {
         comment="pressed",
         group="pressed",
       }
+      if modifier == "Shift" then is_shifted=true end
     end
     local keyboard_layout = wibox.layout.flex.vertical()
     local active_groups = {}
-    for i1, row in ipairs(KEYBOARD) do
+    for _, row in ipairs(KEYBOARD) do
       local row_layout = wibox.layout.flex.horizontal()
-      for i2, key in ipairs(row) do
+      for _, key in ipairs(row) do
         local hotkey_record = hotkeys_for_current_modifier[key]
+        key = LABELS[key] or key
+        if is_shifted then key = SHIFTED[key] or key end
         if hotkey_record
           and hotkey_record.group
           and a_table.hasitem(available_groups, hotkey_record.group)
         then
           row_layout:add(create_keybutton(
-            KEYBOARD_LABELS[i1][i2], hotkey_record.comment, hotkey_record.group
+            key, hotkey_record.comment, hotkey_record.group
           ))
           h_table.list_merge(active_groups, {hotkey_record.group})
         else
-          row_layout:add(create_keybutton(KEYBOARD_LABELS[i1][i2], nil, nil))
+          row_layout:add(create_keybutton(key, nil, nil))
         end
       end
       keyboard_layout:add(row_layout)
