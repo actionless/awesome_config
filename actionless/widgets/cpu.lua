@@ -18,7 +18,8 @@ local async = require("utils.async")
 local cpu = {
   last_total = 0,
   last_active = 0,
-  now = {}
+  now = {},
+  notification = nil,
 }
 
 local function worker(args)
@@ -42,18 +43,22 @@ local function worker(args)
        [[ | awk '{if ($7 > 0.0) {printf "%5s %4s %s\n", $1, $7, $11}}' ]]
 
   function cpu.hide_notification()
-    if cpu.id ~= nil then
-      naughty.destroy(cpu.id)
-      cpu.id = nil
+    if cpu.notification ~= nil then
+      naughty.destroy(cpu.notification)
+      cpu.notification = nil
     end
   end
 
+  function cpu.get_notification_id()
+    return cpu.notification and cpu.notification.id or nil
+  end
+
   function cpu.show_notification()
-    cpu.hide_notification()
-    cpu.id = naughty.notify({
+    cpu.notification = naughty.notify({
       text = "waiting for top...",
       timeout = cpu.timeout,
       font = beautiful.notification_monofont,
+      replaces_id = cpu.get_notification_id(),
     })
     async.execute(cpu.command, cpu.notification_callback)
   end
@@ -90,11 +95,11 @@ local function worker(args)
     else
       result_string = "no running processes atm"
     end
-    cpu.hide_notification()
-    cpu.id = naughty.notify({
+    cpu.notification = naughty.notify({
       text = result_string,
       timeout = cpu.timeout,
       font = beautiful.notification_monofont,
+      replaces_id = cpu.get_notification_id(),
     })
   end
 

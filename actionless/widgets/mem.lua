@@ -17,6 +17,7 @@ local newinterval  = require("actionless.helpers").newinterval
 -- Memory usage (ignoring caches)
 local mem = {
   now = {},
+  notification = nil,
 }
 
 local function worker(args)
@@ -41,19 +42,22 @@ local function worker(args)
     [[ | awk '{printf "%-5s %-4s %s\n", $1, $8, $11}']]
 
   function mem.hide_notification()
-    if mem.id ~= nil then
-      naughty.destroy(mem.id)
-      mem.id = nil
+    if mem.notification ~= nil then
+      naughty.destroy(mem.notification)
+      mem.notification = nil
     end
   end
 
+  function mem.get_notification_id()
+    return mem.notification and mem.notification.id or nil
+  end
 
   function mem.show_notification()
-    mem.hide_notification()
-    mem.id = naughty.notify({
+    mem.notification = naughty.notify({
       text = "waiting for top...",
       timeout = mem.timeout,
       font = beautiful.notification_monofont,
+      replaces_id = mem.get_notification_id(),
     })
     async.execute(mem.command, mem.notification_callback)
   end
@@ -84,11 +88,11 @@ local function worker(args)
       end
     end
 
-    mem.hide_notification()
-    mem.id = naughty.notify({
+    mem.notification = naughty.notify({
       text = result_string,
       timeout = mem.timeout,
       font = beautiful.notification_monofont,
+      replaces_id = mem.get_notification_id(),
     })
   end
 
