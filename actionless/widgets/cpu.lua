@@ -5,11 +5,12 @@
 local naughty      = require("naughty")
 local beautiful    = require("beautiful")
 
-local helpers = require("actionless.helpers")
 local h_table      = require("utils.table")
 local parse = require("utils.parse")
+local helpers = require("actionless.helpers")
 local newinterval = helpers.newinterval
 local common_widget = require("actionless.widgets.common").widget
+local async = require("utils.async")
 
 
 -- CPU usage
@@ -21,7 +22,7 @@ local cpu = {
 }
 
 local function worker(args)
-  local args     = args or {}
+  args     = args or {}
   local update_interval  = args.update_interval or 5
   local bg = args.bg or beautiful.panel_fg or beautiful.fg
   local fg = args.fg or beautiful.panel_bg or beautiful.bg
@@ -49,10 +50,19 @@ local function worker(args)
 
   function cpu.show_notification()
     cpu.hide_notification()
-    local output = parse.command_to_lines(cpu.command)
+    cpu.id = naughty.notify({
+      text = "waiting for top...",
+      timeout = cpu.timeout,
+      font = beautiful.notification_monofont,
+    })
+    async.execute(cpu.command, cpu.notification_callback)
+  end
+
+  function cpu.notification_callback(output)
+    cpu.hide_notification()
     local result = {}
     local names = {}
-    for _, line in ipairs(output) do
+    for _, line in ipairs(parse.string_to_lines(output)) do
       local pid, percent, name = line:match("^(%d+)%s+(.+)%s+(.*)")
       if percent and name ~= 'top' then
         percent = percent + 0
