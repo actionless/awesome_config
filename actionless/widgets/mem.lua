@@ -63,6 +63,8 @@ local function worker(args)
   end
 
   function mem.notification_callback(output)
+    local notification_id = mem.get_notification_id()
+    if not notification_id then return end
     local result = {}
     for _, line in ipairs(parse.string_to_lines(output)) do
       local percent, name = line:match("^%d+%s+(.+)%s+(.*)")

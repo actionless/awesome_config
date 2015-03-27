@@ -64,6 +64,8 @@ local function worker(args)
   end
 
   function cpu.notification_callback(output)
+    local notification_id = cpu.get_notification_id()
+    if not notification_id then return end
     local result = {}
     local names = {}
     for _, line in ipairs(parse.string_to_lines(output)) do
