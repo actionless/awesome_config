@@ -59,7 +59,6 @@ local function worker(args)
   end
 
   function cpu.notification_callback(output)
-    cpu.hide_notification()
     local result = {}
     local names = {}
     for _, line in ipairs(parse.string_to_lines(output)) do
@@ -91,6 +90,7 @@ local function worker(args)
     else
       result_string = "no running processes atm"
     end
+    cpu.hide_notification()
     cpu.id = naughty.notify({
       text = result_string,
       timeout = cpu.timeout,

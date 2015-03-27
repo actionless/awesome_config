@@ -59,7 +59,6 @@ local function worker(args)
   end
 
   function mem.notification_callback(output)
-    mem.hide_notification()
     local result = {}
     for _, line in ipairs(parse.string_to_lines(output)) do
       local percent, name = line:match("^%d+%s+(.+)%s+(.*)")
@@ -85,6 +84,7 @@ local function worker(args)
       end
     end
 
+    mem.hide_notification()
     mem.id = naughty.notify({
       text = result_string,
       timeout = mem.timeout,
