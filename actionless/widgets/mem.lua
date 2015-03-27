@@ -1,13 +1,14 @@
 --[[
      Licensed under GNU General Public License v2
-      * (c) 2013-2014, Yauheni Kirylau
-      * (c) 2013,      Luke Bonham                
-      * (c) 2010-2012, Peter Hofmann              
+      * (c) 2013-2015, Yauheni Kirylau
+      * (c) 2013,      Luke Bonham
+      * (c) 2010-2012, Peter Hofmann
 --]]
 
 local naughty      = require("naughty")
 local beautiful    = require("beautiful")
 
+local async      = require("utils.async")
 local h_table      = require("utils.table")
 local parse        = require("utils.parse")
 local common_widget= require("actionless.widgets.common").widget
@@ -19,7 +20,7 @@ local mem = {
 }
 
 local function worker(args)
-  local args   = args or {}
+  args   = args or {}
   local update_interval  = args.update_interval or 5
   local bg = args.bg or beautiful.panel_fg or beautiful.fg
   local fg = args.fg or beautiful.panel_bg or beautiful.bg
@@ -36,7 +37,7 @@ local function worker(args)
 
   mem.list_len = args.list_length or 10
   mem.command = args.command or
-    "COLUMNS=512 top -o \\%MEM -b -n 1" .. 
+    "COLUMNS=512 top -o \\%MEM -b -n 1" ..
     [[ | awk '{printf "%-5s %-4s %s\n", $1, $8, $11}']]
 
   function mem.hide_notification()
@@ -47,12 +48,20 @@ local function worker(args)
   end
 
 
-
   function mem.show_notification()
     mem.hide_notification()
+    mem.id = naughty.notify({
+      text = "waiting for top...",
+      timeout = mem.timeout,
+      font = beautiful.notification_monofont,
+    })
+    async.execute(mem.command, mem.notification_callback)
+  end
+
+  function mem.notification_callback(output)
+    mem.hide_notification()
     local result = {}
-    local output = parse.command_to_lines(mem.command)
-    for _, line in ipairs(output) do
+    for _, line in ipairs(parse.string_to_lines(output)) do
       local percent, name = line:match("^%d+%s+(.+)%s+(.*)")
       if percent then
         percent = percent + 0
