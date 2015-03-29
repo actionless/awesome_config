@@ -318,9 +318,27 @@ local globalkeys = awful.util.table.join(
   ),
 
   -- ALSA volume control
-  awful.key({}, "#123", function () awesome_context.widgets.volume.up() end),
-  awful.key({}, "#122", function () awesome_context.widgets.volume.down() end),
-  awful.key({}, "#121", function () awesome_context.widgets.volume.toggle() end),
+  awful.key({}, "#123", function ()
+    if awesome_context.volume_widget ~= "apw" then
+      awesome_context.widgets.volume.up()
+    else
+      awesome_context.widgets.volume.Up()
+    end
+  end),
+  awful.key({}, "#122", function ()
+    if awesome_context.volume_widget ~= "apw" then
+      awesome_context.widgets.volume.down()
+    else
+      awesome_context.widgets.volume.Down()
+    end
+  end),
+  awful.key({}, "#121", function ()
+    if awesome_context.volume_widget ~= "apw" then
+      awesome_context.widgets.volume.toggle()
+    else
+      awesome_context.widgets.volume.ToggleMute()
+    end
+  end),
   awful.key({}, "#198", function () awesome_context.widgets.volume.toggle_mic() end),
 
   -- Music player control

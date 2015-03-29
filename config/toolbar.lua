@@ -57,17 +57,15 @@ function toolbar.init(awesome_context)
 
     if awesome_context.volume_widget == "apw" then
       right_layout:add(make_separator('arrl', {fg=beautiful.panel_media}))
-      right_layout:add(require("third_party/apw/widget"))
-    else
-      right_layout:add(loaded_widgets.volume)
     end
+    right_layout:add(loaded_widgets.volume)
 
     -- sneaky_toggle
     if s == 1 then
       loaded_widgets.systray_toggle = widgets.sneaky_toggle({
           widgets={
             sep_media,
-            loaded_widgets.netctl,
+            --loaded_widgets.netctl,
             sep_media,
           }, enable_sneaky_tray = true,
       })
