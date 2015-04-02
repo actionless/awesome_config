@@ -37,9 +37,15 @@ local function worker(args)
     "mouse::leave", function () mem.hide_notification() end)
 
   mem.list_len = args.list_length or 10
+
+  local new_top = args.new_top or false
   mem.command = args.command or
+    new_top and
     "COLUMNS=512 top -o \\%MEM -b -n 1" ..
     [[ | awk '{printf "%-5s %-4s %s\n", $1, $8, $11}']]
+    or
+    "COLUMNS=512 top -o \\%MEM -b -n 1" ..
+    [[ | awk '{printf "%-5s %-4s %s\n", $1, $10, $12}']]
 
   function mem.hide_notification()
     if mem.notification ~= nil then

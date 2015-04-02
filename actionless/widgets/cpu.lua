@@ -38,9 +38,18 @@ local function worker(args)
     "mouse::leave", function () cpu.hide_notification() end)
 
   cpu.list_len = args.list_length or 10
-  cpu.command = args.command
-    or [[ top -o \%CPU -b -n 5 -w 512 -d 0.05 ]] ..
-       [[ | awk '{if ($7 > 0.0) {printf "%5s %4s %s\n", $1, $7, $11}}' ]]
+
+  local new_top = args.new_top or false
+  cpu.command = args.command or
+    new_top and
+    [[ top -o \%CPU -b -n 5 -w 512 -d 0.05 ]] ..
+    [[ | awk '{if ($7 > 0.0) {printf "%5s %4s %s\n", $1, $7, $11}}' ]]
+    or
+    [[COLUMNS=512 ]] ..
+    [[ top -o \%CPU -b -n 1 ]] ..
+    [[ | head -n ]] .. cpu.list_len + 6 ..
+    [[ | tail -n ]] .. cpu.list_len  ..
+    [[ | awk '{printf "%-5s %-4s %s\n", $1, $9, $12}' ]]
 
   function cpu.hide_notification()
     if cpu.notification ~= nil then
