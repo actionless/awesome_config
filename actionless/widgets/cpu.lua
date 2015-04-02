@@ -46,10 +46,8 @@ local function worker(args)
     [[ | awk '{if ($7 > 0.0) {printf "%5s %4s %s\n", $1, $7, $11}}' ]]
     or
     [[COLUMNS=512 ]] ..
-    [[ top -o \%CPU -b -n 1 ]] ..
-    [[ | head -n ]] .. cpu.list_len + 6 ..
-    [[ | tail -n ]] .. cpu.list_len  ..
-    [[ | awk '{printf "%-5s %-4s %s\n", $1, $9, $12}' ]]
+    [[ top -o \%CPU -b -n 5 -w 512 -d 0.05 ]] ..
+    [[ | awk '{if ($9 > 0.0) {printf "%-5s %-4s %s\n", $1, $9, $12}}' ]]
 
   function cpu.hide_notification()
     if cpu.notification ~= nil then
