@@ -5,11 +5,12 @@
 local naughty      = require("naughty")
 local beautiful    = require("beautiful")
 
-local helpers = require("actionless.helpers")
 local h_table      = require("utils.table")
 local parse = require("utils.parse")
+local helpers = require("actionless.helpers")
 local newinterval = helpers.newinterval
 local common_widget = require("actionless.widgets.common").widget
+local async = require("utils.async")
 
 
 -- CPU usage
@@ -17,11 +18,12 @@ local common_widget = require("actionless.widgets.common").widget
 local cpu = {
   last_total = 0,
   last_active = 0,
-  now = {}
+  now = {},
+  notification = nil,
 }
 
 local function worker(args)
-  local args     = args or {}
+  args     = args or {}
   local update_interval  = args.update_interval or 5
   local bg = args.bg or beautiful.panel_fg or beautiful.fg
   local fg = args.fg or beautiful.panel_bg or beautiful.bg
@@ -36,23 +38,44 @@ local function worker(args)
     "mouse::leave", function () cpu.hide_notification() end)
 
   cpu.list_len = args.list_length or 10
-  cpu.command = args.command
-    or [[ top -o \%CPU -b -n 5 -w 512 -d 0.05 ]] ..
-       [[ | awk '{if ($7 > 0.0) {printf "%5s %4s %s\n", $1, $7, $11}}' ]]
+
+  local new_top = args.new_top or false
+  cpu.command = args.command or
+    new_top and
+    [[ top -o \%CPU -b -n 5 -w 512 -d 0.05 ]] ..
+    [[ | awk '{if ($7 > 0.0) {printf "%5s %4s %s\n", $1, $7, $11}}' ]]
+    or
+    [[COLUMNS=512 ]] ..
+    [[ top -o \%CPU -b -n 5 -w 512 -d 0.05 ]] ..
+    [[ | awk '{if ($9 > 0.0) {printf "%-5s %-4s %s\n", $1, $9, $12}}' ]]
 
   function cpu.hide_notification()
-    if cpu.id ~= nil then
-      naughty.destroy(cpu.id)
-      cpu.id = nil
+    if cpu.notification ~= nil then
+      naughty.destroy(cpu.notification)
+      cpu.notification = nil
     end
   end
 
+  function cpu.get_notification_id()
+    return cpu.notification and cpu.notification.id or nil
+  end
+
   function cpu.show_notification()
-    cpu.hide_notification()
-    local output = parse.command_to_lines(cpu.command)
+    cpu.notification = naughty.notify({
+      text = "waiting for top...",
+      timeout = cpu.timeout,
+      font = beautiful.notification_monofont,
+      replaces_id = cpu.get_notification_id(),
+    })
+    async.execute(cpu.command, cpu.notification_callback)
+  end
+
+  function cpu.notification_callback(output)
+    local notification_id = cpu.get_notification_id()
+    if not notification_id then return end
     local result = {}
     local names = {}
-    for _, line in ipairs(output) do
+    for _, line in ipairs(parse.string_to_lines(output)) do
       local pid, percent, name = line:match("^(%d+)%s+(.+)%s+(.*)")
       if percent and name ~= 'top' then
         percent = percent + 0
@@ -81,10 +104,11 @@ local function worker(args)
     else
       result_string = "no running processes atm"
     end
-    cpu.id = naughty.notify({
+    cpu.notification = naughty.notify({
       text = result_string,
       timeout = cpu.timeout,
       font = beautiful.notification_monofont,
+      replaces_id = cpu.get_notification_id(),
     })
   end
 
