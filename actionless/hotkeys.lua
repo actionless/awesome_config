@@ -19,14 +19,16 @@ local h_table = require("utils.table")
 local markup = require("utils.markup")
 local bordered_widget = require("actionless.widgets.common").bordered
 
+local dpi = require("actionless.xresources").compute_fontsize
+
 local hotkeys = {
   appearance = {
-    width = 1400,
-    height = 720,
-    keyboard_height = 580,
+    width = dpi(1400),
+    height = dpi(720),
+    keyboard_height = dpi(580),
     key_padding = 5,
     key_margin = 5,
-    comment_font_size = 8,
+    comment_font_size = dpi(8),
     hide_on_key_release = false,
     special_button_bg = "#333333",
     special_button_fg = "#000000",
