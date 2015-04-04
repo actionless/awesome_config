@@ -53,6 +53,8 @@ function common_theme.generate_theme(theme_dir)
   theme.color.f = theme.color.fg
   theme.dir = theme_dir
 
+  theme.hidpi = false
+
   -- Use plain color:
   theme.wallpaper_cmd     = "hsetroot"
   -- Use nitrogen:
@@ -99,6 +101,9 @@ function common_theme.generate_theme(theme_dir)
   theme.border_normal		= "theme.border"
   theme.border_focus		= "theme.sel_border"
   theme.border_marked		= "theme.error"
+
+  theme.useless_gap_width = 20
+  theme.useless_gap_width = 40
 
   theme.fg_normal		= "theme.fg"
   theme.bg_normal		= "theme.bg"
@@ -282,6 +287,14 @@ function common_theme.generate_theme(theme_dir)
   theme.layout_fullscreen		= layout_icons_dir .. "fullscreen.png"
   theme.layout_magnifier		= layout_icons_dir .. "magnifier.png"
   theme.layout_floating		= layout_icons_dir .. "floating.png"
+
+  theme.layout_uselesstile		= theme.layout_tile
+  theme.lain_icons         = os.getenv("HOME") .. "/.config/awesome/third_party/lain/icons/layout/default/"
+  theme.layout_termfair    = theme.lain_icons .. "termfair.png"
+  theme.layout_cascade     = theme.lain_icons .. "cascade.png"
+  theme.layout_cascadetile = theme.lain_icons .. "cascadetile.png"
+  theme.layout_centerwork  = theme.lain_icons .. "centerwork.png"
+
 
   local titlebar_icons_dir = icons_dir .. "titlebar/"
   theme.titlebar_icons_dir = titlebar_icons_dir

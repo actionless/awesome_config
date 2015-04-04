@@ -2,6 +2,7 @@ local awful = require("awful")
 local gears = require("gears")
 local beautiful = require("beautiful")
 local capi = { screen = screen }
+local lain = require("lain")
 
 local layouts = {}
 
@@ -9,14 +10,27 @@ local layouts = {}
 function layouts.init(context)
 
   -- Table of layouts to cover with awful.layout.inc, order matters.
-  context.layouts = {
-    awful.layout.suit.tile,
-    awful.layout.suit.tile.bottom,
-    awful.layout.suit.floating,
-    awful.layout.suit.fair,
-    awful.layout.suit.fair.horizontal,
-    awful.layout.suit.spiral
-  }
+  if beautiful.hidpi then
+    context.layouts = {
+      --awful.layout.suit.tile,
+      lain.layout.centerwork,
+      lain.layout.uselesstile,
+      awful.layout.suit.tile.bottom,
+      awful.layout.suit.floating,
+      awful.layout.suit.fair,
+      awful.layout.suit.fair.horizontal,
+      awful.layout.suit.spiral
+    }
+  else
+    context.layouts = {
+      awful.layout.suit.tile,
+      awful.layout.suit.tile.bottom,
+      awful.layout.suit.floating,
+      awful.layout.suit.fair,
+      awful.layout.suit.fair.horizontal,
+      awful.layout.suit.spiral
+    }
+  end
   awful.layout.layouts = context.layouts
   -- }}}
 

@@ -11,3 +11,6 @@
 [submodule "third_party/collision"]
 	path = third_party/collision
 	url = https://github.com/Elv13/collision
+[submodule "third_party/lain"]
+	path = third_party/lain
+	url = https://github.com/copycat-killer/lain

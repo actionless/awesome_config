@@ -29,13 +29,14 @@ local function worker(args)
     local args = args or {}
     local fg = args.fg or beautiful.panel_widget_fg or beautiful.bg or "#000000"
     local bg = args.bg or beautiful.panel_widget_bg or beautiful.fg or "#ffffff"
+    local icon_resize = args.icon_resize or true
     layoutbox.screen = args.screen or 1
 
     layoutbox.n_master = wibox.widget.background()
     layoutbox.n_master:set_widget(textbox())
     layoutbox.layout = wibox.widget.background()
     local layout_imagebox = imagebox()
-    layout_imagebox:set_resize(false)
+    layout_imagebox:set_resize(icon_resize)
     layoutbox.layout:set_widget(layout_imagebox)
     layoutbox.n_col = wibox.widget.background()
     layoutbox.n_col:set_widget(textbox())

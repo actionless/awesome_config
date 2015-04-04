@@ -9,6 +9,7 @@ local third_party = {
   collision = require("collision"),
   eminent = require("eminent"),
   revelation = require("revelation"),
+  lain = require("lain"),
 }
 
 return third_party
