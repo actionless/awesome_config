@@ -55,7 +55,7 @@ function layouts.init(context)
       s,
       {
         awful.layout.layouts[1],
-        awful.layout.layouts[1],
+        awful.layout.layouts[2],
         awful.layout.layouts[1],
         awful.layout.layouts[1],
         awful.layout.layouts[1],
@@ -68,6 +68,7 @@ function layouts.init(context)
         awful.layout.layouts[1],
       }
     )
+    awful.tag.incmwfact(0.20, awful.tag.gettags(s)[2])
   end
   -- }}}
 
