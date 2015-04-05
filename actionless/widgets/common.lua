@@ -38,7 +38,7 @@ function common.widget(args)
         widget.layout:add(widget.iconfont_widget)
       else
         widget.icon_widget = wibox.widget.imagebox()
-        widget.icon_widget:set_resize(false)
+        widget.icon_widget:set_resize(beautiful.hidpi or false)
         widget.layout:add(widget.icon_widget)
       end
     end
@@ -178,7 +178,7 @@ function common.make_image_separator(separator_character, args)
   local bg = args.bg
   local widget = {}
   local separator_widget = wibox.widget.imagebox(bgimage_normal)
-  separator_widget:set_resize(false)
+  separator_widget:set_resize(beautiful.hidpi or false)
   local widget_bg = wibox.widget.background()
   widget_bg:set_bg(bg)
   widget_bg:set_widget(separator_widget)
