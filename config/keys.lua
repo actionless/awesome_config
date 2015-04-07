@@ -94,6 +94,11 @@ local globalkeys = awful.util.table.join(
     function() helpers.run_once("xscreensaver-command -lock") end,
     "xscreensaver lock", UTILS
   ),
+  hk.on({ modkey,  "Control"  }, "d",
+    function() helpers.run_once("xset dpms force off") end,
+    "turn off display", UTILS
+  ),
+
 
   hk.on({ modkey,        }, ",",
     function() awful.tag.viewprev(helpers.get_current_screen()) end,
