@@ -140,6 +140,7 @@ local function worker(args)
     awful.button({ }, 1, player.toggle),
     awful.button({ }, 3, function()
       player.use_next_backend()
+      player.show_notification()
     end),
     awful.button({ }, 5, player.next_song),
     awful.button({ }, 4, player.prev_song)
@@ -205,7 +206,7 @@ local function worker(args)
         player.widget:set_icon('music_stop')
         player.widget:set_text('')
       else
-        player.widget:set_text('(m)')
+        player.widget:set_text('♫')
       end
     end
   end
