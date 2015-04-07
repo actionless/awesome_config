@@ -71,6 +71,7 @@ function widget_loader.init(awesome_context)
     list_length = 20,
     bg = beautiful.widget_mem_bg,
     fg = beautiful.widget_mem_fg,
+    new_top = true,
   })
   -- CPU
   w.cpu = widgets.cpu({
@@ -79,6 +80,7 @@ function widget_loader.init(awesome_context)
     list_length = 20,
     bg = beautiful.widget_cpu_bg,
     fg = beautiful.widget_cpu_fg,
+    new_top = true,
   })
   -- Sensor
   w.temp = widgets.temp({
@@ -200,22 +202,11 @@ function widget_loader.init(awesome_context)
     sw.tasklist:set_third(minimized_clients_widget)
 
     -- layoutbox
-    -- @TODO: remove it
     sw.layoutbox = widgets.layoutbox({
       screen = s,
       bg = beautiful.widget_layoutbox_bg,
       fg = beautiful.widget_layoutbox_fg,
     })
-    sw.layoutbox:buttons(awful.util.table.join(
-      awful.button({ }, 1, function ()
-        awful.layout.inc(1) end),
-      awful.button({ }, 3, function ()
-        awful.layout.inc(-1) end),
-      awful.button({ }, 5, function ()
-        awful.layout.inc(1) end),
-      awful.button({ }, 4, function ()
-        awful.layout.inc(-1) end)
-    ))
 
   end
 

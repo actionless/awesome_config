@@ -50,6 +50,31 @@ local function worker(args)
         bg=bg, fg=fg,
     })
 
+    local layouts_menu_items = {}
+    for _, layout in ipairs(awful.layout.layouts) do
+      table.insert(layouts_menu_items, {
+        layout.name,
+        function() awful.layout.set(layout) end,
+        beautiful["layout_"..layout.name]
+      })
+    end
+
+    local layouts_menu = awful.menu({
+        items = layouts_menu_items,
+    })
+
+    widget:buttons(awful.util.table.join(
+      awful.button({ }, 1, function ()
+        layouts_menu:show()
+      end),
+      awful.button({ }, 3, function ()
+        awful.layout.inc(1) end),
+      awful.button({ }, 5, function ()
+        awful.layout.inc(1) end),
+      awful.button({ }, 4, function ()
+        awful.layout.inc(-1) end)
+    ))
+
 
     function layoutbox:update_layout()
         local layout = awful.layout.getname(awful.layout.get(self.screen))

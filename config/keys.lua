@@ -52,7 +52,7 @@ hk.add_groups({
 
 -- {{{ Mouse bindings
 capi.root.buttons(awful.util.table.join(
-  awful.button({ }, 3, function () awesome_context.menu.mainmenu:toggle() end),
+  awful.button({ }, 3, function () awesome_context.menu.mainmenu_toggle() end),
   awful.button({ }, 5, awful.tag.viewnext),
   awful.button({ }, 4, awful.tag.viewprev)
 ))

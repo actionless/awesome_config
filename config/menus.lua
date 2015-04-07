@@ -53,6 +53,13 @@ function menus.init(context)
     end
     context.menu.mainmenu:show()
   end
+  function context.menu.mainmenu_toggle()
+    if not context.menu.mainmenu then
+      return context.menu.mainmenu_show()
+    else
+      return context.menu.mainmenu:toggle()
+    end
+  end
   -- }}}
   --
 
