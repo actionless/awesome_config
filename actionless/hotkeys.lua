@@ -23,11 +23,11 @@ local dpi = require("actionless.xresources").compute_fontsize
 
 local hotkeys = {
   appearance = {
-    width = dpi(1400),
-    height = dpi(720),
-    keyboard_height = dpi(580),
-    key_padding = 5,
-    key_margin = 5,
+    width = dpi(1280),
+    height = dpi(680),
+    keyboard_height = dpi(520),
+    key_padding = dpi(3),
+    key_margin = dpi(3),
     comment_font_size = dpi(8),
     hide_on_key_release = false,
     special_button_bg = "#333333",
@@ -35,9 +35,10 @@ local hotkeys = {
     default_button_bg = beautiful.theme,
     alt_fg = beautiful.color and beautiful.color["0"] or beautiful.bg,
     button_fg = beautiful.hotkeys_widget_fg or beautiful.fg,
-    border_width = 2,
+    border_width = dpi(2),
     border_color = beautiful.fg,
-    widget_padding = 8,
+    widget_padding = dpi(8),
+    legend_separator = dpi(16),
   },
   bindings = {
     --[[
@@ -208,6 +209,11 @@ local function create_wibox(modifiers, available_groups)
     keyboard_wrapper_layout:set_strategy('exact')
     local all_layout = wibox.layout.fixed.vertical()
     all_layout:add(keyboard_wrapper_layout)
+    local legend_separator = wibox.layout.constraint()
+    legend_separator:set_widget(keyboard_layout)
+    legend_separator:set_height(APPEARANCE.legend_separator)
+    legend_separator:set_strategy('exact')
+    all_layout:add(legend_separator)
     all_layout:add(
       create_legend(active_modifiers_string, available_groups, active_groups))
     return all_layout
