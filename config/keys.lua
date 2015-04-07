@@ -368,7 +368,7 @@ local globalkeys = awful.util.table.join(
   ),
   hk.on({ modkey, altkey }, "Return",
     function () awful.util.spawn(cmd.tmux_light) end,
-    "terminal", IMPORTANT_COLOR
+    "white terminal", UTILS
   ),
   hk.on({ modkey,        }, "s",
     function () awful.util.spawn(cmd.file_manager) end,
