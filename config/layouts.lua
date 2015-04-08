@@ -63,7 +63,7 @@ function layouts.init(context)
         awful.layout.layouts[1],
         awful.layout.layouts[1],
         awful.layout.layouts[1],
-        awful.layout.layouts[3],
+        awful.layout.layouts[4],
         awful.layout.layouts[1],
         awful.layout.layouts[1],
       }
