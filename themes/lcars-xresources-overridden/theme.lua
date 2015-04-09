@@ -13,5 +13,6 @@ theme.panel_widget_bg_error = theme.color["1"]
 theme.panel_widget_fg_error = theme.color["15"]
 
 theme.widget_close_bg = theme.tasklist_fg_focus
+theme.apw_bg_color = theme.panel_info
 
 return theme
