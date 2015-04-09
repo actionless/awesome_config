@@ -50,46 +50,4 @@ function async.pipe_multiline_done(id, str)
   async.request_table[id] = nil
 end
 
-local fd = require("third_party.fd_async")
-local nlog = require("utils.debug").nlog
-local log = require("utils.debug").log
-
-function async.execute_debug(command, callback)
-  --local req = fd.exec.command('bash -c \\"' .. command:gsub('"','\"') .. '\\"')
-  local req = fd.exec.command(command)
-  function patched_callback(str)
-    nlog("TA-DAM!!!")
-    result = str:gsub('\\n','\n')
-    nlog(result)
-    return callback(result)
-  end
-  req:connect_signal("request::completed", patched_callback)
-  req:connect_signal("new::error", log)
-  req:connect_signal("new::line", log)
-end
-
-function async.execute_ng(command, callback)
-  --local req = fd.exec.command('bash -c \\"' .. command:gsub('"','\"') .. '\\"')
-  local req = fd.exec.command(command)
-  req:connect_signal("request::completed", callback)
-end
-
---local exec = fd.exec.command
---local req1 = exec( 'echo test')
---req1:connect_signal(
-  --"request::completed",
-  --function(res)
-    --print('1.begin')
-    --print(res)
-    --local req2 = exec( 'echo ' .. res)
-    --req2:connect_signal(
-      --"request::completed",
-      --function(res2)
-        --print(res2)
-      --end
-    --)
-    --print('1.end')
-  --end
---)
-
 return async
