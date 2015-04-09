@@ -67,7 +67,7 @@ local function worker(args)
       font = beautiful.notification_monofont,
       replaces_id = mem.get_notification_id(),
     })
-    async.execute_ng(mem.command, mem.notification_callback)
+    async.execute(mem.command, mem.notification_callback)
   end
 
   function mem.notification_callback(output)

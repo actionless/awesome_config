@@ -69,7 +69,7 @@ local function worker(args)
       font = beautiful.notification_monofont,
       replaces_id = cpu.get_notification_id(),
     })
-    async.execute_ng(cpu.command, cpu.notification_callback)
+    async.execute(cpu.command, cpu.notification_callback)
   end
 
   function cpu.notification_callback(output)
