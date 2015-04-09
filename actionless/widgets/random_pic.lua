@@ -7,16 +7,14 @@ local wibox        = require("wibox")
 local math         = require("math")
 local beautiful = require("beautiful")
 
-local tonumber     = tonumber
-local setmetatable = setmetatable
 
-local async   = require("actionless.async")
+
 local helpers = require("actionless.helpers")
-local newtimer     = helpers.newtimer
+local newinterval     = helpers.newinterval
 
 
 local function scandir(directory)
-    local i, t, popen, result = 0, {}, io.popen, {}
+    local i, popen, result = 0, io.popen, {}
     for filename in popen('ls -a "'..directory..'"'):lines() do
         i = i + 1
 		if filename ~= '.' and filename ~= '..' then
@@ -51,7 +49,7 @@ local function worker(args)
 
 	-- random timer id is for possibility to
 	-- run different instance of the widget simultaneously
-	newtimer("random_pic_" .. math.random(1,65535), interval, rp.update)
+	newinterval("random_pic_" .. math.random(1,65535), interval, rp.update)
 	return rp.widget
 end
 

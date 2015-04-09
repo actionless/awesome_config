@@ -1,59 +1,87 @@
---[[            
+--[[
      Licensed under GNU General Public License v2
-      * (c) 2013-2014, Yauheni Kirylau             
+      * (c) 2013-2014, Yauheni Kirylau
 --]]
 
-local awful		= require("awful")
-local naughty	= require("naughty")
+local awful = require("awful")
 local beautiful = require("beautiful")
-local io		= { popen = io.popen }
-local string    = { format = string.format }
-local setmetatable = setmetatable
+
 local capi = { client = client }
 
-local common	= require("actionless.widgets.common")
-local helpers	= require("actionless.helpers")
-local newtimer	= helpers.newtimer
-local font		= helpers.font
-local mono_preset = helpers.mono_preset()
+
+local common = require("actionless.widgets.common")
 
 
 local manage_client = {}
 
-manage_client.widget = common.widget()
-
 local function worker(args)
-	local args	 = args or {}
-	local interval  = args.interval or 5
-        local fg = args.fg or beautiful.panel_fg or beautiful.fg
-        local bg = args.bg or beautiful.panel_bg or beautiful.bg
-        if beautiful.close_button then
-          manage_client.widget:set_image(beautiful.close_button)
-          manage_client.widget:connect_signal(
-            "mouse::enter", function () manage_client.widget:set_image(beautiful.close_button_hover) end)
-          manage_client.widget:connect_signal(
-            "mouse::leave", function () manage_client.widget:set_image(beautiful.close_button) end)
-        else
-          manage_client.widget.text_widget:set_text(' x ')
-          manage_client.widget = common.decorated({
-            widget=manage_client.widget, bg=bg, widget_inverted=true,
-          })
-          manage_client.widget:set_color({color_n=args.color_n or 1})
-          manage_client.widget:connect_signal(
-            "mouse::enter", function () manage_client.widget:set_color({color_n='err'}) end)
-          manage_client.widget:connect_signal(
-            "mouse::leave", function () manage_client.widget:set_color({color_n=args.color_n or 1}) end)
+  local args	 = args or {}
+  args.bg = args.bg or beautiful.panel_widget_bg or beautiful.fg
+  args.fg = args.fg or beautiful.panel_widget_fg or beautiful.bg
+  local widget_screen = args.screen or 1
+  local clientbuttons = args.clientbuttons
+  local clientbuttons_manage = args.clientbuttons_manage
+
+  local object = {}
+  local widget = common.widget()
+
+  widget.is_managing = false
+
+  args.widget = widget
+  widget = common.decorated(args)
+  widget:set_text('X')
+  widget:connect_signal(
+    "mouse::enter", function ()
+      if not widget.is_managing then
+        widget:set_error()
+      else
+        widget:set_warning()
+      end
+    end)
+  widget:connect_signal(
+    "mouse::leave", function ()
+      if not widget.is_managing then
+        widget:set_normal()
+      end
+    end)
+
+  widget:buttons(awful.util.table.join(
+    awful.button({ }, 1, function ()
+      capi.client.focus:kill()
+    end),
+    awful.button({ }, 3, function ()
+      local cls = capi.client.get()
+      if not widget.is_managing then
+        widget.is_managing = true
+        widget:set_warning()
+        widget:set_text('M')
+        for _, c in pairs(cls) do
+          c:buttons(clientbuttons_manage)
         end
+      else
+        widget.is_managing = false
+        widget:set_error()
+        widget:set_text('X')
+        for _, c in pairs(cls) do
+          c:buttons(clientbuttons)
+        end
+      end
+    end)
+  ))
 
-	manage_client.widget:buttons(awful.util.table.join(
-		--awful.button({ }, 1, function () alsa.toggle() end),
-		--awful.button({ }, 5, function () alsa.down() end),
-		awful.button({ }, 1, function () 
-			--naughty.notify({text='DEBUG'})
-			capi.client.focus:kill()  end)
-	))
+  widget:hide()
+  capi.client.connect_signal("focus",function(c)
+    if c.screen == widget_screen then
+      widget:show()
+    end
+  end)
+  capi.client.connect_signal("unfocus",function(c)
+    if c.screen == widget_screen then
+      widget:hide()
+    end
+  end)
 
-    return setmetatable(manage_client, { __index = manage_client.widget })
+  return setmetatable(object, { __index = widget })
 end
 
 return setmetatable(manage_client, { __call = function(_, ...) return worker(...) end })

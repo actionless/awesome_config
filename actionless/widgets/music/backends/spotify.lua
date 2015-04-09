@@ -3,23 +3,88 @@
    * (c) 2014, Yauheni Kirylau
 --]]
 
+local dbus = dbus
 local awful = require("awful")
 
-local async = require("actionless.async")
-local h_table = require("actionless.table")
-local h_string = require("actionless.string")
-local parse = require("actionless.parse")
+local async = require("utils.async")
+local h_table = require("utils.table")
+local h_string = require("utils.string")
+local parse = require("utils.parse")
+
+local lgi = require 'lgi'
+local Gio = lgi.require 'Gio'
+--local inspect = require("inspect")
 
 -- @TODO: change to native dbus implementation instead of calling qdbus
 local dbus_cmd = "qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 "
 
 local spotify = {
   player_status = {},
+  player_cmd = 'spotify'
 }
+
+function spotify.init(widget)
+  dbus.add_match("session", "path='/org/mpris/MediaPlayer2',interface='org.freedesktop.DBus.Properties',member='PropertiesChanged'")
+  dbus.connect_signal(
+    "org.freedesktop.DBus.Properties",
+    function(...)
+      widget.update()
+    end)
+end
 
 -------------------------------------------------------------------------------
 function spotify.toggle()
   awful.util.spawn_with_shell(dbus_cmd .. "PlayPause")
+end
+
+
+function spotify.toggle2()
+  spotify.bus = Gio.bus_get_sync(Gio.BusType.SESSION)
+  local result, err = spotify.bus:call_sync(
+    'org.mpris.MediaPlayer2.spotify',
+
+    --'/',
+    '/org/mpris/MediaPlayer2',
+
+    --'org.freedesktop.MediaPlayer2',
+    'org.mpris.MediaPlayer2.Player',
+
+    --'GetMetadata',
+    'PlayPause',
+
+    nil,
+    nil,
+    Gio.DBusConnectionFlags.NONE,
+    -1
+  )
+  spotify.bus:flush()
+  result, err = spotify.bus:call_sync(
+    'org.mpris.MediaPlayer2.spotify',
+
+    --'/',
+    '/org/mpris/MediaPlayer2',
+
+    --'org.freedesktop.MediaPlayer2',
+    'org.mpris.MediaPlayer2.Player',
+
+    --'GetMetadata',
+    'PlayPause',
+
+    nil,
+    nil,
+    Gio.DBusConnectionFlags.NONE,
+    -1
+  )
+  --if result then
+    --for a, b in pairs(result.value) do
+      --print('---')
+      --print(a)
+      ----print(inspect(b))
+    --end
+  --else
+    --print('error:')
+    --print(inspect(err))
+  --end
 end
 
 function spotify.next_song()
@@ -75,7 +140,7 @@ end
 
 -------------------------------------------------------------------------------
 function spotify.resize_cover(
-  player_status, cover_size, output_coverart_path, notification_callback
+  player_status, _, output_coverart_path, notification_callback
 )
   async.execute(
     string.format(
@@ -83,7 +148,7 @@ function spotify.resize_cover(
       player_status.cover_url,
       output_coverart_path
     ),
-    function(f) notification_callback() end
+    function() notification_callback() end
   )
 end
 

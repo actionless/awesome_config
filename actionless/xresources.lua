@@ -4,7 +4,7 @@
 --]]
 
 local os = os
-local parse = require("actionless.parse")
+local parse = require("utils.parse")
 
 local xresources = {}
 
@@ -56,5 +56,33 @@ function xresources.read_theme(path)
     xresources.read(path)
   )
 end
+
+function xresources.get_current_theme()
+  local colors = {}
+  local file = io.popen("xrdb -query")
+  local query = file:read('*a')
+  file:close()
+  for i,color in string.gmatch(query, "%*color(%d+):[^#]*(#[%a%d]+)") do
+    colors[i] = color
+  end
+  colors.bg = string.match(query, "*background:[^#]*(#[%a%d]+)")
+  colors.fg = string.match(query, "*foreground:[^#]*(#[%a%d]+)")
+  return colors
+end
+
+
+function xresources.compute_fontsize(size)
+  if not xresources.dpi then
+    local file = io.popen(
+      "xrdb -query"
+    )
+    local query = file:read('*a')
+    xresources.dpi = tonumber(string.match(query, "dpi:[%s]+([%d]+)"))
+    file:close()
+  end
+  return size/96*xresources.dpi
+end
+
+
 
 return xresources

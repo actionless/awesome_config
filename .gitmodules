@@ -2,3 +2,15 @@
 	path = third_party/eminent
 	url = https://github.com/guotsuan/eminent.git
 	branch = master
+[submodule "third_party/apw"]
+	path = third_party/apw
+	url = https://github.com/mokasin/apw.git
+[submodule "third_party/revelation"]
+	path = third_party/revelation
+	url = https://github.com/guotsuan/awesome-revelation
+[submodule "third_party/collision"]
+	path = third_party/collision
+	url = https://github.com/Elv13/collision
+[submodule "third_party/lain"]
+	path = third_party/lain
+	url = https://github.com/copycat-killer/lain

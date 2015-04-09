@@ -1,19 +1,17 @@
-
 --[[
-                                                  
      Licensed under GNU General Public License v2
       * (c) 2013-2014, Yauheni Kirylau
-                                                  
 --]]
 local naughty      = require("naughty")
 local beautiful    = require("beautiful")
 
+local h_table      = require("utils.table")
+local h_string      = require("utils.string")
+local parse = require("utils.parse")
 local helpers = require("actionless.helpers")
-local parse = require("actionless.parse")
-local newtimer = helpers.newtimer
-local font = helpers.font
-local mono_preset = helpers.mono_preset()
+local newinterval = helpers.newinterval
 local common_widget = require("actionless.widgets.common").widget
+local async = require("utils.async")
 
 
 -- CPU usage
@@ -21,44 +19,106 @@ local common_widget = require("actionless.widgets.common").widget
 local cpu = {
   last_total = 0,
   last_active = 0,
-  now = {}
+  now = {},
+  notification = nil,
 }
-cpu.widget = common_widget()
-cpu.widget:set_image(beautiful.widget_cpu)
-cpu.widget:connect_signal("mouse::enter", function () cpu.show_notification() end)
-cpu.widget:connect_signal("mouse::leave", function () cpu.hide_notification() end)
 
 local function worker(args)
-  local args     = args or {}
+  args     = args or {}
   local update_interval  = args.update_interval or 5
-  local bg = args.bg or beautiful.panel_bg or beautiful.bg
-  local fg = args.fg or beautiful.panel_fg or beautiful.fg
+  local bg = args.bg or beautiful.panel_fg or beautiful.fg
+  local fg = args.fg or beautiful.panel_bg or beautiful.bg
   cpu.cores_number = args.cores_number or 8
-  cpu.font = args.font or font
   cpu.timeout = args.timeout or 0
 
+  cpu.widget = common_widget()
+  cpu.widget:set_image(beautiful.widget_cpu)
+  cpu.widget:connect_signal(
+    "mouse::enter", function () cpu.show_notification() end)
+  cpu.widget:connect_signal(
+    "mouse::leave", function () cpu.hide_notification() end)
+
   cpu.list_len = args.list_length or 10
-  cpu.command = args.command
-    or [[COLUMNS=512 ]] ..
-       [[ top -o \%CPU -b -n 1 ]] ..
-       [[ | head -n ]] .. cpu.list_len + 6 ..
-       [[ | tail -n ]] .. cpu.list_len  ..
-       [[ | awk '{printf "%-5s %-4s %s\n", $1, $9, $12}' ]]
+
+  local new_top = args.new_top or false
+  cpu.command = args.command or
+    new_top and
+    [[ top -o \%CPU -b -n 5 -w 512 -d 0.05 ]] ..
+    [[ | awk '{if ($7 > 0.0) {printf "%5s %4s %s\n", $1, $7, $11}}' ]]
+    or
+    [[COLUMNS=512 ]] ..
+    [[ top -o \%CPU -b -n 5 -w 512 -d 0.05 ]] ..
+    [[ | awk '{if ($9 > 0.0) {printf "%-5s %-4s %s\n", $1, $9, $12}}' ]]
+  cpu.command = "top -o \\%CPU -b -n 1 -w 512 -d 0.05"
 
   function cpu.hide_notification()
-    if cpu.id ~= nil then
-      naughty.destroy(cpu.id)
-      cpu.id = nil
+    if cpu.notification ~= nil then
+      naughty.destroy(cpu.notification)
+      cpu.notification = nil
     end
   end
 
+  function cpu.get_notification_id()
+    return cpu.notification and cpu.notification.id or nil
+  end
+
   function cpu.show_notification()
-    cpu.hide_notification()
-    local output = parse.command_to_string(cpu.command)
-    cpu.id = naughty.notify({
-      text = output,
+    cpu.notification = naughty.notify({
+      text = "waiting for top...",
       timeout = cpu.timeout,
-      preset = mono_preset
+      font = beautiful.notification_monofont,
+      replaces_id = cpu.get_notification_id(),
+    })
+    async.execute_ng(cpu.command, cpu.notification_callback)
+  end
+
+  function cpu.notification_callback(output)
+    local notification_id = cpu.get_notification_id()
+    if not notification_id then return end
+    local result = {}
+    local names = {}
+    for _, line in ipairs(
+      h_table.range(
+        parse.string_to_lines(output),
+        15
+      )
+    ) do
+      --local pid, percent, name = line:match("^(%d+)%s+(.+)%s+(.*)")
+      local values = h_string.split(line, ' ')
+      local pid = values[1]
+      local percent = values[7]
+      local name = values[11]
+      percent = percent + 0
+      if percent and percent ~= 0 and name ~= 'top' then
+        if result[pid] then
+          result[pid] = (result[pid] + percent)/2
+        elseif name then
+          result[pid] = percent
+        end
+        names[pid] = name
+      end
+    end
+
+    local result_string = ''
+    local counter = 0
+    for pid, percent in h_table.spairs(result, function(t,a,b) return t[b] < t[a] end) do
+      result_string = result_string .. string.format("%5s %5.2f %s", pid, percent, names[pid])
+      counter = counter + 1
+      if counter == cpu.list_len then
+        break
+      end
+      result_string = result_string .. '\n'
+    end
+    if result_string ~= '' then
+      result_string = "  PID  %CPU COMMAND\n" .. result_string
+    else
+      result_string = "no running processes atm"
+    end
+    cpu.notification = naughty.notify({
+      text = result_string,
+      timeout = cpu.timeout,
+      font = beautiful.notification_monofont,
+      replaces_id = cpu.get_notification_id(),
     })
   end
 
@@ -67,11 +127,11 @@ local function worker(args)
       "/proc/loadavg",
       "^([0-9.]+) ([0-9.]+) ([0-9.]+) .*")
     if tonumber(cpu.now.la1) > cpu.cores_number * 2 then
-      cpu.widget:set_bg(beautiful.error)
-      cpu.widget:set_fg(fg)
+      cpu.widget:set_bg(beautiful.panel_widget_bg_error)
+      cpu.widget:set_fg(beautiful.panel_widget_fg_error)
     elseif tonumber(cpu.now.la1) > cpu.cores_number then
-      cpu.widget:set_bg(beautiful.warning)
-      cpu.widget:set_fg(fg)
+      cpu.widget:set_bg(beautiful.panel_widget_bg_warning)
+      cpu.widget:set_fg(beautiful.panel_widget_fg_warning)
     else
       cpu.widget:set_fg(fg)
       cpu.widget:set_bg(bg)
@@ -83,7 +143,7 @@ local function worker(args)
     ))
   end
 
-  newtimer("cpu", update_interval, cpu.update)
+  newinterval("cpu", update_interval, cpu.update)
 
   return setmetatable(cpu, { __index = cpu.widget })
 end

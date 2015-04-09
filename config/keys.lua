@@ -1,5 +1,6 @@
 
 local awful = require("awful")
+local beautiful = require("beautiful")
 local menubar = require("menubar")
 local client = client
 local capi = {
@@ -9,7 +10,6 @@ local capi = {
   awesome = awesome,
 }
 
-local widgets = require("actionless.widgets")
 local helpers = require("actionless.helpers")
 local titlebar = require("actionless.titlebar")
 local menu_addon = require("actionless.menu_addon")
@@ -17,12 +17,12 @@ local floats = require("actionless.helpers").client_floats
 local hk = require("actionless.hotkeys")
 
 
+local revelation = require("third_party.revelation")
+revelation.init()
 
 
 local keys = {}
 function keys.init(awesome_context)
-
-hk.init(awesome_context)
 
 local modkey = awesome_context.modkey
 local altkey = awesome_context.altkey
@@ -30,45 +30,75 @@ local cmd = awesome_context.cmds
 
 local RESIZE_STEP = 15
 
-local TO_DEFINE_COLOR = nil
+local TO_DEFINE_COLOR = "wip"
 
-local TAG_COLOR = 4
-local CLIENT_COLOR = 3
-local MENU_COLOR = 5
-local IMPORTANT_COLOR = 9
-local CLIENT_MANIPULATION = 10
-local LAYOUT_MANIPULATION = 12
+local TAG_COLOR = "tag"
+local CLIENT_COLOR = "client_focus"
+local UTILS = "menu"
+local IMPORTANT_COLOR = "important"
+local CLIENT_MANIPULATION = "client"
+local LAYOUT_MANIPULATION = "layout"
+
+hk.add_groups({
+  [TAG_COLOR]={name="tags",color=beautiful.color["6"]},
+  [CLIENT_COLOR]={name="client focus",color=beautiful.color["3"]},
+  [UTILS]={name="utils",color=beautiful.color["5"]},
+  [IMPORTANT_COLOR]={name="important",color=beautiful.color["9"]},
+  [CLIENT_MANIPULATION]={name="client",color=beautiful.color["10"]},
+  [LAYOUT_MANIPULATION]={name="layout",color=beautiful.color["12"]},
+  [TO_DEFINE_COLOR]={name="wip",color=beautiful.color["7"]},
+})
+
 
 -- {{{ Mouse bindings
 capi.root.buttons(awful.util.table.join(
-  awful.button({ }, 3, function () awesome_context.menu.mainmenu:toggle() end),
+  awful.button({ }, 3, function () awesome_context.menu.mainmenu_toggle() end),
   awful.button({ }, 5, awful.tag.viewnext),
   awful.button({ }, 4, awful.tag.viewprev)
 ))
 -- }}}
 
+awful.menu.menu_keys.back = { "Left", "h" }
+awful.menu.menu_keys.down = { "Down", "j" }
+awful.menu.menu_keys.up = { "Up", "k" }
+awful.menu.menu_keys.enter = { "Right", "l" }
+awful.menu.menu_keys.close = { "Escape", '#133', 'q' }
+
+
+--local HELPKEY = "Print"
+local HELPKEY = "#108"
+
 -- {{{ Key bindings
 local globalkeys = awful.util.table.join(
 
-  hk.on({ modkey, }, "/", "show_help"),
-  hk.on({ modkey, altkey }, "/", "show_help"),
-  hk.on({ modkey, altkey, "Shift" }, "/", "show_help"),
-  hk.on({ modkey, altkey, "Control" }, "/", "show_help"),
-  hk.on({ modkey, "Shift"    }, "/", "show_help"),
-  hk.on({ modkey, "Control"  }, "/", "show_help"),
-  hk.on({ modkey, "Shift", "Control" }, "/", "show_help"),
+  hk.on({  }, HELPKEY, "show_help"),
+  hk.on({ "Shift" }, HELPKEY, "show_help"),
+  hk.on({ "Control" }, HELPKEY, "show_help"),
+  hk.on({ altkey }, HELPKEY, "show_help"),
+  hk.on({ modkey, }, HELPKEY, "show_help"),
+  hk.on({ modkey, altkey }, HELPKEY, "show_help"),
+  hk.on({ modkey, altkey, "Shift" }, HELPKEY, "show_help"),
+  hk.on({ modkey, altkey, "Control" }, HELPKEY, "show_help"),
+  hk.on({ modkey, "Shift"    }, HELPKEY, "show_help"),
+  hk.on({ modkey, "Control"  }, HELPKEY, "show_help"),
+  hk.on({ modkey, "Shift", "Control" }, HELPKEY, "show_help"),
 
   -- hk.on({ modkey,  }, "Control", "show_help"), -- show hotkey on hold
 
   hk.on({ modkey,  "Control"  }, "t",
     function() awesome_context.widgets.systray_toggle.toggle() end,
-    "toggle sysTray popup", MENU_COLOR
+    "toggle sysTray popup", UTILS
   ),
 
   hk.on({ modkey,  "Control"  }, "s",
     function() helpers.run_once("xscreensaver-command -lock") end,
-    "xScreensaver lock", IMPORTANT_COLOR
+    "xscreensaver lock", UTILS
   ),
+  hk.on({ modkey,  "Control"  }, "d",
+    function() helpers.run_once("sleep 1 && xset dpms force off") end,
+    "turn off display", UTILS
+  ),
+
 
   hk.on({ modkey,        }, ",",
     function() awful.tag.viewprev(helpers.get_current_screen()) end,
@@ -82,15 +112,34 @@ local globalkeys = awful.util.table.join(
     awful.tag.history.restore,
     "cycle tags", TAG_COLOR
   ),
+  hk.on({ modkey, altkey }, "r",
+    function ()
+      local tag = awful.tag.selected(helpers.get_current_screen())
+      if tag then
+        awful.prompt.run(
+          { prompt = "new tag name: ",
+            text = awful.tag.getidx(tag) .. ":" },
+          awesome_context.widgets.screen[helpers.get_current_screen()].promptbox.widget,
+          function(new_name)
+            if not new_name or #new_name == 0 then
+              return
+            else
+               tag.name = new_name
+            end
+          end)
+      end
+    end,
+    "Rename tag", TAG_COLOR
+  ),
 
   -- By direction screen focus
   hk.on({ modkey,        }, "Next",
     function() awful.screen.focus_relative(1) end,
-    "next screen", TO_DEFINE_COLOR
+    "next screen", TAG_COLOR
   ),
   hk.on({ modkey,        }, "Prior",
     function() awful.screen.focus_relative(-1) end,
-    "prev screen", TO_DEFINE_COLOR
+    "prev screen", TAG_COLOR
   ),
 
   -- By direction client focus
@@ -157,16 +206,17 @@ local globalkeys = awful.util.table.join(
 
   -- Menus
   hk.on({ modkey,       }, "w",
-    function () awesome_context.menu.mainmenu:show() end,
-    "aWesome menu", MENU_COLOR
+    function () awesome_context.menu.mainmenu_show() end,
+    "aWesome menu", UTILS
   ),
   hk.on({ modkey,       }, "i",
     function ()
       awesome_context.menu.instance = menu_addon.clients_on_tag({
         theme = {width=capi.screen[helpers.get_current_screen()].workarea.width},
-        coords = {x=0, y=18}})
+        coords = {x=0, y=18}
+      })
     end,
-    "current clients", MENU_COLOR
+    "clients on current tag menu", UTILS
   ),
   hk.on({ modkey,       }, "p",
     function ()
@@ -175,25 +225,24 @@ local globalkeys = awful.util.table.join(
         coords = {x=0, y=18}
       })
     end,
-    "all clients", MENU_COLOR
+    "all clients menu", UTILS
   ),
   hk.on({ modkey, "Control"}, "p",
     function() menubar.show() end,
-    "aPPlications menu", MENU_COLOR
+    "applications menu", UTILS
   ),
   hk.on({ modkey,        }, "space",
     function() awful.util.spawn_with_shell(cmd.dmenu) end,
-    "app launcher", IMPORTANT_COLOR
+    "app launcher", UTILS
   ),
 
-  -- Layout manipulation
   hk.on({ modkey, "Control"  }, "n",
     function()
       local c = awful.client.restore()
       -- @TODO: it's a workaround for some strange upstream issue
       if c then client.focus = c end
     end,
-    "de-icoNify", CLIENT_MANIPULATION
+    "de-iconify client", TAG_COLOR
   ),
 
   hk.on({ modkey,        }, "u",
@@ -210,12 +259,11 @@ local globalkeys = awful.util.table.join(
     "cycle clients", CLIENT_COLOR
   ),
 
-  -- Layouts
-  hk.on({ modkey, "Control" }, "space",
+  hk.on({ modkey, altkey }, "space",
     function () awful.layout.inc(1) end,
     "next layout", LAYOUT_MANIPULATION
   ),
-  hk.on({ modkey, "Shift"    }, "space",
+  hk.on({ modkey, "Control" }, "space",
     function () awful.layout.inc(-1) end,
     "prev layout", LAYOUT_MANIPULATION
   ),
@@ -261,33 +309,61 @@ local globalkeys = awful.util.table.join(
 
   -- Prompt
   hk.on({ modkey }, "r",
-    function () awesome_context.widgets.uniq[helpers.get_current_screen()].promptbox:run() end,
-    "Run command...", TO_DEFINE_COLOR
+    function () awesome_context.widgets.screen[helpers.get_current_screen()].promptbox:run() end,
+    "Run command...", UTILS
   ),
   hk.on({ modkey }, "x",
     function ()
       awful.prompt.run({ prompt = "Run Lua code: " },
-      awesome_context.widgets.promptbox[helpers.get_current_screen()].widget,
+      awesome_context.widgets.screen[helpers.get_current_screen()].promptbox.widget,
       awful.util.eval, nil,
       awful.util.getdir("cache") .. "/history_eval")
     end,
-    "eXecute lua code...", TO_DEFINE_COLOR
+    "eXecute lua code...", UTILS
   ),
 
   -- ALSA volume control
-  awful.key({}, "#123", function () awesome_context.widgets.volume.up() end),
-  awful.key({}, "#122", function () awesome_context.widgets.volume.down() end),
-  awful.key({}, "#121", function () awesome_context.widgets.volume.toggle() end),
+  awful.key({}, "#123", function ()
+    if awesome_context.volume_widget ~= "apw" then
+      awesome_context.widgets.volume.up()
+    else
+      awesome_context.widgets.volume.Up()
+    end
+  end),
+  awful.key({}, "#122", function ()
+    if awesome_context.volume_widget ~= "apw" then
+      awesome_context.widgets.volume.down()
+    else
+      awesome_context.widgets.volume.Down()
+    end
+  end),
+  awful.key({}, "#121", function ()
+    if awesome_context.volume_widget ~= "apw" then
+      awesome_context.widgets.volume.toggle()
+    else
+      awesome_context.widgets.volume.ToggleMute()
+    end
+  end),
   awful.key({}, "#198", function () awesome_context.widgets.volume.toggle_mic() end),
 
-  -- MPD control
+  -- Music player control
+  hk.on({modkey, altkey}, ",",
+    function () awesome_context.widgets.music.prev_song() end,
+    "prev song", UTILS),
+  hk.on({modkey, altkey}, ".",
+    function () awesome_context.widgets.music.next_song() end,
+    "next song", UTILS),
+  hk.on({modkey, altkey}, "/",
+    function () awesome_context.widgets.music.toggle() end,
+    "Pause", UTILS),
+
   awful.key({}, "#150", function () awesome_context.widgets.music.prev_song() end),
   awful.key({}, "#148", function () awesome_context.widgets.music.next_song() end),
   awful.key({}, "#172", function () awesome_context.widgets.music.toggle() end),
 
   hk.on({ modkey }, "c",
     function () os.execute("xsel -p -o | xsel -i -b") end,
-    "copy to Clipboard", TO_DEFINE_COLOR
+    "copy to clipboard", UTILS
   ),
 
   -- Standard program
@@ -295,16 +371,20 @@ local globalkeys = awful.util.table.join(
     function () awful.util.spawn(cmd.tmux) end,
     "terminal", IMPORTANT_COLOR
   ),
+  hk.on({ modkey, altkey }, "Return",
+    function () awful.util.spawn(cmd.tmux_light) end,
+    "white terminal", UTILS
+  ),
   hk.on({ modkey,        }, "s",
     function () awful.util.spawn(cmd.file_manager) end,
-    "file manager", TO_DEFINE_COLOR
+    "file manager", UTILS
   ),
 
   hk.on({ modkey, "Control"  }, "r",
     capi.awesome.restart,
     "Reload awesome wm", IMPORTANT_COLOR
   ),
-  hk.on({ modkey, "Shift"    }, "q",
+  hk.on({ modkey, "Control"    }, "q",
     capi.awesome.quit,
     "Quit awesome wm", IMPORTANT_COLOR
   ),
@@ -324,12 +404,17 @@ local globalkeys = awful.util.table.join(
     end,
     "screenshot selected", TO_DEFINE_COLOR
   ),
-  hk.on({            }, "Print",
+  hk.on({  }, "Print",
     function ()
       awful.util.spawn_with_shell(
       "scrot '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. cmd.scrot_preview_cmd)
     end,
     "screenshot all", TO_DEFINE_COLOR
+  ),
+
+  hk.on({modkey}, "a",
+    revelation,
+    "Revelation", UTILS
   )
 
 )
@@ -554,11 +639,11 @@ awesome_context.clientkeys = awful.util.table.join(
     function (c) c:kill() end,
     "Quit app", IMPORTANT_COLOR
   ),
-  hk.on({ modkey, "Control"  }, "f",
+  hk.on({ modkey, "Shift"  }, "f",
     awful.client.floating.toggle,
     "toggle client Float", CLIENT_MANIPULATION
   ),
-  hk.on({ modkey, "Control"  }, "Return",
+  hk.on({ modkey, "Shift"  }, "Return",
     function (c) c:swap(awful.client.getmaster()) end,
     "put client on master", CLIENT_MANIPULATION
   ),
@@ -613,14 +698,16 @@ for scr = 1, 2 do
         local tag = awful.tag.gettags(scr)[i]
         if tag then awful.tag.viewonly(tag) end
       end,
-      "go to tag " .. i .. " (screen #" .. scr .. ")", TAG_COLOR
+      i==1 and "go to tag " .. i .. "\n(screen #" .. scr .. ")" or "",
+      TAG_COLOR
     ),
     hk.on({ modkey, "Control" }, "#" .. i + diff,
       function ()
         local tag = awful.tag.gettags(scr)[i]
         if tag then awful.tag.viewtoggle(tag) end
       end,
-      "toggle tag " .. i .. " (screen #" .. scr .. ")", TAG_COLOR
+      i==1 and "toggle tag " .. i .. "\n(screen #" .. scr .. ")" or "",
+      TAG_COLOR
     ),
     hk.on({ modkey, "Shift" }, "#" .. i + diff,
       function ()
@@ -629,7 +716,8 @@ for scr = 1, 2 do
           if tag then awful.client.movetotag(tag) end
          end
       end,
-      "move client to tag " .. i .. " (screen #" .. scr .. ")", CLIENT_MANIPULATION
+      i==1 and "move client to tag " .. i .. "\n(screen #" .. scr .. ")" or "",
+      CLIENT_MANIPULATION
     ),
     hk.on({ modkey, "Control", "Shift" }, "#" .. i + diff,
       function ()
@@ -639,20 +727,12 @@ for scr = 1, 2 do
         end
 
       end,
-      "toggle client on tag " .. i .. " (screen #" .. scr .. ")", CLIENT_MANIPULATION
+      i==1 and "toggle client to tag " .. i .. "\n(screen #" .. scr .. ")" or "",
+      CLIENT_MANIPULATION
     )
   )
   end
 end
-
-awesome_context.clientbuttons = awful.util.table.join(
-    awful.button({ }, 1,
-      function (c)
-        client.focus = c;
-        c:raise();
-      end),
-    awful.button({ modkey }, 1, awful.mouse.client.move),
-    awful.button({ modkey }, 3, awful.mouse.client.resize))
 
 -- Set keys
 capi.root.keys(globalkeys)

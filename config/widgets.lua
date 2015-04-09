@@ -17,78 +17,90 @@ local widget_loader = {}
 function widget_loader.init(awesome_context)
   local w = awesome_context.widgets
   local conf = awesome_context.config
-  local bpc = beautiful.panel_colors
   local modkey = awesome_context.modkey
 
-  -- CLOSE button
-  w.close_button = widgets.manage_client({color_n=bpc.close})
+  -- Keyboard layout widget
+  w.kbd = widgets.kbd({
+    bg = beautiful.warning
+  })
 
   -- NetCtl
-  w.netctl = widgets.netctl({
-    update_interval = 5,
-    preset = conf.net_preset,
-    wlan_if = conf.wlan_if,
-    eth_if = conf.eth_if,
-    bg = beautiful.color[bpc.media],
-    fg = beautiful.panel_bg,
-  })
+  --w.netctl = widgets.netctl({
+    --update_interval = 5,
+    --preset = conf.net_preset,
+    --wlan_if = conf.wlan_if,
+    --eth_if = conf.eth_if,
+    --bg = beautiful.widget_netctl_bg,
+    --fg = beautiful.widget_netctl_fg,
+  --})
   -- MUSIC
   w.music = widgets.music.widget({
     update_interval = 5,
-    backend = conf.music_player,
+    backends = conf.music_players,
     music_dir = conf.music_dir,
-    bg = beautiful.panel_bg,
-    fg = beautiful.color[bpc.media],
+    bg = beautiful.widget_music_bg,
+    fg = beautiful.widget_music_fg,
+    force_no_bgimage=true,
   })
   -- ALSA volume
-  w.volume = widgets.alsa({
-    update_interval = 5,
-    channel = 'Master',
-    channels_toggle = {'Master', 'Speaker', 'Headphone'},
-    color_n = bpc.media,
-    widget_inverted=true,
-    left_separators = { 'sq' },
-    right_separators = { 'arrr' }
-  })
+  if awesome_context.volume_widget ~= "apw" then
+    w.volume = widgets.alsa({
+      update_interval = 5,
+      step=2,
+      channel = 'Master',
+      channels_toggle = {'Master', 'Speaker', 'Headphone'},
+      bg = beautiful.widget_alsa_bg,
+      fg = beautiful.widget_alsa_fg,
+      left_separators = { 'arrl' },
+      right_separators = { 'sq' }
+    })
+  else
+    w.volume = require("third_party/apw/widget")
+  end
 
   -- systray_toggle
-  w.systray_toggle = widgets.systray_toggle({
-    screen = 1
-  })
+  --w.systray_toggle = widgets.systray_toggle({
+    --screen = 1
+  --})
+  --w.systray_toggle = widgets.sneaky_tray({})
+  --w.systray = wibox.widget.systray()
 
   -- MEM
   w.mem = widgets.mem({
     update_interval = 10,
     list_length = 20,
-    bg = beautiful.color[bpc.info],
-    fg = beautiful.panel_bg,
+    bg = beautiful.widget_mem_bg,
+    fg = beautiful.widget_mem_fg,
+    new_top = true,
   })
   -- CPU
   w.cpu = widgets.cpu({
     update_interval = 5,
     cores_number = conf.cpu_cores_num,
     list_length = 20,
-    bg = beautiful.color[bpc.info],
-    fg = beautiful.panel_bg,
+    bg = beautiful.widget_cpu_bg,
+    fg = beautiful.widget_cpu_fg,
+    new_top = true,
   })
   -- Sensor
   w.temp = widgets.temp({
     update_interval = 10,
     sensor = "Core 0",
     warning = 75,
-    bg = beautiful.color[bpc.info],
-    fg = beautiful.panel_bg,
+    bg = beautiful.widget_temp_bg,
+    fg = beautiful.widget_temp_fg,
   })
   -- Battery
   w.bat = widgets.bat({
     update_interval = 30,
-    bg = beautiful.color[bpc.info],
-    fg = beautiful.panel_bg,
+    bg = beautiful.widget_bat_bg,
+    fg = beautiful.widget_bat_fg,
+    show_when_charged=false,
   })
 
   -- Textclock
   w.textclock = awful.widget.textclock("%H:%M")
-  widgets.calendar:attach(w.textclock)
+  widgets.calendar:attach(w.textclock, {fg=beautiful.theme})
 
 
   w.screen = {}
@@ -96,13 +108,26 @@ function widget_loader.init(awesome_context)
     w.screen[s] = {}
     local sw = w.screen[s]
 
+    -- CLOSE button
+    sw.close_button = widgets.manage_client(
+      {
+        screen = s,
+        bg = beautiful.widget_close_bg,
+        fg = beautiful.widget_close_fg,
+        left_separators = beautiful.widget_close_left_decorators,
+        right_separators = beautiful.widget_close_right_decorators,
+        clientbuttons = awesome_context.clientbuttons,
+        clientbuttons_manage = awesome_context.clientbuttons_manage,
+      }
+    )
+
     -- taglist
     sw.taglist = {}
     sw.taglist.buttons = awful.util.table.join(
       awful.button({		}, 1, awful.tag.viewonly),
-      awful.button({ modkey		}, 1, awful.client.movetotag),
+      awful.button({ modkey	}, 1, awful.client.movetotag),
       awful.button({		}, 3, awful.tag.viewtoggle),
-      awful.button({ modkey		}, 3, awful.client.toggletag),
+      awful.button({ modkey	}, 3, awful.client.toggletag),
       awful.button({		}, 5, function(t)
         awful.tag.viewnext(awful.tag.getscreen(t)) end),
       awful.button({		}, 4, function(t)
@@ -112,7 +137,8 @@ function widget_loader.init(awesome_context)
       widget = awful.widget.taglist(
         s, awful.widget.taglist.filter.all, sw.taglist.buttons
       ),
-      color_n = bpc.taglist,
+      bg = beautiful.widget_taglist_bg,
+      fg = beautiful.widget_taglist_fg,
     })
 
     -- promptbox
@@ -135,17 +161,18 @@ function widget_loader.init(awesome_context)
         end
       end),
       awful.button({ }, 3, function ()
-        if awesome_context.menu.instance then
+        if awesome_context.menu.instance and awesome_context.menu.instance.wibox.visible then
           awesome_context.menu.instance:hide()
           awesome_context.menu.instance = nil
         else
+          if awesome_context.menu.instance then
+            awesome_context.menu.instance:hide()
+          end
           awesome_context.menu.instance = awful.menu.clients({
             theme = {
               width=capi.screen[helpers.get_current_screen()].workarea.width
             },
-            coords = {
-              x=0, y=18
-            }
+            coords = { x=0, y=18 }
           })
         end
       end),
@@ -177,18 +204,9 @@ function widget_loader.init(awesome_context)
     -- layoutbox
     sw.layoutbox = widgets.layoutbox({
       screen = s,
-      color_n = 7
+      bg = beautiful.widget_layoutbox_bg,
+      fg = beautiful.widget_layoutbox_fg,
     })
-    sw.layoutbox:buttons(awful.util.table.join(
-      awful.button({ }, 1, function ()
-        awful.layout.inc(awful.layout.layouts, 1) end),
-      awful.button({ }, 3, function ()
-        awful.layout.inc(awful.layout.layouts, -1) end),
-      awful.button({ }, 5, function ()
-        awful.layout.inc(awful.layout.layouts, 1) end),
-      awful.button({ }, 4, function ()
-        awful.layout.inc(awful.layout.layouts, -1) end)
-    ))
 
   end
 

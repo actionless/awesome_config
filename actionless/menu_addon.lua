@@ -8,7 +8,7 @@ local tags = require("awful.tag")
 local capi = { client = client }
 local escape_f = require("awful.util").escape
 
-local table_add = require("actionless.table").add
+local table_add = require("utils.table").add
 
 
 local menu_addon = { mt={} }
@@ -54,7 +54,7 @@ function menu_addon.clients_on_tag(args, item_args)
 end
 
 function menu_addon.mt:__call(...)
-  return menu.new(...)
+  return self.new(...)
 end
 
-return setmetatable(menu_addon, menu_addon.mt)
+return setmetatable(menu_addon, menu)

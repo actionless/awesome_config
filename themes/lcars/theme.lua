@@ -1,7 +1,8 @@
-theme = {}
+local theme = {}
 
-themes_dir = os.getenv("HOME") .. "/.config/awesome/themes/lcars"
-theme.dir = themes_dir
+local awful = require("awful")
+local theme_dir = awful.util.getdir("config").."/themes/lcars"
+theme.dir = theme_dir
 --theme.wallpaper_cmd     = "hsetroot"
 theme.wallpaper_cmd     = "nitrogen --restore"
 theme.show_widget_icon = false
@@ -67,7 +68,7 @@ theme.panel_bg                  = theme.bg
 theme.panel_fg                  = theme.fg
 theme.panel_height              = 23
 theme.panel_opacity		= 1.0
-theme.panel_margin              = 3
+theme.panel_padding_bottom              = 6
 
 theme.taglist_font		= theme.font
 theme.taglist_fg_occupied	= theme.bg
@@ -113,7 +114,7 @@ theme.player_text		= theme.color2
 
 -- ICONS
 
-icons_dir = theme.dir .. "/icons/"
+local icons_dir = theme.dir .. "/icons/"
 theme.icons_dir = icons_dir
 
 theme.menu_submenu_icon		= icons_dir .. "submenu.png"
@@ -180,7 +181,7 @@ theme.tasklist_disable_icon = true
 --theme.tasklist_maximized_horizontal = "_"
 --theme.tasklist_maximized_vertical = "|"
 
-layout_icons_dir = icons_dir .. "layout/"
+local layout_icons_dir = icons_dir .. "layout/"
 theme.layout_icons_dir = layout_icons_dir
 theme.layout_tile		= layout_icons_dir .. "tile.png"
 theme.layout_tilegaps		= layout_icons_dir .. "tilegaps.png"
@@ -196,7 +197,7 @@ theme.layout_fullscreen		= layout_icons_dir .. "fullscreen.png"
 theme.layout_magnifier		= layout_icons_dir .. "magnifier.png"
 theme.layout_floating		= layout_icons_dir .. "floating.png"
 
-titlebar_icons_dir = icons_dir .. "titlebar/"
+local titlebar_icons_dir = icons_dir .. "titlebar/"
 theme.titlebar_icons_dir = titlebar_icons_dir
 theme.titlebar_close_button_focus = titlebar_icons_dir .. "/close_focus.png"
 theme.titlebar_close_button_normal = titlebar_icons_dir .. "/close_normal.png"

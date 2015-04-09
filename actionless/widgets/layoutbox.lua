@@ -5,18 +5,15 @@
 -- @ 2013-2014 Yauhen Kirylau
 ---------------------------------------------------------------------------
 
-local setmetatable = setmetatable
-local ipairs = ipairs
-local button = require("awful.button")
-local layout = require("awful.layout")
+
+local awful = require("awful")
 local tag = require("awful.tag")
 local beautiful = require("beautiful")
 local wibox = require("wibox")
 local imagebox = require("wibox.widget.imagebox")
 local textbox = require("wibox.widget.textbox")
 
-local helpers = require("actionless.helpers")
-local decorated = require("actionless.widgets.common").decorated
+local common = require("actionless.widgets.common")
 
 --- Layoutbox widget "class".
 
@@ -25,33 +22,62 @@ local decorated = require("actionless.widgets.common").decorated
 -- symbol of the current tag.
 -- @param screen The screen number that the layout will be represented for.
 -- @return An imagebox widget configured as a layoutbox.
-function worker(args)
+local function worker(args)
 
     local layoutbox = { mt = {} }
 
     local args = args or {}
-    local color_n = args.color_n or 'f'
-    local bg = args.bg or beautiful.color[color_n]
-    local fg = args.fg or beautiful.panel_bg
+    local fg = args.fg or beautiful.panel_widget_fg or beautiful.bg or "#000000"
+    local bg = args.bg or beautiful.panel_widget_bg or beautiful.fg or "#ffffff"
     layoutbox.screen = args.screen or 1
 
     layoutbox.n_master = wibox.widget.background()
     layoutbox.n_master:set_widget(textbox())
     layoutbox.layout = wibox.widget.background()
-    layoutbox.layout:set_widget(imagebox())
+    local layout_imagebox = imagebox()
+    layout_imagebox:set_resize(beautiful.hidpi or false)
+    layoutbox.layout:set_widget(layout_imagebox)
     layoutbox.n_col = wibox.widget.background()
     layoutbox.n_col:set_widget(textbox())
 
-    layoutbox.widget = decorated({
-        widgets={
-            layoutbox.n_master, layoutbox.layout, layoutbox.n_col
-        },
-        color_n = color_n,
-        widget_inverted=true,
+    local widget = common.widget()
+    widget.layout:reset()
+    widget.layout:add(layoutbox.n_master)
+    widget.layout:add(layoutbox.layout)
+    widget.layout:add(layoutbox.n_col)
+    layoutbox.widget = common.decorated({
+        widget = widget,
+        bg=bg, fg=fg,
     })
 
+    local layouts_menu_items = {}
+    for _, layout in ipairs(awful.layout.layouts) do
+      table.insert(layouts_menu_items, {
+        layout.name,
+        function() awful.layout.set(layout) end,
+        beautiful["layout_"..layout.name]
+      })
+    end
+
+    local layouts_menu = awful.menu({
+        items = layouts_menu_items,
+    })
+
+    widget:buttons(awful.util.table.join(
+      awful.button({ }, 1, function ()
+        layouts_menu:show()
+      end),
+      awful.button({ }, 3, function ()
+        awful.layout.inc(1) end),
+      awful.button({ }, 5, function ()
+        awful.layout.inc(1) end),
+      awful.button({ }, 4, function ()
+        awful.layout.inc(-1) end)
+    ))
+
+
     function layoutbox:update_layout()
-        local layout = layout.getname(layout.get(self.screen))
+        local layout = awful.layout.getname(awful.layout.get(self.screen))
         self.layout.widget:set_image(layout and beautiful["layout_" .. layout])
     end
     function layoutbox:update_nmaster(t)
@@ -72,7 +98,7 @@ function worker(args)
         function(t) layoutbox:update_all(t) end)
     tag.attached_connect_signal(
         layoutbox.screen, "property::layout",
-        function(t) layoutbox:update_layout() end)
+        function(_) layoutbox:update_layout() end)
     tag.attached_connect_signal(
         layoutbox.screen, "property::ncol",
         function(t) layoutbox:update_ncol(t) end)

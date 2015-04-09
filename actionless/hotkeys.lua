@@ -3,26 +3,43 @@
       * (c) 2014  Yauheni Kirylau
 --]]
 
-local capi = { screen = screen }
+local capi = {
+  screen = screen,
+  client = client,
+  keygrabber = keygrabber,
+}
 local awful = require("awful")
+local a_table = awful.util.table
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 
 local helpers = require("actionless.helpers")
-local h_table = require("actionless.table")
-local markup = require("actionless.markup")
+local hotkey_resources = require("actionless.hotkey_resources")
+local h_table = require("utils.table")
+local markup = require("utils.markup")
 local bordered_widget = require("actionless.widgets.common").bordered
 
-local APPEARANCE = {
-  width = 1400,
-  height = 600,
-  key_padding = 5,
-  key_margin = 5,
-  comment_font_size = 8,
-  comment_width_chars = 10,
-  pressed_color_group = 2,
-}
+local dpi = require("actionless.xresources").compute_fontsize
+
 local hotkeys = {
+  appearance = {
+    width = dpi(1280),
+    height = dpi(680),
+    keyboard_height = dpi(520),
+    key_padding = dpi(3),
+    key_margin = dpi(3),
+    comment_font_size = dpi(8),
+    hide_on_key_release = false,
+    special_button_bg = "#333333",
+    special_button_fg = "#000000",
+    default_button_bg = beautiful.theme,
+    alt_fg = beautiful.color and beautiful.color["0"] or beautiful.bg,
+    button_fg = beautiful.hotkeys_widget_fg or beautiful.fg,
+    border_width = dpi(2),
+    border_color = beautiful.fg,
+    widget_padding = dpi(8),
+    legend_separator = dpi(16),
+  },
   bindings = {
     --[[
     Mod4 = {
@@ -35,156 +52,178 @@ local hotkeys = {
   },
   cached_keyboards = {},
   last_modifiers = nil,
+  last_groups = nil,
   last_visible = false,
   popup = {
     visible = false,
-  }
-}
-local KEYBOARD = {
-  { 'Escape', '#67', '#68', '#69', '#70', '#71', '#72', '#73', '#74', '#75', '#76', '#95', '#96', 'Home', 'End'},
-  { '`', '#10', '#11', '#12', '#13', '#14', '#15', '#16', '#17', '#18', '#19', '#20', '#21', 'Insert', 'Delete' },
-  { 'Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 'Backspace' },
-  { 'Caps', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", '\\', 'Return' },
-  { 'Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 'Next', 'Up' , 'Prior' },
-  { 'Fn', 'Control', 'Mod4', 'Mod1', '', 'space', '', '', 'Alt Gr', 'Print', 'Control', 'Left', 'Down', 'Right'},
-}
-local KEYBOARD_LABELS = {
-  { 'Esc', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12', 'Home', 'End'},
-  { '~', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Ins', 'Del'},
-  { 'Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 'BackSpc' },
-  { 'Caps', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", '\\', 'Enter' },
-  { 'Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '&lt;', '&gt;', '?', 'PgUp', 'Up' , 'PgDn' },
-  { 'Fn', 'Ctrl', 'Super', 'Alt', '', 'Space', '', '', 'Alt G', 'PrScr', 'Ctrl', 'Left', 'Down', 'Right'},
-}
-local SPECIAL_KEYBUTTONS = {
-  'Esc',
-  'Tab',
-  'Caps',
-  'Shift',
-  'Ctrl',
-  'Super',
-  'Alt',
-  'Alt G',
-  'PrScr',
-  'PgUp',
-  'PgDn',
-  'BackSpc',
-  'Enter',
-  'Ins',
-  'Del',
-  'Home',
-  'End',
-  'F1',
-  'F2',
-  'F3',
-  'F4',
-  'F5',
-  'F6',
-  'F7',
-  'F8',
-  'F9',
-  'F10',
-  'F11',
-  'F12',
-}
-
-local MODIFIERS = {
-  Control = '#37'
-}
-local function keyname_to_keycode(keyname)
-  --[[
-  by default modifier can't be binded as a hotkey, only as a modifier.
-  but it's possible to bind it if use it's keycode instead of alias,
-  like '#37' instead of 'Control'
-  --]]
-  for k, v in pairs(MODIFIERS) do
-    if k == keyname then return v end
-  end
-  return nil
-end
-
-local function get_mod_table_name(modifiers)
-  local copied = h_table.deepcopy(modifiers)
-  table.sort(copied)
-  return table.concat(copied)
-end
-
-
-local function new_keybutton(key_label, comment, key_group)
-  local obj = {}
-
-  local letter_widget = wibox.widget.textbox()
-  letter_widget:set_markup(markup.big(
-      key_label
-  ))
-  local comment_widget = wibox.widget.textbox()
-  comment_widget:set_font(helpers.font .. " " .. APPEARANCE.comment_font_size)
-  comment_widget:set_text(comment or '')
-
-  local button_layout = wibox.layout.fixed.vertical()
-  button_layout:add(letter_widget)
-  button_layout:add(comment_widget)
-
-  local button_widget = bordered_widget(
-    button_layout, {
-      padding = APPEARANCE.key_padding,
-      margin = APPEARANCE.key_margin,
-  })
-
-  local key_group_bg = nil
-  local key_group_fg = beautiful.bg
-  if key_group then
-    key_group_bg = beautiful.color[key_group]
-  elseif comment then
-    key_group_bg = beautiful.theme
-  elseif h_table.contains(SPECIAL_KEYBUTTONS, key_label) then
-    key_group_bg = "#333333"
-    key_group_fg = "#000000"
-  end
-  if key_group_bg then
-    button_widget:set_bg(key_group_bg)
-    button_widget:set_fg(key_group_fg)
-  end
-
-  setmetatable(obj, { __index = button_widget })
-  return obj
-end
-
-
-local function init_keyboard(modifiers)
-  local modifiers_table_name = get_mod_table_name(modifiers)
-
-  for i, modifier in ipairs(modifiers) do
-    hotkeys.bindings[modifiers_table_name][modifier] = {
-      comment='pressed',
-      group=APPEARANCE.pressed_color_group,
+  },
+  groups = {
+    pressed={
+      name="hold",
+      color=beautiful.color and beautiful.color["2"] or "#aaaabb",
+      modifiers={}
     }
-  end
+  },
+}
+local APPEARANCE = hotkeys.appearance
+local LABELS = hotkey_resources.LABELS
+local SPECIAL_KEYBUTTONS = hotkey_resources.SPECIAL_KEYBUTTONS
+local KEYBOARD = hotkey_resources.KEYBOARD
+local SHIFTED = hotkey_resources.SHIFTED
+local MODIFIERS = hotkey_resources.MODIFIERS
 
-  local keyboard_layout = wibox.layout.flex.vertical()
-  for i1, row in ipairs(KEYBOARD) do
-    local row_layout = wibox.layout.flex.horizontal()
-    for i2, key in ipairs(row) do
-      local hotkey_record = hotkeys.bindings[modifiers_table_name][key] or
-                            { comment=nil, group=nil }
-      row_layout:add(new_keybutton(
-        KEYBOARD_LABELS[i1][i2], hotkey_record.comment, hotkey_record.group
-      ))
-    end
-    keyboard_layout:add(row_layout)
-  end
 
-  return keyboard_layout
+local function join_modifiers(modifiers)
+  if #modifiers<1 then return "no modifiers" end
+  local result = {}
+  for _, modifier in pairs(modifiers) do
+    table.insert(result, LABELS[modifier] or modifier)
+  end
+  table.sort(result, function(a,b) return a>b end)
+  return table.concat(result, '+')
 end
 
+-------------------------------------------------------------------------------
+--{{
+local function create_wibox(modifiers, available_groups)
+  table.sort(available_groups)
 
-local function init_popup(modifiers)
+  local function create_keybutton(key_label, comment, key_group)
+    local obj = {}
+        local letter_widget = wibox.widget.textbox()
+        letter_widget:set_markup(markup.big(key_label))
+        local comment_widget = wibox.widget.textbox()
+        comment_widget:set_font(helpers.font .. " " .. APPEARANCE.comment_font_size)
+        comment_widget:set_text(comment or '')
+      local button_layout = wibox.layout.fixed.vertical()
+      button_layout:add(letter_widget)
+      button_layout:add(comment_widget)
+    local button_widget = bordered_widget(
+      button_layout, {
+        padding = APPEARANCE.key_padding,
+        margin = APPEARANCE.key_margin,
+    })
+    local key_group_bg = nil
+    local key_group_fg = APPEARANCE.button_fg
+    if key_group and hotkeys.groups[key_group] then
+      key_group_bg = hotkeys.groups[key_group].color
+    elseif comment then
+      key_group_bg = APPEARANCE.default_button_bg
+    elseif a_table.hasitem(SPECIAL_KEYBUTTONS, key_label) then
+      key_group_bg = APPEARANCE.special_button_bg
+      key_group_fg = APPEARANCE.special_button_fg
+    end
+    if key_group_bg then
+      button_widget:set_bg(key_group_bg)
+      button_widget:set_fg(key_group_fg)
+    end
+    setmetatable(obj, { __index = button_widget })
+    return obj
+  end
+
+  local function create_legend(active_modifiers_string, available_groups, active_groups)
+
+    local function create_layout_for_group(group_id, group_is_active, active_modifiers_string)
+      local group = hotkeys.groups[group_id]
+      local group_layout = wibox.layout.fixed.vertical()
+      group_layout:add(
+        wibox.widget.textbox(
+          group_is_active
+          and markup.fg(
+            APPEARANCE.alt_fg,
+            markup.bg(group.color, group.name)
+          )
+          or markup.fg(group.color, group.name)
+        )
+      )
+      if group.modifiers then
+        for _, modifier in h_table.spairs(
+            group.modifiers,
+            function(t, a, b) return t[a] < t[b] end
+        ) do
+          group_layout:add(
+            wibox.widget.textbox(
+              modifier == active_modifiers_string
+              and markup.fg(
+                APPEARANCE.alt_fg,
+                markup.bg(group.color, modifier))
+              or modifier
+          ))
+        end
+      end
+      return bordered_widget(
+        group_layout,
+        { padding=APPEARANCE.key_padding }
+      )
+    end
+
+    local legend_layout = wibox.layout.fixed.horizontal()
+    for _, group_id in ipairs(available_groups) do
+      local group_is_active = a_table.hasitem(active_groups, group_id)
+      legend_layout:add(create_layout_for_group(group_id, group_is_active, active_modifiers_string))
+    end
+    -- @TODO: fix it:
+    --local legend_align = wibox.layout.align.horizontal()
+    --legend_align:set_second(legend_layout)
+    --legend_align:set_expand('outside')
+    --return legend_align
+    return legend_layout
+  end
+
+  local function create_keyboard(active_modifiers, available_groups)
+    local active_modifiers_string = join_modifiers(active_modifiers)
+    local hotkeys_for_current_modifier = hotkeys.bindings[active_modifiers_string]
+    local is_shifted = false
+    for _, modifier in ipairs(active_modifiers) do
+      hotkeys_for_current_modifier[modifier] = {
+        comment="pressed",
+        group="pressed",
+      }
+      if modifier == "Shift" then is_shifted=true end
+    end
+    local keyboard_layout = wibox.layout.flex.vertical()
+    local active_groups = {}
+    for _, row in ipairs(KEYBOARD) do
+      local row_layout = wibox.layout.flex.horizontal()
+      for _, key in ipairs(row) do
+        local hotkey_record = hotkeys_for_current_modifier[key]
+        key = LABELS[key] or key
+        if is_shifted then key = SHIFTED[key] or key end
+        if hotkey_record
+          and hotkey_record.group
+          and a_table.hasitem(available_groups, hotkey_record.group)
+        then
+          row_layout:add(create_keybutton(
+            key, hotkey_record.comment, hotkey_record.group
+          ))
+          h_table.list_merge(active_groups, {hotkey_record.group})
+        else
+          row_layout:add(create_keybutton(key, nil, nil))
+        end
+      end
+      keyboard_layout:add(row_layout)
+    end
+    local keyboard_wrapper_layout = wibox.layout.constraint()
+    keyboard_wrapper_layout:set_widget(keyboard_layout)
+    keyboard_wrapper_layout:set_height(APPEARANCE.keyboard_height)
+    keyboard_wrapper_layout:set_strategy('exact')
+    local all_layout = wibox.layout.fixed.vertical()
+    all_layout:add(keyboard_wrapper_layout)
+    local legend_separator = wibox.layout.constraint()
+    legend_separator:set_widget(keyboard_layout)
+    legend_separator:set_height(APPEARANCE.legend_separator)
+    legend_separator:set_strategy('exact')
+    all_layout:add(legend_separator)
+    all_layout:add(
+      create_legend(active_modifiers_string, available_groups, active_groups))
+    return all_layout
+  end
+
   local scrgeom = capi.screen[helpers.get_current_screen()].workarea
   local width = APPEARANCE.width
   local height = APPEARANCE.height
   local x = (scrgeom.width - width) / 2
   local y = (scrgeom.height - height) / 2
-
   local mywibox = wibox({
     ontop = true,
     opacity = beautiful.notification_opacity,
@@ -196,74 +235,118 @@ local function init_popup(modifiers)
     width = width,
   })
   mywibox:set_widget(
-    bordered_widget(init_keyboard(modifiers), {
-      padding = APPEARANCE.key_padding,
-      margin = APPEARANCE.key_margin,
-  }))
-
+    bordered_widget(
+      create_keyboard(modifiers, available_groups),
+      {
+        padding = APPEARANCE.widget_padding,
+        margin = APPEARANCE.border_width,
+        margin_color = APPEARANCE.border_color,
+      }
+    )
+  )
   return mywibox
 end
+--}}
+-------------------------------------------------------------------------------
 
 
-function hotkeys.init(awesome_context)
-  hotkeys.modkey = awesome_context.modkey
-  hotkeys.altkey = awesome_context.altkey
+function hotkeys.add_groups(groups)
+  h_table.merge(hotkeys.groups, groups)
 end
 
 
 function hotkeys.key(modifiers, key, key_press_function, key_release_function,
                      comment, key_group)
-  local patched_key_press_function
 
   if key_press_function == 'show_help' then
     -- {{ that needed if popup is called by modifier itself:
-    local modifiers_to_show = h_table.deepcopy(modifiers)
-    if h_table.contains_key(MODIFIERS, key) then
+    local modifiers_to_show = a_table.clone(modifiers)
+    if h_table.haskey(MODIFIERS, key) then
       table.insert(modifiers_to_show, key)
-      key = keyname_to_keycode(key)
+      key = MODIFIERS[key]
     end
     -- }}
-    patched_key_press_function = function()
+    key_press_function = function()
       hotkeys.show_by_modifiers(modifiers_to_show)
     end
     comment = "show this help"
-  else
-    patched_key_press_function = function(...)
-      hotkeys.popup.visible = false
-      hotkeys.last_visible = false
-      key_press_function(...)
-    end
   end
 
-  local mod_table = get_mod_table_name(modifiers)
+  local mod_table = join_modifiers(modifiers)
   if not hotkeys.bindings[mod_table] then hotkeys.bindings[mod_table] = {} end
   hotkeys.bindings[mod_table][key] = {
     comment=comment,
     group=key_group,
   }
+  if key_group then
+    hotkeys.groups[key_group].modifiers = h_table.list_merge(hotkeys.groups[key_group].modifiers, {mod_table})
+  end
 
-  return awful.key(modifiers, key, patched_key_press_function, key_release_function)
+  if key_press_function or key_release_function then
+    return awful.key(modifiers, key, key_press_function, key_release_function)
+  end
 end
+
 
 function hotkeys.on(modifiers, key, key_press_function, comment, key_group)
   return hotkeys.key(modifiers, key, key_press_function, nil, comment, key_group)
 end
 
+
 function hotkeys.show_by_modifiers(modifiers)
-  if hotkeys.last_modifiers ~= modifiers then
-    local mod_table = get_mod_table_name(modifiers)
-    if not hotkeys.cached_keyboards[mod_table] then
-      hotkeys.cached_keyboards[mod_table] = init_popup(modifiers)
+  local client_name
+  if capi.client.focus then
+    client_name = capi.client.focus.name
+  else
+    client_name = 'no client'
+  end
+  local available_groups = {}
+  for group_name, group in pairs(hotkeys.groups) do
+    if not group.client_name
+      or (group.client_name and client_name:match(group.client_name))
+    then
+      table.insert(available_groups, group_name)
     end
+  end
+  local joined_groups = join_modifiers(available_groups)
+  local mod_table = join_modifiers(modifiers)
+
+  if hotkeys.last_modifiers ~= mod_table
+    or hotkeys.last_groups ~= joined_groups
+  then
+    if not hotkeys.cached_keyboards[mod_table] then
+      hotkeys.cached_keyboards[mod_table] = {}
+    end
+    if not hotkeys.cached_keyboards[mod_table][joined_groups] then
+      hotkeys.cached_keyboards[mod_table][joined_groups] = create_wibox(modifiers, available_groups)
+    end
+    -- old-popup -- is to prevent flickering when switching between them:
     local old_popup = hotkeys.popup
-    hotkeys.popup = hotkeys.cached_keyboards[mod_table]
+    hotkeys.popup = hotkeys.cached_keyboards[mod_table][joined_groups]
     hotkeys.popup.visible = true
     old_popup.visible = false
   else
     hotkeys.popup.visible = not hotkeys.popup.visible
   end
+
+  hotkeys.last_groups = joined_groups
   hotkeys.last_visible = hotkeys.popup.visible
-  hotkeys.last_modifiers = modifiers
+  hotkeys.last_modifiers = mod_table
+
+  local function hide_popup()
+    capi.keygrabber.stop()
+    hotkeys.popup.visible = false
+    hotkeys.last_visible = false
+  end
+
+  capi.keygrabber.run(function(_, key, event)
+    if APPEARANCE.hide_on_key_release then
+      if event == "release" then hide_popup() end
+    else
+      if event == "release" then return end
+      if key then hide_popup() end
+    end
+  end)
 end
 
 return hotkeys
