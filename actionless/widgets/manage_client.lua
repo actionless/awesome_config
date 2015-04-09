@@ -28,7 +28,7 @@ local function worker(args)
   widget.is_managing = false
 
   args.widget = widget
-  widget = common.decorated(args)
+  widget = common.decorated_horizontal(args)
   widget:set_text('X')
   widget:connect_signal(
     "mouse::enter", function ()

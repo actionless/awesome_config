@@ -24,29 +24,49 @@ local common = require("actionless.widgets.common")
 -- @return An imagebox widget configured as a layoutbox.
 local function worker(args)
 
-    local layoutbox = { mt = {} }
+    local layoutbox = {
+        menu = nil,
+        mt = {}
+    }
 
     local args = args or {}
     local fg = args.fg or beautiful.panel_widget_fg or beautiful.bg or "#000000"
     local bg = args.bg or beautiful.panel_widget_bg or beautiful.fg or "#ffffff"
+    local text_mode = args.text_mode or true
     layoutbox.screen = args.screen or 1
 
     layoutbox.n_master = wibox.widget.background()
     layoutbox.n_master:set_widget(textbox())
     layoutbox.layout = wibox.widget.background()
-    local layout_imagebox = imagebox()
-    layout_imagebox:set_resize(beautiful.hidpi or false)
-    layoutbox.layout:set_widget(layout_imagebox)
+
+    layoutbox.imagebox = imagebox()
+    layoutbox.imagebox:set_resize(beautiful.hidpi or false)
+    layoutbox.textbox = textbox()
+    if text_mode then
+        layoutbox.layout:set_widget(layoutbox.textbox)
+    else
+        layoutbox.layout:set_widget(layoutbox.imagebox)
+    end
+
     layoutbox.n_col = wibox.widget.background()
     layoutbox.n_col:set_widget(textbox())
 
-    local widget = common.widget()
-    widget.layout:reset()
-    widget.layout:add(layoutbox.n_master)
-    widget.layout:add(layoutbox.layout)
-    widget.layout:add(layoutbox.n_col)
+    layoutbox.numbers_layout = common.decorated_horizontal({
+        widgets={
+            layoutbox.n_master,
+            wibox.widget.textbox(' '),
+            layoutbox.n_col
+        },
+        left_separators = {},
+        right_separators = {},
+        bg=bg, fg=fg,
+    })
+
     layoutbox.widget = common.decorated({
-        widget = widget,
+        widgets = {
+            layoutbox.numbers_layout,
+            layoutbox.layout,
+        },
         bg=bg, fg=fg,
     })
 
@@ -58,14 +78,13 @@ local function worker(args)
         beautiful["layout_"..layout.name]
       })
     end
-
     local layouts_menu = awful.menu({
         items = layouts_menu_items,
     })
 
-    widget:buttons(awful.util.table.join(
+    layoutbox.widget:buttons(awful.util.table.join(
       awful.button({ }, 1, function ()
-        layouts_menu:show()
+        layoutbox.menu = layouts_menu:toggle()
       end),
       awful.button({ }, 3, function ()
         awful.layout.inc(1) end),
@@ -78,7 +97,8 @@ local function worker(args)
 
     function layoutbox:update_layout()
         local layout = awful.layout.getname(awful.layout.get(self.screen))
-        self.layout.widget:set_image(layout and beautiful["layout_" .. layout])
+        self.imagebox:set_image(layout and beautiful["layout_" .. layout])
+        self.textbox:set_text(layout)
     end
     function layoutbox:update_nmaster(t)
         self.n_master.widget:set_text(tag.getnmaster(t))

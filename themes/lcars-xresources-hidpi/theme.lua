@@ -47,11 +47,11 @@ theme.sans_font = "Sans Bold "..tostring(dpi(10))
 --MISC:
 --
 
-local basic_panel_height = dpi(18)
-theme.panel_padding_bottom = dpi(6)
+theme.basic_panel_height = dpi(18)
+theme.panel_padding_bottom = dpi(3)
 theme.border_width = dpi(3)
-theme.panel_height = basic_panel_height + theme.panel_padding_bottom
-theme.titlebar_height = basic_panel_height + theme.border_width
+theme.panel_height = theme.basic_panel_height + theme.panel_padding_bottom
+theme.titlebar_height = theme.basic_panel_height + theme.border_width
 
 theme.menu_height		= dpi(16)
 theme.menu_width		= dpi(150)
@@ -80,7 +80,11 @@ theme.panel_widget_fg_error = theme.color["15"]
 
 theme.widget_close_bg = theme.tasklist_fg_focus
 
-return create_theme({
+theme = create_theme({
   theme_name=theme_name,
   theme=theme,
 })
+
+--theme.wallpaper_cmd     = "hsetroot -solid \"" .. theme.bg .. "\""
+
+return theme

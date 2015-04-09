@@ -244,8 +244,143 @@ function common.make_separator(separator_character, args)
   return widget
 end
 
+local nlog = require("utils.debug").nlog
+
+
+function common.constraint(args)
+  args = args or {}
+  local strategy = args.strategy or "exact"
+  local result = wibox.layout.constraint()
+  result:set_strategy(strategy)
+  if args.width then
+    result:set_width(args.width)
+  end
+  if args.height then
+    result:set_height(args.height)
+  end
+  return result
+end
+
 
 function common.decorated(args)
+  local decorated = {
+    widget_list = {},
+  }
+
+  args = args or {}
+  decorated.bg = args.bg or beautiful.panel_widget_bg or beautiful.fg or "#ffffff"
+  decorated.fg = args.fg or beautiful.panel_widget_fg or beautiful.bg or "#000000"
+
+  if args.widget then
+    decorated.widget_list = {args.widget}
+  else
+    decorated.widget_list = args.widgets or {common.widget(args)}
+  end
+  decorated.widget = decorated.widget_list[1]
+  -- give set_bg and set_fg methods to ones don't have it:
+  for i, widget in ipairs(decorated.widget_list) do
+    if (decorated.fg and not widget.set_fg) or (decorated.bg and not widget.set_bg) then
+      decorated.widget_list[i] = setmetatable(wibox.widget.background(widget), widget)
+    end
+  end
+
+  decorated.layout = wibox.layout.flex.vertical()
+    decorated.background = wibox.widget.background()
+    decorated.background:set_bg(decorated.bg)
+      local vert_layout = wibox.layout.align.vertical()
+        local horiz_layout = wibox.layout.align.horizontal()
+          decorated.widget_layout = wibox.layout.fixed.vertical()
+        horiz_layout:set_middle(decorated.widget_layout)
+        horiz_layout:set_right(
+          common.constraint({width=beautiful.panel_padding_bottom})
+        )
+      vert_layout:set_top(horiz_layout)
+        local bottom_margin = wibox.widget.background(
+          common.constraint({height=beautiful.panel_padding_bottom}),
+          beautiful.panel_bg
+        )
+      vert_layout:set_bottom(bottom_margin)
+    decorated.background:set_widget(vert_layout)
+  decorated.layout:add(decorated.background)
+
+  setmetatable(decorated.layout, { __index = decorated.widget })
+  setmetatable(decorated,        { __index = decorated.layout })
+
+  --- Set widget color
+  -- @param args. "fg", "bg", "name" - "err", "warn", "b", "f" or 1..16
+  function decorated:set_color(args)
+    args = args or {}
+    local fg = args.fg
+    local bg
+    for _, widget in ipairs(self.widget_list) do
+      widget:set_fg(fg)
+      widget:set_bg(bg)
+    end
+    if bg then 
+      self.background:set_bg(bg)
+    end
+  end
+
+  function decorated:set_bg(bg)
+    return self:set_color({bg=bg})
+  end
+
+  function decorated:set_fg(fg)
+    return self:set_color({fg=fg})
+  end
+
+  --- Make widget invisible
+  function decorated:hide()
+    self.widget_layout:reset()
+  end
+
+  --- Make widget visible again
+  function decorated:show()
+    for _, each_widget in ipairs(self.widget_list) do
+      local horiz_layout = wibox.layout.align.horizontal()
+      horiz_layout:set_right(each_widget)
+      self.widget_layout:add(horiz_layout)
+    end
+  end
+
+  function decorated:set_normal()
+    self:set_color({fg=self.fg, bg=self.bg})
+  end
+
+  function decorated:set_warning()
+    self:set_color({
+      bg=beautiful.panel_widget_bg_warning,
+      fg=beautiful.panel_widget_fg_warning
+    })
+  end
+
+  function decorated:set_error()
+    self:set_color({
+      bg=beautiful.panel_widget_bg_error,
+      fg=beautiful.panel_widget_fg_error
+    })
+  end
+
+  decorated:set_normal()
+  decorated:show()
+  return decorated
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function common.decorated_horizontal(args)
   local decorated = {
     left_separator_widgets = {},
     widget_list = {},

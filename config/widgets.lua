@@ -35,12 +35,13 @@ function widget_loader.init(awesome_context)
   --})
   -- MUSIC
   w.music = widgets.music.widget({
-    update_interval = 5,
-    backends = conf.music_players,
-    music_dir = conf.music_dir,
-    bg = beautiful.widget_music_bg,
-    fg = beautiful.widget_music_fg,
-    force_no_bgimage=true,
+      update_interval = 5,
+      backends = conf.music_players,
+      music_dir = conf.music_dir,
+      --bg = beautiful.widget_music_bg,
+      --fg = beautiful.widget_music_fg,
+      bg = beautiful.color["8"],
+      force_no_bgimage=true,
   })
   -- ALSA volume
   if awesome_context.volume_widget ~= "apw" then
@@ -67,19 +68,16 @@ function widget_loader.init(awesome_context)
 
   -- MEM
   w.mem = widgets.mem({
-    update_interval = 10,
+    update_interval = 2,
     list_length = 20,
-    bg = beautiful.widget_mem_bg,
-    fg = beautiful.widget_mem_fg,
+    --bg = beautiful.color["6"],
     new_top = true,
   })
   -- CPU
   w.cpu = widgets.cpu({
-    update_interval = 5,
+    update_interval = 2,
     cores_number = conf.cpu_cores_num,
     list_length = 20,
-    bg = beautiful.widget_cpu_bg,
-    fg = beautiful.widget_cpu_fg,
     new_top = true,
   })
   -- Sensor
@@ -99,7 +97,9 @@ function widget_loader.init(awesome_context)
   })
 
   -- Textclock
-  w.textclock = awful.widget.textclock("%H:%M")
+  w.textclock = widgets.common.decorated({
+    widget = awful.widget.textclock("%H:%M"),
+  })
   widgets.calendar:attach(w.textclock, {fg=beautiful.theme})
 
 
@@ -133,13 +133,16 @@ function widget_loader.init(awesome_context)
       awful.button({		}, 4, function(t)
         awful.tag.viewprev(awful.tag.getscreen(t)) end)
     )
-    sw.taglist = widgets.common.decorated({
-      widget = awful.widget.taglist(
+    --sw.taglist = widgets.common.decorated_horizontal({
+      --widget = awful.widget.taglist(
+        --s, awful.widget.taglist.filter.all, sw.taglist.buttons
+      --),
+      --bg = beautiful.widget_taglist_bg,
+      --fg = beautiful.widget_taglist_fg,
+    --})
+    sw.taglist = awful.widget.taglist(
         s, awful.widget.taglist.filter.all, sw.taglist.buttons
-      ),
-      bg = beautiful.widget_taglist_bg,
-      fg = beautiful.widget_taglist_fg,
-    })
+    )
 
     -- promptbox
     sw.promptbox = awful.widget.prompt()

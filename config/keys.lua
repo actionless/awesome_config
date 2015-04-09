@@ -415,8 +415,16 @@ local globalkeys = awful.util.table.join(
   hk.on({modkey}, "a",
     revelation,
     "Revelation", UTILS
-  )
+  ),
 
+  hk.on({modkey, altkey}, "p",
+    function()
+      awesome_context.left_panel_visible = not awesome_context.left_panel_visible
+      awesome_context.leftwibox[1].visible = awesome_context.left_panel_visible
+      awful.wibox.stretch(awesome_context.topwibox[1], 1)
+    end,
+    "hide sidebox", UTILS
+  )
 )
 
 awesome_context.clientkeys = awful.util.table.join(

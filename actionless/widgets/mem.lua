@@ -12,7 +12,7 @@ local async      = require("utils.async")
 local h_table      = require("utils.table")
 local h_string      = require("utils.string")
 local parse        = require("utils.parse")
-local common_widget= require("actionless.widgets.common").widget
+local common_widget= require("actionless.widgets.common").decorated
 local newinterval  = require("actionless.helpers").newinterval
 
 -- Memory usage (ignoring caches)
@@ -28,10 +28,8 @@ local function worker(args)
   local fg = args.fg or beautiful.panel_bg or beautiful.bg
   mem.timeout = args.timeout or 0
 
-  mem.widget = common_widget()
+  mem.widget = common_widget(args)
   mem.widget:set_image(beautiful.widget_mem)
-  mem.widget:set_fg(fg)
-  mem.widget:set_bg(bg)
   mem.widget:connect_signal(
     "mouse::enter", function () mem.show_notification() end)
   mem.widget:connect_signal(

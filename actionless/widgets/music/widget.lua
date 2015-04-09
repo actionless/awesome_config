@@ -11,6 +11,7 @@ local setmetatable	= setmetatable
 
 local h_string		= require("utils.string")
 local common_widget	= require("actionless.widgets.common").widget
+local decorated_widget	= require("actionless.widgets.common").decorated
 local markup		= require("utils.markup")
 local async		= require("utils.async")
 
@@ -45,7 +46,8 @@ local function worker(args)
   local fg = args.fg or beautiful.panel_fg or beautiful.fg
   local artist_color      = beautiful.player_artist or fg or beautiful.fg_normal
   local title_color      = beautiful.player_title or fg or beautiful.fg_normal
-  player.widget = common_widget(args)
+  --player.widget = common_widget(args)
+  player.widget = decorated_widget(args)
 
 
   local backend_id = 0
@@ -196,7 +198,8 @@ local function worker(args)
           (beautiful.panel_enbolden_details
             and markup.bold(artist)
             or artist)
-          .. " " ..
+          -- .. " " ..
+          .. "\n" ..
           markup.fg.color(title_color,
             title)
           .. " ")

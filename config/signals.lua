@@ -11,25 +11,15 @@ local signals = {}
 function signals.init(awesome_context)
 
 local function on_client_focus(c)
-<<<<<<< Updated upstream
   local layout = awful.layout.get(c.screen)
-  if c.maximized_horizontal == true and c.maximized_vertical == true then
-=======
   if c.maximized then
->>>>>>> Stashed changes
     -- maximized
     titlebar.remove_border(c)
   elseif awful.client.floating.get(c) then
     -- floating client
     c.border_width = beautiful.border_width
     titlebar.make_titlebar(c)
-<<<<<<< Updated upstream
   elseif layout == awful.layout.suit.floating then
-=======
-    print(awful.client.floating.get(c))
-    print("DEBUG")
-  elseif awful.layout.get(c.screen) == awful.layout.suit.floating then
->>>>>>> Stashed changes
     -- floating layout
     c.border_width = beautiful.border_width
     titlebar.make_titlebar(c)

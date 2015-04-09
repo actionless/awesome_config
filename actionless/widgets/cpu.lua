@@ -10,7 +10,7 @@ local h_string      = require("utils.string")
 local parse = require("utils.parse")
 local helpers = require("actionless.helpers")
 local newinterval = helpers.newinterval
-local common_widget = require("actionless.widgets.common").widget
+local common_widget = require("actionless.widgets.common").decorated
 local async = require("utils.async")
 
 
@@ -31,7 +31,7 @@ local function worker(args)
   cpu.cores_number = args.cores_number or 8
   cpu.timeout = args.timeout or 0
 
-  cpu.widget = common_widget()
+  cpu.widget = common_widget(args)
   cpu.widget:set_image(beautiful.widget_cpu)
   cpu.widget:connect_signal(
     "mouse::enter", function () cpu.show_notification() end)
@@ -127,14 +127,11 @@ local function worker(args)
       "/proc/loadavg",
       "^([0-9.]+) ([0-9.]+) ([0-9.]+) .*")
     if tonumber(cpu.now.la1) > cpu.cores_number * 2 then
-      cpu.widget:set_bg(beautiful.panel_widget_bg_error)
-      cpu.widget:set_fg(beautiful.panel_widget_fg_error)
+      cpu.widget:set_error()
     elseif tonumber(cpu.now.la1) > cpu.cores_number then
-      cpu.widget:set_bg(beautiful.panel_widget_bg_warning)
-      cpu.widget:set_fg(beautiful.panel_widget_fg_warning)
+      cpu.widget:set_warning()
     else
-      cpu.widget:set_fg(fg)
-      cpu.widget:set_bg(bg)
+      cpu.widget:set_normal()
     end
     cpu.widget:set_text(
       string.format(

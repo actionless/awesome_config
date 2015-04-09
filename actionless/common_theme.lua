@@ -150,8 +150,9 @@ function common_theme.generate_theme(theme_dir)
 
   theme.widget_close_bg = "theme.panel_close"
   theme.widget_close_fg = "theme.panel_widget_fg"
-  theme.widget_close_left_decorators = { 'arrl' }
-  theme.widget_close_right_decorators = { 'sq' }
+  --theme.widget_close_left_decorators = { 'arrl' }
+  theme.widget_close_left_decorators = { 'sq', 'sq' }
+  theme.widget_close_right_decorators = { 'sq', 'sq' }
 
   theme.tasklist_font		= "theme.sans_font"
   theme.tasklist_fg_focus	= "theme.alt_bg"
