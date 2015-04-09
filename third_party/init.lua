@@ -10,6 +10,7 @@ local third_party = {
   eminent = require("eminent"),
   revelation = require("revelation"),
   lain = require("lain"),
+  fd_async = require("fd_async"),
 }
 
 return third_party

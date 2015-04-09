@@ -10,6 +10,7 @@ local beautiful    = require("beautiful")
 
 local async      = require("utils.async")
 local h_table      = require("utils.table")
+local h_string      = require("utils.string")
 local parse        = require("utils.parse")
 local common_widget= require("actionless.widgets.common").widget
 local newinterval  = require("actionless.helpers").newinterval
@@ -38,14 +39,15 @@ local function worker(args)
 
   mem.list_len = args.list_length or 10
 
-  local new_top = args.new_top or false
-  mem.command = args.command or
-    new_top and
-    "COLUMNS=512 top -o \\%MEM -b -n 1" ..
-    [[ | awk '{printf "%-5s %-4s %s\n", $1, $8, $11}']]
-    or
-    "COLUMNS=512 top -o \\%MEM -b -n 1" ..
-    [[ | awk '{printf "%-5s %-4s %s\n", $1, $10, $12}']]
+  --local new_top = args.new_top or false
+  --mem.command = args.command or
+    --new_top and
+    --"COLUMNS=512 top -o \\%MEM -b -n 1" ..
+    --[[ | awk '{printf "%-5s %-4s %s\n", $1, $8, $11}']]
+    --or
+    --"COLUMNS=512 top -o \\%MEM -b -n 1" ..
+    --[[ | awk '{printf "%-5s %-4s %s\n", $1, $10, $12}']]
+  mem.command = "top -o \\%MEM -b -n 1 -w 512"
 
   function mem.hide_notification()
     if mem.notification ~= nil then
@@ -65,22 +67,28 @@ local function worker(args)
       font = beautiful.notification_monofont,
       replaces_id = mem.get_notification_id(),
     })
-    async.execute(mem.command, mem.notification_callback)
+    async.execute_ng(mem.command, mem.notification_callback)
   end
 
   function mem.notification_callback(output)
     local notification_id = mem.get_notification_id()
     if not notification_id then return end
     local result = {}
-    for _, line in ipairs(parse.string_to_lines(output)) do
-      local percent, name = line:match("^%d+%s+(.+)%s+(.*)")
-      if percent then
-        percent = percent + 0
-        if result[name] then
-          result[name] = result[name] + percent
-        elseif name then
-          result[name] = percent
-        end
+
+    for _, line in ipairs(
+      h_table.range(
+        parse.string_to_lines(output),
+        14
+      )
+    ) do
+      local values = h_string.split(line, ' ')
+      local percent = values[8]
+      local name = values[11]
+      percent = percent + 0
+      if result[name] then
+        result[name] = result[name] + percent
+      elseif name then
+        result[name] = percent
       end
     end
 

@@ -6,6 +6,7 @@ local naughty      = require("naughty")
 local beautiful    = require("beautiful")
 
 local h_table      = require("utils.table")
+local h_string      = require("utils.string")
 local parse = require("utils.parse")
 local helpers = require("actionless.helpers")
 local newinterval = helpers.newinterval
@@ -48,6 +49,7 @@ local function worker(args)
     [[COLUMNS=512 ]] ..
     [[ top -o \%CPU -b -n 5 -w 512 -d 0.05 ]] ..
     [[ | awk '{if ($9 > 0.0) {printf "%-5s %-4s %s\n", $1, $9, $12}}' ]]
+  cpu.command = "top -o \\%CPU -b -n 1 -w 512 -d 0.05"
 
   function cpu.hide_notification()
     if cpu.notification ~= nil then
@@ -67,7 +69,7 @@ local function worker(args)
       font = beautiful.notification_monofont,
       replaces_id = cpu.get_notification_id(),
     })
-    async.execute(cpu.command, cpu.notification_callback)
+    async.execute_ng(cpu.command, cpu.notification_callback)
   end
 
   function cpu.notification_callback(output)
@@ -75,10 +77,19 @@ local function worker(args)
     if not notification_id then return end
     local result = {}
     local names = {}
-    for _, line in ipairs(parse.string_to_lines(output)) do
-      local pid, percent, name = line:match("^(%d+)%s+(.+)%s+(.*)")
-      if percent and name ~= 'top' then
-        percent = percent + 0
+    for _, line in ipairs(
+      h_table.range(
+        parse.string_to_lines(output),
+        15
+      )
+    ) do
+      --local pid, percent, name = line:match("^(%d+)%s+(.+)%s+(.*)")
+      local values = h_string.split(line, ' ')
+      local pid = values[1]
+      local percent = values[7]
+      local name = values[11]
+      percent = percent + 0
+      if percent and percent ~= 0 and name ~= 'top' then
         if result[pid] then
           result[pid] = (result[pid] + percent)/2
         elseif name then
@@ -95,9 +106,8 @@ local function worker(args)
       counter = counter + 1
       if counter == cpu.list_len then
         break
-      else
-        result_string = result_string .. '\n'
       end
+      result_string = result_string .. '\n'
     end
     if result_string ~= '' then
       result_string = "  PID  %CPU COMMAND\n" .. result_string

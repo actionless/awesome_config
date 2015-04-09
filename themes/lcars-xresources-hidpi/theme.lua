@@ -58,8 +58,9 @@ theme.menu_width		= dpi(150)
 theme.menu_border_color = "theme.color.1"
 
 
-theme.taglist_squares_sel       = "theme.null"
-theme.taglist_squares_unsel     = "theme.null"
+--theme.taglist_squares_sel       = "theme.null"
+--theme.taglist_squares_unsel     = "theme.null"
+theme.taglist_fg_focus		= "theme.theme"
 
 theme.titlebar_fg_focus		= "theme.titlebar_border"
 theme.titlebar_bg_focus		= "theme.titlebar_focus_border"
