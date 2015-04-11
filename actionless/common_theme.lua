@@ -128,6 +128,9 @@ function common_theme.generate_theme(theme_dir)
   theme.panel_padding_bottom	= 6
   theme.panel_enbolden_details	= false
 
+
+  theme.left_panel_width = 120
+
   -- PANEL COLORS:
   --
   theme.panel_taglist = "theme.color.7"

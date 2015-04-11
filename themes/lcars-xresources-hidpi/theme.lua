@@ -53,6 +53,8 @@ theme.border_width = dpi(3)
 theme.panel_height = theme.basic_panel_height + theme.panel_padding_bottom
 theme.titlebar_height = theme.basic_panel_height + theme.border_width
 
+theme.left_panel_width = dpi(120)
+
 theme.menu_height		= dpi(16)
 theme.menu_width		= dpi(150)
 theme.menu_border_color = "theme.color.1"
@@ -60,7 +62,7 @@ theme.menu_border_color = "theme.color.1"
 
 --theme.taglist_squares_sel       = "theme.null"
 --theme.taglist_squares_unsel     = "theme.null"
-theme.taglist_fg_focus		= "theme.theme"
+--theme.taglist_fg_focus		= "theme.theme"
 
 theme.titlebar_fg_focus		= "theme.titlebar_border"
 theme.titlebar_bg_focus		= "theme.titlebar_focus_border"

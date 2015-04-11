@@ -7,12 +7,14 @@ local capi = {
   screen = screen,
   client = client,
 }
+local cairo        = require( "lgi"            ).cairo
 
 local widgets = require("actionless.widgets")
 local common = require("actionless.widgets.common")
 local make_separator = common.make_separator
 
 local dpi = require("actionless.xresources").compute_fontsize
+local assets = require("config.toolbar_assets")
 
 local toolbar = {}
 
@@ -30,6 +32,7 @@ function toolbar.init(awesome_context)
   -- Create a wibox for each screen and add it
   local leftwibox = {}
   local topwibox = {}
+  local internal_corner_wibox = {}
   for s = 1, capi.screen.count() do
 
     -- top side
@@ -109,49 +112,9 @@ function toolbar.init(awesome_context)
       top_panel_layout = margined_layout
     end
 
-local cairo        = require( "lgi"            ).cairo
-
-local left_panel_width = dpi(120)
 
     if true then -- namespace
-      local top_left_corner_image = wibox.layout.constraint()
-      top_left_corner_image:set_strategy('exact')
-        local top_left_corner_imagebox = wibox.widget.imagebox(beautiful.decoration_top_left_corner)
-          local radius = left_panel_width / 2
-          local img = cairo.ImageSurface(cairo.Format.ARGB32, left_panel_width, radius)
-          local cr = cairo.Context(img)
-          --cr:set_source(gears.color(beautiful.panel_widget_fg))
-          --cr:paint()
-          cr:set_source(gears.color(beautiful.panel_widget_bg))
-          --[[cr:set_antialias(cairo.Antialias.NONE)]]
-          cr:save()
-          cr:arc(
-            radius,
-            radius,
-            radius,
-            math.pi,
-            3*(math.pi/2)
-          )
-          cr:arc(
-            radius,
-            0,
-            radius,
-            math.pi,
-            3*(math.pi/2)
-          )
-          cr:arc(
-            radius*2,
-            radius,
-            radius,
-            3*(math.pi/2),
-            math.pi
-          )
-          --cr:close_path()
-          --cr:restore()
-          cr:fill()
-        top_left_corner_imagebox:set_image(img)
-      top_left_corner_image:set_widget(top_left_corner_imagebox)
-
+      top_left_corner_image = assets.top_left_corner_image()
 
       local top_left_corner_border = wibox.layout.constraint()
       top_left_corner_border:set_strategy('exact')
@@ -175,49 +138,7 @@ local left_panel_width = dpi(120)
       const:set_strategy("exact")
       const:set_width(beautiful.panel_padding_bottom)
         local internal_corner_radius = dpi(30)
-        local internal_corner_wibox = wibox({})
-        internal_corner_wibox.height = internal_corner_radius
-        internal_corner_wibox.width  = internal_corner_radius
-        internal_corner_wibox.x = left_panel_width - beautiful.panel_padding_bottom
-        internal_corner_wibox.y = beautiful.basic_panel_height
-        internal_corner_wibox.ontop  = true
-        internal_corner_wibox.visible  = true
-        local internal_corner_imagebox = wibox.widget.imagebox()
-          local img = cairo.ImageSurface(cairo.Format.ARGB32, internal_corner_radius, internal_corner_radius)
-          local cr = cairo.Context(img)
-          cr:save()
-
-          local border_radius = internal_corner_radius + beautiful.panel_padding_bottom
-          cr.line_width = beautiful.panel_padding_bottom * 2
-          cr:set_source(gears.color(beautiful.panel_widget_fg))
-          cr:move_to(0, border_radius)
-          cr:line_to(0, 0)
-          cr:line_to(border_radius, 0)
-          cr:curve_to(
-            border_radius, 0,
-            0, 0,
-            0, border_radius
-          )
-          cr:stroke()
-          cr:fill()
-
-          cr:set_source(gears.color(beautiful.panel_widget_bg))
-          cr.line_width = 1
-          cr:move_to(0, internal_corner_radius)
-          cr:line_to(0, 0)
-          cr:line_to(internal_corner_radius, 0)
-          cr:curve_to(
-            internal_corner_radius, 0,
-            0, 0,
-            0, internal_corner_radius
-          )
-          cr:close_path()
-          cr:fill_preserve()
-          cr:stroke()
-        internal_corner_imagebox:set_image(img)
-        internal_corner_wibox:set_widget(internal_corner_imagebox)
-        --internal_corner_wibox:set_widget(wibox.widget.textbox('test'))
-        internal_corner_wibox.shape_bounding = img._native
+        internal_corner_wibox[s] = assets.internal_corner_wibox(internal_corner_radius)
       local rounding_decoration = wibox.layout.fixed.vertical()
       rounding_decoration:add(horiz_placeholder_bg)
       rounding_decoration:add(const)
@@ -232,7 +153,7 @@ local left_panel_width = dpi(120)
       position = "left",
       screen = s,
       --height = beautiful.panel_height,
-      width = left_panel_width,
+      width = beautiful.left_panel_width,
     })
     leftwibox[s]:set_widget(left_panel_layout)
     leftwibox[s].opacity = beautiful.panel_opacity
@@ -249,11 +170,14 @@ local left_panel_width = dpi(120)
     topwibox[s]:set_bg(beautiful.panel_bg)
     topwibox[s]:set_fg(beautiful.panel_fg)
 
+    internal_corner_wibox[s].visible = true
 
   end
 
   awesome_context.topwibox = topwibox
   awesome_context.leftwibox = leftwibox
+  awesome_context.internal_corner_wibox = internal_corner_wibox
+
   awesome_context.left_panel_visible = true
 
 end
