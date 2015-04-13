@@ -68,6 +68,7 @@ local function worker(args)
       timeout = cpu.timeout,
       font = beautiful.notification_monofont,
       replaces_id = cpu.get_notification_id(),
+      position = beautiful.widget_notification_position,
     })
     async.execute(cpu.command, cpu.notification_callback)
   end
@@ -119,6 +120,7 @@ local function worker(args)
       timeout = cpu.timeout,
       font = beautiful.notification_monofont,
       replaces_id = cpu.get_notification_id(),
+      position = beautiful.widget_notification_position,
     })
   end
 

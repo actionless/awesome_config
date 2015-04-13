@@ -39,6 +39,7 @@ theme.widget_decoration_arrr = ''
 
 -- FONTS:
 theme.font = "Monospace Bold "..tostring(dpi(10))
+theme.small_font = "Monospace "..tostring(dpi(7))
 theme.sans_font = "Sans Bold "..tostring(dpi(10))
 -- Don't use sans font:
 --theme.sans_font	= "theme.font"
@@ -54,6 +55,7 @@ theme.panel_height = theme.basic_panel_height + theme.panel_padding_bottom
 theme.titlebar_height = theme.basic_panel_height + theme.border_width
 
 theme.left_panel_width = dpi(120)
+theme.left_widget_min_height = dpi(120)
 
 theme.menu_height		= dpi(16)
 theme.menu_width		= dpi(150)
@@ -79,6 +81,9 @@ theme.warning = theme.color["2"]
 
 theme.panel_widget_bg_error = theme.color["1"]
 theme.panel_widget_fg_error = theme.color["15"]
+
+theme.widget_music_bg = "theme.color.11"
+theme.widget_music_fg = "theme.bg"
 
 theme.widget_close_bg = theme.tasklist_fg_focus
 

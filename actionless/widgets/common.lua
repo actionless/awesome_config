@@ -22,10 +22,6 @@ local common = {}
 function common.widget(args)
   args = args or {}
 
-  local bgimage_normal = beautiful.widget_decoration_image_bg
-  local bgimage_warning = beautiful.widget_decoration_image_bg_warning
-  local bgimage_error = beautiful.widget_decoration_image_bg_error
-
   local show_icon = args.show_icon or beautiful.show_widget_icon
   local use_iconfont = args.use_iconfont or beautiful.use_iconfont
   local force_no_bgimage = args.force_no_bgimage or false
@@ -115,6 +111,7 @@ function common.widget(args)
     widget.widget_bg:set_bgimage(bgimage_normal)
   end
 
+  setmetatable(widget.widget_bg, { __index = widget.text_widget })
   return setmetatable(widget, { __index = widget.widget_bg })
 end
 
@@ -258,6 +255,9 @@ function common.constraint(args)
   if args.height then
     result:set_height(args.height)
   end
+  if args.widget then
+    result:set_widget(args.widget)
+  end
   return result
 end
 
@@ -317,28 +317,38 @@ function common.decorated(args)
   decorated.widget = decorated.widget_list[1]
   -- give set_bg and set_fg methods to ones don't have it:
   for i, widget in ipairs(decorated.widget_list) do
+    if widget.set_align then
+      widget:set_align("right")
+      widget:set_valign("top")
+      widget:set_wrap("word")
+      --widget:set_wrap("char")
+    end
     if (decorated.fg and not widget.set_fg) or (decorated.bg and not widget.set_bg) then
       decorated.widget_list[i] = setmetatable(wibox.widget.background(widget), widget)
     end
   end
 
+  decorated.widget_layout = wibox.layout.fixed.vertical()
+
+  decorated.background =wibox.widget.background(
+    common.constraint({
+      widget = common.align.vertical(
+          common.align.horizontal(
+              nil,
+              decorated.widget_layout,
+              common.constraint({width=beautiful.panel_padding_bottom})
+          ),
+          nil,
+          wibox.widget.background(
+              common.constraint({height=beautiful.panel_padding_bottom}),
+              beautiful.panel_bg
+          )
+      ),
+    height = beautiful.left_widget_min_height}),
+    decorated.bg
+  )
+
   decorated.layout = wibox.layout.flex.vertical()
-    decorated.background = wibox.widget.background()
-    decorated.background:set_bg(decorated.bg)
-      local vert_layout = wibox.layout.align.vertical()
-        local horiz_layout = wibox.layout.align.horizontal()
-          decorated.widget_layout = wibox.layout.fixed.vertical()
-        horiz_layout:set_middle(decorated.widget_layout)
-        horiz_layout:set_right(
-          common.constraint({width=beautiful.panel_padding_bottom})
-        )
-      vert_layout:set_top(horiz_layout)
-        local bottom_margin = wibox.widget.background(
-          common.constraint({height=beautiful.panel_padding_bottom}),
-          beautiful.panel_bg
-        )
-      vert_layout:set_bottom(bottom_margin)
-    decorated.background:set_widget(vert_layout)
   decorated.layout:add(decorated.background)
 
   setmetatable(decorated.layout, { __index = decorated.widget })
@@ -349,12 +359,12 @@ function common.decorated(args)
   function decorated:set_color(args)
     args = args or {}
     local fg = args.fg
-    local bg
+    local bg = args.bg
     for _, widget in ipairs(self.widget_list) do
       widget:set_fg(fg)
       widget:set_bg(bg)
     end
-    if bg then 
+    if bg then
       self.background:set_bg(bg)
     end
   end
@@ -396,6 +406,13 @@ function common.decorated(args)
     self:set_color({
       bg=beautiful.panel_widget_bg_error,
       fg=beautiful.panel_widget_fg_error
+    })
+  end
+
+  function decorated:set_disabled()
+    self:set_color({
+      bg=beautiful.panel_widget_bg_disabled,
+      fg=beautiful.panel_widget_fg_disabled
     })
   end
 

@@ -65,11 +65,20 @@ function toolbar.init(awesome_context)
 
 
     -- INDICATORS LEFT PANEL
-    local left_panel_layout = common.flex.vertical({
+    local left_panel_layout = common.fixed.vertical({
       loaded_widgets.textclock,
       loaded_widgets.screen[s].layoutbox,
-      loaded_widgets.music,
-      loaded_widgets.volume,
+      common.constraint({
+        widget=loaded_widgets.music,
+        height=dpi(180)
+      }),
+      common.fixed.vertical({
+        common.constraint({
+          widget=loaded_widgets.volume,
+          height=dpi(80)
+        }),
+        common.constraint({height=beautiful.panel_padding_bottom})
+      }),
       loaded_widgets.mem,
       loaded_widgets.cpu,
       loaded_widgets.temp,

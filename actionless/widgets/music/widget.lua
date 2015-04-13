@@ -4,14 +4,16 @@
 --]]
 
 local awful		= require("awful")
+local wibox	= require("wibox")
 local naughty		= require("naughty")
 local beautiful		= require("beautiful")
 local string		= { format	= string.format }
 local setmetatable	= setmetatable
 
 local h_string		= require("utils.string")
-local common_widget	= require("actionless.widgets.common").widget
-local decorated_widget	= require("actionless.widgets.common").decorated
+local common = require("actionless.widgets.common")
+local common_widget	= common.widget
+local decorated_widget	= common.decorated
 local markup		= require("utils.markup")
 local async		= require("utils.async")
 
@@ -42,11 +44,18 @@ local function worker(args)
   local enabled_backends = args.backends
                            or { 'mpd', 'cmus', 'spotify', 'clementine', }
   local cover_size = args.cover_size or 100
-  local font = args.font or beautiful.tasklist_font or beautiful.font
   local fg = args.fg or beautiful.panel_fg or beautiful.fg
-  local artist_color      = beautiful.player_artist or fg or beautiful.fg_normal
-  local title_color      = beautiful.player_title or fg or beautiful.fg_normal
-  --player.widget = common_widget(args)
+  local artist_color      = fg or beautiful.player_artist or fg or beautiful.fg_normal
+  local title_color      = fg or beautiful.player_title or fg or beautiful.fg_normal
+  --player.artist_widget = common_widget(args)
+  --player.title_widget = common_widget(args)
+  player.artist_widget = wibox.widget.textbox()
+  player.title_widget = wibox.widget.textbox()
+  args.widgets = {
+    player.artist_widget,
+    common.constraint({height = beautiful.panel_padding_bottom }),
+    player.title_widget,
+  }
   player.widget = decorated_widget(args)
 
 
@@ -112,7 +121,8 @@ local function worker(args)
       icon = player.cover,
       title = ps.title,
       text = text,
-      timeout = timeout
+      timeout = timeout,
+      position = beautiful.widget_notification_position,
     })
   end
 -------------------------------------------------------------------------------
@@ -158,60 +168,48 @@ local function worker(args)
     local artist = ""
     local title = ""
     local old_title = player.player_status.title
-    player_status = tag_parser.predict_missing_tags(player_status)
+    --player_status = tag_parser.predict_missing_tags(player_status)
     player.player_status = player_status
 
     if player_status.state == "play" then
       -- playing
       artist = player_status.artist or "playing"
       title = player_status.title or " "
-      player.widget:set_icon('music_play')
-      if #artist + #title > 60 then
-        if #artist > 25 then
-          artist = h_string.max_length(artist, 15) .. "…"
-        end
-        if #player_status.title > 35 then
-          title = h_string.max_length(title, 25) .. "…"
-        end
-      end
+      --player.widget:set_icon('music_play')
+      --if #artist + #title > 60 then
+        --if #artist > 25 then
+          --artist = h_string.max_length(artist, 15) .. "…"
+        --end
+        --if #player_status.title > 35 then
+          --title = h_string.max_length(title, 25) .. "…"
+        --end
+      --end
       artist = h_string.escape(artist)
       title = h_string.escape(title)
       -- playing new song
       if player_status.title ~= old_title then
         player.resize_cover()
       end
+      player.widget:set_normal()
     elseif player_status.state == "pause" then
       -- paused
       artist = enabled_backends[backend_id]
       title  = "paused"
-      player.widget:set_icon('music_pause')
+      --player.widget:set_icon('music_pause')
+      player.widget:set_warning()
     else
       -- stop
       artist = enabled_backends[backend_id]
+      title = "stopped"
+      player.widget:set_disabled()
     end
 
-    if player_status.state == "play" or player_status.state == "pause" then
-      artist = markup.fg.color(artist_color, artist)
-      player.widget:set_markup(
-        markup.font(font,
-           " " ..
-          (beautiful.panel_enbolden_details
-            and markup.bold(artist)
-            or artist)
-          -- .. " " ..
-          .. "\n" ..
-          markup.fg.color(title_color,
-            title)
-          .. " ")
-      )
-    else
-      if beautiful.show_widget_icon then
-        player.widget:set_icon('music_stop')
-        player.widget:set_text('')
-      else
-        player.widget:set_text('♫')
-      end
-    end
+    player.artist_widget:set_markup(
+        beautiful.panel_enbolden_details
+          and markup.bold(artist)
+          or artist
+    )
+    player.title_widget:set_markup(title)
   end
 -------------------------------------------------------------------------------
 function player.resize_cover()

@@ -75,8 +75,9 @@ function common_theme.generate_theme(theme_dir)
   --theme.font = "Meslo LG S for Lcarsline Bold 10.5"
   --theme.sans_font = "PT Sans Bold 10.3"
   -- use ~/.fonts.conf, Luke ;)
-  theme.font = "Monospace Bold 10.5"
-  theme.sans_font = "Sans Bold 10.3"
+  theme.font = "Monospace Bold 10"
+  theme.small_font = "Monospace 6"
+  theme.sans_font = "Sans Bold 10"
   -- Don't use sans font:
   --theme.sans_font	= theme.font
 
@@ -122,6 +123,8 @@ function common_theme.generate_theme(theme_dir)
   theme.panel_widget_fg_warning	= "theme.bg"
   theme.panel_widget_bg_error 	= "theme.error"
   theme.panel_widget_fg_error 	= "theme.bg"
+  theme.panel_widget_bg_disabled = "theme.color.8"
+  theme.panel_widget_fg_disabled = "theme.bg"
   --theme.panel_opacity		= 0.96
   theme.panel_opacity		= 0.92
   theme.panel_height		= 24
@@ -130,6 +133,8 @@ function common_theme.generate_theme(theme_dir)
 
 
   theme.left_panel_width = 120
+  theme.left_widget_min_height = 120
+  theme.widget_notification_position = "top_left"
 
   -- PANEL COLORS:
   --

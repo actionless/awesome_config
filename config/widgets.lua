@@ -38,9 +38,8 @@ function widget_loader.init(awesome_context)
       update_interval = 5,
       backends = conf.music_players,
       music_dir = conf.music_dir,
-      --bg = beautiful.widget_music_bg,
-      --fg = beautiful.widget_music_fg,
-      bg = beautiful.color["8"],
+      bg = beautiful.widget_music_bg,
+      fg = beautiful.widget_music_fg,
       force_no_bgimage=true,
   })
   -- ALSA volume
@@ -100,7 +99,7 @@ function widget_loader.init(awesome_context)
   w.textclock = widgets.common.decorated({
     widget = awful.widget.textclock("%H:%M"),
   })
-  widgets.calendar:attach(w.textclock, {fg=beautiful.theme})
+  widgets.calendar:attach(w.textclock, {fg=beautiful.theme, position="top_left"})
 
 
   w.screen = {}

@@ -78,4 +78,13 @@ function string_helpers.multiline_limit(unicode_string, max_length)
   return result
 end
 
+function string_helpers.fix_unicode(unicode_string)
+  if not unicode_string then return nil end
+  local line = ''
+  for uchar in string.gmatch(unicode_string, '([%z\1-\127\194-\244][\128-\191]*)') do
+    line = line .. uchar
+  end
+  return line
+end
+
 return string_helpers
