@@ -6,7 +6,7 @@ local gears = require("gears")
 local assets = {}
 
 function assets.top_left_corner_image()
-  local top_left_corner_imagebox = wibox.widget.imagebox(beautiful.decoration_top_left_corner)
+  local top_left_corner_imagebox = wibox.widget.imagebox()
   local radius = beautiful.left_panel_width / 2
   local img = cairo.ImageSurface(cairo.Format.ARGB32, beautiful.left_panel_width, radius)
   local cr = cairo.Context(img)
@@ -43,6 +43,7 @@ function assets.internal_corner_wibox(internal_corner_radius)
   w.width  = internal_corner_radius
   w.x = beautiful.left_panel_width - beautiful.panel_padding_bottom
   w.y = beautiful.basic_panel_height
+  w.opacity = beautiful.panel_opacity
   local internal_corner_imagebox = wibox.widget.imagebox()
   local img = cairo.ImageSurface(cairo.Format.ARGB32, internal_corner_radius, internal_corner_radius)
   local cr = cairo.Context(img)
