@@ -262,6 +262,44 @@ function common.constraint(args)
 end
 
 
+local function init_list_layout(layout, widgets)
+  widgets = widgets or {}
+  for _, widget in ipairs(widgets) do
+    layout:add(widget)
+  end
+  return layout
+end
+common.fixed = {}
+function common.fixed.horizontal(widgets)
+  return init_list_layout(wibox.layout.fixed.horizontal(), widgets)
+end
+function common.fixed.vertical(widgets)
+  return init_list_layout(wibox.layout.fixed.vertical(), widgets)
+end
+common.flex = {}
+function common.flex.horizontal(widgets)
+  return init_list_layout(wibox.layout.flex.horizontal(), widgets)
+end
+function common.flex.vertical(widgets)
+  return init_list_layout(wibox.layout.flex.vertical(), widgets)
+end
+
+common.align = {}
+function common.align.init(layout, first, second, third)
+  layout:set_first(first)
+  layout:set_second(second)
+  layout:set_third(third)
+  return layout
+end
+function common.align.horizontal(...)
+  return common.align.init(wibox.layout.align.horizontal(), ...)
+end
+function common.align.vertical(...)
+  return common.align.init(wibox.layout.align.vertical(), ...)
+end
+
+
+
 function common.decorated(args)
   local decorated = {
     widget_list = {},

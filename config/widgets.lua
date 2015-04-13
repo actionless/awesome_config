@@ -25,14 +25,14 @@ function widget_loader.init(awesome_context)
   })
 
   -- NetCtl
-  --w.netctl = widgets.netctl({
-    --update_interval = 5,
-    --preset = conf.net_preset,
-    --wlan_if = conf.wlan_if,
-    --eth_if = conf.eth_if,
-    --bg = beautiful.widget_netctl_bg,
-    --fg = beautiful.widget_netctl_fg,
-  --})
+  w.netctl = widgets.netctl({
+    update_interval = 5,
+    preset = conf.net_preset,
+    wlan_if = conf.wlan_if,
+    eth_if = conf.eth_if,
+    bg = beautiful.widget_netctl_bg,
+    fg = beautiful.widget_netctl_fg,
+  })
   -- MUSIC
   w.music = widgets.music.widget({
       update_interval = 5,
@@ -44,7 +44,9 @@ function widget_loader.init(awesome_context)
       force_no_bgimage=true,
   })
   -- ALSA volume
-  if awesome_context.volume_widget ~= "apw" then
+  if awesome_context.volume_widget == "apw" then
+    w.volume = require("third_party/apw/widget")
+  else
     w.volume = widgets.alsa({
       update_interval = 5,
       step=2,
@@ -55,8 +57,6 @@ function widget_loader.init(awesome_context)
       left_separators = { 'arrl' },
       right_separators = { 'sq' }
     })
-  else
-    w.volume = require("third_party/apw/widget")
   end
 
   -- systray_toggle
