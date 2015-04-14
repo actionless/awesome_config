@@ -58,7 +58,7 @@ function string_helpers.max_length(unicode_string, max_length)
   return result
 end
 
-function string_helpers.multiline_limit(unicode_string, max_length)
+function string_helpers.multiline_limit(unicode_string, max_length) --char
   if not unicode_string then return nil end
   local result = ''
   local line = ''
@@ -75,6 +75,23 @@ function string_helpers.multiline_limit(unicode_string, max_length)
   if counter > 0 then
       result = result .. line .. string.rep(' ', max_length - string_helpers.getn(line))
   end
+  return result
+end
+function string_helpers.multiline_limit_word(unicode_string, max_length)
+  local words = string_helpers.split(unicode_string, ' ')
+
+  local result = ''
+  local counter = 0
+  local line = ''
+  for _, word in ipairs(words) do
+    if #word + #line + 1 > max_length and #line>0 then
+      result = result .. line .. '\n'
+      line = ''
+    end
+    line = line .. ' ' .. word
+      --local subwords = string_helpers.multiline_limit(word, max_length)
+  end
+  result = result .. line
   return result
 end
 

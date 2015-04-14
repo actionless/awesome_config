@@ -204,6 +204,8 @@ local function worker(args)
       player.widget:set_disabled()
     end
 
+    artist = h_string.multiline_limit_word(artist, 14)
+    title = h_string.multiline_limit_word(title, 14)
     player.artist_widget:set_markup(
         beautiful.panel_enbolden_details
           and markup.bold(artist)
