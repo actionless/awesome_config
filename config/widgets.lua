@@ -9,7 +9,10 @@ local capi = {
 
 local helpers = require("actionless.helpers")
 local widgets = require("actionless.widgets")
+local common = widgets.common
 local tasklist_addon = require("actionless.tasklist_addon")
+
+local dpi = require("actionless.xresources").compute_fontsize
 
 
 local widget_loader = {}
@@ -44,7 +47,13 @@ function widget_loader.init(awesome_context)
   })
   -- ALSA volume
   if awesome_context.volume_widget == "apw" then
-    w.volume = require("third_party/apw/widget")
+    w.volume = common.fixed.vertical({
+      common.constraint({
+        widget=require("third_party/apw/widget"),
+        height=dpi(80)
+      }),
+      common.constraint({height=beautiful.panel_padding_bottom})
+    })
   else
     w.volume = widgets.alsa({
       update_interval = 5,

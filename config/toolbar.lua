@@ -72,13 +72,7 @@ function toolbar.init(awesome_context)
         widget=loaded_widgets.music,
         height=dpi(180)
       }),
-      common.fixed.vertical({
-        common.constraint({
-          widget=loaded_widgets.volume,
-          height=dpi(80)
-        }),
-        common.constraint({height=beautiful.panel_padding_bottom})
-      }),
+      loaded_widgets.volume,
       loaded_widgets.mem,
       loaded_widgets.cpu,
       loaded_widgets.temp,
