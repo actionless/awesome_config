@@ -301,11 +301,16 @@ end
 
 
 function common.decorated(args)
+  args = args or {}
+
+  if args.horizontal or args.orientation == "horizontal" then
+    return common.decorated_horizontal(args)
+  end
+
   local decorated = {
     widget_list = {},
   }
 
-  args = args or {}
   decorated.bg = args.bg or beautiful.panel_widget_bg or beautiful.fg or "#ffffff"
   decorated.fg = args.fg or beautiful.panel_widget_fg or beautiful.bg or "#000000"
   local valign = args.valign or "top"
