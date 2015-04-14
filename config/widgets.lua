@@ -24,7 +24,9 @@ function widget_loader.init(awesome_context)
 
   -- Keyboard layout widget
   w.kbd = widgets.kbd({
-    bg = beautiful.warning
+    bg = beautiful.warning,
+    left_separators = {'sq'},
+    right_separators = {'sq'},
   })
 
   -- NetCtl
@@ -240,7 +242,7 @@ function widget_loader.init(awesome_context)
       screen = s,
       bg = beautiful.widget_layoutbox_bg,
       fg = beautiful.widget_layoutbox_fg,
-      valign = "bottom",
+      --valign = "bottom",
     })
 
   end

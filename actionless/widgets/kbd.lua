@@ -15,11 +15,11 @@ local function worker(args)
   local args	 = args or {}
   local bg = args.bg or beautiful.panel_widget_bg_warning or beautiful.fg
   local fg = args.fg or beautiful.panel_widget_fg_warning or beautiful.bg
+  args.orientation = args.orientation or "horizontal"
   local layouts = args.layouts or {"eng", "rus"}
   local default_layout = args.default_layout or "eng"
-  kbd.widget = common.decorated({
-    widget=kbd.widget, bg=bg, fg=fg, widget_inverted=true,
-  })
+  args.widget=kbd.widget
+  kbd.widget = common.decorated(args)
   kbd.widget:hide()
 
   dbus.request_name("session", "ru.gentoo.kbdd")

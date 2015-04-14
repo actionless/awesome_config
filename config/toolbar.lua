@@ -45,6 +45,7 @@ function toolbar.init(awesome_context)
         loaded_widgets.screen[s].close_button,
         separator,
         loaded_widgets.kbd,
+        separator,
         loaded_widgets.screen[s].promptbox,
         separator
       }),
@@ -88,13 +89,11 @@ function toolbar.init(awesome_context)
     end
 
     -- bottom panel padding:
-    if beautiful.panel_padding_bottom then
-      top_panel_layout = common.align.vertical(
-        nil,
-        top_panel_layout,
-        common.constraint({height=beautiful.panel_padding_bottom})
-      )
-    end
+    top_panel_layout = common.align.vertical(
+      nil,
+      top_panel_layout,
+      common.constraint({height=beautiful.panel_padding_bottom})
+    )
 
 
     left_panel_layout = common.align.horizontal(
