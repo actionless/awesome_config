@@ -97,12 +97,14 @@ function widget_loader.init(awesome_context)
     fg = beautiful.widget_temp_fg,
   })
   -- Battery
-  w.bat = widgets.bat({
-    update_interval = 30,
-    bg = beautiful.widget_bat_bg,
-    fg = beautiful.widget_bat_fg,
-    show_when_charged=false,
-  })
+  if awesome_context.have_battery then
+    w.bat = widgets.bat({
+      update_interval = 30,
+      bg = beautiful.widget_bat_bg,
+      fg = beautiful.widget_bat_fg,
+      show_when_charged=false,
+    })
+  end
 
   -- Textclock
   w.textclock = widgets.common.decorated({

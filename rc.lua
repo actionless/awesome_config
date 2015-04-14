@@ -46,7 +46,8 @@ context = {
   widgets = {},
   menu = {},
 
-  volume_widget = "noapw",
+  volume_widget = "apw",
+  have_battery = true,
 }
 
 local local_settings_result, local_settings_details = pcall(function()
