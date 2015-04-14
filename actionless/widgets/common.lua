@@ -308,6 +308,7 @@ function common.decorated(args)
   args = args or {}
   decorated.bg = args.bg or beautiful.panel_widget_bg or beautiful.fg or "#ffffff"
   decorated.fg = args.fg or beautiful.panel_widget_fg or beautiful.bg or "#000000"
+  local valign = args.valign or "top"
 
   if args.widget then
     decorated.widget_list = {args.widget}
@@ -330,21 +331,41 @@ function common.decorated(args)
 
   decorated.widget_layout = wibox.layout.fixed.vertical()
 
-  decorated.background =wibox.widget.background(
-    common.constraint({
-      widget = common.align.vertical(
+  if valign == "top" then
+    decorated.internal_widget_layout = common.align.vertical(
+        common.align.horizontal(
+            nil,
+            decorated.widget_layout,
+            common.constraint({width=beautiful.panel_padding_bottom})
+        ),
+        nil,
+        wibox.widget.background(
+            common.constraint({height=beautiful.panel_padding_bottom}),
+            beautiful.panel_bg
+        )
+    )
+  elseif valign == "bottom" then
+    decorated.internal_widget_layout = common.align.vertical(
+        nil,
+        nil,
+        common.fixed.vertical({
           common.align.horizontal(
               nil,
               decorated.widget_layout,
               common.constraint({width=beautiful.panel_padding_bottom})
           ),
-          nil,
           wibox.widget.background(
               common.constraint({height=beautiful.panel_padding_bottom}),
               beautiful.panel_bg
           )
-      ),
-    height = beautiful.left_widget_min_height}),
+        })
+    )
+  end
+  decorated.background =wibox.widget.background(
+    common.constraint({
+      widget = decorated.internal_widget_layout,
+      height = beautiful.left_widget_min_height
+    }),
     decorated.bg
   )
 
