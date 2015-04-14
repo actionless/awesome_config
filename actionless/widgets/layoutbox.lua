@@ -51,24 +51,21 @@ local function worker(args)
     layoutbox.n_col = wibox.widget.background()
     layoutbox.n_col:set_widget(textbox())
 
-    layoutbox.numbers_layout = common.decorated_horizontal({
-        widgets={
+    args.widgets={
             layoutbox.n_master,
             wibox.widget.textbox(' '),
             layoutbox.n_col
-        },
-        left_separators = {},
-        right_separators = {},
-        bg=bg, fg=fg,
-    })
+        }
+    args.left_separators = args.left_separators or {}
+    args.right_separators = args.right_separators or {}
 
-    layoutbox.widget = common.decorated({
-        widgets = {
-            layoutbox.numbers_layout,
-            layoutbox.layout,
-        },
-        bg=bg, fg=fg,
-    })
+    layoutbox.numbers_layout = common.decorated_horizontal(args)
+
+    args.widgets={
+        layoutbox.layout,
+        layoutbox.numbers_layout,
+    }
+    layoutbox.widget = common.decorated(args)
 
     local layouts_menu_items = {}
     for _, layout in ipairs(awful.layout.layouts) do
