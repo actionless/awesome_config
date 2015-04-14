@@ -14,7 +14,13 @@ eminent.create_new_tag = false
 local awful = require("awful")
 require("awful.autofocus")
 
-context = {
+local debug = require("utils.debug")
+
+-- GLOBALS:
+nlog = debug.nlog
+log = debug.log
+
+local context = {
 
   modkey = "Mod4",
   altkey = "Mod1",
