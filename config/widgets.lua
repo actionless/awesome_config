@@ -47,13 +47,17 @@ function widget_loader.init(awesome_context)
   })
   -- ALSA volume
   if awesome_context.volume_widget == "apw" then
-    w.volume = common.fixed.vertical({
-      common.constraint({
-        widget=require("third_party/apw/widget"),
-        height=dpi(80)
+    local apw_widget = require("third_party/apw/widget")
+    w.volume = setmetatable(
+      common.fixed.vertical({
+        common.constraint({
+          widget=apw_widget,
+          height=dpi(80)
+        }),
+        common.constraint({height=beautiful.panel_padding_bottom})
       }),
-      common.constraint({height=beautiful.panel_padding_bottom})
-    })
+      { __index = apw_widget }
+    )
   else
     w.volume = widgets.alsa({
       update_interval = 5,
@@ -109,6 +113,7 @@ function widget_loader.init(awesome_context)
   -- Textclock
   w.textclock = widgets.common.decorated({
     widget = awful.widget.textclock("%H:%M"),
+    valign = "bottom",
   })
   widgets.calendar:attach(w.textclock, {fg=beautiful.theme, position="top_left"})
 
@@ -232,6 +237,7 @@ function widget_loader.init(awesome_context)
       screen = s,
       bg = beautiful.widget_layoutbox_bg,
       fg = beautiful.widget_layoutbox_fg,
+      valign = "bottom",
     })
 
   end
