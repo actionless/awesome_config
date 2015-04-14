@@ -119,7 +119,7 @@ local globalkeys = awful.util.table.join(
         awful.prompt.run(
           { prompt = "new tag name: ",
             text = awful.tag.getidx(tag) .. ":" },
-          awesome_context.widgets.screen[helpers.get_current_screen()].promptbox.widget,
+          awesome_context.widgets.screen[helpers.get_current_screen()].promptbox,
           function(new_name)
             if not new_name or #new_name == 0 then
               return

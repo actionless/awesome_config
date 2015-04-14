@@ -315,7 +315,6 @@ function common.decorated(args)
     decorated.widget_list = args.widgets or {common.widget(args)}
   end
   decorated.widget = decorated.widget_list[1]
-  -- give set_bg and set_fg methods to ones don't have it:
   for i, widget in ipairs(decorated.widget_list) do
     if widget.set_align then
       widget:set_align("right")
@@ -323,6 +322,7 @@ function common.decorated(args)
       widget:set_wrap("word")
       --widget:set_wrap("char")
     end
+  -- give set_bg and set_fg methods to ones don't have it:
     if (decorated.fg and not widget.set_fg) or (decorated.bg and not widget.set_bg) then
       decorated.widget_list[i] = setmetatable(wibox.widget.background(widget), widget)
     end
@@ -443,8 +443,8 @@ function common.decorated_horizontal(args)
   }
 
   args = args or {}
-  local bg = args.bg or beautiful.panel_widget_bg or beautiful.fg or "#ffffff"
-  local fg = args.fg or beautiful.panel_widget_fg or beautiful.bg or "#000000"
+  decorated.bg = args.bg or beautiful.panel_widget_bg or beautiful.fg or "#ffffff"
+  decorated.fg = args.fg or beautiful.panel_widget_fg or beautiful.bg or "#000000"
   local left_separators = args.left_separators or { 'arrl' }
   local right_separators = args.right_separators or { 'arrr' }
 
@@ -452,6 +452,20 @@ function common.decorated_horizontal(args)
     decorated.widget_list = {args.widget}
   else
     decorated.widget_list = args.widgets or {common.widget(args)}
+  end
+
+  -- give set_bg and set_fg methods to ones don't have it:
+  for i, widget in ipairs(decorated.widget_list) do
+    if (decorated.fg and not widget.set_fg) or (decorated.bg and not widget.set_bg) then
+      local bg_widget = setmetatable(wibox.widget.background(widget), widget)
+      bg_widget.set_font = function(...)
+        widget.set_font(...)
+      end
+      bg_widget.set_markup = function(...)
+        widget.set_markup(...)
+      end
+      decorated.widget_list[i] = setmetatable(bg_widget, widget)
+    end
   end
 
   decorated.widget = decorated.widget_list[1]
@@ -476,7 +490,7 @@ function common.decorated_horizontal(args)
   function decorated:set_color(args)
     args = args or {}
     local fg = args.fg
-    local bg
+    local bg = args.bg
     if args.name then
       bg = get_color(args.name)
     else
@@ -528,7 +542,7 @@ function common.decorated_horizontal(args)
   end
 
   function decorated:set_normal()
-    self:set_color({fg=fg, bg=bg})
+    self:set_color({fg=self.fg, bg=self.bg})
   end
 
   function decorated:set_warning()
@@ -543,6 +557,10 @@ function common.decorated_horizontal(args)
       bg=beautiful.panel_widget_bg_error,
       fg=beautiful.panel_widget_fg_error
     })
+  end
+
+  function decorated:set_font(...)
+    return self.widget:set_font(...)
   end
 
   decorated:set_normal()

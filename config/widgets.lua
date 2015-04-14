@@ -144,7 +144,20 @@ function widget_loader.init(awesome_context)
     )
 
     -- promptbox
-    sw.promptbox = awful.widget.prompt()
+    local promptbox = awful.widget.prompt({ })
+    function promptbox:set_font(...)
+      self.widget:set_font(...)
+    end
+    function promptbox:set_markup (...)
+      self.widget:set_markup(...)
+    end
+    sw.promptbox = widgets.common.decorated_horizontal({
+      widget = promptbox,
+      left_separators = {},
+      right_separators = {},
+      bg = beautiful.panel_widget_bg_warning,
+      fg = beautiful.panel_widget_fg_warning,
+    })
 
     -- tasklist
     local tasklist_buttons = awful.util.table.join(
