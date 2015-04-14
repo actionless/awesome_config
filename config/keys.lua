@@ -85,9 +85,9 @@ local globalkeys = awful.util.table.join(
 
   -- hk.on({ modkey,  }, "Control", "show_help"), -- show hotkey on hold
 
-  hk.on({ modkey,  "Control"  }, "t",
+  hk.on({ modkey,  altkey  }, "t",
     function() awesome_context.widgets.systray_toggle.toggle() end,
-    "toggle sysTray popup", UTILS
+    "toggle systray popup", UTILS
   ),
 
   hk.on({ modkey,  "Control"  }, "s",
