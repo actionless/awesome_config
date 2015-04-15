@@ -329,7 +329,7 @@ function common.decorated(args)
       --widget:set_wrap("char")
     end
   -- give set_bg and set_fg methods to ones don't have it:
-    if (decorated.fg and not widget.set_fg) or (decorated.bg and not widget.set_bg) then
+    if (decorated.fg and not widget.set_fg) then
       decorated.widget_list[i] = setmetatable(wibox.widget.background(widget), widget)
     end
   end
@@ -388,7 +388,7 @@ function common.decorated(args)
     local bg = args.bg
     for _, widget in ipairs(self.widget_list) do
       widget:set_fg(fg)
-      widget:set_bg(bg)
+      --widget:set_bg(bg)
     end
     if bg then
       self.background:set_bg(bg)
