@@ -11,6 +11,7 @@ local actionless = {
   xresources = require("actionless.xresources"),
   common_theme = require("actionless.common_theme"),
   iconfont = require("actionless.iconfont"),
+  lcars_layout = require("actionless.lcars_layout"),
 }
 
 return actionless

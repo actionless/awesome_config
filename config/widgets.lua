@@ -46,17 +46,15 @@ function widget_loader.init(awesome_context)
       bg = beautiful.widget_music_bg,
       fg = beautiful.widget_music_fg,
       force_no_bgimage=true,
+      --valign = "bottom",
   })
   -- ALSA volume
   if awesome_context.volume_widget == "apw" then
     local apw_widget = require("third_party/apw/widget")
     w.volume = setmetatable(
-      common.fixed.vertical({
-        common.constraint({
-          widget=apw_widget,
-          height=dpi(80)
-        }),
-        common.constraint({height=beautiful.panel_padding_bottom})
+      common.constraint({
+        widget=apw_widget,
+        height=dpi(80)
       }),
       { __index = apw_widget }
     )

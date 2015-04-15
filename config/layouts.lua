@@ -3,6 +3,7 @@ local gears = require("gears")
 local beautiful = require("beautiful")
 local capi = { screen = screen }
 local lain = require("lain")
+local lcars_layout = require("actionless.lcars_layout")
 
 local layouts = {}
 
@@ -12,14 +13,13 @@ function layouts.init(context)
   -- Table of layouts to cover with awful.layout.inc, order matters.
   if beautiful.hidpi then
     context.layouts = {
-      --awful.layout.suit.tile,
       lain.layout.centerwork,
       lain.layout.uselesstile,
-      awful.layout.suit.tile.bottom,
+      lcars_layout.top,
       awful.layout.suit.floating,
-      awful.layout.suit.fair,
-      awful.layout.suit.fair.horizontal,
-      awful.layout.suit.spiral
+      lain.layout.uselessfair,
+      lain.layout.uselessfair.horizontal,
+      lain.layout.uselesspiral
     }
   else
     context.layouts = {
@@ -54,7 +54,7 @@ function layouts.init(context)
       { '1:bs', '2:web', '3:ww', '4:im', '5:mm', 6, 7, 8, '9:sd', '10:nl', '11', '12' },
       s,
       {
-        awful.layout.layouts[1],
+        awful.layout.layouts[3],
         awful.layout.layouts[2],
         awful.layout.layouts[2],
         awful.layout.layouts[1],
@@ -69,6 +69,7 @@ function layouts.init(context)
       }
     )
     awful.tag.incmwfact(0.20, awful.tag.gettags(s)[2])
+    awful.tag.incmwfact(0.20, awful.tag.gettags(s)[1])
   end
   -- }}}
 

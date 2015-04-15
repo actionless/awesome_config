@@ -1,14 +1,61 @@
 local awful = require("awful")
+local wibox = require("wibox")
 local client = client
 local beautiful = require("beautiful")
 
 local titlebar	= require("actionless.titlebar")
 local lain = require("third_party.lain")
+local helpers = require("actionless.helpers")
 
 
 local signals = {}
 
 function signals.init(awesome_context)
+
+local function lcars_unite(t)
+  if not awesome_context.lcars_is_separated then return end
+  awesome_context.lcars_is_separated = false
+  local s = helpers.get_current_screen()
+  local w = awesome_context.topwibox[s]
+  w:struts({top = beautiful.panel_height})
+  w:geometry({height = beautiful.panel_height})
+  awful.wibox.set_position(w, "top", s)
+  awesome_context.leftwibox_separator[s]:set_height(0)
+  awesome_context.internal_corner_wibox[s]:geometry({y = beautiful.basic_panel_height})
+  awesome_context.topwibox_layout[s]:set_first(nil)
+  awesome_context.top_internal_corner_wibox[s].visible = false
+end
+
+local function lcars_separate(t)
+  if #t.clients(t) < 2 then return lcars_unite(t) end
+  local s = awful.tag.getscreen(t)
+  local w = awesome_context.topwibox[s]
+  if not awesome_context.lcars_is_separated then
+    w:struts({top = 0})
+  end
+  local mwfact =  awful.tag.getmwfact(t)
+  local height = screen[s].workarea.height
+  local computed_y = (height-beautiful.panel_height)*(1-mwfact) + beautiful.useless_gap_width
+  if awesome_context.lcars_is_separated
+    and computed_y == awesome_context.lcars_last_y
+  then return end
+  awesome_context.lcars_last_y = computed_y
+
+  w:geometry({height = beautiful.panel_height * 2 + beautiful.panel_padding_bottom})
+  w:struts({top = 0})
+  w:geometry({y = computed_y - beautiful.panel_height - beautiful.panel_padding_bottom })
+  awesome_context.leftwibox_separator[s]:set_height(computed_y)
+
+  awesome_context.internal_corner_wibox[s]:geometry({y = computed_y+beautiful.basic_panel_height})
+  awesome_context.top_internal_corner_wibox[s].visible = true
+  awesome_context.top_internal_corner_wibox[s]:geometry({
+    y = computed_y-beautiful.panel_height - 60
+  }) --@TODO: remove hardcode
+  awesome_context.topwibox_layout[s]:set_first(awesome_context.topwibox_toplayout[s])
+
+  awesome_context.lcars_is_separated = true
+end
+
 
 local function on_client_focus(c)
   local layout = awful.layout.get(c.screen)
@@ -73,6 +120,19 @@ client.connect_signal("manage", function (c, startup)
     -- Prevent clients from being unreachable after screen count change
     awful.placement.no_offscreen(c)
   end
+  for _, t in ipairs(c:tags()) do
+    if awful.tag.getproperty(t, 'layout').name == 'lcars' then
+      lcars_separate(t)
+    end
+  end
+end)
+
+client.connect_signal("unmanage", function (c, startup)
+  for _, t in ipairs(c:tags()) do
+    if awful.tag.getproperty(t, 'layout').name == 'lcars' then
+      lcars_separate(t)
+    end
+  end
 end)
 
 client.connect_signal("focus", function(c)
@@ -91,6 +151,25 @@ tag.connect_signal("property::layout", function (t)
       on_client_unfocus(c)
     end
   end
+  if awful.tag.getproperty(t, 'layout').name == 'lcars' then
+    lcars_separate(t)
+  else
+    lcars_unite(t)
+  end
+end)
+
+tag.connect_signal("property::selected", function (t)
+  if awful.tag.getproperty(t, 'layout').name == 'lcars' then
+    lcars_separate(t)
+  else
+    lcars_unite(t)
+  end
+end)
+
+tag.connect_signal("property::mwfact", function (t)
+  if awful.tag.getproperty(t, 'layout').name == 'lcars' then
+    lcars_separate(t)
+  end
 end)
 
 client.connect_signal("property::maximized", function (c)
@@ -106,5 +185,12 @@ client.connect_signal("property::minimized", function (c)
 end)
 
 end
+  --local t = awful.tag.selected(helpers.get_current_screen())
+  --if awful.tag.getproperty(t, 'layout').name == 'lcars' then
+    --lcars_separate(t)
+  --else
+    --lcars_unite(t)
+  --end
+
 -- }}}
 return signals

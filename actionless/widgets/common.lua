@@ -325,7 +325,6 @@ function common.decorated(args)
     if widget.set_align then
       widget:set_align("right")
       widget:set_valign("top")
-      widget:set_wrap("word")
       --widget:set_wrap("char")
     end
   -- give set_bg and set_fg methods to ones don't have it:
@@ -337,39 +336,28 @@ function common.decorated(args)
   decorated.widget_layout = wibox.layout.fixed.vertical()
 
   if valign == "top" then
-    decorated.internal_widget_layout = common.align.vertical(
-        common.align.horizontal(
-            nil,
-            decorated.widget_layout,
-            common.constraint({width=beautiful.panel_padding_bottom})
-        ),
+    decorated.internal_widget_layout = 
+    common.align.horizontal(
         nil,
-        wibox.widget.background(
-            common.constraint({height=beautiful.panel_padding_bottom}),
-            beautiful.panel_bg
-        )
+        decorated.widget_layout,
+        common.constraint({width=beautiful.panel_padding_bottom})
     )
   elseif valign == "bottom" then
     decorated.internal_widget_layout = common.align.vertical(
         nil,
         nil,
-        common.fixed.vertical({
-          common.align.horizontal(
-              nil,
-              decorated.widget_layout,
-              common.constraint({width=beautiful.panel_padding_bottom})
-          ),
-          wibox.widget.background(
-              common.constraint({height=beautiful.panel_padding_bottom}),
-              beautiful.panel_bg
-          )
-        })
+        common.align.horizontal(
+            nil,
+            decorated.widget_layout,
+            common.constraint({width=beautiful.panel_padding_bottom})
+        )
     )
   end
   decorated.background =wibox.widget.background(
     common.constraint({
       widget = decorated.internal_widget_layout,
-      height = beautiful.left_widget_min_height
+      height = beautiful.left_widget_min_height,
+      strategy = 'min',
     }),
     decorated.bg
   )

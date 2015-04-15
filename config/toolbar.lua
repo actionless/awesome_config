@@ -24,11 +24,20 @@ function toolbar.init(awesome_context)
   local separator  = common.make_separator(' ')
   local sep_media  = common.make_separator('sq', {fg=beautiful.panel_media})
 
+  local v_sep = wibox.widget.background(
+    common.constraint({height=beautiful.panel_padding_bottom}),
+    beautiful.panel_bg
+  )
+
 
   -- Create a wibox for each screen and add it
   local leftwibox = {}
   local topwibox = {}
+  local topwibox_layout = {}
+  local topwibox_toplayout = {}
+  local leftwibox_separator = {}
   local internal_corner_wibox = {}
+  local top_internal_corner_wibox = {}
   for s = 1, capi.screen.count() do
 
     local top_panel_left_margin = wibox.widget.background(
@@ -36,7 +45,15 @@ function toolbar.init(awesome_context)
       beautiful.fg
     )
     -- TOP PANEL:
-    local top_panel_layout = common.align.horizontal(
+    local top_panel_toplayout = common.align.horizontal(
+      common.fixed.horizontal({
+        top_panel_left_margin,
+        top_panel_left_margin,
+      }),
+      nil,
+      nil
+    )
+    local top_panel_bottomlayout = common.align.horizontal(
       common.fixed.horizontal({
         top_panel_left_margin,
         loaded_widgets.screen[s].taglist,
@@ -61,63 +78,117 @@ function toolbar.init(awesome_context)
             sep_media,
           }, enable_sneaky_tray = true,
       })
-      top_panel_layout:set_third(loaded_widgets.systray_toggle)
+      top_panel_bottomlayout:set_third(loaded_widgets.systray_toggle)
     end
+
+    topwibox_toplayout[s] =
+      common.fixed.vertical({
+        common.constraint({height=beautiful.panel_padding_bottom}),
+        common.constraint({
+          height=beautiful.basic_panel_height,
+          widget = top_panel_toplayout,
+        }),
+        common.constraint({height=beautiful.panel_padding_bottom}),
+      })
+ 
+    local top_panel_layout = common.align.vertical(
+      nil,
+      nil,
+      common.fixed.vertical({
+        common.constraint({
+          height=beautiful.basic_panel_height,
+          widget = top_panel_bottomlayout,
+        }),
+        common.constraint({height=beautiful.panel_padding_bottom})
+      })
+    )
+    topwibox_layout[s] = top_panel_layout
+
 
 
     -- INDICATORS LEFT PANEL
-    local left_panel_layout = common.fixed.vertical({
+    local left_panel_bottom_layout = common.fixed.vertical({
       loaded_widgets.textclock,
+      v_sep,
       loaded_widgets.screen[s].layoutbox,
+      v_sep,
       common.constraint({
         widget=loaded_widgets.music,
-        height=dpi(180)
+        height=dpi(180),
+        strategy="min",
       }),
+      v_sep,
       loaded_widgets.volume,
+      v_sep,
       loaded_widgets.mem,
+      v_sep,
       loaded_widgets.cpu,
       loaded_widgets.temp,
-      loaded_widgets.bat
+      loaded_widgets.bat,
     })
 
 
-    -- background image:
-    if false and beautiful.panel_bg_image then
-      local layout_bg = wibox.widget.background(top_panel_layout)
-      layout_bg:set_bgimage(beautiful.panel_bg_image)
-      top_panel_layout = layout_bg
-    end
-
-    -- bottom panel padding:
-    top_panel_layout = common.align.vertical(
-      nil,
-      top_panel_layout,
-      common.constraint({height=beautiful.panel_padding_bottom})
-    )
-
-
-    left_panel_layout = common.align.horizontal(
+    local left_panel_top_layout = common.align.horizontal(
       nil,
       common.align.vertical(
+        nil,
+        nil,
         common.fixed.vertical({
-          assets.top_left_corner_image(),
+          assets.top_top_left_corner_image(),
           common.constraint({height=beautiful.panel_padding_bottom})
-        }),
-        left_panel_layout,
-        nil
+        })
       ),
       -- right margin:
-      common.fixed.vertical({
-        wibox.widget.background(
-          common.constraint({height=beautiful.basic_panel_height}),
-          beautiful.panel_fg
+      common.align.vertical(
+        nil,
+        nil,
+        common.fixed.vertical({
+          wibox.widget.background(
+            common.constraint({
+              height=beautiful.basic_panel_height+1, -- @TODO: remove +1 hack
+              width=beautiful.panel_padding_bottom
+            }),
+            beautiful.panel_fg
+          ),
+          common.constraint({height=beautiful.panel_padding_bottom})
+        })
+      )
+    )
+    local left_panel_top_constraint = common.constraint({
+      height = 0,
+      widget = left_panel_top_layout
+    })
+    leftwibox_separator[s] = left_panel_top_constraint
+
+    left_panel_layout = common.align.vertical(
+      leftwibox_separator[s],
+      common.align.horizontal(
+        nil,
+        common.align.vertical(
+          common.fixed.vertical({
+            assets.top_left_corner_image(),
+            common.constraint({height=beautiful.panel_padding_bottom})
+          }),
+          wibox.widget.background(
+            left_panel_bottom_layout,
+            beautiful.panel_widget_bg
+          ),
+          nil
         ),
-        common.constraint({width=beautiful.panel_padding_bottom})
-      })
+        -- right margin:
+        common.fixed.vertical({
+          wibox.widget.background(
+            common.constraint({height=beautiful.basic_panel_height, width=beautiful.panel_padding_bottom}),
+            beautiful.panel_fg
+          ),
+          common.constraint({width=beautiful.panel_padding_bottom})
+        })
+      )
     )
 
     local internal_corner_radius = dpi(30)
     internal_corner_wibox[s] = assets.internal_corner_wibox(internal_corner_radius)
+    top_internal_corner_wibox[s] = assets.top_internal_corner_wibox(internal_corner_radius)
 
     leftwibox[s] = awful.wibox({
       position = "left",
@@ -145,8 +216,12 @@ function toolbar.init(awesome_context)
   end
 
   awesome_context.topwibox = topwibox
+  awesome_context.topwibox_layout = topwibox_layout
+  awesome_context.topwibox_toplayout = topwibox_toplayout
   awesome_context.leftwibox = leftwibox
+  awesome_context.leftwibox_separator = leftwibox_separator
   awesome_context.internal_corner_wibox = internal_corner_wibox
+  awesome_context.top_internal_corner_wibox = top_internal_corner_wibox
 
   awesome_context.left_panel_visible = true
 

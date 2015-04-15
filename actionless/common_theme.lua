@@ -298,6 +298,10 @@ function common_theme.generate_theme(theme_dir)
   theme.layout_floating		= layout_icons_dir .. "floating.png"
 
   theme.layout_uselesstile		= theme.layout_tile
+  theme.layout_uselesstiletop		= theme.layout_tiletop
+  theme.layout_uselessfair		= theme.layout_fairv
+  theme.layout_uselessfairh		= theme.layout_fairh
+  theme.layout_uselesspiral		= theme.layout_spiral
   theme.lain_icons         = os.getenv("HOME") .. "/.config/awesome/third_party/lain/icons/layout/default/"
   theme.layout_termfair    = theme.lain_icons .. "termfair.png"
   theme.layout_cascade     = theme.lain_icons .. "cascade.png"
