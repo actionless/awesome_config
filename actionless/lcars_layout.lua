@@ -171,9 +171,9 @@ local function tile(p, orientation)
        wa, master_area, cls_master,
        {
         x=ugw,
-        y=ugw * 4 + beautiful.panel_height,
+        y=(#cls > 1) and (ugw * 4 + beautiful.panel_height) or ugw,
         w=ugw,
-        h=ugw * 2 + beautiful.panel_height,
+        h=(#cls > 1) and (ugw * 2 + beautiful.panel_height) or ugw,
        },
        transformation,
        data[0]
