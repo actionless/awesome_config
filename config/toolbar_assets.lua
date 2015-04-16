@@ -11,29 +11,18 @@ function assets.top_left_corner_image()
   local img = cairo.ImageSurface(cairo.Format.ARGB32, beautiful.left_panel_width, radius)
   local cr = cairo.Context(img)
   cr:set_source(gears.color(beautiful.panel_widget_bg))
-  cr:arc(
-    radius,
-    radius,
-    radius,
-    math.pi,
-    3/2*math.pi
-  )
-  cr:arc(
-    radius,
-    0,
-    radius,
-    math.pi,
-    3/2*math.pi
-  )
-  cr:arc(
-    radius*2,
-    radius,
-    radius,
-    3/2*math.pi,
-    math.pi
+  cr:move_to(0, radius)
+  cr:line_to(radius*2, radius)
+  cr:line_to(radius*2, 0)
+  cr:line_to(radius, 0)
+  cr:curve_to(
+    radius, 0,
+    0, 0,
+    0, radius
   )
   cr:fill()
   top_left_corner_imagebox:set_image(img)
+  top_left_corner_imagebox:set_resize(false)
   return top_left_corner_imagebox
 end
 function assets.top_top_left_corner_image()
@@ -42,29 +31,17 @@ function assets.top_top_left_corner_image()
   local img = cairo.ImageSurface(cairo.Format.ARGB32, beautiful.left_panel_width, radius)
   local cr = cairo.Context(img)
   cr:set_source(gears.color(beautiful.panel_widget_bg))
-  cr:arc(
-    radius,
-    0,
-    radius,
-    3/2*math.pi,
-    math.pi
-  )
-  cr:arc(
-    0,
-    0,
-    radius,
-    math.pi,
-    3/2*math.pi
-  )
-  cr:arc(
-    radius*2,
-    radius,
-    radius,
-    3/2*math.pi,
-    math.pi
+  cr:line_to(radius*2, 0)
+  cr:line_to(radius*2, radius)
+  cr:line_to(radius, radius)
+  cr:curve_to(
+    radius, radius,
+    0, radius,
+    0, 0
   )
   cr:fill()
   top_left_corner_imagebox:set_image(img)
+  top_left_corner_imagebox:set_resize(false)
   return top_left_corner_imagebox
 end
 
