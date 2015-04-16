@@ -33,6 +33,33 @@ function table_helpers.spairs(t, order)
     end
 end
 
+function table_helpers.rpairs(t)
+-- http://stackoverflow.com/a/15706820/1850190
+
+    -- collect the keys
+    local keys = {}
+    for k in pairs(t) do keys[#keys+1] = k end
+
+    -- return the iterator function
+    local i = #keys
+    return function()
+        i = i - 1
+        if keys[i] then
+            return keys[i], t[keys[i]]
+        end
+    end
+end
+
+function table_helpers.reversed(t)
+-- https://gist.github.com/balaam/3122129
+    local reversedTable = {}
+    local itemCount = #t
+    for k, v in ipairs(t) do
+        reversedTable[itemCount + 1 - k] = v
+    end
+    return reversedTable
+end
+
 function table_helpers.merge(container, addition)
   container = container or {}
   addition = addition or {}

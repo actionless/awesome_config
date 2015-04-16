@@ -13,6 +13,7 @@ local common = require("actionless.widgets.common")
 
 local dpi = require("actionless.xresources").compute_fontsize
 local assets = require("config.toolbar_assets")
+local h_table = require("utils.table")
 
 local toolbar = {}
 
@@ -127,12 +128,20 @@ function toolbar.init(awesome_context)
       loaded_widgets.bat,
     })
 
-
+    local left_panel_bottom_layout_reflection = common.fixed.vertical(
+      h_table.reversed(left_panel_bottom_layout.widgets)
+    )
     local left_panel_top_layout = common.align.horizontal(
       nil,
       common.align.vertical(
-        nil,
-        nil,
+        wibox.widget.background(
+          common.constraint({height=beautiful.left_panel_width/2}),
+          beautiful.panel_widget_bg
+        ),
+        wibox.widget.background(
+          left_panel_bottom_layout_reflection,
+          beautiful.panel_widget_bg
+        ),
         common.fixed.vertical({
           assets.top_top_left_corner_image(),
           common.constraint({height=beautiful.panel_padding_bottom})
@@ -165,10 +174,7 @@ function toolbar.init(awesome_context)
       common.align.horizontal(
         nil,
         common.align.vertical(
-          common.fixed.vertical({
-            assets.top_left_corner_image(),
-            common.constraint({height=beautiful.panel_padding_bottom})
-          }),
+          assets.top_left_corner_image(),
           wibox.widget.background(
             left_panel_bottom_layout,
             beautiful.panel_widget_bg
