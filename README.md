@@ -1,5 +1,16 @@
-awesome_config
+﻿awesome_config
 ==============
+
+#### Installation
+```sh
+cd ~/.config/
+git clone https://github.com/actionless/awesome_config.git awesome
+cd awesome
+git submodule init
+git submodule update
+# copy config with machine-specific variables
+wget https://gist.githubusercontent.com/actionless/229eef7795915068bad9/raw/08c2df45abcc3cb9b08737cadd9058bbfe005e40/local.lua -O config/local.lua
+```
 
 example of config/local.lua: https://gist.github.com/actionless/229eef7795915068bad9
 
