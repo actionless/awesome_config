@@ -88,7 +88,6 @@ function widget_loader.init(awesome_context)
   -- CPU
   w.cpu = widgets.cpu({
     update_interval = 2,
-    cores_number = conf.cpu_cores_num,
     list_length = 20,
     new_top = true,
   })
