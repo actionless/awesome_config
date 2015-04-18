@@ -7,9 +7,10 @@
 
 local debug  = require("debug")
 local awful = require("awful")
-local gears = require("gears")
 local capi   = { client = client,
                  mouse = mouse }
+local awesome_timer = require("gears").timer or timer
+
 
 local beautiful = require("beautiful")
 
@@ -25,7 +26,7 @@ helpers.dir    = debug.getinfo(1, 'S').source:match[[^@(.*/).*$]]
 helpers.timer_table = {}
 
 function helpers.newtimer(name, timeout, fun, nostart)
-  local timer = gears.timer({ timeout = timeout })
+  local timer = awesome_timer({ timeout = timeout })
   timer:connect_signal("timeout", fun)
   timer:start()
   if not nostart then
@@ -35,7 +36,7 @@ function helpers.newtimer(name, timeout, fun, nostart)
 end
 
 function helpers.newinterval(name, timeout, fun, nostart)
-  local timer = gears.timer({ timeout = timeout })
+  local timer = awesome_timer({ timeout = timeout })
   local patched_function = function(...)
     timer:stop()
     fun(...)
@@ -50,7 +51,7 @@ function helpers.newinterval(name, timeout, fun, nostart)
 end
 
 function helpers.newdelay(name, timeout, fun)
-  local timer = gears.timer({ timeout = timeout })
+  local timer = awesome_timer({ timeout = timeout })
   local patched_function = function(...)
     timer:stop()
     fun(...)
