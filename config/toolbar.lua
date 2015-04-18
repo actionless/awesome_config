@@ -25,10 +25,14 @@ function toolbar.init(awesome_context)
   local separator  = common.make_separator(' ')
   local sep_media  = common.make_separator('sq', {fg=beautiful.panel_media})
 
+  local v_sep_constraint = common.constraint({
+    height=beautiful.panel_padding_bottom
+  })
   local v_sep = wibox.widget.background(
-    common.constraint({height=beautiful.panel_padding_bottom}),
+    v_sep_constraint,
     beautiful.panel_bg
   )
+  setmetatable(v_sep, { __index = v_sep_constraint })
 
 
   -- Create a wibox for each screen and add it
@@ -127,6 +131,9 @@ function toolbar.init(awesome_context)
       loaded_widgets.temp,
       loaded_widgets.bat,
     })
+    for i, widget in ipairs(left_panel_bottom_layout.widgets) do
+      log(widget._height)
+    end
 
     local left_panel_bottom_layout_reflection = common.fixed.vertical(
       h_table.reversed(left_panel_bottom_layout.widgets)

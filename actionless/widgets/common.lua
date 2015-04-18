@@ -353,19 +353,21 @@ function common.decorated(args)
         )
     )
   end
+  decorated.constraint = common.constraint({
+    widget = decorated.internal_widget_layout,
+    height = beautiful.left_widget_min_height,
+    strategy = 'min',
+  })
   decorated.background =wibox.widget.background(
-    common.constraint({
-      widget = decorated.internal_widget_layout,
-      height = beautiful.left_widget_min_height,
-      strategy = 'min',
-    }),
+    decorated.constraint,
     decorated.bg
   )
 
   decorated.layout = wibox.layout.flex.vertical()
   decorated.layout:add(decorated.background)
 
-  setmetatable(decorated.layout, { __index = decorated.widget })
+  setmetatable(decorated.constraint, { __index = decorated.widget })
+  setmetatable(decorated.layout, { __index = decorated.constraint })
   setmetatable(decorated,        { __index = decorated.layout })
 
   --- Set widget color
