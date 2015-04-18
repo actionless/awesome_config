@@ -135,7 +135,9 @@ local function lcars_separate(t)
   end
   local mwfact =  awful.tag.getmwfact(t)
   local height = screen[s].workarea.height
-  local computed_y = (height-beautiful.panel_height)*(1-mwfact) + beautiful.useless_gap_width
+  local computed_y = math.floor(
+    (height-beautiful.panel_height)*(1-mwfact) + beautiful.useless_gap_width
+  )
   if awesome_context.lcars_is_separated
     and computed_y == awesome_context.lcars_last_y
   then return end
@@ -144,13 +146,15 @@ local function lcars_separate(t)
   w:geometry({height = beautiful.panel_height * 2 + beautiful.panel_padding_bottom})
   w:struts({top = 0})
   w:geometry({y = computed_y - beautiful.panel_height - beautiful.panel_padding_bottom })
+
   awesome_context.leftwibox_separator[s]:set_height(computed_y)
 
   awesome_context.internal_corner_wibox[s]:geometry({y = computed_y+beautiful.basic_panel_height})
   awesome_context.top_internal_corner_wibox[s].visible = true
   awesome_context.top_internal_corner_wibox[s]:geometry({
     y = computed_y-beautiful.panel_height - beautiful.left_panel_internal_corner_radius
-  }) --@TODO: remove hardcode
+  })
+
   awesome_context.topwibox_layout[s]:set_first(awesome_context.topwibox_toplayout[s])
 
   awesome_context.lcars_is_separated = true

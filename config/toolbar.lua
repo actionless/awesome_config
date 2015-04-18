@@ -154,7 +154,7 @@ function toolbar.init(awesome_context)
         common.fixed.vertical({
           wibox.widget.background(
             common.constraint({
-              height=beautiful.basic_panel_height+1, -- @TODO: remove +1 hack
+              height=beautiful.basic_panel_height,
               width=beautiful.panel_padding_bottom
             }),
             beautiful.panel_fg
@@ -163,11 +163,10 @@ function toolbar.init(awesome_context)
         })
       )
     )
-    local left_panel_top_constraint = common.constraint({
+    leftwibox_separator[s] = common.constraint({
       height = 0,
       widget = left_panel_top_layout
     })
-    leftwibox_separator[s] = left_panel_top_constraint
 
     left_panel_layout = common.align.vertical(
       leftwibox_separator[s],
