@@ -53,7 +53,7 @@ local function worker(args)
   player.title_widget = wibox.widget.textbox()
   args.widgets = {
     player.artist_widget,
-    common.constraint({height = beautiful.panel_padding_bottom }),
+    common.constraint({height = beautiful.panel_padding_bottom * 2 }),
     player.title_widget,
   }
   player.widget = decorated_widget(args)
