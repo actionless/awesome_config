@@ -36,6 +36,12 @@ function toolbar.init(awesome_context)
 
 
   -- Create a wibox for each screen and add it
+
+  -- @TODO: clean it up:
+  local left_panel_widgets = {}
+  local left_panel_top_layouts = {}
+  local left_panel_bottom_layouts = {}
+
   local leftwibox = {}
   local topwibox = {}
   local topwibox_layout = {}
@@ -43,6 +49,7 @@ function toolbar.init(awesome_context)
   local leftwibox_separator = {}
   local internal_corner_wibox = {}
   local top_internal_corner_wibox = {}
+
   for s = 1, capi.screen.count() do
 
     local top_panel_left_margin = wibox.widget.background(
@@ -112,7 +119,7 @@ function toolbar.init(awesome_context)
 
 
     -- INDICATORS LEFT PANEL
-    local left_panel_bottom_layout = common.fixed.vertical({
+    left_panel_widgets[s] = {
       loaded_widgets.textclock,
       v_sep,
       loaded_widgets.screen[s].layoutbox,
@@ -130,23 +137,24 @@ function toolbar.init(awesome_context)
       loaded_widgets.cpu,
       loaded_widgets.temp,
       loaded_widgets.bat,
-    })
-    for i, widget in ipairs(left_panel_bottom_layout.widgets) do
-      log(widget._height)
-    end
+    }
+    left_panel_bottom_layouts[s] = common.fixed.vertical(left_panel_widgets[s])
 
-    local left_panel_bottom_layout_reflection = common.fixed.vertical(
-      h_table.reversed(left_panel_bottom_layout.widgets)
+    left_panel_top_layouts[s] = common.fixed.vertical(
+      h_table.reversed(left_panel_bottom_layouts[s].widgets)
     )
-    local left_panel_top_layout = common.align.horizontal(
+    leftwibox_separator[s] = common.constraint({
+      height = 0,
+      widget = common.align.horizontal(
       nil,
       common.align.vertical(
+        --wibox.widget.background(
+          --common.constraint({height=beautiful.left_panel_width/2}),
+          --beautiful.panel_widget_bg
+        --),
+        nil,
         wibox.widget.background(
-          common.constraint({height=beautiful.left_panel_width/2}),
-          beautiful.panel_widget_bg
-        ),
-        wibox.widget.background(
-          left_panel_bottom_layout_reflection,
+          left_panel_top_layouts[s],
           beautiful.panel_widget_bg
         ),
         common.fixed.vertical({
@@ -170,9 +178,6 @@ function toolbar.init(awesome_context)
         })
       )
     )
-    leftwibox_separator[s] = common.constraint({
-      height = 0,
-      widget = left_panel_top_layout
     })
 
     left_panel_layout = common.align.vertical(
@@ -182,7 +187,7 @@ function toolbar.init(awesome_context)
         common.align.vertical(
           assets.top_left_corner_image(),
           wibox.widget.background(
-            left_panel_bottom_layout,
+            left_panel_bottom_layouts[s],
             beautiful.panel_widget_bg
           ),
           nil
@@ -233,6 +238,10 @@ function toolbar.init(awesome_context)
   awesome_context.leftwibox_separator = leftwibox_separator
   awesome_context.internal_corner_wibox = internal_corner_wibox
   awesome_context.top_internal_corner_wibox = top_internal_corner_wibox
+
+  awesome_context.left_panel_widgets = left_panel_widgets
+  awesome_context.left_panel_top_layouts = left_panel_top_layouts
+  awesome_context.left_panel_bottom_layouts = left_panel_bottom_layouts
 
   awesome_context.left_panel_visible = true
 

@@ -114,7 +114,6 @@ end)
 
 local function lcars_unite(t)
   if not awesome_context.lcars_is_separated then return end
-  awesome_context.lcars_is_separated = false
   local s = helpers.get_current_screen()
   local w = awesome_context.topwibox[s]
   w:struts({top = beautiful.panel_height})
@@ -124,6 +123,14 @@ local function lcars_unite(t)
   awesome_context.internal_corner_wibox[s]:geometry({y = beautiful.basic_panel_height})
   awesome_context.topwibox_layout[s]:set_first(nil)
   awesome_context.top_internal_corner_wibox[s].visible = false
+
+  awesome_context.left_panel_top_layouts[s]:reset()
+  awesome_context.left_panel_bottom_layouts[s]:reset()
+  for i, widget in ipairs(awesome_context.left_panel_widgets[s]) do
+      awesome_context.left_panel_bottom_layouts[s]:add(widget)
+  end
+
+  awesome_context.lcars_is_separated = false
 end
 
 local function lcars_separate(t)
@@ -156,6 +163,24 @@ local function lcars_separate(t)
   })
 
   awesome_context.topwibox_layout[s]:set_first(awesome_context.topwibox_toplayout[s])
+
+
+  awesome_context.left_panel_top_layouts[s]:reset()
+  awesome_context.left_panel_bottom_layouts[s]:reset()
+  local height_sum = 0
+  local last_bottom_widget_id = 1
+  for i, widget in ipairs(awesome_context.left_panel_widgets[s]) do
+    if widget._height and widget._height + height_sum < computed_y - (beautiful.left_panel_width/2) then
+      awesome_context.left_panel_top_layouts[s]:add(widget)
+      height_sum = height_sum + widget._height
+      last_bottom_widget_id = i
+    else
+      break
+    end
+  end
+  for c = last_bottom_widget_id, #awesome_context.left_panel_widgets[s] do
+    awesome_context.left_panel_bottom_layouts[s]:add(awesome_context.left_panel_widgets[s][c])
+  end
 
   awesome_context.lcars_is_separated = true
 end
