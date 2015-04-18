@@ -127,6 +127,7 @@ function common_theme.generate_theme(theme_dir)
   theme.panel_widget_fg_disabled = "theme.bg"
   --theme.panel_opacity		= 0.96
   theme.panel_opacity		= 0.92
+  theme.basic_panel_height	= 18
   theme.panel_height		= 24
   theme.panel_padding_bottom	= 6
   theme.panel_enbolden_details	= false

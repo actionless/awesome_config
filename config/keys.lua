@@ -411,6 +411,13 @@ local globalkeys = awful.util.table.join(
     end,
     "screenshot all", TO_DEFINE_COLOR
   ),
+  hk.on({ "Shift" }, "Print",
+    function ()
+      awful.util.spawn_with_shell(
+      "scrot '%Y-%m-%d--%s_$wx$h_scrot.png'")
+    end,
+    "screenshot all", TO_DEFINE_COLOR
+  ),
 
   hk.on({modkey}, "a",
     revelation,
