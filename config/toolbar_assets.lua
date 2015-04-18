@@ -45,7 +45,8 @@ function assets.top_top_left_corner_image()
   return top_left_corner_imagebox
 end
 
-function assets.internal_corner_wibox(internal_corner_radius)
+function assets.internal_corner_wibox()
+  local internal_corner_radius = beautiful.left_panel_internal_corner_radius
   local w = wibox({})
   w.height = internal_corner_radius
   w.width  = internal_corner_radius
@@ -90,7 +91,8 @@ function assets.internal_corner_wibox(internal_corner_radius)
   w.shape_bounding = img._native
   return w
 end
-function assets.top_internal_corner_wibox(internal_corner_radius)
+function assets.top_internal_corner_wibox()
+  local internal_corner_radius = beautiful.left_panel_internal_corner_radius
   local w = wibox({})
   w.height = internal_corner_radius
   w.width  = internal_corner_radius

@@ -192,9 +192,8 @@ function toolbar.init(awesome_context)
       )
     )
 
-    local internal_corner_radius = dpi(30)
-    internal_corner_wibox[s] = assets.internal_corner_wibox(internal_corner_radius)
-    top_internal_corner_wibox[s] = assets.top_internal_corner_wibox(internal_corner_radius)
+    internal_corner_wibox[s] = assets.internal_corner_wibox()
+    top_internal_corner_wibox[s] = assets.top_internal_corner_wibox()
 
     leftwibox[s] = awful.wibox({
       position = "left",

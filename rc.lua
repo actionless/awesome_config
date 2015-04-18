@@ -25,7 +25,7 @@ local context = {
   modkey = "Mod4",
   altkey = "Mod1",
 
-  theme_dir = awful.util.getdir("config") .. "/themes/lcars_xresources/theme.lua",
+  theme_dir = awful.util.getdir("config") .. "/themes/lcars-xresources-hidpi/theme.lua",
 
   config = {
     net_preset = 'netctl-auto',

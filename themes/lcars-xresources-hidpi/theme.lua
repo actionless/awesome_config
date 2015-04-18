@@ -44,6 +44,9 @@ theme.sans_font = "Sans Bold "..tostring(dpi(10))
 -- Don't use sans font:
 --theme.sans_font	= "theme.font"
 
+--theme.font = "Roboto Condensed Bold "..tostring(dpi(10))
+--theme.sans_font = "Roboto Condensed Bold "..tostring(dpi(10))
+
 --
 --MISC:
 --
@@ -53,6 +56,8 @@ theme.panel_padding_bottom = dpi(3)
 theme.border_width = dpi(3)
 theme.panel_height = theme.basic_panel_height + theme.panel_padding_bottom
 theme.titlebar_height = theme.basic_panel_height + theme.border_width
+
+theme.left_panel_internal_corner_radius = dpi(30)
 
 theme.left_panel_width = dpi(120)
 theme.left_widget_min_height = dpi(120)
@@ -79,6 +84,7 @@ theme.titlebar_bg_normal	= "theme.titlebar_border"
 theme.error = theme.color["1"]
 theme.warning = theme.color["2"]
 
+--theme.panel_widget_bg		= "theme.color.3"
 theme.panel_widget_bg_error = theme.color["1"]
 theme.panel_widget_fg_error = theme.color["15"]
 

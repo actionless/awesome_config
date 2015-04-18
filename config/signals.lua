@@ -149,7 +149,7 @@ local function lcars_separate(t)
   awesome_context.internal_corner_wibox[s]:geometry({y = computed_y+beautiful.basic_panel_height})
   awesome_context.top_internal_corner_wibox[s].visible = true
   awesome_context.top_internal_corner_wibox[s]:geometry({
-    y = computed_y-beautiful.panel_height - 60
+    y = computed_y-beautiful.panel_height - beautiful.left_panel_internal_corner_radius
   }) --@TODO: remove hardcode
   awesome_context.topwibox_layout[s]:set_first(awesome_context.topwibox_toplayout[s])
 
