@@ -4,7 +4,7 @@
 #### Installation
 ```sh
 cd ~/.config/
-git clone https://github.com/actionless/awesome_config.git awesome
+git clone https://github.com/actionless/awesome_config.git -b devel awesome
 cd awesome
 git submodule init
 git submodule update
