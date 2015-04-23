@@ -67,6 +67,7 @@ local function worker(args)
       position = beautiful.widget_notification_position,
     })
     async.execute(mem.command, mem.notification_callback)
+    mem.update()
   end
 
   function mem.notification_callback(output)
