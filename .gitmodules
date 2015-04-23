@@ -14,3 +14,9 @@
 [submodule "third_party/lain"]
 	path = third_party/lain
 	url = https://github.com/copycat-killer/lain
+[submodule "forgotten"]
+	path = forgotten
+	url = https://github.com/Elv13/forgotten.git
+[submodule "third_party/forgotten"]
+	path = third_party/forgotten
+	url = https://github.com/Elv13/forgotten.git
