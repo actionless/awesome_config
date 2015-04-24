@@ -134,8 +134,8 @@ local function lcars_unite(t)
 end
 
 local function lcars_separate(t)
-  if #t.clients(t) < 2 then return lcars_unite(t) end
   local s = awful.tag.getscreen(t)
+  if #awful.client.tiled(s) < 2 then return lcars_unite(t) end
   local w = awesome_context.topwibox[s]
   if not awesome_context.lcars_is_separated then
     w:struts({top = 0})
