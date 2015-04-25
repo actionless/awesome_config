@@ -395,12 +395,16 @@ function common.decorated(args)
 
   --- Make widget invisible
   function decorated:hide()
+    if not self.visible then return end
+    self.visible = false
     self.widget_layout:reset()
     self.constraint:set_height(0)
   end
 
   --- Make widget visible again
   function decorated:show()
+    if self.visible then return end
+    self.visible = true
     for _, each_widget in ipairs(self.widget_list) do
       local horiz_layout = wibox.layout.align.horizontal()
       horiz_layout:set_right(each_widget)
