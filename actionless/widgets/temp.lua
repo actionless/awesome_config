@@ -9,20 +9,23 @@ local async        = require("utils.async")
 local helpers      = require("actionless.helpers")
 local parse        = require("utils.parse")
 local common_widget= require("actionless.widgets.common").widget
+local decorated_widget= require("actionless.widgets.common").decorated
 
 
 -- coretemp
 local temp = {}
-temp.widget = common_widget()
-temp.widget:set_image(beautiful.widget_temp)
 
 local function worker(args)
   local args = args or {}
   local update_interval = args.update_interval or 5
   local warning = args.warning or 75
   local sensor = args.sensor or "CPU Temperature"
-  local bg = args.bg or beautiful.panel_fg or beautiful.fg
-  local fg = args.fg or beautiful.panel_bg or beautiful.bg
+  local bg = args.bg or beautiful.panel_widget_bg or beautiful.panel_fg or beautiful.fg
+  local fg = args.fg or beautiful.panel_widget_fg or beautiful.panel_bg or beautiful.bg
+
+  args.widget = common_widget(args)
+  temp.widget = decorated_widget(args)
+  temp.widget:set_image(beautiful.widget_temp)
 
   function temp.update()
     async.execute("sensors ", function (str) temp.post_update(str) end)
