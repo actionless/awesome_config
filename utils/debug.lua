@@ -13,7 +13,6 @@ function debug_module.nlog(object)
     title="DEBUG",
     text=inspect(object),
     timeout=60,
-    position = beautiful.widget_notification_position or "top_left"
   }
 end
 
