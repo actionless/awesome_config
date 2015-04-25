@@ -8,19 +8,18 @@ git clone https://github.com/actionless/awesome_config.git -b devel awesome
 cd awesome
 git submodule init
 git submodule update
-# copy config with machine-specific variables
+# optionally copy config with machine-specific variables
 wget https://gist.githubusercontent.com/actionless/229eef7795915068bad9/raw/08c2df45abcc3cb9b08737cadd9058bbfe005e40/local.lua -O config/local.lua
 ```
 
-example of config/local.lua: https://gist.github.com/actionless/229eef7795915068bad9
-
-in `*-xresources` themes panel [adapts](http://imgur.com/a/qIAAa) for current xrdb theme.
+ - [lcars](http://i.imgur.com/8C6l5ko.gifv) layout
+ - in `*-xresources` themes panel [adapts](http://imgur.com/a/qIAAa) for current xrdb theme
 
 ![Screenshot](https://raw.githubusercontent.com/actionless/awesome_config/devel/screenshots/screenshot.png "Screenshot")
 
-![pokemon_dark](http://i.imgur.com/BWnzpfh.png?1 "pokemon_dark")
-
 #### Widget popups
+
+@TODO: upload newer screenshots
 
 ##### CPU
 Shows results from top for last second
