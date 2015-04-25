@@ -396,6 +396,7 @@ function common.decorated(args)
   --- Make widget invisible
   function decorated:hide()
     self.widget_layout:reset()
+    self.constraint:set_height(0)
   end
 
   --- Make widget visible again
@@ -405,6 +406,7 @@ function common.decorated(args)
       horiz_layout:set_right(each_widget)
       self.widget_layout:add(horiz_layout)
     end
+    self.constraint:set_height(beautiful.left_widget_min_height)
   end
 
   function decorated:set_normal()
