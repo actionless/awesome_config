@@ -135,7 +135,10 @@ end
 
 local function lcars_separate(t)
   local s = awful.tag.getscreen(t)
-  if #awful.client.tiled(s) < 2 then return lcars_unite(t) end
+  local nmaster = awful.tag.getnmaster(t)
+  if nmaster < 1 or #awful.client.tiled(s) <= nmaster then
+    return lcars_unite(t)
+  end
   local w = awesome_context.topwibox[s]
   if not awesome_context.lcars_is_separated then
     w:struts({top = 0})
@@ -186,6 +189,13 @@ local function lcars_separate(t)
 end
 
 
+local function tag_callback(t)
+  if awful.tag.getproperty(t, 'layout').name == 'lcars' then
+    lcars_separate(t)
+  else
+    lcars_unite(t)
+  end
+end
 client.connect_signal("unmanage", function (c)
   local t = awful.tag.selected(helpers.get_current_screen())
   if awful.tag.getproperty(t, 'layout').name == 'lcars' then
@@ -207,23 +217,21 @@ client.connect_signal("untagged", function (c)
   end
 end)
 tag.connect_signal("property::layout", function (t)
-  if awful.tag.getproperty(t, 'layout').name == 'lcars' then
-    lcars_separate(t)
-  else
-    lcars_unite(t)
-  end
+  return tag_callback(t)
 end)
 tag.connect_signal("property::selected", function (t)
-  if awful.tag.getproperty(t, 'layout').name == 'lcars' then
-    lcars_separate(t)
-  else
-    lcars_unite(t)
-  end
+  return tag_callback(t)
 end)
 tag.connect_signal("property::mwfact", function (t)
   if awful.tag.getproperty(t, 'layout').name == 'lcars' then
     lcars_separate(t)
   end
+end)
+tag.connect_signal("property::ncol", function (t)
+  return tag_callback(t)
+end)
+tag.connect_signal("property::nmaster", function (t)
+  return tag_callback(t)
 end)
 
 
