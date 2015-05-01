@@ -196,6 +196,11 @@ local function tag_callback(t)
     lcars_unite(t)
   end
 end
+local function client_callback(c)
+  local t = awful.tag.selected(helpers.get_current_screen())
+  return tag_callback(t)
+end
+
 client.connect_signal("unmanage", function (c)
   local t = awful.tag.selected(helpers.get_current_screen())
   if awful.tag.getproperty(t, 'layout').name == 'lcars' then
@@ -216,6 +221,10 @@ client.connect_signal("untagged", function (c)
     end
   end
 end)
+client.connect_signal("property::minimized", function (c)
+  return client_callback(c)
+end)
+
 tag.connect_signal("property::layout", function (t)
   return tag_callback(t)
 end)
