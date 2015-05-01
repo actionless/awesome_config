@@ -54,6 +54,7 @@ local context = {
 
   volume_widget = "apw",
   have_battery = true,
+  new_top = false,
 }
 
 local local_settings_result, local_settings_details = pcall(function()

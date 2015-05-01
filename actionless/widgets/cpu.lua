@@ -41,14 +41,6 @@ local function worker(args)
   cpu.list_len = args.list_length or 10
 
   local new_top = args.new_top or false
-  cpu.command = args.command or
-    new_top and
-    [[ top -o \%CPU -b -n 5 -w 512 -d 0.05 ]] ..
-    [[ | awk '{if ($7 > 0.0) {printf "%5s %4s %s\n", $1, $7, $11}}' ]]
-    or
-    [[COLUMNS=512 ]] ..
-    [[ top -o \%CPU -b -n 5 -w 512 -d 0.05 ]] ..
-    [[ | awk '{if ($9 > 0.0) {printf "%-5s %-4s %s\n", $1, $9, $12}}' ]]
   cpu.command = "top -o \\%CPU -b -n 1 -w 512 -d 0.05"
 
   function cpu.hide_notification()
@@ -88,8 +80,8 @@ local function worker(args)
       --local pid, percent, name = line:match("^(%d+)%s+(.+)%s+(.*)")
       local values = h_string.split(line, ' ')
       local pid = values[1]
-      local percent = values[7]
-      local name = values[11]
+      local percent = values[new_top and 7 or 9]
+      local name = values[new_top and 11 or 12]
       percent = percent + 0
       if percent and percent ~= 0 and name ~= 'top' then
         if result[pid] then

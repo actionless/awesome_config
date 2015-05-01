@@ -37,14 +37,7 @@ local function worker(args)
 
   mem.list_len = args.list_length or 10
 
-  --local new_top = args.new_top or false
-  --mem.command = args.command or
-    --new_top and
-    --"COLUMNS=512 top -o \\%MEM -b -n 1" ..
-    --[[ | awk '{printf "%-5s %-4s %s\n", $1, $8, $11}']]
-    --or
-    --"COLUMNS=512 top -o \\%MEM -b -n 1" ..
-    --[[ | awk '{printf "%-5s %-4s %s\n", $1, $10, $12}']]
+  local new_top = args.new_top or false
   mem.command = "top -o \\%MEM -b -n 1 -w 512"
 
   function mem.hide_notification()
@@ -82,8 +75,8 @@ local function worker(args)
       )
     ) do
       local values = h_string.split(line, ' ')
-      local percent = values[8]
-      local name = values[11]
+      local percent = values[new_top and 8 or 10]
+      local name = values[new_top and 11 or 12]
       percent = percent + 0
       if result[name] then
         result[name] = result[name] + percent
