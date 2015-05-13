@@ -114,6 +114,11 @@ function toolbar.init(awesome_context)
         common.constraint({height=beautiful.panel_padding_bottom})
       })
     )
+    -- add :buttons method
+    top_panel_layout = setmetatable(
+      top_panel_layout,
+      wibox.widget.background(top_panel_layout)
+    )
     topwibox_layout[s] = top_panel_layout
 
 
@@ -135,8 +140,8 @@ function toolbar.init(awesome_context)
       loaded_widgets.mem,
       v_sep,
       loaded_widgets.cpu,
-      loaded_widgets.temp,
-      loaded_widgets.bat,
+      --loaded_widgets.temp,
+      --loaded_widgets.bat,
     }
     left_panel_bottom_layouts[s] = common.fixed.vertical(left_panel_widgets[s])
 
@@ -222,6 +227,12 @@ function toolbar.init(awesome_context)
       screen = s,
       height = beautiful.panel_height,
     })
+    top_panel_layout:buttons(awful.util.table.join(
+      awful.button({		}, 5, function(t)
+        awful.tag.viewnext(awful.tag.getscreen(t)) end),
+      awful.button({		}, 4, function(t)
+        awful.tag.viewprev(awful.tag.getscreen(t)) end)
+    ))
     topwibox[s]:set_widget(top_panel_layout)
     topwibox[s].opacity = beautiful.panel_opacity
     topwibox[s]:set_bg(beautiful.panel_bg)

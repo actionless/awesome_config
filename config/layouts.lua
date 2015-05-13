@@ -2,7 +2,7 @@ local awful = require("awful")
 local gears = require("gears")
 local beautiful = require("beautiful")
 local capi = { screen = screen }
-local lain = require("lain")
+local lain = require("third_party.lain")
 local lcars_layout = require("actionless.lcars_layout")
 
 local layouts = {}

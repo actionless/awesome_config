@@ -92,22 +92,23 @@ function widget_loader.init(awesome_context)
     new_top = awesome_context.new_top,
   })
   -- Sensor
-  w.temp = widgets.temp({
-    update_interval = 10,
-    sensor = "Core 0",
-    warning = 75,
-    bg = beautiful.widget_temp_bg,
-    fg = beautiful.widget_temp_fg,
-  })
+  --w.temp = widgets.temp({
+    --update_interval = 10,
+    ----sensor = "Core 0",
+    --sensor = "temp1",
+    --warning = 75,
+    --bg = beautiful.widget_temp_bg,
+    --fg = beautiful.widget_temp_fg,
+  --})
   -- Battery
-  if awesome_context.have_battery then
-    w.bat = widgets.bat({
-      update_interval = 30,
-      bg = beautiful.widget_bat_bg,
-      fg = beautiful.widget_bat_fg,
-      show_when_charged=false,
-    })
-  end
+  --if awesome_context.have_battery then
+    --w.bat = widgets.bat({
+      --update_interval = 30,
+      --bg = beautiful.widget_bat_bg,
+      --fg = beautiful.widget_bat_fg,
+      --show_when_charged=false,
+    --})
+  --end
 
   -- Textclock
   w.textclock = widgets.common.decorated({
@@ -130,8 +131,7 @@ function widget_loader.init(awesome_context)
         fg = beautiful.widget_close_fg,
         left_separators = beautiful.widget_close_left_decorators,
         right_separators = beautiful.widget_close_right_decorators,
-        clientbuttons = awesome_context.clientbuttons,
-        clientbuttons_manage = awesome_context.clientbuttons_manage,
+        awesome_context = awesome_context,
       }
     )
 
@@ -141,11 +141,7 @@ function widget_loader.init(awesome_context)
       awful.button({		}, 1, awful.tag.viewonly),
       awful.button({ modkey	}, 1, awful.client.movetotag),
       awful.button({		}, 3, awful.tag.viewtoggle),
-      awful.button({ modkey	}, 3, awful.client.toggletag),
-      awful.button({		}, 5, function(t)
-        awful.tag.viewnext(awful.tag.getscreen(t)) end),
-      awful.button({		}, 4, function(t)
-        awful.tag.viewprev(awful.tag.getscreen(t)) end)
+      awful.button({ modkey	}, 3, awful.client.toggletag)
     )
     --sw.taglist = widgets.common.decorated_horizontal({
       --widget = awful.widget.taglist(

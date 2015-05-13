@@ -33,9 +33,13 @@ local function on_client_focus(c)
     titlebar.remove_border(c)
   else
     -- more tiling clients
-    titlebar.remove_titlebar(c)
     c.border_width = beautiful.border_width
     c.border_color = beautiful.border_focus
+    if not awesome_context.show_titlebar then
+      titlebar.remove_titlebar(c)
+    else
+      titlebar.make_titlebar(c)
+    end
   end
   --print(c:get_xproperty('_GTK_APP_MENU_OBJECT_PATH'))
 end
@@ -56,7 +60,11 @@ local function on_client_unfocus (c)
     titlebar.remove_border(c)
   else
     -- more tiling clients
-    titlebar.remove_titlebar(c)
+    if not awesome_context.show_titlebar then
+      titlebar.remove_titlebar(c)
+    else
+      titlebar.make_titlebar(c)
+    end
     c.border_width = beautiful.border_width
     c.border_color = beautiful.border_normal
   end
@@ -202,10 +210,7 @@ local function client_callback(c)
 end
 
 client.connect_signal("unmanage", function (c)
-  local t = awful.tag.selected(helpers.get_current_screen())
-  if awful.tag.getproperty(t, 'layout').name == 'lcars' then
-    lcars_separate(t)
-  end
+  return client_callback(c)
 end)
 client.connect_signal("tagged", function (c)
   for _, t in ipairs(c:tags()) do

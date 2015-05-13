@@ -10,6 +10,7 @@ local capi = { client = client }
 
 
 local common = require("actionless.widgets.common")
+local helpers = require("actionless.helpers")
 
 
 local manage_client = {}
@@ -18,9 +19,8 @@ local function worker(args)
   local args	 = args or {}
   args.bg = args.bg or beautiful.panel_widget_bg or beautiful.fg
   args.fg = args.fg or beautiful.panel_widget_fg or beautiful.bg
+  local awesome_context = args.awesome_context
   local widget_screen = args.screen or 1
-  local clientbuttons = args.clientbuttons
-  local clientbuttons_manage = args.clientbuttons_manage
 
   local object = {}
   local widget = common.widget()
@@ -47,24 +47,24 @@ local function worker(args)
 
   widget:buttons(awful.util.table.join(
     awful.button({ }, 1, function ()
-      capi.client.focus:kill()
+      if not widget.is_managing then
+        capi.client.focus:kill()
+      end
     end),
     awful.button({ }, 3, function ()
-      local cls = capi.client.get()
+      local t = awful.tag.selected(helpers.get_current_screen())
       if not widget.is_managing then
         widget.is_managing = true
         widget:set_warning()
-        widget:set_text('M')
-        for _, c in pairs(cls) do
-          c:buttons(clientbuttons_manage)
-        end
+        widget:set_text('T')
+        awesome_context.show_titlebar = true
+        tag.emit_signal("property::layout", t)
       else
         widget.is_managing = false
         widget:set_error()
         widget:set_text('X')
-        for _, c in pairs(cls) do
-          c:buttons(clientbuttons)
-        end
+        awesome_context.show_titlebar = false
+        tag.emit_signal("property::layout", t)
       end
     end)
   ))
