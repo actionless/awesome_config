@@ -17,6 +17,10 @@ wget https://gist.githubusercontent.com/actionless/229eef7795915068bad9/raw/08c2
 
 ![Screenshot](https://raw.githubusercontent.com/actionless/awesome_config/devel/screenshots/screenshot.png "Screenshot")
 
+The same screenshot with other colors set in ~/.Xresources:
+
+![Screenshot](https://raw.githubusercontent.com/actionless/awesome_config/devel/screenshots/screenshot_lcars.png "Screenshot")
+
 #### Widget popups
 
 @TODO: upload newer screenshots
