@@ -71,7 +71,7 @@ function toolbar.init(awesome_context)
         loaded_widgets.screen[s].taglist,
         top_panel_left_margin,
         separator,
-        loaded_widgets.screen[s].close_button,
+        loaded_widgets.screen[s].manage_client,
         separator,
         loaded_widgets.kbd,
         separator,
@@ -210,6 +210,7 @@ function toolbar.init(awesome_context)
 
     internal_corner_wibox[s] = assets.internal_corner_wibox()
     top_internal_corner_wibox[s] = assets.top_internal_corner_wibox()
+    --top_internal_corner_wibox[s] = assets.internal_corner_wibox()
 
     leftwibox[s] = awful.wibox({
       position = "left",
@@ -249,6 +250,7 @@ function toolbar.init(awesome_context)
   awesome_context.leftwibox_separator = leftwibox_separator
   awesome_context.internal_corner_wibox = internal_corner_wibox
   awesome_context.top_internal_corner_wibox = top_internal_corner_wibox
+  --awesome_context.top_internal_corner_wibox = internal_corner_wibox
 
   awesome_context.left_panel_widgets = left_panel_widgets
   awesome_context.left_panel_top_layouts = left_panel_top_layouts

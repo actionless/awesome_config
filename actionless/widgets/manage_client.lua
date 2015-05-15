@@ -45,28 +45,30 @@ local function worker(args)
       end
     end)
 
+  widget.toggle = function()
+    local t = awful.tag.selected(helpers.get_current_screen())
+    if not widget.is_managing then
+      widget.is_managing = true
+      widget:set_warning()
+      widget:set_text('T')
+      awesome_context.show_titlebar = true
+      tag.emit_signal("property::layout", t)
+    else
+      widget.is_managing = false
+      widget:set_error()
+      widget:set_text('X')
+      awesome_context.show_titlebar = false
+      tag.emit_signal("property::layout", t)
+    end
+  end
+
   widget:buttons(awful.util.table.join(
     awful.button({ }, 1, function ()
       if not widget.is_managing then
         capi.client.focus:kill()
       end
     end),
-    awful.button({ }, 3, function ()
-      local t = awful.tag.selected(helpers.get_current_screen())
-      if not widget.is_managing then
-        widget.is_managing = true
-        widget:set_warning()
-        widget:set_text('T')
-        awesome_context.show_titlebar = true
-        tag.emit_signal("property::layout", t)
-      else
-        widget.is_managing = false
-        widget:set_error()
-        widget:set_text('X')
-        awesome_context.show_titlebar = false
-        tag.emit_signal("property::layout", t)
-      end
-    end)
+    awful.button({ }, 3, widget.toggle)
   ))
 
   widget:hide()

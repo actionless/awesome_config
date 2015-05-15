@@ -683,11 +683,9 @@ awesome_context.clientkeys = awful.util.table.join(
   ),
   hk.on({ modkey, "Shift"    }, "t",
     function(c)
-      titlebar.titlebar_toggle(c)
-      --awful.titlebar.toggle(
-      --  c, beautiful.titlebar_position or 'top')
+     awesome_context.widgets.screen[c.screen].manage_client.toggle()
     end,
-    "toggle Titlebar", CLIENT_MANIPULATION
+    "toggle titlebars", CLIENT_MANIPULATION
   ),
   hk.on({ modkey,        }, "n",
     function (c) c.minimized = true end,

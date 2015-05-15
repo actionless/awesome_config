@@ -124,7 +124,7 @@ function widget_loader.init(awesome_context)
     local sw = w.screen[s]
 
     -- CLOSE button
-    sw.close_button = widgets.manage_client(
+    sw.manage_client = widgets.manage_client(
       {
         screen = s,
         bg = beautiful.widget_close_bg,
