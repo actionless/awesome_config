@@ -191,7 +191,7 @@ local function tile(p, orientation)
     local ncol = math.min(tag.getncol(t), #cls_other)
 
     -- split other windows to column groups
-    local last_small_column = ncol - #cls_other % ncol
+    local last_small_column = ncol - #cls_other % (ncol > 0 and ncol or 1)
     local rows_min = math.floor(#cls_other / ncol)
 
     local client_index = 1
