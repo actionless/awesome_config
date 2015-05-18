@@ -14,7 +14,12 @@ function signals.init(awesome_context)
 
 local function on_client_focus(c)
   local layout = awful.layout.get(c.screen)
-  if c.maximized then
+  if awesome_context.show_titlebar then
+    -- titlebars enabled explicitly
+    c.border_color = beautiful.border_focus
+    c.border_width = beautiful.border_width
+    titlebar.make_titlebar(c)
+  elseif c.maximized then
     -- maximized
     titlebar.remove_border(c)
   elseif awful.client.floating.get(c) then
@@ -35,11 +40,7 @@ local function on_client_focus(c)
     -- more tiling clients
     c.border_width = beautiful.border_width
     c.border_color = beautiful.border_focus
-    if not awesome_context.show_titlebar then
-      titlebar.remove_titlebar(c)
-    else
-      titlebar.make_titlebar(c)
-    end
+    titlebar.remove_titlebar(c)
   end
   --print(c:get_xproperty('_GTK_APP_MENU_OBJECT_PATH'))
 end
