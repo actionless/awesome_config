@@ -38,7 +38,19 @@ local function worker(args)
       netctl.netctl_auto_update()
     elseif netctl.preset == 'netctl' then
       netctl.netctl_update()
+    elseif netctl.preset == 'systemd' then
+      netctl.systemd_update()
     end
+  end
+
+  function netctl.systemd_update()
+    async.execute(
+      "systemctl list-unit-files systemd-networkd.service",
+      function(str)
+        netctl.update_widget(
+          str:match("systemd%-(networkd)%.service.*enabled.*"
+          ) or 'networkd...')
+      end)
   end
 
   function netctl.update_bond()
