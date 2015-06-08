@@ -369,6 +369,8 @@ local globalkeys = awful.util.table.join(
 
   awful.key({}, "#150", function () awesome_context.widgets.music.prev_song() end),
   awful.key({}, "#148", function () awesome_context.widgets.music.next_song() end),
+  awful.key({}, "#173", function () awesome_context.widgets.music.prev_song() end),
+  awful.key({}, "#171", function () awesome_context.widgets.music.next_song() end),
   awful.key({}, "#172", function () awesome_context.widgets.music.toggle() end),
 
   hk.on({ modkey }, "c",
@@ -659,15 +661,15 @@ awesome_context.clientkeys = awful.util.table.join(
 
   hk.on({ modkey,        }, "f",
     function (c) c.fullscreen = not c.fullscreen end,
-    "toggle client Fullscreen", CLIENT_MANIPULATION
+    "toggle client fullscreen", CLIENT_MANIPULATION
   ),
   hk.on({ modkey,        }, "q",
     function (c) c:kill() end,
-    "Quit app", IMPORTANT_COLOR
+    "quit app", IMPORTANT_COLOR
   ),
   hk.on({ modkey, "Shift"  }, "f",
     awful.client.floating.toggle,
-    "toggle client Float", CLIENT_MANIPULATION
+    "toggle client float", CLIENT_MANIPULATION
   ),
   hk.on({ modkey, "Shift"  }, "Return",
     function (c) c:swap(awful.client.getmaster()) end,
@@ -675,11 +677,11 @@ awesome_context.clientkeys = awful.util.table.join(
   ),
   hk.on({ modkey,        }, "o",
     awful.client.movetoscreen,
-    "move client to Other screen", CLIENT_MANIPULATION
+    "move client to other screen", CLIENT_MANIPULATION
   ),
   hk.on({ modkey,        }, "t",
     function (c) c.ontop = not c.ontop end,
-    "toggle client on Top", CLIENT_MANIPULATION
+    "toggle client on top", CLIENT_MANIPULATION
   ),
   hk.on({ modkey, "Shift"    }, "t",
     function(c)
@@ -689,14 +691,13 @@ awesome_context.clientkeys = awful.util.table.join(
   ),
   hk.on({ modkey,        }, "n",
     function (c) c.minimized = true end,
-    "icoNify client", CLIENT_MANIPULATION
+    "iconify client", CLIENT_MANIPULATION
   ),
   hk.on({ modkey,        }, "m",
     function (c)
-      c.maximized_horizontal = not c.maximized_horizontal
-      c.maximized_vertical   = not c.maximized_vertical
+      c.maximized = not c.maximized
     end,
-    "Maximize client", CLIENT_MANIPULATION
+    "maximize client", CLIENT_MANIPULATION
   )
 )
 
