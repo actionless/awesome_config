@@ -38,9 +38,12 @@ theme.widget_decoration_arrl = ''
 theme.widget_decoration_arrr = ''
 
 -- FONTS:
-theme.font = "Monospace Bold "..tostring(dpi(10))
-theme.small_font = "Monospace "..tostring(dpi(7))
-theme.sans_font = "Sans Bold "..tostring(dpi(10))
+--theme.font = "Monospace Bold "..tostring(dpi(10))
+--theme.small_font = "Monospace "..tostring(dpi(7))
+--theme.sans_font = "Sans Bold "..tostring(dpi(10))
+theme.font = "Monospace Bold 10"
+theme.small_font = "Monospace 7"
+theme.sans_font = "Sans Bold 10"
 -- Don't use sans font:
 --theme.sans_font	= "theme.font"
 
