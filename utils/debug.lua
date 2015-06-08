@@ -5,7 +5,7 @@ local beautiful = require("beautiful")
 local debug_module = {}
 
 function debug_module.log(object)
-  print(inspect(object))
+  io.stderr:write(inspect(object)..'\n')
 end
 
 function debug_module.nlog(object)
