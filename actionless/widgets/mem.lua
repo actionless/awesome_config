@@ -34,6 +34,7 @@ local function worker(args)
     "mouse::enter", function () mem.show_notification() end)
   mem.widget:connect_signal(
     "mouse::leave", function () mem.hide_notification() end)
+  mem.cores_number = tonumber(parse.command_to_string('nproc'))
 
   mem.list_len = args.list_length or 10
 
@@ -71,7 +72,7 @@ local function worker(args)
     for _, line in ipairs(
       h_table.range(
         parse.string_to_lines(output),
-        14
+       6 + mem.cores_number
       )
     ) do
       local values = h_string.split(line, ' ')

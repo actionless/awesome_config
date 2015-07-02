@@ -74,7 +74,7 @@ local function worker(args)
     for _, line in ipairs(
       h_table.range(
         parse.string_to_lines(output),
-        15
+        6 + cpu.cores_number
       )
     ) do
       --local pid, percent, name = line:match("^(%d+)%s+(.+)%s+(.*)")
