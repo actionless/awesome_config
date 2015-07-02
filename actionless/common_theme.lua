@@ -13,7 +13,7 @@ local common_theme = {}
 
 function common_theme.generate_theme(theme_dir)
 
-  local theme = {}
+  local theme = dofile("/usr/share/awesome/themes/xresources/theme.lua")
 
   theme.null = nil
   -- TERMINAL COLORSCHEME:
@@ -56,6 +56,7 @@ function common_theme.generate_theme(theme_dir)
   theme.hidpi = false
 
   -- Use plain color:
+  theme.wallpaper = nil
   theme.wallpaper_cmd     = "hsetroot"
   -- Use nitrogen:
   --theme.wallpaper_cmd     = "nitrogen --restore"
@@ -282,32 +283,41 @@ theme.left_panel_internal_corner_radius = 30
   --theme.tasklist_maximized_horizontal = "_"
   --theme.tasklist_maximized_vertical = "|"
 
-  local layout_icons_dir = icons_dir .. "layout/"
-  theme.layout_icons_dir = layout_icons_dir
-  theme.layout_tile		= layout_icons_dir .. "tile.png"
-  theme.layout_tilegaps		= layout_icons_dir .. "tilegaps.png"
-  theme.layout_tileleft		= layout_icons_dir .. "tileleft.png"
-  theme.layout_tilebottom		= layout_icons_dir .. "tilebottom.png"
-  theme.layout_tiletop		= layout_icons_dir .. "tiletop.png"
-  theme.layout_fairv		= layout_icons_dir .. "fairv.png"
-  theme.layout_fairh		= layout_icons_dir .. "fairh.png"
-  theme.layout_spiral		= layout_icons_dir .. "spiral.png"
-  theme.layout_dwindle		= layout_icons_dir .. "dwindle.png"
-  theme.layout_max		= layout_icons_dir .. "max.png"
-  theme.layout_fullscreen		= layout_icons_dir .. "fullscreen.png"
-  theme.layout_magnifier		= layout_icons_dir .. "magnifier.png"
-  theme.layout_floating		= layout_icons_dir .. "floating.png"
+  --local layout_icons_dir = icons_dir .. "layout/"
+  --theme.layout_icons_dir = layout_icons_dir
+  --theme.layout_tile		= layout_icons_dir .. "tile.png"
+  --theme.layout_tilegaps		= layout_icons_dir .. "tilegaps.png"
+  --theme.layout_tileleft		= layout_icons_dir .. "tileleft.png"
+  --theme.layout_tilebottom		= layout_icons_dir .. "tilebottom.png"
+  --theme.layout_tiletop		= layout_icons_dir .. "tiletop.png"
+  --theme.layout_fairv		= layout_icons_dir .. "fairv.png"
+  --theme.layout_fairh		= layout_icons_dir .. "fairh.png"
+  --theme.layout_spiral		= layout_icons_dir .. "spiral.png"
+  --theme.layout_dwindle		= layout_icons_dir .. "dwindle.png"
+  --theme.layout_max		= layout_icons_dir .. "max.png"
+  --theme.layout_fullscreen		= layout_icons_dir .. "fullscreen.png"
+  --theme.layout_magnifier		= layout_icons_dir .. "magnifier.png"
+  --theme.layout_floating		= layout_icons_dir .. "floating.png"
 
   theme.layout_uselesstile		= theme.layout_tile
   theme.layout_uselesstiletop		= theme.layout_tiletop
+  theme.layout_lcars		        = theme.layout_tiletop -- @TODO: add icon
   theme.layout_uselessfair		= theme.layout_fairv
   theme.layout_uselessfairh		= theme.layout_fairh
   theme.layout_uselesspiral		= theme.layout_spiral
-  theme.lain_icons         = os.getenv("HOME") .. "/.config/awesome/third_party/lain/icons/layout/default/"
-  theme.layout_termfair    = theme.lain_icons .. "termfair.png"
-  theme.layout_cascade     = theme.lain_icons .. "cascade.png"
-  theme.layout_cascadetile = theme.lain_icons .. "cascadetile.png"
-  theme.layout_centerwork  = theme.lain_icons .. "centerwork.png"
+
+-- Use 'w' postfix for dark background:
+local bg_numberic_value = 0;
+for s in theme.bg_normal:gmatch("[a-fA-F0-9][a-fA-F0-9]") do
+    bg_numberic_value = bg_numberic_value + tonumber("0x"..s);
+end
+local is_dark_bg = (bg_numberic_value < 383)
+local pf = is_dark_bg and 'w' or ''
+  theme.lain_icons         = awful.util.getdir("config").."/third_party/lain/icons/layout/default/"
+  theme.layout_termfair    = theme.lain_icons .. "termfair"..pf..".png"
+  theme.layout_cascade     = theme.lain_icons .. "cascade"..pf..".png"
+  theme.layout_cascadetile = theme.lain_icons .. "cascadetile"..pf..".png"
+  theme.layout_centerwork  = theme.lain_icons .. "centerwork"..pf..".png"
 
 
   local titlebar_icons_dir = icons_dir .. "titlebar/"
