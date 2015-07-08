@@ -307,20 +307,6 @@ theme.left_panel_internal_corner_radius = 30
   theme.layout_uselessfairh		= theme.layout_fairh
   theme.layout_uselesspiral		= theme.layout_spiral
 
--- Use 'w' postfix for dark background:
-local bg_numberic_value = 0;
-for s in theme.bg_normal:gmatch("[a-fA-F0-9][a-fA-F0-9]") do
-    bg_numberic_value = bg_numberic_value + tonumber("0x"..s);
-end
-local is_dark_bg = (bg_numberic_value < 383)
-local pf = is_dark_bg and 'w' or ''
-  theme.lain_icons         = awful.util.getdir("config").."/third_party/lain/icons/layout/default/"
-  theme.layout_termfair    = theme.lain_icons .. "termfair"..pf..".png"
-  theme.layout_cascade     = theme.lain_icons .. "cascade"..pf..".png"
-  theme.layout_cascadetile = theme.lain_icons .. "cascadetile"..pf..".png"
-  theme.layout_centerwork  = theme.lain_icons .. "centerwork"..pf..".png"
-
-
   local titlebar_icons_dir = icons_dir .. "titlebar/"
   theme.titlebar_icons_dir = titlebar_icons_dir
   theme.titlebar_close_button_focus = titlebar_icons_dir .. "/close_focus.png"

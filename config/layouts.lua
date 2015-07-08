@@ -2,8 +2,8 @@ local awful = require("awful")
 local gears = require("gears")
 local beautiful = require("beautiful")
 local capi = { screen = screen }
-local lain = require("third_party.lain")
 local lcars_layout = require("actionless.lcars_layout")
+local center_layout = require("actionless.center_layout")
 
 local layouts = {}
 
@@ -13,7 +13,7 @@ function layouts.init(context)
   -- Table of layouts to cover with awful.layout.inc, order matters.
   if true then
     context.layouts = {
-      lain.layout.centerfair,
+      center_layout,
       awful.layout.suit.tile,
       lcars_layout.top,
       awful.layout.suit.floating,
@@ -53,7 +53,7 @@ function layouts.init(context)
       { '1:bs', '2:web', '3:ww', '4:im', '5:mm', 6, 7, 8, '9:sd', '10:nl', '11', '12' },
       s,
       {
-        awful.layout.layouts[3],
+        awful.layout.layouts[1],
         awful.layout.layouts[2],
         awful.layout.layouts[2],
         awful.layout.layouts[1],

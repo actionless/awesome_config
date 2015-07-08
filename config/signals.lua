@@ -4,8 +4,8 @@ local client = client
 local beautiful = require("beautiful")
 
 local titlebar	= require("actionless.titlebar")
-local lain = require("third_party.lain")
 local helpers = require("actionless.helpers")
+local center_layout = require("actionless.center_layout")
 
 local delayed_call = require("gears.timer").delayed_call
 
@@ -37,8 +37,7 @@ local function on_client_focus(c)
     c.border_width = beautiful.border_width
     titlebar.make_titlebar(c)
   elseif #awful.client.tiled(c.screen) == 1 and not (
-    layout == lain.layout.centerwork
-    or layout == lain.layout.centerfair
+    layout == center_layout
   ) then
     log("F: one tiling client")
     titlebar.remove_border(c)
@@ -60,8 +59,7 @@ local function on_client_unfocus (c)
     -- floating layout
     c.border_color = beautiful.titlebar_border
   elseif #awful.client.tiled(c.screen) == 1 and not (
-    layout == lain.layout.centerwork
-    or layout == lain.layout.centerfair
+    layout == center_layout
   ) then
     -- one tiling client
     titlebar.remove_border(c)
