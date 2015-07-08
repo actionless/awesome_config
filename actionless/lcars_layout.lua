@@ -102,7 +102,7 @@ end
 local function tile(p, orientation)
 
     -- Theme vars
-    local ugw = beautiful.useless_gap_width or 0
+    local ugw = beautiful.useless_gap or 0
     local useless_gap = {x=ugw, y=ugw, h=ugw, w=ugw}
     local global_border = beautiful.global_border_width or 0
 
@@ -160,31 +160,39 @@ local function tile(p, orientation)
 
     -- Tile master windows
     local master_area = {
-        x = wa.x,
+        x = (#cls_other >= 1)
+          and wa.x
+          or wa.x,
         y = wa.y,
-        width  = nmaster > 0 and wa.width * mwfact or 0,
-        height = wa.height
+        width  = (#cls_other >= 1)
+          and wa.width * mwfact - beautiful.panel_height * 2 - ugw
+          or ((nmaster > 0) and wa.width * mwfact or 0),
+        height = wa.height + ugw
     }
 
     if not data[0] then data[0] = {} end
     tile_column(
        wa, master_area, cls_master,
        {
-        x=ugw,
-        y=(#cls_other >= 1) and (ugw * 4 + beautiful.panel_height) or ugw,
-        w=ugw,
-        h=(#cls_other >= 1) and (ugw * 2 + beautiful.panel_height) or ugw,
-       },
+            x=ugw,
+            y=ugw,
+            w=ugw*2,
+            h=ugw,
+         },
        transformation,
        data[0]
     )
 
     -- Tile other windows
     local other_area = {
-        x = wa.x + master_area.width,
+        x = (nmaster >= 1)
+          and wa.x + master_area.width + beautiful.panel_height*2 + ugw*3
+          or wa.x + master_area.width + ugw*2,
         y = wa.y,
-        width  = wa.width - master_area.width,
-        height = wa.height
+        width = (nmaster >= 1) 
+          and wa.width - master_area.width - beautiful.panel_height * 2 - ugw*3 
+          or wa.width - master_area.width - ugw*2,
+        height = wa.height + ugw
     }
 
     -- get column number for other windows
@@ -213,8 +221,8 @@ local function tile(p, orientation)
           wa, column_area, column, {
             x=ugw,
             y=ugw,
-            w=ugw,
-            h=((ncol==1 or i==ncol) and #cls_master >= 1) and ugw + beautiful.panel_height or ugw,
+            w=ugw*2,
+            h=ugw,
          }, transformation, data[i]
        )
     end

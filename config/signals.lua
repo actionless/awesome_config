@@ -10,6 +10,10 @@ local helpers = require("actionless.helpers")
 local delayed_call = require("gears.timer").delayed_call
 
 
+local debug_messages_enabled = false
+local log = function(...) if debug_messages_enabled then nlog(...) end end
+
+
 local signals = {}
 
 function signals.init(awesome_context)
@@ -17,35 +21,29 @@ function signals.init(awesome_context)
 local function on_client_focus(c)
   local layout = awful.layout.get(c.screen)
   if awesome_context.show_titlebar then
-    -- titlebars enabled explicitly
-    --nlog(" titlebars enabled explicitly")
+    log("F: titlebars enabled explicitly")
     c.border_color = beautiful.border_focus
     c.border_width = beautiful.border_width
     titlebar.make_titlebar(c)
   elseif c.maximized then
-    -- maximized
-    --nlog("maximized")
+    log("F: maximized")
     titlebar.remove_border(c)
   elseif awful.client.floating.get(c) then
-    -- floating client
-    --nlog("-- floating client")
+    log("F: floating client")
     c.border_width = beautiful.border_width
     titlebar.make_titlebar(c)
   elseif layout == awful.layout.suit.floating then
-    -- floating layout
-    --nlog("floating layout")
+    log("F: floating layout")
     c.border_width = beautiful.border_width
     titlebar.make_titlebar(c)
   elseif #awful.client.tiled(c.screen) == 1 and not (
     layout == lain.layout.centerwork
-    or layout == lain.layout.uselesstile
+    or layout == lain.layout.centerfair
   ) then
-    -- one tiling client
-    --nlog("-- one tiling client")
+    log("F: one tiling client")
     titlebar.remove_border(c)
   else
-    -- more tiling clients
-    --nlog("-- more tiling clients")
+    log("F: more tiling clients")
     c.border_width = beautiful.border_width
     c.border_color = beautiful.border_focus
     titlebar.remove_titlebar(c)
@@ -63,7 +61,7 @@ local function on_client_unfocus (c)
     c.border_color = beautiful.titlebar_border
   elseif #awful.client.tiled(c.screen) == 1 and not (
     layout == lain.layout.centerwork
-    or layout == lain.layout.uselesstile
+    or layout == lain.layout.centerfair
   ) then
     -- one tiling client
     titlebar.remove_border(c)
@@ -133,7 +131,7 @@ end)
 
 local function lcars_unite(t, from)
   if not awesome_context.lcars_is_separated then return end
-  --nlog("unite|"..from)
+  log("LCARS: unite|"..from)
   local s = helpers.get_current_screen()
   local w = awesome_context.topwibox[s]
   w:struts({top = beautiful.panel_height})
@@ -159,7 +157,7 @@ local function lcars_separate(t, from)
   if nmaster < 1 or #awful.client.tiled(s) <= nmaster then
     return lcars_unite(t, from)
   end
-  --nlog("separate|"..from)
+  log("LCARS: separate|"..from)
   local w = awesome_context.topwibox[s]
   if not awesome_context.lcars_is_separated then
     w:struts({top = 0})
@@ -167,12 +165,12 @@ local function lcars_separate(t, from)
   local mwfact =  awful.tag.getmwfact(t)
   local height = screen[s].workarea.height
   local computed_y = math.floor(
-    (height-beautiful.panel_height)*(1-mwfact) + beautiful.useless_gap_width
+    height*(1-mwfact) + beautiful.panel_height
   )
   if awesome_context.lcars_is_separated
     and computed_y == awesome_context.lcars_last_y
   then return end
-  --nlog("--not cached")
+  log("LCARS: not cached")
   awesome_context.lcars_last_y = computed_y
 
   w:geometry({height = beautiful.panel_height * 2 + beautiful.panel_padding_bottom})

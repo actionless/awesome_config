@@ -11,15 +11,14 @@ local layouts = {}
 function layouts.init(context)
 
   -- Table of layouts to cover with awful.layout.inc, order matters.
-  if beautiful.hidpi then
+  if true then
     context.layouts = {
-      lain.layout.centerwork,
-      lain.layout.uselesstile,
+      lain.layout.centerfair,
+      awful.layout.suit.tile,
       lcars_layout.top,
       awful.layout.suit.floating,
-      lain.layout.uselessfair,
-      lain.layout.uselessfair.horizontal,
-      lain.layout.uselesspiral
+      awful.layout.suit.fair,
+      awful.layout.suit.spiral,
     }
   else
     context.layouts = {
@@ -68,8 +67,9 @@ function layouts.init(context)
         awful.layout.layouts[1],
       }
     )
-    awful.tag.incmwfact(0.20, awful.tag.gettags(s)[2])
-    awful.tag.incmwfact(0.20, awful.tag.gettags(s)[1])
+    local tags = awful.tag.gettags(s)
+    awful.tag.incmwfact(0.20, tags[2])
+    awful.tag.incmwfact(0.20, tags[1])
   end
   -- }}}
 

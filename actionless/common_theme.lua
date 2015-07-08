@@ -106,6 +106,7 @@ function common_theme.generate_theme(theme_dir)
 
   theme.useless_gap_width = 20
   theme.useless_gap_width = 40
+  theme.useless_gap = 20
 
   theme.fg_normal		= "theme.fg"
   theme.bg_normal		= "theme.bg"
