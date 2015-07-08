@@ -186,11 +186,11 @@ local function tile(p, orientation)
     -- Tile other windows
     local other_area = {
         x = (nmaster >= 1)
-          and wa.x + master_area.width + beautiful.panel_height*2 + ugw*3
+          and wa.x + master_area.width + beautiful.panel_height*2 + ugw*4
           or wa.x + master_area.width + ugw*2,
         y = wa.y,
-        width = (nmaster >= 1) 
-          and wa.width - master_area.width - beautiful.panel_height * 2 - ugw*3 
+        width = (nmaster >= 1)
+          and wa.width - master_area.width - beautiful.panel_height * 2 - ugw*5
           or wa.width - master_area.width - ugw*2,
         height = wa.height + ugw
     }

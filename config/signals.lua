@@ -225,7 +225,10 @@ client.connect_signal("untagged", function (c, t)
   return tag_callback(t, "c:untagged")
 end)
 client.connect_signal("property::minimized", function (c)
-  return tag_callback(c:tags()[1], "c:min")
+  local t = c:tags()[1]
+  if awful.tag.getproperty(t, 'layout').name == 'lcars' then
+    return tag_callback(t, "c:min")
+  end
 end)
 
 tag.connect_signal("property::layout", function (t)
@@ -242,10 +245,14 @@ tag.connect_signal("property::mwfact", function (t)
   end
 end)
 tag.connect_signal("property::ncol", function (t)
-  return tag_callback(t, "t:ncol")
+  if awful.tag.getproperty(t, 'layout').name == 'lcars' then
+    return tag_callback(t, "t:ncol")
+  end
 end)
 tag.connect_signal("property::nmaster", function (t)
-  return tag_callback(t, "t:nmaster")
+  if awful.tag.getproperty(t, 'layout').name == 'lcars' then
+    return tag_callback(t, "t:nmaster")
+  end
 end)
 
 client.connect_signal("property::maximized", function (c)
