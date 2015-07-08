@@ -167,6 +167,7 @@ local function lcars_separate(t, from)
   local computed_y = math.floor(
     height*(1-mwfact) + beautiful.panel_height
   )
+  --nlog(height)
   if awesome_context.lcars_is_separated
     and computed_y == awesome_context.lcars_last_y
   then return end

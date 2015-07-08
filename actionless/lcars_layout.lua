@@ -104,7 +104,7 @@ local function tile(p, orientation)
     -- Theme vars
     local ugw = beautiful.useless_gap or 0
     local useless_gap = {x=ugw, y=ugw, h=ugw, w=ugw}
-    local global_border = beautiful.global_border_width or 0
+    local global_border = 0 --beautiful.global_border_width or 0
 
     -- Aliases
     local wa = p.workarea
@@ -132,21 +132,6 @@ local function tile(p, orientation)
         tag.getdata(t).windowfact = data
     end
 
-    -- Workarea size correction depending on useless gap and global border
-    wa.height = wa.height - 2 * global_border - useless_gap.h
-    wa.width  = wa.width -  2 * global_border - useless_gap.w
-    wa.x = wa.x + useless_gap.x / 2 + global_border
-    wa.y = wa.y + useless_gap.x / 2 + global_border
-
-    -- Find which transformation we need for given orientation
-    local transformation = {
-        swap = orientation == 'top' or orientation == 'bottom',
-        flip = orientation == 'left' or orientation == 'top'
-    }
-
-    -- Swap workarea dimensions if orientation vertical
-    if transformation.swap then wa = swap(wa) end
-
     -- Split master and other windows
     local cls_master, cls_other = {}, {}
 
@@ -158,14 +143,29 @@ local function tile(p, orientation)
         end
     end
 
+    -- Workarea size correction depending on useless gap and global border
+    wa.height = wa.height - 2 * global_border - useless_gap.h + ((#cls_other >= 1) and useless_gap.h*3 or 0)
+    wa.width  = wa.width -  2 * global_border - useless_gap.w
+    wa.x = wa.x + useless_gap.x / 2 + global_border
+    wa.y = (#cls_other >= 1) and 0 or wa.y + useless_gap.x / 2 + global_border
+
+    -- Find which transformation we need for given orientation
+    local transformation = {
+        swap = orientation == 'top' or orientation == 'bottom',
+        flip = orientation == 'left' or orientation == 'top'
+    }
+
+    -- Swap workarea dimensions if orientation vertical
+    if transformation.swap then wa = swap(wa) end
+
     -- Tile master windows
     local master_area = {
         x = (#cls_other >= 1)
-          and wa.x
+          and wa.x + beautiful.panel_height*0 + ugw*1
           or wa.x,
         y = wa.y,
         width  = (#cls_other >= 1)
-          and wa.width * mwfact - beautiful.panel_height * 2 - ugw
+          and wa.width * mwfact - beautiful.panel_height * 2 - ugw*2
           or ((nmaster > 0) and wa.width * mwfact or 0),
         height = wa.height + ugw
     }
