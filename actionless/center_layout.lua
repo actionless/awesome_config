@@ -224,7 +224,7 @@ local function do_tile(param, orientation)
             if nother > 0 or not grow_master then
                 size = math.min(wa[width] * mwfact, wa[width] - (coord - wa[x]))
             end
-            if nother == 0 then
+            if nother == 0 and not grow_master then
               coord = coord + (wa[width] - size)/2
             end
             if not data[0] then

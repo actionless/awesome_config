@@ -5,7 +5,6 @@ local beautiful = require("beautiful")
 
 local titlebar	= require("actionless.titlebar")
 local helpers = require("actionless.helpers")
-local center_layout = require("actionless.center_layout")
 
 local delayed_call = require("gears.timer").delayed_call
 
@@ -36,9 +35,9 @@ local function on_client_focus(c)
     log("F: floating layout")
     c.border_width = beautiful.border_width
     titlebar.make_titlebar(c)
-  elseif #awful.client.tiled(c.screen) == 1 and not (
-    layout == center_layout
-  ) then
+  elseif #awful.client.tiled(c.screen) == 1
+    and beautiful.useless_gap == 0
+  then
     log("F: one tiling client")
     titlebar.remove_border(c)
   else
@@ -59,7 +58,7 @@ local function on_client_unfocus (c)
     -- floating layout
     c.border_color = beautiful.titlebar_border
   elseif #awful.client.tiled(c.screen) == 1 and not (
-    layout == center_layout
+    beautiful.useless_gap == 0
   ) then
     -- one tiling client
     titlebar.remove_border(c)
@@ -233,7 +232,7 @@ tag.connect_signal("property::layout", function (t)
   return tag_callback(t, "t:layout")
 end)
 tag.connect_signal("property::selected", function (t)
-  if t.selected then 
+  if t.selected then
     return tag_callback(t, "t:selected")
   end
 end)
