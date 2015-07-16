@@ -11,25 +11,14 @@ local layouts = {}
 function layouts.init(context)
 
   -- Table of layouts to cover with awful.layout.inc, order matters.
-  if true then
-    context.layouts = {
-      center_layout,
-      awful.layout.suit.tile,
-      lcars_layout.top,
-      awful.layout.suit.floating,
-      awful.layout.suit.fair,
-      awful.layout.suit.spiral,
-    }
-  else
-    context.layouts = {
-      awful.layout.suit.tile,
-      awful.layout.suit.tile.bottom,
-      awful.layout.suit.floating,
-      awful.layout.suit.fair,
-      awful.layout.suit.fair.horizontal,
-      awful.layout.suit.spiral
-    }
-  end
+  context.layouts = {
+    awful.layout.suit.tile,
+    lcars_layout.top,
+    awful.layout.suit.corner.nw,
+    awful.layout.suit.floating,
+    awful.layout.suit.fair,
+    awful.layout.suit.spiral,
+  }
   awful.layout.layouts = context.layouts
   -- }}}
 
@@ -54,8 +43,8 @@ function layouts.init(context)
       s,
       {
         awful.layout.layouts[1],
-        awful.layout.layouts[2],
-        awful.layout.layouts[2],
+        awful.layout.layouts[1],
+        awful.layout.layouts[1],
         awful.layout.layouts[1],
         awful.layout.layouts[1],
         awful.layout.layouts[1],
@@ -68,8 +57,12 @@ function layouts.init(context)
       }
     )
     local tags = awful.tag.gettags(s)
-    awful.tag.incmwfact(0.20, tags[2])
+
     awful.tag.incmwfact(0.20, tags[1])
+    awful.tag.incmwfact(0.20, tags[2])
+
+    awful.tag.setmfpol("mwfact", tags[2])
+    awful.tag.setmfpol("mwfact", tags[3])
   end
   -- }}}
 

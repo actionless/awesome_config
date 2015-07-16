@@ -13,6 +13,7 @@ local wibox = require("wibox")
 local imagebox = require("wibox.widget.imagebox")
 local textbox = require("wibox.widget.textbox")
 
+local h_string = require("utils.string")
 local common = require("actionless.widgets.common")
 
 --- Layoutbox widget "class".
@@ -35,12 +36,9 @@ local function worker(args)
     local text_mode = args.text_mode or true
     layoutbox.screen = args.screen or 1
 
-    layoutbox.n_master = wibox.widget.background()
-    layoutbox.n_master:set_widget(textbox())
     layoutbox.layout = wibox.widget.background()
-
     layoutbox.imagebox = imagebox()
-    layoutbox.imagebox:set_resize(beautiful.hidpi or false)
+    layoutbox.imagebox:set_resize(true)
     layoutbox.textbox = textbox()
     if text_mode then
         layoutbox.layout:set_widget(layoutbox.textbox)
@@ -48,13 +46,19 @@ local function worker(args)
         layoutbox.layout:set_widget(layoutbox.imagebox)
     end
 
+    layoutbox.n_master = wibox.widget.background()
+    layoutbox.n_master:set_widget(textbox())
+
     layoutbox.n_col = wibox.widget.background()
     layoutbox.n_col:set_widget(textbox())
+
+    layoutbox.mfpol = wibox.widget.background()
+    layoutbox.mfpol:set_widget(textbox())
 
     args.widgets={
             layoutbox.n_master,
             wibox.widget.textbox(' '),
-            layoutbox.n_col
+            layoutbox.n_col,
         }
     args.left_separators = args.left_separators or {}
     args.right_separators = args.right_separators or {}
@@ -64,6 +68,7 @@ local function worker(args)
     args.widgets={
         layoutbox.layout,
         layoutbox.numbers_layout,
+        layoutbox.mfpol,
     }
     layoutbox.widget = common.decorated(args)
 
@@ -96,6 +101,7 @@ local function worker(args)
         local layout = awful.layout.getname(awful.layout.get(self.screen))
         self.imagebox:set_image(layout and beautiful["layout_" .. layout])
         self.textbox:set_text(layout)
+        self.layout_name = layout
     end
     function layoutbox:update_nmaster(t)
         self.n_master.widget:set_text(tag.getnmaster(t))
@@ -103,10 +109,20 @@ local function worker(args)
     function layoutbox:update_ncol(t)
         self.n_col.widget:set_text(tag.getncol(t))
     end
+    function layoutbox:update_mfpol(t)
+        if h_string.starts(self.layout_name, 'tile') or
+            h_string.starts(self.layout_name, 'corner')
+        then
+            self.mfpol.widget:set_text(tag.getmfpol(t))
+        else
+            self.mfpol.widget:set_text("")
+        end
+    end
     function layoutbox:update_all(t)
         self:update_layout()
         self:update_nmaster(t)
         self:update_ncol(t)
+        self:update_mfpol(t)
     end
 
     layoutbox:update_all(nil)
@@ -122,6 +138,9 @@ local function worker(args)
     tag.attached_connect_signal(
         layoutbox.screen, "property::nmaster",
         function(t) layoutbox:update_nmaster(t) end)
+    tag.attached_connect_signal(
+        layoutbox.screen, "property::master_fill_policy",
+        function(t) layoutbox:update_mfpol(t) end)
     return setmetatable(layoutbox, { __index = layoutbox.widget })
 end
 
