@@ -316,6 +316,10 @@ local globalkeys = awful.util.table.join(
     "columns+", LAYOUT_MANIPULATION
   ),
 
+  hk.on({ modkey, altkey }, "e",
+    function () awful.tag.togglemfpol() end,
+    "toggle expand master", LAYOUT_MANIPULATION
+  ),
 
   -- Prompt
   hk.on({ modkey }, "r",
