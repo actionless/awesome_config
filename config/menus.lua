@@ -1,6 +1,7 @@
 local awful = require("awful")
 local awesome = awesome
-local menubar = require("menubar")
+--local menubar = require("menubar")
+local menubar = require("actionless.menubar")
 local beautiful = require("beautiful")
 local capi = { screen = screen }
 
@@ -63,14 +64,26 @@ function menus.init(context)
   -- }}}
   --
 
-  -- Menubar configuration
   menubar.utils.terminal = context.cmds.terminal
-  menubar.geometry = {
+  -- Menubar configuration
+  context.menu.menubar = menubar()
+  context.menu.menubar.geometry = {
     height = beautiful.panel_height,
     width = capi.screen[get_current_screen()].workarea.width,
     x = 0,
     y = capi.screen[get_current_screen()].workarea.height - beautiful.panel_height
   }
+  -- D-Menubar configuration
+  context.menu.dmenubar = menubar()
+  context.menu.dmenubar.cache_entries = false
+  context.menu.dmenubar.menu_cache_path = awful.util.getdir("cache") .. "/history"
+  context.menu.dmenubar.geometry = {
+    height = beautiful.panel_height,
+    width = capi.screen[get_current_screen()].workarea.width,
+    x = 0,
+    y = capi.screen[get_current_screen()].workarea.height - beautiful.panel_height
+  }
+  context.menu.dmenubar.menu_gen = require("actionless.menubar.dmenugen")
   -- }}}
 
 end

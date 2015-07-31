@@ -238,11 +238,12 @@ local globalkeys = awful.util.table.join(
     "all clients menu", UTILS
   ),
   hk.on({ modkey, "Control"}, "p",
-    function() menubar.show() end,
+    function() awesome_context.menu.menubar:show() end,
     "applications menu", UTILS
   ),
   hk.on({ modkey,        }, "space",
-    function() awful.util.spawn_with_shell(cmd.dmenu) end,
+    --function() awful.util.spawn_with_shell(cmd.dmenu) end,
+    function() awesome_context.menu.dmenubar:show() end,
     "app launcher", UTILS
   ),
 
