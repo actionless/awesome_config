@@ -239,6 +239,7 @@ local globalkeys = awful.util.table.join(
   ),
   hk.on({ modkey, "Control"}, "p",
     function() awesome_context.menu.menubar:show() end,
+    --function() menubar.show() end,
     "applications menu", UTILS
   ),
   hk.on({ modkey,        }, "space",

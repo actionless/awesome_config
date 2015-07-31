@@ -364,11 +364,6 @@ menubar.__index = menubar
 return menubar
 end -- worker end
 
-function menubar_module.create(...)
-    return worker(...)
-end
-
-
 function menubar_module.mt:__call(_, ...)
     return worker(...)
 end
