@@ -39,7 +39,8 @@ function layouts.init(context)
   for s = 1, capi.screen.count() do
     -- Each screen has its own tag table.
     context.tags[s] = awful.tag(
-      { '1:bs', '2:web', '3:ww', '4:im', '5:mm', 6, 7, 8, '9:sd', '10:nl', '11', '12' },
+      { '1:bs', '2:web', '3:ww', '4:im', '5:mm',
+         6, '7:sp', 8, '9:sd', '10:nl', '11', '12' },
       s,
       {
         awful.layout.layouts[1],
@@ -60,9 +61,12 @@ function layouts.init(context)
 
     awful.tag.incmwfact(0.20, tags[1])
     awful.tag.incmwfact(0.20, tags[2])
+    awful.tag.incmwfact(0.05, tags[7])
 
-    awful.tag.setmfpol("mwfact", tags[2])
-    awful.tag.setmfpol("mwfact", tags[3])
+    for _, tag_number in pairs({1,3,5,7,9}) do
+      awful.tag.setmfpol("mwfact", tags[tag_number])
+    end
+
   end
   -- }}}
 

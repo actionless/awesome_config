@@ -44,7 +44,6 @@ local context = {
     tmux = terminal .. " -e tmux",
     tmux_light = terminal_light .. " -e tmux",
     tmux_run   = terminal .. " -e tmux new-session",
-    dmenu = "~/.config/dmenu/dmenu-recent.sh",
     scrot_preview_cmd = [['mv $f ~/images/ && viewnior ~/images/$f']],
   },
 
@@ -61,7 +60,7 @@ local local_settings_result, local_settings_details = pcall(function()
   context = require("config.local").init(context) or context
 end)
 if local_settings_result ~= true then
-  print("!!!WARNING: local settings not found")
+  nlog("!!!WARNING: local settings not found")
   print(local_settings_details)
 end
 

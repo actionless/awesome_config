@@ -19,9 +19,9 @@ function signals.init(awesome_context)
 
 local function on_client_focus(c)
   local layout = awful.layout.get(c.screen)
+  c.border_color = beautiful.border_focus
   if awesome_context.show_titlebar then
     log("F: titlebars enabled explicitly")
-    c.border_color = beautiful.border_focus
     c.border_width = beautiful.border_width
     titlebar.make_titlebar(c)
   elseif c.maximized then
@@ -43,7 +43,6 @@ local function on_client_focus(c)
   else
     log("F: more tiling clients")
     c.border_width = beautiful.border_width
-    c.border_color = beautiful.border_focus
     titlebar.remove_titlebar(c)
   end
   --print(c:get_xproperty('_GTK_APP_MENU_OBJECT_PATH'))
@@ -164,7 +163,6 @@ local function lcars_separate(t, from)
   local computed_y = math.floor(
     height*(1-mwfact) + beautiful.panel_height
   )
-  --nlog(height)
   if awesome_context.lcars_is_separated
     and computed_y == awesome_context.lcars_last_y
   then return end

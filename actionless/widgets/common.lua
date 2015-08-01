@@ -241,8 +241,6 @@ function common.make_separator(separator_character, args)
   return widget
 end
 
-local nlog = require("utils.debug").nlog
-
 
 function common.constraint(args)
   args = args or {}

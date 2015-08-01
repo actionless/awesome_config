@@ -255,7 +255,6 @@ end
 
 --- Refresh menubar's cache by reloading .desktop files.
 function menubar:refresh()
-    nlog("DEBUG:refresh")
     self.menu_entries = self.menu_gen.generate()
 end
 
@@ -306,7 +305,6 @@ end
 --- Show the menubar on the given screen.
 -- @param scr Screen number.
 function menubar:show(scr)
-    nlog("DEBUG:show")
     if not self.instance.wibox then
         self:initialize()
     elseif self.instance.wibox.visible then -- Menu already shown, exit
