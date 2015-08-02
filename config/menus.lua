@@ -65,24 +65,18 @@ function menus.init(context)
   --
 
   menubar.utils.terminal = context.cmds.terminal
-  -- Menubar configuration
-  context.menu.menubar = menubar()
-  context.menu.menubar.geometry = {
+  menubar.geometry = {
     height = beautiful.panel_height,
     width = capi.screen[get_current_screen()].workarea.width,
     x = 0,
     y = capi.screen[get_current_screen()].workarea.height - beautiful.panel_height
   }
+  -- Menubar configuration
+  context.menu.menubar = menubar.create()
   -- D-Menubar configuration
-  context.menu.dmenubar = menubar()
+  context.menu.dmenubar = menubar.create()
   context.menu.dmenubar.cache_entries = false
   context.menu.dmenubar.menu_cache_path = awful.util.getdir("cache") .. "/history"
-  context.menu.dmenubar.geometry = {
-    height = beautiful.panel_height,
-    width = capi.screen[get_current_screen()].workarea.width,
-    x = 0,
-    y = capi.screen[get_current_screen()].workarea.height - beautiful.panel_height
-  }
   context.menu.dmenubar.menu_gen = require("actionless.menubar.dmenugen")
   -- }}}
 

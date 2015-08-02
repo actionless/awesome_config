@@ -38,45 +38,56 @@ menubar_module.utils = require("actionless.menubar.utils")
 menubar_module.dmenugen = require("actionless.menubar.dmenugen")
 local compute_text_width = menubar_module.utils.compute_text_width
 
-local function worker(...)
-
-    --local menubar = { mt = {}, menu_entries = {} }
-    local menubar = {}
-    menubar.menu_entries = {}
-    --setmetatable(menubar, menubar_module)
-    menubar.menu_gen = menubar_module.menu_gen
 
 -- Options section
 
 --- When true the .desktop files will be reparsed only when the
 -- extension is initialized. Use this if menubar takes much time to
 -- open.
-menubar.cache_entries = true
+menubar_module.cache_entries = true
 
 --- When true the categories will be shown alongside application
 -- entries.
-menubar.show_categories = true
+menubar_module.show_categories = true
 
 --- Specifies the geometry of the menubar. This is a table with the keys
 -- x, y, width and height. Missing values are replaced via the screen's
 -- geometry. However, missing height is replaced by the font size.
-menubar.geometry = { width = nil,
+menubar_module.geometry = { width = nil,
                      height = nil,
                      x = nil,
                      y = nil }
 
 --- Width of blank space left in the right side.
-menubar.right_margin = 50
+menubar_module.right_margin = 50
 
 --- Label used for "Next page", default "▶▶".
-menubar.right_label = "▶▶"
+menubar_module.right_label = "▶▶"
 
 --- Label used for "Previous page", default "◀◀".
-menubar.left_label = "◀◀"
+menubar_module.left_label = "◀◀"
 
 --- Allows user to specify custom parameters for prompt.run function
 -- (like colors).
-menubar.prompt_args = {}
+menubar_module.prompt_args = {}
+
+
+--- Create new menubar instance
+function menubar_module.create(...)
+    local args = ... or {}
+    local mm = menubar_module
+
+    --local menubar = {mt = {}, menu_entries = {}}
+    local menubar = {}
+    menubar.menu_entries = {}
+    menubar.menu_gen = menubar_module.menu_gen
+    menubar.cache_entries = args.cache_entries or menubar_module.cache_entries
+    menubar.show_categories = args.show_categories or menubar_module.show_categories
+    menubar.geometry = args.geometry or menubar_module.geometry
+    menubar.right_margin = args.right_margin or menubar_module.right_margin
+    menubar.right_label = args.right_label or menubar_module.right_label
+    menubar.left_label = args.left_label or menubar_module.left_label
+
 
 menubar.menu_cache_path = awful.util.getdir("cache") .. "/history_menu"
 
@@ -360,11 +371,25 @@ end
 menubar.__index = menubar
 
 return menubar
-end -- worker end
+end -- 
+------------------------------------------------------------------------------
+-- menubar.create end
+------------------------------------------------------------------------------
 
-function menubar_module.mt:__call(_, ...)
-    return worker(...)
+
+--- Compatibility layer with the previous API:
+local fallback_menubar_instance
+local function mb()
+    if not fallback_menubar_instance then
+        fallback_menubar_instance = menubar_module.create()
+    end
+    return fallback_menubar_instance
 end
+menubar_module.refresh = function(...) mb():refresh(...) end
+menubar_module.show = function(...) mb():show(...) end
+menubar_module.hide = function(...) mb():hide(...) end
+menubar_module.get = function(...) mb():get(...) end
+function menubar_module.mt:__call(...) return mb().get(...) end
 
 return setmetatable(menubar_module, menubar_module.mt)
 
