@@ -4,6 +4,7 @@
 --]]
 
 local awful = require("awful")
+local xresources = require("beautiful").xresources
 
 local h_string = require("utils.string")
 local h_table = require("utils.table")
@@ -18,39 +19,10 @@ function common_theme.generate_theme(theme_dir)
   theme.null = nil
   -- TERMINAL COLORSCHEME:
   --
-  theme.color = {
-    --black
-    ["0"] = '#000000',
-    ["8"] = '#465457',
-    --red
-    ["1"] = '#960050',
-    ["9"] = '#F92672',
-    --green
-    ["2"] = '#008877',
-    ["10"] = '#A6E22E',
-    --yellow
-    ["3"] = '#FD971F',
-    ["11"] = '#e6db74',
-    --blue
-    ["4"] = '#7711dd',
-    ["12"] = '#8432ff',
-    --purple
-    ["5"] = '#890089',
-    ["13"] = '#85509b',
-    --cyan
-    ["6"] = '#00d6b5',
-    ["14"] = '#51edbc',
-    --white
-    ["7"] = '#888a85',
-    ["15"] = '#ffffff',
-    --
-    c  = '#ae81ff',
-    bg  = '#0e0021',
-    fg  = '#bcbcbc',
-  }
+  theme.xrdb = xresources.get_current_theme()
 
-  theme.color.b = theme.color.bg
-  theme.color.f = theme.color.fg
+  xrdb=theme.xrdb
+
   theme.dir = theme_dir
 
   theme.hidpi = false
@@ -84,19 +56,19 @@ function common_theme.generate_theme(theme_dir)
 
   -- COLORS:
 
-  theme.error = "theme.color.9"
-  theme.warning = "theme.color.10"
-  theme.theme = "theme.color.13"
+  theme.error = "theme.xrdb.color9"
+  theme.warning = "theme.xrdb.color10"
+  theme.theme = "theme.xrdb.color13"
 
-  theme.bg = "theme.color.bg"
-  theme.alt_bg = "theme.color.4"
+  theme.bg = "theme.xrdb.background"
+  theme.alt_bg = "theme.xrdb.color4"
 
-  theme.fg = "theme.color.7"
-  theme.alt_fg = "theme.color.fg"
+  theme.fg = "theme.xrdb.color7"
+  theme.alt_fg = "theme.xrdb.background"
 
 
   theme.border                  = "theme.bg"
-  theme.sel_border              = "theme.color.10"
+  theme.sel_border              = "theme.xrdb.color10"
   theme.titlebar_border         = "theme.border"
   theme.titlebar_focus_border   = "theme.sel_border"
   theme.border_width		= "6"
@@ -121,11 +93,12 @@ function common_theme.generate_theme(theme_dir)
   theme.panel_fg		= "theme.fg"
   theme.panel_widget_bg		= "theme.fg"
   theme.panel_widget_fg		= "theme.bg"
+  theme.panel_widget_bg		= "theme.fg"
   theme.panel_widget_bg_warning	= "theme.warning"
   theme.panel_widget_fg_warning	= "theme.bg"
   theme.panel_widget_bg_error 	= "theme.error"
   theme.panel_widget_fg_error 	= "theme.bg"
-  theme.panel_widget_bg_disabled = "theme.color.8"
+  theme.panel_widget_bg_disabled = "theme.xrdb.color8"
   theme.panel_widget_fg_disabled = "theme.bg"
   --theme.panel_opacity		= 0.96
   theme.panel_opacity		= 0.92
@@ -141,11 +114,11 @@ theme.left_panel_internal_corner_radius = 30
 
   -- PANEL COLORS:
   --
-  theme.panel_taglist = "theme.color.7"
-  theme.panel_close = "theme.color.1"
-  theme.panel_tasklist = "theme.color.bg"
-  theme.panel_media = "theme.color.14"
-  theme.panel_info = "theme.color.13"
+  theme.panel_taglist = "theme.xrdb.color7"
+  theme.panel_close = "theme.xrdb.color1"
+  theme.panel_tasklist = "theme.xrdb.colorbg"
+  theme.panel_media = "theme.xrdb.color14"
+  theme.panel_info = "theme.xrdb.color13"
   theme.panel_layoutbox = "theme.alt_bg"
 
   theme.widget_taglist_bg = "theme.panel_taglist"
@@ -219,7 +192,7 @@ theme.left_panel_internal_corner_radius = 30
   theme.menu_height		= 16
   theme.menu_width		= 140
 
-  theme.player_artist		= "theme.color.13"
+  theme.player_artist		= "theme.xrdb.color13"
   theme.player_title      = "theme.panel_media"
 
   theme.apw_bg_color = "theme.panel_bg"
@@ -309,28 +282,6 @@ theme.left_panel_internal_corner_radius = 30
 
   local titlebar_icons_dir = icons_dir .. "titlebar/"
   theme.titlebar_icons_dir = titlebar_icons_dir
-  theme.titlebar_close_button_focus = titlebar_icons_dir .. "/close_focus.png"
-  theme.titlebar_close_button_normal = titlebar_icons_dir .. "/close_normal.png"
-
-  theme.titlebar_ontop_button_focus_active = titlebar_icons_dir .. "/ontop_focus_active.png"
-  theme.titlebar_ontop_button_normal_active = titlebar_icons_dir .. "/ontop_normal_active.png"
-  theme.titlebar_ontop_button_focus_inactive = titlebar_icons_dir .. "/ontop_focus_inactive.png"
-  theme.titlebar_ontop_button_normal_inactive = titlebar_icons_dir .. "/ontop_normal_inactive.png"
-
-  theme.titlebar_sticky_button_focus_active = titlebar_icons_dir .. "/sticky_focus_active.png"
-  theme.titlebar_sticky_button_normal_active = titlebar_icons_dir .. "/sticky_normal_active.png"
-  theme.titlebar_sticky_button_focus_inactive = titlebar_icons_dir .. "/sticky_focus_inactive.png"
-  theme.titlebar_sticky_button_normal_inactive = titlebar_icons_dir .. "/sticky_normal_inactive.png"
-
-  theme.titlebar_floating_button_focus_active = titlebar_icons_dir .. "/floating_focus_active.png"
-  theme.titlebar_floating_button_normal_active = titlebar_icons_dir .. "/floating_normal_active.png"
-  theme.titlebar_floating_button_focus_inactive = titlebar_icons_dir .. "/floating_focus_inactive.png"
-  theme.titlebar_floating_button_normal_inactive = titlebar_icons_dir .. "/floating_normal_inactive.png"
-
-  theme.titlebar_maximized_button_focus_active = titlebar_icons_dir .. "/maximized_focus_active.png"
-  theme.titlebar_maximized_button_normal_active = titlebar_icons_dir .. "/maximized_normal_active.png"
-  theme.titlebar_maximized_button_focus_inactive = titlebar_icons_dir .. "/maximized_focus_inactive.png"
-  theme.titlebar_maximized_button_normal_inactive = titlebar_icons_dir .. "/maximized_normal_inactive.png"
 
   theme.titlebar_minimize_button_focus_active = titlebar_icons_dir .. "/minimized_focus.png"
   theme.titlebar_minimize_button_normal_active = titlebar_icons_dir .. "/minimized_normal.png"
@@ -368,7 +319,7 @@ function common_theme.create_theme(args)
   args = args or {}
   local theme_dir = args.theme_dir
   local theme_name = args.theme_name
-  local theme = args.theme
+  local theme = args.theme or {}
 
   if not theme then
     error("theme is not provided")

@@ -9,7 +9,6 @@ local actionless = {
   center_layout = require("actionless.center_layout"),
   -- misc
   helpers = require("actionless.helpers"),
-  xresources = require("actionless.xresources"),
   common_theme = require("actionless.common_theme"),
   iconfont = require("actionless.iconfont"),
   lcars_layout = require("actionless.lcars_layout"),

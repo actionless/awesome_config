@@ -19,7 +19,7 @@ local h_table = require("utils.table")
 local markup = require("utils.markup")
 local bordered_widget = require("actionless.widgets.common").bordered
 
-local dpi = require("actionless.xresources").compute_fontsize
+local dpi = require("beautiful.xresources").apply_dpi
 
 local hotkeys = {
   appearance = {

@@ -12,7 +12,7 @@ local widgets = require("actionless.widgets")
 local common = widgets.common
 local tasklist_addon = require("actionless.tasklist_addon")
 
-local dpi = require("actionless.xresources").compute_fontsize
+local dpi = require("beautiful.xresources").apply_dpi
 
 
 local widget_loader = {}

@@ -1,6 +1,7 @@
 local gears = require("gears")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
+local dpi = require("beautiful.xresources").apply_dpi
 local awful = require("awful")
 
 local capi = {
@@ -11,7 +12,6 @@ local capi = {
 local widgets = require("actionless.widgets")
 local common = require("actionless.widgets.common")
 
-local dpi = require("actionless.xresources").compute_fontsize
 local assets = require("config.toolbar_assets")
 local h_table = require("utils.table")
 
