@@ -2,12 +2,15 @@ local awful = require("awful")
 local recolor_image = require("gears").color.recolor_image
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
+local create_theme = require("actionless.common_theme").create_theme
 
 local theme_name = "lcars-xresources-hidpi"
 
 theme_dir = awful.util.getdir("config").."/themes/"..theme_name
 --local theme = dofile("/usr/share/awesome/themes/xresources/theme.lua")
-local theme = require("actionless.common_theme").create_theme({theme_name=theme_name})
+local theme = {}
+
+theme.xrdb = xresources.get_current_theme()
 
 theme.dir = theme_dir
 theme.icons_dir = theme.dir .. "/icons/"
@@ -30,11 +33,12 @@ theme.panel_tasklist = theme.xrdb.background
 theme.panel_media = theme.xrdb.color14
 theme.panel_info = theme.xrdb.color13
 theme.panel_layoutbox = theme.xrdb.color7
-theme.widget_layoutbox_bg = theme.panel_layoutbox
-theme.widget_layoutbox_fg = theme.panel_widget_fg
+--theme.widget_layoutbox_bg = theme.panel_layoutbox
+--theme.widget_layoutbox_fg = theme.panel_widget_fg
 
 -- WALLPAPER:
 -- Use nitrogen:
+theme.wallpaper = nil
 theme.wallpaper_cmd     = "nitrogen --restore"
 -- Use wallpaper tile:
 --theme.wallpaper = theme_dir .. '/umbreon_pattern.png'
@@ -135,5 +139,7 @@ theme.widget_music_fg = theme.bg
 theme.widget_close_bg = theme.tasklist_fg_focus
 
 --theme.wallpaper_cmd     = "hsetroot -solid \"" .. theme.bg .. "\""
+
+theme = create_theme({ theme_name=theme_name, theme=theme, })
 
 return theme
