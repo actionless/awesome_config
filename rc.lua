@@ -20,7 +20,7 @@ local debug = require("utils.debug")
 nlog = debug.nlog
 log = debug.log
 
-local context = {
+context = {
 
   modkey = "Mod4",
   altkey = "Mod1",
