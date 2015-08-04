@@ -95,9 +95,6 @@ end
 function assets.top_internal_corner_wibox()
   local internal_corner_radius = beautiful.left_panel_internal_corner_radius
 
-  -- strange workaround for radeonsi bug:
-  require("naughty").notify({})
-
   local wibox_instance = wibox({})
   wibox_instance.height = internal_corner_radius
   wibox_instance.width  = internal_corner_radius
