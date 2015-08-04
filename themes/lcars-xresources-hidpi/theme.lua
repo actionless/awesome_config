@@ -90,10 +90,10 @@ theme.menu_border_color = theme.xrdb.color1
 --theme.taglist_squares_unsel     = "theme.null"
 --theme.taglist_fg_focus		= "theme.theme"
 
-theme.titlebar_fg_focus		= theme.titlebar_border
-theme.titlebar_bg_focus		= theme.titlebar_focus_border
-theme.titlebar_fg_normal	= theme.tasklist_fg_normal
-theme.titlebar_bg_normal	= theme.titlebar_border
+theme.titlebar_fg_focus		= "theme.titlebar_border"
+theme.titlebar_bg_focus		= "theme.titlebar_focus_border"
+theme.titlebar_fg_normal	= "theme.tasklist_fg_normal"
+theme.titlebar_bg_normal	= "theme.titlebar_border"
 
 
 --theme.border_normal            = theme.color["8"]
