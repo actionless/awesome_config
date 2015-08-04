@@ -88,6 +88,8 @@ function menubar_module.create(...)
     menubar.right_label = args.right_label or menubar_module.right_label
     menubar.left_label = args.left_label or menubar_module.left_label
 
+    menubar.term_prefix = args.term_prefix or menubar_module.utils.terminal .. " -e "
+
 
 menubar.menu_cache_path = awful.util.getdir("cache") .. "/history_menu"
 
@@ -299,14 +301,27 @@ local function prompt_keypressed_callback(mod, key, comm)
     elseif key == "End" then
         current_item = #shownitems
         return true
+    elseif key == "Delete" then
+        menubar_module.dmenugen.remove_history_record(
+            shownitems[current_item].cmdline
+        )
+        menubar_module.dmenugen.history_save()
+        menubar_module.dmenugen.history_check_load()
+        menubar:refresh()
+        return true
     elseif key == "Return" or key == "KP_Enter" then
         if mod.Control then
             current_item = #shownitems
             if mod.Mod1 then
                 -- add a terminal to the cmdline
-                shownitems[current_item].cmdline = menubar.utils.terminal
+                shownitems[current_item].cmdline = menubar_module.utils.terminal
                         .. " -e " .. shownitems[current_item].cmdline
             end
+        end
+        if mod.Mod1 then
+            -- run command with terminal
+            shownitems[current_item].cmdline = menubar.term_prefix
+                    .. shownitems[current_item].cmdline
         end
         return perform_action(shownitems[current_item])
     end

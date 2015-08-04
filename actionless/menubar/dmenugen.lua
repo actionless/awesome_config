@@ -25,12 +25,21 @@ menu_gen.all_categories = { }
 --@TODO: merge this func with awful.prompt------------------------------------
 --
 --- Private data
-local history_file_path = awful.util.getdir("cache") .. "/history"
+local history_file_path = awful.util.getdir("cache") .. "/history_dmenu"
 local data = {}
 data.history = {}
 function menu_gen.add_history_record(record, id)
     id = id or history_file_path
     table.insert(data.history[id]['table'], record)
+end
+function menu_gen.remove_history_record(record, id)
+    id = id or history_file_path
+    for i, cmd in ipairs(data.history[id]['table']) do
+        if cmd == record then
+            table.remove(data.history[id]['table'], i)
+            return
+        end
+    end
 end
 --- Load history file in history table
 -- @param id The data.history identifier which is the path to the filename.

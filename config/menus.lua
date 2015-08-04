@@ -74,7 +74,9 @@ function menus.init(context)
   -- Menubar configuration
   context.menu.menubar = menubar.create()
   -- D-Menubar configuration
-  context.menu.dmenubar = menubar.create()
+  context.menu.dmenubar = menubar.create({
+    term_prefix = context.cmds.terminal .. " -e tmux new-session ",
+  })
   context.menu.dmenubar.cache_entries = false
   context.menu.dmenubar.menu_cache_path = awful.util.getdir("cache") .. "/history"
   context.menu.dmenubar.menu_gen = require("actionless.menubar.dmenugen")
