@@ -103,6 +103,7 @@ theme.titlebar_bg_normal	= "theme.titlebar_border"
 -- Recolor titlebar icons:
 for _, titlebar_icon in ipairs({
     'titlebar_close_button_normal',
+    'titlebar_minimize_button_normal_inactive',
     'titlebar_ontop_button_normal_inactive',
     'titlebar_ontop_button_normal_active',
     'titlebar_sticky_button_normal_inactive',
@@ -116,6 +117,7 @@ for _, titlebar_icon in ipairs({
 end
 for _, titlebar_icon in ipairs({
     'titlebar_close_button_focus',
+    'titlebar_minimize_button_focus_inactive',
     'titlebar_ontop_button_focus_inactive',
     'titlebar_ontop_button_focus_active',
     'titlebar_sticky_button_focus_inactive',

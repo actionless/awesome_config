@@ -283,11 +283,6 @@ theme.left_panel_internal_corner_radius = 30
   local titlebar_icons_dir = icons_dir .. "titlebar/"
   theme.titlebar_icons_dir = titlebar_icons_dir
 
-  theme.titlebar_minimize_button_focus_active = titlebar_icons_dir .. "/minimized_focus.png"
-  theme.titlebar_minimize_button_normal_active = titlebar_icons_dir .. "/minimized_normal.png"
-  theme.titlebar_minimize_button_focus_inactive = titlebar_icons_dir .. "/minimized_focus.png"
-  theme.titlebar_minimize_button_normal_inactive = titlebar_icons_dir .. "/minimized_normal.png"
-
 return theme
 end
 
