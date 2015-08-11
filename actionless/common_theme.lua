@@ -35,8 +35,6 @@ function common_theme.generate_theme(theme_dir)
   -- Use wallpaper tile:
   --theme.wallpaper = theme.dir .. '/pattern.png'
 
-  theme.iconfont = "FontAwesome 10"
-  theme.use_iconfont = false
   theme.show_widget_icon = false
   theme.widget_decoration_arrl = ''
   theme.widget_decoration_arrr = ''

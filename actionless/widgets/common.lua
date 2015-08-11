@@ -8,7 +8,6 @@ local wibox = require("wibox")
 local beautiful = require("beautiful")
 
 local h_table = require("utils.table")
-local iconfont = require("actionless.iconfont")
 
 
 local function get_color(color_n)
@@ -23,20 +22,13 @@ function common.widget(args)
   args = args or {}
 
   local show_icon = args.show_icon or beautiful.show_widget_icon
-  local use_iconfont = args.use_iconfont or beautiful.use_iconfont
   local force_no_bgimage = args.force_no_bgimage or false
   local widget = {}
     widget.layout = wibox.layout.fixed.horizontal()
     if show_icon then
-      if use_iconfont then
-        widget.iconfont_widget = wibox.widget.textbox()
-        widget.iconfont_widget:set_font(beautiful.iconfont)
-        widget.layout:add(widget.iconfont_widget)
-      else
         widget.icon_widget = wibox.widget.imagebox()
         widget.icon_widget:set_resize(beautiful.hidpi or false)
         widget.layout:add(widget.icon_widget)
-      end
     end
       widget.text_widget = wibox.widget.textbox('')
     widget.layout:add(widget.text_widget)
@@ -83,12 +75,6 @@ function common.widget(args)
 
   function widget:set_icon(name)
     if show_icon then
-      if use_iconfont then
-        local symbol = iconfont.get_symbol(name)
-        if symbol then
-          return self.iconfont_widget:set_text(" " .. symbol .. " ")
-        end
-      end
       local icon = beautiful.get()['widget_' .. name]
       --gears.debug.assert(icon, ":set_icon failed: icon is missing: " .. name)
       return self.icon_widget:set_image(icon)

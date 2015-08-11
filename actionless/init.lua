@@ -10,7 +10,6 @@ local actionless = {
   -- misc
   helpers = require("actionless.helpers"),
   common_theme = require("actionless.common_theme"),
-  iconfont = require("actionless.iconfont"),
   lcars_layout = require("actionless.lcars_layout"),
   -- tmp
   menubar = require("actionless.menubar"),

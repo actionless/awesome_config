@@ -46,7 +46,6 @@ theme.wallpaper_cmd     = "nitrogen --restore"
 -- PANEL DECORATIONS:
 --
 theme.show_widget_icon = false
-theme.use_iconfont = true
 --theme.widget_decoration_arrl = ''
 --theme.widget_decoration_arrr = ''
 theme.widget_decoration_arrl = ''
