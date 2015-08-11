@@ -28,6 +28,9 @@ local modkey = awesome_context.modkey
 local altkey = awesome_context.altkey
 local cmd = awesome_context.cmds
 
+awful.layout.suit.floating.resize_jump_to_corner = false
+awful.layout.suit.tile.resize_jump_to_corner = false
+
   awesome_context.clientbuttons = awful.util.table.join(
     awful.button({ }, 1,
       function (c)
