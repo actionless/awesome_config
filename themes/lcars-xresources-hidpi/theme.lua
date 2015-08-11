@@ -100,6 +100,21 @@ theme.titlebar_bg_normal	= "theme.titlebar_border"
 --theme.border_normal            = "#1d1234"
 --theme.titlebar_border           = theme.border_normal
 
+
+
+--theme.panel_widget_bg		= theme.xrdb.color3
+theme.panel_widget_bg_error = theme.xrdb.color1
+theme.panel_widget_fg_error = theme.xrdb.color15
+
+theme.widget_music_bg = theme.xrdb.color11
+theme.widget_music_fg = theme.bg
+
+theme.widget_close_bg = theme.tasklist_fg_focus
+
+--theme.wallpaper_cmd     = "hsetroot -solid \"" .. theme.bg .. "\""
+
+theme = create_theme({ theme_name=theme_name, theme=theme, })
+
 -- Recolor titlebar icons:
 for _, titlebar_icon in ipairs({
     'titlebar_close_button_normal',
@@ -129,19 +144,5 @@ for _, titlebar_icon in ipairs({
 }) do
     theme[titlebar_icon] = recolor_image(theme[titlebar_icon], theme.titlebar_fg_focus)
 end
-
-
---theme.panel_widget_bg		= theme.xrdb.color3
-theme.panel_widget_bg_error = theme.xrdb.color1
-theme.panel_widget_fg_error = theme.xrdb.color15
-
-theme.widget_music_bg = theme.xrdb.color11
-theme.widget_music_fg = theme.bg
-
-theme.widget_close_bg = theme.tasklist_fg_focus
-
---theme.wallpaper_cmd     = "hsetroot -solid \"" .. theme.bg .. "\""
-
-theme = create_theme({ theme_name=theme_name, theme=theme, })
 
 return theme
