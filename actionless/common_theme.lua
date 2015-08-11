@@ -212,11 +212,13 @@ theme.left_panel_internal_corner_radius = 30
   theme.menu_submenu_icon		= common_icons_dir .. "submenu.png"
   theme.dropdown_icon		= theme.icon_down
 
-  theme.taglist_squares_sel	= common_icons_dir .. "square_sel.png"
-  theme.taglist_squares_unsel	= common_icons_dir .. "square_unsel.png"
+  --theme.taglist_squares_sel	= common_icons_dir .. "square_sel.png"
+  --theme.taglist_squares_unsel	= common_icons_dir .. "square_unsel.png"
+  theme.taglist_squares_sel	= nil
+  theme.taglist_squares_unsel	= nil
 
-  theme.taglist_squares_sel_empty	= nil
-  theme.taglist_squares_unsel_empty	= nil
+  --theme.taglist_squares_sel_empty	= nil
+  --theme.taglist_squares_unsel_empty	= nil
 
   theme.small_separator		= common_icons_dir .. "small_separator.png"
 
