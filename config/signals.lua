@@ -20,7 +20,8 @@ function signals.init(awesome_context)
 local function on_client_focus(c)
   local layout = awful.layout.get(c.screen)
   c.border_color = beautiful.border_focus
-  if awesome_context.show_titlebar then
+  log(#awful.client.tiled(c.screen))
+  if awesome_context.show_titlebar and #awful.client.tiled(c.screen) > 1 then
     log("F: titlebars enabled explicitly")
     c.border_width = beautiful.border_width
     titlebar.make_titlebar(c)
@@ -35,11 +36,15 @@ local function on_client_focus(c)
     log("F: floating layout")
     c.border_width = beautiful.border_width
     titlebar.make_titlebar(c)
-  elseif #awful.client.tiled(c.screen) == 1
-    and beautiful.useless_gap == 0
-  then
-    log("F: one tiling client")
-    titlebar.remove_border(c)
+  elseif #awful.client.tiled(c.screen) == 1 then
+    if beautiful.useless_gap == 0 then
+      log("F: one tiling client: no-gap")
+      titlebar.remove_border(c)
+    else
+      log("F: one tiling client: gap")
+      c.border_width = beautiful.border_width
+      titlebar.remove_titlebar(c)
+    end
   else
     log("F: more tiling clients")
     c.border_width = beautiful.border_width
