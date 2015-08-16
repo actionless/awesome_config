@@ -22,7 +22,7 @@ local function on_client_focus(c)
   c.border_color = beautiful.border_focus
   log(#awful.client.tiled(c.screen))
   if awesome_context.show_titlebar and #awful.client.tiled(c.screen) > 1 then
-    log("F: titlebars enabled explicitly")
+    log("F: tile: titlebars enabled explicitly")
     c.border_width = beautiful.border_width
     titlebar.make_titlebar(c)
   elseif c.maximized then
@@ -55,24 +55,29 @@ end
 
 local function on_client_unfocus (c)
   local layout = awful.layout.get(c.screen)
-  if awful.client.floating.get(c) then
-    -- floating client
+  if awesome_context.show_titlebar and #awful.client.tiled(c.screen) > 1 then
+    log("F: tile: titlebars enabled explicitly")
+    c.border_width = beautiful.border_width
+    titlebar.make_titlebar(c)
+  elseif awful.client.floating.get(c) then
+    log("U: floating client")
     c.border_color = beautiful.titlebar_border
   elseif layout == awful.layout.suit.floating then
-    -- floating layout
+    log("U: floating layout")
     c.border_color = beautiful.titlebar_border
-  elseif #awful.client.tiled(c.screen) == 1 and not (
-    beautiful.useless_gap == 0
-  ) then
-    -- one tiling client
-    titlebar.remove_border(c)
-  else
-    -- more tiling clients
-    if not awesome_context.show_titlebar then
-      titlebar.remove_titlebar(c)
+  elseif #awful.client.tiled(c.screen) == 1 then
+    if beautiful.useless_gap == 0 then
+      log("U: one tiling client: no-gap")
+      titlebar.remove_border(c)
     else
-      titlebar.make_titlebar(c)
+      log("U: one tiling client: gap")
+      c.border_color = beautiful.border_normal
+      c.border_width = beautiful.border_width
+      titlebar.remove_titlebar(c)
     end
+  else
+    log("U: more tiling clients")
+    titlebar.remove_titlebar(c)
     c.border_width = beautiful.border_width
     c.border_color = beautiful.border_normal
   end
