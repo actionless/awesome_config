@@ -20,7 +20,6 @@ function signals.init(awesome_context)
 local function on_client_focus(c)
   local layout = awful.layout.get(c.screen)
   c.border_color = beautiful.border_focus
-  log(#awful.client.tiled(c.screen))
   if awesome_context.show_titlebar and #awful.client.tiled(c.screen) > 1 then
     log("F: tile: titlebars enabled explicitly")
     c.border_width = beautiful.border_width
@@ -55,8 +54,9 @@ end
 
 local function on_client_unfocus (c)
   local layout = awful.layout.get(c.screen)
+  c.border_color = beautiful.border_normal
   if awesome_context.show_titlebar and #awful.client.tiled(c.screen) > 1 then
-    log("F: tile: titlebars enabled explicitly")
+    log("U: tile: titlebars enabled explicitly")
     c.border_width = beautiful.border_width
     titlebar.make_titlebar(c)
   elseif awful.client.floating.get(c) then
