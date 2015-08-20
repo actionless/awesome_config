@@ -15,6 +15,7 @@ local titlebar = require("actionless.titlebar")
 local menu_addon = require("actionless.menu_addon")
 local floats = require("actionless.helpers").client_floats
 local hk = require("actionless.hotkeys")
+local hkng = require("hot")
 
 
 local revelation = require("third_party.revelation")
@@ -43,7 +44,7 @@ awful.layout.suit.tile.resize_jump_to_corner = false
 
 local RESIZE_STEP = 15
 
-local TO_DEFINE_COLOR = "wip"
+local TO_DEFINE_COLOR = "none"
 
 local TAG_COLOR = "tag"
 local CLIENT_COLOR = "client_focus"
@@ -59,7 +60,7 @@ hk.add_groups({
   [IMPORTANT_COLOR]={name="important",color=beautiful.xrdb.color9},
   [CLIENT_MANIPULATION]={name="client",color=beautiful.xrdb.color10},
   [LAYOUT_MANIPULATION]={name="layout",color=beautiful.xrdb.color12},
-  [TO_DEFINE_COLOR]={name="wip",color=beautiful.xrdb.color7},
+  [TO_DEFINE_COLOR]={name="none",color=beautiful.xrdb.color7},
 })
 
 
@@ -78,23 +79,32 @@ awful.menu.menu_keys.enter = { "Right", "l" }
 awful.menu.menu_keys.close = { "Escape", '#133', 'q' }
 
 
---local HELPKEY = "Print"
-local HELPKEY = "#108"
+hk.on = function(mod, key, press, description, group)
+  return awful.key.new(mod, key, press, nil, {description=description, group=group})
+end
 
 -- {{{ Key bindings
 local globalkeys = awful.util.table.join(
 
-  hk.on({  }, HELPKEY, "show_help"),
-  hk.on({ "Shift" }, HELPKEY, "show_help"),
-  hk.on({ "Control" }, HELPKEY, "show_help"),
-  hk.on({ altkey }, HELPKEY, "show_help"),
-  hk.on({ modkey, }, HELPKEY, "show_help"),
-  hk.on({ modkey, altkey }, HELPKEY, "show_help"),
-  hk.on({ modkey, altkey, "Shift" }, HELPKEY, "show_help"),
-  hk.on({ modkey, altkey, "Control" }, HELPKEY, "show_help"),
-  hk.on({ modkey, "Shift"    }, HELPKEY, "show_help"),
-  hk.on({ modkey, "Control"  }, HELPKEY, "show_help"),
-  hk.on({ modkey, "Shift", "Control" }, HELPKEY, "show_help"),
+  ----local HELPKEY = "Print"
+  --local HELPKEY = "#108" -- Alt Gr
+  --hk.on({  }, HELPKEY, "show_help"),
+  --hk.on({ "Shift" }, HELPKEY, "show_help"),
+  --hk.on({ "Control" }, HELPKEY, "show_help"),
+  --hk.on({ altkey }, HELPKEY, "show_help"),
+  --hk.on({ modkey, }, HELPKEY, "show_help"),
+  --hk.on({ modkey, altkey }, HELPKEY, "show_help"),
+  --hk.on({ modkey, altkey, "Shift" }, HELPKEY, "show_help"),
+  --hk.on({ modkey, altkey, "Control" }, HELPKEY, "show_help"),
+  --hk.on({ modkey, "Shift"    }, HELPKEY, "show_help"),
+  --hk.on({ modkey, "Control"  }, HELPKEY, "show_help"),
+  --hk.on({ modkey, "Shift", "Control" }, HELPKEY, "show_help"),
+
+  awful.key({modkey}, "/", function()
+    hkng.show_help()
+  end, nil, {
+    description = "show help"
+  }),
 
   -- hk.on({ modkey,  }, "Control", "show_help"), -- show hotkey on hold
 
@@ -732,7 +742,7 @@ for scr = 1, 2 do
         local tag = awful.tag.gettags(scr)[i]
         if tag then awful.tag.viewonly(tag) end
       end,
-      i==1 and "go to tag " .. i .. "\n(screen #" .. scr .. ")" or "",
+      i==1 and "go to tag " .. i .. "(screen #" .. scr .. ")",
       TAG_COLOR
     ),
     hk.on({ modkey, "Control" }, "#" .. i + diff,
@@ -740,7 +750,7 @@ for scr = 1, 2 do
         local tag = awful.tag.gettags(scr)[i]
         if tag then awful.tag.viewtoggle(tag) end
       end,
-      i==1 and "toggle tag " .. i .. "\n(screen #" .. scr .. ")" or "",
+      i==1 and "toggle tag " .. i .. "(screen #" .. scr .. ")",
       TAG_COLOR
     ),
     hk.on({ modkey, "Shift" }, "#" .. i + diff,
@@ -750,7 +760,7 @@ for scr = 1, 2 do
           if tag then awful.client.movetotag(tag) end
          end
       end,
-      i==1 and "move client to tag " .. i .. "\n(screen #" .. scr .. ")" or "",
+      i==1 and "move client to tag " .. i .. "(screen #" .. scr .. ")",
       CLIENT_MANIPULATION
     ),
     hk.on({ modkey, "Control", "Shift" }, "#" .. i + diff,
@@ -761,7 +771,7 @@ for scr = 1, 2 do
         end
 
       end,
-      i==1 and "toggle client to tag " .. i .. "\n(screen #" .. scr .. ")" or "",
+      i==1 and "toggle client to tag " .. i .. "(screen #" .. scr .. ")",
       CLIENT_MANIPULATION
     )
   )
