@@ -19,6 +19,8 @@ local hkng = require("hot")
 
 
 local revelation = require("third_party.revelation")
+revelation.fg = beautiful.bg
+revelation.font = "Monospace Bold 24"
 revelation.init()
 
 
