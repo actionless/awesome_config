@@ -15,7 +15,8 @@ local titlebar = require("actionless.titlebar")
 local menu_addon = require("actionless.menu_addon")
 local floats = require("actionless.helpers").client_floats
 local hk = require("actionless.hotkeys")
-local hkng = require("hot")
+
+local hkng = require("awful.hotkeys_popup")
 
 
 local revelation = require("third_party.revelation")
