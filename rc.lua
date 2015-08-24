@@ -4,17 +4,35 @@ OH HI
 
 -- localization
 os.setlocale(os.getenv("LANG"))
-local terminal = "st" or "urxvt -lsp 1 -geometry 120x30" or "xterm"
-local terminal_light = "stl"
 local editor = "vim" or os.getenv("EDITOR") or "nano" or "vi"
 
 local eminent = require("third_party").eminent
 eminent.create_new_tag = false
 
+local xresources = require("beautiful.xresources")
 local awful = require("awful")
 require("awful.autofocus")
 
 local debug = require("utils.debug")
+
+
+local function st_color_line(theme_table)
+  local colors = {}
+  for k, v in pairs(theme_table) do
+    table.insert(colors, (
+      k:match("color(.*)") or
+      (k=='background' and "257") or
+      (k=='foreground' and "256")
+    ).."="..v)
+  end
+  return table.concat(colors, ",")
+end
+
+local colorscheme = xresources.get_current_theme()
+local terminal = 'st -b "' .. st_color_line(colorscheme) .. '" '
+colorscheme.background, colorscheme.foreground = colorscheme.foreground, colorscheme.background
+local terminal_light = 'st -b "' .. st_color_line(colorscheme) .. '" '
+
 
 -- GLOBALS:
 nlog = debug.nlog
