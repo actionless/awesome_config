@@ -298,6 +298,7 @@ function common.decorated(args)
   decorated.bg = args.bg or beautiful.panel_widget_bg or beautiful.fg or "#ffffff"
   decorated.fg = args.fg or beautiful.panel_widget_fg or beautiful.bg or "#000000"
   local valign = args.valign or "top"
+  decorated.min_height = args.min_height or beautiful.left_widget_min_height
 
   if args.widget then
     decorated.widget_list = {args.widget}
@@ -324,7 +325,7 @@ function common.decorated(args)
     common.align.horizontal(
         nil,
         decorated.widget_layout,
-        common.constraint({width=beautiful.panel_padding_bottom})
+        common.constraint({width=args.padding or beautiful.panel_padding_bottom})
     )
   elseif valign == "bottom" then
     decorated.internal_widget_layout = common.align.vertical(
@@ -333,13 +334,13 @@ function common.decorated(args)
         common.align.horizontal(
             nil,
             decorated.widget_layout,
-            common.constraint({width=beautiful.panel_padding_bottom})
+            common.constraint({width=args.padding or beautiful.panel_padding_bottom})
         )
     )
   end
   decorated.constraint = common.constraint({
     widget = decorated.internal_widget_layout,
-    height = beautiful.left_widget_min_height,
+    height = decorated.min_height,
     strategy = 'min',
   })
   decorated.background =wibox.widget.background(
@@ -395,7 +396,7 @@ function common.decorated(args)
       horiz_layout:set_right(each_widget)
       self.widget_layout:add(horiz_layout)
     end
-    self.constraint:set_height(beautiful.left_widget_min_height)
+    self.constraint:set_height(self.min_height)
   end
 
   function decorated:set_normal()
@@ -452,8 +453,8 @@ function common.decorated_horizontal(args)
   args = args or {}
   decorated.bg = args.bg or beautiful.panel_widget_bg or beautiful.fg or "#ffffff"
   decorated.fg = args.fg or beautiful.panel_widget_fg or beautiful.bg or "#000000"
-  local left_separators = args.left_separators or { 'arrl' }
-  local right_separators = args.right_separators or { 'arrr' }
+  local left_separators = args.left_separators or {} -- { 'arrl' }
+  local right_separators = args.right_separators or {} -- { 'arrr' }
 
   if args.widget then
     decorated.widget_list = {args.widget}
