@@ -478,6 +478,10 @@ function common.decorated_horizontal(args)
 
   decorated.widget = decorated.widget_list[1]
   decorated.layout = wibox.layout.fixed.horizontal()
+  decorated.background = wibox.widget.background()
+  decorated.background:set_widget(decorated.layout)
+  decorated.wrap_layout = wibox.layout.flex.horizontal()
+  decorated.wrap_layout:add(decorated.background)
 
   for _, separator_id in ipairs(left_separators) do
     table.insert(
@@ -490,8 +494,8 @@ function common.decorated_horizontal(args)
       common.make_separator(separator_id, {inverted=true}))
   end
 
-  setmetatable(decorated.layout, { __index = decorated.widget })
-  setmetatable(decorated,        { __index = decorated.layout })
+  setmetatable(decorated.wrap_layout, { __index = decorated.widget })
+  setmetatable(decorated,        { __index = decorated.wrap_layout })
 
   --- Set widget color
   -- @param args. "fg", "bg", "name" - "err", "warn", "b", "f" or 1..16
@@ -506,7 +510,8 @@ function common.decorated_horizontal(args)
     end
     for _, widget in ipairs(h_table.flat({
       self.left_separator_widgets,
-      self.right_separator_widgets
+      self.right_separator_widgets,
+      {decorated.background}
     })) do
       if fg and widget.set_fg then
         widget:set_fg(beautiful.panel_bg)

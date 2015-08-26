@@ -52,9 +52,15 @@ local function worker(args)
   player.artist_widget = wibox.widget.textbox()
   player.title_widget = wibox.widget.textbox()
   args.widgets = {
+    wibox.widget.textbox(' '),
     player.artist_widget,
-    common.constraint({height = beautiful.panel_padding_bottom * 2 }),
+    --common.constraint({
+      --height = beautiful.panel_padding_bottom * 2,
+      --width = beautiful.panel_padding_bottom * 2,
+    --}),
+    wibox.widget.textbox(' - '),
     player.title_widget,
+    wibox.widget.textbox(' '),
   }
   player.widget = decorated_widget(args)
 
@@ -204,8 +210,8 @@ local function worker(args)
       player.widget:set_disabled()
     end
 
-    artist = h_string.multiline_limit_word(artist, 14)
-    title = h_string.multiline_limit_word(title, 14)
+    --artist = h_string.multiline_limit_word(artist, 14)
+    --title = h_string.multiline_limit_word(title, 14)
     player.artist_widget:set_markup(
         beautiful.panel_enbolden_details
           and markup.bold(artist)

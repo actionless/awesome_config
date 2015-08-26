@@ -34,6 +34,8 @@ function toolbar.init(awesome_context)
   )
   setmetatable(v_sep, { __index = v_sep_constraint })
 
+  local h_sep = common.constraint({ width=dpi(7) })
+
 
   -- Create a wibox for each screen and add it
 
@@ -65,10 +67,16 @@ function toolbar.init(awesome_context)
       nil,
       nil
     )
+    loaded_widgets.screen[s].tasklist:buttons(awful.util.table.join(
+      awful.button({		}, 5, function(t)
+        awful.tag.viewnext(awful.tag.getscreen(t)) end),
+      awful.button({		}, 4, function(t)
+        awful.tag.viewprev(awful.tag.getscreen(t)) end)
+    ))
     local top_panel_bottomlayout = common.align.horizontal(
       common.fixed.horizontal({
-        top_panel_left_margin,
-        loaded_widgets.screen[s].taglist,
+        --top_panel_left_margin,
+        --loaded_widgets.screen[s].taglist,
         top_panel_left_margin,
         separator,
         loaded_widgets.screen[s].manage_client,
@@ -85,12 +93,42 @@ function toolbar.init(awesome_context)
     if s == 1 then
       loaded_widgets.systray_toggle = widgets.sneaky_toggle({
           widgets={
+            h_sep,
             sep_media,
             loaded_widgets.netctl,
             sep_media,
+            h_sep,
           }, enable_sneaky_tray = true,
       })
-      top_panel_bottomlayout:set_third(loaded_widgets.systray_toggle)
+      local fancy_volume_widget_bg = wibox.widget.background(wibox.widget.textbox())
+      fancy_volume_widget_bg:set_bg(beautiful.apw_fg_color)
+      local fancy_volume_widget = common.constraint({
+        widget=common.fixed.vertical({
+          common.constraint({
+            widget=loaded_widgets.volume,
+            height=dpi(8),
+          }),
+          common.constraint({
+            widget=fancy_volume_widget_bg,
+            height=dpi(10),
+          }),
+        }),
+        width=dpi(400)
+      })
+      fancy_volume_widget:buttons(loaded_widgets.volume:buttons())
+      top_panel_bottomlayout:set_third(
+        common.fixed.horizontal({
+          h_sep,
+          fancy_volume_widget,
+          h_sep,
+          common.constraint({
+            widget=loaded_widgets.music,
+            --height=dpi(80),
+            width=dpi(700)
+          }),
+          loaded_widgets.systray_toggle,
+        })
+      )
     end
 
     topwibox_toplayout[s] =
@@ -129,17 +167,28 @@ function toolbar.init(awesome_context)
       v_sep,
       loaded_widgets.screen[s].layoutbox,
       v_sep,
-      common.constraint({
-        widget=loaded_widgets.music,
-        height=dpi(180),
-        strategy="min",
-      }),
-      v_sep,
-      loaded_widgets.volume,
-      v_sep,
-      loaded_widgets.mem,
-      v_sep,
-      loaded_widgets.cpu,
+      --common.constraint({
+        --widget=loaded_widgets.music,
+        ----height=dpi(180),
+        --height=dpi(120),
+        --strategy="min",
+      --}),
+      --v_sep,
+      --setmetatable(
+        --common.constraint({
+          --widget=loaded_widgets.volume,
+          --height=dpi(80)
+          ----height=dpi(60)
+        --}),
+        --{ __index = apw_widget }
+      --),
+      --v_sep,
+      --common.decorated({widgets={
+        --loaded_widgets.cpu,
+        --loaded_widgets.mem,
+      --}}),
+      --v_sep,
+      loaded_widgets.screen[s].lcarslist,
       --loaded_widgets.temp,
       --loaded_widgets.bat,
     }
@@ -228,12 +277,6 @@ function toolbar.init(awesome_context)
       screen = s,
       height = beautiful.panel_height,
     })
-    top_panel_layout:buttons(awful.util.table.join(
-      awful.button({		}, 5, function(t)
-        awful.tag.viewnext(awful.tag.getscreen(t)) end),
-      awful.button({		}, 4, function(t)
-        awful.tag.viewprev(awful.tag.getscreen(t)) end)
-    ))
     topwibox[s]:set_widget(top_panel_layout)
     topwibox[s].opacity = beautiful.panel_opacity
     topwibox[s]:set_bg(beautiful.panel_bg)
@@ -246,6 +289,7 @@ function toolbar.init(awesome_context)
   awesome_context.topwibox = topwibox
   awesome_context.topwibox_layout = topwibox_layout
   awesome_context.topwibox_toplayout = topwibox_toplayout
+
   awesome_context.leftwibox = leftwibox
   awesome_context.leftwibox_separator = leftwibox_separator
   awesome_context.internal_corner_wibox = internal_corner_wibox

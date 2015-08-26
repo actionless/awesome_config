@@ -46,18 +46,12 @@ function widget_loader.init(awesome_context)
       bg = beautiful.widget_music_bg,
       fg = beautiful.widget_music_fg,
       force_no_bgimage=true,
+      horizontal=true,
       --valign = "bottom",
   })
   -- ALSA volume
   if awesome_context.volume_widget == "apw" then
-    local apw_widget = require("third_party/apw/widget")
-    w.volume = setmetatable(
-      common.constraint({
-        widget=apw_widget,
-        height=dpi(80)
-      }),
-      { __index = apw_widget }
-    )
+    w.volume = require("third_party/apw/widget")
   else
     w.volume = widgets.alsa({
       update_interval = 5,
@@ -84,12 +78,14 @@ function widget_loader.init(awesome_context)
     list_length = 20,
     --bg = beautiful.color["6"],
     new_top = awesome_context.new_top,
+    horizontal=true,
   })
   -- CPU
   w.cpu = widgets.cpu({
     update_interval = 2,
     list_length = 20,
     new_top = awesome_context.new_top,
+    horizontal=true,
   })
   -- Sensor
   --w.temp = widgets.temp({
@@ -136,23 +132,24 @@ function widget_loader.init(awesome_context)
     )
 
     -- taglist
-    sw.taglist = {}
-    sw.taglist.buttons = awful.util.table.join(
-      awful.button({		}, 1, awful.tag.viewonly),
-      awful.button({ modkey	}, 1, awful.client.movetotag),
-      awful.button({		}, 3, awful.tag.viewtoggle),
-      awful.button({ modkey	}, 3, awful.client.toggletag)
-    )
-    --sw.taglist = widgets.common.decorated_horizontal({
-      --widget = awful.widget.taglist(
+    --sw.taglist = {}
+    --sw.taglist.buttons = awful.util.table.join(
+      --awful.button({		}, 1, awful.tag.viewonly),
+      --awful.button({ modkey	}, 1, awful.client.movetotag),
+      --awful.button({		}, 3, awful.tag.viewtoggle),
+      --awful.button({ modkey	}, 3, awful.client.toggletag)
+    --)
+    ----sw.taglist = widgets.common.decorated_horizontal({
+      ----widget = awful.widget.taglist(
+        ----s, awful.widget.taglist.filter.all, sw.taglist.buttons
+      ----),
+      ----bg = beautiful.widget_taglist_bg,
+      ----fg = beautiful.widget_taglist_fg,
+    ----})
+    --sw.taglist = awful.widget.taglist(
         --s, awful.widget.taglist.filter.all, sw.taglist.buttons
-      --),
-      --bg = beautiful.widget_taglist_bg,
-      --fg = beautiful.widget_taglist_fg,
-    --})
-    sw.taglist = awful.widget.taglist(
-        s, awful.widget.taglist.filter.all, sw.taglist.buttons
-    )
+    --)
+
 
     -- promptbox
     local promptbox = awful.widget.prompt({ })
@@ -176,6 +173,9 @@ function widget_loader.init(awesome_context)
     -- tasklist
     local tasklist_buttons = awful.util.table.join(
       awful.button({ }, 1, function (c)
+        if c.is_tag then
+          return awful.tag.viewonly(c.tag)
+        end
         if c == capi.client.focus then
           c.minimized = true
         else
@@ -189,7 +189,10 @@ function widget_loader.init(awesome_context)
           c:raise()
         end
       end),
-      awful.button({ }, 3, function ()
+      awful.button({ }, 3, function (c)
+        if c.is_tag then
+          return awful.tag.viewtoggle(c.tag)
+        end
         if awesome_context.menu.instance and awesome_context.menu.instance.wibox.visible then
           awesome_context.menu.instance:hide()
           awesome_context.menu.instance = nil
@@ -217,18 +220,37 @@ function widget_loader.init(awesome_context)
     local active_client_widget = awful.widget.tasklist(
       s,
       awful.widget.tasklist.filter.focused,
-      tasklist_buttons
+      nil --tasklist_buttons
     )
-    local minimized_clients_widget = awful.widget.tasklist(
+    --local minimized_clients_widget = awful.widget.tasklist(
+      --s,
+      --awful.widget.tasklist.filter.minimizedcurrenttags,
+      --tasklist_buttons,
+      --nil,
+      --tasklist_addon.list_update
+    --)
+    --sw.tasklist = wibox.layout.align.horizontal()
+    --sw.tasklist:set_second(active_client_widget)
+    --sw.tasklist:set_third(minimized_clients_widget)
+    sw.tasklist = active_client_widget
+
+    --sw.lcarslist = {}
+    --sw.lcarslist.buttons = awful.util.table.join(
+      --awful.button({ }, 5, function() awful.tag.viewnext() end),
+      --awful.button({ }, 4, function() awful.tag.viewprev() end),
+      --awful.button({		}, 1, awful.tag.viewonly),
+      --awful.button({ modkey	}, 1, awful.client.movetotag),
+      --awful.button({		}, 3, awful.tag.viewtoggle),
+      --awful.button({ modkey	}, 3, awful.client.toggletag)
+    --)
+    sw.lcarslist = widgets.lcarslist(
       s,
-      awful.widget.tasklist.filter.minimizedcurrenttags,
+      awful.widget.tasklist.filter.alltags,
       tasklist_buttons,
       nil,
-      tasklist_addon.list_update
+      tasklist_addon.list_update,
+      wibox.layout.fixed.vertical()
     )
-    sw.tasklist = wibox.layout.align.horizontal()
-    sw.tasklist:set_second(active_client_widget)
-    sw.tasklist:set_third(minimized_clients_widget)
 
     -- layoutbox
     sw.layoutbox = widgets.layoutbox({

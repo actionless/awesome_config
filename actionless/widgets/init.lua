@@ -12,6 +12,7 @@ local widgets = {
 	random_pic		= require("actionless.widgets.random_pic"),
 	alsa			= require("actionless.widgets.alsa"),
 	temp			= require("actionless.widgets.temp"),
+	lcarslist		= require("actionless.widgets.lcarslist"),
 	-- lain forks
 	cpu			= require("actionless.widgets.cpu"),
 	mem			= require("actionless.widgets.mem"),
