@@ -460,10 +460,12 @@ local globalkeys = awful.util.table.join(
 
   hk.on({modkey, altkey}, "p",
     function()
-      awesome_context.left_panel_visible = not awesome_context.left_panel_visible
-      awesome_context.leftwibox[1].visible = awesome_context.left_panel_visible
-      awesome_context.internal_corner_wibox[1].visible = awesome_context.left_panel_visible
-      awful.wibox.stretch(awesome_context.topwibox[1], 1)
+      local t = awful.tag.selected(awful.screen.focused())
+      local visible = awful.tag.getproperty(t, 'left_panel_visible')
+      if visible ~= false then
+        visible = true
+      end
+      awful.tag.setproperty(t, 'left_panel_visible', not visible)
     end,
     "hide sidebox", UTILS
   )
