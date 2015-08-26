@@ -15,10 +15,8 @@ theme.xrdb = xresources.get_current_theme()
 theme.dir = theme_dir
 theme.icons_dir = theme.dir .. "/icons/"
 
---theme.hidpi = true
-
-theme.error = theme.xrdb.color1
-theme.warning = theme.xrdb.color2
+--theme.error = theme.xrdb.color1
+--theme.warning = theme.xrdb.color2
 
 
 -- TERMINAL COLORSCHEME:
