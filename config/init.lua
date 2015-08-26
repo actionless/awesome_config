@@ -5,6 +5,7 @@ local config = {
 	menus	= require("config.menus"),
 	toolbar	= require("config.toolbar"),
 	toolbar_assets	= require("config.toolbar_assets"),
+	lcars_layout	= require("config.lcars_layout"),
 	keys	= require("config.keys"),
 	rules	= require("config.rules"),
 	signals	= require("config.signals"),

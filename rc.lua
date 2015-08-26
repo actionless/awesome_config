@@ -95,6 +95,7 @@ config.toolbar.init(context)
 config.keys.init(context)
 config.rules.init(context)
 config.signals.init(context)
+config.lcars_layout.init(context)
 require("hotkeys")
 
 --require("third_party").collision {
