@@ -100,8 +100,6 @@ function toolbar.init(awesome_context)
             h_sep,
           }, enable_sneaky_tray = true,
       })
-      local fancy_volume_widget_bg = wibox.widget.background(wibox.widget.textbox())
-      fancy_volume_widget_bg:set_bg(beautiful.apw_fg_color)
       local fancy_volume_widget = common.constraint({
         widget=common.fixed.vertical({
           common.constraint({
@@ -109,7 +107,7 @@ function toolbar.init(awesome_context)
             height=dpi(8),
           }),
           common.constraint({
-            widget=fancy_volume_widget_bg,
+            widget=wibox.widget.background(wibox.widget.textbox(), beautiful.apw_fg_color),
             height=dpi(10),
           }),
         }),

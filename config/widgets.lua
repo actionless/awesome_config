@@ -258,6 +258,7 @@ function widget_loader.init(awesome_context)
       bg = beautiful.widget_layoutbox_bg,
       fg = beautiful.widget_layoutbox_fg,
       --valign = "bottom",
+      bg = theme.color.color8 -- 6
     })
 
   end
