@@ -33,6 +33,16 @@ local function handle_left_panel_visibility(t)
   awesome_context.leftwibox[1].visible = visible
   awesome_context.internal_corner_wibox[1].visible = visible
   awful.wibox.stretch(awesome_context.topwibox[1], 1)
+  local s = awful.tag.getscreen(t)
+  if visible then
+    awesome_context.topwibox[s]:set_widget(
+      awesome_context.topwibox_layout[s]
+    )
+  else
+    awesome_context.topwibox[s]:set_widget(
+      wibox.widget.textbox('i am fallback panel')
+    )
+  end
   --c:geometry({width=screen[c.screen].workarea.width})
 end
 function lcars_layout_helper.getlpv(t)
