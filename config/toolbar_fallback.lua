@@ -1,5 +1,6 @@
 local wibox = require("wibox")
 local beautiful = require("beautiful")
+local dpi = beautiful.xresources.apply_dpi
 local awful = require("awful")
 
 local capi = {
@@ -8,6 +9,7 @@ local capi = {
 }
 
 local widgets = require("actionless.widgets")
+local common = widgets.common
 local make_separator = require("actionless.widgets.common").make_separator
 
 
@@ -20,6 +22,7 @@ function toolbar.init(awesome_context)
   -- Separators
   local sep = wibox.widget.imagebox(beautiful.small_separator)
   local separator  = make_separator(' ')
+  local iseparator  = make_separator(' ', {bg=beautiful.panel_widget_bg})
   local sep_info   = make_separator('sq', {fg=beautiful.panel_info})
   local sep_media  = make_separator('sq', {fg=beautiful.panel_media})
 
@@ -31,17 +34,19 @@ function toolbar.init(awesome_context)
     -- LEFT side
     local left_layout = wibox.layout.fixed.horizontal()
 
+    left_layout:add(separator)
+    left_layout:add(make_separator('arrl', {fg=beautiful.panel_widget_bg}))
+    left_layout:add(loaded_widgets.screen[s].taglist)
+    left_layout:add(make_separator('arrr', {fg=beautiful.panel_widget_bg}))
     left_layout:add(sep)
     left_layout:add(loaded_widgets.screen[s].promptbox)
-    left_layout:add(sep)
-    left_layout:add(loaded_widgets.screen[s].taglist)
     left_layout:add(sep)
 
     left_layout:add(sep)
     left_layout:add(loaded_widgets.kbd)
     left_layout:add(sep)
     left_layout:add(sep)
-    --left_layout:add(loaded_widgets.screen[s].close_button)
+    left_layout:add(loaded_widgets.screen[s].manage_client)
     left_layout:add(sep)
 
     -- RIGHT side
@@ -50,45 +55,44 @@ function toolbar.init(awesome_context)
     if beautiful.panel_tasklist then
       right_layout:add(make_separator('arrr', {fg=beautiful.panel_tasklist}))
     end
-
     right_layout:add(separator)
-
+    right_layout:add(make_separator('arrl', {fg=beautiful.panel_media}))
+    right_layout:add(
+      common.constraint({
+        widget=loaded_widgets.volume,
+        width=dpi(80),
+      })
+    )
+    right_layout:add(separator)
     right_layout:add(loaded_widgets.music)
-    right_layout:add(separator)
 
-    if awesome_context.volume_widget == "apw" then
-      right_layout:add(make_separator('arrl', {fg=beautiful.panel_media}))
-    end
-    right_layout:add(loaded_widgets.volume)
-
-    -- sneaky_toggle
     if s == 1 then
-      --loaded_widgets.systray_toggle = widgets.sneaky_toggle({
-          --widgets={
-            --sep_media,
-            ----loaded_widgets.netctl,
-            --sep_media,
-          --}, enable_sneaky_tray = true,
-      --})
-      --right_layout:add(loaded_widgets.systray_toggle)
+      right_layout:add(loaded_widgets.systray_toggle)
     else
       right_layout:add(separator)
     end
 
-    right_layout:add(sep_info)
+    right_layout:add(iseparator)
     right_layout:add(loaded_widgets.mem)
-    right_layout:add(sep_info)
+    right_layout:add(iseparator)
     right_layout:add(loaded_widgets.cpu)
-    right_layout:add(sep_info)
-    --right_layout:add(loaded_widgets.temp)
-    --right_layout:add(loaded_widgets.bat)
-    right_layout:add(make_separator('arrr', {fg=beautiful.panel_info}))
+    right_layout:add(iseparator)
+    right_layout:add(loaded_widgets.temp)
+    if loaded_widgets.bat then
+      right_layout:add(loaded_widgets.bat)
+    end
+    right_layout:add(make_separator('arrr', {fg=beautiful.panel_widget_bg}))
 
     right_layout:add(separator)
+
+    right_layout:add(make_separator('arrl', {fg=beautiful.panel_widget_bg}))
+    right_layout:add(iseparator)
     right_layout:add(loaded_widgets.textclock)
+    right_layout:add(iseparator)
     right_layout:add(separator)
-
     right_layout:add(loaded_widgets.screen[s].layoutbox)
+    right_layout:add(make_separator('sq', {fg=beautiful.panel_widget_bg_disabled}))
+    right_layout:add(make_separator('arrr', {fg=beautiful.panel_widget_bg_disabled}))
     right_layout:add(sep)
 
 
@@ -117,28 +121,6 @@ function toolbar.init(awesome_context)
       margined_layout:set_bottom(const)
       layout = margined_layout
     end
-
-    --mywibox[s] = awful.wibox({
-      --position = "top",
-      --screen = s,
-      --height = beautiful.panel_height,
-    --})
-    --mywibox[s]:set_widget(layout)
-    --mywibox[s].opacity = beautiful.panel_opacity
-    --mywibox[s]:set_bg(beautiful.panel_bg)
-    --mywibox[s]:set_fg(beautiful.panel_fg)
-
-    --if beautiful.screen_padding and beautiful.screen_padding > 0 then
-      ---- padding for clients' area
-      --awful.screen.padding(
-        --capi.screen[s], {
-          --top = beautiful.screen_padding,
-          --bottom = beautiful.screen_padding,
-          --left = beautiful.screen_padding,
-          --right = beautiful.screen_padding
-        --}
-      --)
-    --end
 
     awesome_context.topwibox_layout_fallback[s] = layout  -- this one!
   end

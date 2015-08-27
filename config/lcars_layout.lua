@@ -9,7 +9,7 @@ local helpers = require("actionless.helpers")
 local delayed_call = require("gears.timer").delayed_call
 
 
-local debug_messages_enabled = true
+local debug_messages_enabled = false
 local log = function(...) if debug_messages_enabled then nlog(...) end end
 
 

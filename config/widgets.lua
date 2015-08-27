@@ -88,14 +88,14 @@ function widget_loader.init(awesome_context)
     horizontal=true,
   })
   -- Sensor
-  --w.temp = widgets.temp({
-    --update_interval = 10,
-    ----sensor = "Core 0",
-    --sensor = "temp1",
-    --warning = 75,
-    --bg = beautiful.widget_temp_bg,
-    --fg = beautiful.widget_temp_fg,
-  --})
+  w.temp = widgets.temp({
+    update_interval = 10,
+    --sensor = "Core 0",
+    sensor = "temp1",
+    warning = 75,
+    bg = beautiful.widget_temp_bg,
+    fg = beautiful.widget_temp_fg,
+  })
   -- Battery
   --if awesome_context.have_battery then
     --w.bat = widgets.bat({
