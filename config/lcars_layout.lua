@@ -40,7 +40,7 @@ local function handle_left_panel_visibility(t)
     )
   else
     awesome_context.topwibox[s]:set_widget(
-      wibox.widget.textbox('i am fallback panel')
+      awesome_context.topwibox_layout_fallback[s]
     )
   end
   --c:geometry({width=screen[c.screen].workarea.width})

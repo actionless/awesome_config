@@ -162,6 +162,7 @@ local function tasklist_label(c, args)
     local bg_image = nil
 
     local lenth_chars = 13
+    local lenth_chars = 12
 
     if c.is_tag then
         --if c.is_separator then

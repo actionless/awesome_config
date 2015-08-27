@@ -132,23 +132,23 @@ function widget_loader.init(awesome_context)
     )
 
     -- taglist
-    --sw.taglist = {}
-    --sw.taglist.buttons = awful.util.table.join(
-      --awful.button({		}, 1, awful.tag.viewonly),
-      --awful.button({ modkey	}, 1, awful.client.movetotag),
-      --awful.button({		}, 3, awful.tag.viewtoggle),
-      --awful.button({ modkey	}, 3, awful.client.toggletag)
-    --)
-    ----sw.taglist = widgets.common.decorated_horizontal({
-      ----widget = awful.widget.taglist(
-        ----s, awful.widget.taglist.filter.all, sw.taglist.buttons
-      ----),
-      ----bg = beautiful.widget_taglist_bg,
-      ----fg = beautiful.widget_taglist_fg,
-    ----})
-    --sw.taglist = awful.widget.taglist(
+    sw.taglist = {}
+    sw.taglist.buttons = awful.util.table.join(
+      awful.button({		}, 1, awful.tag.viewonly),
+      awful.button({ modkey	}, 1, awful.client.movetotag),
+      awful.button({		}, 3, awful.tag.viewtoggle),
+      awful.button({ modkey	}, 3, awful.client.toggletag)
+    )
+    --sw.taglist = widgets.common.decorated_horizontal({
+      --widget = awful.widget.taglist(
         --s, awful.widget.taglist.filter.all, sw.taglist.buttons
-    --)
+      --),
+      --bg = beautiful.widget_taglist_bg,
+      --fg = beautiful.widget_taglist_fg,
+    --})
+    sw.taglist = awful.widget.taglist(
+        s, awful.widget.taglist.filter.all, sw.taglist.buttons
+    )
 
 
     -- promptbox
