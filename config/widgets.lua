@@ -93,8 +93,8 @@ function widget_loader.init(awesome_context)
     --sensor = "Core 0",
     sensor = "temp1",
     warning = 75,
-    bg = beautiful.widget_temp_bg,
-    fg = beautiful.widget_temp_fg,
+    --bg = beautiful.widget_temp_bg,
+    --fg = beautiful.widget_temp_fg,
   })
   -- Battery
   --if awesome_context.have_battery then
