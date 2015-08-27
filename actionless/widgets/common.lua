@@ -572,6 +572,13 @@ function common.decorated_horizontal(args)
     })
   end
 
+  function decorated:set_disabled()
+    self:set_color({
+      bg=beautiful.panel_widget_bg_disabled,
+      fg=beautiful.panel_widget_fg_disabled
+    })
+  end
+
   function decorated:set_font(...)
     return self.widget:set_font(...)
   end
