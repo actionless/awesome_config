@@ -99,8 +99,6 @@ function toolbar.init(awesome_context)
     layout:set_right(right_layout)
 
 
-    awesome_context.topwibox_layout_fallback[s] = layout  -- this one!
-
     -- background image:
     --if beautiful.panel_bg_image then
       --local layout_bg = wibox.widget.background()
@@ -110,15 +108,15 @@ function toolbar.init(awesome_context)
     --end
 
     -- bottom panel padding:
-    --if beautiful.panel_padding_bottom then
-      --local const = wibox.layout.constraint()
-      --const:set_strategy("exact")
-      --const:set_height(beautiful.panel_padding_bottom)
-      --local margined_layout = wibox.layout.align.vertical()
-      --margined_layout:set_middle(layout)
-      --margined_layout:set_bottom(const)
-      --layout = margined_layout
-    --end
+    if beautiful.panel_padding_bottom then
+      local const = wibox.layout.constraint()
+      const:set_strategy("exact")
+      const:set_height(beautiful.panel_padding_bottom)
+      local margined_layout = wibox.layout.align.vertical()
+      margined_layout:set_middle(layout)
+      margined_layout:set_bottom(const)
+      layout = margined_layout
+    end
 
     --mywibox[s] = awful.wibox({
       --position = "top",
@@ -142,6 +140,7 @@ function toolbar.init(awesome_context)
       --)
     --end
 
+    awesome_context.topwibox_layout_fallback[s] = layout  -- this one!
   end
 
 end
