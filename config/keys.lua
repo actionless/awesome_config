@@ -461,6 +461,9 @@ local globalkeys = awful.util.table.join(
   hk.on({modkey, altkey}, "p",
     function()
       local t = awful.tag.selected(awful.screen.focused())
+      if awful.tag.getproperty(t, 'layout').name == 'lcars' then
+        return nlog("fuck you")
+      end
       local visible = awful.tag.getproperty(t, 'left_panel_visible')
       if visible ~= false then
         visible = true

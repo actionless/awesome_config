@@ -67,6 +67,10 @@ function layouts.init(context)
       awful.tag.setmfpol("mwfact", tags[tag_number])
     end
 
+    for _, t in ipairs(tags) do
+      awful.tag.setproperty(t, 'left_panel_visible', false)
+    end
+
   end
   -- }}}
 

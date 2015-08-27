@@ -100,6 +100,7 @@ local function lcars_separate(t, from)
   if lcars_layout_helper.is_separated and lcars_layout_helper.last_y == computed_y
     then return end
   log("LCARS: not cached")
+  lcars_layout_helper.setlpv(true, t)
   lcars_layout_helper.last_y = computed_y
 
   w:geometry({height = beautiful.panel_height * 2 + beautiful.panel_padding_bottom})
