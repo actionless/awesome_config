@@ -85,6 +85,15 @@ function tasklist_addon.list_update(w, buttons, label, data, objects, spacing_le
    end
 end
 
+
+function tasklist_addon.sorted_update(w, buttons, label, data, clients)
+    local sorted_clients = {client.focus, }
+    for _, c in ipairs(clients) do
+        table.insert(sorted_clients, c)
+    end
+    return tasklist_addon.list_update(w, buttons, label, data, sorted_clients)
+end
+
 return tasklist_addon
 
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80

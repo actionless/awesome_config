@@ -137,15 +137,10 @@ function widget_loader.init(awesome_context)
       awful.button({		}, 1, awful.tag.viewonly),
       awful.button({ modkey	}, 1, awful.client.movetotag),
       awful.button({		}, 3, awful.tag.viewtoggle),
-      awful.button({ modkey	}, 3, awful.client.toggletag)
+      awful.button({ modkey	}, 3, awful.client.toggletag),
+      awful.button({ }, 5, function() awful.tag.viewnext() end),
+      awful.button({ }, 4, function() awful.tag.viewprev() end)
     )
-    --sw.taglist = widgets.common.decorated_horizontal({
-      --widget = awful.widget.taglist(
-        --s, awful.widget.taglist.filter.all, sw.taglist.buttons
-      --),
-      --bg = beautiful.widget_taglist_bg,
-      --fg = beautiful.widget_taglist_fg,
-    --})
     sw.taglist = awful.widget.taglist(
         s, awful.widget.taglist.filter.all, sw.taglist.buttons
     )
@@ -219,8 +214,10 @@ function widget_loader.init(awesome_context)
     )
     local active_client_widget = awful.widget.tasklist(
       s,
-      awful.widget.tasklist.filter.focused,
-      nil --tasklist_buttons
+      awful.widget.tasklist.filter.minimizedcurrenttags,
+      nil, --tasklist_buttons
+      nil,
+      tasklist_addon.sorted_update
     )
     --local minimized_clients_widget = awful.widget.tasklist(
       --s,
@@ -243,14 +240,18 @@ function widget_loader.init(awesome_context)
       --awful.button({		}, 3, awful.tag.viewtoggle),
       --awful.button({ modkey	}, 3, awful.client.toggletag)
     --)
-    sw.lcarslist = widgets.lcarslist(
-      s,
-      awful.widget.tasklist.filter.alltags,
-      tasklist_buttons,
-      nil,
-      tasklist_addon.list_update,
-      wibox.layout.fixed.vertical()
-    )
+    if false then
+      sw.lcarslist = widgets.lcarslist(
+        s,
+        awful.widget.tasklist.filter.alltags,
+        tasklist_buttons,
+        nil,
+        tasklist_addon.list_update,
+        wibox.layout.fixed.vertical()
+      )
+    else
+      sw.lcarslist = wibox.widget.textbox()
+    end
 
     -- layoutbox
     sw.layoutbox = widgets.layoutbox({

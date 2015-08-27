@@ -15,7 +15,8 @@ local log = function(...) if debug_messages_enabled then nlog(...) end end
 
 local lcars_layout_helper = {
   last_y = nil,
-  is_separated = false
+  is_separated = false,
+  is_visible = nil
 }
 
 function lcars_layout_helper.init(awesome_context)
@@ -29,6 +30,11 @@ end)
 local function handle_left_panel_visibility(t)
   --if not t then t = awful.tag.selected(awful.screen.focused()) end
   local visible = lcars_layout_helper.getlpv(t)
+  if visible == lcars_layout_helper.is_visible then
+    return
+  else
+    lcars_layout_helper.is_visible = visible
+  end
   --awesome_context.leftwibox[1]:struts({left=0})
   awesome_context.leftwibox[1].visible = visible
   awesome_context.internal_corner_wibox[1].visible = visible
