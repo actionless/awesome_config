@@ -90,4 +90,40 @@ function helpers.client_floats(c)
 end
 
 
+function helpers.tag_noempty_list(s)
+  local screen = s or awful.screen.focused()
+  local tags = awful.tag.gettags(screen)
+  local vtags = {}
+  for i, t in pairs(tags) do
+      if awful.widget.taglist.filter.noempty(t) then
+          vtags[#vtags + 1] = t
+      end
+  end
+  return vtags
+end
+
+
+function helpers.tag_view_noempty(delta, s)
+    s = s or awful.screen.focused()
+    local selected_tag = awful.tag.selected(s)
+    local noempty_tags = helpers.tag_noempty_list(s)
+    local target_tag_local_idx
+    for i, t in ipairs(noempty_tags) do
+      if t == selected_tag then
+        target_tag_local_idx = i + delta
+        break
+      end
+    end
+    if target_tag_local_idx < 1 then
+      target_tag_local_idx = #noempty_tags
+    elseif target_tag_local_idx > #noempty_tags then
+      target_tag_local_idx = 1
+    end
+    local current_idx = awful.tag.getidx()
+    local target_idx = awful.tag.getidx(noempty_tags[target_tag_local_idx])
+    local idx_delta = current_idx - target_idx
+    awful.tag.viewidx(-idx_delta, s)
+end
+
+
 return helpers

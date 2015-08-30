@@ -6,9 +6,6 @@ OH HI
 os.setlocale(os.getenv("LANG"))
 local editor = "vim" or os.getenv("EDITOR") or "nano" or "vi"
 
-local eminent = require("third_party").eminent
-eminent.create_new_tag = false
-
 local xresources = require("beautiful.xresources")
 local awful = require("awful")
 require("awful.autofocus")

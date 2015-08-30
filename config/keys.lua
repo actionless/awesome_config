@@ -127,11 +127,15 @@ local globalkeys = awful.util.table.join(
 
 
   hk.on({ modkey,        }, ",",
-    function() awful.tag.viewprev(helpers.get_current_screen()) end,
+    function()
+      helpers.tag_view_noempty(-1)
+    end,
     "prev tag", TAG_COLOR
   ),
   hk.on({ modkey,        }, ".",
-    function() awful.tag.viewnext(helpers.get_current_screen()) end,
+    function()
+      helpers.tag_view_noempty(1)
+    end,
     "next tag", TAG_COLOR
   ),
   hk.on({ modkey,        }, "Escape",
@@ -140,12 +144,12 @@ local globalkeys = awful.util.table.join(
   ),
   hk.on({ modkey, altkey }, "r",
     function ()
-      local tag = awful.tag.selected(helpers.get_current_screen())
+      local tag = awful.tag.selected(awful.screen.focused())
       if tag then
         awful.prompt.run(
           { prompt = "new tag name: ",
             text = awful.tag.getidx(tag) .. ":" },
-          awesome_context.widgets.screen[helpers.get_current_screen()].promptbox,
+          awesome_context.widgets.screen[awful.screen.focused()].promptbox,
           function(new_name)
             if not new_name or #new_name == 0 then
               return
@@ -238,7 +242,7 @@ local globalkeys = awful.util.table.join(
   hk.on({ modkey,       }, "i",
     function ()
       awesome_context.menu.instance = menu_addon.clients_on_tag({
-        theme = {width=capi.screen[helpers.get_current_screen()].workarea.width},
+        theme = {width=capi.screen[awful.screen.focused()].workarea.width},
         coords = {x=0, y=18}
       })
     end,
@@ -247,7 +251,7 @@ local globalkeys = awful.util.table.join(
   hk.on({ modkey,       }, "p",
     function ()
       awesome_context.menu.instance = awful.menu.clients({
-        theme = {width=capi.screen[helpers.get_current_screen()].workarea.width},
+        theme = {width=capi.screen[awful.screen.focused()].workarea.width},
         coords = {x=0, y=18}
       })
     end,
@@ -341,13 +345,13 @@ local globalkeys = awful.util.table.join(
 
   -- Prompt
   hk.on({ modkey }, "r",
-    function () awesome_context.widgets.screen[helpers.get_current_screen()].promptbox:run() end,
+    function () awesome_context.widgets.screen[awful.screen.focused()].promptbox:run() end,
     "Run command...", UTILS
   ),
   hk.on({ modkey }, "x",
     function ()
       awful.prompt.run({ prompt = "Run Lua code: " },
-      awesome_context.widgets.screen[helpers.get_current_screen()].promptbox.widget,
+      awesome_context.widgets.screen[awful.screen.focused()].promptbox.widget,
       awful.util.eval, nil,
       awful.util.getdir("cache") .. "/history_eval")
     end,

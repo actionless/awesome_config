@@ -1,7 +1,3 @@
-[submodule "third_party/eminent"]
-	path = third_party/eminent
-	url = https://github.com/guotsuan/eminent.git
-	branch = master
 [submodule "third_party/apw"]
 	path = third_party/apw
 	url = https://github.com/mokasin/apw.git

@@ -142,7 +142,9 @@ function widget_loader.init(awesome_context)
       awful.button({ }, 4, function() awful.tag.viewprev() end)
     )
     sw.taglist = awful.widget.taglist(
-        s, awful.widget.taglist.filter.all, sw.taglist.buttons
+        s,
+        awful.widget.taglist.filter.noempty,
+        sw.taglist.buttons
     )
 
 
