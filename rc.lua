@@ -66,7 +66,6 @@ context = {
   widgets = {},
   menu = {},
 
-  volume_widget = "apw",
   have_battery = true,
   new_top = false,
 }

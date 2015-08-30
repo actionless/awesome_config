@@ -48,21 +48,8 @@ function widget_loader.init(awesome_context)
       horizontal=true,
       --valign = "bottom",
   })
-  -- ALSA volume
-  if awesome_context.volume_widget == "apw" then
-    w.volume = require("third_party/apw/widget")
-  else
-    w.volume = widgets.alsa({
-      update_interval = 5,
-      step=2,
-      channel = 'Master',
-      channels_toggle = {'Master', 'Speaker', 'Headphone'},
-      bg = beautiful.widget_alsa_bg,
-      fg = beautiful.widget_alsa_fg,
-      left_separators = { 'arrl' },
-      right_separators = { 'sq' }
-    })
-  end
+  -- volume
+  w.volume = require("third_party/apw/widget")
 
   -- systray_toggle
   --w.systray_toggle = widgets.systray_toggle({
