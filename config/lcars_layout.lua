@@ -4,7 +4,6 @@ local client = client
 local beautiful = require("beautiful")
 
 local titlebar	= require("actionless.titlebar")
-local helpers = require("actionless.helpers")
 
 local delayed_call = require("gears.timer").delayed_call
 
@@ -68,7 +67,7 @@ tag.connect_signal("property::left_panel_visible", handle_left_panel_visibility)
 local function lcars_unite(t, from)
   if not lcars_layout_helper.is_separated then return end
   log("LCARS: unite|"..from)
-  local s = helpers.get_current_screen()
+  local s = awful.screen.focused()
   local w = awesome_context.topwibox[s]
   w:struts({top = beautiful.panel_height})
   w:geometry({height = beautiful.panel_height})

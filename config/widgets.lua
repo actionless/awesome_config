@@ -7,7 +7,6 @@ local capi = {
   client = client,
 }
 
-local helpers = require("actionless.helpers")
 local widgets = require("actionless.widgets")
 local common = widgets.common
 local tasklist_addon = require("actionless.tasklist_addon")
@@ -199,7 +198,7 @@ function widget_loader.init(awesome_context)
           end
           awesome_context.menu.instance = awful.menu.clients({
             theme = {
-              width=capi.screen[helpers.get_current_screen()].workarea.width
+              width=capi.screen[awful.screen.focused()].workarea.width
             },
             coords = { x=0, y=18 }
           })

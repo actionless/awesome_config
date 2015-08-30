@@ -10,18 +10,16 @@ local awful = require("awful")
 local capi   = { client = client,
                  mouse = mouse }
 local gears = require("gears")
-
-
 local beautiful = require("beautiful")
 
 
 -- helper functions for internal use
 local helpers = {}
 
+
 helpers.font = string.match(beautiful.get().font or "monospace 8", "([%a, ]+) %d+")
 helpers.dir    = debug.getinfo(1, 'S').source:match[[^@(.*/).*$]]
 
--- {{{ Timer maker
 
 function helpers.newinterval(timeout, fun, nostart)
   if not nostart then fun() end
@@ -41,7 +39,6 @@ function helpers.newdelay(timeout, fun)
   gears.timer.start_new(timeout, wrapped_fun)
 end
 
--- }}}
 
 function helpers.run_once(cmd)
   local findme = cmd
@@ -50,14 +47,6 @@ function helpers.run_once(cmd)
 	findme = cmd:sub(0, firstspace-1)
   end
   awful.util.spawn_with_shell("pgrep -u $USER -x " .. findme .. " > /dev/null || (" .. cmd .. ")")
-end
-
-function helpers.get_current_screen()
-  if capi.client.focus then
-    return capi.client.focus.screen
-  else
-    return capi.mouse.screen
-  end
 end
 
 

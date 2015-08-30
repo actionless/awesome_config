@@ -219,7 +219,7 @@ local function create_wibox(modifiers, available_groups)
     return all_layout
   end
 
-  local scrgeom = capi.screen[helpers.get_current_screen()].workarea
+  local scrgeom = capi.screen[awful.screen.focused()].workarea
   local width = APPEARANCE.width
   local height = APPEARANCE.height
   local x = (scrgeom.width - width) / 2

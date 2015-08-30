@@ -5,7 +5,6 @@ local menubar = require("actionless.menubar")
 local beautiful = require("beautiful")
 local capi = { screen = screen }
 
-local get_current_screen = require("actionless.helpers").get_current_screen
 local menugen = require("utils.menugen")
 
 local menus = {}
@@ -67,9 +66,9 @@ function menus.init(context)
   menubar.utils.terminal = context.cmds.terminal
   menubar.geometry = {
     height = beautiful.panel_height,
-    width = capi.screen[get_current_screen()].workarea.width,
+    width = capi.screen[awful.screen.focused()].workarea.width,
     x = 0,
-    y = capi.screen[get_current_screen()].workarea.height - beautiful.panel_height
+    y = capi.screen[awful.screen.focused()].workarea.height - beautiful.panel_height
   }
   -- Menubar configuration
   context.menu.menubar = menubar.create()

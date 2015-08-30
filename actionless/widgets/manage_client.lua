@@ -10,7 +10,6 @@ local capi = { client = client }
 
 
 local common = require("actionless.widgets.common")
-local helpers = require("actionless.helpers")
 
 
 local manage_client = {}
@@ -46,7 +45,7 @@ local function worker(args)
     end)
 
   widget.toggle = function()
-    local t = awful.tag.selected(helpers.get_current_screen())
+    local t = awful.tag.selected(widget_screen)
     if not widget.is_managing then
       widget.is_managing = true
       widget:set_warning()
