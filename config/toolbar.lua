@@ -67,12 +67,6 @@ function toolbar.init(awesome_context)
       nil,
       nil
     )
-    loaded_widgets.screen[s].tasklist:buttons(awful.util.table.join(
-      awful.button({		}, 5, function(t)
-        awful.tag.viewnext(awful.tag.getscreen(t)) end),
-      awful.button({		}, 4, function(t)
-        awful.tag.viewprev(awful.tag.getscreen(t)) end)
-    ))
     local top_panel_bottomlayout = common.align.horizontal(
       common.fixed.horizontal({
         --top_panel_left_margin,
@@ -91,15 +85,6 @@ function toolbar.init(awesome_context)
     )
     -- add sneaky_toggle on first screen
     if s == 1 then
-      loaded_widgets.systray_toggle = widgets.sneaky_toggle({
-          widgets={
-            h_sep,
-            sep_media,
-            loaded_widgets.netctl,
-            sep_media,
-            h_sep,
-          }, enable_sneaky_tray = true,
-      })
       local fancy_volume_widget = common.constraint({
         widget=common.fixed.vertical({
           common.constraint({

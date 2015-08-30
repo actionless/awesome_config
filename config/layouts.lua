@@ -3,7 +3,6 @@ local gears = require("gears")
 local beautiful = require("beautiful")
 local capi = { screen = screen }
 local lcars_layout = require("actionless.lcars_layout")
-local center_layout = require("actionless.center_layout")
 
 local layouts = {}
 

@@ -8,6 +8,7 @@ local capi = {
 }
 
 local widgets = require("actionless.widgets")
+local helpers = require("actionless.helpers")
 local common = widgets.common
 local tasklist_addon = require("actionless.tasklist_addon")
 
@@ -52,11 +53,17 @@ function widget_loader.init(awesome_context)
   w.volume = require("third_party/apw/widget")
 
   -- systray_toggle
-  --w.systray_toggle = widgets.systray_toggle({
-    --screen = 1
-  --})
-  --w.systray_toggle = widgets.sneaky_tray({})
-  --w.systray = wibox.widget.systray()
+  w.systray_toggle = widgets.sneaky_toggle({
+      widgets={
+        --h_sep,
+        --sep_media,
+        wibox.widget.textbox(' '),
+        w.netctl,
+        wibox.widget.textbox(' '),
+        --sep_media,
+        --h_sep,
+      }, enable_sneaky_tray = true,
+  })
 
   -- MEM
   w.mem = widgets.mem({
@@ -124,8 +131,12 @@ function widget_loader.init(awesome_context)
       awful.button({ modkey	}, 1, awful.client.movetotag),
       awful.button({		}, 3, awful.tag.viewtoggle),
       awful.button({ modkey	}, 3, awful.client.toggletag),
-      awful.button({ }, 5, function() awful.tag.viewnext() end),
-      awful.button({ }, 4, function() awful.tag.viewprev() end)
+      awful.button({ }, 4, function()
+        helpers.tag_view_noempty(-1)
+      end),
+      awful.button({ }, 5, function()
+        helpers.tag_view_noempty(1)
+      end)
     )
     sw.taglist = awful.widget.taglist(
         s,
@@ -191,43 +202,30 @@ function widget_loader.init(awesome_context)
           })
         end
       end),
-      awful.button({ }, 4, function ()
-        awful.client.focus.byidx(-1)
-        if capi.client.focus then capi.client.focus:raise() end
+      --awful.button({ }, 4, function ()
+        --awful.client.focus.byidx(-1)
+        --if capi.client.focus then capi.client.focus:raise() end
+      --end),
+      --awful.button({ }, 5, function ()
+        --awful.client.focus.byidx(1)
+        --if capi.client.focus then capi.client.focus:raise() end
+      --end)
+      awful.button({		}, 5, function(t)
+        helpers.tag_view_noempty(1, awful.tag.getscreen(t))
       end),
-      awful.button({ }, 5, function ()
-        awful.client.focus.byidx(1)
-        if capi.client.focus then capi.client.focus:raise() end
+      awful.button({		}, 4, function(t)
+        helpers.tag_view_noempty(-1, awful.tag.getscreen(t))
       end)
     )
-    local active_client_widget = awful.widget.tasklist(
+
+    sw.tasklist = awful.widget.tasklist(
       s,
       awful.widget.tasklist.filter.minimizedcurrenttags,
-      nil, --tasklist_buttons
+      tasklist_buttons,
       nil,
       tasklist_addon.sorted_update
     )
-    --local minimized_clients_widget = awful.widget.tasklist(
-      --s,
-      --awful.widget.tasklist.filter.minimizedcurrenttags,
-      --tasklist_buttons,
-      --nil,
-      --tasklist_addon.list_update
-    --)
-    --sw.tasklist = wibox.layout.align.horizontal()
-    --sw.tasklist:set_second(active_client_widget)
-    --sw.tasklist:set_third(minimized_clients_widget)
-    sw.tasklist = active_client_widget
 
-    --sw.lcarslist = {}
-    --sw.lcarslist.buttons = awful.util.table.join(
-      --awful.button({ }, 5, function() awful.tag.viewnext() end),
-      --awful.button({ }, 4, function() awful.tag.viewprev() end),
-      --awful.button({		}, 1, awful.tag.viewonly),
-      --awful.button({ modkey	}, 1, awful.client.movetotag),
-      --awful.button({		}, 3, awful.tag.viewtoggle),
-      --awful.button({ modkey	}, 3, awful.client.toggletag)
-    --)
     if false then
       sw.lcarslist = widgets.lcarslist(
         s,
