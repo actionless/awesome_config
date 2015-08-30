@@ -10,6 +10,7 @@ local awful = require("awful")
 local capi   = { client = client,
                  mouse = mouse }
 local awesome_timer = require("gears").timer or timer
+local gears = require("gears")
 
 
 local beautiful = require("beautiful")
@@ -35,19 +36,14 @@ function helpers.newtimer(name, timeout, fun, nostart)
   helpers.timer_table[name] = timer
 end
 
-function helpers.newinterval(name, timeout, fun, nostart)
-  local timer = awesome_timer({ timeout = timeout })
-  local patched_function = function(...)
-    timer:stop()
+function helpers.newinterval(timeout, fun, nostart)
+  if not nostart then fun() end
+  local function wrapped_fun(...)
     fun(...)
-    timer:again()
+    gears.timer.start_new(timeout, wrapped_fun)
+    return false
   end
-  timer:connect_signal("timeout", patched_function)
-  timer:start()
-  if not nostart then
-    timer:emit_signal("timeout")
-  end
-  helpers.timer_table[name] = timer
+  gears.timer.start_new(timeout, wrapped_fun)
 end
 
 function helpers.newdelay(name, timeout, fun)

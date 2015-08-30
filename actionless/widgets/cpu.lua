@@ -135,7 +135,7 @@ local function worker(args)
     ))
   end
 
-  newinterval("cpu", update_interval, cpu.update)
+  newinterval(update_interval, cpu.update)
 
   return setmetatable(cpu, { __index = cpu.widget })
 end

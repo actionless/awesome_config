@@ -49,7 +49,7 @@ local function worker(args)
 
 	-- random timer id is for possibility to
 	-- run different instance of the widget simultaneously
-	newinterval("random_pic_" .. math.random(1,65535), interval, rp.update)
+	newinterval(interval, rp.update)
 	return rp.widget
 end
 

@@ -127,7 +127,7 @@ local function worker(args)
     ))
   end
 
-  newinterval("mem", update_interval, mem.update)
+  newinterval(update_interval, mem.update)
   return setmetatable(mem, { __index = mem.widget })
 end
 return setmetatable(mem, { __call = function(_, ...) return worker(...) end })

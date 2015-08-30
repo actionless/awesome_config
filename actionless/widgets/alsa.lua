@@ -163,7 +163,7 @@ local function worker(args)
     )
   end
 
-  newinterval("alsa", alsa.update_interval, alsa.update)
+  newinterval(alsa.update_interval, alsa.update)
   return setmetatable(alsa, { __index = alsa.widget })
 end
 

@@ -114,7 +114,7 @@ local function worker(args)
     end
   end
 
-  newinterval("netctl", update_interval, netctl.update)
+  newinterval(update_interval, netctl.update)
 
   return setmetatable(
     netctl,
