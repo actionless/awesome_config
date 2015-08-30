@@ -195,10 +195,10 @@ tag.connect_signal("property::mwfact", function (t)
     size_change_callback(t, "t:mwfact")
 end)
 tag.connect_signal("property::ncol", function (t)
-    size_change_callback("t:ncol")
+    size_change_callback(t, "t:ncol")
 end)
 tag.connect_signal("property::nmaster", function (t)
-    size_change_callback("t:nmaster")
+    size_change_callback(t, "t:nmaster")
 end)
 
 
