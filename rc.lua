@@ -68,7 +68,6 @@ context = {
 
   have_battery = true,
   new_top = false,
-  --sensor = "temp1",
   sensor = "Core 0",
   lcarslist_enabled = false
 

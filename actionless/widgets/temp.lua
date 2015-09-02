@@ -2,12 +2,11 @@
      Licensed under GNU General Public License v2
       * (c) 2013-2014, Yauheni Kirylau
 --]]
+local beautiful = require("beautiful")
+local awful = require("awful")
 
-local beautiful    = require("beautiful")
-
-local async        = require("utils.async")
-local helpers      = require("actionless.helpers")
-local parse        = require("utils.parse")
+local helpers = require("actionless.helpers")
+local parse = require("utils.parse")
 local common_widget= require("actionless.widgets.common").widget
 local decorated_widget= require("actionless.widgets.common").decorated
 
@@ -28,7 +27,7 @@ local function worker(args)
   temp.widget:set_image(beautiful.widget_temp)
 
   function temp.update()
-    async.execute("sensors ", function (str) temp.post_update(str) end)
+    awful.util.spawn_with_line_callback("sensors ", function (str) temp.post_update(str) end)
   end
 
   function temp.post_update(str)

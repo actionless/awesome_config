@@ -6,7 +6,6 @@
 local dbus = dbus
 local awful = require("awful")
 
-local async = require("utils.async")
 local h_table = require("utils.table")
 local h_string = require("utils.string")
 local parse = require("utils.parse")
@@ -96,7 +95,7 @@ function spotify.prev_song()
 end
 -------------------------------------------------------------------------------
 function spotify.update(parse_status_callback)
-  async.execute(
+  awful.util.spawn_with_line_callback(
     dbus_cmd .. "PlaybackStatus",
     function(str) spotify.post_update(str, parse_status_callback) end
   )
@@ -112,7 +111,7 @@ function spotify.post_update(result_string, parse_status_callback)
   end
   spotify.player_status.state = state
   if state == 'play' or state == 'pause' then
-    async.execute(
+    awful.util.spawn_with_line_callback(
       dbus_cmd .. "Metadata",
       function(str) spotify.parse_metadata(str, parse_status_callback) end
     )
@@ -142,7 +141,7 @@ end
 function spotify.resize_cover(
   player_status, _, output_coverart_path, notification_callback
 )
-  async.execute(
+  awful.util.spawn_with_line_callback(
     string.format(
       "wget %s -O %s",
       player_status.cover_url,

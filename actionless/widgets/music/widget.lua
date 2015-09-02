@@ -15,7 +15,6 @@ local common = require("actionless.widgets.common")
 local common_widget	= common.widget
 local decorated_widget	= common.decorated
 local markup		= require("utils.markup")
-local async		= require("utils.async")
 
 local backend_modules	= require("actionless.widgets.music.backends")
 local tag_parser	= require("actionless.widgets.music.tag_parser")
@@ -235,7 +234,7 @@ function player.resize_cover()
   if not player.player_status.cover then
     player.player_status.cover = default_art
   end
-  async.execute(
+  awful.util.spawn_with_line_callback(
     string.format(
       [[convert %q -thumbnail %q -gravity center -background "none" -extent %q %q]],
       player.player_status.cover,

@@ -6,7 +6,6 @@
 local dbus = dbus
 local awful = require("awful")
 
-local async = require("utils.async")
 local h_table = require("utils.table")
 local parse = require("utils.parse")
 
@@ -40,7 +39,7 @@ function clementine.prev_song()
 end
 -------------------------------------------------------------------------------
 function clementine.update(parse_status_callback)
-  async.execute(
+  awful.util.spawn_with_line_callback(
     dbus_cmd .. " /org/mpris/MediaPlayer2 PlaybackStatus",
     function(str) clementine.post_update(str, parse_status_callback) end
   )
@@ -56,7 +55,7 @@ function clementine.post_update(result_string, parse_status_callback)
   end
   clementine.player_status.state = state
   if state == 'play' or state == 'pause' then
-    async.execute(
+    awful.util.spawn_with_line_callback(
       dbus_cmd .. "/Player GetMetadata",
       function(str) clementine.parse_metadata(str, parse_status_callback) end
     )

@@ -2,8 +2,10 @@
      Licensed under GNU General Public License v2
       * (c) 2013-2014, Yauheni Kirylau
 --]]
+
 local naughty      = require("naughty")
 local beautiful    = require("beautiful")
+local awful = require("awful")
 
 local h_table      = require("utils.table")
 local h_string      = require("utils.string")
@@ -11,7 +13,6 @@ local parse = require("utils.parse")
 local helpers = require("actionless.helpers")
 local newinterval = helpers.newinterval
 local common_widget = require("actionless.widgets.common").decorated
-local async = require("utils.async")
 
 
 -- CPU usage
@@ -62,7 +63,7 @@ local function worker(args)
       replaces_id = cpu.get_notification_id(),
       position = beautiful.widget_notification_position,
     })
-    async.execute(cpu.command, cpu.notification_callback)
+    awful.util.spawn_with_line_callback(cpu.command, cpu.notification_callback)
     cpu.update()
   end
 
@@ -132,7 +133,7 @@ local function worker(args)
       string.format(
         "%-4s",
         cpu.now.la1
-    ))
+      ))
   end
 
   newinterval(update_interval, cpu.update)

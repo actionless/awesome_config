@@ -5,15 +5,15 @@
       * (c) 2010-2012, Peter Hofmann
 --]]
 
-local naughty      = require("naughty")
-local beautiful    = require("beautiful")
+local naughty = require("naughty")
+local beautiful = require("beautiful")
+local awful = require("awful")
 
-local async      = require("utils.async")
-local h_table      = require("utils.table")
-local h_string      = require("utils.string")
-local parse        = require("utils.parse")
+local h_table = require("utils.table")
+local h_string = require("utils.string")
+local parse = require("utils.parse")
 local common_widget= require("actionless.widgets.common").decorated
-local newinterval  = require("actionless.helpers").newinterval
+local newinterval = require("actionless.helpers").newinterval
 
 -- Memory usage (ignoring caches)
 local mem = {
@@ -60,7 +60,7 @@ local function worker(args)
       replaces_id = mem.get_notification_id(),
       position = beautiful.widget_notification_position,
     })
-    async.execute(mem.command, mem.notification_callback)
+    awful.util.spawn_with_line_callback(mem.command, mem.notification_callback)
     mem.update()
   end
 
@@ -72,7 +72,7 @@ local function worker(args)
     for _, line in ipairs(
       h_table.range(
         parse.string_to_lines(output),
-       6 + mem.cores_number
+        6 + mem.cores_number
       )
     ) do
       local values = h_string.split(line, ' ')
@@ -124,7 +124,7 @@ local function worker(args)
     mem.widget:set_text(
       string.format(
         "%6s", mem.now.used .. "MB"
-    ))
+      ))
   end
 
   newinterval(update_interval, mem.update)

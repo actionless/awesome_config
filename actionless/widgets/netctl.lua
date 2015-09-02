@@ -4,11 +4,11 @@
 --]]
 
 local beautiful		= require("beautiful")
+local awful             = require("awful")
 
 local newinterval	= require("actionless.helpers").newinterval
 local common_widget	= require("actionless.widgets.common").widget
 local parse		= require("utils.parse")
-local async		= require("utils.async")
 
 
 local netctl = {
@@ -44,7 +44,7 @@ local function worker(args)
   end
 
   function netctl.systemd_update()
-    async.execute(
+    awful.util.spawn_with_line_callback(
       "systemctl list-unit-files systemd-networkd.service",
       function(str)
         netctl.update_widget(
@@ -70,7 +70,7 @@ local function worker(args)
   end
 
   function netctl.wpa_update()
-    async.execute(
+    awful.util.spawn_with_line_callback(
       "sudo wpa_cli status",
       function(str)
         netctl.update_widget(
@@ -80,7 +80,7 @@ local function worker(args)
   end
 
   function netctl.netctl_auto_update()
-    async.execute(
+    awful.util.spawn_with_line_callback(
       'sudo netctl-auto current',
       function(str)
         if #str ~= 0 then
@@ -94,7 +94,7 @@ local function worker(args)
   end
 
   function netctl.netctl_update()
-    async.execute(
+    awful.util.spawn_with_line_callback(
       "systemctl list-unit-files 'netctl@*'",
       function(str)
         netctl.update_widget(

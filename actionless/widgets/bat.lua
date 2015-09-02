@@ -6,7 +6,6 @@
 local awful		= require("awful")
 local beautiful		= require("beautiful")
 
-local async		= require("utils.async")
 local helpers 		= require("actionless.helpers")
 local h_string 		= require("utils.string")
 local parse 		= require("utils.parse")
@@ -92,7 +91,7 @@ local function worker(args)
   end
 
   local function update()
-    async.execute(
+    awful.util.spawn_with_line_callback(
       'upower -i /org/freedesktop/UPower/devices/' .. device,
       function(str) post_update(str) end)
   end

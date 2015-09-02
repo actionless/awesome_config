@@ -1,6 +1,5 @@
 local utils = {
   menugen = require("utils.menugen"),
-  async = require("utils.async"),
   markup = require("utils.markup"),
   parse = require("utils.parse"),
   table = require("utils.table"),
