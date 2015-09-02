@@ -461,9 +461,6 @@ local globalkeys = awful.util.table.join(
         return nlog("fuck you")
       end
       local visible = awful.tag.getproperty(t, 'left_panel_visible')
-      if visible ~= false then
-        visible = true
-      end
       awful.tag.setproperty(t, 'left_panel_visible', not visible)
     end,
     "hide sidebox", UTILS

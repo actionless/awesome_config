@@ -283,7 +283,5 @@ function toolbar.init(awesome_context)
   awesome_context.left_panel_top_layouts = left_panel_top_layouts
   awesome_context.left_panel_bottom_layouts = left_panel_bottom_layouts
 
-  awesome_context.left_panel_visible = true
-
 end
 return toolbar

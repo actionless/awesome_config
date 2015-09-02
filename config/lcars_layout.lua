@@ -15,7 +15,7 @@ local log = function(...) if debug_messages_enabled then nlog(...) end end
 local lcars_layout_helper = {
   last_y = nil,
   is_separated = false,
-  is_visible = nil
+  is_visible = true
 }
 
 function lcars_layout_helper.init(awesome_context)
@@ -27,7 +27,6 @@ client.connect_signal("property::maximized", function (c)
 end)
 
 local function handle_left_panel_visibility(t)
-  --if not t then t = awful.tag.selected(awful.screen.focused()) end
   local visible = lcars_layout_helper.getlpv(t)
   if visible == lcars_layout_helper.is_visible then
     return
@@ -51,17 +50,14 @@ local function handle_left_panel_visibility(t)
   --c:geometry({width=screen[c.screen].workarea.width})
 end
 function lcars_layout_helper.getlpv(t)
-  if awful.tag.getproperty(t, 'left_panel_visible') == false then
-    return false
-  else
-    return true
-  end
+  return awful.tag.getproperty(t, 'left_panel_visible') or false
 end
 function lcars_layout_helper.setlpv(prop, t)
   awful.tag.setproperty(t, 'left_panel_visible', prop)
 end
 tag.add_signal("property::left_panel_visible")
 tag.connect_signal("property::left_panel_visible", handle_left_panel_visibility)
+handle_left_panel_visibility(awful.tag.selected(awful.screen.focused()))
 
 
 local function lcars_unite(t, from)
