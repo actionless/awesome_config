@@ -40,10 +40,12 @@ local function worker(args)
     layoutbox.imagebox = imagebox()
     layoutbox.imagebox:set_resize(true)
     layoutbox.textbox = textbox()
-    if text_mode then
-        layoutbox.layout:set_widget(layoutbox.textbox)
-    else
+    if args.horizontal then
         layoutbox.layout:set_widget(layoutbox.imagebox)
+        layoutbox.mfpol_template = "%1.1s"
+    else
+        layoutbox.layout:set_widget(layoutbox.textbox)
+        layoutbox.mfpol_template = "%s"
     end
 
     layoutbox.n_master = wibox.widget.background()
@@ -57,7 +59,6 @@ local function worker(args)
 
     args.widgets={
             layoutbox.n_master,
-            wibox.widget.textbox(' '),
             layoutbox.n_col,
         }
     args.left_separators = args.left_separators or {}
@@ -113,9 +114,11 @@ local function worker(args)
         if h_string.starts(self.layout_name, 'tile') or
             h_string.starts(self.layout_name, 'corner')
         then
-            self.mfpol.widget:set_text(tag.getmfpol(t))
+            self.mfpol.widget:set_text(
+                string.format(self.mfpol_template, tag.getmfpol(t))
+            )
         else
-            self.mfpol.widget:set_text("")
+            self.mfpol.widget:set_text(" ")
         end
     end
     function layoutbox:update_all(t)

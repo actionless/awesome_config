@@ -114,33 +114,9 @@ theme.widget_close_bg = theme.tasklist_fg_focus
 theme = create_theme({ theme_name=theme_name, theme=theme, })
 
 -- Recolor titlebar icons:
-for _, titlebar_icon in ipairs({
-    'titlebar_close_button_normal',
-    'titlebar_minimize_button_normal_inactive',
-    'titlebar_ontop_button_normal_inactive',
-    'titlebar_ontop_button_normal_active',
-    'titlebar_sticky_button_normal_inactive',
-    'titlebar_sticky_button_normal_active',
-    'titlebar_floating_button_normal_inactive',
-    'titlebar_floating_button_normal_active',
-    'titlebar_maximized_button_normal_inactive',
-    'titlebar_maximized_button_normal_active',
-}) do
-    theme[titlebar_icon] = recolor_image(theme[titlebar_icon], theme.titlebar_fg_normal)
-end
-for _, titlebar_icon in ipairs({
-    'titlebar_close_button_focus',
-    'titlebar_minimize_button_focus_inactive',
-    'titlebar_ontop_button_focus_inactive',
-    'titlebar_ontop_button_focus_active',
-    'titlebar_sticky_button_focus_inactive',
-    'titlebar_sticky_button_focus_active',
-    'titlebar_floating_button_focus_inactive',
-    'titlebar_floating_button_focus_active',
-    'titlebar_maximized_button_focus_inactive',
-    'titlebar_maximized_button_focus_active',
-}) do
-    theme[titlebar_icon] = recolor_image(theme[titlebar_icon], theme.titlebar_fg_focus)
-end
+local theme_assets = dofile("/usr/share/awesome/themes/xresources/assets.lua")
+theme = theme_assets.recolor_layout(theme, theme.fg_normal)
+theme = theme_assets.recolor_titlebar_normal(theme, theme.titlebar_fg_normal)
+theme = theme_assets.recolor_titlebar_focus(theme, theme.titlebar_fg_focus)
 
 return theme

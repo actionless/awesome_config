@@ -102,6 +102,8 @@ function widget_loader.init(awesome_context)
   w.textclock = widgets.common.decorated({
     widget = awful.widget.textclock("%H:%M"),
     valign = "bottom",
+    fg = beautiful.xrdb.foreground,
+    bg = beautiful.bg,
   })
   widgets.calendar:attach(w.textclock, {fg=beautiful.theme, position="top_left"})
 
@@ -241,10 +243,11 @@ function widget_loader.init(awesome_context)
     -- layoutbox
     sw.layoutbox = widgets.layoutbox({
       screen = s,
-      bg = beautiful.widget_layoutbox_bg,
-      fg = beautiful.widget_layoutbox_fg,
+      fg = beautiful.widget_layoutbox_bg,
+      bg = beautiful.widget_layoutbox_fg,
       --valign = "bottom",
-      bg = theme.color.color8 -- 6
+      --bg = theme.color.color8, -- 6
+      horizontal = true,
     })
 
   end

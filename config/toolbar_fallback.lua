@@ -85,14 +85,14 @@ function toolbar.init(awesome_context)
 
     right_layout:add(separator)
 
-    right_layout:add(make_separator('arrl', {fg=beautiful.panel_widget_bg}))
-    right_layout:add(iseparator)
+    --right_layout:add(make_separator('arrl', {fg=beautiful.panel_widget_bg}))
+    right_layout:add(separator)
     right_layout:add(loaded_widgets.textclock)
-    right_layout:add(iseparator)
+    right_layout:add(separator)
     right_layout:add(separator)
     right_layout:add(loaded_widgets.screen[s].layoutbox)
-    right_layout:add(make_separator('sq', {fg=beautiful.panel_widget_bg_disabled}))
-    right_layout:add(make_separator('arrr', {fg=beautiful.panel_widget_bg_disabled}))
+    right_layout:add(separator)
+    --right_layout:add(make_separator('arrr', {fg=beautiful.panel_widget_bg_disabled}))
     right_layout:add(sep)
 
 

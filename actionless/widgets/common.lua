@@ -456,6 +456,8 @@ function common.decorated_horizontal(args)
   local left_separators = args.left_separators or {} -- { 'arrl' }
   local right_separators = args.right_separators or {} -- { 'arrr' }
 
+  local separator = common.make_separator(' ')
+
   if args.widget then
     decorated.widget_list = {args.widget}
   else
@@ -546,8 +548,11 @@ function common.decorated_horizontal(args)
     for _, separator in ipairs(self.left_separator_widgets) do
       self.layout:add(separator)
     end
-    for _, each_widget in ipairs(self.widget_list) do
+    for i, each_widget in ipairs(self.widget_list) do
       self.layout:add(each_widget)
+      if i ~= #self.widget_list then
+        self.layout:add(separator)
+      end
     end
     for _, separator in ipairs(self.right_separator_widgets) do
       self.layout:add(separator)

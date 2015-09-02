@@ -58,7 +58,7 @@ local function worker(args)
       --height = beautiful.panel_padding_bottom * 2,
       --width = beautiful.panel_padding_bottom * 2,
     --}),
-    wibox.widget.textbox(' - '),
+    wibox.widget.textbox('-'),
     player.title_widget,
     wibox.widget.textbox(' '),
   }
