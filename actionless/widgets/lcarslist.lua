@@ -21,6 +21,7 @@ local tag = require("awful.tag")
 local wibox = require("wibox")
 local flex = require("wibox.layout.flex")
 local timer = require("gears.timer")
+local awful = require("awful")
 
 local dpi = beautiful.xresources.apply_dpi
 
@@ -274,9 +275,10 @@ local v_sep = wibox.widget.background(
 )
 
 local function tasklist_update(s, w, buttons, filter, data, style, update_function, tag_filter)
+    tag_filter = tag_filter or function() return true end
     w:reset()
     for _, t in ipairs(tag.gettags(s)) do
-        if not tag.getproperty(t, "hide") and filter(t) then
+        if not tag.getproperty(t, "hide") and tag_filter(t) then
             w:add(tag_group(t, buttons, filter, data, update_function))
             w:add(v_sep)
         end
@@ -326,7 +328,7 @@ function tasklist.new(screen, filter, buttons, style, update_function, base_widg
         if not queued_update then
             timer.delayed_call(function()
                 queued_update = false
-                tasklist_update(screen, w, buttons, filter, data, style, uf)
+                tasklist_update(screen, w, buttons, filter, data, style, uf, awful.widget.taglist.filter.noempty)
             end)
             queued_update = true
         end

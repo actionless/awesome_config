@@ -99,13 +99,22 @@ function widget_loader.init(awesome_context)
   --end
 
   -- Textclock
-  w.textclock = widgets.common.decorated({
-    widget = awful.widget.textclock("%H:%M"),
-    valign = "bottom",
-    fg = beautiful.xrdb.foreground,
-    bg = beautiful.bg,
-  })
-  widgets.calendar:attach(w.textclock, {fg=beautiful.theme, position="top_left"})
+  if awesome_context.lcarslist_enabled then
+    w.textclock = widgets.common.decorated({
+      widget = awful.widget.textclock("%H:%M"),
+      valign = "bottom",
+    })
+    widgets.calendar:attach(w.textclock, {fg=beautiful.theme, position="top_left"})
+  else
+    w.textclock = widgets.common.decorated({
+      widget = awful.widget.textclock("%H:%M"),
+      valign = "bottom",
+      fg = beautiful.xrdb.foreground,
+      bg = beautiful.bg,
+    })
+    widgets.calendar:attach(w.textclock, {fg=beautiful.theme, position="top_right"})
+
+  end
 
 
   w.screen = {}
@@ -227,7 +236,7 @@ function widget_loader.init(awesome_context)
       tasklist_addon.sorted_update
     )
 
-    if false then
+    if awesome_context.lcarslist_enabled then
       sw.lcarslist = widgets.lcarslist(
         s,
         awful.widget.tasklist.filter.alltags,
@@ -241,14 +250,25 @@ function widget_loader.init(awesome_context)
     end
 
     -- layoutbox
-    sw.layoutbox = widgets.layoutbox({
-      screen = s,
-      fg = beautiful.widget_layoutbox_bg,
-      bg = beautiful.widget_layoutbox_fg,
-      --valign = "bottom",
-      --bg = theme.color.color8, -- 6
-      horizontal = true,
-    })
+    if awesome_context.lcarslist_enabled then
+      sw.layoutbox = widgets.layoutbox({
+        screen = s,
+        fg = beautiful.widget_layoutbox_fg,
+        bg = beautiful.widget_layoutbox_bg,
+        --valign = "bottom",
+        --bg = theme.color.color8, -- 6
+        horizontal = false,
+      })
+    else
+      sw.layoutbox = widgets.layoutbox({
+        screen = s,
+        fg = beautiful.widget_layoutbox_bg,
+        bg = beautiful.widget_layoutbox_fg,
+        --valign = "bottom",
+        --bg = theme.color.color8, -- 6
+        horizontal = true,
+      })
+    end
 
   end
 
