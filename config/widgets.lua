@@ -83,8 +83,7 @@ function widget_loader.init(awesome_context)
   -- Sensor
   w.temp = widgets.temp({
     update_interval = 10,
-    --sensor = "Core 0",
-    sensor = "temp1",
+    sensor = awesome_context.sensor,
     warning = 75,
     --bg = beautiful.widget_temp_bg,
     --fg = beautiful.widget_temp_fg,

@@ -68,6 +68,9 @@ context = {
 
   have_battery = true,
   new_top = false,
+  --sensor = "temp1",
+  sensor = "Core 0",
+
 }
 
 local local_settings_result, local_settings_details = pcall(function()
