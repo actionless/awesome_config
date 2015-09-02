@@ -44,7 +44,6 @@ function sneaky_toggle.initialize()
     end
 
         st.arrow = wibox.widget.imagebox(beautiful.icon_left)
-        st.arrow:set_resize(beautiful.hidpi or false)
     st.export_widget:add(st.arrow)
 
     if not st.show_on_start then
