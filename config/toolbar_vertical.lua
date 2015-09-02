@@ -44,8 +44,6 @@ function toolbar.init(awesome_context)
   local left_panel_top_layouts = {}
   local left_panel_bottom_layouts = {}
 
-  local leftwibox = {}
-  local topwibox = {}
   local topwibox_layout = {}
   local topwibox_toplayout = {}
   local leftwibox_separator = {}
@@ -244,36 +242,15 @@ function toolbar.init(awesome_context)
     top_internal_corner_wibox[s] = assets.top_internal_corner_wibox()
     --top_internal_corner_wibox[s] = assets.internal_corner_wibox()
 
-    leftwibox[s] = awful.wibox({
-      position = "left",
-      screen = s,
-      --height = beautiful.panel_height,
-      width = beautiful.left_panel_width,
-    })
-    leftwibox[s]:set_widget(left_panel_layout)
-    leftwibox[s].opacity = beautiful.panel_opacity
-    leftwibox[s]:set_bg(beautiful.panel_bg)
-    leftwibox[s]:set_fg(beautiful.panel_fg)
 
-    topwibox[s] = awful.wibox({
-      position = "top",
-      screen = s,
-      height = beautiful.panel_height,
-    })
-    topwibox[s]:set_widget(top_panel_layout)
-    topwibox[s].opacity = beautiful.panel_opacity
-    topwibox[s]:set_bg(beautiful.panel_bg)
-    topwibox[s]:set_fg(beautiful.panel_fg)
-
-    internal_corner_wibox[s].visible = true
+    awesome_context.leftwibox[s]:set_widget(left_panel_layout)
+    internal_corner_wibox[s].visible = false
 
   end
 
-  awesome_context.topwibox = topwibox
   awesome_context.topwibox_layout = topwibox_layout  -- this one!
   awesome_context.topwibox_toplayout = topwibox_toplayout
 
-  awesome_context.leftwibox = leftwibox
   awesome_context.leftwibox_separator = leftwibox_separator
   awesome_context.internal_corner_wibox = internal_corner_wibox
   awesome_context.top_internal_corner_wibox = top_internal_corner_wibox

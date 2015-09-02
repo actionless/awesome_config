@@ -91,10 +91,12 @@ config.menus.init(context)
 config.layouts.init(context)
 config.widgets.init(context)
 config.toolbar_horizontal.init(context)
-config.toolbar_vertical.init(context)
 config.keys.init(context)
 config.signals.init(context)
-config.lcars_layout.init(context)
+if context.lcarslist_enabled then
+  config.toolbar_vertical.init(context)
+  config.lcars_layout.init(context)
+end
 config.rules.init(context)
 require("hotkeys")
 

@@ -123,6 +123,10 @@ function toolbar.init(awesome_context)
     end
 
     awesome_context.topwibox_layout_fallback[s] = layout  -- this one!
+
+    awesome_context.topwibox[s]:set_widget(
+      awesome_context.topwibox_layout_fallback[s]
+    )
   end
 
 end

@@ -22,6 +22,9 @@ function widget_loader.init(awesome_context)
   local conf = awesome_context.config
   local modkey = awesome_context.modkey
 
+  local leftwibox = {}
+  local topwibox = {}
+
   -- Keyboard layout widget
   w.kbd = widgets.kbd({
     bg = beautiful.warning,
@@ -270,7 +273,33 @@ function widget_loader.init(awesome_context)
       })
     end
 
+
+    leftwibox[s] = awful.wibox({
+      position = "left",
+      screen = s,
+      --height = beautiful.panel_height,
+      width = beautiful.left_panel_width,
+    })
+    --leftwibox[s]:set_widget(left_panel_layout)
+    leftwibox[s].opacity = beautiful.panel_opacity
+    leftwibox[s]:set_bg(beautiful.panel_bg)
+    leftwibox[s]:set_fg(beautiful.panel_fg)
+    leftwibox[s].visible = false
+
+    topwibox[s] = awful.wibox({
+      position = "top",
+      screen = s,
+      height = beautiful.panel_height,
+    })
+    --topwibox[s]:set_widget(top_panel_layout)
+    topwibox[s].opacity = beautiful.panel_opacity
+    topwibox[s]:set_bg(beautiful.panel_bg)
+    topwibox[s]:set_fg(beautiful.panel_fg)
+
   end
+
+  awesome_context.topwibox = topwibox
+  awesome_context.leftwibox = leftwibox
 
   return awesome_context
 end
