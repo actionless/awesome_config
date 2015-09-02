@@ -70,7 +70,7 @@ theme.basic_panel_height = dpi(18)
 theme.panel_padding_bottom = dpi(3)
 theme.border_width = dpi(3)
 theme.useless_gap = dpi(10)
-theme.useless_gap = dpi(6)
+theme.useless_gap = dpi(4)
 theme.panel_height = theme.basic_panel_height + theme.panel_padding_bottom
 theme.titlebar_height = theme.basic_panel_height + theme.border_width
 
