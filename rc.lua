@@ -70,7 +70,7 @@ context = {
   new_top = false,
   --sensor = "temp1",
   sensor = "Core 0",
-  lcarslist_enabled = true
+  lcarslist_enabled = false
 
 }
 
