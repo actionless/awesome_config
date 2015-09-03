@@ -95,9 +95,10 @@ function spotify.prev_song()
 end
 -------------------------------------------------------------------------------
 function spotify.update(parse_status_callback)
+  local callback = function(str) spotify.post_update(str, parse_status_callback) end
   awful.util.spawn_with_line_callback(
     dbus_cmd .. "PlaybackStatus",
-    function(str) spotify.post_update(str, parse_status_callback) end
+    callback, callback
   )
 end
 -------------------------------------------------------------------------------
