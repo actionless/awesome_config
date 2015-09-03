@@ -248,12 +248,7 @@ function widget_loader.init(awesome_context)
         tasklist_addon.list_update,
         wibox.layout.fixed.vertical()
       )
-    else
-      sw.lcarslist = wibox.widget.textbox()
-    end
-
-    -- layoutbox
-    if awesome_context.lcarslist_enabled then
+      -- layoutbox
       sw.layoutbox = widgets.layoutbox({
         screen = s,
         fg = beautiful.widget_layoutbox_fg,

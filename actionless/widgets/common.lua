@@ -117,78 +117,6 @@ function common.centered(widget)
 end
 
 
-function common.bordered(widget, args)
-  if not widget then return nil end
-  local margin = args.margin or 0
-  local padding = args.padding or 0
-  local margin_color = args.margin_color
-  local obj = {}
-      obj.padding = wibox.layout.margin()
-      obj.padding:set_widget(widget)
-      obj.padding:set_margins(padding)
-    obj.background = wibox.widget.background()
-    obj.background:set_widget(obj.padding)
-  obj.margin = wibox.layout.margin()
-  obj.margin:set_widget(obj.background)
-  obj.margin:set_margins(margin)
-  if margin_color then obj.margin:set_color(margin_color) end
-  setmetatable(obj, { __index = obj.margin })
-
-  function obj:set_bg(...)
-    self.background:set_bg(...)
-  end
-
-  function obj:set_fg(...)
-    self.background:set_fg(...)
-  end
-
-  return obj
-end
-
-
-
-function common.make_image_separator(separator_character, args)
-
-  local bgimage_normal = beautiful[
-    'widget_decoration_image_' .. separator_character]
-  local bgimage_warning = beautiful[
-    'widget_decoration_image_' .. separator_character .. '_warning']
-  local bgimage_error = beautiful[
-    'widget_decoration_image_' .. separator_character .. '_error']
-
-  if not bgimage_normal then return false end
-  args = args or {}
-  local bg = args.bg
-  local widget = {}
-  local separator_widget = wibox.widget.imagebox(bgimage_normal)
-  separator_widget:set_resize(beautiful.hidpi or false)
-  local widget_bg = wibox.widget.background()
-  widget_bg:set_bg(bg)
-  widget_bg:set_widget(separator_widget)
-
-  widget.widget_bg = widget_bg
-  widget.separator = separator_widget
-
-  setmetatable(widget, { __index = widget.widget_bg })
-  function widget:set_bg(...)
-    local bg = select(1, ...)
-    if bg == beautiful.panel_widget_bg_warning and bgimage_warning then
-      self.separator:set_image(bgimage_warning)
-      return
-    elseif bg == beautiful.panel_widget_bg_error and bgimage_error then
-      self.separator:set_image(bgimage_error)
-      return
-    elseif
-      bg ~= beautiful.panel_widget_bg_warning and
-      bg ~= beautiful.panel_widget_bg_error and
-      bgimage_normal
-    then
-      self.separator:set_image(bgimage_normal)
-    end
-    self.widget_bg:set_bg(...)
-  end
-  return widget
-end
 
 
 function common.make_separator(separator_character, args)
@@ -196,9 +124,6 @@ function common.make_separator(separator_character, args)
   local bgimage_normal = beautiful[
     'widget_decoration_image_' .. separator_character]
 
-  if bgimage_normal then
-    return common.make_image_separator(separator_character, args)
-  end
   local separator_alias = beautiful['widget_decoration_' .. separator_character]
   if separator_alias then
     return common.make_separator(separator_alias, args)
@@ -380,6 +305,7 @@ function common.decorated(args)
 
   --- Make widget invisible
   function decorated:hide()
+    --self.visible = false
     if not self._visible then return end
     self._visible = false
 
@@ -389,6 +315,7 @@ function common.decorated(args)
 
   --- Make widget visible again
   function decorated:show()
+    --self.visible = true
     if self._visible then return end
     self._visible = true
     for _, each_widget in ipairs(self.widget_list) do
