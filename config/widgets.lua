@@ -50,6 +50,7 @@ function widget_loader.init(awesome_context)
       fg = beautiful.widget_music_fg,
       force_no_bgimage=true,
       horizontal=true,
+      left_separators = awesome_context.lcarslist_enabled and nil or { 'arrl' },
       --valign = "bottom",
   })
   -- volume
@@ -131,7 +132,7 @@ function widget_loader.init(awesome_context)
         screen = s,
         bg = beautiful.widget_close_bg,
         fg = beautiful.widget_close_fg,
-        left_separators = beautiful.widget_close_left_decorators,
+        left_separators = awesome_context.lcarslist_enabled and theme.widget_close_left_decorators or { 'arrl', 'sq' },
         right_separators = beautiful.widget_close_right_decorators,
         awesome_context = awesome_context,
       }

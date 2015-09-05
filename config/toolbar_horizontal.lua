@@ -56,7 +56,8 @@ function toolbar.init(awesome_context)
       right_layout:add(make_separator('arrr', {fg=beautiful.panel_tasklist}))
     end
     right_layout:add(separator)
-    right_layout:add(make_separator('arrl', {fg=beautiful.panel_media}))
+    right_layout:add(loaded_widgets.music)
+    right_layout:add(separator)
     right_layout:add(
       common.constraint({
         widget=loaded_widgets.volume,
@@ -64,13 +65,6 @@ function toolbar.init(awesome_context)
       })
     )
     right_layout:add(separator)
-    right_layout:add(loaded_widgets.music)
-
-    if s == 1 then
-      right_layout:add(loaded_widgets.systray_toggle)
-    else
-      right_layout:add(separator)
-    end
 
     right_layout:add(iseparator)
     right_layout:add(loaded_widgets.mem)
@@ -82,6 +76,13 @@ function toolbar.init(awesome_context)
       right_layout:add(loaded_widgets.bat)
     end
     right_layout:add(make_separator('arrr', {fg=beautiful.panel_widget_bg}))
+    right_layout:add(separator)
+
+    if s == 1 then
+      right_layout:add(loaded_widgets.systray_toggle)
+    else
+      right_layout:add(separator)
+    end
 
     right_layout:add(separator)
 
