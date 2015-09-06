@@ -26,9 +26,9 @@ local function st_color_line(theme_table)
 end
 
 local colorscheme = xresources.get_current_theme()
-local terminal = 'st -b "' .. st_color_line(colorscheme) .. '" '
+local terminal = 'st -b "' .. st_color_line(colorscheme) .. '" -f "'..'Monospace'..':pixelsize='..tostring(xresources.apply_dpi(13))..'" '
 colorscheme.background, colorscheme.foreground = colorscheme.foreground, colorscheme.background
-local terminal_light = 'st -b "' .. st_color_line(colorscheme) .. '" '
+local terminal_light = 'st -b "' .. st_color_line(colorscheme) .. '" -f "'..'Monospace'..':pixelsize='..tostring(xresources.apply_dpi(13))..'" '
 
 
 -- GLOBALS:
