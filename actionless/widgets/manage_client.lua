@@ -32,15 +32,19 @@ local function worker(args)
   widget:connect_signal(
     "mouse::enter", function ()
       if not widget.is_managing then
-        widget:set_error()
+        --widget:set_error()
+        widget:set_bg(beautiful.color.color9)
       else
-        widget:set_warning()
+        --widget:set_warning()
+        widget:set_bg(beautiful.color.color10)
       end
     end)
   widget:connect_signal(
     "mouse::leave", function ()
       if not widget.is_managing then
         widget:set_normal()
+      else
+        widget:set_warning()
       end
     end)
 
