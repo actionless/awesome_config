@@ -38,7 +38,7 @@ function menus.init(context)
     { "quit", awesome.quit }
   }
 
-  function context.menu.mainmenu_show()
+  function context.menu.mainmenu_show(nomouse)
     if not context.menu.mainmenu then
       context.menu.mainmenu = awful.menu({
         items = {
@@ -51,7 +51,9 @@ function menus.init(context)
         },
       })
     end
-    context.menu.mainmenu:show()
+    local args = {}
+    if nomouse then args.coords = {x=0,y=0} end
+    context.menu.mainmenu:show(args)
   end
   function context.menu.mainmenu_toggle()
     if not context.menu.mainmenu then
