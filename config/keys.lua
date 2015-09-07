@@ -463,7 +463,30 @@ local globalkeys = awful.util.table.join(
       local visible = awful.tag.getproperty(t, 'left_panel_visible')
       awful.tag.setproperty(t, 'left_panel_visible', not visible)
     end,
-    "hide sidebox", UTILS
+    "toggle sidebox", UTILS
+  ),
+  hk.on({modkey, "Control", "Shift"}, "p",
+    function()
+      local t = awful.tag.selected(awful.screen.focused())
+      local visible = awful.tag.getproperty(t, 'left_panel_visible')
+      for s = 1, capi.screen.count() do
+        for _, t in ipairs(awful.tag.gettags(s)) do
+          awful.tag.setproperty(t, 'left_panel_visible', not visible)
+        end
+      end
+    end,
+    "toggle sidebox (all tags)", UTILS
+  ),
+  hk.on({modkey, altkey, "Control"}, "p",
+    function()
+      if awesome_context.lcarslist_enabled then
+        awful.util.spawn_with_shell("sed -i 's/lcarslist_enabled = true/lcarslist_enabled = false/g' ~/.config/awesome/config/local.lua")
+      else
+        awful.util.spawn_with_shell("sed -i 's/lcarslist_enabled = false/lcarslist_enabled = true/g' ~/.config/awesome/config/local.lua")
+      end
+      capi.awesome.restart()
+    end,
+    "toggle lcarslist", UTILS
   )
 )
 
