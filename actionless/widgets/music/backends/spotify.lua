@@ -44,13 +44,24 @@ function spotify.prev_song()
   awful.util.spawn_with_shell(dbus_cmd .. "Previous")
 end
 -------------------------------------------------------------------------------
+--{{  @TODO: temporary workaround:
+local gears = require("gears")
+local timer_added = false
+--}}
 function spotify.update(parse_status_callback)
   local callback = function(str) spotify.post_update(str, parse_status_callback) end
   --awful.util.spawn_with_line_callback(
     --dbus_cmd .. "PlaybackStatus",
     --callback, callback
   --)
+
+  --{{  @TODO: temporary workaround:
+  if not timer_added then
+    gears.timer.start_new(2, function() callback("Playing") return true end)
+    timer_added = true
+  end
   return callback("Playing")
+  --}}
 end
 -------------------------------------------------------------------------------
 function spotify.post_update(result_string, parse_status_callback)
