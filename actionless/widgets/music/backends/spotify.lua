@@ -65,16 +65,18 @@ function spotify.post_update(result_string, parse_status_callback)
   if state == 'play' or state == 'pause' then
     awful.util.spawn_with_line_callback(
       dbus_cmd .. "Metadata",
-      function(str) spotify.parse_metadata(str, parse_status_callback) end
+      function(str) spotify.parse_metadata_line(str) end,
+      nil,
+      function() spotify.parse_metadata_done(parse_status_callback) end
     )
   else
     parse_status_callback(spotify.player_status)
   end
 end
--------------------------------------------------------------------------------
-function spotify.parse_metadata(result_string, parse_status_callback)
+
+function spotify.parse_metadata_line(result_line)
   local player_status = parse.find_values_in_string(
-    result_string,
+    result_line,
     "([%w]+): (.*)$",
     { artist='artist',
       title='title',
@@ -83,12 +85,14 @@ function spotify.parse_metadata(result_string, parse_status_callback)
       cover_url='artUrl'
     }
   )
-  player_status.date = h_string.max_length(player_status.date, 4)
-  player_status.file = 'spotify stream'
   h_table.merge(spotify.player_status, player_status)
-  parse_status_callback(spotify.player_status)
 end
 
+function spotify.parse_metadata_done(parse_status_callback)
+  spotify.player_status.date = h_string.max_length(spotify.player_status.date, 4)
+  spotify.player_status.file = 'spotify stream'
+  parse_status_callback(spotify.player_status)
+end
 -------------------------------------------------------------------------------
 function spotify.resize_cover(
   player_status, _, output_coverart_path, notification_callback
