@@ -9,7 +9,7 @@ local beautiful		= require("beautiful")
 local helpers 		= require("actionless.helpers")
 local h_string 		= require("utils.string")
 local parse 		= require("utils.parse")
-local common_widget	= require("actionless.widgets.common").widget
+local common_widget	= require("actionless.widgets.common").decorated
 
 
 -- Batterys info
