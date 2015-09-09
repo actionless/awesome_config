@@ -20,7 +20,7 @@ function toolbar.init(awesome_context)
   local loaded_widgets = awesome_context.widgets
 
   -- Separators
-  local sep = wibox.widget.imagebox(beautiful.small_separator)
+  local sep = common.constraint({ width=dpi(2), })
   local separator  = make_separator(' ')
   local iseparator  = make_separator(' ', {bg=beautiful.panel_widget_bg})
   local sep_info   = make_separator('sq', {fg=beautiful.panel_info})

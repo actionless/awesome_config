@@ -224,8 +224,6 @@ theme.left_panel_internal_corner_radius = 30
   --theme.taglist_squares_sel_empty	= nil
   --theme.taglist_squares_unsel_empty	= nil
 
-  theme.small_separator		= common_icons_dir .. "small_separator.png"
-
 
   local widgets_icons_dir = icons_dir .. "widgets/"
 
