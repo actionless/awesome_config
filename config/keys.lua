@@ -346,6 +346,18 @@ local globalkeys = awful.util.table.join(
     function () awful.tag.togglemfpol() end,
     "toggle expand master", LAYOUT_MANIPULATION
   ),
+  hk.on({ modkey, altkey }, "g",
+    function ()
+      local newgap = 0
+      local t = awful.tag.selected()
+      if awful.tag.getgap(t) == 0 then
+        newgap = beautiful.useless_gap
+      end
+      awful.tag.setgap(newgap, t)
+      tag.emit_signal("property::layout", t)
+    end,
+    "toggle useless gap", LAYOUT_MANIPULATION
+  ),
 
   -- Prompt
   hk.on({ modkey }, "r",
