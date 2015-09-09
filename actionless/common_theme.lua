@@ -14,7 +14,13 @@ local common_theme = {}
 
 function common_theme.generate_theme(theme_dir)
 
-  local theme = dofile("/usr/share/awesome/themes/xresources/theme.lua")
+  local theme
+  pcall(function()
+    theme = dofile("/usr/share/awesome/themes/xresources/theme.lua")
+  end)
+  if not theme then
+    theme = dofile("/nix/store/fj385p4a8v7p47dv6hd5zdsravspn0s1-awesome-3.5.6/share/awesome/themes/xresources/theme.lua")
+  end
 
   theme.null = nil
   -- TERMINAL COLORSCHEME:

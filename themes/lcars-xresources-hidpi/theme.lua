@@ -114,7 +114,13 @@ theme.widget_close_bg = theme.tasklist_fg_focus
 theme = create_theme({ theme_name=theme_name, theme=theme, })
 
 -- Recolor titlebar icons:
-local theme_assets = dofile("/usr/share/awesome/themes/xresources/assets.lua")
+local theme_assets
+pcall(function()
+  theme_assets = dofile("/usr/share/awesome/themes/xresources/assets.lua")
+end)
+if not theme_assets then
+  theme_assets = dofile("/nix/store/fj385p4a8v7p47dv6hd5zdsravspn0s1-awesome-3.5.6/share/awesome/themes/xresources/assets.lua")
+end
 theme = theme_assets.recolor_layout(theme, theme.fg_normal)
 theme = theme_assets.recolor_titlebar_normal(theme, theme.titlebar_fg_normal)
 theme = theme_assets.recolor_titlebar_focus(theme, theme.titlebar_fg_focus)
