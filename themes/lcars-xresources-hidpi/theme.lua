@@ -3,6 +3,7 @@ local recolor_image = require("gears").color.recolor_image
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
 local create_theme = require("actionless.common_theme").create_theme
+local helpers = require("actionless.helpers")
 
 local theme_name = "lcars-xresources-hidpi"
 
@@ -119,7 +120,7 @@ pcall(function()
   theme_assets = dofile("/usr/share/awesome/themes/xresources/assets.lua")
 end)
 if not theme_assets then
-  theme_assets = dofile("/nix/store/fj385p4a8v7p47dv6hd5zdsravspn0s1-awesome-3.5.6/share/awesome/themes/xresources/assets.lua")
+  theme_assets = dofile(helpers.get_nix_xresources_theme_path().."/assets.lua")
 end
 theme = theme_assets.recolor_layout(theme, theme.fg_normal)
 theme = theme_assets.recolor_titlebar_normal(theme, theme.titlebar_fg_normal)

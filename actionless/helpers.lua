@@ -95,4 +95,15 @@ function helpers.tag_view_noempty(delta, s)
 end
 
 
+function helpers.get_nix_xresources_theme_path()
+  local result
+  result = awful.util.pread("readlink -e /nix/store/*-awesome-3*/share/awesome/themes/xresources")
+  result = string.gsub(result, "\n", "")
+  print("DEBUG")
+  print(result)
+  print("DEBUG_END")
+  return result
+end
+
+
 return helpers

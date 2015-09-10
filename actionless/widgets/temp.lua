@@ -33,6 +33,7 @@ local function worker(args)
   function temp.post_update(str)
     local coretemp_now = parse.find_in_multiline_string(
       str, sensor .. ":[ ]+(.*)°C.*[(]")
+    if not coretemp_now then return end
     if tonumber(coretemp_now) >= warning then
       temp.widget:show()
       temp.widget:set_bg(beautiful.panel_widget_bg_error)
