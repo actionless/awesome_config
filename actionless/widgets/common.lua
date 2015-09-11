@@ -24,16 +24,16 @@ function common.widget(args)
   local show_icon = args.show_icon or beautiful.show_widget_icon
   local force_no_bgimage = args.force_no_bgimage or false
   local widget = {}
-    widget.layout = wibox.layout.fixed.horizontal()
+    widget.lie_layout = wibox.layout.fixed.horizontal()
     if show_icon then
         widget.icon_widget = wibox.widget.imagebox()
         widget.icon_widget:set_resize(beautiful.hidpi or false)
-        widget.layout:add(widget.icon_widget)
+        widget.lie_layout:add(widget.icon_widget)
     end
       widget.text_widget = wibox.widget.textbox('')
-    widget.layout:add(widget.text_widget)
+    widget.lie_layout:add(widget.text_widget)
   widget.widget_bg = wibox.widget.background()
-  widget.widget_bg:set_widget(widget.layout)
+  widget.widget_bg:set_widget(widget.lie_layout)
 
   function widget:set_image(...)
     if self.icon_widget then
@@ -86,7 +86,7 @@ function common.widget(args)
   end
 
   function widget:show()
-    self.widget_bg:set_widget(self.layout)
+    self.widget_bg:set_widget(self.lie_layout)
   end
 
   function widget:hide()
@@ -268,17 +268,17 @@ function common.decorated(args)
     height = decorated.min_height,
     strategy = 'min',
   })
-  decorated.background =wibox.widget.background(
+  decorated.lie_background =wibox.widget.background(
     decorated.constraint,
     decorated.bg
   )
 
-  decorated.layout = wibox.layout.flex.vertical()
-  decorated.layout:add(decorated.background)
+  decorated.lie_layout = wibox.layout.flex.vertical()
+  decorated.lie_layout:add(decorated.lie_background)
 
   setmetatable(decorated.constraint, { __index = decorated.widget })
-  setmetatable(decorated.layout, { __index = decorated.constraint })
-  setmetatable(decorated,        { __index = decorated.layout })
+  setmetatable(decorated.lie_layout, { __index = decorated.constraint })
+  setmetatable(decorated,        { __index = decorated.lie_layout })
 
   --- Set widget color
   -- @param args. "fg", "bg", "name" - "err", "warn", "b", "f" or 1..16
@@ -291,7 +291,7 @@ function common.decorated(args)
       --widget:set_bg(bg)
     end
     if bg then
-      self.background:set_bg(bg)
+      self.lie_background:set_bg(bg)
     end
   end
 
@@ -406,11 +406,11 @@ function common.decorated_horizontal(args)
   end
 
   decorated.widget = decorated.widget_list[1]
-  decorated.layout = wibox.layout.fixed.horizontal()
-  decorated.background = wibox.widget.background()
-  decorated.background:set_widget(decorated.layout)
+  decorated.lie_layout = wibox.layout.fixed.horizontal()
+  decorated.lie_background = wibox.widget.background()
+  decorated.lie_background:set_widget(decorated.lie_layout)
   decorated.wrap_layout = wibox.layout.flex.horizontal()
-  decorated.wrap_layout:add(decorated.background)
+  decorated.wrap_layout:add(decorated.lie_background)
 
   for _, separator_id in ipairs(left_separators) do
     table.insert(
@@ -440,7 +440,7 @@ function common.decorated_horizontal(args)
     for _, widget in ipairs(h_table.flat({
       self.left_separator_widgets,
       self.right_separator_widgets,
-      {decorated.background}
+      {decorated.lie_background}
     })) do
       if fg and widget.set_fg then
         widget:set_fg(beautiful.panel_bg)
@@ -467,22 +467,22 @@ function common.decorated_horizontal(args)
 
   --- Make widget invisible
   function decorated:hide()
-    self.layout:reset()
+    self.lie_layout:reset()
   end
 
   --- Make widget visible again
   function decorated:show()
     for _, separator in ipairs(self.left_separator_widgets) do
-      self.layout:add(separator)
+      self.lie_layout:add(separator)
     end
     for i, each_widget in ipairs(self.widget_list) do
-      self.layout:add(each_widget)
+      self.lie_layout:add(each_widget)
       if i ~= #self.widget_list then
-        self.layout:add(separator)
+        self.lie_layout:add(separator)
       end
     end
     for _, separator in ipairs(self.right_separator_widgets) do
-      self.layout:add(separator)
+      self.lie_layout:add(separator)
     end
   end
 

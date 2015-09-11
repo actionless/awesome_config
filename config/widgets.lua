@@ -104,20 +104,23 @@ function widget_loader.init(awesome_context)
 
   -- Textclock
   if awesome_context.lcarslist_enabled then
+    local textclock = awful.widget.textclock("%H:%M")
     w.textclock = widgets.common.decorated({
-      widget = awful.widget.textclock("%H:%M"),
+      widget = textclock,
       valign = "bottom",
     })
     widgets.calendar:attach(w.textclock, {fg=beautiful.theme, position="top_left"})
   else
-    w.textclock = widgets.common.decorated({
-      widget = awful.widget.textclock("%H:%M"),
-      valign = "bottom",
-      fg = beautiful.xrdb.foreground,
-      bg = beautiful.bg,
-    })
+    local markup = require("utils.markup")
+    local textclock = awful.widget.textclock(markup.fg(beautiful.xrdb.foreground, "%H:%M"))
+    --w.textclock = widgets.common.decorated({
+      --widget = textclock,
+      --valign = "bottom",
+      --fg = beautiful.xrdb.foreground,
+      --bg = beautiful.bg,
+    --})
+    w.textclock = textclock
     widgets.calendar:attach(w.textclock, {fg=beautiful.theme, position="top_right"})
-
   end
 
 

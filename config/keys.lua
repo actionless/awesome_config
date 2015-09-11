@@ -296,13 +296,17 @@ local globalkeys = awful.util.table.join(
   ),
 
   hk.on({ modkey, altkey }, "space",
-    function () awful.layout.inc(1) end,
-    "next layout", LAYOUT_MANIPULATION
+    function ()
+      local s = awful.screen.focused()
+      awesome_context.widgets.screen[s].layoutbox.menu:toggle({coords={y=0,x=capi.screen[s].geometry.width-beautiful.menu_width}})
+      --awful.layout.inc(1)
+    end,
+    "choose layout", LAYOUT_MANIPULATION
   ),
-  hk.on({ modkey, "Control" }, "space",
-    function () awful.layout.inc(-1) end,
-    "prev layout", LAYOUT_MANIPULATION
-  ),
+  --hk.on({ modkey, "Control" }, "space",
+    --function () awful.layout.inc(-1) end,
+    --"prev layout", LAYOUT_MANIPULATION
+  --),
 
   -- Layout tuning
   hk.on({ modkey, altkey }, "Down",
@@ -402,6 +406,7 @@ local globalkeys = awful.util.table.join(
   awful.key({}, "#173", function () awesome_context.widgets.music.prev_song() end),
   awful.key({}, "#171", function () awesome_context.widgets.music.next_song() end),
   awful.key({}, "#172", function () awesome_context.widgets.music.toggle() end),
+  awful.key({}, "#180", function () awesome_context.widgets.music.toggle() end),
 
   hk.on({ modkey }, "c",
     function () os.execute("xsel -p -o | xsel -i -b") end,

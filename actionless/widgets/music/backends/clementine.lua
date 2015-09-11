@@ -58,14 +58,16 @@ function clementine.post_update(result_string, parse_status_callback)
   if state == 'play' or state == 'pause' then
     awful.util.spawn_with_line_callback(
       dbus_cmd .. "/Player GetMetadata",
-      function(str) clementine.parse_metadata(str, parse_status_callback) end
+      function(str) clementine.parse_metadata_line(str) end,
+      nil,
+      function() clementine.parse_metadata_done(parse_status_callback) end
     )
   else
     parse_status_callback(clementine.player_status)
   end
 end
 -------------------------------------------------------------------------------
-function clementine.parse_metadata(result_string, parse_status_callback)
+function clementine.parse_metadata_line(result_string)
   local player_status = parse.find_values_in_string(
     result_string,
     "([%w]+): (.*)$",
@@ -78,6 +80,9 @@ function clementine.parse_metadata(result_string, parse_status_callback)
     }
   )
   h_table.merge(clementine.player_status, player_status)
+end
+
+function clementine.parse_metadata_done(parse_status_callback)
   parse_status_callback(clementine.player_status)
 end
 

@@ -107,7 +107,7 @@ function toolbar.init(awesome_context)
             --height=dpi(80),
             width=dpi(700)
           }),
-          loaded_widgets.systray_toggle,
+          --loaded_widgets.systray_toggle,
         })
       )
     end

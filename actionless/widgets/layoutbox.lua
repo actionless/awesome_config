@@ -27,6 +27,7 @@ local function worker(args)
 
     local layoutbox = {
         menu = nil,
+        menu_id = nil,
         mt = {}
     }
 
@@ -36,15 +37,15 @@ local function worker(args)
     local text_mode = args.text_mode or true
     layoutbox.screen = args.screen or 1
 
-    layoutbox.layout = wibox.widget.background()
+    layoutbox.lie_layout = wibox.widget.background()
     layoutbox.imagebox = imagebox()
     layoutbox.imagebox:set_resize(true)
     layoutbox.textbox = textbox()
     if args.horizontal then
-        layoutbox.layout:set_widget(layoutbox.imagebox)
+        layoutbox.lie_layout:set_widget(layoutbox.imagebox)
         layoutbox.mfpol_template = "%1.1s"
     else
-        layoutbox.layout:set_widget(layoutbox.textbox)
+        layoutbox.lie_layout:set_widget(layoutbox.textbox)
         layoutbox.mfpol_template = "%s"
     end
 
@@ -67,7 +68,7 @@ local function worker(args)
     layoutbox.numbers_layout = common.decorated_horizontal(args)
 
     args.widgets={
-        layoutbox.layout,
+        layoutbox.lie_layout,
         layoutbox.numbers_layout,
         layoutbox.mfpol,
     }
@@ -81,13 +82,13 @@ local function worker(args)
         beautiful["layout_"..layout.name]
       })
     end
-    local layouts_menu = awful.menu({
+    layoutbox.menu = awful.menu({
         items = layouts_menu_items,
     })
 
     layoutbox.widget:buttons(awful.util.table.join(
       awful.button({ }, 1, function ()
-        layoutbox.menu = layouts_menu:toggle()
+        layoutbox.menu_id = layoutbox.menu:toggle()
       end),
       awful.button({ }, 3, function ()
         awful.layout.inc(1) end),

@@ -78,22 +78,22 @@ function toolbar.init(awesome_context)
     right_layout:add(make_separator('arrr', {fg=beautiful.panel_widget_bg}))
     right_layout:add(separator)
 
-    if s == 1 then
-      right_layout:add(loaded_widgets.systray_toggle)
-    else
-      right_layout:add(separator)
-    end
+    --if s == 1 then
+      --right_layout:add(loaded_widgets.systray_toggle)
+    --else
+      --right_layout:add(separator)
+    --end
 
     right_layout:add(separator)
 
-    --right_layout:add(make_separator('arrl', {fg=beautiful.panel_widget_bg}))
+    ----!--right_layout:add(make_separator('arrl', {fg=beautiful.panel_widget_bg}))
     right_layout:add(separator)
     right_layout:add(loaded_widgets.textclock)
     right_layout:add(separator)
     right_layout:add(separator)
     right_layout:add(loaded_widgets.screen[s].layoutbox)
     right_layout:add(separator)
-    --right_layout:add(make_separator('arrr', {fg=beautiful.panel_widget_bg_disabled}))
+    ----!--right_layout:add(make_separator('arrr', {fg=beautiful.panel_widget_bg_disabled}))
     right_layout:add(sep)
 
 
@@ -102,7 +102,6 @@ function toolbar.init(awesome_context)
     layout:set_left(left_layout)
     layout:set_middle(loaded_widgets.screen[s].tasklist)
     layout:set_right(right_layout)
-
 
     -- background image:
     --if beautiful.panel_bg_image then
