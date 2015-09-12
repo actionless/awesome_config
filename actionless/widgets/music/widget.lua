@@ -224,9 +224,7 @@ function player.resize_cover()
   if player.backend.resize_cover then
     return player.backend.resize_cover(
       player.player_status, cover_size, player.cover,
-      function()
-        player.show_notification()
-      end
+      player.show_notification
     )
   end
   -- fallback:
@@ -242,6 +240,8 @@ function player.resize_cover()
       resize,
       player.cover
     ),
+    nil,
+    nil,
     player.show_notification
   )
 end

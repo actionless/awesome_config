@@ -63,11 +63,24 @@ local function worker(args)
       replaces_id = cpu.get_notification_id(),
       position = beautiful.widget_notification_position,
     })
-    awful.util.spawn_with_line_callback(cpu.command, cpu.notification_callback)
+    awful.util.spawn_with_line_callback(
+      cpu.command,
+      cpu.notification_callback_line,
+      nil,
+      cpu.notification_callback_done
+    )
     cpu.update()
   end
 
-  function cpu.notification_callback(output)
+  local cpu_result_lines = ''
+
+  function cpu.notification_callback_line(output)
+    cpu_result_lines = cpu_result_lines..output
+  end
+
+  function cpu.notification_callback_done(output)
+    local output = cpu_result_lines
+    cpu_result_lines = ''
     local notification_id = cpu.get_notification_id()
     if not notification_id then return end
     local result = {}

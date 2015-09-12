@@ -60,11 +60,24 @@ local function worker(args)
       replaces_id = mem.get_notification_id(),
       position = beautiful.widget_notification_position,
     })
-    awful.util.spawn_with_line_callback(mem.command, mem.notification_callback)
+    awful.util.spawn_with_line_callback(
+      mem.command,
+      mem.notification_callback_line,
+      nil,
+      mem.notification_callback_done
+    )
     mem.update()
   end
 
-  function mem.notification_callback(output)
+  local mem_result_lines = ''
+
+  function mem.notification_callback_line(output)
+    mem_result_lines = mem_result_lines..output
+  end
+
+  function mem.notification_callback_done()
+    local output = mem_result_lines
+    mem_result_lines = ''
     local notification_id = mem.get_notification_id()
     if not notification_id then return end
     local result = {}

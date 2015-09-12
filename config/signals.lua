@@ -33,6 +33,7 @@ local function on_client_focus(c)
     c.border_width = beautiful.border_width
     titlebar.make_titlebar(c)
   elseif #awful.client.tiled(c.screen) == 1 then
+    --if awful.tag.getmfpol() == 'expand' then
     if awful.tag.getgap() == 0 then
       log("F: one tiling client: no-gap")
       titlebar.remove_border(c)
@@ -64,6 +65,7 @@ local function on_client_unfocus (c)
     c.border_color = beautiful.titlebar_border
   elseif #awful.client.tiled(c.screen) == 1 then
     if awful.tag.getgap() == 0 then
+    --if awful.tag.getmfpol() == 'expand' then
       log("U: one tiling client: no-gap")
       titlebar.remove_border(c)
     else

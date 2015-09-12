@@ -77,7 +77,7 @@ function spotify.post_update(result_string, parse_status_callback)
     awful.util.spawn_with_line_callback(
       dbus_cmd .. "Metadata",
       function(str) spotify.parse_metadata_line(str) end,
-      nil,
+      function(str) spotify.post_update("Unknown", parse_status_callback) end,
       function() spotify.parse_metadata_done(parse_status_callback) end
     )
   else
@@ -114,6 +114,8 @@ function spotify.resize_cover(
       player_status.cover_url,
       output_coverart_path
     ),
+    nil,
+    nil,
     function() notification_callback() end
   )
 end

@@ -60,9 +60,8 @@ function layouts.init(context)
 
     awful.tag.incmwfact(0.20, tags[1])
     awful.tag.incmwfact(0.20, tags[2])
-    awful.tag.incmwfact(0.05, tags[7])
 
-    for _, tag_number in pairs({1,3,5,7,9}) do
+    for _, tag_number in pairs({1,3,5,9}) do
       awful.tag.setmfpol("mwfact", tags[tag_number])
     end
 

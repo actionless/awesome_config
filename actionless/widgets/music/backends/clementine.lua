@@ -42,7 +42,9 @@ function clementine.update(parse_status_callback)
   local callback = function(str) clementine.post_update(str, parse_status_callback) end
   awful.util.spawn_with_line_callback(
     dbus_cmd .. " /org/mpris/MediaPlayer2 PlaybackStatus",
-    callback, callback
+    callback,
+    callback,
+    callback
   )
 end
 -------------------------------------------------------------------------------

@@ -71,7 +71,9 @@ function toolbar.init(awesome_context)
     right_layout:add(iseparator)
     right_layout:add(loaded_widgets.cpu)
     right_layout:add(iseparator)
-    right_layout:add(loaded_widgets.temp)
+    if loaded_widgets.temp then
+      right_layout:add(loaded_widgets.temp)
+    end
     if loaded_widgets.bat then
       right_layout:add(loaded_widgets.bat)
     end
