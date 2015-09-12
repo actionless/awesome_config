@@ -403,10 +403,13 @@ local globalkeys = awful.util.table.join(
 
   awful.key({}, "#150", function () awesome_context.widgets.music.prev_song() end),
   awful.key({}, "#148", function () awesome_context.widgets.music.next_song() end),
+  -- lenovo keyboard
   awful.key({}, "#173", function () awesome_context.widgets.music.prev_song() end),
   awful.key({}, "#171", function () awesome_context.widgets.music.next_song() end),
   awful.key({}, "#172", function () awesome_context.widgets.music.toggle() end),
+  -- lcars keyboard
   awful.key({}, "#180", function () awesome_context.widgets.music.toggle() end),
+  awful.key({}, "#163", function () awesome_context.widgets.music.next_song() end),
 
   hk.on({ modkey }, "c",
     function () os.execute("xsel -p -o | xsel -i -b") end,
