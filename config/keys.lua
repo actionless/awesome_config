@@ -45,7 +45,7 @@ awful.layout.suit.tile.resize_jump_to_corner = false
     awful.button({ modkey }, 3, awful.mouse.client.resize)
   )
 
-local RESIZE_STEP = 15
+local RESIZE_STEP = beautiful.xresources.apply_dpi(15)
 
 local TO_DEFINE_COLOR = "none"
 
@@ -298,7 +298,9 @@ local globalkeys = awful.util.table.join(
   hk.on({ modkey, altkey }, "space",
     function ()
       local s = awful.screen.focused()
-      awesome_context.widgets.screen[s].layoutbox.menu:toggle({coords={y=0,x=capi.screen[s].geometry.width-beautiful.menu_width}})
+      awesome_context.widgets.screen[s].layoutbox.menu:toggle({coords={
+        y=0, x=capi.screen[s].geometry.width - beautiful.menu_width
+      }})
       --awful.layout.inc(1)
     end,
     "choose layout", LAYOUT_MANIPULATION
@@ -422,7 +424,9 @@ local globalkeys = awful.util.table.join(
     "terminal", IMPORTANT_COLOR
   ),
   hk.on({ modkey, altkey }, "Return",
-    function () awful.util.spawn(cmd.tmux_light) end,
+    function ()
+      awful.util.spawn(cmd.tmux_light)
+    end,
     "white terminal", UTILS
   ),
   hk.on({ modkey,        }, "s",

@@ -26,9 +26,8 @@ local function st_color_line(theme_table)
 end
 
 local colorscheme = xresources.get_current_theme()
-local terminal = 'st -b "' .. st_color_line(colorscheme) .. '" -f "'..'Monospace'..':pixelsize='..tostring(xresources.apply_dpi(13))..'" '
-colorscheme.background, colorscheme.foreground = colorscheme.foreground, colorscheme.background
-local terminal_light = 'st -b "' .. st_color_line(colorscheme) .. '" -f "'..'Monospace'..':pixelsize='..tostring(xresources.apply_dpi(13))..'" '
+local terminal = 'st -b "' .. st_color_line(colorscheme) ..
+  '" -f "'..'Monospace'..':pixelsize='..tostring(xresources.apply_dpi(13))..'" '
 
 
 -- GLOBALS:
@@ -52,12 +51,10 @@ context = {
 
   cmds = {
     terminal = terminal,
-    terminal_light = 'stl',
     editor_cmd = terminal .. " -e " .. editor,
     compositor = "killall compton; compton",
     file_manager = "pcmanfm",
     tmux = terminal .. " -e tmux",
-    tmux_light = terminal_light .. " -e tmux",
     tmux_run   = terminal .. " -e tmux new-session",
     scrot_preview_cmd = [['mv $f ~/images/ && viewnior ~/images/$f']],
   },
@@ -109,3 +106,18 @@ require("hotkeys")
 --}
 
 -- vim: set shiftwidth=2:
+
+local ucolor = require("utils.color")
+
+local inverted_colorscheme = awful.util.table.clone(colorscheme)
+inverted_colorscheme.background, inverted_colorscheme.foreground =
+  inverted_colorscheme.foreground, inverted_colorscheme.background
+local is_dark_bg = ucolor.is_dark(beautiful.bg_normal)
+for i=0,15 do
+  inverted_colorscheme["color"..tostring(i)] = ucolor.darker(
+    inverted_colorscheme["color"..tostring(i)], is_dark_bg and 40 or -40
+  )
+end
+context.cmds.terminal_light = 'st -b "' .. st_color_line(inverted_colorscheme)
+  .. '" -f "'..'Monospace'..':pixelsize='..tostring(xresources.apply_dpi(13))..'" '
+context.cmds.tmux_light = context.cmds.terminal_light .. " -e tmux"

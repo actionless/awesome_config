@@ -6,6 +6,7 @@ local utils = {
   string = require("utils.string"),
   inspect = require("utils.inspect"),
   debug = require("utils.debug"),
+  color = require("utils.color"),
 }
 
 return utils

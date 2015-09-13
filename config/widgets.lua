@@ -113,12 +113,6 @@ function widget_loader.init(awesome_context)
   else
     local markup = require("utils.markup")
     local textclock = awful.widget.textclock(markup.fg(beautiful.xrdb.foreground, "%H:%M"))
-    --w.textclock = widgets.common.decorated({
-      --widget = textclock,
-      --valign = "bottom",
-      --fg = beautiful.xrdb.foreground,
-      --bg = beautiful.bg,
-    --})
     w.textclock = textclock
     widgets.calendar:attach(w.textclock, {fg=beautiful.theme, position="top_right"})
   end
