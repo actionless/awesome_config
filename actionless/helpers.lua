@@ -72,17 +72,22 @@ function helpers.tag_noempty_list(s)
 end
 
 
+function helpers.get_tag_idx(target_tag, tag_list, s)
+  s = s or awful.screen.focused()
+  tag_list = tag_list or awful.tag.gettags(s)
+  for idx, t in ipairs(tag_list) do
+    if t == target_tag then
+      return idx
+    end
+  end
+end
+
+
 function helpers.tag_view_noempty(delta, s)
     s = s or awful.screen.focused()
     local selected_tag = awful.tag.selected(s)
     local noempty_tags = helpers.tag_noempty_list(s)
-    local target_tag_local_idx
-    for i, t in ipairs(noempty_tags) do
-      if t == selected_tag then
-        target_tag_local_idx = i + delta
-        break
-      end
-    end
+    local target_tag_local_idx = helpers.get_tag_idx(selected_tag, noempty_tags, s) + delta
     if target_tag_local_idx < 1 then
       target_tag_local_idx = #noempty_tags
     elseif target_tag_local_idx > #noempty_tags then
@@ -103,6 +108,25 @@ function helpers.get_nix_xresources_theme_path()
   print(result)
   print("DEBUG_END")
   return result
+end
+
+
+function helpers.tag_toggle_gap()
+  local t = awful.tag.selected()
+  local current_gap = awful.tag.getgap(t)
+  local prev_gap = awful.tag.getproperty(t, "prev_useless_gap") or ((current_gap>0) and 0 or beautiful.useless_gap)
+  if prev_gap == current_gap then
+    prev_gap = 0
+    if current_gap == 0 then
+      prev_gap = beautiful.useless_gap
+    end
+  end
+  awful.tag.setproperty(t, "prev_useless_gap", current_gap)
+  local newgap = 0
+  if current_gap == 0 then
+    newgap = prev_gap
+  end
+  awful.tag.setgap(newgap, t)
 end
 
 

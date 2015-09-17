@@ -349,17 +349,15 @@ local globalkeys = awful.util.table.join(
   ),
 
   hk.on({ modkey, altkey }, "e",
-    function () awful.tag.togglemfpol() end,
+    function ()
+      awful.tag.togglemfpol()
+      tag.emit_signal("property::layout", t)
+    end,
     "toggle expand master", LAYOUT_MANIPULATION
   ),
   hk.on({ modkey, altkey }, "g",
     function ()
-      local newgap = 0
-      local t = awful.tag.selected()
-      if awful.tag.getgap(t) == 0 then
-        newgap = beautiful.useless_gap
-      end
-      awful.tag.setgap(newgap, t)
+      helpers.tag_toggle_gap()
       tag.emit_signal("property::layout", t)
     end,
     "toggle useless gap", LAYOUT_MANIPULATION

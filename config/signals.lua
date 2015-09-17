@@ -1,9 +1,9 @@
 local awful = require("awful")
 local beautiful = require("beautiful")
+local delayed_call = require("gears.timer").delayed_call
 
 local titlebar	= require("actionless.titlebar")
-
-local delayed_call = require("gears.timer").delayed_call
+local helpers = require("actionless.helpers")
 
 
 local debug_messages_enabled = false
@@ -17,6 +17,11 @@ function signals.init(awesome_context)
 local function on_client_focus(c)
   local layout = awful.layout.get(c.screen)
   c.border_color = beautiful.border_focus
+  local t = awful.tag.selected(awful.screen.focused())
+  if awful.tag.getproperty(t, "expand_useless_gap") then
+    helpers.tag_toggle_gap()
+    awful.tag.setproperty(t, "expand_useless_gap", false)
+  end
   if awesome_context.show_titlebar and #awful.client.tiled(c.screen) > 1 then
     log("F: tile: titlebars enabled explicitly")
     c.border_width = beautiful.border_width
@@ -33,15 +38,32 @@ local function on_client_focus(c)
     c.border_width = beautiful.border_width
     titlebar.make_titlebar(c)
   elseif #awful.client.tiled(c.screen) == 1 then
-    --if awful.tag.getmfpol() == 'expand' then
-    if awful.tag.getgap() == 0 then
-      log("F: one tiling client: no-gap")
+    if awful.tag.getmfpol() == 'expand' then
+      log("F: one tiling client: expand")
+      local current_gap = awful.tag.getgap(t)
+      if current_gap > 0 then
+        helpers.tag_toggle_gap()
+        awful.tag.setproperty(t, "expand_useless_gap", true)
+      end
       titlebar.remove_border(c)
     else
-      log("F: one tiling client: gap")
+      log("F: one tiling client")
+      local current_gap = awful.tag.getgap(t)
+      if current_gap == 0 then
+        helpers.tag_toggle_gap()
+        awful.tag.setproperty(t, "expand_useless_gap", true)
+      end
       c.border_width = beautiful.border_width
       titlebar.remove_titlebar(c)
     end
+    --if awful.tag.getgap() == 0 then
+      --log("F: one tiling client: no-gap")
+      --titlebar.remove_border(c)
+    --else
+      --log("F: one tiling client: gap")
+      --c.border_width = beautiful.border_width
+      --titlebar.remove_titlebar(c)
+    --end
   else
     log("F: more tiling clients")
     c.border_width = beautiful.border_width
@@ -53,6 +75,7 @@ end
 local function on_client_unfocus (c)
   local layout = awful.layout.get(c.screen)
   c.border_color = beautiful.border_normal
+  --awful.tag.setgap(beautiful.useless_gap)
   if awesome_context.show_titlebar and #awful.client.tiled(c.screen) > 1 then
     log("U: tile: titlebars enabled explicitly")
     c.border_width = beautiful.border_width
@@ -64,16 +87,24 @@ local function on_client_unfocus (c)
     log("U: floating layout")
     c.border_color = beautiful.titlebar_border
   elseif #awful.client.tiled(c.screen) == 1 then
-    if awful.tag.getgap() == 0 then
-    --if awful.tag.getmfpol() == 'expand' then
-      log("U: one tiling client: no-gap")
+    if awful.tag.getmfpol() == 'expand' then
+      --awful.tag.setgap(0)
       titlebar.remove_border(c)
     else
-      log("U: one tiling client: gap")
+      --awful.tag.setgap(beautiful.useless_gap)
       c.border_color = beautiful.border_normal
       c.border_width = beautiful.border_width
       titlebar.remove_titlebar(c)
     end
+    --if awful.tag.getgap() == 0 then
+      --log("U: one tiling client: no-gap")
+      --titlebar.remove_border(c)
+    --else
+      --log("U: one tiling client: gap")
+      --c.border_color = beautiful.border_normal
+      --c.border_width = beautiful.border_width
+      --titlebar.remove_titlebar(c)
+    --end
   else
     log("U: more tiling clients")
     titlebar.remove_titlebar(c)
@@ -108,6 +139,7 @@ client.connect_signal("unfocus", function(c)
 end)
 
 tag.connect_signal("property::layout", function (t)
+  t = t or awful.tag.selected(awful.screen.focused())
   for _, c in ipairs(t.clients(t)) do
     if c == client.focus then
       on_client_focus(c)
