@@ -5,6 +5,7 @@ function color.darker(color, darker_n)
     for s in color:gmatch("[a-fA-F0-9][a-fA-F0-9]") do
         local bg_numeric_value = tonumber("0x"..s) - darker_n
         if bg_numeric_value < 0 then bg_numeric_value = 0 end
+        if bg_numeric_value > 255 then bg_numeric_value = 255 end
         result = result .. string.format("%2.2x", bg_numeric_value)
     end
     return result
