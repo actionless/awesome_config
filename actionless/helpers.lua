@@ -111,8 +111,8 @@ function helpers.get_nix_xresources_theme_path()
 end
 
 
-function helpers.tag_toggle_gap()
-  local t = awful.tag.selected()
+function helpers.tag_toggle_gap(t)
+  t = t or awful.tag.selected()
   local current_gap = awful.tag.getgap(t)
   local prev_gap = awful.tag.getproperty(t, "prev_useless_gap") or ((current_gap>0) and 0 or beautiful.useless_gap)
   if prev_gap == current_gap then
