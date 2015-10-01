@@ -28,11 +28,11 @@ function sneaky_toggle.initialize()
     st.widgetvisible = true
 
         st.container = wibox.layout.constraint()
-            st.layout = wibox.layout.fixed.horizontal()
+            st.lie_layout = wibox.layout.fixed.horizontal()
             for _, widget in ipairs(sneaky_toggle.loaded_widgets) do
-                st.layout:add(widget)
+                st.lie_layout:add(widget)
             end
-        st.container:set_widget(st.layout)
+        st.container:set_widget(st.lie_layout)
         st.container:set_strategy("min")
     st.export_widget = wibox.layout.fixed.horizontal()
     st.export_widget:buttons(awful.util.table.join(
@@ -63,7 +63,7 @@ function sneaky_toggle.toggle()
         sneaky_toggle.arrow:set_image(beautiful.icon_left)
     else
         sneaky_toggle.container:set_strategy("min")
-        sneaky_toggle.container:set_widget(sneaky_toggle.layout)
+        sneaky_toggle.container:set_widget(sneaky_toggle.lie_layout)
         sneaky_toggle.widgetvisible = true
         sneaky_toggle.arrow:set_image(beautiful.icon_right)
     end
