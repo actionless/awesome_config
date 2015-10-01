@@ -12,7 +12,7 @@ local parse		= require("utils.parse")
 
 
 local netctl = {
-  widget = common_widget()
+  lie_widget = common_widget()
 }
 
 local function worker(args)
@@ -24,14 +24,17 @@ local function worker(args)
   netctl.timeout = args.timeout or 0
   netctl.font = args.font or font
 
-  netctl.widget:set_bg(bg)
-  netctl.widget:set_fg(fg)
+  netctl.lie_widget:set_bg(bg)
+  netctl.lie_widget:set_fg(fg)
 
   netctl.preset = args.preset or 'bond' -- or netctl or netctl-auto
   netctl.wlan_if = args.wlan_if or 'wlan0'
   netctl.eth_if = args.eth_if or 'eth0'
 
+  netctl.read_cache = ''
+
   function netctl.update()
+    netctl.read_cache = ''
     if netctl.preset == 'bond' then
       netctl.update_bond()
     elseif netctl.preset == 'netctl-auto' then
@@ -43,12 +46,18 @@ local function worker(args)
     end
   end
 
+  function readstdout(str)
+    netctl.read_cache = netctl.read_cache .. str
+  end
+
   function netctl.systemd_update()
     awful.util.spawn_with_line_callback(
       "systemctl list-unit-files systemd-networkd.service",
-      function(str)
+      readstdout,
+      readstdout,
+      function()
         netctl.update_widget(
-          str:match("systemd%-(networkd)%.service.*enabled.*"
+          netctl.read_cache:match("systemd%-(networkd)%.service.*enabled.*"
           ) or 'networkd...')
       end)
   end
@@ -72,9 +81,11 @@ local function worker(args)
   function netctl.wpa_update()
     awful.util.spawn_with_line_callback(
       "sudo wpa_cli status",
-      function(str)
+      readstdout,
+      readstdout,
+      function()
         netctl.update_widget(
-          str:match(".*ssid=(.*)\n.*"
+          netctl.read_cache:match(".*ssid=(.*)\n.*"
           ) or 'wpa...')
       end)
   end
@@ -82,10 +93,12 @@ local function worker(args)
   function netctl.netctl_auto_update()
     awful.util.spawn_with_line_callback(
       'sudo netctl-auto current',
-      function(str)
-        if #str ~= 0 then
+      readstdout,
+      readstdout,
+      function()
+        if #netctl.read_cache ~= 0 then
           netctl.interface = netctl.wlan_if
-          netctl.update_widget(str:match("^(.*)\n.*"))
+          netctl.update_widget(netctl.read_cache:match("^(.*)\n.*"))
         else
           netctl.interface = nil
           netctl.update_widget('nctl-a...')
@@ -96,21 +109,23 @@ local function worker(args)
   function netctl.netctl_update()
     awful.util.spawn_with_line_callback(
       "systemctl list-unit-files 'netctl@*'",
-      function(str)
+      readstdout,
+      readstdout,
+      function()
         netctl.update_widget(
-          str:match("netctl@(.*)%.service.*enabled"
+          netctl.read_cache:match("netctl@(.*)%.service.*enabled"
           ) or 'nctl...')
       end)
   end
 
   function netctl.update_widget(network_name)
-    netctl.widget:set_text(network_name)
+    netctl.lie_widget:set_text(network_name)
     if netctl.interface == netctl.eth_if then
-      netctl.widget:set_image(beautiful.widget_net_wired)
+      netctl.lie_widget:set_image(beautiful.lie_widget_net_wired)
     elseif netctl.interface == netctl.wlan_if then
-      netctl.widget:set_icon('net_wifi')
+      netctl.lie_widget:set_icon('net_wifi')
     else
-      netctl.widget:set_image(beautiful.widget_net_searching)
+      netctl.lie_widget:set_image(beautiful.lie_widget_net_searching)
     end
   end
 
@@ -118,7 +133,7 @@ local function worker(args)
 
   return setmetatable(
     netctl,
-    { __index = netctl.widget })
+    { __index = netctl.lie_widget })
 end
 
 return setmetatable(
