@@ -33,14 +33,14 @@ function widget_loader.init(awesome_context)
   })
 
   -- NetCtl
-  --w.netctl = widgets.netctl({
-    --update_interval = 5,
-    --preset = conf.net_preset,
-    --wlan_if = conf.wlan_if,
-    --eth_if = conf.eth_if,
-    --bg = beautiful.widget_netctl_bg,
-    --fg = beautiful.widget_netctl_fg,
-  --})
+  w.netctl = widgets.netctl({
+    update_interval = 5,
+    preset = conf.net_preset,
+    wlan_if = conf.wlan_if,
+    eth_if = conf.eth_if,
+    bg = beautiful.widget_netctl_bg,
+    fg = beautiful.widget_netctl_fg,
+  })
   -- MUSIC
   w.music = widgets.music.widget({
       update_interval = 5,

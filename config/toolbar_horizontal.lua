@@ -80,11 +80,11 @@ function toolbar.init(awesome_context)
     right_layout:add(make_separator('arrr', {fg=beautiful.panel_widget_bg}))
     right_layout:add(separator)
 
-    --if s == 1 then
-      --right_layout:add(loaded_widgets.systray_toggle)
-    --else
-      --right_layout:add(separator)
-    --end
+    if s == 1 then
+      right_layout:add(loaded_widgets.systray_toggle)
+    else
+      right_layout:add(separator)
+    end
 
     right_layout:add(separator)
 
