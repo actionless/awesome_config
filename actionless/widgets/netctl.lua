@@ -31,8 +31,6 @@ local function worker(args)
   netctl.wlan_if = args.wlan_if or 'wlan0'
   netctl.eth_if = args.eth_if or 'eth0'
 
-  netctl.read_cache = ''
-
   function netctl.update()
     netctl.read_cache = ''
     if netctl.preset == 'bond' then
@@ -42,23 +40,31 @@ local function worker(args)
     elseif netctl.preset == 'netctl' then
       netctl.netctl_update()
     elseif netctl.preset == 'systemd' then
-      netctl.systemd_update()
+      netctl.common_update(
+        "systemctl list-unit-files systemd-networkd.service",
+        "systemd%-(networkd)%.service.*enabled.*",
+        'networkd...'
+      )
+    elseif netctl.preset == 'wpa_supplicant' then
+      netctl.common_update(
+        "systemctl status wpa_supplicant.service",
+        "Active: active",
+        'wpa_supplicant...'
+      )
     end
   end
 
   function readstdout(str)
-    netctl.read_cache = netctl.read_cache .. str
+    netctl.read_cache = netctl.read_cache .. str .. '\n'
   end
 
-  function netctl.systemd_update()
+  function netctl.common_update(cmd, match, fallback)
     awful.util.spawn_with_line_callback(
-      "systemctl list-unit-files systemd-networkd.service",
+      cmd,
       readstdout,
       readstdout,
       function()
-        netctl.update_widget(
-          netctl.read_cache:match("systemd%-(networkd)%.service.*enabled.*"
-          ) or 'networkd...')
+        netctl.update_widget(netctl.read_cache:match(match) or fallback)
       end)
   end
 
@@ -96,13 +102,7 @@ local function worker(args)
       readstdout,
       readstdout,
       function()
-        if #netctl.read_cache ~= 0 then
-          netctl.interface = netctl.wlan_if
-          netctl.update_widget(netctl.read_cache:match("^(.*)\n.*"))
-        else
-          netctl.interface = nil
-          netctl.update_widget('nctl-a...')
-        end
+        netctl.update_widget(netctl.read_cache:match("^(.*)\n.*") or 'nctl-a...')
       end)
   end
 
