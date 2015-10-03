@@ -35,7 +35,6 @@ local function need_gapless(t)
     helpers.tag_toggle_gap(t)
     awful.tag.setproperty(t, "expand_useless_gap", true)
   end
-  c.border_width = beautiful.border_width
 end
 
 local function on_client_focus(c)
@@ -66,6 +65,7 @@ local function on_client_focus(c)
       log("F: one tiling client")
       need_gapless(t)
       titlebar.remove_titlebar(c)
+      c.border_width = beautiful.border_width
     end
     --if awful.tag.getgap() == 0 then
       --log("F: one tiling client: no-gap")
