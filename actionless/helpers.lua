@@ -102,7 +102,7 @@ end
 
 function helpers.get_nix_xresources_theme_path()
   local result
-  result = awful.util.pread("readlink -e /nix/store/*-awesome-3*/share/awesome/themes/xresources")
+  result = awful.util.pread("readlink -e /nix/store/*-awesome-3*/share/awesome/themes/xresources | tail -n 1")
   result = string.gsub(result, "\n", "")
   print("DEBUG")
   print(result)

@@ -74,9 +74,9 @@ local function worker(args)
     end
   end
 
-  local function post_update(str)
+  local function post_update()
     bat.now = parse.find_values_in_string(
-      str, "[ ]+(.*):[ ]+(.*)",
+      bat.read_cache, "[ ]+(.*):[ ]+(.*)",
       { percentage='percentage',
         state='state',
         on_low_battery='on-low-battery' }
@@ -90,10 +90,19 @@ local function worker(args)
     end
   end
 
+  bat.read_cache = ''
+  function readstdout(str)
+    bat.read_cache = bat.read_cache .. str .. '\n'
+  end
+
+
   local function update()
+    bat.read_cache = ''
     awful.util.spawn_with_line_callback(
       'upower -i /org/freedesktop/UPower/devices/' .. device,
-      function(str) post_update(str) end)
+      readstdout,
+      readstdout,
+      post_update)
   end
 
   helpers.newinterval(update_interval, update)
