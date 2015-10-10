@@ -267,7 +267,7 @@ local globalkeys = awful.util.table.join(
     "applications menu", UTILS
   ),
   hk.on({ modkey,        }, "space",
-    --function() awful.util.spawn_with_shell(cmd.dmenu) end,
+    --function() awful.spawn.with_shell(cmd.dmenu) end,
     function() awesome_context.menu.dmenubar:show() end,
     "app launcher", UTILS
   ),
@@ -418,17 +418,17 @@ local globalkeys = awful.util.table.join(
 
   -- Standard program
   hk.on({ modkey,        }, "Return",
-    function () awful.util.spawn(cmd.tmux) end,
+    function () awful.spawn.spawn(cmd.tmux) end,
     "terminal", IMPORTANT_COLOR
   ),
   hk.on({ modkey, altkey }, "Return",
     function ()
-      awful.util.spawn(cmd.tmux_light)
+      awful.spawn.spawn(cmd.tmux_light)
     end,
     "white terminal", UTILS
   ),
   hk.on({ modkey,        }, "s",
-    function () awful.util.spawn(cmd.file_manager) end,
+    function () awful.spawn.spawn(cmd.file_manager) end,
     "file manager", UTILS
   ),
 
@@ -444,28 +444,28 @@ local globalkeys = awful.util.table.join(
   -- Scrot stuff
   hk.on({ "Control"      }, "Print",
     function ()
-      awful.util.spawn_with_shell(
+      awful.spawn.with_shell(
       "scrot -ub '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. cmd.scrot_preview_cmd)
     end,
     "screenshot focused", TO_DEFINE_COLOR
   ),
   hk.on({ altkey        }, "Print",
     function ()
-      awful.util.spawn_with_shell(
+      awful.spawn.with_shell(
       "scrot -s '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. cmd.scrot_preview_cmd)
     end,
     "screenshot selected", TO_DEFINE_COLOR
   ),
   hk.on({  }, "Print",
     function ()
-      awful.util.spawn_with_shell(
+      awful.spawn.with_shell(
       "scrot '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. cmd.scrot_preview_cmd)
     end,
     "screenshot all", TO_DEFINE_COLOR
   ),
   hk.on({ "Shift" }, "Print",
     function ()
-      awful.util.spawn_with_shell(
+      awful.spawn.with_shell(
       "scrot '%Y-%m-%d--%s_$wx$h_scrot.png'")
     end,
     "screenshot all", TO_DEFINE_COLOR
@@ -502,9 +502,9 @@ local globalkeys = awful.util.table.join(
   hk.on({modkey, altkey, "Control"}, "p",
     function()
       if awesome_context.lcarslist_enabled then
-        awful.util.spawn_with_shell("sed -i 's/lcarslist_enabled = true/lcarslist_enabled = false/g' ~/.config/awesome/config/local.lua")
+        awful.spawn.with_shell("sed -i 's/lcarslist_enabled = true/lcarslist_enabled = false/g' ~/.config/awesome/config/local.lua")
       else
-        awful.util.spawn_with_shell("sed -i 's/lcarslist_enabled = false/lcarslist_enabled = true/g' ~/.config/awesome/config/local.lua")
+        awful.spawn.with_shell("sed -i 's/lcarslist_enabled = false/lcarslist_enabled = true/g' ~/.config/awesome/config/local.lua")
       end
       capi.awesome.restart()
     end,

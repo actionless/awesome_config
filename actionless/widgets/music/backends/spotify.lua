@@ -33,15 +33,15 @@ end
 
 -------------------------------------------------------------------------------
 function spotify.toggle()
-  awful.util.spawn_with_shell(dbus_cmd .. "PlayPause")
+  awful.spawn.with_shell(dbus_cmd .. "PlayPause")
 end
 
 function spotify.next_song()
-  awful.util.spawn_with_shell(dbus_cmd .. "Next")
+  awful.spawn.with_shell(dbus_cmd .. "Next")
 end
 
 function spotify.prev_song()
-  awful.util.spawn_with_shell(dbus_cmd .. "Previous")
+  awful.spawn.with_shell(dbus_cmd .. "Previous")
 end
 -------------------------------------------------------------------------------
 --{{  @TODO: temporary workaround:
@@ -50,7 +50,7 @@ local timer_added = false
 --}}
 function spotify.update(parse_status_callback)
   local callback = function(str) spotify.post_update(str, parse_status_callback) end
-  --awful.util.spawn_with_line_callback(
+  --awful.spawn.with_line_callback(
     --dbus_cmd .. "PlaybackStatus",
     --callback, callback
   --)
@@ -74,7 +74,7 @@ function spotify.post_update(result_string, parse_status_callback)
   end
   spotify.player_status.state = state
   if state == 'play' or state == 'pause' then
-    awful.util.spawn_with_line_callback(
+    awful.spawn.with_line_callback(
       dbus_cmd .. "Metadata",
       function(str) spotify.parse_metadata_line(str) end,
       function(str) spotify.post_update("Unknown", parse_status_callback) end,
@@ -108,7 +108,7 @@ end
 function spotify.resize_cover(
   player_status, _, output_coverart_path, notification_callback
 )
-  awful.util.spawn_with_line_callback(
+  awful.spawn.with_line_callback(
     string.format(
       "wget %s -O %s",
       player_status.cover_url,

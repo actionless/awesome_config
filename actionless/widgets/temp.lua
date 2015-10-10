@@ -27,7 +27,7 @@ local function worker(args)
   temp.widget:set_image(beautiful.widget_temp)
 
   function temp.update()
-    awful.util.spawn_with_line_callback("sensors ", function (str) temp.post_update(str) end)
+    awful.spawn.with_line_callback("sensors ", function (str) temp.post_update(str) end)
   end
 
   function temp.post_update(str)

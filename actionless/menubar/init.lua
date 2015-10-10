@@ -142,7 +142,7 @@ local function perform_action(o)
             menubar_module.dmenugen.history_save()
         end
         ----------
-        awful.util.spawn(shownitems[current_item].cmdline)
+        awful.spawn.spawn(shownitems[current_item].cmdline)
         -- Let awful.prompt execute dummy exec_callback and
         -- done_callback to stop the keygrabber properly.
         return false

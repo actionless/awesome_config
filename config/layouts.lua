@@ -28,7 +28,7 @@ function layouts.init(context)
       gears.wallpaper[wallpaper_layout](beautiful.wallpaper, s)
     end
   elseif beautiful.wallpaper_cmd then
-      awful.util.spawn_with_shell(beautiful.wallpaper_cmd)
+      awful.spawn.with_shell(beautiful.wallpaper_cmd)
   end
   -- }}}
 

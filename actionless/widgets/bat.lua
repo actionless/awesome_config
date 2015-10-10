@@ -32,7 +32,7 @@ local function worker(args)
   }
   widget:buttons(awful.util.table.join(
     awful.button({ }, 1, function()
-      awful.util.spawn_with_shell(exec)
+      awful.spawn.with_shell(exec)
     end)
   ))
 
@@ -98,7 +98,7 @@ local function worker(args)
 
   local function update()
     bat.read_cache = ''
-    awful.util.spawn_with_line_callback(
+    awful.spawn.with_line_callback(
       'upower -i /org/freedesktop/UPower/devices/' .. device,
       readstdout,
       readstdout,

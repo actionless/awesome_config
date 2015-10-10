@@ -27,20 +27,20 @@ function clementine.init(widget)
 end
 -------------------------------------------------------------------------------
 function clementine.toggle()
-  awful.util.spawn_with_shell(dbus_cmd .. "/org/mpris/MediaPlayer2 PlayPause")
+  awful.spawn.with_shell(dbus_cmd .. "/org/mpris/MediaPlayer2 PlayPause")
 end
 
 function clementine.next_song()
-  awful.util.spawn_with_shell(dbus_cmd .. "/org/mpris/MediaPlayer2 Next")
+  awful.spawn.with_shell(dbus_cmd .. "/org/mpris/MediaPlayer2 Next")
 end
 
 function clementine.prev_song()
-  awful.util.spawn_with_shell(dbus_cmd .. "/org/mpris/MediaPlayer2 Previous")
+  awful.spawn.with_shell(dbus_cmd .. "/org/mpris/MediaPlayer2 Previous")
 end
 -------------------------------------------------------------------------------
 function clementine.update(parse_status_callback)
   local callback = function(str) clementine.post_update(str, parse_status_callback) end
-  awful.util.spawn_with_line_callback(
+  awful.spawn.with_line_callback(
     dbus_cmd .. " /org/mpris/MediaPlayer2 PlaybackStatus",
     callback,
     callback,
@@ -58,7 +58,7 @@ function clementine.post_update(result_string, parse_status_callback)
   end
   clementine.player_status.state = state
   if state == 'play' or state == 'pause' then
-    awful.util.spawn_with_line_callback(
+    awful.spawn.with_line_callback(
       dbus_cmd .. "/Player GetMetadata",
       function(str) clementine.parse_metadata_line(str) end,
       nil,

@@ -92,7 +92,7 @@ local function worker(args)
 
 -------------------------------------------------------------------------------
   function player.run_player()
-    awful.util.spawn_with_shell(player.cmd)
+    awful.spawn.with_shell(player.cmd)
   end
 -------------------------------------------------------------------------------
   function player.hide_notification()
@@ -232,7 +232,7 @@ function player.resize_cover()
   if not player.player_status.cover then
     player.player_status.cover = default_art
   end
-  awful.util.spawn_with_line_callback(
+  awful.spawn.with_line_callback(
     string.format(
       [[convert %q -thumbnail %q -gravity center -background "none" -extent %q %q]],
       player.player_status.cover,

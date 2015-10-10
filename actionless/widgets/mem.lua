@@ -60,7 +60,7 @@ local function worker(args)
       replaces_id = mem.get_notification_id(),
       position = beautiful.widget_notification_position,
     })
-    awful.util.spawn_with_line_callback(
+    awful.spawn.with_line_callback(
       mem.command,
       mem.notification_callback_line,
       nil,

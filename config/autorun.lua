@@ -7,16 +7,16 @@ local autorun = {}
 
 function autorun.init(awesome_context)
 
-  --awful.util.spawn_with_shell("eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)")
-  --awful.util.spawn_with_shell("/home/lie/.screenlayout/awesome.sh")
+  --awful.spawn.with_shell("eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)")
+  --awful.spawn.with_shell("/home/lie/.screenlayout/awesome.sh")
   --run_once("redshift")
-  awful.util.spawn_with_shell("xset r rate 250 25")
-  --awful.util.spawn_with_shell("xset r rate 250 10")
-  awful.util.spawn_with_shell("xset b off") -- turn off beep
+  awful.spawn.with_shell("xset r rate 250 25")
+  --awful.spawn.with_shell("xset r rate 250 10")
+  awful.spawn.with_shell("xset b off") -- turn off beep
   --run_once(awesome_context.cmds.compositor)
-  awful.util.spawn_with_shell("xsettingsd")
+  awful.spawn.with_shell("xsettingsd")
   run_once("pulseaudio")
-  awful.util.spawn_with_shell("start-pulseaudio-x11")
+  awful.spawn.with_shell("start-pulseaudio-x11")
   run_once("xfce4-power-manager")
   run_once("dropbox")
   run_once("megasync")
@@ -27,7 +27,7 @@ function autorun.init(awesome_context)
   --run_once("urxvtd")
 
   for _, item in ipairs(awesome_context.autorun) do
-    awful.util.spawn_with_shell(item)
+    awful.spawn.with_shell(item)
   end
 
 end

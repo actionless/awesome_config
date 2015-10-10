@@ -63,7 +63,7 @@ local function worker(args)
       replaces_id = cpu.get_notification_id(),
       position = beautiful.widget_notification_position,
     })
-    awful.util.spawn_with_line_callback(
+    awful.spawn.with_line_callback(
       cpu.command,
       cpu.notification_callback_line,
       nil,

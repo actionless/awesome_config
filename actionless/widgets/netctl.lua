@@ -59,7 +59,7 @@ local function worker(args)
   end
 
   function netctl.common_update(cmd, match, fallback)
-    awful.util.spawn_with_line_callback(
+    awful.spawn.with_line_callback(
       cmd,
       readstdout,
       readstdout,
@@ -85,7 +85,7 @@ local function worker(args)
   end
 
   function netctl.wpa_update()
-    awful.util.spawn_with_line_callback(
+    awful.spawn.with_line_callback(
       "sudo wpa_cli status",
       readstdout,
       readstdout,
@@ -97,7 +97,7 @@ local function worker(args)
   end
 
   function netctl.netctl_auto_update()
-    awful.util.spawn_with_line_callback(
+    awful.spawn.with_line_callback(
       'sudo netctl-auto current',
       readstdout,
       readstdout,
@@ -107,7 +107,7 @@ local function worker(args)
   end
 
   function netctl.netctl_update()
-    awful.util.spawn_with_line_callback(
+    awful.spawn.with_line_callback(
       "systemctl list-unit-files 'netctl@*'",
       readstdout,
       readstdout,
