@@ -49,6 +49,26 @@ function helpers.run_once(cmd)
   awful.spawn.with_shell("pgrep -u $USER -x " .. findme .. " > /dev/null || (" .. cmd .. ")")
 end
 
+function helpers.async_spawn(cmd, callback)
+  local stdout = ''
+  local stderr = ''
+  local function parse_stdout(str)
+    stdout = stdout .. "\n" .. str
+  end
+  local function parse_stderr(str)
+    stderr = stderr .. "\n" .. str
+  end
+  local function done_callback()
+    return callback(stdout, stderr)
+  end
+  return awful.spawn.with_line_callback(
+    cmd,
+    parse_stdout,
+    parse_stderr,
+    done_callback
+  )
+end
+
 
 function helpers.client_floats(c)
   local l = awful.layout.get(c.screen)
