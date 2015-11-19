@@ -115,7 +115,8 @@ function common_theme.generate_theme(theme_dir)
   theme.left_panel_width = 120
   theme.left_widget_min_height = 120
 theme.left_panel_internal_corner_radius = 30
-  theme.widget_notification_position = "top_left"
+  --theme.widget_notification_position = "top_left"
+  theme.widget_notification_position = "top_right"
 
   -- PANEL COLORS:
   --
