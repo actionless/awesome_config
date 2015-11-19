@@ -13,7 +13,7 @@ local h_table = require("utils.table")
 local h_string = require("utils.string")
 local parse = require("utils.parse")
 local common_widget= require("actionless.widgets.common").decorated
-local newinterval = require("actionless.helpers").newinterval
+local helpers = require("actionless.helpers")
 
 -- Memory usage (ignoring caches)
 local mem = {
@@ -60,24 +60,14 @@ local function worker(args)
       replaces_id = mem.get_notification_id(),
       position = beautiful.widget_notification_position,
     })
-    awful.spawn.with_line_callback(
+    helpers.async_spawn(
       mem.command,
-      mem.notification_callback_line,
-      nil,
       mem.notification_callback_done
     )
     mem.update()
   end
 
-  local mem_result_lines = ''
-
-  function mem.notification_callback_line(output)
-    mem_result_lines = mem_result_lines..output
-  end
-
-  function mem.notification_callback_done()
-    local output = mem_result_lines
-    mem_result_lines = ''
+  function mem.notification_callback_done(output)
     local notification_id = mem.get_notification_id()
     if not notification_id then return end
     local result = {}
@@ -140,7 +130,7 @@ local function worker(args)
       ))
   end
 
-  newinterval(update_interval, mem.update)
+  helpers.newinterval(update_interval, mem.update)
   return setmetatable(mem, { __index = mem.widget })
 end
 return setmetatable(mem, { __call = function(_, ...) return worker(...) end })

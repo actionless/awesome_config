@@ -116,7 +116,7 @@ function spotify.resize_cover(
     ),
     nil,
     nil,
-    function() notification_callback() end
+    notification_callback
   )
 end
 
