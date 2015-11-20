@@ -153,25 +153,25 @@ end
 -- @tparam table all_items All items list.
 -- @tparam str query Search query.
 -- @return table List of items for current page.
-function menubar:get_current_page(all_items, query)
+function menubar:get_current_page(all_items, query, scr)
     if not self.instance.prompt.width then
-        self.instance.prompt.width = compute_text_width(self.instance.prompt.prompt)
+        self.instance.prompt.width = compute_text_width(self.instance.prompt.prompt, scr)
     end
     if not self.left_label_width then
-        self.left_label_width = compute_text_width(self.left_label)
+        self.left_label_width = compute_text_width(self.left_label, scr)
     end
     if not self.right_label_width then
-        self.right_label_width = compute_text_width(self.right_label)
+        self.right_label_width = compute_text_width(self.right_label, scr)
     end
     local available_space = self.instance.geometry.width - self.right_margin -
         self.right_label_width - self.left_label_width -
-        compute_text_width(query) - self.instance.prompt.width
+        compute_text_width(query, scr) - self.instance.prompt.width
 
     local width_sum = 0
     local current_page = {}
     for i, item in ipairs(all_items) do
         item.width = item.width or
-            compute_text_width(" " .. item.name) +
+            compute_text_width(" " .. item.name, scr) +
             (item.icon and self.instance.geometry.height or 0)
         if width_sum + item.width > available_space then
             if current_item < i then
@@ -190,7 +190,7 @@ end
 
 --- Update the menubar according to the command entered by user.
 -- @tparam str query Search query.
-function menubar:menulist_update(query)
+function menubar:menulist_update(query, scr)
     query = query or ""
     shownitems = {}
     local pattern = awful.util.query_to_pattern(query)
@@ -251,7 +251,7 @@ function menubar:menulist_update(query)
 
     common.list_update(common_args.w, nil, label,
                        common_args.data,
-                       self:get_current_page(shownitems, query))
+                       self:get_current_page(shownitems, query, scr))
 end
 
 --- Create the menubar wibox and widgets.
@@ -351,7 +351,7 @@ function menubar:show(scr)
 
     current_item = 1
     current_category = nil
-    self:menulist_update()
+    self:menulist_update(nil, scr)
 
     local prompt_args = self.prompt_args or {}
     prompt_args.prompt = "Run: "
@@ -361,7 +361,7 @@ function menubar:show(scr)
                 menubar.menu_cache_path,
                 nil,
                 function() return self:hide() end,
-                function(...) return self:menulist_update(...) end,
+                function(query) return self:menulist_update(query, scr) end,
                 prompt_keypressed_callback
                 )
     self.instance.wibox.visible = true

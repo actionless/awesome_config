@@ -15,6 +15,29 @@ local ipairs = ipairs
 local string = string
 local table = table
 
+
+-----
+-- move this one to awful.util.table ?
+----------
+local function ReverseTable(t)
+    local reversedTable = {}
+    local itemCount = #t
+    for k, v in ipairs(t) do
+        reversedTable[itemCount + 1 - k] = v
+    end
+    return reversedTable
+end
+local function DedupTable(t)
+    local dedupedTable = {}
+    for _, v in ipairs(t) do
+        if awful.util.table.hasitem(dedupedTable, v) == nil then
+            table.insert(dedupedTable, v)
+        end
+    end
+    return dedupedTable
+end
+
+
 local menu_gen = {}
 
 --- Specify the mapping of .desktop Categories section to the
@@ -90,17 +113,6 @@ function menu_gen.history_save(id)
        f:close()
     end
 end
------
--- move this one to awful.util.table ?
-----------
-local function ReverseTable(t)
-    local reversedTable = {}
-    local itemCount = #t
-    for k, v in ipairs(t) do
-        reversedTable[itemCount + 1 - k] = v
-    end
-    return reversedTable
-end
 ------------------------------------------------------------------------------
 
 --- Generate an array of all visible menu entries.
@@ -113,9 +125,7 @@ function menu_gen.generate()
 
     local result = {}
 
-    -- @TODO: count number of occurences, sort by most used
-
-    for _, command in ipairs(ReverseTable(history_table)) do
+    for _, command in ipairs(DedupTable(ReverseTable(history_table))) do
                 table.insert(result, { name = command,
                                        cmdline = command,
                                        icon = nil,

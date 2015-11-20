@@ -223,9 +223,10 @@ end
 --- Compute text width.
 -- @tparam str text Text.
 -- @treturn int Text width.
-function utils.compute_text_width(text)
-    local _, logical = wibox.widget.textbox(awful_util.escape(text))._layout:get_pixel_extents()
-    return logical.width
+function utils.compute_text_width(text, s)
+    s = s or mouse.screen
+    local w, h = wibox.widget.textbox(awful_util.escape(tostring(text))):get_preferred_size(s)
+    return w
 end
 
 return utils
