@@ -194,10 +194,15 @@ function common.flex.vertical(widgets)
 end
 
 common.align = {}
-function common.align.init(layout, first, second, third)
+function common.align.init(layout, first, second, third, args)
   layout:set_first(first)
   layout:set_second(second)
   layout:set_third(third)
+  if args then
+    if args.expand then
+      layout:set_expand(args.expand)
+    end
+  end
   return layout
 end
 function common.align.horizontal(...)
