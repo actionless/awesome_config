@@ -41,11 +41,10 @@ end
 function clementine.update(parse_status_callback)
   local callback = function(str) clementine.post_update(str, parse_status_callback) end
   awful.spawn.with_line_callback(
-    dbus_cmd .. " /org/mpris/MediaPlayer2 PlaybackStatus",
-    callback,
-    callback,
-    callback
-  )
+    dbus_cmd .. " /org/mpris/MediaPlayer2 PlaybackStatus",{
+    stdout=callback,
+    exit=callback
+  })
 end
 -------------------------------------------------------------------------------
 function clementine.post_update(result_string, parse_status_callback)
@@ -59,11 +58,10 @@ function clementine.post_update(result_string, parse_status_callback)
   clementine.player_status.state = state
   if state == 'play' or state == 'pause' then
     awful.spawn.with_line_callback(
-      dbus_cmd .. "/Player GetMetadata",
-      function(str) clementine.parse_metadata_line(str) end,
-      nil,
-      function() clementine.parse_metadata_done(parse_status_callback) end
-    )
+      dbus_cmd .. "/Player GetMetadata", {
+      stdout=function(str) clementine.parse_metadata_line(str) end,
+      exit=function() clementine.parse_metadata_done(parse_status_callback) end
+    })
   else
     parse_status_callback(clementine.player_status)
   end

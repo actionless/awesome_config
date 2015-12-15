@@ -6,7 +6,7 @@
 local beautiful		= require("beautiful")
 local awful             = require("awful")
 
-local newinterval	= require("actionless.helpers").newinterval
+local helpers           = require("actionless.helpers")
 local common_widget	= require("actionless.widgets.common").widget
 local parse		= require("utils.parse")
 
@@ -32,7 +32,6 @@ local function worker(args)
   netctl.eth_if = args.eth_if or 'eth0'
 
   function netctl.update()
-    netctl.read_cache = ''
     if netctl.preset == 'bond' then
       netctl.update_bond()
     elseif netctl.preset == 'netctl-auto' then
@@ -54,17 +53,11 @@ local function worker(args)
     end
   end
 
-  function readstdout(str)
-    netctl.read_cache = netctl.read_cache .. str .. '\n'
-  end
-
   function netctl.common_update(cmd, match, fallback)
-    awful.spawn.with_line_callback(
+    helpers.async_spawn(
       cmd,
-      readstdout,
-      readstdout,
-      function()
-        netctl.update_widget(netctl.read_cache:match(match) or fallback)
+      function(stdout)
+        netctl.update_widget(stdout:match(match) or fallback)
       end)
   end
 
@@ -85,35 +78,29 @@ local function worker(args)
   end
 
   function netctl.wpa_update()
-    awful.spawn.with_line_callback(
+    helpers.async_spawn(
       "sudo wpa_cli status",
-      readstdout,
-      readstdout,
-      function()
+      function(stdout)
         netctl.update_widget(
-          netctl.read_cache:match(".*ssid=(.*)\n.*"
+          stdout:match(".*ssid=(.*)\n.*"
           ) or 'wpa...')
       end)
   end
 
   function netctl.netctl_auto_update()
-    awful.spawn.with_line_callback(
+    helpers.async_spawn(
       'sudo netctl-auto current',
-      readstdout,
-      readstdout,
-      function()
-        netctl.update_widget(netctl.read_cache:match("^(.*)\n.*") or 'nctl-a...')
+      function(stdout)
+        netctl.update_widget(stdout:match("^(.*)\n.*") or 'nctl-a...')
       end)
   end
 
   function netctl.netctl_update()
-    awful.spawn.with_line_callback(
+    helpers.async_spawn(
       "systemctl list-unit-files 'netctl@*'",
-      readstdout,
-      readstdout,
-      function()
+      function(stdout)
         netctl.update_widget(
-          netctl.read_cache:match("netctl@(.*)%.service.*enabled"
+          stdout:match("netctl@(.*)%.service.*enabled"
           ) or 'nctl...')
       end)
   end
@@ -129,7 +116,7 @@ local function worker(args)
     end
   end
 
-  newinterval(update_interval, netctl.update)
+  helpers.newinterval(update_interval, netctl.update)
 
   return setmetatable(
     netctl,

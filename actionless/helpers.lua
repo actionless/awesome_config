@@ -62,11 +62,11 @@ function helpers.async_spawn(cmd, callback)
     return callback(stdout, stderr)
   end
   return awful.spawn.with_line_callback(
-    cmd,
-    parse_stdout,
-    parse_stderr,
-    done_callback
-  )
+    cmd, {
+    stdout=parse_stdout,
+    stderr=parse_stderr,
+    exit=done_callback
+  })
 end
 
 

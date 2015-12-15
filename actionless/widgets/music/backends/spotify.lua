@@ -75,11 +75,11 @@ function spotify.post_update(result_string, parse_status_callback)
   spotify.player_status.state = state
   if state == 'play' or state == 'pause' then
     awful.spawn.with_line_callback(
-      dbus_cmd .. "Metadata",
-      function(str) spotify.parse_metadata_line(str) end,
-      function(str) spotify.post_update("Unknown", parse_status_callback) end,
-      function() spotify.parse_metadata_done(parse_status_callback) end
-    )
+      dbus_cmd .. "Metadata", {
+      stdout=function(str) spotify.parse_metadata_line(str) end,
+      stderr=function(str) spotify.post_update("Unknown", parse_status_callback) end,
+      output_done=function() spotify.parse_metadata_done(parse_status_callback) end,
+    })
   else
     parse_status_callback(spotify.player_status)
   end
@@ -113,11 +113,9 @@ function spotify.resize_cover(
       "wget %s -O %s",
       player_status.cover_url,
       output_coverart_path
-    ),
-    nil,
-    nil,
-    notification_callback
-  )
+    ),{
+    exit=notification_callback
+  })
 end
 
 return spotify
