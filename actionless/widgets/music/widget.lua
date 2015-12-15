@@ -181,14 +181,14 @@ local function worker(args)
       artist = player_status.artist or "playing"
       title = player_status.title or " "
       --player.widget:set_icon('music_play')
-      if #artist + #title > 14*10 then
-        if #artist > 14*5 then
-          artist = h_string.max_length(artist, 14*5) .. "…"
-        end
-        if #player_status.title > 14*5 then
-          title = h_string.max_length(title, 14*5) .. "…"
-        end
-      end
+      --if #artist + #title > 14*10 then
+        --if #artist > 14*5 then
+          --artist = h_string.max_length(artist, 14*5) .. "…"
+        --end
+        --if #player_status.title > 14*5 then
+          --title = h_string.max_length(title, 14*5) .. "…"
+        --end
+      --end
       artist = h_string.escape(artist)
       title = h_string.escape(title)
       -- playing new song
@@ -239,11 +239,9 @@ function player.resize_cover()
       resize,
       resize,
       player.cover
-    ),
-    nil,
-    nil,
-    player.show_notification
-  )
+    ), {
+    output_done=player.show_notification
+  })
 end
 -------------------------------------------------------------------------------
   player.use_next_backend()

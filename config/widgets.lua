@@ -38,17 +38,16 @@ function widget_loader.init(awesome_context)
     preset = conf.net_preset,
     wlan_if = conf.wlan_if,
     eth_if = conf.eth_if,
-    bg = beautiful.widget_netctl_bg,
-    fg = beautiful.widget_netctl_fg,
+    fg = beautiful.widget_netctl_bg,
+    bg = beautiful.widget_netctl_fg,
   })
   -- MUSIC
   w.music = widgets.music.widget({
       update_interval = 5,
       backends = conf.music_players,
       music_dir = conf.music_dir,
-      bg = beautiful.widget_music_bg,
-      fg = beautiful.color.color0,
-      --fg = beautiful.widget_music_fg,
+      fg = beautiful.widget_music_bg,
+      bg = beautiful.panel_bg,
       force_no_bgimage=true,
       horizontal=true,
       left_separators = awesome_context.lcarslist_enabled and {} or { 'arrl' },
@@ -62,9 +61,11 @@ function widget_loader.init(awesome_context)
       widgets={
         --h_sep,
         --sep_media,
-        wibox.widget.textbox(' '),
-        w.netctl,
-        wibox.widget.textbox(' '),
+
+        --wibox.widget.textbox(' '),
+        --w.netctl,
+        --wibox.widget.textbox(' '),
+
         --sep_media,
         --h_sep,
       }, enable_sneaky_tray = true,
@@ -130,7 +131,7 @@ function widget_loader.init(awesome_context)
         screen = s,
         bg = beautiful.widget_close_bg,
         fg = beautiful.widget_close_fg,
-        left_separators = awesome_context.lcarslist_enabled and theme.widget_close_left_decorators or { 'arrl', 'sq' },
+        left_separators = awesome_context.lcarslist_enabled and theme.widget_close_left_decorators or { ' ', 'arrl', 'sq' },
         right_separators = beautiful.widget_close_right_decorators,
         awesome_context = awesome_context,
       }
@@ -142,13 +143,13 @@ function widget_loader.init(awesome_context)
       awful.button({		}, 1, awful.tag.viewonly),
       awful.button({ modkey	}, 1, awful.client.movetotag),
       awful.button({		}, 3, awful.tag.viewtoggle),
-      awful.button({ modkey	}, 3, awful.client.toggletag),
-      awful.button({ }, 4, function()
-        helpers.tag_view_noempty(-1)
-      end),
-      awful.button({ }, 5, function()
-        helpers.tag_view_noempty(1)
-      end)
+      awful.button({ modkey	}, 3, awful.client.toggletag)--,
+      --awful.button({ }, 4, function()
+        --helpers.tag_view_noempty(-1)
+      --end),
+      --awful.button({ }, 5, function()
+        --helpers.tag_view_noempty(1)
+      --end)
     )
     sw.taglist = awful.widget.taglist(
         s,
@@ -213,7 +214,7 @@ function widget_loader.init(awesome_context)
             coords = { x=0, y=18 }
           })
         end
-      end),
+      end)--,
       --awful.button({ }, 4, function ()
         --awful.client.focus.byidx(-1)
         --if capi.client.focus then capi.client.focus:raise() end
@@ -222,12 +223,13 @@ function widget_loader.init(awesome_context)
         --awful.client.focus.byidx(1)
         --if capi.client.focus then capi.client.focus:raise() end
       --end)
-      awful.button({		}, 5, function(t)
-        helpers.tag_view_noempty(1, awful.tag.getscreen(t))
-      end),
-      awful.button({		}, 4, function(t)
-        helpers.tag_view_noempty(-1, awful.tag.getscreen(t))
-      end)
+      --
+      --awful.button({		}, 5, function(t)
+        --helpers.tag_view_noempty(1, awful.tag.getscreen(t))
+      --end),
+      --awful.button({		}, 4, function(t)
+        --helpers.tag_view_noempty(-1, awful.tag.getscreen(t))
+      --end)
     )
 
     sw.tasklist = awful.widget.tasklist(
@@ -235,7 +237,8 @@ function widget_loader.init(awesome_context)
       awful.widget.tasklist.filter.minimizedcurrenttags,
       tasklist_buttons,
       nil,
-      tasklist_addon.sorted_update
+      tasklist_addon.sorted_update,
+      wibox.layout.flex.horizontal()
     )
 
     if awesome_context.lcarslist_enabled then
