@@ -61,11 +61,26 @@ function helpers.async_spawn(cmd, callback)
   local function done_callback()
     return callback(stdout, stderr)
   end
+  local exit_callback_fired = false
+  local output_done_callback_fired = false
+  local function exit_callback()
+    exit_callback_fired = true
+    if output_done_callback_fired then
+      return done_callback()
+    end
+  end
+  local function output_done_callback()
+    output_done_callback_fired = true
+    if exit_callback_fired then
+      return done_callback()
+    end
+  end
   return awful.spawn.with_line_callback(
     cmd, {
     stdout=parse_stdout,
     stderr=parse_stderr,
-    exit=done_callback
+    exit=exit_callback,
+    output_done=output_done_callback
   })
 end
 
