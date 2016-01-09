@@ -14,6 +14,14 @@ local signals = {}
 
 function signals.init(awesome_context)
 
+  awful.tag.getgap = function(t)
+    local t = t or awful.tag.selected()
+    if numclients == 1 and awful.tag.getmfpol(t) ~= "mwfact" then
+        return 0
+    end
+    return awful.tag.getproperty(t, "useless_gap") or beautiful.useless_gap or 0
+  end
+
 local function restore_gap(t)
   if awful.tag.getproperty(t, "expand_useless_gap") then
     helpers.tag_toggle_gap(t)
@@ -164,6 +172,8 @@ client.connect_signal("property::maximized", function (c)
     return on_client_focus(c)
   end)
 end)
+
+
 
 client.connect_signal("property::minimized", function (c)
   if c.minimized then
