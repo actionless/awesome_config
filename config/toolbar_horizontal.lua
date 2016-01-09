@@ -86,7 +86,7 @@ function toolbar.init(awesome_context)
     --right_layout_left:add(separator)
 
     local right_layout_right = wibox.layout.fixed.horizontal()
-    --right_layout_right:add(make_separator('arrl', {fg=beautiful.panel_widget_bg}))
+    right_layout_right:add(make_separator('arrl', {fg=beautiful.panel_media}))
     --right_layout_right:add(separator)
     right_layout_right:add(
       common.constraint({
@@ -97,7 +97,8 @@ function toolbar.init(awesome_context)
     )
     right_layout_right:add(separator)
 
-    right_layout_right:add(iseparator)
+    right_layout_right:add(make_separator('arrl', {fg=beautiful.panel_widget_bg}))
+    --right_layout_right:add(iseparator)
     right_layout_right:add(iseparator)
     right_layout_right:add(loaded_widgets.mem)
     right_layout_right:add(iseparator)

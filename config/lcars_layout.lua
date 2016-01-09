@@ -3,8 +3,6 @@ local wibox = require("wibox")
 local client = client
 local beautiful = require("beautiful")
 
-local titlebar	= require("actionless.titlebar")
-
 local delayed_call = require("gears.timer").delayed_call
 
 

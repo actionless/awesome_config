@@ -47,14 +47,22 @@ theme.wallpaper_cmd     = "nitrogen --restore"
 theme.show_widget_icon = false
 --theme.widget_decoration_arrl = ''
 --theme.widget_decoration_arrr = ''
-theme.widget_decoration_arrl = ''
-theme.widget_decoration_arrr = ''
+
+-- deprecated :
+--theme.widget_decoration_arrl = ''
+--theme.widget_decoration_arrr = ''
+
+theme.widget_decoration_arrl = '퟾'
+theme.widget_decoration_arrr = '퟿'
+theme.widget_decoration_arrl = '퟼'
+theme.widget_decoration_arrr = '퟽'
 
 -- FONTS:
 --theme.font = "Monospace Bold "..tostring(dpi(10))
 --theme.small_font = "Monospace "..tostring(dpi(7))
 --theme.sans_font = "Sans Bold "..tostring(dpi(10))
 theme.font = "Monospace Bold 10"
+theme.tasklist_font = theme.font
 theme.small_font = "Monospace 7"
 theme.sans_font = "Sans Bold 10"
 -- Don't use sans font:
@@ -70,9 +78,8 @@ theme.sans_font = "Sans Bold 10"
 theme.basic_panel_height = dpi(18)
 theme.panel_padding_bottom = dpi(3)
 theme.border_width = dpi(3)
-theme.useless_gap = dpi(10)
+--theme.useless_gap = dpi(10)
 theme.useless_gap = dpi(6)
---theme.useless_gap = dpi(4)
 theme.panel_height = theme.basic_panel_height + theme.panel_padding_bottom
 theme.titlebar_height = theme.basic_panel_height + theme.border_width
 
@@ -89,6 +96,11 @@ theme.menu_border_color = theme.xrdb.color1
 --theme.taglist_squares_sel       = "theme.null"
 --theme.taglist_squares_unsel     = "theme.null"
 --theme.taglist_fg_focus		= "theme.theme"
+theme.taglist_fg_focus		= "theme.bg"
+--theme.taglist_bg_focus		= "theme.xrdb.color6"
+theme.taglist_bg_focus		= "theme.xrdb.color15"
+--theme.taglist_bg_focus		= "theme.xrdb.color8"
+--theme.taglist_fg_focus		= "theme.xrdb.foreground"
 
 theme.titlebar_fg_focus		= "theme.titlebar_border"
 theme.titlebar_bg_focus		= "theme.titlebar_focus_border"

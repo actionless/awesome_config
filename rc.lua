@@ -4,11 +4,12 @@ OH HI
 
 -- localization
 os.setlocale(os.getenv("LANG"))
-local editor = "vim" or os.getenv("EDITOR") or "nano" or "vi"
+local editor = "vim"
 
 local xresources = require("beautiful.xresources")
 local awful = require("awful")
 require("awful.autofocus")
+awful.titlebar.enable_tooltip = false
 
 local debug = require("utils.debug")
 
@@ -53,7 +54,7 @@ context = {
     terminal = terminal,
     editor_cmd = terminal .. " -e " .. editor,
     compositor = "killall compton; compton",
-    file_manager = "pcmanfm",
+    file_manager = "nautilus",
     tmux = terminal .. " -e tmux",
     tmux_run   = terminal .. " -e tmux new-session",
     scrot_preview_cmd = [['mv $f ~/images/ && viewnior ~/images/$f']],

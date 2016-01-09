@@ -132,7 +132,7 @@ function widget_loader.init(awesome_context)
         bg = beautiful.widget_close_bg,
         fg = beautiful.widget_close_fg,
         left_separators = awesome_context.lcarslist_enabled and theme.widget_close_left_decorators or { ' ', 'arrl', 'sq' },
-        right_separators = beautiful.widget_close_right_decorators,
+        right_separators = awesome_context.lcarslist_enabled and theme.widget_close_right_decorators or { 'sq', 'arrr' },
         awesome_context = awesome_context,
       }
     )
