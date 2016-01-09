@@ -71,11 +71,7 @@ function menu_gen.history_check_load(id, max)
     id = id or history_file_path
     if id and id ~= ""
         and not data.history[id] then
-	data.history[id] = { max = 50, table = {} }
-
-	if max then
-            data.history[id].max = max
-	end
+	data.history[id] = { max = max or 50, table = {} }
 
 	local f = io.open(id, "r")
 
@@ -84,9 +80,9 @@ function menu_gen.history_check_load(id, max)
             for line in f:lines() do
                 --if awful.util.table.hasitem(data.history[id].table, line) == nil then
                         table.insert(data.history[id].table, line)
-                        if #data.history[id].table >= data.history[id].max then
-                           break
-                        end
+                        --if #data.history[id].table >= data.history[id].max then
+                           --break
+                        --end
                 --end
             end
             f:close()
@@ -104,13 +100,16 @@ function menu_gen.history_save(id)
             for d in id:gmatch(".-/") do
                 i = i + #d
             end
-            util.mkdir(id:sub(1, i - 1))
+            awful.util.mkdir(id:sub(1, i - 1))
             f = assert(io.open(id, "w"))
         end
-	for i = 1, math.min(#data.history[id].table, data.history[id].max) do
+	--for i = 1, math.min(#data.history[id].table, data.history[id].max) do
+	for i = 1, #data.history[id].table do
             f:write(data.history[id].table[i] .. "\n")
         end
        f:close()
+       --nlog(#data.history[id].table)
+       --nlog("F:WRITE")
     end
 end
 ------------------------------------------------------------------------------
@@ -119,7 +118,7 @@ end
 -- @return all menu entries.
 function menu_gen.generate()
 
-    menu_gen.history_save(history_file_path)
+    --menu_gen.history_save(history_file_path)
     menu_gen.history_check_load(history_file_path, 666)
     local history_table = data.history[history_file_path]['table']
 
