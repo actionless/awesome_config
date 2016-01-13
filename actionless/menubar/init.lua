@@ -58,6 +58,8 @@ menubar_module.geometry = { width = nil,
                      x = nil,
                      y = nil }
 
+menubar_module.position = "bottom"
+
 --- Width of blank space left in the right side.
 menubar_module.right_margin = 50
 
@@ -84,6 +86,7 @@ function menubar_module.create(...)
     menubar.cache_entries = args.cache_entries or menubar_module.cache_entries
     menubar.show_categories = args.show_categories or menubar_module.show_categories
     menubar.geometry = args.geometry or menubar_module.geometry
+    menubar.position = args.position or menubar_module.position
     menubar.right_margin = args.right_margin or menubar_module.right_margin
     menubar.right_label = args.right_label or menubar_module.right_label
     menubar.left_label = args.left_label or menubar_module.left_label
@@ -331,8 +334,10 @@ end
 --- Show the menubar on the given screen.
 -- @param scr Screen number.
 function menubar:show(scr)
+    scr = scr or awful.screen.focused() or 1
+
     if not self.instance.wibox then
-        self:initialize()
+        self:initialize(scr)
     elseif self.instance.wibox.visible then -- Menu already shown, exit
         return
     elseif not self.cache_entries then
@@ -340,14 +345,14 @@ function menubar:show(scr)
     end
 
     -- Set position and size
-    scr = scr or awful.screen.focused() or 1
     local scrgeom = capi.screen[scr].workarea
     local geometry = self.geometry
-    self.instance.geometry = {x = geometry.x or scrgeom.x,
-                             y = geometry.y or scrgeom.y,
-                             height = geometry.height or theme.get_font_height() * 1.5,
-                             width = geometry.width or scrgeom.width}
+    self.instance.geometry = {x = scrgeom.x,
+                             y = scrgeom.y,
+                             height = math.floor(theme.get_font_height() * 1.5),
+                             width = scrgeom.width}
     self.instance.wibox:geometry(self.instance.geometry)
+    awful.wibox.set_position(self.instance.wibox, self.position, scr)
 
     current_item = 1
     current_category = nil
