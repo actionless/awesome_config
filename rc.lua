@@ -65,7 +65,7 @@ context = {
   menu = {},
 
   have_battery = true,
-  new_top = false,
+  new_top = true,
   sensor = "Core 0",
   lcarslist_enabled = false
 
