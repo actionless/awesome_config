@@ -179,28 +179,28 @@ local globalkeys = awful.util.table.join(
   -- By direction client focus
   hk.on({ modkey,        }, "Down",
     function()
-      awful.client.focus.bydirection("down")
+      awful.client.focus.global_bydirection("down")
       if client.focus then client.focus:raise() end
     end,
     "client focus", CLIENT_COLOR
   ),
   hk.on({ modkey        }, "Up",
     function()
-      awful.client.focus.bydirection("up")
+      awful.client.focus.global_bydirection("up")
       if client.focus then client.focus:raise() end
     end,
     "client focus", CLIENT_COLOR
   ),
   hk.on({ modkey        }, "Left",
     function()
-      awful.client.focus.bydirection("left")
+      awful.client.focus.global_bydirection("left")
       if client.focus then client.focus:raise() end
     end,
     "client focus", CLIENT_COLOR
   ),
   hk.on({ modkey        }, "Right",
     function()
-      awful.client.focus.bydirection("right")
+      awful.client.focus.global_bydirection("right")
       if client.focus then client.focus:raise() end
     end,
     "client focus", CLIENT_COLOR
@@ -210,28 +210,28 @@ local globalkeys = awful.util.table.join(
   -- By direction client focus (VIM style)
   hk.on({ modkey }, "j",
     function()
-      awful.client.focus.bydirection("down")
+      awful.client.focus.global_bydirection("down")
       if client.focus then client.focus:raise() end
     end,
     "client focus", CLIENT_COLOR
   ),
   hk.on({ modkey }, "k",
     function()
-      awful.client.focus.bydirection("up")
+      awful.client.focus.global_bydirection("up")
       if client.focus then client.focus:raise() end
     end,
     "client focus", CLIENT_COLOR
   ),
   hk.on({ modkey }, "h",
     function()
-      awful.client.focus.bydirection("left")
+      awful.client.focus.global_bydirection("left")
       if client.focus then client.focus:raise() end
     end,
     "client focus", CLIENT_COLOR
   ),
   hk.on({ modkey }, "l",
     function()
-      awful.client.focus.bydirection("right")
+      awful.client.focus.global_bydirection("right")
       if client.focus then client.focus:raise() end
     end,
     "client focus", CLIENT_COLOR
@@ -522,7 +522,7 @@ awesome_context.clientkeys = awful.util.table.join(
         g.y = g.y + RESIZE_STEP
         c:geometry(g)
       else
-        awful.client.swap.bydirection("down")
+        awful.client.swap.global_bydirection("down")
         if client.swap then client.swap:raise() end
       end
     end,
@@ -535,7 +535,7 @@ awesome_context.clientkeys = awful.util.table.join(
         g.y = g.y - RESIZE_STEP
         c:geometry(g)
       else
-        awful.client.swap.bydirection("up")
+        awful.client.swap.global_bydirection("up")
         if client.swap then client.swap:raise() end
       end
     end,
@@ -548,7 +548,7 @@ awesome_context.clientkeys = awful.util.table.join(
         g.x = g.x - RESIZE_STEP
         c:geometry(g)
       else
-        awful.client.swap.bydirection("left")
+        awful.client.swap.global_bydirection("left")
         if client.swap then client.swap:raise() end
       end
     end,
@@ -561,7 +561,7 @@ awesome_context.clientkeys = awful.util.table.join(
         g.x = g.x + RESIZE_STEP
         c:geometry(g)
       else
-        awful.client.swap.bydirection("right")
+        awful.client.swap.global_bydirection("right")
         if client.swap then client.swap:raise() end
       end
     end,
@@ -576,7 +576,7 @@ awesome_context.clientkeys = awful.util.table.join(
         g.y = g.y + RESIZE_STEP
         c:geometry(g)
       else
-        awful.client.swap.bydirection("down")
+        awful.client.swap.global_bydirection("down")
         if client.swap then client.swap:raise() end
       end
     end,
@@ -589,7 +589,7 @@ awesome_context.clientkeys = awful.util.table.join(
         g.y = g.y - RESIZE_STEP
         c:geometry(g)
       else
-        awful.client.swap.bydirection("up")
+        awful.client.swap.global_bydirection("up")
         if client.swap then client.swap:raise() end
       end
     end,
@@ -602,7 +602,7 @@ awesome_context.clientkeys = awful.util.table.join(
         g.x = g.x - RESIZE_STEP
         c:geometry(g)
       else
-        awful.client.swap.bydirection("left")
+        awful.client.swap.global_bydirection("left")
         if client.swap then client.swap:raise() end
       end
     end,
@@ -615,7 +615,7 @@ awesome_context.clientkeys = awful.util.table.join(
         g.x = g.x + RESIZE_STEP
         c:geometry(g)
       else
-        awful.client.swap.bydirection("right")
+        awful.client.swap.global_bydirection("right")
         if client.swap then client.swap:raise() end
       end
     end,
