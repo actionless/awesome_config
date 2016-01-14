@@ -14,7 +14,6 @@ local helpers = require("actionless.helpers")
 local titlebar = require("actionless.titlebar")
 local menu_addon = require("actionless.menu_addon")
 local floats = require("actionless.helpers").client_floats
-local hk = require("actionless.hotkeys")
 
 local hkng = require("awful.hotkeys_popup")
 
@@ -55,17 +54,7 @@ local UTILS = "menu"
 local IMPORTANT_COLOR = "important"
 local CLIENT_MANIPULATION = "client"
 local LAYOUT_MANIPULATION = "layout"
-
-hk.add_groups({
-  [TAG_COLOR]={name="tags",color=beautiful.xrdb.color6},
-  [CLIENT_COLOR]={name="client focus",color=beautiful.xrdb.color3},
-  [UTILS]={name="utils",color=beautiful.xrdb.color5},
-  [IMPORTANT_COLOR]={name="important",color=beautiful.xrdb.color9},
-  [CLIENT_MANIPULATION]={name="client",color=beautiful.xrdb.color10},
-  [LAYOUT_MANIPULATION]={name="layout",color=beautiful.xrdb.color12},
-  [TO_DEFINE_COLOR]={name="none",color=beautiful.xrdb.color7},
-})
-
+local LCARS = "LCARS"
 
 -- {{{ Mouse bindings
 capi.root.buttons(awful.util.table.join(
@@ -85,8 +74,7 @@ awful.menu.menu_keys.up = { "Up", "k" }
 awful.menu.menu_keys.enter = { "Right", "l" }
 awful.menu.menu_keys.close = { "Escape", '#133', 'q' }
 
-
-hk.on = function(mod, key, press, description, group)
+local bind_key = function(mod, key, press, description, group)
   return awful.key.new(mod, key, press, nil, {description=description, group=group})
 end
 
@@ -95,17 +83,17 @@ local globalkeys = awful.util.table.join(
 
   ----local HELPKEY = "Print"
   --local HELPKEY = "#108" -- Alt Gr
-  --hk.on({  }, HELPKEY, "show_help"),
-  --hk.on({ "Shift" }, HELPKEY, "show_help"),
-  --hk.on({ "Control" }, HELPKEY, "show_help"),
-  --hk.on({ altkey }, HELPKEY, "show_help"),
-  --hk.on({ modkey, }, HELPKEY, "show_help"),
-  --hk.on({ modkey, altkey }, HELPKEY, "show_help"),
-  --hk.on({ modkey, altkey, "Shift" }, HELPKEY, "show_help"),
-  --hk.on({ modkey, altkey, "Control" }, HELPKEY, "show_help"),
-  --hk.on({ modkey, "Shift"    }, HELPKEY, "show_help"),
-  --hk.on({ modkey, "Control"  }, HELPKEY, "show_help"),
-  --hk.on({ modkey, "Shift", "Control" }, HELPKEY, "show_help"),
+  --bind_key({  }, HELPKEY, "show_help"),
+  --bind_key({ "Shift" }, HELPKEY, "show_help"),
+  --bind_key({ "Control" }, HELPKEY, "show_help"),
+  --bind_key({ altkey }, HELPKEY, "show_help"),
+  --bind_key({ modkey, }, HELPKEY, "show_help"),
+  --bind_key({ modkey, altkey }, HELPKEY, "show_help"),
+  --bind_key({ modkey, altkey, "Shift" }, HELPKEY, "show_help"),
+  --bind_key({ modkey, altkey, "Control" }, HELPKEY, "show_help"),
+  --bind_key({ modkey, "Shift"    }, HELPKEY, "show_help"),
+  --bind_key({ modkey, "Control"  }, HELPKEY, "show_help"),
+  --bind_key({ modkey, "Shift", "Control" }, HELPKEY, "show_help"),
 
   awful.key({modkey}, "/", function()
     hkng.show_help()
@@ -113,40 +101,40 @@ local globalkeys = awful.util.table.join(
     description = "show help"
   }),
 
-  -- hk.on({ modkey,  }, "Control", "show_help"), -- show hotkey on hold
+  -- bind_key({ modkey,  }, "Control", "show_help"), -- show hotkey on hold
 
-  hk.on({ modkey,  altkey  }, "t",
+  bind_key({ modkey,  altkey  }, "t",
     function() awesome_context.widgets.systray_toggle.toggle() end,
     "toggle systray popup", UTILS
   ),
 
-  hk.on({ modkey,  "Control"  }, "s",
+  bind_key({ modkey,  "Control"  }, "s",
     function() helpers.run_once("xscreensaver-command -lock") end,
     "xscreensaver lock", UTILS
   ),
-  hk.on({ modkey,  "Control"  }, "d",
+  bind_key({ modkey,  "Control"  }, "d",
     function() helpers.run_once("sleep 1 && xset dpms force off") end,
     "turn off display", UTILS
   ),
 
 
-  hk.on({ modkey,        }, ",",
+  bind_key({ modkey,        }, ",",
     function()
       helpers.tag_view_noempty(-1)
     end,
     "prev tag", TAG_COLOR
   ),
-  hk.on({ modkey,        }, ".",
+  bind_key({ modkey,        }, ".",
     function()
       helpers.tag_view_noempty(1)
     end,
     "next tag", TAG_COLOR
   ),
-  hk.on({ modkey,        }, "Escape",
+  bind_key({ modkey,        }, "Escape",
     awful.tag.history.restore,
     "cycle tags", TAG_COLOR
   ),
-  hk.on({ modkey, altkey }, "r",
+  bind_key({ modkey, altkey }, "r",
     function ()
       local tag = awful.tag.selected(awful.screen.focused())
       if tag then
@@ -167,38 +155,38 @@ local globalkeys = awful.util.table.join(
   ),
 
   -- By direction screen focus
-  hk.on({ modkey,        }, "Next",
+  bind_key({ modkey,        }, "Next",
     function() awful.screen.focus_relative(1) end,
     "next screen", TAG_COLOR
   ),
-  hk.on({ modkey,        }, "Prior",
+  bind_key({ modkey,        }, "Prior",
     function() awful.screen.focus_relative(-1) end,
     "prev screen", TAG_COLOR
   ),
 
   -- By direction client focus
-  hk.on({ modkey,        }, "Down",
+  bind_key({ modkey,        }, "Down",
     function()
       awful.client.focus.global_bydirection("down")
       if client.focus then client.focus:raise() end
     end,
     "client focus", CLIENT_COLOR
   ),
-  hk.on({ modkey        }, "Up",
+  bind_key({ modkey        }, "Up",
     function()
       awful.client.focus.global_bydirection("up")
       if client.focus then client.focus:raise() end
     end,
     "client focus", CLIENT_COLOR
   ),
-  hk.on({ modkey        }, "Left",
+  bind_key({ modkey        }, "Left",
     function()
       awful.client.focus.global_bydirection("left")
       if client.focus then client.focus:raise() end
     end,
     "client focus", CLIENT_COLOR
   ),
-  hk.on({ modkey        }, "Right",
+  bind_key({ modkey        }, "Right",
     function()
       awful.client.focus.global_bydirection("right")
       if client.focus then client.focus:raise() end
@@ -208,28 +196,28 @@ local globalkeys = awful.util.table.join(
 
 
   -- By direction client focus (VIM style)
-  hk.on({ modkey }, "j",
+  bind_key({ modkey }, "j",
     function()
       awful.client.focus.global_bydirection("down")
       if client.focus then client.focus:raise() end
     end,
     "client focus", CLIENT_COLOR
   ),
-  hk.on({ modkey }, "k",
+  bind_key({ modkey }, "k",
     function()
       awful.client.focus.global_bydirection("up")
       if client.focus then client.focus:raise() end
     end,
     "client focus", CLIENT_COLOR
   ),
-  hk.on({ modkey }, "h",
+  bind_key({ modkey }, "h",
     function()
       awful.client.focus.global_bydirection("left")
       if client.focus then client.focus:raise() end
     end,
     "client focus", CLIENT_COLOR
   ),
-  hk.on({ modkey }, "l",
+  bind_key({ modkey }, "l",
     function()
       awful.client.focus.global_bydirection("right")
       if client.focus then client.focus:raise() end
@@ -239,11 +227,11 @@ local globalkeys = awful.util.table.join(
 
 
   -- Menus
-  hk.on({ modkey,       }, "w",
+  bind_key({ modkey,       }, "w",
     function () awesome_context.menu.mainmenu_show(true) end,
     "aWesome menu", UTILS
   ),
-  hk.on({ modkey,       }, "i",
+  bind_key({ modkey,       }, "i",
     function ()
       awesome_context.menu.instance = menu_addon.clients_on_tag({
         theme = {width=capi.screen[awful.screen.focused()].workarea.width},
@@ -252,7 +240,7 @@ local globalkeys = awful.util.table.join(
     end,
     "clients on current tag menu", UTILS
   ),
-  hk.on({ modkey,       }, "p",
+  bind_key({ modkey,       }, "p",
     function ()
       awesome_context.menu.instance = awful.menu.clients({
         theme = {width=capi.screen[awful.screen.focused()].workarea.width},
@@ -261,18 +249,18 @@ local globalkeys = awful.util.table.join(
     end,
     "all clients menu", UTILS
   ),
-  hk.on({ modkey, "Control"}, "p",
+  bind_key({ modkey, "Control"}, "p",
     --function() awesome_context.menu.menubar:show() end,
     function() menubar.show() end,
     "applications menu", UTILS
   ),
-  hk.on({ modkey,        }, "space",
+  bind_key({ modkey,        }, "space",
     --function() awful.spawn.with_shell(cmd.dmenu) end,
     function() awesome_context.menu.dmenubar:show() end,
     "app launcher", UTILS
   ),
 
-  hk.on({ modkey, "Control"  }, "n",
+  bind_key({ modkey, "Control"  }, "n",
     function()
       local c = awful.client.restore()
       -- @TODO: it's a workaround for some strange upstream issue
@@ -281,11 +269,11 @@ local globalkeys = awful.util.table.join(
     "de-iconify client", TAG_COLOR
   ),
 
-  hk.on({ modkey,        }, "u",
+  bind_key({ modkey,        }, "u",
     awful.client.urgent.jumpto,
     "jump to Urgent client", IMPORTANT_COLOR
   ),
-  hk.on({ modkey,        }, "Tab",
+  bind_key({ modkey,        }, "Tab",
     function ()
       awful.client.focus.history.previous()
       if client.focus then
@@ -295,7 +283,7 @@ local globalkeys = awful.util.table.join(
     "cycle clients", CLIENT_COLOR
   ),
 
-  hk.on({ modkey, altkey }, "space",
+  bind_key({ modkey, altkey }, "space",
     function ()
       local s = awful.screen.focused()
       awesome_context.widgets.screen[s].layoutbox.menu:toggle({coords={
@@ -305,57 +293,57 @@ local globalkeys = awful.util.table.join(
     end,
     "choose layout", LAYOUT_MANIPULATION
   ),
-  --hk.on({ modkey, "Control" }, "space",
+  --bind_key({ modkey, "Control" }, "space",
     --function () awful.layout.inc(-1) end,
     --"prev layout", LAYOUT_MANIPULATION
   --),
 
   -- Layout tuning
-  hk.on({ modkey, altkey }, "Down",
+  bind_key({ modkey, altkey }, "Down",
     function ()
       awful.tag.incnmaster(-1)
     end,
     "master-", LAYOUT_MANIPULATION
   ),
-  hk.on({ modkey, altkey }, "Up",
+  bind_key({ modkey, altkey }, "Up",
     function () awful.tag.incnmaster( 1) end,
     "master+", LAYOUT_MANIPULATION
   ),
-  hk.on({ modkey, altkey }, "Left",
+  bind_key({ modkey, altkey }, "Left",
     function () awful.tag.incncol(-1) end,
     "columns-", LAYOUT_MANIPULATION
   ),
-  hk.on({ modkey, altkey }, "Right",
+  bind_key({ modkey, altkey }, "Right",
     function () awful.tag.incncol( 1) end,
     "columns+", LAYOUT_MANIPULATION
   ),
 
   -- Layout tuning (VIM style)
-  hk.on({ modkey, altkey }, "j",
+  bind_key({ modkey, altkey }, "j",
     function () awful.tag.incnmaster(-1) end,
     "master-", LAYOUT_MANIPULATION
   ),
-  hk.on({ modkey, altkey }, "k",
+  bind_key({ modkey, altkey }, "k",
     function () awful.tag.incnmaster( 1) end,
     "master+", LAYOUT_MANIPULATION
   ),
-  hk.on({ modkey, altkey }, "h",
+  bind_key({ modkey, altkey }, "h",
     function () awful.tag.incncol(-1) end,
     "columns-", LAYOUT_MANIPULATION
   ),
-  hk.on({ modkey, altkey }, "l",
+  bind_key({ modkey, altkey }, "l",
     function () awful.tag.incncol( 1) end,
     "columns+", LAYOUT_MANIPULATION
   ),
 
-  hk.on({ modkey, altkey }, "e",
+  bind_key({ modkey, altkey }, "e",
     function ()
       awful.tag.togglemfpol()
       tag.emit_signal("property::layout", t)
     end,
     "toggle expand master", LAYOUT_MANIPULATION
   ),
-  hk.on({ modkey, altkey }, "g",
+  bind_key({ modkey, altkey }, "g",
     function ()
       helpers.tag_toggle_gap()
       tag.emit_signal("property::layout", t)
@@ -364,11 +352,11 @@ local globalkeys = awful.util.table.join(
   ),
 
   -- Prompt
-  hk.on({ modkey }, "r",
+  bind_key({ modkey }, "r",
     function () awesome_context.widgets.screen[awful.screen.focused()].promptbox:run() end,
     "Run command...", UTILS
   ),
-  hk.on({ modkey }, "x",
+  bind_key({ modkey }, "x",
     function ()
       awful.prompt.run({ prompt = "Run Lua code: " },
       awesome_context.widgets.screen[awful.screen.focused()].promptbox.widget,
@@ -391,13 +379,13 @@ local globalkeys = awful.util.table.join(
   awful.key({}, "#198", function () awesome_context.widgets.volume.toggle_mic() end),
 
   -- Music player control
-  hk.on({modkey, altkey}, ",",
+  bind_key({modkey, altkey}, ",",
     function () awesome_context.widgets.music.prev_song() end,
     "prev song", UTILS),
-  hk.on({modkey, altkey}, ".",
+  bind_key({modkey, altkey}, ".",
     function () awesome_context.widgets.music.next_song() end,
     "next song", UTILS),
-  hk.on({modkey, altkey}, "/",
+  bind_key({modkey, altkey}, "/",
     function () awesome_context.widgets.music.toggle() end,
     "Pause", UTILS),
 
@@ -411,59 +399,59 @@ local globalkeys = awful.util.table.join(
   awful.key({}, "#180", function () awesome_context.widgets.music.toggle() end),
   awful.key({}, "#163", function () awesome_context.widgets.music.next_song() end),
 
-  hk.on({ modkey }, "c",
+  bind_key({ modkey }, "c",
     function () os.execute("xsel -p -o | xsel -i -b") end,
     "copy to clipboard", UTILS
   ),
 
   -- Standard program
-  hk.on({ modkey,        }, "Return",
+  bind_key({ modkey,        }, "Return",
     function () awful.spawn.spawn(cmd.tmux) end,
     "terminal", IMPORTANT_COLOR
   ),
-  hk.on({ modkey, altkey }, "Return",
+  bind_key({ modkey, altkey }, "Return",
     function ()
       awful.spawn.spawn(cmd.tmux_light)
     end,
     "white terminal", UTILS
   ),
-  hk.on({ modkey,        }, "s",
+  bind_key({ modkey,        }, "s",
     function () awful.spawn.spawn(cmd.file_manager) end,
     "file manager", UTILS
   ),
 
-  hk.on({ modkey, "Control"  }, "r",
+  bind_key({ modkey, "Control"  }, "r",
     capi.awesome.restart,
     "Reload awesome wm", IMPORTANT_COLOR
   ),
-  hk.on({ modkey, "Control"    }, "q",
+  bind_key({ modkey, "Control"    }, "q",
     capi.awesome.quit,
     "Quit awesome wm", IMPORTANT_COLOR
   ),
 
   -- Scrot stuff
-  hk.on({ "Control"      }, "Print",
+  bind_key({ "Control"      }, "Print",
     function ()
       awful.spawn.with_shell(
       "scrot -ub '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. cmd.scrot_preview_cmd)
     end,
     "screenshot focused", TO_DEFINE_COLOR
   ),
-  hk.on({ altkey        }, "Print",
+  bind_key({ altkey        }, "Print",
     function ()
       awful.spawn.with_shell(
       "scrot -s '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. cmd.scrot_preview_cmd)
     end,
     "screenshot selected", TO_DEFINE_COLOR
   ),
-  hk.on({  }, "Print",
+  bind_key({  }, "Print",
     function ()
       awful.spawn.with_shell(
       "scrot '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. cmd.scrot_preview_cmd)
     end,
     "screenshot all", TO_DEFINE_COLOR
   ),
-  hk.on({ "Shift" }, "Print",
+  bind_key({ "Shift" }, "Print",
     function ()
       awful.spawn.with_shell(
       "scrot '%Y-%m-%d--%s_$wx$h_scrot.png'")
@@ -471,12 +459,12 @@ local globalkeys = awful.util.table.join(
     "screenshot all", TO_DEFINE_COLOR
   ),
 
-  hk.on({modkey}, "a",
+  bind_key({modkey}, "a",
     revelation,
     "Revelation", UTILS
   ),
 
-  hk.on({modkey, altkey}, "p",
+  bind_key({modkey, altkey}, "p",
     function()
       local t = awful.tag.selected(awful.screen.focused())
       if awful.tag.getproperty(t, 'layout').name == 'lcars' then
@@ -485,9 +473,9 @@ local globalkeys = awful.util.table.join(
       local visible = awful.tag.getproperty(t, 'left_panel_visible')
       awful.tag.setproperty(t, 'left_panel_visible', not visible)
     end,
-    "toggle sidebox", UTILS
+    "toggle sidebox", LCARS
   ),
-  hk.on({modkey, "Control", "Shift"}, "p",
+  bind_key({modkey, "Control", "Shift"}, "p",
     function()
       local t = awful.tag.selected(awful.screen.focused())
       local visible = awful.tag.getproperty(t, 'left_panel_visible')
@@ -497,9 +485,9 @@ local globalkeys = awful.util.table.join(
         end
       end
     end,
-    "toggle sidebox (all tags)", UTILS
+    "toggle sidebox (all tags)", LCARS
   ),
-  hk.on({modkey, altkey, "Control"}, "p",
+  bind_key({modkey, altkey, "Control"}, "p",
     function()
       if awesome_context.lcarslist_enabled then
         awful.spawn.with_shell("sed -i 's/lcarslist_enabled = true/lcarslist_enabled = false/g' ~/.config/awesome/config/local.lua")
@@ -508,14 +496,14 @@ local globalkeys = awful.util.table.join(
       end
       capi.awesome.restart()
     end,
-    "toggle lcarslist", UTILS
+    "toggle lcarslist", LCARS
   )
 )
 
 awesome_context.clientkeys = awful.util.table.join(
 
   -- By direction client swap/move
-  hk.on({ modkey,  "Shift"    }, "Down",
+  bind_key({ modkey,  "Shift"    }, "Down",
     function (c)
       if floats(c) then
         local g = c:geometry()
@@ -528,7 +516,7 @@ awesome_context.clientkeys = awful.util.table.join(
     end,
     "client swap", CLIENT_MANIPULATION
   ),
-  hk.on({ modkey,  "Shift"    }, "Up",
+  bind_key({ modkey,  "Shift"    }, "Up",
     function (c)
       if floats(c) then
         local g = c:geometry()
@@ -541,7 +529,7 @@ awesome_context.clientkeys = awful.util.table.join(
     end,
     "client swap", CLIENT_MANIPULATION
   ),
-  hk.on({ modkey,  "Shift"    }, "Left",
+  bind_key({ modkey,  "Shift"    }, "Left",
     function (c)
       if floats(c) then
         local g = c:geometry()
@@ -554,7 +542,7 @@ awesome_context.clientkeys = awful.util.table.join(
     end,
     "client swap", CLIENT_MANIPULATION
   ),
-  hk.on({ modkey,  "Shift"    }, "Right",
+  bind_key({ modkey,  "Shift"    }, "Right",
     function (c)
       if floats(c) then
         local g = c:geometry()
@@ -569,7 +557,7 @@ awesome_context.clientkeys = awful.util.table.join(
   ),
 
   -- By direction client swap (VIM style)
-  hk.on({ modkey, "Shift" }, "j",
+  bind_key({ modkey, "Shift" }, "j",
     function (c)
       if floats(c) then
         local g = c:geometry()
@@ -582,7 +570,7 @@ awesome_context.clientkeys = awful.util.table.join(
     end,
     "client swap", CLIENT_MANIPULATION
   ),
-  hk.on({ modkey, "Shift" }, "k",
+  bind_key({ modkey, "Shift" }, "k",
     function (c)
       if floats(c) then
         local g = c:geometry()
@@ -595,7 +583,7 @@ awesome_context.clientkeys = awful.util.table.join(
     end,
     "client swap", CLIENT_MANIPULATION
   ),
-  hk.on({ modkey, "Shift" }, "h",
+  bind_key({ modkey, "Shift" }, "h",
     function (c)
       if floats(c) then
         local g = c:geometry()
@@ -608,7 +596,7 @@ awesome_context.clientkeys = awful.util.table.join(
     end,
     "client swap", CLIENT_MANIPULATION
   ),
-  hk.on({ modkey, "Shift" }, "l",
+  bind_key({ modkey, "Shift" }, "l",
     function (c)
       if floats(c) then
         local g = c:geometry()
@@ -623,7 +611,7 @@ awesome_context.clientkeys = awful.util.table.join(
   ),
 
   -- Client resize
-  hk.on({ modkey, "Control"  }, "Right",
+  bind_key({ modkey, "Control"  }, "Right",
     function (c)
       if floats(c) then
         local g = c:geometry()
@@ -635,7 +623,7 @@ awesome_context.clientkeys = awful.util.table.join(
     end,
     "master size+", LAYOUT_MANIPULATION
   ),
-  hk.on({ modkey,  "Control"  }, "Left",
+  bind_key({ modkey,  "Control"  }, "Left",
     function (c)
       if floats(c) then
         local g = c:geometry()
@@ -647,7 +635,7 @@ awesome_context.clientkeys = awful.util.table.join(
     end,
     "master size-", LAYOUT_MANIPULATION
   ),
-  hk.on({ modkey, "Control"  }, "Down",
+  bind_key({ modkey, "Control"  }, "Down",
     function (c)
       if floats(c) then
         local g = c:geometry()
@@ -659,7 +647,7 @@ awesome_context.clientkeys = awful.util.table.join(
     end,
     "column size-", LAYOUT_MANIPULATION
   ),
-  hk.on({ modkey, "Control"  }, "Up",
+  bind_key({ modkey, "Control"  }, "Up",
     function (c)
       if floats(c) then
         local g = c:geometry()
@@ -673,7 +661,7 @@ awesome_context.clientkeys = awful.util.table.join(
   ),
 
   -- Client resize (VIM style)
-  hk.on({ modkey, "Control" }, "l",
+  bind_key({ modkey, "Control" }, "l",
     function (c)
       if floats(c) then
         local g = c:geometry()
@@ -685,7 +673,7 @@ awesome_context.clientkeys = awful.util.table.join(
     end,
     "master size+", LAYOUT_MANIPULATION
   ),
-  hk.on({ modkey,  "Control" }, "h",
+  bind_key({ modkey,  "Control" }, "h",
     function (c)
       if floats(c) then
         local g = c:geometry()
@@ -697,7 +685,7 @@ awesome_context.clientkeys = awful.util.table.join(
     end,
     "master size-", LAYOUT_MANIPULATION
   ),
-  hk.on({ modkey, "Control" }, "j",
+  bind_key({ modkey, "Control" }, "j",
     function (c)
       if floats(c) then
         local g = c:geometry()
@@ -710,7 +698,7 @@ awesome_context.clientkeys = awful.util.table.join(
     "column size-", LAYOUT_MANIPULATION
   ),
 
-  hk.on({ modkey, "Control" }, "k",
+  bind_key({ modkey, "Control" }, "k",
     function (c)
       if floats(c) then
         local g = c:geometry()
@@ -724,41 +712,41 @@ awesome_context.clientkeys = awful.util.table.join(
   ),
 
 
-  hk.on({ modkey,        }, "f",
+  bind_key({ modkey,        }, "f",
     function (c) c.fullscreen = not c.fullscreen end,
     "toggle client fullscreen", CLIENT_MANIPULATION
   ),
-  hk.on({ modkey,        }, "q",
+  bind_key({ modkey,        }, "q",
     function (c) c:kill() end,
     "quit app", IMPORTANT_COLOR
   ),
-  hk.on({ modkey, "Shift"  }, "f",
+  bind_key({ modkey, "Shift"  }, "f",
     awful.client.floating.toggle,
     "toggle client float", CLIENT_MANIPULATION
   ),
-  hk.on({ modkey, "Shift"  }, "Return",
+  bind_key({ modkey, "Shift"  }, "Return",
     function (c) c:swap(awful.client.getmaster()) end,
     "put client on master", CLIENT_MANIPULATION
   ),
-  hk.on({ modkey,        }, "o",
+  bind_key({ modkey,        }, "o",
     awful.client.movetoscreen,
     "move client to other screen", CLIENT_MANIPULATION
   ),
-  hk.on({ modkey,        }, "t",
+  bind_key({ modkey,        }, "t",
     function (c) c.ontop = not c.ontop end,
     "toggle client on top", CLIENT_MANIPULATION
   ),
-  hk.on({ modkey, "Shift"    }, "t",
+  bind_key({ modkey, "Shift"    }, "t",
     function(c)
      awesome_context.widgets.screen[c.screen].manage_client.toggle()
     end,
     "toggle titlebars", CLIENT_MANIPULATION
   ),
-  hk.on({ modkey,        }, "n",
+  bind_key({ modkey,        }, "n",
     function (c) c.minimized = true end,
     "iconify client", CLIENT_MANIPULATION
   ),
-  hk.on({ modkey,        }, "m",
+  bind_key({ modkey,        }, "m",
     function (c)
       c.maximized = not c.maximized
     end,
@@ -783,7 +771,7 @@ for scr = 1, 2 do
   end
 
   globalkeys = awful.util.table.join(globalkeys,
-    hk.on({ modkey }, "#" .. i + diff,
+    bind_key({ modkey }, "#" .. i + diff,
       function ()
         local tag = awful.tag.gettags(scr)[i]
         if tag then awful.tag.viewonly(tag) end
@@ -791,7 +779,7 @@ for scr = 1, 2 do
       i==1 and "go to tag " .. i .. "(screen #" .. scr .. ")",
       TAG_COLOR
     ),
-    hk.on({ modkey, "Control" }, "#" .. i + diff,
+    bind_key({ modkey, "Control" }, "#" .. i + diff,
       function ()
         local tag = awful.tag.gettags(scr)[i]
         if tag then awful.tag.viewtoggle(tag) end
@@ -799,7 +787,7 @@ for scr = 1, 2 do
       i==1 and "toggle tag " .. i .. "(screen #" .. scr .. ")",
       TAG_COLOR
     ),
-    hk.on({ modkey, "Shift" }, "#" .. i + diff,
+    bind_key({ modkey, "Shift" }, "#" .. i + diff,
       function ()
         if client.focus then
           local tag = awful.tag.gettags(scr)[i]
@@ -809,7 +797,7 @@ for scr = 1, 2 do
       i==1 and "move client to tag " .. i .. "(screen #" .. scr .. ")",
       CLIENT_MANIPULATION
     ),
-    hk.on({ modkey, "Control", "Shift" }, "#" .. i + diff,
+    bind_key({ modkey, "Control", "Shift" }, "#" .. i + diff,
       function ()
         if client.focus then
           local tag = awful.tag.gettags(scr)[i]
