@@ -145,7 +145,9 @@ local function perform_action(o)
             menubar_module.dmenugen.history_save()
         end
         ----------
-        awful.spawn.spawn(shownitems[current_item].cmdline)
+        local command = shownitems[current_item].cmdline
+        command = command:gsub("^TERM:", menubar.term_prefix)
+        awful.spawn.spawn(command)
         -- Let awful.prompt execute dummy exec_callback and
         -- done_callback to stop the keygrabber properly.
         return false
@@ -240,7 +242,7 @@ function menubar:menulist_update(query, scr)
         table.insert(shownitems, v)
     end
 
-    if #shownitems > 0 then
+    --if #shownitems > 0 then
         -- Insert a run item value as the last choice
         table.insert(shownitems, { name = "Exec: " .. query, cmdline = query, icon = nil })
 
@@ -248,9 +250,9 @@ function menubar:menulist_update(query, scr)
             current_item = #shownitems
         end
         shownitems[current_item].focused = true
-    else
-        table.insert(shownitems, { name = "", cmdline = query, icon = nil })
-    end
+    --else
+        --table.insert(shownitems, { name = "", cmdline = query, icon = nil })
+    --end
 
     common.list_update(common_args.w, nil, label,
                        common_args.data,
@@ -312,18 +314,16 @@ local function prompt_keypressed_callback(mod, key, comm)
         menubar_module.dmenugen.history_check_load()
         menubar:refresh()
         return true
+    elseif key == "space" and mod.Control then
+        -- add to the cmdline
+        nlog(current_item)
+        local focused_item_number = current_item
+        current_item = #shownitems
+        return true, shownitems[focused_item_number].name
     elseif key == "Return" or key == "KP_Enter" then
-        if mod.Control then
-            current_item = #shownitems
-            if mod.Mod1 then
-                -- add a terminal to the cmdline
-                shownitems[current_item].cmdline = menubar_module.utils.terminal
-                        .. " -e " .. shownitems[current_item].cmdline
-            end
-        end
         if mod.Mod1 then
             -- run command with terminal
-            shownitems[current_item].cmdline = menubar.term_prefix
+            shownitems[current_item].cmdline = "TERM:"
                     .. shownitems[current_item].cmdline
         end
         return perform_action(shownitems[current_item])
