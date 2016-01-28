@@ -4,6 +4,7 @@ local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
 local create_theme = require("actionless.common_theme").create_theme
 local helpers = require("actionless.helpers")
+local color_utils = require("utils.color")
 
 local theme_name = "lcars-xresources-hidpi"
 
@@ -108,10 +109,12 @@ theme.titlebar_fg_normal	= "theme.tasklist_fg_normal"
 theme.titlebar_bg_normal	= "theme.titlebar_border"
 
 
---theme.border_normal            = theme.color["8"]
---theme.border_normal            = "#1d1234"
+--if color_utils.is_dark(theme.xrdb.background) then
+  --theme.border_normal = color_utils.darker(theme.xrdb.background, -20)
+--else
+  --theme.border_normal = color_utils.darker(theme.xrdb.background, 20)
+--end
 --theme.titlebar_border           = theme.border_normal
-
 
 
 --theme.panel_widget_bg		= theme.xrdb.color3
