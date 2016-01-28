@@ -421,7 +421,10 @@ local globalkeys = awful.util.table.join(
   ),
 
   bind_key({ modkey, "Control"  }, "r",
-    capi.awesome.restart,
+    function()
+      awful.spawn.with_shell('xrdb -merge $HOME/.Xresources')
+      capi.awesome.restart()
+    end,
     "Reload awesome wm", IMPORTANT_COLOR
   ),
   bind_key({ modkey, "Control"    }, "q",
