@@ -11,7 +11,6 @@ local capi = {
 }
 
 local helpers = require("actionless.helpers")
-local titlebar = require("actionless.titlebar")
 local menu_addon = require("actionless.menu_addon")
 local floats = require("actionless.helpers").client_floats
 
@@ -49,12 +48,17 @@ local RESIZE_STEP = beautiful.xresources.apply_dpi(15)
 local TO_DEFINE_COLOR = "none"
 
 local TAG_COLOR = "tag"
-local CLIENT_COLOR = "client_focus"
+local CLIENT_FOCUS = "client: focus"
+local CLIENT_MOVE = "client: move"
 local UTILS = "menu"
-local IMPORTANT_COLOR = "important"
+local AWESOME_COLOR = "awesome"
 local CLIENT_MANIPULATION = "client"
 local LAYOUT_MANIPULATION = "layout"
 local LCARS = "LCARS"
+local LAUNCHER = "launcher"
+local MUSIC = "music"
+local PROGRAMS = "programs"
+local SCREENSHOT = "screenshot"
 
 -- {{{ Mouse bindings
 capi.root.buttons(awful.util.table.join(
@@ -81,40 +85,26 @@ end
 -- {{{ Key bindings
 local globalkeys = awful.util.table.join(
 
-  ----local HELPKEY = "Print"
-  --local HELPKEY = "#108" -- Alt Gr
-  --bind_key({  }, HELPKEY, "show_help"),
-  --bind_key({ "Shift" }, HELPKEY, "show_help"),
-  --bind_key({ "Control" }, HELPKEY, "show_help"),
-  --bind_key({ altkey }, HELPKEY, "show_help"),
-  --bind_key({ modkey, }, HELPKEY, "show_help"),
-  --bind_key({ modkey, altkey }, HELPKEY, "show_help"),
-  --bind_key({ modkey, altkey, "Shift" }, HELPKEY, "show_help"),
-  --bind_key({ modkey, altkey, "Control" }, HELPKEY, "show_help"),
-  --bind_key({ modkey, "Shift"    }, HELPKEY, "show_help"),
-  --bind_key({ modkey, "Control"  }, HELPKEY, "show_help"),
-  --bind_key({ modkey, "Shift", "Control" }, HELPKEY, "show_help"),
-
   awful.key({modkey}, "/", function()
     hkng.show_help()
   end, nil, {
-    description = "show help"
+    description = "show help", group=AWESOME_COLOR
   }),
 
   -- bind_key({ modkey,  }, "Control", "show_help"), -- show hotkey on hold
 
   bind_key({ modkey,  altkey  }, "t",
     function() awesome_context.widgets.systray_toggle.toggle() end,
-    "toggle systray popup", UTILS
+    "toggle systray popup", AWESOME_COLOR
   ),
 
   bind_key({ modkey,  "Control"  }, "s",
     function() helpers.run_once("xscreensaver-command -lock") end,
-    "xscreensaver lock", UTILS
+    "xscreensaver lock", AWESOME_COLOR
   ),
   bind_key({ modkey,  "Control"  }, "d",
     function() helpers.run_once("sleep 1 && xset dpms force off") end,
-    "turn off display", UTILS
+    "turn off display", AWESOME_COLOR
   ),
 
 
@@ -170,59 +160,58 @@ local globalkeys = awful.util.table.join(
       awful.client.focus.global_bydirection("down")
       if client.focus then client.focus:raise() end
     end,
-    "client focus", CLIENT_COLOR
+    "client focus", CLIENT_FOCUS
   ),
   bind_key({ modkey        }, "Up",
     function()
       awful.client.focus.global_bydirection("up")
       if client.focus then client.focus:raise() end
     end,
-    "client focus", CLIENT_COLOR
+    "client focus", CLIENT_FOCUS
   ),
   bind_key({ modkey        }, "Left",
     function()
       awful.client.focus.global_bydirection("left")
       if client.focus then client.focus:raise() end
     end,
-    "client focus", CLIENT_COLOR
+    "client focus", CLIENT_FOCUS
   ),
   bind_key({ modkey        }, "Right",
     function()
       awful.client.focus.global_bydirection("right")
       if client.focus then client.focus:raise() end
     end,
-    "client focus", CLIENT_COLOR
+    "client focus", CLIENT_FOCUS
   ),
 
 
-  -- By direction client focus (VIM style)
   bind_key({ modkey }, "j",
     function()
       awful.client.focus.global_bydirection("down")
       if client.focus then client.focus:raise() end
     end,
-    "client focus", CLIENT_COLOR
+    "client focus (vim style)", CLIENT_FOCUS
   ),
   bind_key({ modkey }, "k",
     function()
       awful.client.focus.global_bydirection("up")
       if client.focus then client.focus:raise() end
     end,
-    "client focus", CLIENT_COLOR
+    "client focus (vim style)", CLIENT_FOCUS
   ),
   bind_key({ modkey }, "h",
     function()
       awful.client.focus.global_bydirection("left")
       if client.focus then client.focus:raise() end
     end,
-    "client focus", CLIENT_COLOR
+    "client focus (vim style)", CLIENT_FOCUS
   ),
   bind_key({ modkey }, "l",
     function()
       awful.client.focus.global_bydirection("right")
       if client.focus then client.focus:raise() end
     end,
-    "client focus", CLIENT_COLOR
+    "client focus (vim style)", CLIENT_FOCUS
   ),
 
 
@@ -252,12 +241,12 @@ local globalkeys = awful.util.table.join(
   bind_key({ modkey, "Control"}, "p",
     --function() awesome_context.menu.menubar:show() end,
     function() menubar.show() end,
-    "applications menu", UTILS
+    "applications menu", LAUNCHER
   ),
   bind_key({ modkey,        }, "space",
     --function() awful.spawn.with_shell(cmd.dmenu) end,
     function() awesome_context.menu.dmenubar:show() end,
-    "app launcher", UTILS
+    "app launcher", LAUNCHER
   ),
 
   bind_key({ modkey, "Control"  }, "n",
@@ -266,12 +255,12 @@ local globalkeys = awful.util.table.join(
       -- @TODO: it's a workaround for some strange upstream issue
       if c then client.focus = c end
     end,
-    "de-iconify client", TAG_COLOR
+    "de-iconify client", CLIENT_MANIPULATION
   ),
 
   bind_key({ modkey,        }, "u",
     awful.client.urgent.jumpto,
-    "jump to Urgent client", IMPORTANT_COLOR
+    "jump to urgent client", CLIENT_FOCUS
   ),
   bind_key({ modkey,        }, "Tab",
     function ()
@@ -280,7 +269,7 @@ local globalkeys = awful.util.table.join(
         client.focus:raise()
       end
     end,
-    "cycle clients", CLIENT_COLOR
+    "cycle clients", CLIENT_FOCUS
   ),
 
   bind_key({ modkey, altkey }, "space",
@@ -354,7 +343,7 @@ local globalkeys = awful.util.table.join(
   -- Prompt
   bind_key({ modkey }, "r",
     function () awesome_context.widgets.screen[awful.screen.focused()].promptbox:run() end,
-    "Run command...", UTILS
+    "run command", LAUNCHER
   ),
   bind_key({ modkey }, "x",
     function ()
@@ -363,7 +352,7 @@ local globalkeys = awful.util.table.join(
       awful.util.eval, nil,
       awful.util.getdir("cache") .. "/history_eval")
     end,
-    "eXecute lua code...", UTILS
+    "eXecute lua code", LAUNCHER
   ),
 
   -- ALSA volume control
@@ -381,13 +370,13 @@ local globalkeys = awful.util.table.join(
   -- Music player control
   bind_key({modkey, altkey}, ",",
     function () awesome_context.widgets.music.prev_song() end,
-    "prev song", UTILS),
+    "prev song", MUSIC),
   bind_key({modkey, altkey}, ".",
     function () awesome_context.widgets.music.next_song() end,
-    "next song", UTILS),
+    "next song", MUSIC),
   bind_key({modkey, altkey}, "/",
     function () awesome_context.widgets.music.toggle() end,
-    "Pause", UTILS),
+    "Pause", MUSIC),
 
   awful.key({}, "#150", function () awesome_context.widgets.music.prev_song() end),
   awful.key({}, "#148", function () awesome_context.widgets.music.next_song() end),
@@ -401,23 +390,23 @@ local globalkeys = awful.util.table.join(
 
   bind_key({ modkey }, "c",
     function () os.execute("xsel -p -o | xsel -i -b") end,
-    "copy to clipboard", UTILS
+    "copy to clipboard", AWESOME_COLOR
   ),
 
   -- Standard program
   bind_key({ modkey,        }, "Return",
     function () awful.spawn.spawn(cmd.tmux) end,
-    "terminal", IMPORTANT_COLOR
+    "terminal", PROGRAMS
   ),
   bind_key({ modkey, altkey }, "Return",
     function ()
       awful.spawn.spawn(cmd.tmux_light)
     end,
-    "white terminal", UTILS
+    "reversed terminal", PROGRAMS
   ),
   bind_key({ modkey,        }, "s",
     function () awful.spawn.spawn(cmd.file_manager) end,
-    "file manager", UTILS
+    "file manager", PROGRAMS
   ),
 
   bind_key({ modkey, "Control"  }, "r",
@@ -425,11 +414,11 @@ local globalkeys = awful.util.table.join(
       awful.spawn.with_shell('xrdb -merge $HOME/.Xresources')
       capi.awesome.restart()
     end,
-    "Reload awesome wm", IMPORTANT_COLOR
+    "reload awesome wm", AWESOME_COLOR
   ),
   bind_key({ modkey, "Control"    }, "q",
     capi.awesome.quit,
-    "Quit awesome wm", IMPORTANT_COLOR
+    "quit awesome wm", AWESOME_COLOR
   ),
 
   -- Scrot stuff
@@ -438,33 +427,33 @@ local globalkeys = awful.util.table.join(
       awful.spawn.with_shell(
       "scrot -ub '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. cmd.scrot_preview_cmd)
     end,
-    "screenshot focused", TO_DEFINE_COLOR
+    "screenshot focused", SCREENSHOT
   ),
   bind_key({ altkey        }, "Print",
     function ()
       awful.spawn.with_shell(
       "scrot -s '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. cmd.scrot_preview_cmd)
     end,
-    "screenshot selected", TO_DEFINE_COLOR
+    "screenshot selected", SCREENSHOT
   ),
   bind_key({  }, "Print",
     function ()
       awful.spawn.with_shell(
       "scrot '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. cmd.scrot_preview_cmd)
     end,
-    "screenshot all", TO_DEFINE_COLOR
+    "screenshot all", SCREENSHOT
   ),
   bind_key({ "Shift" }, "Print",
     function ()
       awful.spawn.with_shell(
       "scrot '%Y-%m-%d--%s_$wx$h_scrot.png'")
     end,
-    "screenshot all", TO_DEFINE_COLOR
+    "screenshot all", SCREENSHOT
   ),
 
   bind_key({modkey}, "a",
     revelation,
-    "Revelation", UTILS
+    "Revelation", AWESOME_COLOR
   ),
 
   bind_key({modkey, altkey}, "p",
@@ -505,7 +494,6 @@ local globalkeys = awful.util.table.join(
 
 awesome_context.clientkeys = awful.util.table.join(
 
-  -- By direction client swap/move
   bind_key({ modkey,  "Shift"    }, "Down",
     function (c)
       if floats(c) then
@@ -517,7 +505,7 @@ awesome_context.clientkeys = awful.util.table.join(
         if client.swap then client.swap:raise() end
       end
     end,
-    "client swap", CLIENT_MANIPULATION
+    "client swap", CLIENT_MOVE
   ),
   bind_key({ modkey,  "Shift"    }, "Up",
     function (c)
@@ -530,7 +518,7 @@ awesome_context.clientkeys = awful.util.table.join(
         if client.swap then client.swap:raise() end
       end
     end,
-    "client swap", CLIENT_MANIPULATION
+    "client swap", CLIENT_MOVE
   ),
   bind_key({ modkey,  "Shift"    }, "Left",
     function (c)
@@ -543,7 +531,7 @@ awesome_context.clientkeys = awful.util.table.join(
         if client.swap then client.swap:raise() end
       end
     end,
-    "client swap", CLIENT_MANIPULATION
+    "client swap", CLIENT_MOVE
   ),
   bind_key({ modkey,  "Shift"    }, "Right",
     function (c)
@@ -556,10 +544,9 @@ awesome_context.clientkeys = awful.util.table.join(
         if client.swap then client.swap:raise() end
       end
     end,
-    "client swap", CLIENT_MANIPULATION
+    "client swap", CLIENT_MOVE
   ),
 
-  -- By direction client swap (VIM style)
   bind_key({ modkey, "Shift" }, "j",
     function (c)
       if floats(c) then
@@ -571,7 +558,7 @@ awesome_context.clientkeys = awful.util.table.join(
         if client.swap then client.swap:raise() end
       end
     end,
-    "client swap", CLIENT_MANIPULATION
+    "client swap (vim style)", CLIENT_MOVE
   ),
   bind_key({ modkey, "Shift" }, "k",
     function (c)
@@ -584,7 +571,7 @@ awesome_context.clientkeys = awful.util.table.join(
         if client.swap then client.swap:raise() end
       end
     end,
-    "client swap", CLIENT_MANIPULATION
+    "client swap (vim style)", CLIENT_MOVE
   ),
   bind_key({ modkey, "Shift" }, "h",
     function (c)
@@ -597,7 +584,7 @@ awesome_context.clientkeys = awful.util.table.join(
         if client.swap then client.swap:raise() end
       end
     end,
-    "client swap", CLIENT_MANIPULATION
+    "client swap (vim style)", CLIENT_MOVE
   ),
   bind_key({ modkey, "Shift" }, "l",
     function (c)
@@ -610,7 +597,7 @@ awesome_context.clientkeys = awful.util.table.join(
         if client.swap then client.swap:raise() end
       end
     end,
-    "client swap", CLIENT_MANIPULATION
+    "client swap (vim style)", CLIENT_MOVE
   ),
 
   -- Client resize
@@ -721,7 +708,7 @@ awesome_context.clientkeys = awful.util.table.join(
   ),
   bind_key({ modkey,        }, "q",
     function (c) c:kill() end,
-    "quit app", IMPORTANT_COLOR
+    "quit app", CLIENT_MANIPULATION
   ),
   bind_key({ modkey, "Shift"  }, "f",
     awful.client.floating.toggle,
@@ -729,11 +716,11 @@ awesome_context.clientkeys = awful.util.table.join(
   ),
   bind_key({ modkey, "Shift"  }, "Return",
     function (c) c:swap(awful.client.getmaster()) end,
-    "put client on master", CLIENT_MANIPULATION
+    "put client on master", CLIENT_MOVE
   ),
   bind_key({ modkey,        }, "o",
     awful.client.movetoscreen,
-    "move client to other screen", CLIENT_MANIPULATION
+    "move client to other screen", CLIENT_MOVE
   ),
   bind_key({ modkey,        }, "t",
     function (c) c.ontop = not c.ontop end,
@@ -798,7 +785,7 @@ for scr = 1, 2 do
          end
       end,
       i==1 and "move client to tag " .. i .. "(screen #" .. scr .. ")",
-      CLIENT_MANIPULATION
+      CLIENT_MOVE
     ),
     bind_key({ modkey, "Control", "Shift" }, "#" .. i + diff,
       function ()
