@@ -22,13 +22,16 @@ helpers.dir    = debug.getinfo(1, 'S').source:match[[^@(.*/).*$]]
 
 
 function helpers.newinterval(timeout, fun, nostart)
-  if not nostart then fun() end
-  local function wrapped_fun(...)
-    fun(...)
-    gears.timer.start_new(timeout, wrapped_fun)
-    return false
+  local t = gears.timer {timeout = timeout or 5}
+  t:connect_signal("timeout", function(...)
+      t:stop()
+      fun(...)
+      t:again()
+  end)
+  t:start()
+  if not nostart then
+    t:emit_signal("timeout")
   end
-  gears.timer.start_new(timeout, wrapped_fun)
 end
 
 function helpers.newdelay(timeout, fun)
@@ -36,7 +39,7 @@ function helpers.newdelay(timeout, fun)
     fun(...)
     return false
   end
-  gears.timer.start_new(timeout, wrapped_fun)
+  gears.timer.weak_start_new(timeout, wrapped_fun)
 end
 
 
@@ -53,10 +56,10 @@ function helpers.async_spawn(cmd, callback)
   local stdout = ''
   local stderr = ''
   local function parse_stdout(str)
-    stdout = stdout .. "\n" .. str
+    stdout = stdout .. str .. "\n"
   end
   local function parse_stderr(str)
-    stderr = stderr .. "\n" .. str
+    stderr = stderr ..  str .. "\n"
   end
   local function done_callback()
     return callback(stdout, stderr)
