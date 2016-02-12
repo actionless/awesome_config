@@ -229,6 +229,11 @@ theme.left_panel_internal_corner_radius = 30
 
   local widgets_icons_dir = icons_dir .. "widgets/"
 
+  --theme.widget_tray_left			= widgets_icons_dir .. "tray_left.png"
+  --theme.widget_tray_right			= widgets_icons_dir .. "tray_right.png"
+  theme.widget_tray_left			= nil
+  theme.widget_tray_right			= nil
+
   theme.widget_ac			= widgets_icons_dir .. "ac.png"
   theme.widget_ac_charging	= widgets_icons_dir .. "ac_charging.png"
   theme.widget_ac_charging_low	= widgets_icons_dir .. "ac_charging_low.png"
