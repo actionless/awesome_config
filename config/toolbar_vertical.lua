@@ -144,7 +144,7 @@ function toolbar.init(awesome_context)
 
     -- INDICATORS LEFT PANEL
     left_panel_widgets[s] = {
-      loaded_widgets.textclock,
+      loaded_widgets.lcars_textclock,
       v_sep,
       loaded_widgets.screen[s].layoutbox,
       v_sep,

@@ -106,18 +106,16 @@ function widget_loader.init(awesome_context)
 
   -- Textclock
   if awesome_context.lcarslist_enabled then
-    local textclock = awful.widget.textclock("%H:%M")
-    w.textclock = widgets.common.decorated({
-      widget = textclock,
+    w.lcars_textclock = widgets.common.decorated({
+      widget = awful.widget.textclock("%H:%M"),
       valign = "bottom",
     })
-    widgets.calendar:attach(w.textclock, {fg=beautiful.theme, position="top_left"})
-  else
-    local markup = require("utils.markup")
-    local textclock = awful.widget.textclock(markup.fg(beautiful.xrdb.foreground, "%H:%M"))
-    w.textclock = textclock
-    widgets.calendar:attach(w.textclock, {fg=beautiful.theme, position="top_right"})
+    widgets.calendar:attach(w.lcars_textclock, {fg=beautiful.theme, position="top_left"})
   end
+  local markup = require("utils.markup")
+  local textclock = awful.widget.textclock(markup.fg(beautiful.xrdb.foreground, "%H:%M"))
+  w.textclock = textclock
+  widgets.calendar:attach(w.textclock, {fg=beautiful.theme, position="top_right"})
 
 
   w.screen = {}
@@ -131,8 +129,8 @@ function widget_loader.init(awesome_context)
         screen = s,
         bg = beautiful.widget_close_bg,
         fg = beautiful.widget_close_fg,
-        left_separators = awesome_context.lcarslist_enabled and theme.widget_close_left_decorators or { ' ', 'arrl', 'sq' },
-        right_separators = awesome_context.lcarslist_enabled and theme.widget_close_right_decorators or { 'sq', 'arrr' },
+        left_separators = awesome_context.lcarslist_enabled and beautiful.widget_close_left_decorators or { ' ', 'arrl', 'sq' },
+        right_separators = awesome_context.lcarslist_enabled and beautiful.widget_close_right_decorators or { 'sq', 'arrr' },
         awesome_context = awesome_context,
       }
     )
