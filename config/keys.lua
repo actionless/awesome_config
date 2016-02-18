@@ -126,17 +126,24 @@ local globalkeys = awful.util.table.join(
   ),
   bind_key({ modkey, altkey }, "r",
     function ()
-      local tag = awful.tag.selected(awful.screen.focused())
+      local db = require("utils.db")
+      local s = awful.screen.focused()
+      local tag = awful.tag.selected(s)
+      local tag_id = awful.tag.getidx(tag)
       if tag then
         awful.prompt.run(
           { prompt = "new tag name: ",
-            text = awful.tag.getidx(tag) .. ":" },
-          awesome_context.widgets.screen[awful.screen.focused()].promptbox,
+            text = tag_id .. ":" },
+          awesome_context.widgets.screen[s].promptbox,
           function(new_name)
             if not new_name or #new_name == 0 then
               return
             else
                tag.name = new_name
+               local db_id = "tag_names_"..s
+               local tag_names = db.get(db_id)
+               tag_names[tag_id] = new_name
+               db.set(db_id, tag_names)
             end
           end)
       end

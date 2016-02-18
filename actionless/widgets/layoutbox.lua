@@ -15,6 +15,7 @@ local textbox = require("wibox.widget.textbox")
 
 local h_string = require("utils.string")
 local common = require("actionless.widgets.common")
+local db = require("utils.db")
 
 --- Layoutbox widget "class".
 
@@ -75,10 +76,17 @@ local function worker(args)
     layoutbox.widget = common.decorated(args)
 
     local layouts_menu_items = {}
-    for _, layout in ipairs(awful.layout.layouts) do
+    for layout_id, layout in ipairs(awful.layout.layouts) do
       table.insert(layouts_menu_items, {
         layout.name,
-        function() awful.layout.set(layout) end,
+        function()
+            awful.layout.set(layout)
+            local db_id = "tag_layout_ids_"..layoutbox.screen
+            local layout_ids = db.get(db_id)
+            local tag_id = awful.tag.getidx(awful.tag.selected(s))
+            layout_ids[tag_id] = layout_id
+            db.set(db_id, layout_ids)
+        end,
         beautiful["layout_"..layout.name]
       })
     end

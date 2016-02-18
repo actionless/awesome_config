@@ -7,6 +7,8 @@ local utils = {
   inspect = require("utils.inspect"),
   debug = require("utils.debug"),
   color = require("utils.color"),
+  pickle = require("utils.pickle"),
+  db = require("utils.db"),
 }
 
 return utils
