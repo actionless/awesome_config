@@ -3,7 +3,7 @@
    * (c) 2014, Yauheni Kirylau
 --]]
 
-local dbus = dbus
+local dbus = dbus -- luacheck: ignore
 local awful = require("awful")
 
 local h_table = require("utils.table")
@@ -21,8 +21,8 @@ function clementine.init(widget)
   dbus.add_match("session", "path='/org/mpris/MediaPlayer2',interface='org.freedesktop.DBus.Properties',member='PropertiesChanged'")
   dbus.connect_signal(
     "org.freedesktop.DBus.Properties",
-    function(...)
-      widget.update()
+    function()
+      widget.update(args.parse_status)
     end)
 end
 -------------------------------------------------------------------------------
@@ -40,11 +40,10 @@ end
 -------------------------------------------------------------------------------
 function clementine.update(parse_status_callback)
   local callback = function(str) clementine.post_update(str, parse_status_callback) end
-  awful.spawn.with_line_callback(
-    dbus_cmd .. " /org/mpris/MediaPlayer2 PlaybackStatus",{
-    stdout=callback,
-    exit=callback
-  })
+  awful.spawn.easy_async(
+    dbus_cmd .. " /org/mpris/MediaPlayer2 PlaybackStatus",
+    callback
+  )
 end
 -------------------------------------------------------------------------------
 function clementine.post_update(result_string, parse_status_callback)
@@ -57,17 +56,16 @@ function clementine.post_update(result_string, parse_status_callback)
   end
   clementine.player_status.state = state
   if state == 'play' or state == 'pause' then
-    awful.spawn.with_line_callback(
-      dbus_cmd .. "/Player GetMetadata", {
-      stdout=function(str) clementine.parse_metadata_line(str) end,
-      exit=function() clementine.parse_metadata_done(parse_status_callback) end
-    })
+    awful.spawn.easy_async(
+      dbus_cmd .. "/Player GetMetadata",
+      function(str) clementine.parse_metadata(str, parse_status_callback) end
+    )
   else
     parse_status_callback(clementine.player_status)
   end
 end
 -------------------------------------------------------------------------------
-function clementine.parse_metadata_line(result_string)
+function clementine.parse_metadata(result_string, parse_status_callback)
   local player_status = parse.find_values_in_string(
     result_string,
     "([%w]+): (.*)$",
@@ -80,9 +78,6 @@ function clementine.parse_metadata_line(result_string)
     }
   )
   h_table.merge(clementine.player_status, player_status)
-end
-
-function clementine.parse_metadata_done(parse_status_callback)
   parse_status_callback(clementine.player_status)
 end
 

@@ -10,9 +10,6 @@ local h_table = require("utils.table")
 local h_string = require("utils.string")
 local parse = require("utils.parse")
 
-local lgi = require 'lgi'
-local Gio = lgi.require 'Gio'
---local inspect = require("inspect")
 
 -- @TODO: change to native dbus implementation instead of calling qdbus
 local dbus_cmd = "qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player."
@@ -45,22 +42,22 @@ function spotify.prev_song()
 end
 -------------------------------------------------------------------------------
 --{{  @TODO: temporary workaround:
-local gears = require("gears")
-local timer_added = false
+--local gears = require("gears")
+--local timer_added = false
 --}}
 function spotify.update(parse_status_callback)
-  local callback = function(str) spotify.post_update(str, parse_status_callback) end
+  --local callback = function(str) spotify.post_update(str, parse_status_callback) end
   --awful.spawn.with_line_callback(
     --dbus_cmd .. "PlaybackStatus",
     --callback, callback
   --)
 
   --{{  @TODO: temporary workaround:
-  if not timer_added then
-    gears.timer.start_new(2, function() callback("Playing") return true end)
-    timer_added = true
-  end
-  return callback("Playing")
+  --if not timer_added then
+    --gears.timer.start_new(2, function() callback("Playing") return true end)
+    --timer_added = true
+  --end
+  return spotify.post_update("Playing", parse_status_callback)
   --}}
 end
 -------------------------------------------------------------------------------
