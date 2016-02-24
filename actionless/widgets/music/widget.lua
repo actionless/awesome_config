@@ -50,6 +50,7 @@ local function worker(args)
   --player.title_widget = common_widget(args)
   player.artist_widget = wibox.widget.textbox()
   player.title_widget = wibox.widget.textbox()
+  player.separator_widget = wibox.widget.textbox("waiting for " .. enabled_backends[1] .. "...")
   args.widgets = {
     wibox.widget.textbox(' '),
     player.artist_widget,
@@ -57,7 +58,7 @@ local function worker(args)
       --height = beautiful.panel_padding_bottom * 2,
       --width = beautiful.panel_padding_bottom * 2,
     --}),
-    wibox.widget.textbox('-'),
+    player.separator_widget,
     player.title_widget,
     wibox.widget.textbox(' '),
   }
@@ -176,7 +177,7 @@ local function worker(args)
     --player_status = tag_parser.predict_missing_tags(player_status)
     player.player_status = player_status
 
-    if player_status.state == "play" then
+    if player_status.state == "play" or player_status.state == "pause" then
       -- playing
       artist = player_status.artist or "playing"
       title = player_status.title or " "
@@ -195,19 +196,28 @@ local function worker(args)
       if player_status.title ~= old_title then
         player.resize_cover()
       end
+    end
+    if player_status.state == "play" then
       player.widget:set_normal()
+      player.separator_widget:set_text("⏵")
     elseif player_status.state == "pause" then
       -- paused
-      artist = enabled_backends[backend_id]
-      title  = "paused"
       --player.widget:set_icon('music_pause')
       --player.widget:set_warning()
+      --title = title .. " (⏸)"
+      player.separator_widget:set_text("⏸")
       player.widget:set_fg(beautiful.panel_fg)
       player.widget:set_bg(beautiful.panel_bg)
-    else
+    elseif player_status.state == "stop" then
       -- stop
+      player.separator_widget:set_text("")
       artist = enabled_backends[backend_id]
       title = "stopped"
+      player.widget:set_disabled()
+    else
+      player.separator_widget:set_text("waiting for " .. enabled_backends[backend_id] .. "...")
+      artist = ""
+      title = ""
       player.widget:set_disabled()
     end
 
