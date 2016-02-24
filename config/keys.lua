@@ -13,6 +13,7 @@ local capi = {
 local helpers = require("actionless.helpers")
 local menu_addon = require("actionless.menu_addon")
 local floats = require("actionless.helpers").client_floats
+local db = require("utils.db")
 
 local hkng = require("awful.hotkeys_popup")
 
@@ -126,7 +127,6 @@ local globalkeys = awful.util.table.join(
   ),
   bind_key({ modkey, altkey }, "r",
     function ()
-      local db = require("utils.db")
       local s = awful.screen.focused()
       local tag = awful.tag.selected(s)
       local tag_id = awful.tag.getidx(tag)
@@ -334,15 +334,27 @@ local globalkeys = awful.util.table.join(
 
   bind_key({ modkey, altkey }, "e",
     function ()
-      awful.tag.togglemfpol()
-      tag.emit_signal("property::layout", t)
+      local s = awful.screen.focused()
+      local tag = awful.tag.selected(s)
+      local tag_id = awful.tag.getidx(tag)
+
+      awful.tag.togglemfpol(tag)
+      tag.emit_signal("property::layout", tag_id)
+
+      local db_id = "tag_layout_expand_master_"..s
+      local layout_expand_masters = db.get(db_id)
+      layout_expand_masters[tag_id] = not layout_expand_masters[tag_id]
+      db.set(db_id, layout_expand_masters)
     end,
     "toggle expand master", LAYOUT_MANIPULATION
   ),
   bind_key({ modkey, altkey }, "g",
     function ()
-      helpers.tag_toggle_gap()
-      tag.emit_signal("property::layout", t)
+      local s = awful.screen.focused()
+      local tag = awful.tag.selected(s)
+      local tag_id = awful.tag.getidx(tag)
+      helpers.tag_toggle_gap(tag)
+      tag.emit_signal("property::layout", tag)
     end,
     "toggle useless gap", LAYOUT_MANIPULATION
   ),

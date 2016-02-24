@@ -38,11 +38,6 @@ function layouts.init(context)
   context.tags = {}
   for s = 1, capi.screen.count() do
 
-    local tag_names = db.get_or_set("tag_names_"..s, {
-      '1:bs', '2:web', '3:ww', '4:im', '5:mm', 6, '7:sp', 8, '9:sd', '10:nl',
-      '11', '12'
-    })
-
     local layout_ids = db.get_or_set("tag_layout_ids_"..s, {
       1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1,
     })
@@ -51,15 +46,26 @@ function layouts.init(context)
       layouts[i] = awful.layout.layouts[id]
     end
 
-    -- Each screen has its own tag table.
+    local tag_names = db.get_or_set("tag_names_"..s, {
+      '1:bs', '2:web', '3:ww', '4:im', '5:mm', 6, '7:sp', 8, '9:sd', '10:nl',
+      '11', '12'
+    })
     context.tags[s] = awful.tag( tag_names, s, layouts)
+
     local tags = awful.tag.gettags(s)
 
     awful.tag.incmwfact(0.20, tags[1])
     awful.tag.incmwfact(0.20, tags[2])
 
-    for _, tag_number in pairs({1,3,5,9}) do
-      awful.tag.setmfpol("mwfact", tags[tag_number])
+    local layout_expand_masters = db.get_or_set("tag_layout_expand_master_"..s,
+    --1      2      3      4      5      6      7      8      9      10     11     12
+    {
+      true,  false, true,  false, true,  false, false, false, true,  false, false, false
+    })
+    for tag_number, is_enabled in ipairs(layout_expand_masters) do
+      if is_enabled then
+        awful.tag.setmfpol("mwfact", tags[tag_number])
+      end
     end
 
   end
