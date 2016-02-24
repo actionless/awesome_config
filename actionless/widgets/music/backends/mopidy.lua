@@ -5,6 +5,7 @@
 
 local awful		= require("awful")
 local parse		= require("utils.parse")
+local helpers		= require("actionless.helpers")
 local dbus = dbus -- luacheck: ignore
 
 local mopidy = {
@@ -27,6 +28,7 @@ function mopidy.init(args)
     function()
       mopidy.update(args.parse_status)
     end)
+  helpers.newinterval(10, function() return mopidy.update(args.parse_status) end)
   mopidy.update()
 end
 -------------------------------------------------------------------------------
@@ -65,6 +67,8 @@ function mopidy.parse_metadata(result_string, parse_status_callback)
     state  = 'play'
   elseif result_string:match("%[paused%]") then
     state = 'pause'
+  elseif result_string:match("volume") then
+    state = 'stop'
   end
 
   if state then
