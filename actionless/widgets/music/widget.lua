@@ -201,7 +201,9 @@ local function worker(args)
       artist = enabled_backends[backend_id]
       title  = "paused"
       --player.widget:set_icon('music_pause')
-      player.widget:set_warning()
+      --player.widget:set_warning()
+      player.widget:set_fg(beautiful.panel_fg)
+      player.widget:set_bg(beautiful.panel_bg)
     else
       -- stop
       artist = enabled_backends[backend_id]
