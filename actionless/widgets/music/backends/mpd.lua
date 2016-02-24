@@ -13,8 +13,6 @@ local mpd = {
 }
 
 --local cover_script = helpers.dir .. "widgets/music/backends_legacy/mpdcover"
-local timer_added = false
-
 
 function mpd.init(args)
   args = args or {} 
@@ -22,10 +20,7 @@ function mpd.init(args)
   mpd.host = args.host or "127.0.0.1"
   mpd.port = args.port or "6600"
   mpd.password = args.password or [[""]]
-  if not timer_added then
-    helpers.newinterval(2, function() return mpd.update(args.parse_status) end)
-    timer_added = true
-  end
+  helpers.newinterval(2, function() return mpd.update(args.parse_status) end)
 end
 -------------------------------------------------------------------------------
 function mpd.toggle()
