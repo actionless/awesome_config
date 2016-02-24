@@ -59,7 +59,7 @@ local pickle = {}
                file:write( charS.."{"..lookup[v].."},"..charE )
             elseif stype == "string" then
                file:write(  charS..exportstring( v )..","..charE )
-            elseif stype == "number" then
+            elseif stype == "number" or stype == "boolean" then
                file:write(  charS..tostring( v )..","..charE )
             end
          end
@@ -79,7 +79,7 @@ local pickle = {}
                   str = charS.."[{"..lookup[i].."}]="
                elseif stype == "string" then
                   str = charS.."["..exportstring( i ).."]="
-               elseif stype == "number" then
+               elseif stype == "number" or stype == "boolean" then
                   str = charS.."["..tostring( i ).."]="
                end
             
@@ -94,7 +94,7 @@ local pickle = {}
                      file:write( str.."{"..lookup[v].."},"..charE )
                   elseif stype == "string" then
                      file:write( str..exportstring( v )..","..charE )
-                  elseif stype == "number" then
+                  elseif stype == "number" or stype == "boolean" then
                      file:write( str..tostring( v )..","..charE )
                   end
                end

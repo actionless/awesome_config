@@ -35,7 +35,6 @@ end
 
 db.set = function(key, value)
   db.init()
-  nlog(key)
   db.file_table[key] = value
   db.was_changed = true
 end
