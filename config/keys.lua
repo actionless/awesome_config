@@ -339,7 +339,7 @@ local globalkeys = awful.util.table.join(
       local tag_id = awful.tag.getidx(tag)
 
       awful.tag.togglemfpol(tag)
-      tag.emit_signal("property::layout", tag_id)
+      tag:emit_signal("property::layout")
 
       local db_id = "tag_layout_expand_master_"..s
       local layout_expand_masters = db.get(db_id)
@@ -354,7 +354,7 @@ local globalkeys = awful.util.table.join(
       local tag = awful.tag.selected(s)
       local tag_id = awful.tag.getidx(tag)
       helpers.tag_toggle_gap(tag)
-      tag.emit_signal("property::layout", tag)
+      tag:emit_signal("property::layout")
     end,
     "toggle useless gap", LAYOUT_MANIPULATION
   ),

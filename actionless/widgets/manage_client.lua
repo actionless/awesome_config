@@ -55,13 +55,13 @@ local function worker(args)
       widget:set_warning()
       widget:set_text('T')
       awesome_context.show_titlebar = true
-      tag.emit_signal("property::layout", t)
+      t:emit_signal("property::layout")
     else
       widget.is_managing = false
       widget:set_error()
       widget:set_text('X')
       awesome_context.show_titlebar = false
-      tag.emit_signal("property::layout", t)
+      t:emit_signal("property::layout")
     end
   end
 
