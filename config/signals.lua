@@ -93,11 +93,11 @@ end
 
 local function on_client_unfocus (c)
   local layout = awful.layout.get(c.screen)
-  c.border_color = beautiful.border_normal
   if awesome_context.show_titlebar and #awful.client.tiled(c.screen) > 1 then
     log("U: tile: titlebars enabled explicitly")
     c.border_width = beautiful.border_width
     titlebar.make_titlebar(c)
+    c.border_color = beautiful.border_normal
   elseif awful.client.floating.get(c) then
     log("U: floating client")
     c.border_color = beautiful.titlebar_border
