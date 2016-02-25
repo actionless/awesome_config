@@ -8,12 +8,11 @@ local parse		= require("utils.parse")
 local helpers		= require("actionless.helpers")
 local dbus = dbus -- luacheck: ignore
 
-local mopidy = {
-  player_cmd = 'st -e ncmpcpp'
-}
+local mopidy = {}
 
 function mopidy.init(args)
   args = args or {} 
+  mopidy.player_cmd = args.args.mopidy_player_command or "xterm -e ncmpcpp"
   mopidy.music_dir = args.music_dir or os.getenv("HOME") .. "/Music"
   mopidy.host = args.host or "127.0.0.1"
   mopidy.port = args.port or "6600"
@@ -83,6 +82,10 @@ function mopidy.parse_metadata(result_string, parse_status_callback)
   player_status.state = state
 
   parse_status_callback(player_status)
+end
+
+function mopidy.resize_cover(_, _, _, notification_callback)
+  return notification_callback()
 end
 
 return mopidy

@@ -51,6 +51,8 @@ function widget_loader.init(awesome_context)
       force_no_bgimage=true,
       horizontal=true,
       left_separators = awesome_context.lcarslist_enabled and {} or { 'arrl' },
+      mopidy_player_command = awesome_context.cmds.tmux_run .. "ncmpcpp",
+      enable_notifications = false,
       --valign = "bottom",
   })
   -- volume

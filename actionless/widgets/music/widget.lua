@@ -38,6 +38,7 @@ local player = {
 
 local function worker(args)
   local args = args or {}
+  player.args = args
   local timeout = args.timeout or 5
   local default_art = args.default_art or ""
   local enabled_backends = args.backends
@@ -46,6 +47,7 @@ local function worker(args)
   local fg = args.fg or beautiful.panel_fg or beautiful.fg
   local artist_color      = fg or beautiful.player_artist or fg or beautiful.fg_normal
   local title_color      = fg or beautiful.player_title or fg or beautiful.fg_normal
+  player.enable_notifications = args.enable_notifications or false
   --player.artist_widget = common_widget(args)
   --player.title_widget = common_widget(args)
   player.artist_widget = wibox.widget.textbox()
@@ -232,11 +234,17 @@ local function worker(args)
   end
 -------------------------------------------------------------------------------
 function player.resize_cover()
+  local notification_callback
+  if player.enable_notifications then
+    notification_callback = player.show_notification
+  else
+    notification_callback = function() end
+  end
   -- backend supports it:
   if player.backend.resize_cover then
     return player.backend.resize_cover(
       player.player_status, cover_size, player.cover,
-      player.show_notification
+      notification_callback
     )
   end
   -- fallback:
@@ -252,7 +260,7 @@ function player.resize_cover()
       resize,
       player.cover
     ), {
-    output_done=player.show_notification
+    output_done=notification_callback
   })
 end
 -------------------------------------------------------------------------------

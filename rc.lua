@@ -56,7 +56,7 @@ context = {
     compositor = "killall compton; compton",
     file_manager = "nautilus",
     tmux = terminal .. " -e tmux",
-    tmux_run   = terminal .. " -e tmux new-session",
+    tmux_run   = terminal .. " -e tmux new-session ",
     scrot_preview_cmd = [['mv $f ~/images/ && viewnior ~/images/$f']],
   },
 
