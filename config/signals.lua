@@ -14,42 +14,27 @@ local signals = {}
 
 function signals.init(awesome_context)
 
+
   awful.tag.getgap = function(t)
     local t = t or awful.tag.selected()
-    if numclients == 1 and awful.tag.getmfpol(t) ~= "mwfact" then
+    if #awful.client.tiled(awful.tag.getscreen(t)) == 1 and awful.tag.getmfpol(t) ~= "mwfact" then
         return 0
     end
     return awful.tag.getproperty(t, "useless_gap") or beautiful.useless_gap or 0
   end
 
-local function restore_gap(t)
-  if helpers.tag_getproperty(t, "expand_useless_gap") then
-    helpers.tag_toggle_gap(t)
-    helpers.tag_setproperty(t, "expand_useless_gap", false)
-  end
-end
-
-local function need_gap(t)
-  local current_gap = awful.tag.getgap(t)
-  if current_gap > 0 then
-    helpers.tag_toggle_gap(t)
-    helpers.tag_setproperty(t, "expand_useless_gap", true)
-  end
-end
-
-local function need_gapless(t)
-  local current_gap = awful.tag.getgap(t)
-  if current_gap == 0 then
-    helpers.tag_toggle_gap(t)
-    helpers.tag_setproperty(t, "expand_useless_gap", true)
-  end
-end
 
 local function on_client_focus(c)
-  local t = awful.tag.selected(awful.screen.focused())
   local layout = awful.layout.get(c.screen)
+  local num_tiled = #awful.client.tiled(c.screen)
+
   c.border_color = beautiful.border_focus
-  if awesome_context.show_titlebar and #awful.client.tiled(c.screen) > 1 then
+
+  if awesome_context.show_titlebar and (
+    num_tiled > 1 or (
+      num_tiled > 0 and awful.tag.getmfpol() ~= 'expand'
+    )
+  ) then
     log("F: tile: titlebars enabled explicitly")
     c.border_width = beautiful.border_width
     titlebar.make_titlebar(c)
@@ -64,28 +49,17 @@ local function on_client_focus(c)
     log("F: floating layout")
     c.border_width = beautiful.border_width
     titlebar.make_titlebar(c)
-  elseif #awful.client.tiled(c.screen) == 1 then
+  elseif num_tiled == 1 then
     if awful.tag.getmfpol() == 'expand' then
       log("F: one tiling client: expand")
-      need_gap(t)
       titlebar.remove_border(c)
     else
       log("F: one tiling client")
-      need_gapless(t)
       titlebar.remove_titlebar(c)
       c.border_width = beautiful.border_width
     end
-    --if awful.tag.getgap() == 0 then
-      --log("F: one tiling client: no-gap")
-      --titlebar.remove_border(c)
-    --else
-      --log("F: one tiling client: gap")
-      --c.border_width = beautiful.border_width
-      --titlebar.remove_titlebar(c)
-    --end
   else
     log("F: more tiling clients")
-    restore_gap(t)
     c.border_width = beautiful.border_width
     titlebar.remove_titlebar(c)
   end
@@ -93,7 +67,13 @@ end
 
 local function on_client_unfocus (c)
   local layout = awful.layout.get(c.screen)
-  if awesome_context.show_titlebar and #awful.client.tiled(c.screen) > 1 then
+  local num_tiled = #awful.client.tiled(c.screen)
+
+  if awesome_context.show_titlebar and (
+    num_tiled > 1 or (
+      num_tiled > 0 and awful.tag.getmfpol() ~= 'expand'
+    )
+  ) then
     log("U: tile: titlebars enabled explicitly")
     c.border_width = beautiful.border_width
     titlebar.make_titlebar(c)
@@ -104,7 +84,7 @@ local function on_client_unfocus (c)
   elseif layout == awful.layout.suit.floating then
     log("U: floating layout")
     c.border_color = beautiful.titlebar_border
-  elseif #awful.client.tiled(c.screen) == 1 then
+  elseif num_tiled == 1 then
     if awful.tag.getmfpol() == 'expand' then
       log("U: one tiling client: expand")
       titlebar.remove_border(c)
@@ -114,15 +94,6 @@ local function on_client_unfocus (c)
       c.border_width = beautiful.border_width
       titlebar.remove_titlebar(c)
     end
-    --if awful.tag.getgap() == 0 then
-      --log("U: one tiling client: no-gap")
-      --titlebar.remove_border(c)
-    --else
-      --log("U: one tiling client: gap")
-      --c.border_color = beautiful.border_normal
-      --c.border_width = beautiful.border_width
-      --titlebar.remove_titlebar(c)
-    --end
   else
     log("U: more tiling clients")
     titlebar.remove_titlebar(c)
