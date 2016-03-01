@@ -149,17 +149,31 @@ function helpers.get_nix_xresources_theme_path()
 end
 
 
+localstorage = {}
+function helpers.tag_getproperty(t, key)
+  local id = awful.tag.getidx(t)
+  return localstorage[key] and localstorage[key][id]
+end
+function helpers.tag_setproperty(t, key, value)
+  local id = awful.tag.getidx(t)
+  if not localstorage[key] then
+    localstorage[key] = {}
+  end
+  localstorage[key][id] = value
+end
+
+
 function helpers.tag_toggle_gap(t)
   t = t or awful.tag.selected()
   local current_gap = awful.tag.getgap(t)
-  local prev_gap = awful.tag.getproperty(t, "prev_useless_gap") or ((current_gap>0) and 0 or beautiful.useless_gap)
+  local prev_gap = helpers.tag_getproperty(t, "prev_useless_gap") or ((current_gap>0) and 0 or beautiful.useless_gap)
   if prev_gap == current_gap then
     prev_gap = 0
     if current_gap == 0 then
       prev_gap = beautiful.useless_gap
     end
   end
-  awful.tag.setproperty(t, "prev_useless_gap", current_gap)
+  helpers.tag_setproperty(t, "prev_useless_gap", current_gap)
   local newgap = 0
   if current_gap == 0 then
     newgap = prev_gap

@@ -23,9 +23,9 @@ function signals.init(awesome_context)
   end
 
 local function restore_gap(t)
-  if awful.tag.getproperty(t, "expand_useless_gap") then
+  if helpers.tag_getproperty(t, "expand_useless_gap") then
     helpers.tag_toggle_gap(t)
-    awful.tag.setproperty(t, "expand_useless_gap", false)
+    helpers.tag_setproperty(t, "expand_useless_gap", false)
   end
 end
 
@@ -33,7 +33,7 @@ local function need_gap(t)
   local current_gap = awful.tag.getgap(t)
   if current_gap > 0 then
     helpers.tag_toggle_gap(t)
-    awful.tag.setproperty(t, "expand_useless_gap", true)
+    helpers.tag_setproperty(t, "expand_useless_gap", true)
   end
 end
 
@@ -41,7 +41,7 @@ local function need_gapless(t)
   local current_gap = awful.tag.getgap(t)
   if current_gap == 0 then
     helpers.tag_toggle_gap(t)
-    awful.tag.setproperty(t, "expand_useless_gap", true)
+    helpers.tag_setproperty(t, "expand_useless_gap", true)
   end
 end
 
