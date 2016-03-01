@@ -166,19 +166,17 @@ end
 function helpers.tag_toggle_gap(t)
   t = t or awful.tag.selected()
   local current_gap = awful.tag.getgap(t)
-  local prev_gap = helpers.tag_getproperty(t, "prev_useless_gap") or ((current_gap>0) and 0 or beautiful.useless_gap)
+  local prev_gap = helpers.tag_getproperty(t, "prev_useless_gap")
+    or ((current_gap>0) and 0 or beautiful.useless_gap)
   if prev_gap == current_gap then
-    prev_gap = 0
     if current_gap == 0 then
       prev_gap = beautiful.useless_gap
+    else
+      prev_gap = 0
     end
   end
   helpers.tag_setproperty(t, "prev_useless_gap", current_gap)
-  local newgap = 0
-  if current_gap == 0 then
-    newgap = prev_gap
-  end
-  awful.tag.setgap(newgap, t)
+  awful.tag.setgap(prev_gap, t)
 end
 
 
