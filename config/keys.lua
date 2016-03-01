@@ -751,7 +751,7 @@ awesome_context.clientkeys = awful.util.table.join(
     function(c)
      awesome_context.widgets.screen[c.screen].manage_client.toggle()
     end,
-    "toggle titlebars", CLIENT_MANIPULATION
+    "toggle titlebars", AWESOME_COLOR
   ),
   bind_key({ modkey,        }, "n",
     function (c) c.minimized = true end,

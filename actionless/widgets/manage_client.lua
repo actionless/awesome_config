@@ -49,18 +49,19 @@ local function worker(args)
     end)
 
   widget.toggle = function()
-    local t = awful.tag.selected(widget_screen)
     if not widget.is_managing then
       widget.is_managing = true
       widget:set_warning()
       widget:set_text('T')
       awesome_context.show_titlebar = true
-      t:emit_signal("property::layout")
     else
       widget.is_managing = false
       widget:set_error()
       widget:set_text('X')
       awesome_context.show_titlebar = false
+    end
+    local tags = awful.tag.gettags(widget_screen)
+    for _, t in ipairs(tags) do
       t:emit_signal("property::layout")
     end
   end
