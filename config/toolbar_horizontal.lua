@@ -81,7 +81,6 @@ function toolbar.init(awesome_context)
     if beautiful.panel_tasklist then
       right_layout_left:add(make_separator('arrr', {fg=beautiful.panel_tasklist}))
     end
-    right_layout_left:add(separator)
     right_layout_left:add(loaded_widgets.music)
     --right_layout_left:add(separator)
 

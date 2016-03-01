@@ -54,7 +54,7 @@ local function worker(args)
   player.title_widget = wibox.widget.textbox()
   player.separator_widget = wibox.widget.textbox("waiting for " .. enabled_backends[1] .. "...")
   args.widgets = {
-    wibox.widget.textbox(' '),
+    --wibox.widget.textbox(' '),
     player.artist_widget,
     --common.constraint({
       --height = beautiful.panel_padding_bottom * 2,
@@ -62,7 +62,7 @@ local function worker(args)
     --}),
     player.separator_widget,
     player.title_widget,
-    wibox.widget.textbox(' '),
+    --wibox.widget.textbox(' '),
   }
   player.widget = decorated_widget(args)
 
