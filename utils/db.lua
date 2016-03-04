@@ -1,3 +1,4 @@
+local awful_util = require("awful.util")
 local pickle = require("utils.pickle")
 local helpers = require("actionless.helpers")
 
@@ -7,7 +8,7 @@ local db = {
   was_changed = false
 }
 
-db.filename = "/home/lie/.config/awesome/config/config.db"
+db.filename = awful_util.getdir("config") .. "/config/config.db"
 
 db.init = function()
   if not db.file_table then
