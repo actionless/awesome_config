@@ -1,8 +1,8 @@
 --[[
-     Licensed under GNU General Public License v2
-      * (c) 2013-2014  Yauheni Kirylau
-      * (c) 2013,      Luke Bonham
-      * (c) 2010-2012, Peter Hofmann
+Licensed under GNU General Public License v2
+* (c) 2013-2014  Yauheni Kirylau
+* (c) 2013,      Luke Bonham
+* (c) 2010-2012, Peter Hofmann
 --]]
 
 local debug  = require("debug")
@@ -22,9 +22,9 @@ helpers.dir    = debug.getinfo(1, 'S').source:match[[^@(.*/).*$]]
 function helpers.newinterval(timeout, fun, nostart)
   local t = gears.timer {timeout = timeout or 5}
   t:connect_signal("timeout", function(...)
-      t:stop()
-      fun(...)
-      t:again()
+    t:stop()
+    fun(...)
+    t:again()
   end)
   t:start()
   if not nostart then
@@ -45,69 +45,9 @@ function helpers.run_once(cmd)
   local findme = cmd
   local firstspace = cmd:find(" ")
   if firstspace then
-	findme = cmd:sub(0, firstspace-1)
+    findme = cmd:sub(0, firstspace-1)
   end
   awful.spawn.with_shell("pgrep -u $USER -x " .. findme .. " > /dev/null || (" .. cmd .. ")")
-end
-
-
-function helpers.client_floats(c)
-  local l = awful.layout.get(c.screen)
-  if awful.layout.getname(l) == 'floating' or awful.client.floating.get(c) then
-    return true
-  end
-  return false
-end
-
-
-function helpers.layout_get_id(layout)
-  local layout_name = awful.layout.getname(layout)
-  for layout_id, layout2 in ipairs(awful.layout.layouts) do
-    if layout_name == awful.layout.getname(layout2) then
-      return layout_id
-    end
-  end
-end
-
-
-function helpers.tag_noempty_list(s)
-  local screen = s or awful.screen.focused()
-  local tags = awful.tag.gettags(screen)
-  local vtags = {}
-  for _, t in pairs(tags) do
-      if awful.widget.taglist.filter.noempty(t) then
-          vtags[#vtags + 1] = t
-      end
-  end
-  return vtags
-end
-
-
-function helpers.get_tag_idx(target_tag, tag_list, s)
-  s = s or awful.screen.focused()
-  tag_list = tag_list or awful.tag.gettags(s)
-  for idx, t in ipairs(tag_list) do
-    if t == target_tag then
-      return idx
-    end
-  end
-end
-
-
-function helpers.tag_view_noempty(delta, s)
-    s = s or awful.screen.focused()
-    local selected_tag = awful.tag.selected(s)
-    local noempty_tags = helpers.tag_noempty_list(s)
-    local target_tag_local_idx = helpers.get_tag_idx(selected_tag, noempty_tags, s) + delta
-    if target_tag_local_idx < 1 then
-      target_tag_local_idx = #noempty_tags
-    elseif target_tag_local_idx > #noempty_tags then
-      target_tag_local_idx = 1
-    end
-    local current_idx = awful.tag.getidx()
-    local target_idx = awful.tag.getidx(noempty_tags[target_tag_local_idx])
-    local idx_delta = current_idx - target_idx
-    awful.tag.viewidx(-idx_delta, s)
 end
 
 
@@ -150,6 +90,66 @@ function helpers.tag_toggle_gap(t)
   end
   helpers.tag_setproperty(t, "prev_useless_gap", current_gap)
   awful.tag.setgap(prev_gap, t)
+end
+
+
+function helpers.tag_noempty_list(s)
+  local screen = s or awful.screen.focused()
+  local tags = awful.tag.gettags(screen)
+  local vtags = {}
+  for _, t in pairs(tags) do
+    if awful.widget.taglist.filter.noempty(t) then
+      vtags[#vtags + 1] = t
+    end
+  end
+  return vtags
+end
+
+
+function helpers.tag_get_idx(target_tag, tag_list, s)
+  s = s or awful.screen.focused()
+  tag_list = tag_list or awful.tag.gettags(s)
+  for idx, t in ipairs(tag_list) do
+    if t == target_tag then
+      return idx
+    end
+  end
+end
+
+
+function helpers.tag_view_noempty(delta, s)
+  s = s or awful.screen.focused()
+  local selected_tag = awful.tag.selected(s)
+  local noempty_tags = helpers.tag_noempty_list(s)
+  local target_tag_local_idx = helpers.tag_get_idx(selected_tag, noempty_tags, s) + delta
+  if target_tag_local_idx < 1 then
+    target_tag_local_idx = #noempty_tags
+  elseif target_tag_local_idx > #noempty_tags then
+    target_tag_local_idx = 1
+  end
+  local current_idx = awful.tag.getidx()
+  local target_idx = awful.tag.getidx(noempty_tags[target_tag_local_idx])
+  local idx_delta = current_idx - target_idx
+  awful.tag.viewidx(-idx_delta, s)
+end
+
+
+function helpers.client_floats(c)
+  local l = awful.layout.get(c.screen)
+  if awful.layout.getname(l) == 'floating' or awful.client.floating.get(c) then
+    return true
+  end
+  return false
+end
+
+
+function helpers.layout_get_id(layout)
+  local layout_name = awful.layout.getname(layout)
+  for layout_id, layout2 in ipairs(awful.layout.layouts) do
+    if layout_name == awful.layout.getname(layout2) then
+      return layout_id
+    end
+  end
 end
 
 
