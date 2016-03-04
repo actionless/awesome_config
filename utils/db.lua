@@ -48,4 +48,10 @@ db.get_or_set = function(key, fallback_value)
     return value
 end
 
+function db.update_child(key, child_key, child_value)
+  local value = db.get(key)
+  value[child_key] = child_value
+  db.set(key, value)
+end
+
 return db
