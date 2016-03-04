@@ -60,7 +60,7 @@ local function worker(args)
       replaces_id = mem.get_notification_id(),
       position = beautiful.widget_notification_position,
     })
-    helpers.async_spawn(
+    awful.spawn.easy_async(
       mem.command,
       mem.notification_callback_done
     )

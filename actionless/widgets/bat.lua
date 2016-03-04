@@ -16,7 +16,7 @@ local common_widget	= require("actionless.widgets.common").decorated
 local bat = {}
 
 local function worker(args)
-  local args = args or {}
+  args = args or {}
   local exec = args.exec or "xfce4-power-manager-settings"
   local update_interval = args.update_interval or 30
   local device = args.device or "battery_BAT0"
@@ -91,7 +91,7 @@ local function worker(args)
   end
 
   local function update()
-    helpers.async_spawn(
+    awful.spawn.easy_async(
       'upower -i /org/freedesktop/UPower/devices/' .. device,
       post_update)
   end

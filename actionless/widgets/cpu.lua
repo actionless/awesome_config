@@ -63,7 +63,7 @@ local function worker(args)
       replaces_id = cpu.get_notification_id(),
       position = beautiful.widget_notification_position,
     })
-    helpers.async_spawn(
+    awful.spawn.easy_async(
       cpu.command,
       cpu.notification_callback_done
     )

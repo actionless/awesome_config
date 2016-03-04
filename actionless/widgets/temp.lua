@@ -15,7 +15,7 @@ local decorated_widget= require("actionless.widgets.common").decorated
 local temp = {}
 
 local function worker(args)
-  local args = args or {}
+  args = args or {}
   local update_interval = args.update_interval or 5
   local warning = args.warning or 75
   local sensor = args.sensor or "CPU Temperature"
@@ -27,7 +27,7 @@ local function worker(args)
   temp.widget:set_image(beautiful.widget_temp)
 
   function temp.update()
-    helpers.async_spawn("sensors ", temp.post_update)
+    awful.spawn.easy_async("sensors ", temp.post_update)
   end
 
   function temp.post_update(str)

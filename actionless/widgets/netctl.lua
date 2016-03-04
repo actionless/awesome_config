@@ -16,7 +16,7 @@ local netctl = {
 }
 
 local function worker(args)
-  local args = args or {}
+  args = args or {}
   local update_interval = args.update_interval or 5
   local font = args.font or beautiful.tasklist_font or beautiful.font
   local bg = args.bg or beautiful.panel_bg or beautiful.bg
@@ -54,7 +54,7 @@ local function worker(args)
   end
 
   function netctl.common_update(cmd, match, fallback)
-    helpers.async_spawn(
+    awful.spawn.easy_async(
       cmd,
       function(stdout)
         netctl.update_widget(stdout:match(match) or fallback)
@@ -78,7 +78,7 @@ local function worker(args)
   end
 
   function netctl.wpa_update()
-    helpers.async_spawn(
+    awful.spawn.easy_async(
       "sudo wpa_cli status",
       function(stdout)
         netctl.update_widget(
@@ -88,7 +88,7 @@ local function worker(args)
   end
 
   function netctl.netctl_auto_update()
-    helpers.async_spawn(
+    awful.spawn.easy_async(
       'sudo netctl-auto current',
       function(stdout)
         netctl.update_widget(stdout:match("^(.*)\n.*") or 'nctl-a...')
@@ -96,7 +96,7 @@ local function worker(args)
   end
 
   function netctl.netctl_update()
-    helpers.async_spawn(
+    awful.spawn.easy_async(
       "systemctl list-unit-files 'netctl@*'",
       function(stdout)
         netctl.update_widget(

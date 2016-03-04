@@ -7,8 +7,6 @@
 
 local debug  = require("debug")
 local awful = require("awful")
-local capi   = { client = client,
-                 mouse = mouse }
 local gears = require("gears")
 local beautiful = require("beautiful")
 
@@ -52,41 +50,6 @@ function helpers.run_once(cmd)
   awful.spawn.with_shell("pgrep -u $USER -x " .. findme .. " > /dev/null || (" .. cmd .. ")")
 end
 
-function helpers.async_spawn(cmd, callback)
-  local stdout = ''
-  local stderr = ''
-  local function parse_stdout(str)
-    stdout = stdout .. str .. "\n"
-  end
-  local function parse_stderr(str)
-    stderr = stderr ..  str .. "\n"
-  end
-  local function done_callback()
-    return callback(stdout, stderr)
-  end
-  local exit_callback_fired = false
-  local output_done_callback_fired = false
-  local function exit_callback()
-    exit_callback_fired = true
-    if output_done_callback_fired then
-      return done_callback()
-    end
-  end
-  local function output_done_callback()
-    output_done_callback_fired = true
-    if exit_callback_fired then
-      return done_callback()
-    end
-  end
-  return awful.spawn.with_line_callback(
-    cmd, {
-    stdout=parse_stdout,
-    stderr=parse_stderr,
-    exit=exit_callback,
-    output_done=output_done_callback
-  })
-end
-
 
 function helpers.client_floats(c)
   local l = awful.layout.get(c.screen)
@@ -111,7 +74,7 @@ function helpers.tag_noempty_list(s)
   local screen = s or awful.screen.focused()
   local tags = awful.tag.gettags(screen)
   local vtags = {}
-  for i, t in pairs(tags) do
+  for _, t in pairs(tags) do
       if awful.widget.taglist.filter.noempty(t) then
           vtags[#vtags + 1] = t
       end
