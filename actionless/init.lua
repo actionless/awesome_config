@@ -5,6 +5,7 @@ local actionless = {
   common_theme = require("actionless.common_theme"),
   lcars_layout = require("actionless.lcars_layout"),
   helpers = require("actionless.helpers"),
+  persistent = require("actionless.persistent"),
   -- awesome addons
   titlebar = require("actionless.titlebar"),
   menu_addon = require("actionless.menu_addon"),
