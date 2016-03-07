@@ -24,144 +24,100 @@ function toolbar.init(awesome_context)
   local sep = common.constraint({ width=dpi(2), })
   local separator  = make_separator(' ')
   local iseparator  = make_separator(' ', {bg=beautiful.panel_widget_bg})
-  local sep_info   = make_separator('sq', {fg=beautiful.panel_info})
-  local sep_media  = make_separator('sq', {fg=beautiful.panel_media})
 
   awesome_context.topwibox_layout_fallback = {}
   -- Create a wibox for each screen and add it
-  local mywibox = {}
   for s = 1, capi.screen.count() do
 
     local wheel_binding = awful.util.table.join(
-      awful.button({		}, 5, function(t)
+      awful.button({		}, 5, function(_)
         helpers.tag_view_noempty(1, s)
       end),
-      awful.button({		}, 4, function(t)
+      awful.button({		}, 4, function(_)
         helpers.tag_view_noempty(-1, s)
       end)
     )
 
 
     -- LEFT side
-    local left_layout = wibox.layout.fixed.horizontal()
+    local left_layout = wibox.layout.fixed.horizontal(
+      loaded_widgets.screen[s].manage_client,
+      sep,
+      loaded_widgets.screen[s].promptbox,
+      sep,
+      sep,
+      loaded_widgets.kbd,
+      sep,
+      loaded_widgets.screen[s].tasklist,
+      separator
+    )
     left_layout:buttons(wheel_binding)
-
-    --left_layout:add(make_separator('arrl', {fg=beautiful.panel_widget_bg}))
-    --left_layout:add(loaded_widgets.screen[s].taglist)
-    --left_layout:add(make_separator('arrr', {fg=beautiful.panel_widget_bg}))
-    left_layout:add(loaded_widgets.screen[s].manage_client)
-    left_layout:add(sep)
-    left_layout:add(loaded_widgets.screen[s].promptbox)
-    left_layout:add(sep)
-    left_layout:add(sep)
-    left_layout:add(loaded_widgets.kbd)
-    left_layout:add(sep)
-    --left_layout:add(common.constraint({
-      --widget=loaded_widgets.screen[s].tasklist,
-      --width=(screen[s].workarea.width / 3),
-    --}))
-    left_layout:add(loaded_widgets.screen[s].tasklist)
-    left_layout:add(separator)
 
 
     -- CENTER
-    local center_layout = wibox.layout.fixed.horizontal()
+    local center_layout = wibox.layout.fixed.horizontal(
+      make_separator('arrl', {fg=beautiful.panel_widget_bg}),
+      loaded_widgets.screen[s].taglist,
+      make_separator('arrr', {fg=beautiful.panel_widget_bg})
+    )
     center_layout:buttons(wheel_binding)
-
-    center_layout:add(make_separator('arrl', {fg=beautiful.panel_widget_bg}))
-    center_layout:add(loaded_widgets.screen[s].taglist)
-    center_layout:add(make_separator('arrr', {fg=beautiful.panel_widget_bg}))
 
 
     -- RIGHT side
-    local right_layout = wibox.layout.align.horizontal()
     --
 
-    local right_layout_left = wibox.layout.fixed.horizontal()
-    if beautiful.panel_tasklist then
-      right_layout_left:add(make_separator('arrr', {fg=beautiful.panel_tasklist}))
-    end
-    right_layout_left:add(loaded_widgets.music)
-    --right_layout_left:add(separator)
+    local right_layout_left = wibox.layout.fixed.horizontal(
+      beautiful.panel_tasklist and make_separator('arrr', {fg=beautiful.panel_tasklist}),
+      loaded_widgets.music
+    )
 
-    local right_layout_right = wibox.layout.fixed.horizontal()
-    right_layout_right:add(make_separator('arrl', {fg=beautiful.panel_media}))
-    --right_layout_right:add(separator)
-    right_layout_right:add(
+    local right_layout_right = wibox.layout.fixed.horizontal(
+      make_separator('arrl', {fg=beautiful.panel_media}),
       common.constraint({
         widget=loaded_widgets.volume,
-        --width=dpi(80),
         width=dpi(120),
-      })
+      }),
+      separator,
+      make_separator('arrl', {fg=beautiful.panel_widget_bg}),
+      iseparator,
+      loaded_widgets.mem,
+      iseparator,
+      iseparator,
+      loaded_widgets.cpu,
+      iseparator
     )
-    right_layout_right:add(separator)
-
-    right_layout_right:add(make_separator('arrl', {fg=beautiful.panel_widget_bg}))
-    --right_layout_right:add(iseparator)
-    right_layout_right:add(iseparator)
-    right_layout_right:add(loaded_widgets.mem)
-    right_layout_right:add(iseparator)
-    right_layout_right:add(iseparator)
-    right_layout_right:add(loaded_widgets.cpu)
-    right_layout_right:add(iseparator)
     if loaded_widgets.temp then
       right_layout_right:add(loaded_widgets.temp)
     end
     if loaded_widgets.bat then
       right_layout_right:add(loaded_widgets.bat)
     end
-    --right_layout_right:add(iseparator)
-    right_layout_right:add(make_separator('arrr', {fg=beautiful.panel_widget_bg}))
-    right_layout_right:add(separator)
+    right_layout_right:add(
+      make_separator('arrr', {fg=beautiful.panel_widget_bg}),
+      make_separator('   '),
+      loaded_widgets.textclock,
+      make_separator('  '),
+      loaded_widgets.screen[s].layoutbox,
+      separator,
+      sep,
+      s==1 and loaded_widgets.systray_toggle or separator
+    )
 
-    right_layout_right:add(separator)
-
-    ----!--right_layout_right:add(make_separator('arrl', {fg=beautiful.panel_widget_bg}))
-    right_layout_right:add(separator)
-    right_layout_right:add(loaded_widgets.textclock)
-    right_layout_right:add(separator)
-    right_layout_right:add(separator)
-    right_layout_right:add(loaded_widgets.screen[s].layoutbox)
-    right_layout_right:add(separator)
-    ----!--right_layout_right:add(make_separator('arrr', {fg=beautiful.panel_widget_bg_disabled}))
-    right_layout_right:add(sep)
-
-    if s == 1 then
-      right_layout_right:add(loaded_widgets.systray_toggle)
-    else
-      right_layout_right:add(separator)
-    end
-
-
+    local right_layout = wibox.layout.align.horizontal(
+        wibox.layout.fixed.horizontal(),
+        right_layout_left,
+        right_layout_right
+    )
     --right_layout:set_expand('none')
-    right_layout:set_middle(
-      wibox.widget.background(
-        right_layout_left--, '#ff0000'
-      )
-    )
-    right_layout:set_left(
-      wibox.widget.background(
-        wibox.layout.fixed.horizontal()--, '#00ff00'
-      )
-    )
-    right_layout:set_right(
-      wibox.widget.background(
-        right_layout_right--, '#0000ff'
-      )
-    )
 
 
     -- TOOLBAR
-    local layout = wibox.layout.align.horizontal()
-    layout:set_expand('outside')
-    layout:set_left(left_layout)
-    layout:set_middle(center_layout)
-    --layout:set_right(right_layout)
-    layout:set_right(
-      wibox.widget.background(
-        right_layout--,'#ffff00'
-      )
+    local layout = wibox.layout.align.horizontal(
+      left_layout,
+      center_layout,
+      right_layout
     )
+    layout:set_expand('outside')
 
     -- background image:
     --if beautiful.panel_bg_image then
@@ -171,15 +127,16 @@ function toolbar.init(awesome_context)
       --layout = layout_bg
     --end
 
-    -- bottom panel padding:
+    -- panel bottom padding:
     if beautiful.panel_padding_bottom then
       local const = wibox.layout.constraint()
       const:set_strategy("exact")
       const:set_height(beautiful.panel_padding_bottom)
-      local margined_layout = wibox.layout.align.vertical()
-      margined_layout:set_middle(layout)
-      margined_layout:set_bottom(const)
-      layout = margined_layout
+      layout = wibox.layout.align.vertical(
+        nil,
+        layout,
+        const
+      )
     end
 
     awesome_context.topwibox_layout_fallback[s] = layout  -- this one!
