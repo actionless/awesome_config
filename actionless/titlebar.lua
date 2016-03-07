@@ -49,33 +49,35 @@ function titlebar.make_titlebar(c)
     end)
     )
 
-  local left_layout = wibox.layout.fixed.horizontal()
-  left_layout:add(awful.titlebar.widget.closebutton(c))
-  left_layout:add(awful.titlebar.widget.minimizebutton(c))
-  --left_layout:add(awful.titlebar.widget.maximizedbutton(c))
-
-  local right_layout = wibox.layout.fixed.horizontal()
-  right_layout:add(awful.titlebar.widget.ontopbutton(c))
-  right_layout:add(awful.titlebar.widget.stickybutton(c))
-
-  local middle_layout = wibox.layout.flex.horizontal()
-  local title = awful.titlebar.widget.titlewidget(c)
-  title:set_align("center")
-  title:set_font(beautiful.titlebar_font)
-  middle_layout:add(title)
-  middle_layout:buttons(buttons)
-
-  local layout = wibox.layout.align.horizontal()
-  layout:set_left(left_layout)
-  layout:set_right(right_layout)
-  layout:set_middle(middle_layout)
-
   awful.titlebar(
     c,
     { size=beautiful.titlebar_height or 16,
       position = beautiful.titlebar_position,
       opacity = beautiful.titlebar_opacity }
-  ):set_widget(layout)
+  ):setup{
+    {
+      awful.titlebar.widget.ontopbutton(c),
+      awful.titlebar.widget.stickybutton(c),
+      layout = wibox.layout.fixed.horizontal,
+    },
+    {
+      {
+        widget = awful.titlebar.widget.titlewidget(c),
+        align = "center",
+        font = beautiful.titlebar_font,
+      },
+      layout = wibox.layout.flex.horizontal,
+      buttons = buttons,
+    },
+    {
+      awful.titlebar.widget.closebutton(c),
+      awful.titlebar.widget.minimizebutton(c),
+      --awful.titlebar.widget.maximizedbutton(c)),
+      layout = wibox.layout.fixed.horizontal,
+    },
+    layout = wibox.layout.align.horizontal,
+  }
+
   c.skip_taskbar = true
 end
 
