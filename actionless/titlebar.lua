@@ -56,8 +56,9 @@ function titlebar.make_titlebar(c)
       opacity = beautiful.titlebar_opacity }
   ):setup{
     {
-      awful.titlebar.widget.ontopbutton(c),
-      awful.titlebar.widget.stickybutton(c),
+      awful.titlebar.widget.closebutton(c),
+      awful.titlebar.widget.minimizebutton(c),
+      --awful.titlebar.widget.maximizedbutton(c)),
       layout = wibox.layout.fixed.horizontal,
     },
     {
@@ -70,9 +71,8 @@ function titlebar.make_titlebar(c)
       buttons = buttons,
     },
     {
-      awful.titlebar.widget.closebutton(c),
-      awful.titlebar.widget.minimizebutton(c),
-      --awful.titlebar.widget.maximizedbutton(c)),
+      awful.titlebar.widget.ontopbutton(c),
+      awful.titlebar.widget.stickybutton(c),
       layout = wibox.layout.fixed.horizontal,
     },
     layout = wibox.layout.align.horizontal,
