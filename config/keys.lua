@@ -14,7 +14,6 @@ local menubar = require("actionless.menubar")
 local helpers = require("actionless.helpers")
 local menu_addon = require("actionless.menu_addon")
 local floats = require("actionless.helpers").client_floats
-local db = require("utils.db")
 local persistent = require("actionless.persistent")
 local tmux_swap_bydirection = require("utils.tmux").swap_bydirection
 
@@ -131,24 +130,16 @@ local globalkeys = awful.util.table.join(
     function ()
       local s = awful.screen.focused()
       local tag = awful.tag.selected(s)
+      if not tag then return end
       local tag_id = awful.tag.getidx(tag)
-      if tag then
-        awful.prompt.run(
-          { prompt = "new tag name: ",
-            text = tag_id .. ":" },
-          awesome_context.widgets.screen[s].promptbox,
-          function(new_name)
-            if not new_name or #new_name == 0 then
-              return
-            else
-               tag.name = new_name
-               local db_id = "tag_names_"..s
-               local tag_names = db.get(db_id)
-               tag_names[tag_id] = new_name
-               db.set(db_id, tag_names)
-            end
-          end)
-      end
+      awful.prompt.run(
+        { prompt = "new tag name: ",
+          text = tag_id .. ":" },
+        awesome_context.widgets.screen[s].promptbox,
+        function(new_name)
+          if not new_name or #new_name == 0 then return end
+          persistent.tag.rename(new_name, tag, s, tag_id)
+        end)
     end,
     "Rename tag", TAG_COLOR
   ),
@@ -335,19 +326,7 @@ local globalkeys = awful.util.table.join(
   ),
 
   bind_key({ modkey, altkey }, "e",
-    function ()
-      local s = awful.screen.focused()
-      local tag = awful.tag.selected(s)
-      local tag_id = awful.tag.getidx(tag)
-
-      awful.tag.togglemfpol(tag)
-      tag:emit_signal("property::layout")
-
-      local db_id = "tag_layout_expand_master_"..s
-      local layout_expand_masters = db.get(db_id)
-      layout_expand_masters[tag_id] = not layout_expand_masters[tag_id]
-      db.set(db_id, layout_expand_masters)
-    end,
+    function () persistent.tag.togglemfpol() end,
     "toggle expand master", LAYOUT_MANIPULATION
   ),
   bind_key({ modkey, altkey }, "g",

@@ -11,19 +11,46 @@ local persistent = {
   lcarslist = {},
 }
 
-function persistent.layout.set(layout, tag, screen)
+local function get_tag_and_screen(tag, screen, tag_id)
   if tag then
     screen = screen or awful.tag.getscreen(tag)
   else
     screen = screen or awful.screen.focused()
     tag = awful.tag.selected(screen)
   end
+  tag_id = tag_id or awful.tag.getidx(tag)
+  return tag, screen, tag_id
+end
+
+
+function persistent.layout.set(layout, tag, screen, tag_id)
+  tag, screen, tag_id = get_tag_and_screen(tag, screen, tag_id)
   awful.layout.set(layout, tag)
   db.update_child(
     "tag_layout_ids_"..screen,
-    awful.tag.getidx(tag),
+    tag_id,
     helpers.layout_get_id(layout)
   )
+end
+
+function persistent.tag.rename(new_name, tag, screen, tag_id)
+  tag, screen, tag_id = get_tag_and_screen(tag, screen, tag_id)
+  tag.name = new_name
+  db.update_child(
+    "tag_names_"..screen,
+    tag_id,
+    new_name
+  )
+end
+
+function persistent.tag.togglemfpol(tag, screen, tag_id)
+  tag, screen, tag_id = get_tag_and_screen(tag, screen, tag_id)
+  awful.tag.togglemfpol(tag)
+  tag:emit_signal("property::layout")
+  local db_id = "tag_layout_expand_master_"..screen
+  local layout_expand_masters = db.get(db_id)
+  layout_expand_masters[tag_id] = not layout_expand_masters[tag_id]
+  db.set(db_id, layout_expand_masters)
 end
 
 function persistent.titlebar.set(enabled)
