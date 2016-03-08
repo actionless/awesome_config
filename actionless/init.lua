@@ -1,7 +1,5 @@
 local actionless = {
   widgets = require("actionless.widgets"),
-  hotkeys = require("actionless.hotkeys"),
-  hotkey_resources = require("actionless.hotkey_resources"),
   common_theme = require("actionless.common_theme"),
   lcars_layout = require("actionless.lcars_layout"),
   helpers = require("actionless.helpers"),
