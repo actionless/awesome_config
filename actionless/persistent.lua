@@ -23,6 +23,10 @@ local function get_tag_and_screen(tag, screen, tag_id)
 end
 
 
+function persistent.layout.get_all_ids(screen, fallback)
+  return db.get_or_set("tag_layout_ids_"..screen, fallback)
+end
+
 function persistent.layout.set(layout, tag, screen, tag_id)
   tag, screen, tag_id = get_tag_and_screen(tag, screen, tag_id)
   awful.layout.set(layout, tag)
@@ -32,6 +36,19 @@ function persistent.layout.set(layout, tag, screen, tag_id)
     helpers.layout_get_id(layout)
   )
 end
+
+function persistent.tag.get_all_names(screen, fallback)
+  return db.get_or_set("tag_names_"..screen, fallback)
+end
+
+function persistent.tag.get_all_mwfact(screen, fallback)
+  return db.get_or_set("tag_mwfact_"..screen, fallback)
+end
+
+function persistent.tag.get_all_mfpol(screen, fallback)
+  return db.get_or_set("tag_mfpol_"..screen, fallback)
+end
+
 
 function persistent.tag.rename(new_name, tag, screen, tag_id)
   tag, screen, tag_id = get_tag_and_screen(tag, screen, tag_id)
@@ -53,6 +70,7 @@ function persistent.tag.togglemfpol(tag, screen, tag_id)
   db.set(db_id, layout_expand_masters)
 end
 
+
 function persistent.titlebar.set(enabled)
   db.set("titlebars_enabled", enabled)
 end
@@ -61,6 +79,7 @@ function persistent.titlebar.get()
   return db.get_or_set("titlebars_enabled", false)
 end
 
+
 function persistent.lcarslist.set(enabled)
   db.set("lcarslist_enabled", enabled)
 end
@@ -68,5 +87,6 @@ end
 function persistent.lcarslist.get()
   return db.get_or_set("lcarslist_enabled", false)
 end
+
 
 return persistent

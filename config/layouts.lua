@@ -3,7 +3,6 @@ local gears = require("gears")
 local beautiful = require("beautiful")
 local capi = { screen = screen }
 local lcars_layout = require("actionless.lcars_layout")
-local db = require("utils.db")
 local persistent = require("actionless.persistent")
 
 local layouts = {}
@@ -39,35 +38,40 @@ function layouts.init(context)
   context.tags = {}
   for s = 1, capi.screen.count() do
 
-    local layout_ids = db.get_or_set("tag_layout_ids_"..s, {
-      1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1,
-    })
     local enabled_layouts = {}
-    for i, id in ipairs(layout_ids) do
+    for i, id in ipairs(persistent.layout.get_all_ids(s, {
+      1, 1, 1, 1, 1, 1,
+      1, 1, 1, 4, 1, 1,
+    })) do
       enabled_layouts[i] = awful.layout.layouts[id]
     end
+    local tags = awful.tag(
+      persistent.tag.get_all_names(s, {
+        '1:bs', '2:web',  '3:ww', '4:im',   '5:mm', 6,
+        '7:sp', 8,        '9:sd', '10:nl',  '11', '12'
+      }),
+      s, enabled_layouts
+    )
 
-    local tag_names = db.get_or_set("tag_names_"..s, {
-      '1:bs', '2:web', '3:ww', '4:im', '5:mm', 6, '7:sp', 8, '9:sd', '10:nl',
-      '11', '12'
-    })
-    context.tags[s] = awful.tag( tag_names, s, enabled_layouts)
-
-    local tags = awful.tag.gettags(s)
-
-    awful.tag.incmwfact(0.20, tags[1])
-    awful.tag.incmwfact(0.20, tags[2])
-
-    local layout_expand_masters = db.get_or_set("tag_layout_expand_master_"..s,
-    --1      2      3      4      5      6      7      8      9      10     11     12
-    {
-      true,  false, true,  false, true,  false, false, false, true,  false, false, false
-    })
-    for tag_number, is_enabled in ipairs(layout_expand_masters) do
-      if is_enabled then
-        awful.tag.setmfpol("mwfact", tags[tag_number])
-      end
+    for tag_number, mwfact in ipairs(persistent.tag.get_all_mwfact(s, {
+    --1     2     3      4     5     6
+      0.60, 0.75, 0.50,  0.50, 0.50, 0.50,
+    --7     8     9      10    11    12
+      0.50, 0.50, 0.50,  0.50, 0.50, 0.50
+    })) do
+        awful.tag.setmwfact(mwfact, tags[tag_number])
     end
+
+    for tag_number, mfpol in ipairs(persistent.tag.get_all_mfpol(s, {
+    --1          2         3          4         5         6
+      "mwfact",  "expand", "mwfact",  "expand", "mwfact", "expand",
+    --7          8         9          10        11        12
+      "expand",  "expand", "mwfact",  "expand", "expand", "expand"
+    })) do
+        awful.tag.setmfpol(mfpol, tags[tag_number])
+    end
+
+    context.tags[s] = tags
 
   end
   -- }}}
