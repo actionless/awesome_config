@@ -7,6 +7,7 @@ local helpers = require("actionless.helpers")
 local persistent = {
   layout = {},
   tag = {},
+  titlebar = {},
 }
 
 function persistent.layout.set(layout, tag, screen)
@@ -22,6 +23,14 @@ function persistent.layout.set(layout, tag, screen)
     awful.tag.getidx(tag),
     helpers.layout_get_id(layout)
   )
+end
+
+function persistent.titlebar.set(enabled)
+  db.set("enable_titlebars", enabled)
+end
+
+function persistent.titlebar.get()
+  return db.get_or_set("enable_titlebars", false)
 end
 
 return persistent

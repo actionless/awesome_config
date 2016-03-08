@@ -3,6 +3,7 @@ local beautiful = require("beautiful")
 local delayed_call = require("gears.timer").delayed_call
 
 local titlebar	= require("actionless.titlebar")
+local persistent = require("actionless.persistent")
 
 
 local debug_messages_enabled = false
@@ -11,7 +12,7 @@ local log = function(...) if debug_messages_enabled then nlog(...) end end
 
 local signals = {}
 
-function signals.init(awesome_context)
+function signals.init(_)
 
   local function ignore_gap(t, numclients)
     numclients = numclients or #awful.client.tiled(awful.tag.getscreen(t))
@@ -41,7 +42,7 @@ local function on_client_focus(c)
 
   c.border_color = beautiful.border_focus
 
-  if awesome_context.show_titlebar and (
+  if persistent.titlebar.get() and (
     num_tiled > 1 or (
       num_tiled > 0 and awful.tag.getmfpol() ~= 'expand'
     )
@@ -80,7 +81,7 @@ local function on_client_unfocus (c)
   local layout = awful.layout.get(c.screen)
   local num_tiled = #awful.client.tiled(c.screen)
 
-  if awesome_context.show_titlebar and (
+  if persistent.titlebar.get() and (
     num_tiled > 1 or (
       num_tiled > 0 and awful.tag.getmfpol() ~= 'expand'
     )

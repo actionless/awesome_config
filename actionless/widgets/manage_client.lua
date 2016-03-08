@@ -10,21 +10,21 @@ local capi = { client = client }
 
 
 local common = require("actionless.widgets.common")
+local persistent = require("actionless.persistent")
 
 
 local manage_client = {}
 
 local function worker(args)
-  local args	 = args or {}
+  args	 = args or {}
   args.bg = args.bg or beautiful.panel_widget_bg or beautiful.fg
   args.fg = args.fg or beautiful.panel_widget_fg or beautiful.bg
-  local awesome_context = args.awesome_context
-  local widget_screen = args.screen or 1
+  local widget_screen = args.screen or awful.screen.focused()
 
   local object = {}
   local widget = common.widget()
 
-  widget.is_managing = false
+  widget.is_managing = persistent.titlebar.get()
 
   args.widget = widget
   widget = common.decorated_horizontal(args)
@@ -48,18 +48,27 @@ local function worker(args)
       end
     end)
 
+  local function update_widget_status()
+    if widget.is_managing then
+      widget:set_warning()
+      widget:set_text('T')
+    else
+      widget:set_error()
+      widget:set_text('X')
+    end
+  end
+
+  update_widget_status()
+
   widget.toggle = function()
     if not widget.is_managing then
       widget.is_managing = true
-      widget:set_warning()
-      widget:set_text('T')
-      awesome_context.show_titlebar = true
+      persistent.titlebar.set(true)
     else
       widget.is_managing = false
-      widget:set_error()
-      widget:set_text('X')
-      awesome_context.show_titlebar = false
+      persistent.titlebar.set(false)
     end
+    update_widget_status()
     local tags = awful.tag.gettags(widget_screen)
     for _, t in ipairs(tags) do
       t:emit_signal("property::layout")
