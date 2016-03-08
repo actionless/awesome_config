@@ -9,6 +9,7 @@ local utils = {
   color = require("utils.color"),
   pickle = require("utils.pickle"),
   db = require("utils.db"),
+  tmux = require("utils.tmux"),
 }
 
 return utils

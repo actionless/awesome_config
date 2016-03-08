@@ -14,6 +14,7 @@ local helpers = require("actionless.helpers")
 local menu_addon = require("actionless.menu_addon")
 local floats = require("actionless.helpers").client_floats
 local db = require("utils.db")
+local tmux_swap_bydirection = require("utils.tmux").swap_bydirection
 
 local hkng = require("awful.hotkeys_popup")
 
@@ -512,8 +513,57 @@ local globalkeys = awful.util.table.join(
     "toggle lcarslist", LCARS
   )
 )
-
 awesome_context.clientkeys = awful.util.table.join(
+
+  bind_key({ modkey, "Control", altkey     }, "Left",
+    function (c)
+      return tmux_swap_bydirection("left", c)
+    end,
+    "move tmux window", CLIENT_MANIPULATION
+  ),
+  bind_key({ modkey, "Control", altkey     }, "Down",
+    function (c)
+      return tmux_swap_bydirection("down", c)
+    end,
+    "move tmux window", CLIENT_MANIPULATION
+  ),
+  bind_key({ modkey, "Control", altkey     }, "Up",
+    function (c)
+      return tmux_swap_bydirection("up", c)
+    end,
+    "move tmux window", CLIENT_MANIPULATION
+  ),
+  bind_key({ modkey, "Control", altkey     }, "Right",
+    function (c)
+      return tmux_swap_bydirection("right", c)
+    end,
+    "move tmux window", CLIENT_MANIPULATION
+  ),
+
+  bind_key({ modkey, "Control", altkey     }, "h",
+    function (c)
+      return tmux_swap_bydirection("left", c)
+    end,
+    "move tmux window (vim style)", CLIENT_MANIPULATION
+  ),
+  bind_key({ modkey, "Control", altkey     }, "j",
+    function (c)
+      return tmux_swap_bydirection("down", c)
+    end,
+    "move tmux window (vim style)", CLIENT_MANIPULATION
+  ),
+  bind_key({ modkey, "Control", altkey     }, "k",
+    function (c)
+      return tmux_swap_bydirection("up", c)
+    end,
+    "move tmux window (vim style)", CLIENT_MANIPULATION
+  ),
+  bind_key({ modkey, "Control", altkey     }, "l",
+    function (c)
+      return tmux_swap_bydirection("right", c)
+    end,
+    "move tmux window (vim style)", CLIENT_MANIPULATION
+  ),
 
   bind_key({ modkey,  "Shift"    }, "Down",
     function (c)
