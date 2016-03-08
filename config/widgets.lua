@@ -9,6 +9,7 @@ local capi = {
 
 local widgets = require("actionless.widgets")
 local tasklist_addon = require("actionless.tasklist_addon")
+local persistent = require("actionless.persistent")
 
 
 local widget_loader = {}
@@ -17,6 +18,8 @@ function widget_loader.init(awesome_context)
   local w = awesome_context.widgets
   local conf = awesome_context.config
   local modkey = awesome_context.modkey
+
+  local lcarslist_enabled = persistent.lcarslist.get()
 
   local leftwibox = {}
   local topwibox = {}
@@ -46,7 +49,7 @@ function widget_loader.init(awesome_context)
       bg = beautiful.panel_bg,
       force_no_bgimage=true,
       horizontal=true,
-      left_separators = awesome_context.lcarslist_enabled and {} or { 'arrl' },
+      left_separators = lcarslist_enabled and {} or { 'arrl' },
       mopidy_player_command = awesome_context.cmds.tmux_run .. "ncmpcpp",
       enable_notifications = false,
       --valign = "bottom",
@@ -103,7 +106,7 @@ function widget_loader.init(awesome_context)
   end
 
   -- Textclock
-  if awesome_context.lcarslist_enabled then
+  if lcarslist_enabled then
     w.lcars_textclock = widgets.common.decorated({
       widget = awful.widget.textclock("%H:%M"),
       valign = "bottom",
@@ -127,8 +130,8 @@ function widget_loader.init(awesome_context)
         screen = s,
         bg = beautiful.widget_close_bg,
         fg = beautiful.widget_close_fg,
-        left_separators = awesome_context.lcarslist_enabled and beautiful.widget_close_left_decorators or { ' ', 'arrl', 'sq' },
-        right_separators = awesome_context.lcarslist_enabled and beautiful.widget_close_right_decorators or { 'sq', 'arrr' },
+        left_separators = lcarslist_enabled and beautiful.widget_close_left_decorators or { ' ', 'arrl', 'sq' },
+        right_separators = lcarslist_enabled and beautiful.widget_close_right_decorators or { 'sq', 'arrr' },
         awesome_context = awesome_context,
       }
     )
@@ -237,7 +240,7 @@ function widget_loader.init(awesome_context)
       wibox.layout.flex.horizontal()
     )
 
-    if awesome_context.lcarslist_enabled then
+    if lcarslist_enabled then
       sw.lcarslist = widgets.lcarslist(
         s,
         awful.widget.tasklist.filter.alltags,

@@ -8,6 +8,7 @@ local persistent = {
   layout = {},
   tag = {},
   titlebar = {},
+  lcarslist = {},
 }
 
 function persistent.layout.set(layout, tag, screen)
@@ -26,11 +27,19 @@ function persistent.layout.set(layout, tag, screen)
 end
 
 function persistent.titlebar.set(enabled)
-  db.set("enable_titlebars", enabled)
+  db.set("titlebars_enabled", enabled)
 end
 
 function persistent.titlebar.get()
-  return db.get_or_set("enable_titlebars", false)
+  return db.get_or_set("titlebars_enabled", false)
+end
+
+function persistent.lcarslist.set(enabled)
+  db.set("lcarslist_enabled", enabled)
+end
+
+function persistent.lcarslist.get()
+  return db.get_or_set("lcarslist_enabled", false)
 end
 
 return persistent

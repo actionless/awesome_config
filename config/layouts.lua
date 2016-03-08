@@ -4,6 +4,7 @@ local beautiful = require("beautiful")
 local capi = { screen = screen }
 local lcars_layout = require("actionless.lcars_layout")
 local db = require("utils.db")
+local persistent = require("actionless.persistent")
 
 local layouts = {}
 
@@ -13,7 +14,7 @@ function layouts.init(context)
   -- Table of layouts to cover with awful.layout.inc, order matters.
   context.layouts = {
     awful.layout.suit.tile,
-    context.lcarslist_enabled and lcars_layout.top or awful.layout.suit.tile.bottom,
+    persistent.lcarslist.get() and lcars_layout.top or awful.layout.suit.tile.bottom,
     awful.layout.suit.corner.nw,
     awful.layout.suit.floating,
     awful.layout.suit.fair,

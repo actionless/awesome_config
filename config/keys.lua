@@ -1,7 +1,7 @@
 
 local awful = require("awful")
 local beautiful = require("beautiful")
-local menubar = require("actionless.menubar")
+local hkng = require("awful.hotkeys_popup")
 local client = client
 local capi = {
   screen = screen,
@@ -9,14 +9,15 @@ local capi = {
   root = root,
   awesome = awesome,
 }
+local menubar = require("actionless.menubar")
 
 local helpers = require("actionless.helpers")
 local menu_addon = require("actionless.menu_addon")
 local floats = require("actionless.helpers").client_floats
 local db = require("utils.db")
+local persistent = require("actionless.persistent")
 local tmux_swap_bydirection = require("utils.tmux").swap_bydirection
 
-local hkng = require("awful.hotkeys_popup")
 
 
 local revelation = require("third_party.revelation")
@@ -502,10 +503,10 @@ local globalkeys = awful.util.table.join(
   ),
   bind_key({modkey, altkey, "Control"}, "p",
     function()
-      if awesome_context.lcarslist_enabled then
-        awful.spawn.with_shell("sed -i 's/lcarslist_enabled = true/lcarslist_enabled = false/g' ~/.config/awesome/config/local.lua")
+      if persistent.lcarslist.get() then
+        persistent.lcarslist.set(false)
       else
-        awful.spawn.with_shell("sed -i 's/lcarslist_enabled = false/lcarslist_enabled = true/g' ~/.config/awesome/config/local.lua")
+        persistent.lcarslist.set(true)
       end
       capi.awesome.restart()
     end,

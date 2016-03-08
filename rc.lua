@@ -35,7 +35,7 @@ local terminal = 'st -b "' .. st_color_line(colorscheme) ..
 nlog = debug.nlog
 log = debug.log
 
-context = {
+local context = {
 
   modkey = "Mod4",
   altkey = "Mod1",
@@ -67,7 +67,6 @@ context = {
   have_battery = true,
   new_top = true,
   sensor = "Core 0",
-  lcarslist_enabled = false
 
 }
 
@@ -78,6 +77,8 @@ if local_settings_result ~= true then
   nlog("!!!WARNING: local settings not found")
   print(local_settings_details)
 end
+
+local persistent = require("actionless.persistent")
 
 local beautiful	= require("beautiful")
 beautiful.init(context.theme_dir)
@@ -91,7 +92,7 @@ config.widgets.init(context)
 config.toolbar_horizontal.init(context)
 config.keys.init(context)
 config.signals.init(context)
-if context.lcarslist_enabled then
+if persistent.lcarslist.get() then
   config.toolbar_vertical.init(context)
   config.lcars_layout.init(context)
 end

@@ -27,12 +27,13 @@ read_globals = {
     "selection",
     "tag",
     "window",
-    "nlog",
 }
 -- May not be read-only due to client.focus
 globals = {
     "client",
-    "localstorage"
+    "localstorage",
+    "nlog",
+    "log",
 }
 
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80
