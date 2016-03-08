@@ -1,9 +1,6 @@
 local awful = require("awful")
-local wibox = require("wibox")
 local client = client
 local beautiful = require("beautiful")
-
-local delayed_call = require("gears.timer").delayed_call
 
 
 local debug_messages_enabled = false
@@ -61,7 +58,7 @@ handle_left_panel_visibility(awful.tag.selected(awful.screen.focused()))
 local function lcars_unite(t, from)
   if not lcars_layout_helper.is_separated then return end
   log("LCARS: unite|"..from)
-  local s = awful.screen.focused()
+  local s = awful.tag.getscreen(t)
   local w = awesome_context.topwibox[s]
   w:struts({top = beautiful.panel_height})
   w:geometry({height = beautiful.panel_height})
@@ -73,7 +70,7 @@ local function lcars_unite(t, from)
 
   awesome_context.left_panel_top_layouts[s]:reset()
   awesome_context.left_panel_bottom_layouts[s]:reset()
-  for i, widget in ipairs(awesome_context.left_panel_widgets[s]) do
+  for _, widget in ipairs(awesome_context.left_panel_widgets[s]) do
       awesome_context.left_panel_bottom_layouts[s]:add(widget)
   end
 
@@ -155,11 +152,11 @@ tag.connect_signal("property::selected", function (t)
     return tag_callback(t, "t:selected")
   end
 end)
-client.connect_signal("tagged", function (c, t)
+client.connect_signal("tagged", function (_, t)
   --handle_left_panel_visibility(t)
   return tag_callback(t, "c:tagged on " .. t.name)
 end)
-client.connect_signal("untagged", function (c, t)
+client.connect_signal("untagged", function (_, t)
   --handle_left_panel_visibility(t)
   return tag_callback(t, "c:untagged")
 end)

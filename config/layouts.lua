@@ -41,16 +41,16 @@ function layouts.init(context)
     local layout_ids = db.get_or_set("tag_layout_ids_"..s, {
       1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1,
     })
-    local layouts = {}
+    local enabled_layouts = {}
     for i, id in ipairs(layout_ids) do
-      layouts[i] = awful.layout.layouts[id]
+      enabled_layouts[i] = awful.layout.layouts[id]
     end
 
     local tag_names = db.get_or_set("tag_names_"..s, {
       '1:bs', '2:web', '3:ww', '4:im', '5:mm', 6, '7:sp', 8, '9:sd', '10:nl',
       '11', '12'
     })
-    context.tags[s] = awful.tag( tag_names, s, layouts)
+    context.tags[s] = awful.tag( tag_names, s, enabled_layouts)
 
     local tags = awful.tag.gettags(s)
 

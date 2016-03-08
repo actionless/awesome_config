@@ -1,15 +1,12 @@
-local gears = require("gears")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 local dpi = require("beautiful.xresources").apply_dpi
-local awful = require("awful")
 
 local capi = {
   screen = screen,
   client = client,
 }
 
-local widgets = require("actionless.widgets")
 local common = require("actionless.widgets.common")
 
 local assets = require("config.toolbar_assets")
@@ -23,7 +20,6 @@ function toolbar.init(awesome_context)
 
   -- Separators
   local separator  = common.make_separator(' ')
-  local sep_media  = common.make_separator('sq', {fg=beautiful.panel_media})
 
   local v_sep_constraint = common.constraint({
     height=beautiful.panel_padding_bottom
@@ -121,7 +117,7 @@ function toolbar.init(awesome_context)
         }),
         common.constraint({height=beautiful.panel_padding_bottom}),
       })
- 
+
     local top_panel_layout = common.align.vertical(
       nil,
       nil,
@@ -215,7 +211,7 @@ function toolbar.init(awesome_context)
     )
     })
 
-    left_panel_layout = common.align.vertical(
+    local left_panel_layout = common.align.vertical(
       leftwibox_separator[s],
       common.align.horizontal(
         nil,

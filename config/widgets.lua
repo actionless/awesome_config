@@ -8,11 +8,7 @@ local capi = {
 }
 
 local widgets = require("actionless.widgets")
-local helpers = require("actionless.helpers")
-local common = widgets.common
 local tasklist_addon = require("actionless.tasklist_addon")
-
-local dpi = require("beautiful.xresources").apply_dpi
 
 
 local widget_loader = {}

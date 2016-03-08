@@ -3,7 +3,6 @@ local beautiful = require("beautiful")
 local delayed_call = require("gears.timer").delayed_call
 
 local titlebar	= require("actionless.titlebar")
-local helpers = require("actionless.helpers")
 
 
 local debug_messages_enabled = false
