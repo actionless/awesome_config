@@ -20,8 +20,10 @@ local hkng = require("awful.hotkeys_popup")
 
 
 local revelation = require("third_party.revelation")
-revelation.fg = beautiful.bg
-revelation.font = "Monospace Bold 24"
+revelation.fg = beautiful.revelation_fg
+revelation.border_color = beautiful.revelation_border_color
+revelation.bg = beautiful.revelation_bg
+revelation.font = beautiful.revelation_font
 revelation.init()
 
 
@@ -46,8 +48,6 @@ awful.layout.suit.tile.resize_jump_to_corner = false
   )
 
 local RESIZE_STEP = beautiful.xresources.apply_dpi(15)
-
-local TO_DEFINE_COLOR = "none"
 
 local TAG_COLOR = "tag"
 local CLIENT_FOCUS = "client: focus"
@@ -353,7 +353,6 @@ local globalkeys = awful.util.table.join(
     function ()
       local s = awful.screen.focused()
       local tag = awful.tag.selected(s)
-      local tag_id = awful.tag.getidx(tag)
       helpers.tag_toggle_gap(tag)
       tag:emit_signal("property::layout")
     end,
@@ -491,8 +490,8 @@ local globalkeys = awful.util.table.join(
   ),
   bind_key({modkey, "Control", "Shift"}, "p",
     function()
-      local t = awful.tag.selected(awful.screen.focused())
-      local visible = awful.tag.getproperty(t, 'left_panel_visible')
+      local selected_tag = awful.tag.selected(awful.screen.focused())
+      local visible = awful.tag.getproperty(selected_tag, 'left_panel_visible')
       for s = 1, capi.screen.count() do
         for _, t in ipairs(awful.tag.gettags(s)) do
           awful.tag.setproperty(t, 'left_panel_visible', not visible)

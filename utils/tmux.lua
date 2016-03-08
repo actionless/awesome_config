@@ -11,7 +11,9 @@ function tmux.swap_bydirection(dir, c, stacked)
   local visible_clients = awful.client.visible(focused_client.screen, stacked)
   local client_geometries = {}
   for i, cl in ipairs(visible_clients) do
-    client_geometries[i] = cl:geometry()
+    if cl.name:match(tmux_session_pattern) then
+      client_geometries[i] = cl:geometry()
+    end
   end
 
   local target_client_id = awful.util.get_rectangle_in_direction(
@@ -20,7 +22,7 @@ function tmux.swap_bydirection(dir, c, stacked)
 
   if not (
     target_client_id and visible_clients[target_client_id].name:match(tmux_session_pattern)
-    ) then
+  ) then
     return naughty.notify({text="no tmux window in '"..dir.."' direction"})
   end
 

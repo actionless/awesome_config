@@ -24,6 +24,7 @@ theme.icons_dir = theme.dir .. "/icons/"
 -- TERMINAL COLORSCHEME:
 --
 theme.color = xresources.get_current_theme()
+theme.xrdb = xresources.get_current_theme()
 
 -- PANEL COLORS:
 --
@@ -58,6 +59,10 @@ theme.widget_decoration_arrr = '퟿'
 theme.widget_decoration_arrl = '퟼'
 theme.widget_decoration_arrr = '퟽'
 
+theme.revelation_fg = theme.xrdb.color13
+theme.revelation_border_color = theme.xrdb.color13
+theme.revelation_bg = theme.panel_bg
+theme.revelation_font = "Monospace Bold 24"
 -- FONTS:
 --theme.font = "Monospace Bold "..tostring(dpi(10))
 --theme.small_font = "Monospace "..tostring(dpi(7))
