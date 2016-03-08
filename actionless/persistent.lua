@@ -41,15 +41,6 @@ function persistent.tag.get_all_names(screen, fallback)
   return db.get_or_set("tag_names_"..screen, fallback)
 end
 
-function persistent.tag.get_all_mwfact(screen, fallback)
-  return db.get_or_set("tag_mwfact_"..screen, fallback)
-end
-
-function persistent.tag.get_all_mfpol(screen, fallback)
-  return db.get_or_set("tag_mfpol_"..screen, fallback)
-end
-
-
 function persistent.tag.rename(new_name, tag, screen, tag_id)
   tag, screen, tag_id = get_tag_and_screen(tag, screen, tag_id)
   tag.name = new_name
@@ -60,13 +51,34 @@ function persistent.tag.rename(new_name, tag, screen, tag_id)
   )
 end
 
+function persistent.tag.get_all_mwfact(screen, fallback)
+  return db.get_or_set("tag_mwfact_"..screen, fallback)
+end
+
+function persistent.tag.incmwfact(add, tag, screen, tag_id)
+  tag, screen, tag_id = get_tag_and_screen(tag, screen, tag_id)
+  awful.tag.incmwfact(add, tag)
+  local db_id = "tag_mwfact_"..screen
+  local current_mwfacts = db.get(db_id)
+  current_mwfacts[tag_id] = current_mwfacts[tag_id] + add
+  db.set(db_id, current_mwfacts)
+end
+
+function persistent.tag.get_all_mfpol(screen, fallback)
+  return db.get_or_set("tag_mfpol_"..screen, fallback)
+end
+
 function persistent.tag.togglemfpol(tag, screen, tag_id)
   tag, screen, tag_id = get_tag_and_screen(tag, screen, tag_id)
   awful.tag.togglemfpol(tag)
   tag:emit_signal("property::layout")
-  local db_id = "tag_layout_expand_master_"..screen
+  local db_id = "tag_mfpol_"..screen
   local layout_expand_masters = db.get(db_id)
-  layout_expand_masters[tag_id] = not layout_expand_masters[tag_id]
+  if layout_expand_masters[tag_id] == "expand" then
+    layout_expand_masters[tag_id] = "mwfact"
+  else
+    layout_expand_masters[tag_id] = "expand"
+  end
   db.set(db_id, layout_expand_masters)
 end
 

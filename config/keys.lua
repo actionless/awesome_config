@@ -658,7 +658,7 @@ awesome_context.clientkeys = awful.util.table.join(
         g.width = g.width + RESIZE_STEP
         c:geometry(g)
       else
-        awful.tag.incmwfact( 0.05)
+        persistent.tag.incmwfact(0.05)
       end
     end,
     "master size+", LAYOUT_MANIPULATION
@@ -670,7 +670,7 @@ awesome_context.clientkeys = awful.util.table.join(
         g.width = g.width - RESIZE_STEP
         c:geometry(g)
       else
-        awful.tag.incmwfact(-0.05)
+        persistent.tag.incmwfact(-0.05)
       end
     end,
     "master size-", LAYOUT_MANIPULATION
@@ -708,7 +708,7 @@ awesome_context.clientkeys = awful.util.table.join(
         g.width = g.width + RESIZE_STEP
         c:geometry(g)
       else
-        awful.tag.incmwfact( 0.05)
+        persistent.tag.incmwfact(0.05)
       end
     end,
     "master size+", LAYOUT_MANIPULATION
@@ -720,7 +720,7 @@ awesome_context.clientkeys = awful.util.table.join(
         g.width = g.width - RESIZE_STEP
         c:geometry(g)
       else
-        awful.tag.incmwfact(-0.05)
+        persistent.tag.incmwfact(-0.05)
       end
     end,
     "master size-", LAYOUT_MANIPULATION
