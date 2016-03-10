@@ -1,6 +1,5 @@
 local inspect = require("utils.inspect")
 local naughty = require("naughty")
-local beautiful = require("beautiful")
 
 local debug_module = {}
 

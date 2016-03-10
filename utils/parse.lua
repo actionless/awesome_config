@@ -61,7 +61,7 @@ end
 ----------------------------------------------
 
 function parse.find_in_lines(lines, regex)
-  local match = nil
+  local match
   for _, line in ipairs(lines) do
     match = line:match(regex)
     if match then
@@ -71,7 +71,7 @@ function parse.find_in_lines(lines, regex)
 end
 
 function parse.find_values_in_lines(lines, regex, match_keys, post_func)
-  local key, value = nil, nil
+  local key, value
   local result_values = {}
   local match_keys_length = h_table.getn(match_keys)
   for _, line in ipairs(lines) do

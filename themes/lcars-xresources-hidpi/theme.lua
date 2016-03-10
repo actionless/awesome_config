@@ -1,14 +1,12 @@
 local awful = require("awful")
-local recolor_image = require("gears").color.recolor_image
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
 local create_theme = require("actionless.common_theme").create_theme
 local helpers = require("actionless.helpers")
-local color_utils = require("utils.color")
 
 local theme_name = "lcars-xresources-hidpi"
 
-theme_dir = awful.util.getdir("config").."/themes/"..theme_name
+local theme_dir = awful.util.getdir("config").."/themes/"..theme_name
 --local theme = dofile("/usr/share/awesome/themes/xresources/theme.lua")
 local theme = {}
 

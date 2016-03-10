@@ -20,7 +20,8 @@ function string_helpers.only_digits(str)
 end
 
 function string_helpers.split(str, separator)
-  local separator, fields = separator or ":", {}
+  separator = separator or ":"
+  local fields = {}
   local pattern = string.format("([^%s]+)", separator)
   str:gsub(pattern, function(c) fields[#fields+1] = c end)
   return fields
@@ -81,7 +82,6 @@ function string_helpers.multiline_limit_word(unicode_string, max_length)
   local words = string_helpers.split(unicode_string, ' ')
 
   local result = ''
-  local counter = 0
   local line = ''
   for _, word in ipairs(words) do
     if #word + #line + 1 > max_length and #line>0 then

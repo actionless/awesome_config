@@ -109,7 +109,7 @@ local pickle = {}
    --// The Load Function
    function pickle.load( sfile )
       local ftables,err = loadfile( sfile )
-      if err then return _,err end
+      if err then return nil, err end
       local tables = ftables()
       for idx = 1,#tables do
          local tolinki = {}
