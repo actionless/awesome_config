@@ -71,12 +71,30 @@ function toolbar.init(awesome_context)
       loaded_widgets.music
     )
 
-    local right_layout_right = wibox.layout.fixed.horizontal(
-      make_separator('arrl', {fg=beautiful.panel_media}),
+    local volume_widget_left_separator = make_separator('arrl', {fg=beautiful.apw_fg_color})
+    local volume_widget_right_separator = make_separator('arrr', {fg=beautiful.apw_bg_color})
+    local volume_layout = wibox.layout.fixed.horizontal(
+      volume_widget_left_separator,
       common.constraint({
         widget=loaded_widgets.volume,
         width=dpi(120),
       }),
+      volume_widget_right_separator
+    )
+    volume_layout:buttons(awful.util.table.join(
+      awful.button({		}, 1, function(_)
+        if loaded_widgets.volume.pulse.Mute then
+          volume_widget_left_separator:set_fg(beautiful.apw_fg_color)
+          volume_widget_right_separator:set_fg(beautiful.apw_bg_color)
+        else
+          volume_widget_left_separator:set_fg(beautiful.apw_mute_fg_color)
+          volume_widget_right_separator:set_fg(beautiful.apw_mute_bg_color)
+        end
+      end)
+    ))
+
+    local right_layout_right = wibox.layout.fixed.horizontal(
+      volume_layout,
       separator,
       make_separator('arrl', {fg=beautiful.panel_widget_bg}),
       iseparator,

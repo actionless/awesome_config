@@ -102,6 +102,11 @@ theme.menu_height		= dpi(16)
 theme.menu_width		= dpi(150)
 theme.menu_border_color = theme.xrdb.color1
 
+--theme.apw_fg_color = "theme.xrdb.color8"
+theme.apw_bg_color = "theme.xrdb.color8"
+theme.apw_mute_bg_color = "theme.xrdb.color1"
+theme.apw_mute_fg_color = "theme.xrdb.color9"
+
 
 --theme.taglist_squares_sel       = "theme.null"
 --theme.taglist_squares_unsel     = "theme.null"

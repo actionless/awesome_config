@@ -20,9 +20,7 @@ function tmux.swap_bydirection(dir, c, stacked)
     dir, client_geometries, focused_client:geometry()
   )
 
-  if not (
-    target_client_id and visible_clients[target_client_id].name:match(tmux_session_pattern)
-  ) then
+  if not target_client_id then
     return naughty.notify({text="no tmux window in '"..dir.."' direction"})
   end
 
