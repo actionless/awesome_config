@@ -35,7 +35,7 @@ local terminal = 'st -b "' .. st_color_line(colorscheme) ..
 nlog = debug.nlog
 log = debug.log
 
-local context = {
+context = {
 
   modkey = "Mod4",
   altkey = "Mod1",
