@@ -13,9 +13,9 @@ local persistent = {
 
 local function get_tag_and_screen(tag, screen, tag_id)
   if tag then
-    screen = screen or awful.tag.getscreen(tag)
+    screen = screen or awful.tag.getscreen(tag).index
   else
-    screen = screen or awful.screen.focused()
+    screen = screen or awful.screen.focused().index
     tag = awful.tag.selected(screen)
   end
   tag_id = tag_id or awful.tag.getidx(tag)

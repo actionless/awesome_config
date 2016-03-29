@@ -274,7 +274,7 @@ local globalkeys = awful.util.table.join(
 
   bind_key({ modkey, altkey }, "space",
     function ()
-      local s = awful.screen.focused()
+      local s = awful.screen.focused().index
       awesome_context.widgets.screen[s].layoutbox.menu:toggle({coords={
         y=0, x=capi.screen[s].geometry.width - beautiful.menu_width
       }})

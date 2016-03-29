@@ -22,7 +22,7 @@ local persistent = require("actionless.persistent")
 
 --- Create a layoutbox widget. It draws a picture with the current layout
 -- symbol of the current tag.
--- @param screen The screen number that the layout will be represented for.
+-- @param screen The screen object that the layout will be represented for.
 -- @return An imagebox widget configured as a layoutbox.
 local function worker(args)
 
@@ -32,11 +32,8 @@ local function worker(args)
         mt = {}
     }
 
-    local args = args or {}
-    local fg = args.fg or beautiful.panel_widget_fg or beautiful.bg or "#000000"
-    local bg = args.bg or beautiful.panel_widget_bg or beautiful.fg or "#ffffff"
-    local text_mode = args.text_mode or true
-    layoutbox.screen = args.screen or 1
+    args = args or {}
+    layoutbox.screen = args.screen or awful.screen.focused()
 
     layoutbox.layout_icon = wibox.widget.background()
     layoutbox.imagebox = imagebox()

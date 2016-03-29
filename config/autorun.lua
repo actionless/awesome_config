@@ -14,6 +14,7 @@ function autorun.init(awesome_context)
   --awful.spawn.with_shell("xset r rate 250 10")
   awful.spawn.with_shell("xset b off") -- turn off beep
   --run_once(awesome_context.cmds.compositor)
+  --run_once('/usr/lib/gnome-settings-daemon/gnome-settings-daemon-localeexec')
   awful.spawn.with_shell("xsettingsd")
   run_once("pulseaudio")
   awful.spawn.with_shell("start-pulseaudio-x11")

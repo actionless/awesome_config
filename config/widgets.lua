@@ -120,7 +120,7 @@ function widget_loader.init(awesome_context)
 
 
   w.screen = {}
-  for s = 1, capi.screen.count() do
+  for s in capi.screen do
     w.screen[s] = {}
     local sw = w.screen[s]
 
