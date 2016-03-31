@@ -472,7 +472,7 @@ local globalkeys = awful.util.table.join(
     function()
       local selected_tag = awful.tag.selected(awful.screen.focused())
       local visible = awful.tag.getproperty(selected_tag, 'left_panel_visible')
-      for s = 1, capi.screen.count() do
+      for s in capi.screen do
         for _, t in ipairs(awful.tag.gettags(s)) do
           awful.tag.setproperty(t, 'left_panel_visible', not visible)
         end

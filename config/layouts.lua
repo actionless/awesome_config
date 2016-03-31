@@ -25,7 +25,7 @@ function layouts.init(context)
   -- {{{ Wallpaper
   if beautiful.wallpaper then
     local wallpaper_layout = beautiful.wallpaper_layout or "tiled"
-    for s = 1, capi.screen.count() do
+    for s in capi.screen do
       gears.wallpaper[wallpaper_layout](beautiful.wallpaper, s)
     end
   elseif beautiful.wallpaper_cmd then
@@ -36,7 +36,7 @@ function layouts.init(context)
   -- {{{ Tags
   -- Define a tag table which hold all screen tags.
   context.tags = {}
-  for s = 1, capi.screen.count() do
+  for s in capi.screen do
 
     local enabled_layouts = {}
     for i, id in ipairs(persistent.layout.get_all_ids(s, {
@@ -71,7 +71,7 @@ function layouts.init(context)
         awful.tag.setmfpol(mfpol, tags[tag_number])
     end
 
-    context.tags[s] = tags
+    context.tags[s.index] = tags
 
   end
   -- }}}

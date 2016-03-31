@@ -27,7 +27,8 @@ function toolbar.init(awesome_context)
 
   awesome_context.topwibox_layout_fallback = {}
   -- Create a wibox for each screen and add it
-  for s = 1, capi.screen.count() do
+  for s in capi.screen do
+    local si = s.index
 
     local wheel_binding = awful.util.table.join(
       awful.button({		}, 5, function(_)
@@ -41,14 +42,14 @@ function toolbar.init(awesome_context)
 
     -- LEFT side
     local left_layout = wibox.layout.fixed.horizontal(
-      loaded_widgets.screen[s].manage_client,
+      loaded_widgets.screen[si].manage_client,
       sep,
-      loaded_widgets.screen[s].promptbox,
+      loaded_widgets.screen[si].promptbox,
       sep,
       sep,
       loaded_widgets.kbd,
       sep,
-      loaded_widgets.screen[s].tasklist,
+      loaded_widgets.screen[si].tasklist,
       separator
     )
     left_layout:buttons(wheel_binding)
@@ -57,7 +58,7 @@ function toolbar.init(awesome_context)
     -- CENTER
     local center_layout = wibox.layout.fixed.horizontal(
       make_separator('arrl', {fg=beautiful.panel_widget_bg}),
-      loaded_widgets.screen[s].taglist,
+      loaded_widgets.screen[si].taglist,
       make_separator('arrr', {fg=beautiful.panel_widget_bg})
     )
     center_layout:buttons(wheel_binding)
@@ -115,10 +116,10 @@ function toolbar.init(awesome_context)
       make_separator('   '),
       loaded_widgets.textclock,
       make_separator('  '),
-      loaded_widgets.screen[s].layoutbox,
+      loaded_widgets.screen[si].layoutbox,
       separator,
       sep,
-      s==1 and loaded_widgets.systray_toggle or separator
+      si==1 and loaded_widgets.systray_toggle or separator
     )
 
     local right_layout = wibox.layout.align.horizontal(
@@ -157,10 +158,10 @@ function toolbar.init(awesome_context)
       )
     end
 
-    awesome_context.topwibox_layout_fallback[s] = layout  -- this one!
+    awesome_context.topwibox_layout_fallback[si] = layout  -- this one!
 
-    awesome_context.topwibox[s]:set_widget(
-      awesome_context.topwibox_layout_fallback[s]
+    awesome_context.topwibox[si]:set_widget(
+      awesome_context.topwibox_layout_fallback[si]
     )
   end
 

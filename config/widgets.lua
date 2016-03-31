@@ -121,8 +121,9 @@ function widget_loader.init(awesome_context)
 
   w.screen = {}
   for s in capi.screen do
-    w.screen[s] = {}
-    local sw = w.screen[s]
+    local si = s.index
+    w.screen[si] = {}
+    local sw = w.screen[si]
 
     -- CLOSE button
     sw.manage_client = widgets.manage_client(
@@ -270,27 +271,27 @@ function widget_loader.init(awesome_context)
     end
 
 
-    leftwibox[s] = awful.wibox({
+    leftwibox[si] = awful.wibox({
       position = "left",
       screen = s,
       --height = beautiful.panel_height,
       width = beautiful.left_panel_width,
     })
-    --leftwibox[s]:set_widget(left_panel_layout)
-    leftwibox[s].opacity = beautiful.panel_opacity
-    leftwibox[s]:set_bg(beautiful.panel_bg)
-    leftwibox[s]:set_fg(beautiful.panel_fg)
-    leftwibox[s].visible = false
+    --leftwibox[si]:set_widget(left_panel_layout)
+    leftwibox[si].opacity = beautiful.panel_opacity
+    leftwibox[si]:set_bg(beautiful.panel_bg)
+    leftwibox[si]:set_fg(beautiful.panel_fg)
+    leftwibox[si].visible = false
 
-    topwibox[s] = awful.wibox({
+    topwibox[si] = awful.wibox({
       position = "top",
       screen = s,
       height = beautiful.panel_height,
     })
     --topwibox[s]:set_widget(top_panel_layout)
-    topwibox[s].opacity = beautiful.panel_opacity
-    topwibox[s]:set_bg(beautiful.panel_bg)
-    topwibox[s]:set_fg(beautiful.panel_fg)
+    topwibox[si].opacity = beautiful.panel_opacity
+    topwibox[si]:set_bg(beautiful.panel_bg)
+    topwibox[si]:set_fg(beautiful.panel_fg)
 
   end
 

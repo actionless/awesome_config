@@ -13,18 +13,18 @@ local persistent = {
 
 local function get_tag_and_screen(tag, screen, tag_id)
   if tag then
-    screen = screen or awful.tag.getscreen(tag).index
+    screen = screen or awful.tag.getscreen(tag)
   else
-    screen = screen or awful.screen.focused().index
+    screen = screen or awful.screen.focused()
     tag = awful.tag.selected(screen)
   end
   tag_id = tag_id or awful.tag.getidx(tag)
-  return tag, screen, tag_id
+  return tag, screen.index, tag_id
 end
 
 
 function persistent.layout.get_all_ids(screen, fallback)
-  return db.get_or_set("tag_layout_ids_"..screen, fallback)
+  return db.get_or_set("tag_layout_ids_"..screen.index, fallback)
 end
 
 function persistent.layout.set(layout, tag, screen, tag_id)
@@ -38,7 +38,7 @@ function persistent.layout.set(layout, tag, screen, tag_id)
 end
 
 function persistent.tag.get_all_names(screen, fallback)
-  return db.get_or_set("tag_names_"..screen, fallback)
+  return db.get_or_set("tag_names_"..screen.index, fallback)
 end
 
 function persistent.tag.rename(new_name, tag, screen, tag_id)
@@ -52,7 +52,7 @@ function persistent.tag.rename(new_name, tag, screen, tag_id)
 end
 
 function persistent.tag.get_all_mwfact(screen, fallback)
-  return db.get_or_set("tag_mwfact_"..screen, fallback)
+  return db.get_or_set("tag_mwfact_"..screen.index, fallback)
 end
 
 function persistent.tag.incmwfact(add, tag, screen, tag_id)
@@ -65,7 +65,7 @@ function persistent.tag.incmwfact(add, tag, screen, tag_id)
 end
 
 function persistent.tag.get_all_mfpol(screen, fallback)
-  return db.get_or_set("tag_mfpol_"..screen, fallback)
+  return db.get_or_set("tag_mfpol_"..screen.index, fallback)
 end
 
 function persistent.tag.togglemfpol(tag, screen, tag_id)
