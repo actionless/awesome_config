@@ -55,6 +55,9 @@ function widget_loader.init(awesome_context)
       --valign = "bottom",
   })
   -- volume
+  if lcarslist_enabled then
+    beautiful.apw_bg_color = beautiful.panel_bg
+  end
   w.volume = require("third_party/apw/widget")
 
   -- systray_toggle
