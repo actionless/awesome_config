@@ -46,7 +46,8 @@ function toolbar.init(awesome_context)
   local internal_corner_wibox = {}
   local top_internal_corner_wibox = {}
 
-  for s = 1, capi.screen.count() do
+  for s in capi.screen do
+    local si = s.index
 
     local top_panel_left_margin = wibox.widget.background(
       common.constraint({width=dpi(100)}),
@@ -64,21 +65,21 @@ function toolbar.init(awesome_context)
     local top_panel_bottomlayout = common.align.horizontal(
       common.fixed.horizontal({
         --top_panel_left_margin,
-        --loaded_widgets.screen[s].taglist,
+        --loaded_widgets.screen[si].taglist,
         top_panel_left_margin,
         separator,
-        loaded_widgets.screen[s].manage_client,
+        loaded_widgets.screen[si].manage_client,
         separator,
         loaded_widgets.kbd,
         separator,
-        loaded_widgets.screen[s].promptbox,
+        loaded_widgets.screen[si].promptbox,
         separator
       }),
-      loaded_widgets.screen[s].tasklist,
+      loaded_widgets.screen[si].tasklist,
       nil
     )
     -- add sneaky_toggle on first screen
-    if s == 1 then
+    if si == 1 then
       local fancy_volume_widget = common.constraint({
         widget=common.fixed.vertical({
           common.constraint({
@@ -108,7 +109,7 @@ function toolbar.init(awesome_context)
       )
     end
 
-    topwibox_toplayout[s] =
+    topwibox_toplayout[si] =
       common.fixed.vertical({
         common.constraint({height=beautiful.panel_padding_bottom}),
         common.constraint({
@@ -134,15 +135,15 @@ function toolbar.init(awesome_context)
       top_panel_layout,
       wibox.widget.background(top_panel_layout)
     )
-    topwibox_layout[s] = top_panel_layout
+    topwibox_layout[si] = top_panel_layout
 
 
 
     -- INDICATORS LEFT PANEL
-    left_panel_widgets[s] = {
+    left_panel_widgets[si] = {
       loaded_widgets.lcars_textclock,
       v_sep,
-      loaded_widgets.screen[s].layoutbox,
+      loaded_widgets.screen[si].layoutbox,
       v_sep,
       --common.constraint({
         --widget=loaded_widgets.music,
@@ -165,16 +166,16 @@ function toolbar.init(awesome_context)
         --loaded_widgets.mem,
       --}}),
       --v_sep,
-      loaded_widgets.screen[s].lcarslist,
+      loaded_widgets.screen[si].lcarslist,
       --loaded_widgets.temp,
       --loaded_widgets.bat,
     }
-    left_panel_bottom_layouts[s] = common.fixed.vertical(left_panel_widgets[s])
+    left_panel_bottom_layouts[si] = common.fixed.vertical(left_panel_widgets[si])
 
-    left_panel_top_layouts[s] = common.fixed.vertical(
-      h_table.reversed(left_panel_bottom_layouts[s].widgets)
+    left_panel_top_layouts[si] = common.fixed.vertical(
+      h_table.reversed(left_panel_bottom_layouts[si].widgets)
     )
-    leftwibox_separator[s] = common.constraint({
+    leftwibox_separator[si] = common.constraint({
       height = 0,
       widget = common.align.horizontal(
       nil,
@@ -185,7 +186,7 @@ function toolbar.init(awesome_context)
         --),
         nil,
         wibox.widget.background(
-          left_panel_top_layouts[s],
+          left_panel_top_layouts[si],
           beautiful.panel_widget_bg
         ),
         common.fixed.vertical({
@@ -212,13 +213,13 @@ function toolbar.init(awesome_context)
     })
 
     local left_panel_layout = common.align.vertical(
-      leftwibox_separator[s],
+      leftwibox_separator[si],
       common.align.horizontal(
         nil,
         common.align.vertical(
           assets.top_left_corner_image(),
           wibox.widget.background(
-            left_panel_bottom_layouts[s],
+            left_panel_bottom_layouts[si],
             beautiful.panel_widget_bg
           ),
           nil
@@ -234,13 +235,13 @@ function toolbar.init(awesome_context)
       )
     )
 
-    internal_corner_wibox[s] = assets.internal_corner_wibox()
-    top_internal_corner_wibox[s] = assets.top_internal_corner_wibox()
-    --top_internal_corner_wibox[s] = assets.internal_corner_wibox()
+    internal_corner_wibox[si] = assets.internal_corner_wibox()
+    top_internal_corner_wibox[si] = assets.top_internal_corner_wibox()
+    --top_internal_corner_wibox[si] = assets.internal_corner_wibox()
 
 
-    awesome_context.leftwibox[s]:set_widget(left_panel_layout)
-    internal_corner_wibox[s].visible = false
+    awesome_context.leftwibox[si]:set_widget(left_panel_layout)
+    internal_corner_wibox[si].visible = false
 
   end
 
