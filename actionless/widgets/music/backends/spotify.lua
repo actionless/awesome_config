@@ -46,11 +46,11 @@ end
 --local timer_added = false
 --}}
 function spotify.update(parse_status_callback)
-  --local callback = function(str) spotify.post_update(str, parse_status_callback) end
-  --awful.spawn.with_line_callback(
-    --dbus_cmd .. "PlaybackStatus",
-    --callback, callback
-  --)
+  local callback = function(str) spotify.post_update(str, parse_status_callback) end
+  awful.spawn.easy_async(
+    dbus_cmd .. "PlaybackStatus",
+    callback
+  )
 
   --{{  @TODO: temporary workaround:
   --if not timer_added then

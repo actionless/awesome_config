@@ -201,13 +201,14 @@ local function worker(args)
     end
     if player_status.state == "play" then
       player.widget:set_normal()
-      player.separator_widget:set_text("⏵")
+      --player.separator_widget:set_text("⏵")
+      player.separator_widget:set_text("-")
     elseif player_status.state == "pause" then
       -- paused
       --player.widget:set_icon('music_pause')
       --player.widget:set_warning()
-      --title = title .. " (⏸)"
-      player.separator_widget:set_text("⏸")
+      --player.separator_widget:set_text("⏸")
+      player.separator_widget:set_text("-")
       player.widget:set_fg(beautiful.panel_fg)
       player.widget:set_bg(beautiful.panel_bg)
     elseif player_status.state == "stop" then
