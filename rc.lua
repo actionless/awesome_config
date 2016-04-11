@@ -13,6 +13,9 @@ awful.titlebar.enable_tooltip = false
 
 local debug = require("utils.debug")
 
+local colorscheme = xresources.get_current_theme()
+
+--local terminal = 'st'
 
 local function st_color_line(theme_table)
   local colors = {}
@@ -25,8 +28,6 @@ local function st_color_line(theme_table)
   end
   return table.concat(colors, ",")
 end
-
-local colorscheme = xresources.get_current_theme()
 local terminal = 'st -b "' .. st_color_line(colorscheme) ..
   '" -f "'..'Monospace'..':pixelsize='..tostring(xresources.apply_dpi(13))..'" '
 
@@ -107,19 +108,19 @@ require("hotkeys")
     --right = { "Right" , "\""       , "al"   , "F17" },
 --}
 
--- vim: set shiftwidth=2:
-
 local ucolor = require("utils.color")
 
 local inverted_colorscheme = awful.util.table.clone(colorscheme)
 inverted_colorscheme.background, inverted_colorscheme.foreground =
   inverted_colorscheme.foreground, inverted_colorscheme.background
-local is_dark_bg = ucolor.is_dark(beautiful.bg_normal)
+local is_dark_bg = ucolor.is_dark(inverted_colorscheme.background)
 for i=0,15 do
   inverted_colorscheme["color"..tostring(i)] = ucolor.darker(
-    inverted_colorscheme["color"..tostring(i)], is_dark_bg and 40 or -40
+    inverted_colorscheme["color"..tostring(i)], is_dark_bg and -40 or 40
   )
 end
 context.cmds.terminal_light = 'st -b "' .. st_color_line(inverted_colorscheme)
   .. '" -f "'..'Monospace'..':pixelsize='..tostring(xresources.apply_dpi(13))..'" '
 context.cmds.tmux_light = context.cmds.terminal_light .. " -e tmux"
+
+-- vim: set shiftwidth=2:
