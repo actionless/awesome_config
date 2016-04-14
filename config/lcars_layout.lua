@@ -32,7 +32,7 @@ local function handle_left_panel_visibility(t)
   awesome_context.leftwibox[1].visible = visible
   awesome_context.internal_corner_wibox[1].visible = visible
   awful.wibox.stretch(awesome_context.topwibox[1], 1)
-  local s = awful.tag.getscreen(t)
+  local s = t.screen.index
   if visible then
     awesome_context.topwibox[s]:set_widget(
       awesome_context.topwibox_layout[s]
@@ -52,13 +52,13 @@ function lcars_layout_helper.setlpv(prop, t)
 end
 tag.add_signal("property::left_panel_visible")
 tag.connect_signal("property::left_panel_visible", handle_left_panel_visibility)
-handle_left_panel_visibility(awful.tag.selected(awful.screen.focused()))
+handle_left_panel_visibility(awful.screen.focused().selected_tag)
 
 
 local function lcars_unite(t, from)
   if not lcars_layout_helper.is_separated then return end
   log("LCARS: unite|"..from)
-  local s = awful.tag.getscreen(t)
+  local s = t.screen.index
   local w = awesome_context.topwibox[s]
   w:struts({top = beautiful.panel_height})
   w:geometry({height = beautiful.panel_height})
@@ -78,8 +78,8 @@ local function lcars_unite(t, from)
 end
 
 local function lcars_separate(t, from)
-  local s = awful.tag.getscreen(t)
-  local nmaster = awful.tag.getnmaster(t)
+  local s = t.screen.index
+  local nmaster = t.master_count
   if nmaster < 1 or #awful.client.tiled(s) <= nmaster then
     return lcars_unite(t, from)
   end
@@ -88,7 +88,7 @@ local function lcars_separate(t, from)
   if not lcars_layout_helper.is_separated then
     w:struts({top = 0})
   end
-  local mwfact =  awful.tag.getmwfact(t)
+  local mwfact =  t.master_width_factor
   local height = screen[s].workarea.height
   local computed_y = math.floor(
     height*(1-mwfact) + beautiful.panel_height
@@ -136,7 +136,7 @@ end
 
 
 local function tag_callback(t, from)
-  if not t then t = awful.tag.selected(awful.screen.focused()) end
+  if not t then t = awful.screen.focused().selected_tag end
   if not t.selected then return end
 
   if awful.tag.getproperty(t, 'layout').name == 'lcars' then

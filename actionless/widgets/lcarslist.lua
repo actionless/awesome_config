@@ -125,10 +125,10 @@ function tasklist.taglist_label(t, w, args)
         text = text .. "</span>"
     end
     if not taglist_disable_icon then
-        if tag.geticon(t) and type(tag.geticon(t)) == "image" then
-            icon = tag.geticon(t)
-        elseif tag.geticon(t) then
-            icon = surface.load(tag.geticon(t))
+        if t.icon and type(t.icon) == "image" then
+            icon = t.icon
+        elseif t.icon then
+            icon = surface.load(t.icon)
         end
     end
 
@@ -198,7 +198,7 @@ local function tasklist_label(c, args)
         else
             if c.maximized_horizontal then name = name .. maximized_horizontal end
             if c.maximized_vertical then name = name .. maximized_vertical end
-            if client.floating.get(c) then name = name .. floating end
+            if c.floating then name = name .. floating end
         end
     end
 
@@ -277,7 +277,7 @@ local v_sep = wibox.widget.background(
 local function tasklist_update(s, w, buttons, filter, data, style, update_function, tag_filter)
     tag_filter = tag_filter or function() return true end
     w:reset()
-    for _, t in ipairs(tag.gettags(s)) do
+    for _, t in ipairs(s.tags) do
         if not tag.getproperty(t, "hide") and tag_filter(t) then
             w:add(tag_group(t, buttons, filter, data, update_function))
             w:add(v_sep)
@@ -390,7 +390,7 @@ function tasklist.filter.currenttags(c, screen)
     if c.screen ~= screen then return false end
     -- Include sticky client too
     if c.sticky then return true end
-    local tags = tag.gettags(screen)
+    local tags = screen.tags
     for k, t in ipairs(tags) do
         if t.selected then
             local ctags = c:tags()
