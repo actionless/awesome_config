@@ -16,7 +16,7 @@ function signals.init(_)
 
   awful.tag.object.get_gap = function(t)
     t = t or awful.tag.selected()
-    if #awful.client.tiled(awful.tag.getscreen(t)) == 1 and awful.tag.getmfpol(t) == "expand" then
+    if #awful.client.tiled(t.screen) == 1 and t.master_fill_policy == "expand" then
         return 0
     end
     return awful.tag.getproperty(t, "useless_gap") or beautiful.useless_gap or 0
@@ -24,6 +24,7 @@ function signals.init(_)
 
 
 local function on_client_focus(c)
+  local t = awful.screen.focused().selected_tag
   local layout = awful.layout.get(c.screen)
   local num_tiled = #awful.client.tiled(c.screen)
 
@@ -31,7 +32,7 @@ local function on_client_focus(c)
 
   if persistent.titlebar.get() and (
     num_tiled > 1 or (
-      num_tiled > 0 and awful.tag.getmfpol() ~= 'expand'
+      num_tiled > 0 and t.master_fill_policy ~= 'expand'
     )
   ) then
     log("F: tile: titlebars enabled explicitly")
@@ -40,7 +41,7 @@ local function on_client_focus(c)
   elseif c.maximized then
     log("F: maximized")
     titlebar.remove_border(c)
-  elseif awful.client.floating.get(c) then
+  elseif c.floating then
     log("F: floating client")
     c.border_width = beautiful.border_width
     titlebar.make_titlebar(c)
@@ -49,7 +50,7 @@ local function on_client_focus(c)
     c.border_width = beautiful.border_width
     titlebar.make_titlebar(c)
   elseif num_tiled == 1 then
-    if awful.tag.getmfpol() == 'expand' then
+    if t.master_fill_policy == 'expand' then
       log("F: one tiling client: expand")
       titlebar.remove_border(c)
     else
@@ -65,26 +66,27 @@ local function on_client_focus(c)
 end
 
 local function on_client_unfocus (c)
+  local t = awful.screen.focused().selected_tag
   local layout = awful.layout.get(c.screen)
   local num_tiled = #awful.client.tiled(c.screen)
 
   if persistent.titlebar.get() and (
     num_tiled > 1 or (
-      num_tiled > 0 and awful.tag.getmfpol() ~= 'expand'
+      num_tiled > 0 and t.master_fill_policy ~= 'expand'
     )
   ) then
     log("U: tile: titlebars enabled explicitly")
     c.border_width = beautiful.border_width
     titlebar.make_titlebar(c)
     c.border_color = beautiful.border_normal
-  elseif awful.client.floating.get(c) then
+  elseif c.floating then
     log("U: floating client")
     c.border_color = beautiful.titlebar_border
   elseif layout == awful.layout.suit.floating then
     log("U: floating layout")
     c.border_color = beautiful.titlebar_border
   elseif num_tiled == 1 then
-    if awful.tag.getmfpol() == 'expand' then
+    if t.master_fill_policy == 'expand' then
       log("U: one tiling client: expand")
       titlebar.remove_border(c)
     else

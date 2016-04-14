@@ -50,7 +50,8 @@ function layouts.init(context)
         '1:bs', '2:web',  '3:ww', '4:im',   '5:mm', 6,
         '7:sp', 8,        '9:sd', '10:nl',  '11', '12'
       }),
-      s, enabled_layouts
+      s,
+      enabled_layouts
     )
 
     for tag_number, mwfact in ipairs(persistent.tag.get_all_mwfact(s, {
@@ -59,7 +60,7 @@ function layouts.init(context)
     --7     8     9      10    11    12
       0.50, 0.50, 0.50,  0.50, 0.50, 0.50
     })) do
-        awful.tag.setmwfact(mwfact, tags[tag_number])
+        tags[tag_number].master_width_factor = mwfact
     end
 
     for tag_number, mfpol in ipairs(persistent.tag.get_all_mfpol(s, {
@@ -68,7 +69,7 @@ function layouts.init(context)
     --7          8         9          10        11        12
       "expand",  "expand", "mwfact",  "expand", "expand", "expand"
     })) do
-        awful.tag.setmfpol(mfpol, tags[tag_number])
+        tags[tag_number].master_fill_policy = mfpol
     end
 
     context.tags[s.index] = tags

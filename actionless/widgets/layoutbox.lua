@@ -110,18 +110,23 @@ local function worker(args)
         self.layout_name = layout
     end
     function layoutbox:update_nmaster(t)
-        self.n_master.widget:set_text(tag.getnmaster(t))
+        self.n_master.widget:set_text(
+            (t or awful.screen.focused().selected_tag).master_count
+        )
     end
     function layoutbox:update_ncol(t)
-        self.n_col.widget:set_text(tag.getncol(t))
+        self.n_col.widget:set_text(
+            (t or awful.screen.focused().selected_tag).column_count
+        )
     end
     function layoutbox:update_mfpol(t)
         if h_string.starts(self.layout_name, 'tile') or
             h_string.starts(self.layout_name, 'corner')
         then
-            self.mfpol.widget:set_text(
-                string.format(self.mfpol_template, tag.getmfpol(t))
-            )
+            self.mfpol.widget:set_text(string.format(
+                self.mfpol_template,
+                (t or awful.screen.focused().selected_tag).master_fill_policy
+            ))
         else
             self.mfpol.widget:set_text(" ")
         end
