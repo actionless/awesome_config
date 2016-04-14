@@ -1,7 +1,6 @@
 local awful = require("awful")
 local gears = require("gears")
 local beautiful = require("beautiful")
-local capi = { screen = screen }
 local lcars_layout = require("actionless.lcars_layout")
 local persistent = require("actionless.persistent")
 
@@ -25,9 +24,9 @@ function layouts.init(context)
   -- {{{ Wallpaper
   if beautiful.wallpaper then
     local wallpaper_layout = beautiful.wallpaper_layout or "tiled"
-    for s in capi.screen do
+    awful.screen.connect_for_each_screen(function(s)
       gears.wallpaper[wallpaper_layout](beautiful.wallpaper, s)
-    end
+    end)
   elseif beautiful.wallpaper_cmd then
       awful.spawn.with_shell(beautiful.wallpaper_cmd)
   end
@@ -36,7 +35,7 @@ function layouts.init(context)
   -- {{{ Tags
   -- Define a tag table which hold all screen tags.
   context.tags = {}
-  for s in capi.screen do
+  awful.screen.connect_for_each_screen(function(s)
 
     local enabled_layouts = {}
     for i, id in ipairs(persistent.layout.get_all_ids(s, {
@@ -74,7 +73,7 @@ function layouts.init(context)
 
     context.tags[s.index] = tags
 
-  end
+  end)
   -- }}}
 
 end

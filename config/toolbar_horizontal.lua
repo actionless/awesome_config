@@ -3,11 +3,6 @@ local beautiful = require("beautiful")
 local dpi = beautiful.xresources.apply_dpi
 local awful = require("awful")
 
-local capi = {
-  screen = screen,
-  client = client,
-}
-
 local helpers = require("actionless.helpers")
 local widgets = require("actionless.widgets")
 local common = widgets.common
@@ -27,7 +22,7 @@ function toolbar.init(awesome_context)
 
   awesome_context.topwibox_layout_fallback = {}
   -- Create a wibox for each screen and add it
-  for s in capi.screen do
+  awful.screen.connect_for_each_screen(function(s)
     local si = s.index
 
     local wheel_binding = awful.util.table.join(
@@ -163,7 +158,7 @@ function toolbar.init(awesome_context)
     awesome_context.topwibox[si]:set_widget(
       awesome_context.topwibox_layout_fallback[si]
     )
-  end
+  end)
 
 end
 return toolbar

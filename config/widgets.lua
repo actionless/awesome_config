@@ -123,7 +123,7 @@ function widget_loader.init(awesome_context)
 
 
   w.screen = {}
-  for s in capi.screen do
+  awful.screen.connect_for_each_screen(function(s)
     local si = s.index
     w.screen[si] = {}
     local sw = w.screen[si]
@@ -296,7 +296,7 @@ function widget_loader.init(awesome_context)
     topwibox[si]:set_bg(beautiful.panel_bg)
     topwibox[si]:set_fg(beautiful.panel_fg)
 
-  end
+  end)
 
   awesome_context.topwibox = topwibox
   awesome_context.leftwibox = leftwibox

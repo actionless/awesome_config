@@ -1,16 +1,13 @@
+local awful = require("awful")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
-local dpi = require("beautiful.xresources").apply_dpi
-
-local capi = {
-  screen = screen,
-  client = client,
-}
+local dpi = beautiful.xresources.apply_dpi
 
 local common = require("actionless.widgets.common")
+local h_table = require("utils.table")
 
 local assets = require("config.toolbar_assets")
-local h_table = require("utils.table")
+
 
 local toolbar = {}
 
@@ -46,7 +43,7 @@ function toolbar.init(awesome_context)
   local internal_corner_wibox = {}
   local top_internal_corner_wibox = {}
 
-  for s in capi.screen do
+  awful.screen.connect_for_each_screen(function(s)
     local si = s.index
 
     local top_panel_left_margin = wibox.widget.background(
@@ -243,7 +240,7 @@ function toolbar.init(awesome_context)
     awesome_context.leftwibox[si]:set_widget(left_panel_layout)
     internal_corner_wibox[si].visible = false
 
-  end
+  end)
 
   awesome_context.topwibox_layout = topwibox_layout  -- this one!
   awesome_context.topwibox_toplayout = topwibox_toplayout
