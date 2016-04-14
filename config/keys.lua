@@ -769,7 +769,7 @@ awesome_context.clientkeys = awful.util.table.join(
     "put client on master", CLIENT_MOVE
   ),
   bind_key({ modkey,        }, "o",
-    awful.client.movetoscreen,
+    function(c) c:move_to_screen() end,
     "move client to other screen", CLIENT_MOVE
   ),
   bind_key({ modkey,        }, "t",
@@ -831,7 +831,7 @@ for scr = 1, 2 do
       function ()
         if client.focus then
           local tag = capi.screen[scr].tags[i]
-          if tag then awful.client.movetotag(tag) end
+          if tag then client.focus:move_to_tag(tag) end
          end
       end,
       i==1 and "move client to tag " .. i .. "(screen #" .. scr .. ")",
@@ -841,9 +841,10 @@ for scr = 1, 2 do
       function ()
         if client.focus then
           local tag = capi.screen[scr].tags[i]
-          if tag then awful.client.toggletag(tag) end
+          if tag then
+            client.focus:toggle_tag(tag)
+          end
         end
-
       end,
       i==1 and "toggle client to tag " .. i .. "(screen #" .. scr .. ")",
       CLIENT_MANIPULATION

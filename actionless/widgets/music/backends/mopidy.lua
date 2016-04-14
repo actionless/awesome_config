@@ -32,17 +32,17 @@ function mopidy.init(player_widget)
 end
 -------------------------------------------------------------------------------
 function mopidy.toggle()
-  awful.util.spawn_with_shell(
+  awful.util.spawn.with_shell(
     "mpc toggle || ncmpcpp toggle")
 end
 
 function mopidy.next_song()
-  awful.util.spawn_with_shell(
+  awful.util.spawn.with_shell(
     "mpc next || ncmpcpp next")
 end
 
 function mopidy.prev_song()
-  awful.util.spawn_with_shell(
+  awful.util.spawn.with_shell(
     "mpc prev || ncmpcpp prev")
 end
 -------------------------------------------------------------------------------

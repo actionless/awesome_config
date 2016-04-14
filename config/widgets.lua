@@ -144,9 +144,17 @@ function widget_loader.init(awesome_context)
     sw.taglist = {}
     sw.taglist.buttons = awful.util.table.join(
       awful.button({		}, 1, function(t) t:view_only() end),
-      awful.button({ modkey	}, 1, awful.client.movetotag),
+      awful.button({ modkey     }, 1, function(t)
+                                        if client.focus then
+                                            client.focus:move_to_tag(t)
+                                        end
+                                      end),
       awful.button({		}, 3, awful.tag.viewtoggle),
-      awful.button({ modkey	}, 3, awful.client.toggletag)--,
+      awful.button({ modkey     }, 3, function(t)
+                                          if client.focus then
+                                              client.focus:toggle_tag(t)
+                                          end
+                                      end)--,
       --awful.button({ }, 4, function()
         --helpers.tag_view_noempty(-1)
       --end),
@@ -184,14 +192,14 @@ function widget_loader.init(awesome_context)
     local tasklist_buttons = awful.util.table.join(
       awful.button({ }, 1, function (c)
         if c.is_tag then
-          return awful.tag.viewonly(c.tag)
+          return c.tag:view_only()
         end
         if c == capi.client.focus then
           c.minimized = true
         else
           c.minimized = false
           if not c:isvisible() then
-            awful.tag.viewonly(c:tags()[1])
+            c:tags()[1]:view_only()
           end
           -- This will also un-minimize
           -- the client, if needed
@@ -228,10 +236,10 @@ function widget_loader.init(awesome_context)
       --end)
       --
       --awful.button({		}, 5, function(t)
-        --helpers.tag_view_noempty(1, awful.tag.getscreen(t))
+        --helpers.tag_view_noempty(1, t.screen)
       --end),
       --awful.button({		}, 4, function(t)
-        --helpers.tag_view_noempty(-1, awful.tag.getscreen(t))
+        --helpers.tag_view_noempty(-1, t.screen)
       --end)
     )
 

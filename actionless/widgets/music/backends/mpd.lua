@@ -24,17 +24,17 @@ function mpd.init(args)
 end
 -------------------------------------------------------------------------------
 function mpd.toggle()
-  awful.util.spawn_with_shell(
+  awful.util.spawn.with_shell(
     "mpc toggle || ncmpcpp toggle")
 end
 
 function mpd.next_song()
-  awful.util.spawn_with_shell(
+  awful.util.spawn.with_shell(
     "mpc next || ncmpcpp next")
 end
 
 function mpd.prev_song()
-  awful.util.spawn_with_shell(
+  awful.util.spawn.with_shell(
     "mpc prev || ncmpcpp prev")
 end
 -------------------------------------------------------------------------------
