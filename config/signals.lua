@@ -14,25 +14,12 @@ local signals = {}
 
 function signals.init(_)
 
-  local function ignore_gap(t, numclients)
-    numclients = numclients or #awful.client.tiled(awful.tag.getscreen(t))
-    if numclients == 1 and awful.tag.getmfpol(t) == "expand" then
-      return true
-    end
-  end
-
-  awful.tag.getgap = function(t, numclients)
+  awful.tag.object.get_gap = function(t)
     t = t or awful.tag.selected()
-    if ignore_gap(t, numclients) then
+    if #awful.client.tiled(awful.tag.getscreen(t)) == 1 and awful.tag.getmfpol(t) == "expand" then
         return 0
     end
     return awful.tag.getproperty(t, "useless_gap") or beautiful.useless_gap or 0
-  end
-  awful.tag.setgap = function (useless_gap, t)
-    t = t or tag.selected()
-    if not ignore_gap(t) then
-        awful.tag.setproperty(t, "useless_gap", useless_gap, true)
-    end
   end
 
 
