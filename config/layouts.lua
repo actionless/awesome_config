@@ -63,10 +63,14 @@ function layouts.init(context)
     end
 
     for tag_number, mfpol in ipairs(persistent.tag.get_all_mfpol(s, {
-    --1          2         3          4         5         6
-      "mwfact",  "expand", "mwfact",  "expand", "mwfact", "expand",
-    --7          8         9          10        11        12
-      "expand",  "expand", "mwfact",  "expand", "expand", "expand"
+    --1                      2                      3
+      "master_width_factor", "expand",              "master_width_factor",
+    --4                      5                      6
+      "expand",              "master_width_factor", "expand",
+    --7                      8                      9
+      "expand",              "expand",              "master_width_factor",
+    --10                     11                     12
+      "expand",              "expand",              "expand"
     })) do
         tags[tag_number].master_fill_policy = mfpol
     end

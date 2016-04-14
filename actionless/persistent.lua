@@ -75,7 +75,7 @@ function persistent.tag.togglemfpol(tag, screen, tag_id)
   local db_id = "tag_mfpol_"..screen
   local layout_expand_masters = db.get(db_id)
   if layout_expand_masters[tag_id] == "expand" then
-    layout_expand_masters[tag_id] = "mwfact"
+    layout_expand_masters[tag_id] = "master_width_factor"
   else
     layout_expand_masters[tag_id] = "expand"
   end
