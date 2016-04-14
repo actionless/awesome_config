@@ -129,9 +129,9 @@ local globalkeys = awful.util.table.join(
   bind_key({ modkey, altkey }, "r",
     function ()
       local s = awful.screen.focused()
-      local tag = awful.tag.selected(s)
+      local tag = s.selected_tag
       if not tag then return end
-      local tag_id = awful.tag.getidx(tag)
+      local tag_id = tag.index
       awful.prompt.run(
         { prompt = "new tag name: ",
           text = tag_id .. ":" },
@@ -332,7 +332,7 @@ local globalkeys = awful.util.table.join(
   bind_key({ modkey, altkey }, "g",
     function ()
       local s = awful.screen.focused()
-      local tag = awful.tag.selected(s)
+      local tag = s.selected_tag
       helpers.tag_toggle_gap(tag)
       tag:emit_signal("property::layout")
     end,
@@ -459,7 +459,7 @@ local globalkeys = awful.util.table.join(
 
   bind_key({modkey, altkey}, "p",
     function()
-      local t = awful.tag.selected(awful.screen.focused())
+      local t = awful.screen.focused().selected_tag
       if awful.tag.getproperty(t, 'layout').name == 'lcars' then
         return nlog("fuck you")
       end
@@ -470,10 +470,10 @@ local globalkeys = awful.util.table.join(
   ),
   bind_key({modkey, "Control", "Shift"}, "p",
     function()
-      local selected_tag = awful.tag.selected(awful.screen.focused())
+      local selected_tag = awful.screen.focused().selected_tag
       local visible = awful.tag.getproperty(selected_tag, 'left_panel_visible')
       for s in capi.screen do
-        for _, t in ipairs(awful.tag.gettags(s)) do
+        for _, t in ipairs(s.tags) do
           awful.tag.setproperty(t, 'left_panel_visible', not visible)
         end
       end
@@ -813,15 +813,15 @@ for scr = 1, 2 do
   globalkeys = awful.util.table.join(globalkeys,
     bind_key({ modkey }, "#" .. i + diff,
       function ()
-        local tag = awful.tag.gettags(scr)[i]
-        if tag then awful.tag.viewonly(tag) end
+        local tag = capi.screen[scr].tags[i]
+        if tag then tag:view_only() end
       end,
       i==1 and "go to tag " .. i .. "(screen #" .. scr .. ")",
       TAG_COLOR
     ),
     bind_key({ modkey, "Control" }, "#" .. i + diff,
       function ()
-        local tag = awful.tag.gettags(scr)[i]
+        local tag = capi.screen[scr].tags[i]
         if tag then awful.tag.viewtoggle(tag) end
       end,
       i==1 and "toggle tag " .. i .. "(screen #" .. scr .. ")",
@@ -830,7 +830,7 @@ for scr = 1, 2 do
     bind_key({ modkey, "Shift" }, "#" .. i + diff,
       function ()
         if client.focus then
-          local tag = awful.tag.gettags(scr)[i]
+          local tag = capi.screen[scr].tags[i]
           if tag then awful.client.movetotag(tag) end
          end
       end,
@@ -840,7 +840,7 @@ for scr = 1, 2 do
     bind_key({ modkey, "Control", "Shift" }, "#" .. i + diff,
       function ()
         if client.focus then
-          local tag = awful.tag.gettags(scr)[i]
+          local tag = capi.screen[scr].tags[i]
           if tag then awful.client.toggletag(tag) end
         end
 

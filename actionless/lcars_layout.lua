@@ -16,7 +16,6 @@ local math      = { floor = math.floor,
                     ceil  = math.ceil,
                     max   = math.max,
                     min   = math.min }
-local tonumber  = tonumber
 
 local uselesstile = {}
 
@@ -109,14 +108,14 @@ local function tile(p, orientation)
     -- Aliases
     local wa = p.workarea
     local cls = p.clients
-    local t = tag.selected(p.screen)
+    local t = screen[p.screen].selected_tag
 
     -- Nothing to tile here
     if #cls == 0 then return end
 
     -- Get tag prop
-    local nmaster = math.min(tag.getnmaster(t), #cls)
-    local mwfact = tag.getmwfact(t)
+    local nmaster = math.min(t.master_count, #cls)
+    local mwfact = t.master_width_factor
 
     if nmaster == 0 then
         mwfact = 0
@@ -196,7 +195,7 @@ local function tile(p, orientation)
     }
 
     -- get column number for other windows
-    local ncol = math.min(tag.getncol(t), #cls_other)
+    local ncol = math.min(t.column_count, #cls_other)
 
     -- split other windows to column groups
     local last_small_column = ncol - #cls_other % (ncol > 0 and ncol or 1)
@@ -208,7 +207,7 @@ local function tile(p, orientation)
         local rows = i <= last_small_column and rows_min or rows_min + 1
         local column = {}
 
-        for j = 1, rows do
+        for _ = 1, rows do
             table.insert(column, cls_other[client_index])
             client_index = client_index + 1
         end

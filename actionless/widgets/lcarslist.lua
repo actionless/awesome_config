@@ -415,8 +415,7 @@ function tasklist.filter.minimizedcurrenttags(c, screen)
     if not c.minimized then return false end
     -- Include sticky client
     if c.sticky then return true end
-    local tags = tag.gettags(screen)
-    for k, t in ipairs(tags) do
+    for k, t in ipairs(screen.tags) do
         -- Select only minimized clients
         if t.selected then
             local ctags = c:tags()

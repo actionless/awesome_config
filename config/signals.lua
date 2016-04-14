@@ -15,7 +15,7 @@ local signals = {}
 function signals.init(_)
 
   awful.tag.object.get_gap = function(t)
-    t = t or awful.tag.selected()
+    t = t or awful.screen.focused().selected_tag
     if #awful.client.tiled(t.screen) == 1 and t.master_fill_policy == "expand" then
         return 0
     end
@@ -129,7 +129,7 @@ client.connect_signal("unfocus", function(c)
 end)
 
 tag.connect_signal("property::layout", function (t)
-  t = t or awful.tag.selected(awful.screen.focused())
+  t = t or awful.screen.focused().selected_tag
   for _, c in ipairs(t.clients(t)) do
     if c == client.focus then
       on_client_focus(c)

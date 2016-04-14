@@ -79,7 +79,7 @@ local function worker(args)
         function()
             persistent.layout.set(
                 layout,
-                awful.tag.selected(layoutbox.screen),
+                layoutbox.screen.selected_tag,
                 layoutbox.screen
             )
         end,

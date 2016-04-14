@@ -143,7 +143,7 @@ function widget_loader.init(awesome_context)
     -- taglist
     sw.taglist = {}
     sw.taglist.buttons = awful.util.table.join(
-      awful.button({		}, 1, awful.tag.viewonly),
+      awful.button({		}, 1, function(t) t:view_only() end),
       awful.button({ modkey	}, 1, awful.client.movetotag),
       awful.button({		}, 3, awful.tag.viewtoggle),
       awful.button({ modkey	}, 3, awful.client.toggletag)--,

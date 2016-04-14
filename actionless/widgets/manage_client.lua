@@ -69,8 +69,7 @@ local function worker(args)
       persistent.titlebar.set(false)
     end
     update_widget_status()
-    local tags = awful.tag.gettags(widget_screen)
-    for _, t in ipairs(tags) do
+    for _, t in ipairs(widget_screen.tags) do
       t:emit_signal("property::layout")
     end
   end
