@@ -12,12 +12,10 @@ local setmetatable	= setmetatable
 
 local h_string		= require("utils.string")
 local common = require("actionless.widgets.common")
-local common_widget	= common.widget
 local decorated_widget	= common.decorated
 local markup		= require("utils.markup")
 
 local backend_modules	= require("actionless.widgets.music.backends")
-local tag_parser	= require("actionless.widgets.music.tag_parser")
 
 
 -- player infos
@@ -37,16 +35,13 @@ local player = {
 
 
 local function worker(args)
-  local args = args or {}
+  args = args or {}
   player.args = args
   local timeout = args.timeout or 5
   local default_art = args.default_art or ""
   local enabled_backends = args.backends
                            or { 'mpd', 'cmus', 'spotify', 'clementine', }
   local cover_size = args.cover_size or 100
-  local fg = args.fg or beautiful.panel_fg or beautiful.fg
-  local artist_color      = fg or beautiful.player_artist or fg or beautiful.fg_normal
-  local title_color      = fg or beautiful.player_title or fg or beautiful.fg_normal
   player.enable_notifications = args.enable_notifications or false
   --player.artist_widget = common_widget(args)
   --player.title_widget = common_widget(args)
@@ -176,7 +171,6 @@ local function worker(args)
     local artist = ""
     local title = ""
     local old_title = player.player_status.title
-    --player_status = tag_parser.predict_missing_tags(player_status)
     player.player_status = player_status
 
     if player_status.state == "play" or player_status.state == "pause" then

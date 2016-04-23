@@ -28,8 +28,6 @@ function common_theme.generate_theme(theme_dir)
   --
   theme.xrdb = xresources.get_current_theme()
 
-  xrdb=theme.xrdb
-
   theme.dir = theme_dir
 
   theme.hidpi = false

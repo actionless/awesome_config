@@ -9,11 +9,6 @@
 
 -- Grab environment
 local awful = require("awful")
-local utils = require("menubar.utils")
-local pairs = pairs
-local ipairs = ipairs
-local string = string
-local table = table
 
 
 -----

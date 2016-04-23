@@ -60,7 +60,7 @@ function sneaky_tray.toggle()
 end
 
 local function worker(args)
-    local args = args or {}
+    args = args or {}
     sneaky_tray.show_on_start = args.show_on_start or false
     sneaky_tray.initialize()
     return setmetatable(sneaky_tray, { __index = sneaky_tray.widget})

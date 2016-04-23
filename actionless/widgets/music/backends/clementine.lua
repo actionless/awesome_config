@@ -22,7 +22,7 @@ function clementine.init(widget)
   dbus.connect_signal(
     "org.freedesktop.DBus.Properties",
     function()
-      widget.update(args.parse_status)
+      widget.update(clementine.update)
     end)
 end
 -------------------------------------------------------------------------------

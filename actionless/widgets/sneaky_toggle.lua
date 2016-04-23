@@ -87,7 +87,7 @@ function sneaky_toggle.toggle()
 end
 
 local function worker(args)
-    local args = args or {}
+    args = args or {}
     sneaky_toggle.enable_sneaky_tray = args.enable_sneaky_tray
     sneaky_toggle.loaded_widgets = args.widgets
     sneaky_toggle.show_on_start = args.show_on_start or false

@@ -24,8 +24,6 @@ local mem = {
 local function worker(args)
   args   = args or {}
   local update_interval  = args.update_interval or 5
-  local bg = args.bg or beautiful.panel_fg or beautiful.fg
-  local fg = args.fg or beautiful.panel_bg or beautiful.bg
   mem.timeout = args.timeout or 0
 
   mem.widget = common_widget(args)

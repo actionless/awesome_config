@@ -83,7 +83,7 @@ function calendar:show(t_out, inc_offset)
 end
 
 function calendar:attach(widget, args)
-  local args = args or {}
+  args = args or {}
   self.icons = args.icons or beautiful.icons_dir .. "calendar/"
   self.fg = args.fg or beautiful.fg_normal or "#FFFFFF"
   self.bg = args.bg or beautiful.bg_normal or "#FFFFFF"
