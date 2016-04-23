@@ -23,7 +23,7 @@ function spotify.init(widget)
   dbus.add_match("session", "path='/org/mpris/MediaPlayer2',interface='org.freedesktop.DBus.Properties',member='PropertiesChanged'")
   dbus.connect_signal(
     "org.freedesktop.DBus.Properties",
-    function(...)
+    function()
       widget.update()
     end)
 end
@@ -41,24 +41,11 @@ function spotify.prev_song()
   awful.spawn.with_shell(dbus_cmd .. "Previous")
 end
 -------------------------------------------------------------------------------
---{{  @TODO: temporary workaround:
---local gears = require("gears")
---local timer_added = false
---}}
 function spotify.update(parse_status_callback)
-  local callback = function(str) spotify.post_update(str, parse_status_callback) end
   awful.spawn.easy_async(
     dbus_cmd .. "PlaybackStatus",
-    callback
+    function(str) spotify.post_update(str, parse_status_callback) end
   )
-
-  --{{  @TODO: temporary workaround:
-  --if not timer_added then
-    --gears.timer.start_new(2, function() callback("Playing") return true end)
-    --timer_added = true
-  --end
-  return spotify.post_update("Playing", parse_status_callback)
-  --}}
 end
 -------------------------------------------------------------------------------
 function spotify.post_update(result_string, parse_status_callback)
@@ -71,20 +58,18 @@ function spotify.post_update(result_string, parse_status_callback)
   end
   spotify.player_status.state = state
   if state == 'play' or state == 'pause' then
-    awful.spawn.with_line_callback(
-      dbus_cmd .. "Metadata", {
-      stdout=function(str) spotify.parse_metadata_line(str) end,
-      stderr=function(str) spotify.post_update("Unknown", parse_status_callback) end,
-      output_done=function() spotify.parse_metadata_done(parse_status_callback) end,
-    })
+    awful.spawn.easy_async(
+      dbus_cmd .. "Metadata",
+      function(str) spotify.parse_metadata(str, parse_status_callback) end
+    )
   else
     parse_status_callback(spotify.player_status)
   end
 end
 
-function spotify.parse_metadata_line(result_line)
-  local player_status = parse.find_values_in_string(
-    result_line,
+function spotify.parse_metadata(result_string, parse_status_callback)
+  h_table.merge(spotify.player_status, parse.find_values_in_string(
+    result_string,
     "([%w]+): (.*)$",
     { artist='artist',
       title='title',
@@ -92,11 +77,7 @@ function spotify.parse_metadata_line(result_line)
       date='contentCreated',
       cover_url='artUrl'
     }
-  )
-  h_table.merge(spotify.player_status, player_status)
-end
-
-function spotify.parse_metadata_done(parse_status_callback)
+  ))
   spotify.player_status.date = h_string.max_length(spotify.player_status.date, 4)
   spotify.player_status.file = 'spotify stream'
   parse_status_callback(spotify.player_status)
