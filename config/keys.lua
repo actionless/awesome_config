@@ -364,6 +364,9 @@ local globalkeys = awful.util.table.join(
   awful.key({}, "#121", function ()
       awesome_context.widgets.volume.ToggleMute()
   end),
+  awful.key({}, "#78", function ()  -- scroll lock
+      awesome_context.widgets.volume.ToggleMute()
+  end),
   awful.key({}, "#198", function () awesome_context.widgets.volume.toggle_mic() end),
 
   -- Music player control
