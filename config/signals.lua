@@ -104,17 +104,16 @@ local function on_client_unfocus (c)
 end
 
 -- New client appears
-client.connect_signal("manage", function (c, startup)
-  if
-    not startup and not c.size_hints.user_position
-  and
-    not c.size_hints.program_position
-  then
-    awful.placement.no_overlap(c)
-    awful.placement.no_offscreen(c)
-  elseif not c.size_hints.user_position and not c.size_hints.program_position then
-    -- Prevent clients from being unreachable after screen count change
-    awful.placement.no_offscreen(c)
+client.connect_signal("manage", function (c)
+    -- Set the windows at the slave,
+    -- i.e. put it at the end of others instead of setting it master.
+    -- if not awesome.startup then awful.client.setslave(c) end
+    if awesome.startup and
+      not c.size_hints.user_position and
+      not c.size_hints.program_position
+    then
+      -- Prevent clients from being unreachable after screen count change
+      awful.placement.no_offscreen(c)
   end
 end)
 
@@ -153,6 +152,10 @@ client.connect_signal("property::minimized", function (c)
   elseif titlebar.is_enabled(c) then
     c.skip_taskbar = true
   end
+end)
+
+client.connect_signal("request::titlebars", function(c)
+  titlebar.make_titlebar(c)
 end)
 
 end

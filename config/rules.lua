@@ -1,5 +1,4 @@
 local awful = require("awful")
-awful.rules = require("awful.rules")
 
 
 local rules = {}
@@ -17,18 +16,30 @@ function rules.init(awesome_context)
         raise = true,
         keys = awesome_context.clientkeys,
         buttons = awesome_context.clientbuttons,
+        placement = awful.placement.no_overlap+awful.placement.no_offscreen,
         size_hints_honor = false
       },
       callback = awful.client.setslave
+    },
+
+    -- Add titlebars to normal clients and dialogs
+    { rule_any = {type = { "normal", "dialog" }
+      }, properties = { titlebars_enabled = true }
     },
 
     { rule = { class = "Skype" },
       properties = { tag=awesome_context.tags[1][4], raise=false } },
     --{ rule = { class = "Spotify" },
       --properties = { tag=awesome_context.tags[1][7], raise=false } },
-    { rule_any = { class = { "Transmission-gtk",  } },
-      properties = { tag=awesome_context.tags[1][6], floating = false } },
-      
+    { rule = { class = "Transmission-gtk", role = "tr-info" },
+        properties = {
+          tag=awesome_context.tags[1][6],
+          floating = false
+        },
+        callback = function(c)
+          c.floating = false
+        end
+    },
   }
 end
 return rules
