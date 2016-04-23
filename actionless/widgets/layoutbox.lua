@@ -16,6 +16,7 @@ local textbox = require("wibox.widget.textbox")
 local h_string = require("utils.string")
 local common = require("actionless.widgets.common")
 local persistent = require("actionless.persistent")
+local delayed_call = require("gears.timer").delayed_call
 
 --- Layoutbox widget "class".
 
@@ -110,14 +111,18 @@ local function worker(args)
         self.layout_name = layout
     end
     function layoutbox:update_nmaster(t)
-        self.n_master.widget:set_text(
-            (t or awful.screen.focused().selected_tag).master_count
-        )
+        delayed_call(function()
+            self.n_master.widget:set_text(
+                (t or awful.screen.focused().selected_tag).master_count
+            )
+        end)
     end
     function layoutbox:update_ncol(t)
-        self.n_col.widget:set_text(
-            (t or awful.screen.focused().selected_tag).column_count
-        )
+        delayed_call(function()
+            self.n_col.widget:set_text(
+                (t or awful.screen.focused().selected_tag).column_count
+            )
+        end)
     end
     function layoutbox:update_mfpol(t)
         if h_string.starts(self.layout_name, 'tile') or
