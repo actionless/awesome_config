@@ -46,8 +46,8 @@ function layouts.init(context)
     end
     local tags = awful.tag(
       persistent.tag.get_all_names(s, {
-        '1:bs', '2:web',  '3:ww', '4:im',   '5:mm', 6,
-        '7:sp', 8,        '9:sd', '10:nl',  '11', '12'
+        '1:bs', '2:web',  '3:ww', '4:im',   '5:mm', '6',
+        '7:sp', '8',      '9:sd', '10:nl',  '11',  '12'
       }),
       s,
       enabled_layouts
