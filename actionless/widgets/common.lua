@@ -22,7 +22,6 @@ function common.widget(args)
   args = args or {}
 
   local show_icon = args.show_icon or beautiful.show_widget_icon
-  local force_no_bgimage = args.force_no_bgimage or false
   local widget = {}
     widget.lie_layout = wibox.layout.fixed.horizontal()
     if show_icon then
@@ -50,22 +49,6 @@ function common.widget(args)
   end
 
   function widget:set_bg(...)
-    if not force_no_bgimage then
-      local bg = select(1, ...)
-      if bg == beautiful.panel_widget_bg_warning and bgimage_warning then
-        self:set_bgimage(bgimage_warning)
-        return
-      elseif bg == beautiful.panel_widget_bg_error and bgimage_error then
-        self:set_bgimage(bgimage_error)
-        return
-      elseif
-        bg ~= beautiful.panel_widget_bg_warning and
-        bg ~= beautiful.panel_widget_bg_error and
-        bgimage_normal
-      then
-        self:set_bgimage(bgimage_normal)
-      end
-    end
     self.widget_bg:set_bg(...)
   end
 
@@ -93,10 +76,6 @@ function common.widget(args)
     self.widget_bg:set_widget(nil)
   end
 
-  if bgimage_normal and not force_no_bgimage then
-    widget.widget_bg:set_bgimage(bgimage_normal)
-  end
-
   setmetatable(widget.widget_bg, { __index = widget.text_widget })
   return setmetatable(widget, { __index = widget.widget_bg })
 end
@@ -120,9 +99,6 @@ end
 
 
 function common.make_separator(separator_character, args)
-
-  local bgimage_normal = beautiful[
-    'widget_decoration_image_' .. separator_character]
 
   local separator_alias = beautiful['widget_decoration_' .. separator_character]
   if separator_alias then
@@ -251,7 +227,7 @@ function common.decorated(args)
   decorated.widget_layout = wibox.layout.fixed.vertical()
 
   if valign == "top" then
-    decorated.internal_widget_layout = 
+    decorated.internal_widget_layout =
     common.align.horizontal(
         nil,
         decorated.widget_layout,
@@ -287,10 +263,10 @@ function common.decorated(args)
 
   --- Set widget color
   -- @param args. "fg", "bg", "name" - "err", "warn", "b", "f" or 1..16
-  function decorated:set_color(args)
-    args = args or {}
-    local fg = args.fg
-    local bg = args.bg
+  function decorated:set_color(color_args)
+    color_args = color_args or {}
+    local fg = color_args.fg
+    local bg = color_args.bg
     for _, widget in ipairs(self.widget_list) do
       widget:set_fg(fg)
       --widget:set_bg(bg)
@@ -410,6 +386,7 @@ function common.decorated_horizontal(args)
     end
   end
 
+  decorated.lie_visible = false
   decorated.widget = decorated.widget_list[1]
   decorated.lie_layout = wibox.layout.fixed.horizontal()
   decorated.lie_background = wibox.widget.background()
@@ -433,14 +410,14 @@ function common.decorated_horizontal(args)
 
   --- Set widget color
   -- @param args. "fg", "bg", "name" - "err", "warn", "b", "f" or 1..16
-  function decorated:set_color(args)
-    args = args or {}
-    local fg = args.fg
-    local bg = args.bg
-    if args.name then
-      bg = get_color(args.name)
+  function decorated:set_color(color_args)
+    color_args = color_args or {}
+    local fg = color_args.fg
+    local bg
+    if color_args.name then
+      bg = get_color(color_args.name)
     else
-      bg = args.bg
+      bg = color_args.bg
     end
     for _, widget in ipairs(h_table.flat({
       self.left_separator_widgets,
@@ -473,12 +450,14 @@ function common.decorated_horizontal(args)
   --- Make widget invisible
   function decorated:hide()
     self.lie_layout:reset()
+    self.lie_visible = false
   end
 
   --- Make widget visible again
   function decorated:show()
-    for _, separator in ipairs(self.left_separator_widgets) do
-      self.lie_layout:add(separator)
+    if self.lie_visible then return end
+    for _, this_separator in ipairs(self.left_separator_widgets) do
+      self.lie_layout:add(this_separator)
     end
     for i, each_widget in ipairs(self.widget_list) do
       self.lie_layout:add(each_widget)
@@ -486,9 +465,10 @@ function common.decorated_horizontal(args)
         self.lie_layout:add(separator)
       end
     end
-    for _, separator in ipairs(self.right_separator_widgets) do
-      self.lie_layout:add(separator)
+    for _, this_separator in ipairs(self.right_separator_widgets) do
+      self.lie_layout:add(this_separator)
     end
+    self.lie_visible = true
   end
 
   function decorated:set_normal()
