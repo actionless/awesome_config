@@ -420,7 +420,7 @@ local globalkeys = awful.util.table.join(
     function()
       awful.spawn.easy_async('bash -c "xrdb -merge $HOME/.Xresources"',
       function()
-        capi.awesome.restart()
+        awful.util.restart()
       end)
     end,
     "reload awesome wm", AWESOME_COLOR
@@ -495,7 +495,7 @@ local globalkeys = awful.util.table.join(
       else
         persistent.lcarslist.set(true)
       end
-      capi.awesome.restart()
+      awful.util.restart()
     end,
     "toggle lcarslist", LCARS
   )
