@@ -341,15 +341,20 @@ local globalkeys = awful.util.table.join(
 
   -- Prompt
   bind_key({ modkey }, "r",
-    function () awesome_context.widgets.screen[awful.screen.focused()].promptbox:run() end,
+    function ()
+      awesome_context.widgets.screen[awful.screen.focused().index].promptbox:run()
+    end,
     "run command", LAUNCHER
   ),
   bind_key({ modkey }, "x",
     function ()
-      awful.prompt.run({ prompt = "Run Lua code: " },
-      awesome_context.widgets.screen[awful.screen.focused()].promptbox.widget,
-      awful.util.eval, nil,
-      awful.util.getdir("cache") .. "/history_eval")
+      awful.prompt.run(
+        { prompt = "Run Lua code: " },
+        awesome_context.widgets.screen[awful.screen.focused().index].promptbox.widget,
+        awful.util.eval,
+        nil,
+        awful.util.getdir("cache") .. "/history_eval"
+      )
     end,
     "eXecute lua code", LAUNCHER
   ),
