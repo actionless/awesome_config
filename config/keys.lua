@@ -366,6 +366,11 @@ local globalkeys = awful.util.table.join(
   end),
   awful.key({}, "#78", function ()  -- scroll lock
       awesome_context.widgets.volume.ToggleMute()
+        if awesome_context.widgets.volume.pulse.Mute then
+          awful.spawn.spawn('xset led named "Scroll Lock"')
+        else
+          awful.spawn.spawn('xset -led named "Scroll Lock"')
+        end
   end),
   awful.key({}, "#198", function () awesome_context.widgets.volume.toggle_mic() end),
 
