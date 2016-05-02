@@ -10,6 +10,7 @@ local capi = {
   awesome = awesome,
 }
 local menubar = require("actionless.menubar")
+local awesome_menubar = require("menubar")
 
 local helpers = require("actionless.helpers")
 local menu_addon = require("actionless.menu_addon")
@@ -240,7 +241,7 @@ local globalkeys = awful.util.table.join(
   ),
   bind_key({ modkey, "Control"}, "p",
     --function() awesome_context.menu.menubar:show() end,
-    function() menubar.show() end,
+    function() awesome_menubar.show() end,
     "applications menu", LAUNCHER
   ),
   bind_key({ modkey,        }, "space",

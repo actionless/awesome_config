@@ -39,21 +39,28 @@ function menus.init(context)
   }
 
   function context.menu.mainmenu_show(nomouse)
-    if not context.menu.mainmenu then
-      context.menu.mainmenu = awful.menu({
-        items = {
-          { "freedesktop", menugen.build_menu(), beautiful.awesome_icon },
-          { "awesome", myawesomemenu, beautiful.awesome_icon },
-          { "applications", applications_menu, beautiful.applications_icon },
-          { "kill compositor", "killall compton" },
-          { "start compositor", context.cmds.compositor },
-          { "open terminal", context.cmds.terminal }
-        },
-      })
+    local function show_menu()
+      local args = {}
+      if nomouse then args.coords = {x=0,y=0} end
+      context.menu.mainmenu:show(args)
     end
-    local args = {}
-    if nomouse then args.coords = {x=0,y=0} end
-    context.menu.mainmenu:show(args)
+    if not context.menu.mainmenu then
+      menugen.build_menu(function(menulist)
+        context.menu.mainmenu = awful.menu({
+          items = {
+            { "freedesktop", menulist, beautiful.awesome_icon },
+            { "awesome", myawesomemenu, beautiful.awesome_icon },
+            { "applications", applications_menu, beautiful.applications_icon },
+            { "kill compositor", "killall compton" },
+            { "start compositor", context.cmds.compositor },
+            { "open terminal", context.cmds.terminal }
+          },
+        })
+        show_menu()
+      end)
+    else
+      show_menu()
+    end
   end
   function context.menu.mainmenu_toggle()
     if not context.menu.mainmenu then
