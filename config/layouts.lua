@@ -34,7 +34,6 @@ function layouts.init(context)
 
   -- {{{ Tags
   -- Define a tag table which hold all screen tags.
-  context.tags = {}
   awful.screen.connect_for_each_screen(function(s)
 
     local enabled_layouts = {}
@@ -74,8 +73,6 @@ function layouts.init(context)
     })) do
         tags[tag_number].master_fill_policy = mfpol
     end
-
-    context.tags[s.index] = tags
 
   end)
   -- }}}
