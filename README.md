@@ -2,6 +2,9 @@
 ==============
 
 #### Installation
+
+Warning, it works only with git master branch of Awesome WM, not stable version.
+
 ```sh
 cd ~/.config/
 git clone https://github.com/actionless/awesome_config.git -b devel awesome
