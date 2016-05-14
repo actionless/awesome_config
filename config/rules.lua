@@ -25,8 +25,11 @@ function rules.init(awesome_context)
         callback = awful.client.setslave
       },
       -- Add titlebars to normal clients and dialogs
-      { rule_any = {type = { "normal", "dialog" }},
-        properties = { titlebars_enabled = true }
+      { rule = {type = "dialog"},
+        properties = {
+          titlebars_enabled = true,
+          ontop = true
+        },
       },
 
       { rule = { class = "Skype" },
