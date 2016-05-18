@@ -36,7 +36,7 @@ local function worker(args)
 
   mem.list_len = args.list_length or 10
 
-  local new_top = args.new_top or false
+  local new_top = args.new_top or true
   mem.command = "top -o \\%MEM -b -n 1 -w 512"
 
   function mem.hide_notification()

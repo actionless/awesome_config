@@ -39,7 +39,7 @@ local function worker(args)
 
   cpu.list_len = args.list_length or 10
 
-  local new_top = args.new_top or false
+  local new_top = args.new_top or true
   cpu.command = "top -o \\%CPU -b -n 1 -w 512 -d 0.05"
 
   function cpu.hide_notification()
