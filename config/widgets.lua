@@ -145,14 +145,14 @@ function widget_loader.init(awesome_context)
     sw.taglist.buttons = awful.util.table.join(
       awful.button({		}, 1, function(t) t:view_only() end),
       awful.button({ modkey     }, 1, function(t)
-                                        if client.focus then
-                                            client.focus:move_to_tag(t)
+                                        if capi.client.focus then
+                                            capi.client.focus:move_to_tag(t)
                                         end
                                       end),
       awful.button({		}, 3, awful.tag.viewtoggle),
       awful.button({ modkey     }, 3, function(t)
-                                          if client.focus then
-                                              client.focus:toggle_tag(t)
+                                          if capi.client.focus then
+                                              capi.client.focus:toggle_tag(t)
                                           end
                                       end)--,
       --awful.button({ }, 4, function()
@@ -282,27 +282,27 @@ function widget_loader.init(awesome_context)
     end
 
 
-    leftwibox[si] = awful.wibox({
+    leftwibox[si] = awful.wibar({
       position = "left",
       screen = s,
       --height = beautiful.panel_height,
       width = beautiful.left_panel_width,
+      opacity = beautiful.panel_opacity,
+      visible = false,
+      bg=beautiful.panel_bg,
+      fg=beautiful.panel_fg,
     })
     --leftwibox[si]:set_widget(left_panel_layout)
-    leftwibox[si].opacity = beautiful.panel_opacity
-    leftwibox[si]:set_bg(beautiful.panel_bg)
-    leftwibox[si]:set_fg(beautiful.panel_fg)
-    leftwibox[si].visible = false
 
-    topwibox[si] = awful.wibox({
+    topwibox[si] = awful.wibar({
       position = "top",
       screen = s,
       height = beautiful.panel_height,
+      opacity = beautiful.panel_opacity,
+      bg=beautiful.panel_bg,
+      fg=beautiful.panel_fg,
     })
     --topwibox[s]:set_widget(top_panel_layout)
-    topwibox[si].opacity = beautiful.panel_opacity
-    topwibox[si]:set_bg(beautiful.panel_bg)
-    topwibox[si]:set_fg(beautiful.panel_fg)
 
   end)
 

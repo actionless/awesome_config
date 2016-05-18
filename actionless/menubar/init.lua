@@ -261,9 +261,10 @@ end
 
 --- Create the menubar wibox and widgets.
 function menubar:initialize()
-    self.instance.wibox = wibox({})
+    self.instance.wibox = wibox({
+        ontop = true
+    })
     self.instance.widget = menubar:get()
-    self.instance.wibox.ontop = true
     self.instance.prompt = awful.widget.prompt()
     local layout = wibox.layout.fixed.horizontal()
     layout:add(self.instance.prompt)
@@ -352,7 +353,7 @@ function menubar:show(scr)
                              height = math.floor(theme.get_font_height() * 1.5),
                              width = scrgeom.width}
     self.instance.wibox:geometry(self.instance.geometry)
-    awful.wibox.set_position(self.instance.wibox, self.position, scr)
+    awful.placement[self.position](self.instance.wibox)
 
     current_item = 1
     current_category = nil

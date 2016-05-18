@@ -31,7 +31,7 @@ local function handle_left_panel_visibility(t)
   --awesome_context.leftwibox[1]:struts({left=0})
   awesome_context.leftwibox[1].visible = visible
   awesome_context.internal_corner_wibox[1].visible = visible
-  awful.wibox.stretch(awesome_context.topwibox[1], 1)
+  awesome_context.topwibox[1].stretch = 1
   local s = t.screen.index
   if visible then
     awesome_context.topwibox[s]:set_widget(
