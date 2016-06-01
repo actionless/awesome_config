@@ -65,15 +65,14 @@ function toolbar.init(awesome_context)
       loaded_widgets.music
     )
 
-    local volume_layout = common.panel_shape(
-      common.constraint({
-        widget=loaded_widgets.volume,
-        width=dpi(120),
-      })
-    )
-
     local right_layout_right = wibox.layout.fixed.horizontal(
-      volume_layout,
+      separator,
+      common.panel_shape(
+        common.constraint({
+          widget=loaded_widgets.volume,
+          width=dpi(120),
+        })
+      ),
       separator
     )
 
@@ -110,9 +109,9 @@ function toolbar.init(awesome_context)
     )
 
     local right_layout = wibox.layout.align.horizontal(
-        wibox.layout.fixed.horizontal(),
-        right_layout_left,
-        right_layout_right
+      separator,
+      right_layout_left,
+      right_layout_right
     )
     --right_layout:set_expand('none')
 
