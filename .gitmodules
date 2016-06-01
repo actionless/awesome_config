@@ -1,6 +1,7 @@
 [submodule "third_party/apw"]
 	path = third_party/apw
-	url = https://github.com/mokasin/apw.git
+	url = git@github.com:actionless/apw.git
+	branch = awesome3.6
 [submodule "third_party/revelation"]
 	path = third_party/revelation
 	url = git@github.com:actionless/awesome-revelation
@@ -8,3 +9,7 @@
 [submodule "third_party/collision"]
 	path = third_party/collision
 	url = https://github.com/Elv13/collision
+	branch = awesome3.6
+[submodule "third_party/radical"]
+	path = third_party/radical
+	url = https://github.com/Elv13/radical.git
