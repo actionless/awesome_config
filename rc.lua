@@ -84,6 +84,10 @@ local persistent = require("actionless.persistent")
 local beautiful	= require("beautiful")
 beautiful.init(context.theme_dir)
 
+--------------------------------
+smart_wibox = require("third_party").radical.smart_wibox
+--------------------------------
+
 local config = require("config")
 config.notify.init(context)
 config.autorun.init(context)
