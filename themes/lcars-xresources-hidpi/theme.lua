@@ -88,8 +88,15 @@ theme.panel_padding_bottom = dpi(3)
 theme.border_width = dpi(4)
 theme.useless_gap = dpi(5)
 
+theme.border_width = dpi(5)
+theme.useless_gap = dpi(4)
+
+theme.base_border_width = theme.border_width
+theme.border_width = 0
+
 theme.panel_height = theme.basic_panel_height + theme.panel_padding_bottom
-theme.titlebar_height = theme.basic_panel_height + theme.border_width
+theme.titlebar_height = theme.basic_panel_height + theme.base_border_width*2
+
 
 theme.left_panel_internal_corner_radius = dpi(30)
 
@@ -115,10 +122,12 @@ theme.taglist_bg_focus		= "theme.xrdb.color15"
 --theme.taglist_bg_focus		= "theme.xrdb.color8"
 --theme.taglist_fg_focus		= "theme.xrdb.foreground"
 
-theme.titlebar_fg_focus		= "theme.titlebar_border"
-theme.titlebar_bg_focus		= "theme.titlebar_focus_border"
+--theme.titlebar_fg_focus		= "theme.titlebar_border"
+--theme.titlebar_bg_focus		= "theme.titlebar_focus_border"
 theme.titlebar_fg_normal	= "theme.tasklist_fg_normal"
 theme.titlebar_bg_normal	= "theme.titlebar_border"
+theme.titlebar_fg_focus		= "theme.titlebar_fg_normal"
+theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
 
 
 --if color_utils.is_dark(theme.xrdb.background) then
@@ -141,6 +150,11 @@ theme.widget_close_bg = theme.tasklist_fg_focus
 --theme.wallpaper_cmd     = "hsetroot -solid \"" .. theme.bg .. "\""
 
 theme = create_theme({ theme_name=theme_name, theme=theme, })
+
+--theme.titlebar_bg_normal = theme.titlebar_bg_normal .."66"
+theme.border = theme.border .."66"
+theme.border_normal = theme.border_normal .."66"
+theme.border_focus = theme.border_focus .."66"
 
 -- Recolor titlebar icons:
 local theme_assets

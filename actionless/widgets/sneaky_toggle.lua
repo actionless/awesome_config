@@ -28,7 +28,7 @@ function sneaky_toggle.initialize()
     end
     st.widgetvisible = true
 
-        st.container = wibox.layout.constraint()
+        st.container = wibox.container.constraint()
             st.lie_layout = wibox.layout.fixed.horizontal()
             for _, widget in ipairs(sneaky_toggle.loaded_widgets) do
                 st.lie_layout:add(widget)

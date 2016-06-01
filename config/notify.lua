@@ -18,6 +18,7 @@ function notify.init(_)
   naughty.config.presets.normal.bg = beautiful.notification_bg
   naughty.config.presets.normal.fg = beautiful.notification_fg
   naughty.config.presets.normal.border_color = beautiful.notification_border_color
+  naughty.config.presets.normal.margin = beautiful.notification_margin
 
   -- {{{ Error handling
   -- Check if awesome encountered an error during startup and fell back to

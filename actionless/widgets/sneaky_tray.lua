@@ -22,7 +22,7 @@ function sneaky_tray.initialize()
     st.systray = wibox.layout.fixed.horizontal()
     st.systray:add(wibox.widget.textbox(' ')) -- left margin
     st.systray:add(wibox.widget.systray())
-    st.container = wibox.layout.constraint()
+    st.container = wibox.container.constraint()
     st.container:set_widget(st.systray)
     st.container:set_strategy("min")
     st.widget = wibox.layout.fixed.horizontal()

@@ -136,7 +136,7 @@ local globalkeys = awful.util.table.join(
       awful.prompt.run(
         { prompt = "new tag name: ",
           text = tag_id .. ":" },
-        awesome_context.widgets.screen[s].promptbox,
+        awesome_context.widgets.screen[s.index].promptbox.widget,
         function(new_name)
           if not new_name or #new_name == 0 then return end
           persistent.tag.rename(new_name, tag, s, tag_id)
@@ -792,7 +792,7 @@ awesome_context.clientkeys = awful.util.table.join(
   ),
   bind_key({ modkey, "Shift"    }, "t",
     function(c)
-     awesome_context.widgets.screen[c.screen].manage_client.toggle()
+     awesome_context.widgets.screen[c.screen.index].manage_client.toggle()
     end,
     "toggle titlebars", AWESOME_COLOR
   ),
