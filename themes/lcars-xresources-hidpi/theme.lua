@@ -137,6 +137,9 @@ theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
 --end
 --theme.titlebar_border           = theme.border_normal
 
+theme.panel_widget_spacing = dpi(10)
+theme.panel_widget_spacing_medium = dpi(8)
+theme.panel_widget_spacing_small = dpi(4)
 
 --theme.panel_widget_bg		= theme.xrdb.color3
 theme.panel_widget_bg_error = theme.xrdb.color1
