@@ -114,6 +114,14 @@ function table_helpers.haskey(container_table, desired_key)
   return false
 end
 
+function table_helpers.hasvalue(container_table, desired_key)
+  container_table = container_table or {}
+  for _, value in pairs(container_table) do
+    if value == desired_key then return true end
+  end
+  return false
+end
+
 function table_helpers.map(container_table, func)
   local result = {}
   for key, value in pairs(container_table) do

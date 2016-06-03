@@ -16,12 +16,12 @@ function toolbar.init(awesome_context)
   local loaded_widgets = awesome_context.widgets
 
   -- Separators
-  local separator  = common.make_separator(' ')
+  local separator  = common.constraint({ width=dpi(8), })
 
   local v_sep_constraint = common.constraint({
     height=beautiful.panel_padding_bottom
   })
-  local v_sep = wibox.widget.background(
+  local v_sep = wibox.container.background(
     v_sep_constraint,
     beautiful.panel_bg
   )
@@ -46,7 +46,7 @@ function toolbar.init(awesome_context)
   awful.screen.connect_for_each_screen(function(s)
     local si = s.index
 
-    local top_panel_left_margin = wibox.widget.background(
+    local top_panel_left_margin = wibox.container.background(
       common.constraint({width=dpi(100)}),
       beautiful.fg
     )
@@ -84,7 +84,7 @@ function toolbar.init(awesome_context)
             height=dpi(8),
           }),
           common.constraint({
-            widget=wibox.widget.background(wibox.widget.textbox(), beautiful.apw_fg_color),
+            widget=wibox.container.background(wibox.widget.textbox(), beautiful.apw_fg_color),
             height=dpi(10),
           }),
         }),
@@ -130,7 +130,7 @@ function toolbar.init(awesome_context)
     -- add :buttons method
     top_panel_layout = setmetatable(
       top_panel_layout,
-      wibox.widget.background(top_panel_layout)
+      wibox.container.background(top_panel_layout)
     )
     topwibox_layout[si] = top_panel_layout
 
@@ -177,12 +177,12 @@ function toolbar.init(awesome_context)
       widget = common.align.horizontal(
       nil,
       common.align.vertical(
-        --wibox.widget.background(
+        --wibox.container.background(
           --common.constraint({height=beautiful.left_panel_width/2}),
           --beautiful.panel_widget_bg
         --),
         nil,
-        wibox.widget.background(
+        wibox.container.background(
           left_panel_top_layouts[si],
           beautiful.panel_widget_bg
         ),
@@ -196,7 +196,7 @@ function toolbar.init(awesome_context)
         nil,
         nil,
         common.fixed.vertical({
-          wibox.widget.background(
+          wibox.container.background(
             common.constraint({
               height=beautiful.basic_panel_height,
               width=beautiful.panel_padding_bottom
@@ -215,7 +215,7 @@ function toolbar.init(awesome_context)
         nil,
         common.align.vertical(
           assets.top_left_corner_image(),
-          wibox.widget.background(
+          wibox.container.background(
             left_panel_bottom_layouts[si],
             beautiful.panel_widget_bg
           ),
@@ -223,7 +223,7 @@ function toolbar.init(awesome_context)
         ),
         -- right margin:
         common.fixed.vertical({
-          wibox.widget.background(
+          wibox.container.background(
             common.constraint({height=beautiful.basic_panel_height, width=beautiful.panel_padding_bottom}),
             beautiful.panel_fg
           ),

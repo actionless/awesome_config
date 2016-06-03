@@ -1,6 +1,7 @@
 local beautiful = require("beautiful")
 local awful = require("awful")
 local wibox = require("wibox")
+local gears = require("gears")
 
 local capi = {
   screen = screen,
@@ -111,13 +112,13 @@ function widget_loader.init(awesome_context)
   -- Textclock
   if lcarslist_enabled then
     w.lcars_textclock = widgets.common.decorated({
-      widget = awful.widget.textclock("%H:%M"),
+      widget = wibox.widget.textclock("%H:%M"),
       valign = "bottom",
     })
     widgets.calendar:attach(w.lcars_textclock, {fg=beautiful.theme, position="top_left"})
   end
   local markup = require("utils.markup")
-  local textclock = awful.widget.textclock(markup.fg(beautiful.xrdb.foreground, "%H:%M"))
+  local textclock = wibox.widget.textclock(markup.fg(beautiful.xrdb.foreground, "%H:%M"))
   w.textclock = textclock
   widgets.calendar:attach(w.textclock, {fg=beautiful.theme, position="top_right"})
 
@@ -134,8 +135,6 @@ function widget_loader.init(awesome_context)
         screen = s,
         bg = beautiful.widget_close_bg,
         fg = beautiful.widget_close_fg,
-        left_separators = lcarslist_enabled and beautiful.widget_close_left_decorators or { ' ', 'arrl', 'sq' },
-        right_separators = lcarslist_enabled and beautiful.widget_close_right_decorators or { 'sq', 'arrr' },
         awesome_context = awesome_context,
       }
     )
@@ -170,23 +169,13 @@ function widget_loader.init(awesome_context)
 
 
     -- promptbox
-    local promptbox = awful.widget.prompt({ })
-    function promptbox:set_font(...)
-      self.widget:set_font(...)
-    end
-    function promptbox:set_markup(...)
-      self.widget:set_markup(...)
-    end
-    sw.promptbox = widgets.common.decorated_horizontal({
-      widget = promptbox,
-      left_separators = {},
-      right_separators = {},
+    sw.promptbox = widgets.common.newdecoration({
+      widget = awful.widget.prompt({ }),
       bg = beautiful.panel_widget_bg_warning,
       fg = beautiful.panel_widget_fg_warning,
+      shape = gears.shape.rounded_rect,
+      shape_args = {beautiful.panel_widget_border_radius},
     })
-    function sw.promptbox:run(...)
-      self.widget.widget:run(...)
-    end
 
     -- tasklist
     local tasklist_buttons = awful.util.table.join(

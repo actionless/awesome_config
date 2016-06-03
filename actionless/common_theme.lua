@@ -73,8 +73,12 @@ function common_theme.generate_theme(theme_dir)
   theme.border                  = "theme.bg"
   theme.sel_border              = "theme.xrdb.color10"
   theme.titlebar_border         = "theme.border"
+  theme.titlebar_bg_normal      = "theme.border"
   theme.titlebar_focus_border   = "theme.sel_border"
-  theme.border_width		= "6"
+  theme.base_border_width		= "6"
+  --theme.border_width		= "theme.base_border_width"
+  theme.border_width = 0
+  theme.client_border_width = 0
   theme.border_normal		= "theme.border"
   theme.border_focus		= "theme.sel_border"
   theme.border_marked		= "theme.error"
@@ -109,6 +113,10 @@ function common_theme.generate_theme(theme_dir)
   theme.panel_height		= 24
   theme.panel_padding_bottom	= 6
   theme.panel_enbolden_details	= false
+  theme.panel_widget_border_radius = 4
+  theme.panel_widget_spacing = 20
+  theme.panel_widget_spacing_medium = 16
+  theme.panel_widget_spacing_small = 8
 
   theme.left_panel_width = 120
   theme.left_widget_min_height = 120
@@ -177,7 +185,7 @@ theme.left_panel_internal_corner_radius = 30
   theme.titlebar_fg_focus	= "theme.tasklist_fg_focus"
   theme.titlebar_bg_focus	= "theme.bg"
   theme.titlebar_fg_normal	= "theme.tasklist_fg_normal"
-  theme.titlebar_bg_normal	= "theme.bg"
+  --theme.titlebar_bg_normal	= "theme.bg"
 
   theme.hotkeys_widget_fg = "theme.bg"
 
@@ -187,6 +195,9 @@ theme.left_panel_internal_corner_radius = 30
   theme.notification_bg = "theme.bg_normal"
   theme.notification_fg = "theme.fg_normal"
   theme.notification_border_color = "theme.theme"
+  theme.notification_border_color = "theme.xrdb.color8"
+  theme.notification_border_width = 4
+  theme.notification_margin = 16
 
   theme.textbox_widget_margin_top	= 1
   theme.awful_widget_height	= 14

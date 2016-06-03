@@ -45,8 +45,8 @@ function tasklist_addon.list_update(w, buttons, label, data, objects, spacing_le
         else
             ib = wibox.widget.imagebox()
             tb = wibox.widget.textbox()
-            bgb = wibox.widget.background()
-            m = wibox.layout.margin(tb, 4, 4)
+            bgb = wibox.container.background()
+            m = wibox.container.margin(tb, 4, 4)
             l = wibox.layout.fixed.horizontal()
 
             -- All of this is added in a fixed widget
@@ -79,7 +79,7 @@ function tasklist_addon.list_update(w, buttons, label, data, objects, spacing_le
         bgb:set_bgimage(bg_image)
         ib:set_image(icon)
         if spacing_length then
-            bgb = wibox.layout.margin(bgb, spacing_length, 0)
+            bgb = wibox.container.margin(bgb, spacing_length, 0)
         end
         w:add(bgb)
    end

@@ -53,7 +53,8 @@ function rules.init(awesome_context)
       },
       { rule = { class = "Transmission-gtk", role = "tr-info" },
         properties = {
-          floating = false
+          floating = false,
+          ontop = false,
         },
       },
 

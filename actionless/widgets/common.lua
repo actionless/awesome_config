@@ -4,7 +4,7 @@
 --]]
 
 local wibox = require("wibox")
---local gears = require("gears")
+local gears = require("gears")
 local beautiful = require("beautiful")
 
 local h_table = require("utils.table")
@@ -31,7 +31,7 @@ function common.widget(args)
     end
       widget.text_widget = wibox.widget.textbox('')
     widget.lie_layout:add(widget.text_widget)
-  widget.widget_bg = wibox.widget.background()
+  widget.widget_bg = wibox.container.background()
   widget.widget_bg:set_widget(widget.lie_layout)
 
   function widget:set_image(...)
@@ -82,7 +82,7 @@ end
 
 
 function common.centered(widget)
-  if not widget then widget=wibox.widget.background() end
+  if not widget then widget=wibox.container.background() end
   local centered_widget = {}
   centered_widget.widget = widget
 
@@ -98,41 +98,10 @@ end
 
 
 
-function common.make_separator(separator_character, args)
-
-  local separator_alias = beautiful['widget_decoration_' .. separator_character]
-  if separator_alias then
-    return common.make_separator(separator_alias, args)
-  end
-
-  args = args or {}
-  local bg = args.bg or beautiful.panel_bg or beautiful.bg or "#000000"
-  local fg = args.fg or get_color(args.color_n) or beautiful.fg
-  local inverted = args.inverted or false
-
-  if separator_character == 'sq' or bg==fg then
-    separator_character = ' '
-    inverted = not inverted
-  end
-
-  local widget = wibox.widget.background()
-  if inverted then
-    widget.set_fg, widget.set_bg = widget.set_bg, widget.set_fg
-  end
-  --@TODO: fix that:
-  --widget:set_bg(bg)
-  widget:set_fg(fg)
-  widget:set_widget(wibox.widget.textbox(separator_character))
-
-
-  return widget
-end
-
-
 function common.constraint(args)
   args = args or {}
   local strategy = args.strategy or "exact"
-  local result = wibox.layout.constraint()
+  local result = wibox.container.constraint()
   result:set_strategy(strategy)
   if args.width then
     result:set_width(args.width)
@@ -207,12 +176,12 @@ function common.decorated(args)
   decorated.min_height = args.min_height or beautiful.left_widget_min_height
 
   if args.widget then
-    decorated.widget_list = {args.widget}
+    decorated.lie_widget_list = {args.widget}
   else
-    decorated.widget_list = args.widgets or {common.widget(args)}
+    decorated.lie_widget_list = args.widgets or {common.widget(args)}
   end
-  decorated.widget = decorated.widget_list[1]
-  for i, widget in ipairs(decorated.widget_list) do
+  decorated.lie_widget = decorated.lie_widget_list[1]
+  for i, widget in ipairs(decorated.lie_widget_list) do
     if widget.set_align then
       widget:set_align("right")
       widget:set_valign("top")
@@ -220,17 +189,17 @@ function common.decorated(args)
     end
   -- give set_bg and set_fg methods to ones don't have it:
     if (decorated.fg and not widget.set_fg) then
-      decorated.widget_list[i] = setmetatable(wibox.widget.background(widget), widget)
+      decorated.lie_widget_list[i] = setmetatable(wibox.container.background(widget), widget)
     end
   end
 
-  decorated.widget_layout = wibox.layout.fixed.vertical()
+  decorated.lie_widget_layout = wibox.layout.fixed.vertical()
 
   if valign == "top" then
     decorated.internal_widget_layout =
     common.align.horizontal(
         nil,
-        decorated.widget_layout,
+        decorated.lie_widget_layout,
         common.constraint({width=args.padding or beautiful.panel_padding_bottom})
     )
   elseif valign == "bottom" then
@@ -239,7 +208,7 @@ function common.decorated(args)
         nil,
         common.align.horizontal(
             nil,
-            decorated.widget_layout,
+            decorated.lie_widget_layout,
             common.constraint({width=args.padding or beautiful.panel_padding_bottom})
         )
     )
@@ -249,7 +218,7 @@ function common.decorated(args)
     height = decorated.min_height,
     strategy = 'min',
   })
-  decorated.lie_background =wibox.widget.background(
+  decorated.lie_background =wibox.container.background(
     decorated.constraint,
     decorated.bg
   )
@@ -257,7 +226,7 @@ function common.decorated(args)
   decorated.lie_layout = wibox.layout.flex.vertical()
   decorated.lie_layout:add(decorated.lie_background)
 
-  setmetatable(decorated.constraint, { __index = decorated.widget })
+  setmetatable(decorated.constraint, { __index = decorated.lie_widget })
   setmetatable(decorated.lie_layout, { __index = decorated.constraint })
   setmetatable(decorated,        { __index = decorated.lie_layout })
 
@@ -361,51 +330,38 @@ function common.decorated_horizontal(args)
   args = args or {}
   decorated.bg = args.bg or beautiful.panel_widget_bg or beautiful.fg or "#ffffff"
   decorated.fg = args.fg or beautiful.panel_widget_fg or beautiful.bg or "#000000"
-  local left_separators = args.left_separators or {} -- { 'arrl' }
-  local right_separators = args.right_separators or {} -- { 'arrr' }
 
-  local separator = common.make_separator(' ')
+  local separator = wibox.widget.textbox(' ')
 
   if args.widget then
-    decorated.widget_list = {args.widget}
+    decorated.lie_widget_list = {args.widget}
   else
-    decorated.widget_list = args.widgets or {common.widget(args)}
+    decorated.lie_widget_list = args.widgets or {common.widget(args)}
   end
 
   -- give set_bg and set_fg methods to ones don't have it:
-  for i, widget in ipairs(decorated.widget_list) do
+  for i, widget in ipairs(decorated.lie_widget_list) do
     if (decorated.fg and not widget.set_fg) or (decorated.bg and not widget.set_bg) then
-      local bg_widget = setmetatable(wibox.widget.background(widget), widget)
+      local bg_widget = setmetatable(wibox.container.background(widget), widget)
       bg_widget.set_font = function(...)
         widget.set_font(...)
       end
       bg_widget.set_markup = function(...)
         widget.set_markup(...)
       end
-      decorated.widget_list[i] = setmetatable(bg_widget, widget)
+      decorated.lie_widget_list[i] = setmetatable(bg_widget, widget)
     end
   end
 
   decorated.lie_visible = false
-  decorated.widget = decorated.widget_list[1]
+  decorated.lie_widget = decorated.lie_widget_list[1]
   decorated.lie_layout = wibox.layout.fixed.horizontal()
-  decorated.lie_background = wibox.widget.background()
+  decorated.lie_background = wibox.container.background()
   decorated.lie_background:set_widget(decorated.lie_layout)
   decorated.wrap_layout = wibox.layout.flex.horizontal()
   decorated.wrap_layout:add(decorated.lie_background)
 
-  for _, separator_id in ipairs(left_separators) do
-    table.insert(
-      decorated.left_separator_widgets,
-      common.make_separator(separator_id, {inverted=true}))
-  end
-  for _, separator_id in ipairs(right_separators) do
-    table.insert(
-      decorated.right_separator_widgets,
-      common.make_separator(separator_id, {inverted=true}))
-  end
-
-  setmetatable(decorated.wrap_layout, { __index = decorated.widget })
+  setmetatable(decorated.wrap_layout, { __index = decorated.lie_widget })
   setmetatable(decorated,        { __index = decorated.wrap_layout })
 
   --- Set widget color
@@ -431,7 +387,7 @@ function common.decorated_horizontal(args)
         widget:set_bg(bg)
       end
     end
-    for _, widget in ipairs(self.widget_list) do
+    for _, widget in ipairs(self.lie_widget_list) do
       if fg and widget.set_fg then
         widget:set_fg(fg) end
       if bg and widget.set_bg then
@@ -459,9 +415,9 @@ function common.decorated_horizontal(args)
     for _, this_separator in ipairs(self.left_separator_widgets) do
       self.lie_layout:add(this_separator)
     end
-    for i, each_widget in ipairs(self.widget_list) do
+    for i, each_widget in ipairs(self.lie_widget_list) do
       self.lie_layout:add(each_widget)
-      if i ~= #self.widget_list then
+      if i ~= #self.lie_widget_list then
         self.lie_layout:add(separator)
       end
     end
@@ -497,12 +453,91 @@ function common.decorated_horizontal(args)
   end
 
   function decorated:set_font(...)
-    return self.widget:set_font(...)
+    return self.lie_widget:set_font(...)
   end
 
   decorated:set_normal()
   decorated:show()
   return decorated
+end
+
+
+local AWESOME_METHODS = {
+  "set_forced_height",
+  "set_shape",
+  "set_fg",
+  "_private",
+  "get_bg",
+  "before_draw_children",
+  "get_forced_height",
+  "set_opacity",
+  "get_shape_border_color",
+  "set_tooltip",
+  "get_fg",
+  "set_shape_border_color",
+  "index",
+  "get_all_children",
+  "fit",
+  "_signals",
+  "get_opacity",
+  "widget_name",
+  "set_bg",
+  "get_widget",
+  "emit_signal",
+  "get_shape_clip",
+  "set_bgimage",
+  "set_children",
+  "mt",
+  "after_draw_children",
+  "weak_connect_signal",
+  "get_shape",
+  "modulename",
+  "set_shape_border_width",
+  "get_shape_border_width",
+  "set_shape_clip",
+  "set_widget",
+  "get_bgimage",
+  "get_preferred_size",
+  "get_children",
+  "draw",
+  "get_forced_width",
+  "set_menu",
+  "is_widget",
+  "get_visible",
+  "setup",
+  "set_visible",
+  "set_forced_width",
+  "layout",
+
+  --"add_signal",
+  --"buttons",
+  --"disconnect_signal",
+  --"connect_signal",
+}
+
+function common.panel_shape(widget)
+  local shaped = wibox.container.background(widget)
+  shaped:set_shape(gears.shape.rounded_rect, beautiful.panel_widget_border_radius)
+  shaped.shape_clip = true
+  return shaped
+end
+
+function common.newdecoration(args)
+  args = args or {}
+  local widget = args.widget
+  local bg = args.bg
+  local fg = args.fg
+  local shape = args.shape
+  local shape_args = args.shape_args or {}
+  local background = wibox.container.background(widget, bg)
+  background:set_fg(fg)
+  background:set_shape(shape, table.unpack(shape_args))
+  for k, v in pairs(widget) do
+    if not h_table.hasvalue(AWESOME_METHODS, k) then
+      background[k] = v
+    end
+  end
+  return background
 end
 
 

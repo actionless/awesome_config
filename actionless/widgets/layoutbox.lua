@@ -14,7 +14,6 @@ local imagebox = require("wibox.widget.imagebox")
 local textbox = require("wibox.widget.textbox")
 
 local h_string = require("utils.string")
-local common = require("actionless.widgets.common")
 local persistent = require("actionless.persistent")
 local delayed_call = require("gears.timer").delayed_call
 
@@ -36,7 +35,7 @@ local function worker(args)
     args = args or {}
     layoutbox.screen = args.screen or awful.screen.focused()
 
-    layoutbox.layout_icon = wibox.widget.background()
+    layoutbox.layout_icon = wibox.container.background()
     layoutbox.imagebox = imagebox()
     layoutbox.imagebox:set_resize(true)
     layoutbox.textbox = textbox()
@@ -48,30 +47,26 @@ local function worker(args)
         layoutbox.mfpol_template = "%s"
     end
 
-    layoutbox.n_master = wibox.widget.background()
+    layoutbox.n_master = wibox.container.background()
     layoutbox.n_master:set_widget(textbox())
 
-    layoutbox.n_col = wibox.widget.background()
+    layoutbox.n_col = wibox.container.background()
     layoutbox.n_col:set_widget(textbox())
 
-    layoutbox.mfpol = wibox.widget.background()
+    layoutbox.mfpol = wibox.container.background()
     layoutbox.mfpol:set_widget(textbox())
 
-    args.widgets={
-            layoutbox.n_master,
-            layoutbox.n_col,
-        }
     args.left_separators = args.left_separators or {}
     args.right_separators = args.right_separators or {}
 
-    layoutbox.numbers_layout = common.decorated_horizontal(args)
 
-    args.widgets={
+    layoutbox.widget = wibox.layout.fixed.horizontal(
         layoutbox.layout_icon,
-        layoutbox.numbers_layout,
-        layoutbox.mfpol,
-    }
-    layoutbox.widget = common.decorated(args)
+        layoutbox.n_master,
+        layoutbox.n_col,
+        layoutbox.mfpol
+    )
+    layoutbox.widget.spacing = beautiful.panel_widget_spacing_medium
 
     local layouts_menu_items = {}
     for _, layout in ipairs(awful.layout.layouts) do

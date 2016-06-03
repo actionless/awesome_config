@@ -28,7 +28,7 @@ local function worker(args)
 
   args.widget = widget
   widget = common.decorated_horizontal(args)
-  widget:set_text('X')
+  widget:set_text(' X ')
   widget:connect_signal(
     "mouse::enter", function ()
       if not widget.is_managing then
@@ -51,10 +51,10 @@ local function worker(args)
   local function update_widget_status()
     if widget.is_managing then
       widget:set_warning()
-      widget:set_text('T')
+      widget:set_text('  T  ')
     else
       widget:set_error()
-      widget:set_text('X')
+      widget:set_text('  X  ')
     end
   end
 
@@ -71,6 +71,9 @@ local function worker(args)
     update_widget_status()
     for _, t in ipairs(widget_screen.tags) do
       t:emit_signal("property::layout")
+      for _, c in ipairs(t:clients()) do
+        c:emit_signal("property::geometry")
+      end
     end
   end
 

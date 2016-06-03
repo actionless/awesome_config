@@ -269,7 +269,7 @@ end
 local v_sep_constraint = a_common.constraint({
     height=beautiful.panel_padding_bottom
 })
-local v_sep = wibox.widget.background(
+local v_sep = wibox.container.background(
     v_sep_constraint,
     beautiful.panel_bg
 )
