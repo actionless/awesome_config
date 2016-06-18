@@ -161,7 +161,7 @@ end
 
 function titlebar.is_enabled(c)
   if (
-    c["titlebar_" .. beautiful.titlebar_position or 'top'
+    c["titlebar_" .. (beautiful.titlebar_position or 'top')
       ](c):geometry()['height'] > beautiful.base_border_width
     ) then
     return true
