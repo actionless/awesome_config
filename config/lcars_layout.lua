@@ -3,7 +3,7 @@ local client = client
 local beautiful = require("beautiful")
 
 
-local debug_messages_enabled = false
+local debug_messages_enabled = true
 local log = function(...) if debug_messages_enabled then nlog(...) end end
 
 
@@ -22,6 +22,7 @@ client.connect_signal("property::maximized", function (c)
 end)
 
 local function handle_left_panel_visibility(t)
+  --log("handle left panel visibility")
   local visible = lcars_layout_helper.getlpv(t)
   if visible == lcars_layout_helper.is_visible then
     return
@@ -31,6 +32,7 @@ local function handle_left_panel_visibility(t)
   --awesome_context.leftwibox[1]:struts({left=0})
   awesome_context.leftwibox[1].visible = visible
   awesome_context.internal_corner_wibox[1].visible = visible
+  awesome_context.external_corner_wibox[1].visible = visible
   awesome_context.topwibox[1].stretch = 1
   local s = t.screen.index
   if visible then

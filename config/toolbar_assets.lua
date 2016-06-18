@@ -20,10 +20,11 @@ function assets.top_left_corner_image()
     0, radius
   )
   cr:fill()
-  local top_left_corner_imagebox = wibox.widget.imagebox()
-  top_left_corner_imagebox:set_image(img)
-  top_left_corner_imagebox:set_resize(false)
-  return top_left_corner_imagebox
+  return img
+  --local top_left_corner_imagebox = wibox.widget.imagebox()
+  --top_left_corner_imagebox:set_image(img)
+  --top_left_corner_imagebox:set_resize(false)
+  --return top_left_corner_imagebox
 end
 function assets.top_top_left_corner_image()
   local radius = beautiful.left_panel_width / 2

@@ -123,38 +123,12 @@ local function init_list_layout(layout, widgets)
   end
   return layout
 end
-common.fixed = {}
-function common.fixed.horizontal(widgets)
-  return init_list_layout(wibox.layout.fixed.horizontal(), widgets)
-end
-function common.fixed.vertical(widgets)
-  return init_list_layout(wibox.layout.fixed.vertical(), widgets)
-end
 common.flex = {}
 function common.flex.horizontal(widgets)
   return init_list_layout(wibox.layout.flex.horizontal(), widgets)
 end
 function common.flex.vertical(widgets)
   return init_list_layout(wibox.layout.flex.vertical(), widgets)
-end
-
-common.align = {}
-function common.align.init(layout, first, second, third, args)
-  layout:set_first(first)
-  layout:set_second(second)
-  layout:set_third(third)
-  if args then
-    if args.expand then
-      layout:set_expand(args.expand)
-    end
-  end
-  return layout
-end
-function common.align.horizontal(...)
-  return common.align.init(wibox.layout.align.horizontal(), ...)
-end
-function common.align.vertical(...)
-  return common.align.init(wibox.layout.align.vertical(), ...)
 end
 
 
@@ -197,16 +171,16 @@ function common.decorated(args)
 
   if valign == "top" then
     decorated.internal_widget_layout =
-    common.align.horizontal(
+    wibox.layout.align.horizontal(
         nil,
         decorated.lie_widget_layout,
         common.constraint({width=args.padding or beautiful.panel_padding_bottom})
     )
   elseif valign == "bottom" then
-    decorated.internal_widget_layout = common.align.vertical(
+    decorated.internal_widget_layout = wibox.layout.align.vertical(
         nil,
         nil,
-        common.align.horizontal(
+        wibox.layout.align.horizontal(
             nil,
             decorated.lie_widget_layout,
             common.constraint({width=args.padding or beautiful.panel_padding_bottom})

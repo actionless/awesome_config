@@ -22,7 +22,6 @@ function widget_loader.init(awesome_context)
 
   local lcarslist_enabled = persistent.lcarslist.get()
 
-  local leftwibox = {}
   local topwibox = {}
 
   -- Keyboard layout widget
@@ -271,17 +270,6 @@ function widget_loader.init(awesome_context)
     end
 
 
-    leftwibox[si] = awful.wibar({
-      position = "left",
-      screen = s,
-      --height = beautiful.panel_height,
-      width = beautiful.left_panel_width,
-      opacity = beautiful.panel_opacity,
-      visible = false,
-      bg=beautiful.panel_bg,
-      fg=beautiful.panel_fg,
-    })
-    --leftwibox[si]:set_widget(left_panel_layout)
 
     topwibox[si] = awful.wibar({
       position = "top",
@@ -296,7 +284,6 @@ function widget_loader.init(awesome_context)
   end)
 
   awesome_context.topwibox = topwibox
-  awesome_context.leftwibox = leftwibox
 
   return awesome_context
 end

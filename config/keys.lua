@@ -106,7 +106,7 @@ local globalkeys = awful.util.table.join(
     "xscreensaver lock", AWESOME_COLOR
   ),
   bind_key({ modkey,  "Control"  }, "d",
-    function() helpers.run_once("sleep 1 && xset dpms force off") end,
+    function() awful.spawn.with_shell("sleep 1 && xset dpms force off") end,
     "turn off display", AWESOME_COLOR
   ),
 
