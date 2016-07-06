@@ -11,6 +11,7 @@ local capi = { client = client }
 
 local common = require("actionless.widgets.common")
 local persistent = require("actionless.persistent")
+local color_utils = require("utils.color")
 
 
 local manage_client = {}
@@ -29,31 +30,40 @@ local function worker(args)
   args.widget = widget
   widget = common.decorated_horizontal(args)
   widget:set_text(' X ')
-  widget:connect_signal(
-    "mouse::enter", function ()
+
+  widget._on_mouse_enter = function ()
+    if not widget.is_managing then
+      --widget:set_error()
+      widget:set_bg(color_utils.darker(args.bg, -20))
+    else
+      widget:set_warning()
+    end
+  end
+  widget._on_mouse_leave = function ()
+    if not widget.is_managing then
+      widget:set_normal()
+    else
+      widget:set_warning()
+    end
+  end
+  widget:connect_signal("mouse::enter", widget._on_mouse_enter)
+  widget:connect_signal("mouse::leave", widget._on_mouse_leave)
+  widget._buttons_table = awful.util.table.join(
+    awful.button({ }, 1, function ()
       if not widget.is_managing then
-        --widget:set_error()
-        widget:set_bg(beautiful.color.color9)
-      else
-        --widget:set_warning()
-        widget:set_bg(beautiful.color.color10)
+        capi.client.focus:kill()
       end
-    end)
-  widget:connect_signal(
-    "mouse::leave", function ()
-      if not widget.is_managing then
-        widget:set_normal()
-      else
-        widget:set_warning()
-      end
-    end)
+    end),
+    awful.button({ }, 3, widget.toggle)
+  )
+  widget:buttons(widget._buttons_table)
 
   local function update_widget_status()
     if widget.is_managing then
       widget:set_warning()
       widget:set_text('  T  ')
     else
-      widget:set_error()
+      widget:set_normal()
       widget:set_text('  X  ')
     end
   end
@@ -76,16 +86,6 @@ local function worker(args)
       end
     end
   end
-
-  widget:buttons(awful.util.table.join(
-    awful.button({ }, 1, function ()
-      if not widget.is_managing then
-        capi.client.focus:kill()
-      end
-    end),
-    awful.button({ }, 3, widget.toggle)
-  ))
-
   widget:hide()
   capi.client.connect_signal("focus",function(c)
     if c.screen == widget_screen then
