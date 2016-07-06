@@ -424,7 +424,7 @@ local globalkeys = awful.util.table.join(
 
   bind_key({ modkey, "Control"  }, "r",
     function()
-      awful.spawn.easy_async('bash -c "xrdb -merge $HOME/.Xresources"',
+      awful.spawn.easy_async('bash -c "xrdb -merge $HOME/.Xresources ; pgrep "^st\\$" | xargs kill -s USR1"',
       function()
         awful.util.restart()
       end)

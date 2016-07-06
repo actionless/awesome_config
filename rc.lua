@@ -15,7 +15,7 @@ local debug = require("utils.debug")
 
 local colorscheme = xresources.get_current_theme()
 
---local terminal = 'st'
+local terminal = 'st'
 
 local function st_color_line(theme_table)
   local colors = {}
@@ -28,8 +28,8 @@ local function st_color_line(theme_table)
   end
   return table.concat(colors, ",")
 end
-local terminal = 'st -b "' .. st_color_line(colorscheme) ..
-  '" -f "'..'Monospace'..':pixelsize='..tostring(xresources.apply_dpi(13))..'" '
+--local terminal = 'st -b "' .. st_color_line(colorscheme) ..
+  --'" -f "'..'Monospace'..':pixelsize='..tostring(xresources.apply_dpi(13))..'" '
 
 
 -- GLOBALS:
