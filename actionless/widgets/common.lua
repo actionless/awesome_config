@@ -493,6 +493,8 @@ function common.panel_shape(widget)
   local shaped = wibox.container.background(widget)
   shaped:set_shape(gears.shape.rounded_rect, beautiful.panel_widget_border_radius)
   shaped.shape_clip = true
+  shaped.shape_border_width = beautiful.panel_widget_border_width or 0
+  shaped.shape_border_color = beautiful.panel_widget_border_color or beautiful.border_normal
   return shaped
 end
 
