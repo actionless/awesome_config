@@ -35,9 +35,11 @@ function toolbar.init(awesome_context)
 
 
     -- LEFT side
-    --beautiful.panel_tasklist and make_separator('arrr', {fg=beautiful.panel_tasklist}
     local left_margin = awful.util.table.clone(separator)
-    --left_margin:buttons(loaded_widgets.screen[si].manage_client.buttons())
+    local manage_client = loaded_widgets.screen[si].manage_client
+    left_margin:buttons(manage_client._buttons_table)
+    left_margin:connect_signal("mouse::enter", manage_client._on_mouse_enter)
+    left_margin:connect_signal("mouse::leave", manage_client._on_mouse_leave)
     local left_layout = wibox.layout.fixed.horizontal(
       left_margin,
       common.panel_shape(loaded_widgets.screen[si].manage_client),
@@ -105,7 +107,7 @@ function toolbar.init(awesome_context)
       loaded_widgets.screen[si].layoutbox,
       separator,
       sep,
-      si==1 and loaded_widgets.systray_toggle or separator
+      si==1 and common.panel_shape(loaded_widgets.systray_toggle) or separator
     )
 
     local right_layout = wibox.layout.align.horizontal(
