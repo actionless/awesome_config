@@ -72,7 +72,7 @@ function sneaky_toggle.toggle()
         if beautiful.widget_tray_left then
             sneaky_toggle.arrow:set_image(beautiful.widget_tray_left)
         else
-            sneaky_toggle.text_arrow:set_markup('&lt;')
+            sneaky_toggle.text_arrow:set_markup(' &lt; ')
         end
     else
         sneaky_toggle.container:set_strategy("min")
@@ -81,7 +81,7 @@ function sneaky_toggle.toggle()
         if beautiful.widget_tray_left then
             sneaky_toggle.arrow:set_image(beautiful.widget_tray_right)
         else
-            sneaky_toggle.text_arrow:set_markup('&gt;')
+            sneaky_toggle.text_arrow:set_markup(' &gt; ')
         end
     end
 end
