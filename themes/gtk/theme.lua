@@ -38,17 +38,21 @@ local gtk = parse.find_values_in_file(
   os.getenv("HOME").."/projects/oomox/colors/retro/uzi",
   --os.getenv("HOME").."/projects/oomox/colors/retro/twg",
   --os.getenv("HOME").."/projects/oomox/colors/monovedek-gray",
+  --os.getenv("HOME").."/projects/oomox/colors/lcars",
+  --os.getenv("HOME").."/projects/oomox/colors/numix",
+  --os.getenv("HOME").."/projects/oomox/colors/Base-16/Ashes-Light",
   "(.*)=(.*)",
   oomox_theme_keys,
   function(value)
     return "#"..value
   end
 )
-gtk.ROUNDNESS = tonumber(gtk.ROUNDNESS:sub(2,2))
+gtk.ROUNDNESS = tonumber(gtk.ROUNDNESS:sub(2,#gtk.ROUNDNESS))
 log(gtk)
 
 
 local MAIN_COLOR = gtk.BTN_BG
+--local MAIN_COLOR = gtk.SEL_BG
 
 local theme_dir = awful.util.getdir("config").."/themes/"..theme_name
 --local theme = dofile("/usr/share/awesome/themes/xresources/theme.lua")
@@ -65,9 +69,11 @@ theme.panel_bg = gtk.MENU_BG
 theme.panel_widget_bg = gtk.TXT_BG
 theme.panel_widget_fg = gtk.TXT_FG
 
+--theme.border_radius = dpi(gtk.ROUNDNESS*2)
+theme.border_radius = dpi(5)
 theme.panel_widget_border_radius = dpi(gtk.ROUNDNESS*0.7)
 theme.panel_widget_border_width = dpi(2)
-theme.panel_widget_border_color = color_utils.darker(gtk.MENU_FG, -70)
+theme.panel_widget_border_color = color_utils.mix(gtk.MENU_FG, gtk.MENU_BG, 0.5)
 
 theme.widget_close_bg = gtk.HDR_BTN_BG
 theme.widget_close_fg = gtk.HDR_BTN_FG
@@ -191,13 +197,13 @@ theme.taglist_bg_focus		= gtk.SEL_BG
 theme.taglist_fg_occupied	= gtk.TXT_FG
 theme.taglist_bg_occupied	= gtk.TXT_BG
 
-theme.taglist_fg_occupied	= gtk.BTN_FG
-theme.taglist_bg_occupied	= gtk.BTN_BG
+theme.taglist_fg_occupied	= gtk.HDR_BTN_FG
+theme.taglist_bg_occupied	= gtk.HDR_BTN_BG
 log(theme.taglist_fg_occupied)
 
 --theme.titlebar_fg_focus		= "theme.titlebar_border"
 --theme.titlebar_bg_focus		= "theme.titlebar_focus_border"
-theme.titlebar_fg_normal	= color_utils.darker(gtk.MENU_FG, -100) -- @TODO: change to "mix"
+theme.titlebar_fg_normal	= color_utils.mix(gtk.MENU_FG, gtk.MENU_BG)
 theme.titlebar_bg_normal	= "theme.titlebar_border"
 theme.titlebar_fg_focus		= gtk.MENU_FG
 theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
@@ -222,7 +228,7 @@ theme.panel_widget_spacing_small = dpi(4)
 theme.panel_widget_bg_error = theme.xrdb.color1
 theme.panel_widget_fg_error = theme.xrdb.color15
 
-theme.widget_music_bg = color_utils.darker(MAIN_COLOR, 65)
+theme.widget_music_bg = color_utils.mix(MAIN_COLOR, gtk.MENU_FG, 0.4)
 --theme.widget_music_fg = MAIN_COLOR
 
 

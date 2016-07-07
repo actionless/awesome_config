@@ -96,8 +96,8 @@ function signals.init(_)
   end
 
   client.connect_signal("property::geometry", function (c)
-    if not c.fullscreen then
-      delayed_call(apply_shape, c, gears.shape.rounded_rect, 10)
+    if not c.fullscreen and beautiful.border_radius and beautiful.border_radius > 0 then
+      delayed_call(apply_shape, c, gears.shape.rounded_rect, beautiful.border_radius)
     end
   end)
 
@@ -146,7 +146,9 @@ function signals.init(_)
       log("F: more tiling clients")
       c.border_width = beautiful.border_width
       titlebar.make_border(c)
-      delayed_call(apply_shape, c, gears.shape.rounded_rect, 10)
+      if not c.fullscreen and beautiful.border_radius and beautiful.border_radius > 0 then
+        delayed_call(apply_shape, c, gears.shape.rounded_rect, beautiful.border_radius)
+      end
     end
   end
 
