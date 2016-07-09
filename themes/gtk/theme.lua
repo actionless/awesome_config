@@ -36,6 +36,7 @@ for _, key in ipairs({
 end
 
 local oomox_theme_name = "retro/uzi"
+--local oomox_theme_name = "retro/pale_sun"
 --local oomox_theme_name = "retro/twg"
 --local oomox_theme_name = "monovedek-gray"
 --local oomox_theme_name = "lcars"
@@ -56,8 +57,10 @@ gtk.MENU_BG = color_utils.darker(gtk.MENU_BG, -math.ceil(gtk.GRADIENT*100))
 log(gtk)
 
 
-local MAIN_COLOR = gtk.BTN_BG
---local MAIN_COLOR = gtk.SEL_BG
+local MAIN_COLOR = gtk.SEL_BG
+if oomox_theme_name == 'retro/uzi' then
+  MAIN_COLOR = gtk.BTN_BG
+end
 
 local theme_dir = awful.util.getdir("config").."/themes/"..theme_name
 --local theme = dofile("/usr/share/awesome/themes/xresources/theme.lua")
