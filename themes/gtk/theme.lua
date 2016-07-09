@@ -4,6 +4,7 @@ local dpi = xresources.apply_dpi
 local create_theme = require("actionless.common_theme").create_theme
 local helpers = require("actionless.helpers")
 local color_utils = require("utils").color
+local parse = require("utils.parse")
 
 
 local theme_name = "gtk"
@@ -24,6 +25,7 @@ for _, key in ipairs({
   "HDR_BTN_FG",
 
   "ROUNDNESS",
+  "GRADIENT",
 
   "ICONS_LIGHT_FOLDER",
   "ICONS_LIGHT",
@@ -33,14 +35,15 @@ for _, key in ipairs({
   oomox_theme_keys[key] = key
 end
 
-local parse = require("utils.parse")
+local oomox_theme_name = "retro/uzi"
+--local oomox_theme_name = "retro/twg"
+--local oomox_theme_name = "monovedek-gray"
+--local oomox_theme_name = "lcars"
+--local oomox_theme_name = "numix"
+--local oomox_theme_name = "Base-16/Ashes-Light"
+
 local gtk = parse.find_values_in_file(
-  os.getenv("HOME").."/projects/oomox/colors/retro/uzi",
-  --os.getenv("HOME").."/projects/oomox/colors/retro/twg",
-  --os.getenv("HOME").."/projects/oomox/colors/monovedek-gray",
-  --os.getenv("HOME").."/projects/oomox/colors/lcars",
-  --os.getenv("HOME").."/projects/oomox/colors/numix",
-  --os.getenv("HOME").."/projects/oomox/colors/Base-16/Ashes-Light",
+  os.getenv("HOME").."/projects/oomox/colors/"..oomox_theme_name,
   "(.*)=(.*)",
   oomox_theme_keys,
   function(value)
@@ -48,6 +51,8 @@ local gtk = parse.find_values_in_file(
   end
 )
 gtk.ROUNDNESS = tonumber(gtk.ROUNDNESS:sub(2,#gtk.ROUNDNESS))
+gtk.GRADIENT = tonumber(gtk.GRADIENT:sub(2,#gtk.GRADIENT))
+gtk.MENU_BG = color_utils.darker(gtk.MENU_BG, -math.ceil(gtk.GRADIENT*100))
 log(gtk)
 
 
@@ -228,7 +233,7 @@ theme.panel_widget_spacing_small = dpi(4)
 theme.panel_widget_bg_error = theme.xrdb.color1
 theme.panel_widget_fg_error = theme.xrdb.color15
 
-theme.widget_music_bg = color_utils.mix(MAIN_COLOR, gtk.MENU_FG, 0.4)
+theme.widget_music_bg = color_utils.mix(MAIN_COLOR, gtk.MENU_FG, 0.6)
 --theme.widget_music_fg = MAIN_COLOR
 
 
