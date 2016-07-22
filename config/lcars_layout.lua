@@ -1,9 +1,11 @@
 local awful = require("awful")
 local client = client
 local beautiful = require("beautiful")
+local delayed_call = require("gears.timer").delayed_call
 
 
 local debug_messages_enabled = true
+local debug_messages_enabled = false
 local log = function(...) if debug_messages_enabled then nlog(...) end end
 
 
@@ -184,7 +186,9 @@ local function size_change_callback(t, from)
 end
 
 tag.connect_signal("property::mwfact", function (t)
+  delayed_call(function()
     size_change_callback(t, "t:mwfact")
+  end)
 end)
 tag.connect_signal("property::ncol", function (t)
     size_change_callback(t, "t:ncol")

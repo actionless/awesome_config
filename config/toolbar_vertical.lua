@@ -73,9 +73,14 @@ function toolbar.init(awesome_context)
       nil,
       nil
     )
+    local top_panel_left_margin_to_compensate_left_wibox = wibox.container.background(
+      common.constraint({width=beautiful.left_panel_width}),
+      beautiful.fg
+    )
     local top_panel_bottomlayout = wibox.layout.align.horizontal(
       wibox.layout.fixed.horizontal(
-        --top_panel_left_margin,
+        top_panel_left_margin_to_compensate_left_wibox,
+        top_panel_left_margin,
         --loaded_widgets.screen[si].taglist,
         top_panel_left_margin,
         separator,
@@ -154,7 +159,14 @@ function toolbar.init(awesome_context)
     left_panel_widgets[si] = {
       loaded_widgets.lcars_textclock,
       v_sep,
-      loaded_widgets.screen[si].layoutbox,
+      common.decorated({widgets={
+        loaded_widgets.screen[si].layoutbox.textbox,
+        wibox.layout.fixed.horizontal(
+          loaded_widgets.screen[si].layoutbox.n_master,
+          wibox.widget.textbox(' '),
+          loaded_widgets.screen[si].layoutbox.n_col
+        ),
+      }}),
       v_sep,
       --common.constraint({
         --widget=loaded_widgets.music,
@@ -172,11 +184,11 @@ function toolbar.init(awesome_context)
         --{ __index = apw_widget }
       --),
       --v_sep,
-      --common.decorated({widgets={
-        --loaded_widgets.cpu,
-        --loaded_widgets.mem,
-      --}}),
-      --v_sep,
+      common.decorated({widgets={
+        loaded_widgets.cpu,
+        loaded_widgets.mem,
+      }}),
+      v_sep,
       loaded_widgets.screen[si].lcarslist,
       --loaded_widgets.temp,
       --loaded_widgets.bat,
@@ -226,11 +238,12 @@ function toolbar.init(awesome_context)
       wibox.layout.align.horizontal(
         nil,
         wibox.layout.align.vertical(
-          --assets.top_left_corner_image(),
+          --assets.bottom_top_left_corner_image(),
           wibox.container.background(
-            --left_panel_bottom_layouts[si],
-            wibox.widget.textbox('test'),
-            beautiful.panel_widget_bg
+            left_panel_bottom_layouts[si],
+            --wibox.widget.textbox('test'),
+            --beautiful.panel_widget_bg
+            "#00ff00"
           ),
           nil
         ),
@@ -238,7 +251,8 @@ function toolbar.init(awesome_context)
         wibox.layout.fixed.vertical(
           wibox.container.background(
             common.constraint({height=beautiful.basic_panel_height, width=beautiful.panel_padding_bottom}),
-            beautiful.panel_fg
+            --beautiful.panel_fg
+            "#ff0000"
           ),
           common.constraint({width=beautiful.panel_padding_bottom})
         )
@@ -249,6 +263,7 @@ function toolbar.init(awesome_context)
     local top_left_corner_imagebox = wibox.widget.imagebox()
     top_left_corner_imagebox:set_image(top_left_corner_image)
     top_left_corner_imagebox:set_resize(false)
+
     external_corner_wibox[si] = wibox(top_left_corner_imagebox)
     --external_corner_wibox[si] = wibox(wibox.container.background(wibox.widget.textbox('test'), "#ff0000"))
     external_corner_wibox[si].shape_bounding = top_left_corner_image._native

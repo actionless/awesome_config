@@ -45,7 +45,10 @@ awful.layout.suit.tile.resize_jump_to_corner = false
         c:raise();
       end),
     awful.button({ modkey }, 1, awful.mouse.client.move),
-    awful.button({ modkey }, 3, awful.mouse.client.resize)
+    awful.button({ modkey }, 3, function(c)
+      awful.mouse.client.resize(c, nil, {jump_to_corner=false})
+      --awful.mouse.client.resize(c, nil, {})
+    end)
   )
 
 local RESIZE_STEP = beautiful.xresources.apply_dpi(15)

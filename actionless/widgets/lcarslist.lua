@@ -146,7 +146,8 @@ local function tasklist_label(c, args)
     local bg_normal = args.bg_normal or theme.panel_widget_fg or theme.bg_normal or "#000000"
 
     local fg_focus = util.ensure_pango_color(args.fg_focus or theme.color.color3 or theme.tasklist_fg_focus or theme.fg_focus, fg_normal)
-    local bg_focus = args.bg_focus or theme.tasklist_bg_focus or theme.bg_focus or bg_normal
+    local bg_focus = args.bg_focus or theme.taglist_bg_focus or theme.bg_focus or "#000000"
+
     local fg_urgent = util.ensure_pango_color(args.fg_urgent or theme.tasklist_fg_urgent or theme.fg_urgent, fg_normal)
     local bg_urgent = args.bg_urgent or theme.tasklist_bg_urgent or theme.bg_urgent or bg_normal
     local fg_minimize = util.ensure_pango_color(args.fg_minimize or theme.tasklist_fg_minimize or theme.fg_minimize, fg_normal)
@@ -278,6 +279,7 @@ local function tasklist_update(s, w, buttons, filter, data, style, update_functi
     tag_filter = tag_filter or function() return true end
     w:reset()
     for _, t in ipairs(s.tags) do
+        -- @TODO: cache tag_group widgets for the tags
         if not tag.getproperty(t, "hide") and tag_filter(t) then
             w:add(tag_group(t, buttons, filter, data, update_function))
             w:add(v_sep)

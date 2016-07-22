@@ -36,6 +36,7 @@ for _, key in ipairs({
 end
 
 local oomox_theme_name = "retro/uzi"
+local oomox_theme_name = "popart/adventure_times_1"
 --local oomox_theme_name = "retro/pale_sun"
 --local oomox_theme_name = "retro/twg"
 --local oomox_theme_name = "monovedek-gray"
