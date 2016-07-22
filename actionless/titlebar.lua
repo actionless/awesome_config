@@ -49,7 +49,7 @@ function titlebar.remove_border(c)
   if not (titlebar.border_is_enabled(c) or titlebar.is_enabled(c)) then
     return
   end
-  for _, position in ipairs({"top", "bottom", "top", "left"}) do
+  for _, position in ipairs({"top", "bottom", "right", "left"}) do
     awful.titlebar.hide(c, position)
   end
 end

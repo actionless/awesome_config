@@ -141,7 +141,7 @@ function common.decorated(args)
   end
 
   local decorated = {
-    widget_list = {},
+    lie_widget_list = {},
   }
 
   decorated.bg = args.bg or beautiful.panel_widget_bg or beautiful.fg or "#ffffff"
@@ -156,13 +156,13 @@ function common.decorated(args)
   end
   decorated.lie_widget = decorated.lie_widget_list[1]
   for i, widget in ipairs(decorated.lie_widget_list) do
-    if widget.set_align then
-      widget:set_align("right")
+    if widget.set_valign then
+      --widget:set_align("right")
       widget:set_valign("top")
       --widget:set_wrap("char")
     end
   -- give set_bg and set_fg methods to ones don't have it:
-    if (decorated.fg and not widget.set_fg) then
+    if (decorated.fg and not widget.set_fg) or (decorated.bg and not widget.set_bg) then
       decorated.lie_widget_list[i] = setmetatable(wibox.container.background(widget), widget)
     end
   end
@@ -200,7 +200,14 @@ function common.decorated(args)
   decorated.lie_layout = wibox.layout.flex.vertical()
   decorated.lie_layout:add(decorated.lie_background)
 
-  setmetatable(decorated.constraint, { __index = decorated.lie_widget })
+  --setmetatable(decorated.constraint, { __index = decorated.lie_widget })
+  function decorated:set_text(...)
+    return self.lie_widget:set_text(...)
+  end
+  function decorated:set_markup(...)
+    return self.lie_widget:set_markup(...)
+  end
+
   setmetatable(decorated.lie_layout, { __index = decorated.constraint })
   setmetatable(decorated,        { __index = decorated.lie_layout })
 
@@ -210,7 +217,7 @@ function common.decorated(args)
     color_args = color_args or {}
     local fg = color_args.fg
     local bg = color_args.bg
-    for _, widget in ipairs(self.widget_list) do
+    for _, widget in ipairs(self.lie_widget_list) do
       widget:set_fg(fg)
       --widget:set_bg(bg)
     end
@@ -233,7 +240,7 @@ function common.decorated(args)
     if not self._visible then return end
     self._visible = false
 
-    self.widget_layout:reset()
+    self.lie_widget_layout:reset()
     self.constraint:set_height(0)
   end
 
@@ -242,10 +249,10 @@ function common.decorated(args)
     --self.visible = true
     if self._visible then return end
     self._visible = true
-    for _, each_widget in ipairs(self.widget_list) do
+    for _, each_widget in ipairs(self.lie_widget_list) do
       local horiz_layout = wibox.layout.align.horizontal()
       horiz_layout:set_right(each_widget)
-      self.widget_layout:add(horiz_layout)
+      self.lie_widget_layout:add(horiz_layout)
     end
     self.constraint:set_height(self.min_height)
   end
