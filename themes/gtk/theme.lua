@@ -82,7 +82,8 @@ theme.panel_widget_fg = gtk.TXT_FG
 theme.border_radius = dpi(5)
 theme.panel_widget_border_radius = dpi(gtk.ROUNDNESS*0.7)
 theme.panel_widget_border_width = dpi(2)
-theme.panel_widget_border_color = color_utils.mix(gtk.MENU_FG, gtk.MENU_BG, 0.5)
+--theme.panel_widget_border_color = color_utils.mix(gtk.MENU_FG, gtk.MENU_BG, 0.5)
+theme.panel_widget_border_color = color_utils.mix(gtk.MENU_FG, gtk.MENU_BG, 0.3)
 
 theme.widget_close_bg = gtk.HDR_BTN_BG
 theme.widget_close_fg = gtk.HDR_BTN_FG
