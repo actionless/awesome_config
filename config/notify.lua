@@ -1,5 +1,7 @@
 local naughty = require("naughty")
+local gears = require("gears")
 local beautiful = require("beautiful")
+local dpi = require("beautiful").xresources.apply_dpi
 
 local awesome = awesome
 
@@ -7,18 +9,23 @@ local notify = {}
 
 function notify.init(_)
 
+  naughty.config.defaults.opacity = beautiful.notification_opacity
+  naughty.config.defaults.font = beautiful.notification_font
+  naughty.config.defaults.bg = beautiful.notification_bg
+  naughty.config.defaults.fg = beautiful.notification_fg
+  naughty.config.defaults.border_color = beautiful.notification_border_color
+  naughty.config.defaults.border_width = beautiful.notification_border_width
+  naughty.config.defaults.margin = beautiful.notification_margin
+  naughty.config.defaults.shape = gears.shape.rounded_rect
+  naughty.config.defaults.shape_args = {10}
+  naughty.config.defaults.margin = dpi(10)
+
   naughty.config.presets.low.opacity = beautiful.notification_opacity
   naughty.config.presets.low.font = beautiful.notification_font
 
   naughty.config.presets.critical.opacity = beautiful.notification_opacity
   naughty.config.presets.critical.font = beautiful.notification_font
 
-  naughty.config.presets.normal.opacity = beautiful.notification_opacity
-  naughty.config.presets.normal.font = beautiful.notification_font
-  naughty.config.presets.normal.bg = beautiful.notification_bg
-  naughty.config.presets.normal.fg = beautiful.notification_fg
-  naughty.config.presets.normal.border_color = beautiful.notification_border_color
-  naughty.config.presets.normal.margin = beautiful.notification_margin
 
   -- {{{ Error handling
   -- Check if awesome encountered an error during startup and fell back to
