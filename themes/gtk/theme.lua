@@ -36,7 +36,13 @@ for _, key in ipairs({
 end
 
 local oomox_theme_name = "retro/uzi"
-local oomox_theme_name = "popart/adventure_times_1"
+--local oomox_theme_name = "popart/adventure_times_1"
+--local oomox_theme_name = "mexico_5"
+pcall(function()
+  if OOMOX_THEME_NAME then
+    oomox_theme_name = OOMOX_THEME_NAME
+  end
+end)
 --local oomox_theme_name = "retro/pale_sun"
 --local oomox_theme_name = "retro/twg"
 --local oomox_theme_name = "monovedek-gray"
@@ -54,7 +60,7 @@ local gtk = parse.find_values_in_file(
 )
 gtk.ROUNDNESS = tonumber(gtk.ROUNDNESS:sub(2,#gtk.ROUNDNESS))
 gtk.GRADIENT = tonumber(gtk.GRADIENT:sub(2,#gtk.GRADIENT))
-gtk.MENU_BG = color_utils.darker(gtk.MENU_BG, -math.ceil(gtk.GRADIENT*100))
+gtk.MENU_BG = color_utils.darker(gtk.MENU_BG, -math.ceil(gtk.GRADIENT*10))
 log(gtk)
 
 
@@ -218,7 +224,7 @@ theme.titlebar_bg_normal	= "theme.titlebar_border"
 theme.titlebar_fg_focus		= gtk.MENU_FG
 theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
 
---theme.border_normal
+theme.border_normal = gtk.MENU_BG
 theme.border_focus = MAIN_COLOR
 theme.titlebar_border = gtk.MENU_BG
 
@@ -247,9 +253,9 @@ theme.widget_music_bg = color_utils.mix(MAIN_COLOR, gtk.MENU_FG, 0.6)
 theme = create_theme({ theme_name=theme_name, theme=theme, })
 
 --theme.titlebar_bg_normal = theme.titlebar_bg_normal .."66"
-theme.border = theme.border .."66"
-theme.border_normal = theme.border_normal .."66"
-theme.border_focus = theme.border_focus .."66"
+--theme.border = theme.border .."66"
+--theme.border_normal = theme.border_normal .."66"
+--theme.border_focus = theme.border_focus .."66"
 
 -- Recolor titlebar icons:
 local theme_assets

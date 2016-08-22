@@ -18,7 +18,12 @@ function notify.init(_)
   naughty.config.defaults.margin = beautiful.notification_margin
   naughty.config.defaults.shape = gears.shape.rounded_rect
   naughty.config.defaults.shape_args = {10}
-  naughty.config.defaults.margin = dpi(10)
+  --naughty.config.defaults.shape = gears.shape.infobubble
+  --naughty.config.defaults.shape_args = {10}
+  --naughty.config.defaults.shape = gears.shape.cross
+  --naughty.config.defaults.shape_args = {}
+  --naughty.config.defaults.shape = gears.shape.octogon
+  --naughty.config.defaults.shape_args = {40}
 
   naughty.config.presets.low.opacity = beautiful.notification_opacity
   naughty.config.presets.low.font = beautiful.notification_font
