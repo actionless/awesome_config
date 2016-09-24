@@ -20,7 +20,8 @@ function rules.init(awesome_context)
           keys = awesome_context.clientkeys,
           buttons = awesome_context.clientbuttons,
           placement = awful.placement.no_overlap+awful.placement.no_offscreen,
-          size_hints_honor = false
+          size_hints_honor = false,
+          screen = awful.screen.preferred,
         },
         callback = awful.client.setslave
       },
