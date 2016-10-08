@@ -9,4 +9,4 @@
 [submodule "third_party/collision"]
 	path = third_party/collision
 	url = https://github.com/Elv13/collision
-	branch = awesome3.6
+	branch = master

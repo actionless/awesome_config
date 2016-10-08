@@ -106,14 +106,6 @@ if context.after_config_loaded then
   context.after_config_loaded()
 end
 
---require("third_party").collision {
-    ----        Normal    Xephyr       Vim      G510
-    --up    = { "Up"    , "&"        , "ak"   , "F15" },
-    --down  = { "Down"  , "KP_Enter" , "aj"   , "F14" },
-    --left  = { "Left"  , "#"        , "ah"   , "F13" },
-    --right = { "Right" , "\""       , "al"   , "F17" },
---}
-
 local ucolor = require("utils.color")
 
 local inverted_colorscheme = awful.util.table.clone(colorscheme)

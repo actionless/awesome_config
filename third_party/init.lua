@@ -6,7 +6,6 @@ package.path = package.path .. ';'.. path .. '?/init.lua'
 package.path = package.path .. ';'.. path .. '?.lua'
 
 local third_party = {
-  collision = require("collision"),
   revelation = require("revelation"),
 }
 
