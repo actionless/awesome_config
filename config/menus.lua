@@ -50,9 +50,19 @@ function menus.init(context)
           items = {
             { "freedesktop", menulist, beautiful.awesome_icon },
             { "awesome", myawesomemenu, beautiful.awesome_icon },
+            { "jack",
+              {{
+                "start", os.getenv("HOME").."/scripts/jack_start.sh",
+                beautiful.widget_music_pause
+              }, {
+                "stop", os.getenv("HOME").."/scripts/jack_stop.sh",
+                beautiful.widget_music_stop
+              }},
+              beautiful.widget_vol
+            },
             { "applications", applications_menu, beautiful.applications_icon },
-            { "kill compositor", "killall compton" },
-            { "start compositor", context.cmds.compositor },
+            --{ "kill compositor", "killall compton" },
+            --{ "start compositor", context.cmds.compositor },
             { "open terminal", context.cmds.terminal }
           },
         })
