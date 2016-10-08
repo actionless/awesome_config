@@ -8,7 +8,6 @@ package.path = package.path .. ';'.. path .. '?.lua'
 local third_party = {
   collision = require("collision"),
   revelation = require("revelation"),
-  radical = require("radical"),
 }
 
 return third_party
