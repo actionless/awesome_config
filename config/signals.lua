@@ -21,10 +21,9 @@ function signals.init(_)
   local function apply_shape(draw, shape, ...)
 
     --nlog('apply_shape')
-
-    if beautiful.border_radius == 0 then
-      return
-    end
+    --if beautiful.border_radius == 0 then
+      --return
+    --end
 
     local client_tag = draw.first_tag
     if not client_tag then
@@ -42,7 +41,7 @@ function signals.init(_)
       --nlog(#draw.first_tag:clients())
       --nlog(client_tag.layout.name)
       return
-    else
+    --else
       --nlog({num_tiled,
         --client_tag.master_fill_policy,
         --draw.floating,
@@ -82,8 +81,7 @@ function signals.init(_)
       cr,
       geo.width-border*2,
       geo.height-titlebar_height-border,
-      --shape_args
-      8
+      beautiful.border_radius*0.75
     )
 
     cr:fill()
