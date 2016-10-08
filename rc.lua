@@ -84,10 +84,9 @@ local persistent = require("actionless.persistent")
 local beautiful	= require("beautiful")
 beautiful.init(context.theme_dir)
 
---------------------------------
-smart_wibox = require("third_party").radical.smart_wibox
---------------------------------
-
+if context.before_config_loaded then
+  context.before_config_loaded()
+end
 local config = require("config")
 config.notify.init(context)
 config.autorun.init(context)
@@ -103,6 +102,9 @@ if persistent.lcarslist.get() then
 end
 config.rules.init(context)
 require("hotkeys")
+if context.after_config_loaded then
+  context.after_config_loaded()
+end
 
 --require("third_party").collision {
     ----        Normal    Xephyr       Vim      G510
