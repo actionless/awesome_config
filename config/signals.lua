@@ -22,9 +22,7 @@ function signals.init(_)
 
     --nlog('apply_shape')
 
-    if false then
-      beautiful.titlebar_fg_focus		= beautiful.titlebar_border
-      beautiful.titlebar_bg_focus		= beautiful.titlebar_focus_border
+    if beautiful.border_radius == 0 then
       return
     end
 

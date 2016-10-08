@@ -36,19 +36,11 @@ for _, key in ipairs({
 end
 
 local oomox_theme_name = "retro/uzi"
---local oomox_theme_name = "popart/adventure_times_1"
---local oomox_theme_name = "mexico_5"
 pcall(function()
   if OOMOX_THEME_NAME then
     oomox_theme_name = OOMOX_THEME_NAME
   end
 end)
---local oomox_theme_name = "retro/pale_sun"
---local oomox_theme_name = "retro/twg"
---local oomox_theme_name = "monovedek-gray"
---local oomox_theme_name = "lcars"
---local oomox_theme_name = "numix"
---local oomox_theme_name = "Base-16/Ashes-Light"
 
 local gtk = parse.find_values_in_file(
   os.getenv("HOME").."/projects/oomox/colors/"..oomox_theme_name,
@@ -62,6 +54,12 @@ gtk.ROUNDNESS = tonumber(gtk.ROUNDNESS:sub(2,#gtk.ROUNDNESS))
 gtk.GRADIENT = tonumber(gtk.GRADIENT:sub(2,#gtk.GRADIENT))
 gtk.MENU_BG = color_utils.darker(gtk.MENU_BG, -math.ceil(gtk.GRADIENT*10))
 log(gtk)
+
+pcall(function()
+  if OOMOX_SEL_BG then
+    gtk.SEL_BG = OOMOX_SEL_BG
+  end
+end)
 
 
 local MAIN_COLOR = gtk.SEL_BG
@@ -77,6 +75,8 @@ theme.fg = gtk.FG
 theme.fg_normal = gtk.FG
 theme.bg = gtk.BG
 theme.bg_normal = gtk.BG
+theme.fg_focus		= gtk.SEL_FG
+theme.bg_focus		= gtk.SEL_BG
 
 theme.panel_fg = gtk.MENU_FG
 theme.panel_bg = gtk.MENU_BG
@@ -84,9 +84,10 @@ theme.panel_bg = gtk.MENU_BG
 theme.panel_widget_bg = gtk.TXT_BG
 theme.panel_widget_fg = gtk.TXT_FG
 
---theme.border_radius = dpi(gtk.ROUNDNESS*2)
-theme.border_radius = dpi(5)
+theme.border_radius = dpi(gtk.ROUNDNESS*2)
 theme.panel_widget_border_radius = dpi(gtk.ROUNDNESS*0.7)
+--theme.border_radius = dpi(5)
+--theme.panel_widget_border_radius = dpi(5)
 theme.panel_widget_border_width = dpi(2)
 --theme.panel_widget_border_color = color_utils.mix(gtk.MENU_FG, gtk.MENU_BG, 0.5)
 theme.panel_widget_border_color = color_utils.mix(gtk.MENU_FG, gtk.MENU_BG, 0.3)
@@ -215,18 +216,23 @@ theme.taglist_bg_occupied	= gtk.TXT_BG
 
 theme.taglist_fg_occupied	= gtk.HDR_BTN_FG
 theme.taglist_bg_occupied	= gtk.HDR_BTN_BG
-log(theme.taglist_fg_occupied)
 
---theme.titlebar_fg_focus		= "theme.titlebar_border"
---theme.titlebar_bg_focus		= "theme.titlebar_focus_border"
-theme.titlebar_fg_normal	= color_utils.mix(gtk.MENU_FG, gtk.MENU_BG)
-theme.titlebar_bg_normal	= "theme.titlebar_border"
-theme.titlebar_fg_focus		= gtk.MENU_FG
-theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
 
 theme.border_normal = gtk.MENU_BG
 theme.border_focus = MAIN_COLOR
 theme.titlebar_border = gtk.MENU_BG
+
+theme.titlebar_fg_normal	= color_utils.mix(gtk.MENU_FG, gtk.MENU_BG)
+theme.titlebar_bg_normal	= "theme.titlebar_border"
+if theme.border_radius > 0 then
+  theme.titlebar_fg_focus		= gtk.MENU_FG
+  theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
+else
+  --theme.titlebar_fg_focus		= theme.titlebar_border
+  --theme.titlebar_bg_focus		= theme.bg_focus
+  theme.titlebar_fg_focus		= gtk.SEL_FG
+  theme.titlebar_bg_focus		= gtk.SEL_BG
+end
 
 
 --if color_utils.is_dark(theme.xrdb.background) then
@@ -244,11 +250,13 @@ theme.panel_widget_spacing_small = dpi(4)
 theme.panel_widget_bg_error = theme.xrdb.color1
 theme.panel_widget_fg_error = theme.xrdb.color15
 
-theme.widget_music_bg = color_utils.mix(MAIN_COLOR, gtk.MENU_FG, 0.6)
+--theme.widget_music_bg = color_utils.mix(MAIN_COLOR, gtk.MENU_FG, 0.6)
+theme.widget_music_bg = MAIN_COLOR
 --theme.widget_music_fg = MAIN_COLOR
 
 
 --theme.wallpaper_cmd     = "hsetroot -solid \"" .. theme.bg .. "\""
+--
 
 theme = create_theme({ theme_name=theme_name, theme=theme, })
 

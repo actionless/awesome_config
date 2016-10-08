@@ -74,7 +74,7 @@ function titlebar.make_border(c)
   }
 
   --               Bottom titlebar                --
-  local tbb = awful.titlebar(c,{size= beautiful.titlebar_bottom_height or 5,position="bottom"})
+  local tbb = awful.titlebar(c,{size= beautiful.base_border_width or 5,position="bottom"})
   tbb:setup {
     buttons = get_buttons(c),
     id     = "main_layout",
@@ -82,7 +82,7 @@ function titlebar.make_border(c)
   }
 
   --               Left titlebar                --
-  local tbl = awful.titlebar(c,{size= beautiful.titlebar_left_width or 5,position="left"})
+  local tbl = awful.titlebar(c,{size= beautiful.base_border_width or 5,position="left"})
   tbl:setup {
     buttons = get_buttons(c),
     wibox.widget.textbox(" "),
@@ -92,7 +92,7 @@ function titlebar.make_border(c)
   }
 
   --               Right titlebar                --
-  local tbr = awful.titlebar(c,{size= beautiful.titlebar_right_width or 5,position="right"})
+  local tbr = awful.titlebar(c,{size= beautiful.base_border_width or 5,position="right"})
   tbr:setup {
     buttons = get_buttons(c),
     wibox.widget.textbox(" "),
