@@ -125,31 +125,39 @@ function titlebar.make_titlebar(c)
   tbt:setup{
     {
       {
-        awful.titlebar.widget.closebutton(c),
-        awful.titlebar.widget.minimizebutton(c),
-        --awful.titlebar.widget.maximizedbutton(c)),
-        layout = wibox.layout.fixed.horizontal,
-      },
-      {
         {
-          widget = awful.titlebar.widget.titlewidget(c),
-          align = "center",
-          font = beautiful.titlebar_font,
+          awful.titlebar.widget.closebutton(c),
+          awful.titlebar.widget.minimizebutton(c),
+          --awful.titlebar.widget.maximizedbutton(c)),
+          layout = wibox.layout.fixed.horizontal,
         },
-        layout = wibox.layout.flex.horizontal,
+        top   = beautiful.base_border_width,
+        layout = wibox.container.margin,
+      }, {
+        {
+          {
+            widget = awful.titlebar.widget.titlewidget(c),
+            align = "center",
+            font = beautiful.titlebar_font,
+          },
+          layout = wibox.layout.flex.horizontal,
+        },
         buttons = get_buttons(c),
-      },
-      {
-        awful.titlebar.widget.ontopbutton(c),
-        awful.titlebar.widget.stickybutton(c),
-        layout = wibox.layout.fixed.horizontal,
+        top   = beautiful.base_border_width,
+        layout = wibox.container.margin,
+      }, {
+        {
+          awful.titlebar.widget.ontopbutton(c),
+          awful.titlebar.widget.stickybutton(c),
+          layout = wibox.layout.fixed.horizontal,
+        },
+        top   = beautiful.base_border_width,
+        layout = wibox.container.margin,
       },
       layout = wibox.layout.align.horizontal,
     },
     left   = beautiful.base_border_width,
     right   = beautiful.base_border_width,
-    top   = beautiful.base_border_width,
-    --bottom   = beautiful.base_border_width,
     layout = wibox.container.margin,
   }
 
