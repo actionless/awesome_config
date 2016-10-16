@@ -3,6 +3,9 @@ local beautiful = require("beautiful")
 local delayed_call = require("gears.timer").delayed_call
 local gears = require("gears")
 local cairo = require("lgi").cairo
+local capi = {
+  screen=screen,
+}
 
 local titlebar	= require("actionless.titlebar")
 local persistent = require("actionless.persistent")
