@@ -71,6 +71,8 @@ local theme_dir = awful.util.getdir("config").."/themes/"..theme_name
 --local theme = dofile("/usr/share/awesome/themes/xresources/theme.lua")
 local theme = {}
 
+theme.gtk = gtk
+
 theme.fg = gtk.FG
 theme.fg_normal = gtk.FG
 theme.bg = gtk.BG
