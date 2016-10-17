@@ -9,7 +9,6 @@ local capi = {
   root = root,
   awesome = awesome,
 }
-local menubar = require("actionless.menubar")
 local awesome_menubar = require("menubar")
 
 local helpers = require("actionless.helpers")
@@ -17,6 +16,7 @@ local menu_addon = require("actionless.menu_addon")
 local floats = require("actionless.helpers").client_floats
 local persistent = require("actionless.persistent")
 local tmux_swap_bydirection = require("utils.tmux").swap_bydirection
+local wlppr = require("actionless.wlppr")
 
 
 
@@ -88,6 +88,7 @@ local bind_key = function(mod, key, press, description, group)
   return awful.key.new(mod, key, press, nil, {description=description, group=group})
 end
 
+
 -- {{{ Key bindings
 local globalkeys = awful.util.table.join(
 
@@ -98,6 +99,26 @@ local globalkeys = awful.util.table.join(
   }),
 
   -- bind_key({ modkey,  }, "Control", "show_help"), -- show hotkey on hold
+  bind_key({ modkey,  "Control"  }, "w",
+    function() wlppr.cycle() end,
+    "cycle", "wallpaper"
+  ),
+  bind_key({ modkey,  "Control" }, "b",
+    function() wlppr.cycle_best() end,
+    "cycle best", "wallpaper"
+  ),
+  bind_key({ modkey,  "Control" }, "y",
+    function() wlppr.save() end,
+    "save to best", "wallpaper"
+  ),
+  bind_key({ modkey,  "Control" }, "o",
+    function() wlppr.open() end,
+    "open in viewer", "wallpaper"
+  ),
+  bind_key({ modkey,  }, "'",
+    function() wlppr.cycle() end,
+    "cycle (TMP)", "wallpaper"
+  ),
 
   bind_key({ modkey,  altkey  }, "t",
     function() awesome_context.widgets.systray_toggle.toggle() end,

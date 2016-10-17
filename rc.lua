@@ -106,6 +106,12 @@ if context.after_config_loaded then
   context.after_config_loaded()
 end
 
+local helpers = require('actionless.helpers')
+local wlppr = require('actionless.wlppr')
+helpers.newinterval(301, wlppr.load_new, true)
+--helpers.newinterval(500, change_wallpaper)
+--helpers.newinterval(300, change_wallpaper_best)
+
 local ucolor = require("utils.color")
 
 local inverted_colorscheme = awful.util.table.clone(colorscheme)
