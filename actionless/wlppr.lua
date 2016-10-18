@@ -38,15 +38,9 @@ function wlppr.cycle()
 end
 
 function wlppr.open()
-  if wlppr.lock then
-    log("WALLPAPER LOCKED (in progress)")
-    return
-  end
-  wlppr.lock = true
   awful.spawn.easy_async(
     'bash -c "viewnior $(/home/lie/projects/tumblr/env/bin/python /home/lie/projects/tumblr/get_last_path.py)"',
     function(...)
-      wlppr.lock = false
       log(table.pack(...))
     end
   )
