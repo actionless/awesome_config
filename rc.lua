@@ -108,7 +108,7 @@ end
 
 local helpers = require('actionless.helpers')
 local wlppr = require('actionless.wlppr')
-helpers.newinterval(301, wlppr.load_new, true)
+helpers.newinterval(701, wlppr.load_new, true)
 --helpers.newinterval(500, change_wallpaper)
 --helpers.newinterval(300, change_wallpaper_best)
 
