@@ -151,7 +151,7 @@ function signals.init(_)
     end
   end
 
-  local function on_client_unfocus (c)
+  local function _on_client_unfocus (c)
     local t = awful.screen.focused().selected_tag
     local layout = awful.layout.get(c.screen)
     local num_tiled = #awful.client.tiled(c.screen)
@@ -184,6 +184,18 @@ function signals.init(_)
       titlebar.make_border(c)
       c.border_color = beautiful.border_normal
     end
+  end
+
+  local function on_client_unfocus (c)
+    delayed_call(function()
+      for _, sel_tag in ipairs(c.screen.selected_tags) do
+        for _, cli_tag in ipairs(c:tags()) do
+          if sel_tag.index == cli_tag.index then
+            return _on_client_unfocus(c)
+          end
+        end
+      end
+    end)
   end
 
   -- New client appears
