@@ -134,7 +134,7 @@ function signals.init(_)
       log("F: floating layout")
       titlebar.make_titlebar(c)
     elseif num_tiled == 1 then
-      if t.master_fill_policy == 'expand' and capi.screen.count == 1 then
+      if t.master_fill_policy == 'expand' and capi.screen.count() == 1 then
         log("F: one tiling client: expand")
         titlebar.remove_border(c)
       else
@@ -171,7 +171,7 @@ function signals.init(_)
       log("U: floating layout")
       c.border_color = beautiful.titlebar_border
     elseif num_tiled == 1 then
-      if t.master_fill_policy == 'expand' and capi.screen.count == 1 then
+      if t.master_fill_policy == 'expand' and capi.screen.count() == 1 then
         log("U: one tiling client: expand")
         titlebar.remove_border(c)
       else
