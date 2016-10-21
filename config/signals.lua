@@ -23,11 +23,6 @@ function signals.init(_)
 
   local function apply_shape(draw, shape, ...)
 
-    --nlog('apply_shape')
-    --if beautiful.border_radius == 0 then
-      --return
-    --end
-
     local client_tag = draw.first_tag
     if not client_tag then
       nlog('no client tag')
@@ -186,8 +181,10 @@ function signals.init(_)
     end
   end
 
+
   local function on_client_unfocus (c)
     delayed_call(function()
+      if not c.valid then return end
       for _, sel_tag in ipairs(c.screen.selected_tags) do
         for _, cli_tag in ipairs(c:tags()) do
           if sel_tag.index == cli_tag.index then
