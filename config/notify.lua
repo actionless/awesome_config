@@ -1,7 +1,6 @@
 local naughty = require("naughty")
 local gears = require("gears")
 local beautiful = require("beautiful")
-local dpi = require("beautiful").xresources.apply_dpi
 
 local awesome = awesome
 
@@ -16,14 +15,14 @@ function notify.init(_)
   naughty.config.defaults.border_color = beautiful.notification_border_color
   naughty.config.defaults.border_width = beautiful.notification_border_width
   naughty.config.defaults.margin = beautiful.notification_margin
-  naughty.config.defaults.shape = gears.shape.rounded_rect
-  naughty.config.defaults.shape_args = {10}
-  --naughty.config.defaults.shape = gears.shape.infobubble
-  --naughty.config.defaults.shape_args = {10}
-  --naughty.config.defaults.shape = gears.shape.cross
-  --naughty.config.defaults.shape_args = {}
-  --naughty.config.defaults.shape = gears.shape.octogon
-  --naughty.config.defaults.shape_args = {40}
+
+  --naughty.config.defaults.shape = gears.shape.rounded_rect
+  --naughty.config.defaults.shape_args = {beautiful.notification_border_radius or beautiful.border_radius}
+  naughty.config.defaults.shape = function(cr,w,h)
+    gears.shape.rounded_rect(
+      cr, w, h, beautiful.notification_border_radius or beautiful.border_radius
+    )
+  end
 
   naughty.config.presets.low.opacity = beautiful.notification_opacity
   naughty.config.presets.low.font = beautiful.notification_font

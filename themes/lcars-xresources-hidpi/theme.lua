@@ -86,6 +86,7 @@ theme.panel_padding_bottom = dpi(3)
 --theme.useless_gap = dpi(6)
 
 theme.border_radius = dpi(5)
+theme.notification_border_radius = dpi(10)
 
 theme.border_width = dpi(4)
 theme.useless_gap = dpi(5)
