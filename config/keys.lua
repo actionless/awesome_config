@@ -48,6 +48,10 @@ awful.layout.suit.tile.resize_jump_to_corner = false
     awful.button({ modkey }, 3, function(c)
       awful.mouse.client.resize(c, nil, {jump_to_corner=false})
       --awful.mouse.client.resize(c, nil, {})
+    end),
+    awful.button({ modkey, "Control" }, 1, function(c)
+      awful.mouse.client.resize(c, nil, {jump_to_corner=false})
+      --awful.mouse.client.resize(c, nil, {})
     end)
   )
 
@@ -827,6 +831,7 @@ awesome_context.clientkeys = awful.util.table.join(
   bind_key({ modkey,        }, "m",
     function (c)
       c.maximized = not c.maximized
+      c:raise()
     end,
     "maximize client", CLIENT_MANIPULATION
   )

@@ -7,6 +7,15 @@ local autorun = {}
 
 function autorun.init(awesome_context)
 
+  awful.spawn.with_shell('xinput set-prop 12 "Device Accel Velocity Scaling" 26')
+  awful.spawn.with_shell('xinput set-prop 12 "Evdev Middle Button Emulation" 1')
+  awful.spawn.with_shell('xinput set-prop 12 "Evdev Wheel Emulation" 1')
+  awful.spawn.with_shell('xinput set-prop 12 "Evdev Wheel Emulation Button" 3')
+  awful.spawn.with_shell('xinput set-prop 12 "Evdev Wheel Emulation Inertia" 20')
+  awful.spawn.with_shell('xinput set-prop 12 "Evdev Wheel Emulation Timeout" 200')
+
+  --run_once("gnome-session")
+  --run_once("/usr/lib/gnome-settings-daemon/gnome-settings-daemon")
   --awful.spawn.with_shell("eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)")
   --awful.spawn.with_shell("/home/lie/.screenlayout/awesome.sh")
   --run_once("redshift")
