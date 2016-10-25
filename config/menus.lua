@@ -6,6 +6,7 @@ local beautiful = require("beautiful")
 local capi = { screen = screen }
 
 local menugen = require("utils.menugen")
+local wlppr = require("actionless.wlppr")
 
 local menus = {}
 
@@ -48,6 +49,19 @@ function menus.init(context)
       menugen.build_menu(function(menulist)
         context.menu.mainmenu = awful.menu({
           items = {
+            { "wlppr",
+              {{
+                "save", wlppr.save,
+                beautiful.widget_ac_charging_low
+              }, {
+                "save to best", wlppr.save_best,
+                beautiful.widget_ac_charging
+              }, {
+                "dump", wlppr.dump,
+                beautiful.widget_music_stop
+              }},
+              beautiful.widget_hdd
+            },
             { "freedesktop", menulist, beautiful.awesome_icon },
             { "awesome", myawesomemenu, beautiful.awesome_icon },
             { "jack",
