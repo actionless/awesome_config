@@ -256,6 +256,7 @@ theme.left_panel_internal_corner_radius = 30
   theme.widget_temp		= widgets_icons_dir .. "temp.png"
   theme.widget_net		= widgets_icons_dir .. "net.png"
   theme.widget_hdd		= widgets_icons_dir .. "hdd.png"
+  theme.widget_task		= widgets_icons_dir .. "task.png"
 
   theme.widget_net_wifi	        = widgets_icons_dir .. "net_wireless.png"
   theme.widget_net_wired		= widgets_icons_dir .. "net_wired.png"
