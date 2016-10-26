@@ -5,6 +5,7 @@ local gears = require("gears")
 local cairo = require("lgi").cairo
 local capi = {
   screen=screen,
+  client=client,
 }
 
 local titlebar	= require("actionless.titlebar")
@@ -20,7 +21,6 @@ local signals = {}
 function signals.init(_)
 
 
-
   local function apply_shape(draw, shape, ...)
 
     local client_tag = draw.first_tag
@@ -29,25 +29,19 @@ function signals.init(_)
       return
     end
     local num_tiled = #awful.client.tiled(draw.screen)
-    if (num_tiled==1 and client_tag.master_fill_policy=='expand')
+    if draw.maximized or (
+      (num_tiled==1 and client_tag.master_fill_policy=='expand')
       and not draw.floating
       and client_tag.layout.name ~= "floating"
-    then
-      --nlog('skip round')
-      --nlog(num_tiled)
-      --nlog(client_tag.master_fill_policy)
-      --nlog(#draw.first_tag:clients())
-      --nlog(client_tag.layout.name)
+    ) then
       return
-    --else
-      --nlog({num_tiled,
-        --client_tag.master_fill_policy,
-        --draw.floating,
-        --client_tag.layout.name})
     end
 
     local geo = draw:geometry()
     local shape_args = ...
+    local border = beautiful.base_border_width
+    local titlebar_height = border
+    --local titlebar_height = titlebar.is_enabled(draw) and beautiful.titlebar_height or border
 
     local img = cairo.ImageSurface(cairo.Format.A1, geo.width, geo.height)
     local cr = cairo.Context(img)
@@ -59,9 +53,7 @@ function signals.init(_)
     cr:set_source_rgba(1,1,1,1)
 
     shape(cr, geo.width, geo.height, shape_args)
-
     cr:fill()
-
     draw.shape_bounding = img._native
 
     cr:set_operator(cairo.Operator.CLEAR)
@@ -70,9 +62,6 @@ function signals.init(_)
     cr:set_operator(cairo.Operator.SOURCE)
     cr:set_source_rgba(1,1,1,1)
 
-    local border = beautiful.base_border_width
-    --local titlebar_height = titlebar.is_enabled(draw) and beautiful.titlebar_height or border
-    local titlebar_height = border
     gears.shape.transform(shape):translate(
       border, titlebar_height
     )(
@@ -81,15 +70,14 @@ function signals.init(_)
       geo.height-titlebar_height-border,
       beautiful.border_radius*0.75
     )
-
     cr:fill()
-
     draw.shape_clip = img._native
 
     img:finish()
   end
 
-  client.connect_signal("property::geometry", function (c)
+
+  capi.client.connect_signal("property::geometry", function (c)
     if not c.fullscreen and beautiful.border_radius and beautiful.border_radius > 0 then
       delayed_call(apply_shape, c, gears.shape.rounded_rect, beautiful.border_radius)
     end
