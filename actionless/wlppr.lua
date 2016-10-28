@@ -5,9 +5,20 @@ local naughty = require("naughty")
 local wlppr = {}
 
 
-function wlppr.load_new()
+local function set_wallpaper(source_script_name)
+  local bg = (beautiful.gtk and beautiful.gtk.BG or beautiful.xrdb.background)
   awful.spawn.easy_async(
-    '/home/lie/projects/tumblr/env/bin/python /home/lie/projects/tumblr/load_images.py',
+    'bash -c "\
+    set -eu; \
+    img=$(/home/lie/projects/tumblr/env/bin/python /home/lie/projects/tumblr/' .. 
+      source_script_name ..
+    '); \
+    (killall gifview || true) ; \
+    grep -E "\\.gif\\$" <<< ${img} && (\
+      gifview --bg \\"'..bg..'\\" --animate -w root $(\
+        test -f ${img}.orig && echo ${img}.orig || echo ${img}\
+      ) & \
+    ) || nitrogen --save --set-color=\\"'..bg..'\\" --set-tiled ${img}"',
     function(stderr, stdout, reason, code)
       print(' \n')
       print(stdout)
@@ -17,9 +28,18 @@ function wlppr.load_new()
   )
 end
 
+
 function wlppr.cycle()
+  set_wallpaper('save_random_image.py')
+end
+
+function wlppr.cycle_best()
+  set_wallpaper('get_best.py')
+end
+
+function wlppr.load_new()
   awful.spawn.easy_async(
-    'bash -c "nitrogen --set-color='..(beautiful.gtk and beautiful.gtk.BG or beautiful.xrdb.background)..' --set-tiled $(/home/lie/projects/tumblr/env/bin/python /home/lie/projects/tumblr/save_random_image.py)"',
+    '/home/lie/projects/tumblr/env/bin/python /home/lie/projects/tumblr/load_images.py',
     function(stderr, stdout, reason, code)
       print(' \n')
       print(stdout)
@@ -34,16 +54,6 @@ function wlppr.open()
     'bash -c "viewnior $(/home/lie/projects/tumblr/env/bin/python /home/lie/projects/tumblr/get_last_path.py)"',
     function(...)
       log(table.pack(...))
-    end
-  )
-end
-
-function wlppr.cycle_best()
-  awful.spawn.easy_async(
-    'bash -c "nitrogen --set-color='..(beautiful.gtk and beautiful.gtk.BG or beautiful.xrdb.background)..' --set-tiled $(/home/lie/projects/tumblr/env/bin/python /home/lie/projects/tumblr/get_best.py)"',
-    function(stderr, stdout, reason, code)
-      print(stdout)
-      print(stderr)
     end
   )
 end
