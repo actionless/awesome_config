@@ -108,7 +108,8 @@ function common_theme.generate_theme(theme_dir)
   theme.panel_widget_bg_disabled = "theme.xrdb.color8"
   theme.panel_widget_fg_disabled = "theme.bg"
   --theme.panel_opacity		= 0.96
-  theme.panel_opacity		= 0.92
+  --theme.panel_opacity		= 0.92
+  theme.panel_opacity		= 0.87
   theme.basic_panel_height	= 18
   theme.panel_height		= 24
   theme.panel_padding_bottom	= 6
@@ -180,6 +181,7 @@ theme.left_panel_internal_corner_radius = 30
 
   theme.titlebar_height		= 28
   theme.titlebar_opacity	= 0.7
+  theme.titlebar_opacity	= 0.6
   theme.titlebar_position	= 'top'
   theme.titlebar_font		= "theme.font"
   theme.titlebar_fg_focus	= "theme.tasklist_fg_focus"

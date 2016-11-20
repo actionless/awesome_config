@@ -13,6 +13,7 @@ local persistent = require("actionless.persistent")
 
 
 local debug_messages_enabled = false
+--local debug_messages_enabled = true
 local log = function(...) if debug_messages_enabled then nlog(...) end end
 
 
@@ -106,28 +107,31 @@ function signals.init(_)
       )
       ) then
       log("F: tile: titlebars enabled explicitly")
-      titlebar.make_titlebar(c)
+      --titlebar.make_titlebar(c)
+      titlebar.make_titlebar(c, nil, beautiful.titlebar_shadow_focus)
     elseif c.maximized then
       log("F: maximized")
       titlebar.remove_border(c)
     elseif c.floating then
       log("F: floating client")
-      titlebar.make_titlebar(c)
+      --titlebar.make_titlebar(c)
+      titlebar.make_titlebar(c, beautiful._titlebar_bg_focus, beautiful.titlebar_shadow_focus)
     elseif layout == awful.layout.suit.floating then
       log("F: floating layout")
-      titlebar.make_titlebar(c)
+      --titlebar.make_titlebar(c)
+      titlebar.make_titlebar(c, beautiful._titlebar_bg_focus, beautiful.titlebar_shadow_focus)
     elseif num_tiled == 1 then
       if t.master_fill_policy == 'expand' and capi.screen.count() == 1 then
         log("F: one tiling client: expand")
         titlebar.remove_border(c)
       else
         log("F: one tiling client")
-        titlebar.make_border(c)
+        titlebar.make_border(c, beautiful._titlebar_bg_focus, beautiful.titlebar_shadow_focus)
       end
     else
       log("F: more tiling clients")
       c.border_width = beautiful.border_width
-      titlebar.make_border(c)
+      titlebar.make_border(c, beautiful._titlebar_bg_focus, beautiful.titlebar_shadow_focus)
       if not c.fullscreen and beautiful.border_radius and beautiful.border_radius > 0 then
         delayed_call(apply_shape, c, gears.shape.rounded_rect, beautiful.border_radius)
       end
@@ -141,18 +145,21 @@ function signals.init(_)
 
     if persistent.titlebar.get() and (
       num_tiled > 1 or (
-      num_tiled > 0 and t.master_fill_policy ~= 'expand'
+        num_tiled > 0 and t.master_fill_policy ~= 'expand'
       )
-      ) then
+    ) then
       log("U: tile: titlebars enabled explicitly")
-      titlebar.make_titlebar(c)
+      --titlebar.make_titlebar(c)
+      titlebar.make_titlebar(c, beautiful._titlebar_bg_normal, beautiful.titlebar_shadow_normal)
       c.border_color = beautiful.border_normal
     elseif c.floating then
       log("U: floating client")
       c.border_color = beautiful.titlebar_border
+      titlebar.make_titlebar(c, beautiful._titlebar_bg_normal, beautiful.titlebar_shadow_normal)
     elseif layout == awful.layout.suit.floating then
       log("U: floating layout")
       c.border_color = beautiful.titlebar_border
+      titlebar.make_titlebar(c, beautiful._titlebar_bg_normal, beautiful.titlebar_shadow_normal)
     elseif num_tiled == 1 then
       if t.master_fill_policy == 'expand' and capi.screen.count() == 1 then
         log("U: one tiling client: expand")
@@ -160,27 +167,28 @@ function signals.init(_)
       else
         log("U: one tiling client")
         c.border_color = beautiful.border_normal
-        titlebar.make_border(c)
+        titlebar.make_border(c, beautiful._titlebar_bg_normal, beautiful.titlebar_shadow_normal)
       end
     else
       log("U: more tiling clients")
-      titlebar.make_border(c)
+      titlebar.make_border(c, beautiful._titlebar_bg_normal, beautiful.titlebar_shadow_normal)
       c.border_color = beautiful.border_normal
     end
   end
 
 
   local function on_client_unfocus (c)
-    delayed_call(function()
-      if not c.valid then return end
-      for _, sel_tag in ipairs(c.screen.selected_tags) do
-        for _, cli_tag in ipairs(c:tags()) do
-          if sel_tag.index == cli_tag.index then
-            return _on_client_unfocus(c)
-          end
-        end
-      end
-    end)
+    return _on_client_unfocus(c)
+    --delayed_call(function()
+      --if not c.valid then return end
+      --for _, sel_tag in ipairs(c.screen.selected_tags) do
+        --for _, cli_tag in ipairs(c:tags()) do
+          --if sel_tag.index == cli_tag.index then
+            --return _on_client_unfocus(c)
+          --end
+        --end
+      --end
+    --end)
   end
 
   -- New client appears
@@ -195,6 +203,9 @@ function signals.init(_)
       -- Prevent clients from being unreachable after screen count change
       awful.placement.no_offscreen(c)
     end
+    --delayed_call(function()
+      --return on_client_focus(c)
+    --end)
   end)
 
 
@@ -235,7 +246,7 @@ function signals.init(_)
   --end)
 
   client.connect_signal("request::titlebars", function(c)
-    titlebar.make_titlebar(c)
+    --titlebar.make_titlebar(c)
   end)
 
 
