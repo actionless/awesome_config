@@ -18,11 +18,20 @@ wget https://gist.githubusercontent.com/actionless/229eef7795915068bad9/raw/08c2
  - [lcars](http://i.imgur.com/8C6l5ko.gifv) layout
  - in `*-xresources` themes panel [adapts](http://imgur.com/a/qIAAa) for current xrdb theme
 
+`themes/lcars-xresourecs-hidpi/theme.lua`
+![Screenshot](https://github.com/actionless/awesome_config/raw/devel/screenshots/screenshot_new.png "Screenshot")
+
+`themes/twmish/theme.lua` and [this](https://github.com/actionless/oomox/blob/master/colors/retro/classic_x_new) oomox theme
+![Screenshot](https://i.redd.it/hre8tx9vynyx.png "Screenshot")
+
+`themes/gtk/theme.lua` and [this](https://github.com/actionless/oomox/blob/master/colors/retro/uzi) oomox theme
+![Screenshot](http://i.imgur.com/fhl6wYp.png "Screenshot")
+
+Lcars layout:
 ![Screenshot](https://raw.githubusercontent.com/actionless/awesome_config/devel/screenshots/screenshot.png "Screenshot")
 
 The same screenshot with other colors set in ~/.Xresources:
 
-![Screenshot](https://raw.githubusercontent.com/actionless/awesome_config/devel/screenshots/screenshot_lcars.png "Screenshot")
 
 #### Widget popups
 
