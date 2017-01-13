@@ -195,6 +195,7 @@ theme.border_width = dpi(5)
 theme.useless_gap = dpi(4)
 
 theme.border_width = dpi(3)
+--theme.border_width = dpi(15)
 theme.border_shadow_width = dpi(5)
 
 

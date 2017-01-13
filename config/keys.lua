@@ -41,8 +41,10 @@ awful.layout.suit.tile.resize_jump_to_corner = false
   awesome_context.clientbuttons = awful.util.table.join(
     awful.button({ }, 1,
       function (c)
-        client.focus = c;
-        c:raise();
+        if c.focusable then
+          client.focus = c;
+          c:raise();
+        end
       end),
     awful.button({ modkey }, 1, awful.mouse.client.move),
     awful.button({ modkey }, 3, function(c)
@@ -136,6 +138,10 @@ local globalkeys = awful.util.table.join(
   bind_key({ modkey,  "Control"  }, "d",
     function() awful.spawn.with_shell("sleep 1 && xset dpms force off") end,
     "turn off display", AWESOME_COLOR
+  ),
+  bind_key({ modkey,  }, "o",
+    function() awful.spawn.with_shell("/home/lie/.screenlayout/cycle.sh") end,
+    "rotate display", AWESOME_COLOR
   ),
 
 
@@ -810,10 +816,10 @@ awesome_context.clientkeys = awful.util.table.join(
     function (c) c:swap(awful.client.getmaster()) end,
     "put client on master", CLIENT_MOVE
   ),
-  bind_key({ modkey,        }, "o",
-    function(c) c:move_to_screen() end,
-    "move client to other screen", CLIENT_MOVE
-  ),
+  --bind_key({ modkey,        }, "o",
+    --function(c) c:move_to_screen() end,
+    --"move client to other screen", CLIENT_MOVE
+  --),
   bind_key({ modkey,        }, "t",
     function (c) c.ontop = not c.ontop end,
     "toggle client on top", CLIENT_MANIPULATION

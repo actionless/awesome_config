@@ -29,7 +29,7 @@ function autorun.init(awesome_context)
   awful.spawn.with_shell("start-pulseaudio-x11")
   run_once("xfce4-power-manager")
   run_once("dropbox")
-  run_once("megasync")
+  --run_once("megasync")
   --run_once("xscreensaver -no-splash")
   --run_once("unclutter -root")
   run_once("unclutter")
@@ -37,6 +37,8 @@ function autorun.init(awesome_context)
   run_once("kbdd")
   --run_once("mopidy -q 2>&1 >> $HOME/.cache/mopidy.log")
   --run_once("urxvtd")
+  
+  run_once("touchegg")
 
   for _, item in ipairs(awesome_context.autorun) do
     awful.spawn.with_shell(item)

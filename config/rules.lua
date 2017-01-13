@@ -52,6 +52,17 @@ function rules.init(awesome_context)
           tag=capi.screen.primary.tags[6],
         },
       },
+
+      { rule = { class = "Onboard"},
+        callback = function(c)
+          nlog(c)
+          c.focusable = false
+          c.valid = false
+          c.ontop = true
+          c.sticky = true
+        end
+      },
+
       { rule = { class = "Transmission-gtk", role = "tr-info" },
         properties = {
           floating = false,
