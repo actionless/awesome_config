@@ -168,13 +168,7 @@ theme.border_normal = theme.border_normal .."66"
 theme.border_focus = theme.border_focus .."66"
 
 -- Recolor titlebar icons:
-local theme_assets
-pcall(function()
-  theme_assets = dofile("/usr/share/awesome/themes/xresources/assets.lua")
-end)
-if not theme_assets then
-  theme_assets = dofile(helpers.get_nix_xresources_theme_path().."/assets.lua")
-end
+local theme_assets = require("beautiful.theme_assets")
 theme = theme_assets.recolor_layout(theme, theme.fg_normal)
 theme = theme_assets.recolor_titlebar_normal(theme, theme.titlebar_fg_normal)
 theme = theme_assets.recolor_titlebar_focus(theme, theme.titlebar_fg_focus)
