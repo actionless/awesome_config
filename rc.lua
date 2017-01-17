@@ -1,3 +1,4 @@
+pcall(function() jit.on() end)
 --[[
 OH HI
 --]]
