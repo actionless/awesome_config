@@ -193,9 +193,9 @@ function toolbar.init(awesome_context)
       --loaded_widgets.temp,
       --loaded_widgets.bat,
     }
-    left_panel_bottom_layouts[si] = wibox.layout.fixed.vertical(table.unpack(left_panel_widgets[si]))
+    left_panel_bottom_layouts[si] = wibox.layout.fixed.vertical(h_table.unpack(left_panel_widgets[si]))
 
-    left_panel_top_layouts[si] = wibox.layout.fixed.vertical(table.unpack(h_table.reversed(left_panel_widgets[si])))
+    left_panel_top_layouts[si] = wibox.layout.fixed.vertical(h_table.unpack(h_table.reversed(left_panel_widgets[si])))
     leftwibox_separator[si] = common.constraint({
       height = 0,
       widget = wibox.layout.align.horizontal(

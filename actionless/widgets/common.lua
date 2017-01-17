@@ -514,7 +514,7 @@ function common.newdecoration(args)
   local shape_args = args.shape_args or {}
   local background = wibox.container.background(widget, bg)
   background:set_fg(fg)
-  background:set_shape(shape, table.unpack(shape_args))
+  background:set_shape(shape, h_table.unpack(shape_args))
   for k, v in pairs(widget) do
     if not h_table.hasvalue(AWESOME_METHODS, k) then
       background[k] = v
