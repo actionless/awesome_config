@@ -135,6 +135,7 @@ function widget_loader.init(awesome_context)
         screen = s,
         bg = beautiful.widget_close_bg,
         fg = beautiful.widget_close_fg,
+        error_color_on_hover = beautiful.widget_close_error_color_on_hover,
       }
     )
 

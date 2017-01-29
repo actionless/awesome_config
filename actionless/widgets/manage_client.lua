@@ -20,6 +20,7 @@ local function worker(args)
   args	 = args or {}
   args.bg = args.bg or beautiful.panel_widget_bg or beautiful.fg
   args.fg = args.fg or beautiful.panel_widget_fg or beautiful.bg
+  args.error_color_on_hover = args.error_color_on_hover or false
   local widget_screen = args.screen or awful.screen.focused()
 
   local object = {}
@@ -33,8 +34,11 @@ local function worker(args)
 
   widget._on_mouse_enter = function ()
     if not widget.is_managing then
-      --widget:set_error()
-      widget:set_bg(color_utils.darker(args.bg, -20))
+      if args.error_color_on_hover then
+        widget:set_error()
+      else
+        widget:set_bg(color_utils.darker(args.bg, -20))
+      end
     else
       widget:set_warning()
     end
