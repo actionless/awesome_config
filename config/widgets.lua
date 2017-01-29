@@ -135,7 +135,6 @@ function widget_loader.init(awesome_context)
         screen = s,
         bg = beautiful.widget_close_bg,
         fg = beautiful.widget_close_fg,
-        awesome_context = awesome_context,
       }
     )
 

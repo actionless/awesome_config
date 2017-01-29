@@ -54,7 +54,9 @@ local function worker(args)
         capi.client.focus:kill()
       end
     end),
-    awful.button({ }, 3, widget.toggle)
+    awful.button({ }, 3, function()
+      widget.toggle()
+    end)
   )
   widget:buttons(widget._buttons_table)
 
