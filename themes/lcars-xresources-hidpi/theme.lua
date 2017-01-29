@@ -138,11 +138,6 @@ theme.titlebar_fg_focus		= "theme.titlebar_fg_normal"
 theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
 
 
---if color_utils.is_dark(theme.xrdb.background) then
-  --theme.border_normal = color_utils.darker(theme.xrdb.background, -20)
---else
-  --theme.border_normal = color_utils.darker(theme.xrdb.background, 20)
---end
 --theme.titlebar_border           = theme.border_normal
 
 theme.panel_widget_spacing = dpi(10)
@@ -156,7 +151,10 @@ theme.panel_widget_fg_error = theme.xrdb.color15
 theme.widget_music_bg = theme.xrdb.color11
 theme.widget_music_fg = theme.bg
 
-theme.widget_close_bg = theme.tasklist_fg_focus
+--theme.tasklist_fg_focus = "theme.fg"
+theme.tasklist_fg_focus = theme.xrdb.foreground
+
+theme.widget_close_bg = "theme.panel_widget_bg"
 
 --theme.wallpaper_cmd     = "hsetroot -solid \"" .. theme.bg .. "\""
 
@@ -172,5 +170,19 @@ local theme_assets = require("beautiful.theme_assets")
 theme = theme_assets.recolor_layout(theme, theme.fg_normal)
 theme = theme_assets.recolor_titlebar_normal(theme, theme.titlebar_fg_normal)
 theme = theme_assets.recolor_titlebar_focus(theme, theme.titlebar_fg_focus)
+
+
+color_utils = require("utils.color")
+if color_utils.is_dark(theme.xrdb.background) then
+  --theme.clock_fg  = theme.xrdb.color15
+  theme.clock_fg = color_utils.darker(theme.xrdb.foreground, -16)
+  --theme.tasklist_fg_focus = color_utils.darker(theme.fg, -33)
+  theme.tasklist_fg_focus = color_utils.darker(theme.xrdb.foreground, 12)
+  --theme.border_normal = color_utils.darker(theme.xrdb.background, -20)
+else
+  --theme.clock_fg  = theme.xrdb.color0
+  theme.clock_fg = color_utils.darker(theme.xrdb.foreground, 16)
+  --theme.border_normal = color_utils.darker(theme.xrdb.background, 20)
+end
 
 return theme

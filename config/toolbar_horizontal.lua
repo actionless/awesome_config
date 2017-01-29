@@ -19,6 +19,16 @@ function toolbar.init(awesome_context)
   local separator  = common.constraint({ width=dpi(8), })
   local iseparator  = wibox.container.background(separator, beautiful.panel_widget_bg)
 
+  local apw = wibox.layout.fixed.horizontal(
+    common.panel_shape(
+      common.constraint({
+        widget=loaded_widgets.volume,
+        width=dpi(120),
+      })
+    ),
+    separator
+  )
+
   awesome_context.topwibox_layout_fallback = {}
   -- Create a wibox for each screen and add it
   awful.screen.connect_for_each_screen(function(s)
@@ -40,7 +50,7 @@ function toolbar.init(awesome_context)
     left_margin:buttons(manage_client._buttons_table)
     left_margin:connect_signal("mouse::enter", manage_client._on_mouse_enter)
     left_margin:connect_signal("mouse::leave", manage_client._on_mouse_leave)
-    local left_layout = wibox.layout.fixed.horizontal(
+    local left_layout_left = wibox.layout.fixed.horizontal(
       left_margin,
       common.panel_shape(loaded_widgets.screen[si].manage_client),
       sep,
@@ -48,11 +58,21 @@ function toolbar.init(awesome_context)
       sep,
       sep,
       loaded_widgets.kbd,
-      sep,
+      sep
+    )
+    local left_layout_middle = wibox.layout.fixed.horizontal(
       loaded_widgets.screen[si].tasklist,
       separator
     )
-    left_layout:buttons(wheel_binding)
+    left_layout_left:buttons(wheel_binding)
+    left_layout_middle:buttons(wheel_binding)
+    local left_layout = wibox.widget{
+      left_layout_left,
+      left_layout_middle,
+      awesome_context.apw_on_the_left and apw,
+      layout = wibox.layout.align.horizontal,
+      expand = 'inside'
+    }
 
 
     -- CENTER
@@ -68,15 +88,11 @@ function toolbar.init(awesome_context)
     )
 
     local right_layout_right = wibox.layout.fixed.horizontal(
-      separator,
-      common.panel_shape(
-        common.constraint({
-          widget=loaded_widgets.volume,
-          width=dpi(120),
-        })
-      ),
       separator
     )
+    if not awesome_context.apw_on_the_left then
+      right_layout_right:add(apw)
+    end
 
     local indicators_layout = wibox.layout.fixed.horizontal(
       iseparator,

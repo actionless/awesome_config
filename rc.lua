@@ -6,6 +6,7 @@ OH HI
 -- localization
 os.setlocale(os.getenv("LANG"))
 local editor = "vim"
+require("awful.hotkeys_popup.keys.vim")
 
 local xresources = require("beautiful.xresources")
 local awful = require("awful")
@@ -69,6 +70,8 @@ context = {
   have_battery = true,
   new_top = true,
   sensor = "Core 0",
+
+  apw_on_the_left = false,
 
 }
 

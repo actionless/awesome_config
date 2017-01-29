@@ -113,6 +113,7 @@ function widget_loader.init(awesome_context)
     w.lcars_textclock = widgets.common.decorated({
       widget = wibox.widget.textclock("%H:%M"),
       valign = "bottom",
+      fg=beautiful.clock_fg,
     })
     widgets.calendar:attach(w.lcars_textclock, {fg=beautiful.theme, position="top_left"})
   end
@@ -236,9 +237,9 @@ function widget_loader.init(awesome_context)
       awful.widget.tasklist.filter.minimizedcurrenttags,
       tasklist_buttons,
       nil,
-      tasklist_addon.sorted_update,
-      wibox.layout.flex.horizontal()
+      tasklist_addon.sorted_update
     )
+
 
     if lcarslist_enabled then
       sw.lcarslist = widgets.lcarslist(
