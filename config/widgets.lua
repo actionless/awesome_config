@@ -120,7 +120,7 @@ function widget_loader.init(awesome_context)
   local markup = require("utils.markup")
   local textclock = wibox.widget.textclock(markup.fg(beautiful.clock_fg or beautiful.panel_fg, "%H:%M"))
   w.textclock = textclock
-  widgets.calendar:attach(w.textclock, {fg=beautiful.theme, position="top_right"})
+  widgets.calendar:attach(w.textclock, {fg=(beautiful.calendar_fg or beautiful.theme), position="top_right"})
 
 
   w.screen = {}
