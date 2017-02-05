@@ -71,5 +71,11 @@ function rules.init(awesome_context)
       },
 
   }
+  --awful.ewmh.add_activate_filter(function(c, source)
+      --nlog({source, c.class})
+      --if source=="rules" and c.class == "Firefox-developer-edition" then
+        --return false
+      --end
+  --end)
 end
 return rules
