@@ -223,7 +223,6 @@ theme.taglist_bg_occupied	= gtk.HDR_BTN_BG
 theme.border_normal = gtk.MENU_BG
 theme.border_focus = MAIN_COLOR
 theme.titlebar_border = gtk.MENU_BG
-
 theme.titlebar_fg_normal	= color_utils.mix(gtk.MENU_FG, gtk.MENU_BG)
 theme.titlebar_bg_normal	= "theme.titlebar_border"
 if theme.border_radius > 0 then
@@ -235,6 +234,19 @@ else
   theme.titlebar_fg_focus		= gtk.SEL_FG
   theme.titlebar_bg_focus		= gtk.SEL_BG
 end
+pcall(function()
+  if OOMOX_BORDER then
+    theme.border_normal = OOMOX_BORDER
+    theme.titlebar_border = OOMOX_BORDER
+  end
+end)
+pcall(function()
+  if OOMOX_SEL_BORDER then
+    theme.border_focus = OOMOX_SEL_BORDER
+    theme.titlebar_bg_focus = OOMOX_SEL_BORDER
+  end
+end)
+
 
 
 --if color_utils.is_dark(theme.xrdb.background) then
