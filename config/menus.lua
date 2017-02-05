@@ -36,7 +36,9 @@ function menus.init(context)
     { "manual", context.cmds.terminal .. " -e man awesome" },
     { "edit config", context.cmds.editor_cmd .. " " .. awesome.conffile },
     { "restart", awesome.restart },
-    { "quit", awesome.quit }
+    { "quit", function() awesome.quit() end},
+    { "quit2", function() awesome.quit(2) end},
+    { "poweroff", "poweroff" },
   }
 
   function context.menu.mainmenu_show(nomouse)
