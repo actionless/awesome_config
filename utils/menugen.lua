@@ -22,7 +22,8 @@ awesome_menu_gen.all_menu_dirs = { '/usr/share/applications/', '/usr/local/share
 awesome_menu_utils.wm_name = ""
 
 -- Use MenuBar Parsing Utils to build StartMenu for Awesome
--- @return awful.menu compliant menu items tree
+-- @return callback
+-- @param callback.menulist awful.menu compliant menu items tree
 function menugen.build_menu(callback)
   awesome_menu_gen.generate(function(menulist)
 
