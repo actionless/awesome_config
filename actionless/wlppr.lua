@@ -15,7 +15,7 @@ local function set_wallpaper(source_script_name)
     '); \
     (killall gifview || true) ; \
     grep -E "\\.gif\\$" <<< ${img} && (\
-      gifview --bg \\"'..bg..'\\" --animate -w root $(\
+      xwinwrap -ov -fs -- gifview --bg \\"'..bg..'\\" --animate -w WID $(\
         test -f ${img}.orig && echo ${img}.orig || echo ${img}\
       ) & \
     ) || nitrogen --save --set-color=\\"'..bg..'\\" --set-tiled ${img}"',
