@@ -2,7 +2,6 @@ local awful = require("awful")
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
 local create_theme = require("actionless.common_theme").create_theme
-local helpers = require("actionless.helpers")
 
 local theme_name = "lcars-xresources-hidpi"
 
@@ -99,6 +98,9 @@ theme.useless_gap = dpi(5)
 theme.border_width = dpi(5)
 theme.useless_gap = dpi(4)
 
+theme.border_width = dpi(4)
+theme.border_radius = dpi(5)
+
 theme.base_border_width = theme.border_width
 theme.border_width = 0
 
@@ -136,6 +138,8 @@ theme.titlebar_fg_normal	= "theme.tasklist_fg_normal"
 theme.titlebar_bg_normal	= "theme.titlebar_border"
 theme.titlebar_fg_focus		= "theme.titlebar_fg_normal"
 theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
+--theme.titlebar_bg_focus		= "theme.border_focus"
+theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
 
 
 --theme.titlebar_border           = theme.border_normal
@@ -165,6 +169,10 @@ theme = create_theme({ theme_name=theme_name, theme=theme, })
 theme.border = theme.border .."66"
 theme.border_normal = theme.border_normal .."66"
 theme.border_focus = theme.border_focus .."66"
+theme.titlebar_bg_normal	= theme.titlebar_bg_normal.."dd"
+theme._titlebar_bg_normal	= theme.titlebar_bg_normal.."dd"
+theme.titlebar_bg_focus		= theme.titlebar_bg_focus.."dd"
+theme._titlebar_bg_focus		= theme.titlebar_bg_focus.."dd"
 
 -- Recolor titlebar icons:
 local theme_assets = require("beautiful.theme_assets")
@@ -173,7 +181,7 @@ theme = theme_assets.recolor_titlebar_normal(theme, theme.titlebar_fg_normal)
 theme = theme_assets.recolor_titlebar_focus(theme, theme.titlebar_fg_focus)
 
 
-color_utils = require("utils.color")
+local color_utils = require("utils.color")
 if color_utils.is_dark(theme.xrdb.background) then
   --theme.clock_fg  = theme.xrdb.color15
   theme.clock_fg = color_utils.darker(theme.xrdb.foreground, -16)

@@ -19,11 +19,11 @@ local log = function(...) if debug_messages_enabled then nlog(...) end end
 
 local signals = {}
 
+
 function signals.init(_)
 
 
   local function apply_shape(draw, shape, ...)
-
     local client_tag = draw.first_tag
     if not client_tag then
       nlog('no client tag')
@@ -107,8 +107,7 @@ function signals.init(_)
       )
       ) then
       log("F: tile: titlebars enabled explicitly")
-      --titlebar.make_titlebar(c)
-      titlebar.make_titlebar(c, nil, beautiful.titlebar_shadow_focus)
+      titlebar.make_titlebar(c, beautiful._titlebar_bg_focus, beautiful.titlebar_shadow_focus)
     elseif c.maximized then
       log("F: maximized")
       titlebar.remove_border(c)
@@ -202,10 +201,20 @@ function signals.init(_)
     then
       -- Prevent clients from being unreachable after screen count change
       awful.placement.no_offscreen(c)
+      delayed_call(function()
+        --local tagged
+        --tagged = function()
+          if c == client.focus then
+            on_client_focus(c)
+          else
+            on_client_unfocus(c)
+          end
+          --c.disconnect_signal("tagged", tagged)
+        --end
+        --c.connect_signal("tagged", tagged)
+        --c.connect_signal("request::activate", tagged)
+      end)
     end
-    --delayed_call(function()
-      --return on_client_focus(c)
-    --end)
   end)
 
 
@@ -245,9 +254,9 @@ function signals.init(_)
   --end
   --end)
 
-  client.connect_signal("request::titlebars", function(c)
+  --client.connect_signal("request::titlebars", function(c)
     --titlebar.make_titlebar(c)
-  end)
+  --end)
 
 
 end

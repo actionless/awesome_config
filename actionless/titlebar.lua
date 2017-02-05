@@ -69,20 +69,6 @@ function titlebar.make_border(c, color, shadow, is_titlebar)
   --c.border_width = 0
   --c.border_color = beautiful.border_normal
 
-  --               Left titlebar                --
-  local tbl = awful.titlebar(c,{size= beautiful.base_border_width or 5,position="left"})
-  tbl:setup {
-          {
-            left   = beautiful.base_border_width,
-            layout = wibox.container.margin,
-          },
-    buttons = get_buttons(c),
-    --bg        = beautiful.titlebar_bg_left or beautiful.titlebar_bg_sides or beautiful.fg_normal,
-    bg=color,
-    --bgimage   = beautiful.titlebar_bgimage_left,
-    widget    = wibox.container.background
-  }
-
   if shadow then 
 
     local SHADOW = shadow
@@ -116,6 +102,20 @@ function titlebar.make_border(c, color, shadow, is_titlebar)
         layout = wibox.container.background,
       }
     end
+
+    --               Left titlebar                --
+    local tbl = awful.titlebar(c,{size= beautiful.base_border_width or 5,position="left"})
+    tbl:setup {
+            {
+              left   = beautiful.base_border_width,
+              layout = wibox.container.margin,
+            },
+      buttons = get_buttons(c),
+      --bg        = beautiful.titlebar_bg_left or beautiful.titlebar_bg_sides or beautiful.fg_normal,
+      bg=color,
+      --bgimage   = beautiful.titlebar_bgimage_left,
+      widget    = wibox.container.background
+    }
 
     local tbr = awful.titlebar(c,{size= (beautiful.base_border_width or 5)+(beautiful.border_shadow_width or 0),position="right"})
     tbr:setup{
@@ -225,11 +225,23 @@ function titlebar.make_border(c, color, shadow, is_titlebar)
         layout = wibox.container.background,
       }
     end
+    --               Left titlebar                --
+    local tbl = awful.titlebar(c,{size= beautiful.base_border_width or 5,position="left"})
+    tbl:setup {
+      buttons = get_buttons(c),
+      --bg        = beautiful.titlebar_bg_left or beautiful.titlebar_bg_sides or beautiful.fg_normal,
+      bg=color,
+      --bgimage   = beautiful.titlebar_bgimage_left,
+      id     = "main_layout",
+      widget    = wibox.container.background
+    }
+
     --               Right titlebar                --
     local tbr = awful.titlebar(c,{size= beautiful.base_border_width or 5,position="right"})
     tbr:setup {
       buttons = get_buttons(c),
-      bgimage   = beautiful.titlebar_bgimage_right,
+      --bgimage   = beautiful.titlebar_bgimage_right,
+      id     = "main_layout",
       widget    = wibox.container.background
     }
     --              Bottom titlebar                --
