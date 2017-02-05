@@ -80,6 +80,8 @@ theme.bg_normal = gtk.SEL_BG
 theme.fg_focus		= gtk.SEL_BG
 theme.bg_focus		= gtk.SEL_FG
 
+theme.theme = gtk.SEL_FG
+
 theme.panel_fg = gtk.SEL_FG
 theme.panel_bg = gtk.SEL_BG
 
@@ -93,6 +95,7 @@ theme.panel_widget_border_radius = dpi(gtk.ROUNDNESS*0.7)
 theme.panel_widget_border_width = dpi(2)
 --theme.panel_widget_border_color = color_utils.mix(gtk.MENU_FG, gtk.MENU_BG, 0.5)
 theme.panel_widget_border_color = color_utils.mix(gtk.MENU_FG, gtk.MENU_BG, 0.3)
+theme.notification_border_color = gtk.SEL_FG
 
 theme.widget_close_bg = gtk.SEL_FG
 theme.widget_close_fg = gtk.SEL_BG
