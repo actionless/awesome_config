@@ -7,12 +7,31 @@ local autorun = {}
 
 function autorun.init(awesome_context)
 
-  awful.spawn.with_shell('xinput set-prop 12 "Device Accel Velocity Scaling" 26')
-  awful.spawn.with_shell('xinput set-prop 12 "Evdev Middle Button Emulation" 1')
-  awful.spawn.with_shell('xinput set-prop 12 "Evdev Wheel Emulation" 1')
-  awful.spawn.with_shell('xinput set-prop 12 "Evdev Wheel Emulation Button" 3')
-  awful.spawn.with_shell('xinput set-prop 12 "Evdev Wheel Emulation Inertia" 20')
-  awful.spawn.with_shell('xinput set-prop 12 "Evdev Wheel Emulation Timeout" 200')
+  --local kensinton =12
+  local kensington = nil
+  --local sanwa_pad = 12
+  local sanwa_pad = nil
+  --local sanwa_big = 12
+
+  -- Kensington
+  if kensington then
+    awful.spawn.with_shell('xinput set-prop ' .. kensington .. ' "Device Accel Velocity Scaling" 26')
+    awful.spawn.with_shell('xinput set-prop ' .. kensington .. ' "Evdev Middle Button Emulation" 1')
+    awful.spawn.with_shell('xinput set-prop ' .. kensington .. ' "Evdev Wheel Emulation" 1')
+    awful.spawn.with_shell('xinput set-prop ' .. kensington .. ' "Evdev Wheel Emulation Button" 3')
+    awful.spawn.with_shell('xinput set-prop ' .. kensington .. ' "Evdev Wheel Emulation Inertia" 20')
+    awful.spawn.with_shell('xinput set-prop ' .. kensington .. ' "Evdev Wheel Emulation Timeout" 200')
+  end
+
+  -- Sanwa
+  if sanwa_pad then
+    awful.spawn.with_shell('xinput set-prop ' .. sanwa_pad .. ' "Device Accel Velocity Scaling" 26')
+    awful.spawn.with_shell('xinput set-prop ' .. sanwa_pad .. ' "Evdev Middle Button Emulation" 1')
+    awful.spawn.with_shell('xinput set-prop ' .. sanwa_pad .. ' "Evdev Wheel Emulation" 1')
+    awful.spawn.with_shell('xinput set-prop ' .. sanwa_pad .. ' "Evdev Wheel Emulation Button" 2')
+    awful.spawn.with_shell('xinput set-prop ' .. sanwa_pad .. ' "Evdev Wheel Emulation Inertia" 50')
+    awful.spawn.with_shell('xinput set-prop ' .. sanwa_pad .. ' "Evdev Wheel Emulation Timeout" 200')
+  end
 
   --run_once("gnome-session")
   --run_once("/usr/lib/gnome-settings-daemon/gnome-settings-daemon")
