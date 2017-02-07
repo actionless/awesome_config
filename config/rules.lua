@@ -7,6 +7,7 @@ local capi = {
 local rules = {}
 
 function rules.init(awesome_context)
+
   -- Rules to apply to new clients (through the "manage" signal).
   awful.rules.rules = {
 
@@ -23,7 +24,21 @@ function rules.init(awesome_context)
           size_hints_honor = false,
           screen = awful.screen.preferred,
         },
-        callback = awful.client.setslave
+        callback = function(c)
+          awful.client.setslave(c)
+          if not c.class and not c.name then
+            nlog({"begin", c.class, c.name})
+            local f
+            f = function(_c)
+                nlog({"end", _c.class, _c.name})
+                _c:disconnect_signal("property::name", f)
+                if _c.name == "Spotify" then
+                    awful.rules.apply(_c)
+                end
+            end
+            c:connect_signal("property::name", f)
+          end
+        end
       },
       -- Add titlebars to normal clients and dialogs
       { rule = {type = "dialog"},
@@ -40,16 +55,22 @@ function rules.init(awesome_context)
         }
       },
 
-      --{ rule = { class = "Spotify" },
-        --properties = {
-          --tag=capi.screen.primary.tags[7],
-          --raise=false
-        --}
-      --},
+      { rule = { name = "Spotify" },
+        properties = {
+          tag=capi.screen.primary.tags[7],
+          raise=false
+        }
+      },
 
       { rule = { class = "Transmission-gtk"},
         properties = {
           tag=capi.screen.primary.tags[6],
+        },
+      },
+      { rule = { class = "Transmission-gtk", role = "tr-info" },
+        properties = {
+          floating = false,
+          ontop = false,
         },
       },
 
@@ -61,13 +82,6 @@ function rules.init(awesome_context)
           c.ontop = true
           c.sticky = true
         end
-      },
-
-      { rule = { class = "Transmission-gtk", role = "tr-info" },
-        properties = {
-          floating = false,
-          ontop = false,
-        },
       },
 
   }
