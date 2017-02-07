@@ -27,6 +27,7 @@ read_globals = {
     "selection",
     "tag",
     "window",
+    "unpack",
 }
 -- May not be read-only due to client.focus
 globals = {
