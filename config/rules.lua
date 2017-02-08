@@ -31,12 +31,12 @@ function rules.init(awesome_context)
             local f
             f = function(_c)
                 nlog({"end", _c.class, _c.name})
-                _c:disconnect_signal("property::name", f)
-                if _c.name == "Spotify" then
+                _c:disconnect_signal("property::class", f)
+                if _c.class == "Spotify" then
                     awful.rules.apply(_c)
                 end
             end
-            c:connect_signal("property::name", f)
+            c:connect_signal("property::class", f)
           end
         end
       },
@@ -55,7 +55,7 @@ function rules.init(awesome_context)
         }
       },
 
-      { rule = { name = "Spotify" },
+      { rule = { class = "Spotify" },
         properties = {
           tag=capi.screen.primary.tags[7],
           raise=false
