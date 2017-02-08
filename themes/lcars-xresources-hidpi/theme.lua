@@ -165,14 +165,16 @@ theme.widget_close_error_color_on_hover = true
 
 theme = create_theme({ theme_name=theme_name, theme=theme, })
 
---theme.titlebar_bg_normal = theme.titlebar_bg_normal .."66"
-theme.border = theme.border .."66"
-theme.border_normal = theme.border_normal .."66"
-theme.border_focus = theme.border_focus .."66"
-theme.titlebar_bg_normal	= theme.titlebar_bg_normal.."dd"
-theme._titlebar_bg_normal	= theme.titlebar_bg_normal.."dd"
-theme.titlebar_bg_focus		= theme.titlebar_bg_focus.."dd"
-theme._titlebar_bg_focus		= theme.titlebar_bg_focus.."dd"
+if awesome.composite_manager_running then
+  --theme.titlebar_bg_normal = theme.titlebar_bg_normal .."66"
+  theme.border = theme.border .."66"
+  theme.border_normal       = theme.border_normal .."66"
+  theme.border_focus        = theme.border_focus .."66"
+  theme.titlebar_bg_normal  = theme.titlebar_bg_normal.."dd"
+  theme._titlebar_bg_normal = theme.titlebar_bg_normal.."dd"
+  theme.titlebar_bg_focus   = theme.titlebar_bg_focus.."dd"
+  theme._titlebar_bg_focus  = theme.titlebar_bg_focus.."dd"
+end
 
 -- Recolor titlebar icons:
 local theme_assets = require("beautiful.theme_assets")
