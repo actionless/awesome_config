@@ -169,12 +169,13 @@ local globalkeys = awful.util.table.join(
       local tag_id = tag.index
       awful.prompt.run(
         { prompt = "new tag name: ",
-          text = tag_id .. ":" },
-        awesome_context.widgets.screen[s.index].promptbox.widget,
-        function(new_name)
-          if not new_name or #new_name == 0 then return end
-          persistent.tag.rename(new_name, tag, s, tag_id)
-        end)
+          text = tag_id .. ":" ,
+          textbox = awesome_context.widgets.screen[s.index].promptbox.widget,
+          exe_callback = function(new_name)
+            if not new_name or #new_name == 0 then return end
+            persistent.tag.rename(new_name, tag, s, tag_id)
+          end
+        })
     end,
     "Rename tag", TAG_COLOR
   ),
@@ -383,15 +384,14 @@ local globalkeys = awful.util.table.join(
   ),
   bind_key({ modkey }, "x",
     function ()
-      awful.prompt.run(
-        { prompt = "Run Lua code: " },
-        awesome_context.widgets.screen[awful.screen.focused().index].promptbox.widget,
-        awful.util.eval,
-        nil,
-        awful.util.getdir("cache") .. "/history_eval"
-      )
+      awful.prompt.run {
+        prompt       = "Run Lua code: ",
+        textbox = awesome_context.widgets.screen[awful.screen.focused().index].promptbox.widget,
+        exe_callback = awful.util.eval,
+        history_path = awful.util.get_cache_dir() .. "/history_eval"
+      }
     end,
-    "eXecute lua code", LAUNCHER
+    "execute lua code", LAUNCHER
   ),
 
   -- ALSA volume control

@@ -167,15 +167,13 @@ function widget_loader.init(awesome_context)
         sw.taglist.buttons
     )
 
-
     -- promptbox
-    sw.promptbox = widgets.common.newdecoration({
-      widget = awful.widget.prompt({ }),
-      bg = beautiful.panel_widget_bg_warning,
-      fg = beautiful.panel_widget_fg_warning,
-      shape = gears.shape.rounded_rect,
-      shape_args = {beautiful.panel_widget_border_radius},
-    })
+    sw.promptbox = awful.widget.prompt()
+    sw.promptbox.fg = beautiful.panel_widget_fg_warning
+    sw.promptbox.bg = beautiful.panel_widget_bg_warning
+    sw.promptbox.shape = function(_c, _w, _h)
+      return gears.shape.rounded_rect(_c, _w, _h, beautiful.panel_widget_border_radius)
+    end
 
     -- tasklist
     local tasklist_buttons = awful.util.table.join(
