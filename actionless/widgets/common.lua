@@ -10,13 +10,58 @@ local beautiful = require("beautiful")
 local h_table = require("utils.table")
 
 
-local function get_color(color_n)
-  return beautiful[color_n]
+local common = {}
+
+
+function common.centered(widget)
+  if not widget then widget=wibox.container.background() end
+  local centered_widget = {}
+  centered_widget.widget = widget
+
+  local horizontal_align = wibox.layout.align.horizontal()
+  horizontal_align:set_second(widget)
+  local vertical_align = wibox.layout.align.vertical()
+  vertical_align:set_second(horizontal_align)
+
+  setmetatable(centered_widget, { __index = centered_widget.widget })
+  return setmetatable(centered_widget, { __index = vertical_align })
 end
 
 
-local common = {}
+function common.constraint(args)
+  args = args or {}
+  local strategy = args.strategy or "exact"
+  local result = wibox.container.constraint()
+  result:set_strategy(strategy)
+  if args.width then
+    result:set_width(args.width)
+  end
+  if args.height then
+    result:set_height(args.height)
+  end
+  if args.widget then
+    result:set_widget(args.widget)
+  end
+  return result
+end
 
+
+function common.panel_shape(widget)
+  local shaped = wibox.container.background(widget)
+  shaped:set_shape(gears.shape.rounded_rect, beautiful.panel_widget_border_radius)
+  shaped.shape_clip = true
+  shaped.shape_border_width = beautiful.panel_widget_border_width or 0
+  shaped.shape_border_color = beautiful.panel_widget_border_color or beautiful.border_normal
+  setmetatable(shaped,        { __index = widget })
+  return shaped
+end
+
+
+--[[
+--------------------------------------------------------------------------------
+         Common widget
+--------------------------------------------------------------------------------
+--]]
 
 function common.widget(args)
   args = args or {}
@@ -95,38 +140,13 @@ function common.widget(args)
 end
 
 
-function common.centered(widget)
-  if not widget then widget=wibox.container.background() end
-  local centered_widget = {}
-  centered_widget.widget = widget
-
-  local horizontal_align = wibox.layout.align.horizontal()
-  horizontal_align:set_second(widget)
-  local vertical_align = wibox.layout.align.vertical()
-  vertical_align:set_second(horizontal_align)
-
-  setmetatable(centered_widget, { __index = centered_widget.widget })
-  return setmetatable(centered_widget, { __index = vertical_align })
-end
 
 
-function common.constraint(args)
-  args = args or {}
-  local strategy = args.strategy or "exact"
-  local result = wibox.container.constraint()
-  result:set_strategy(strategy)
-  if args.width then
-    result:set_width(args.width)
-  end
-  if args.height then
-    result:set_height(args.height)
-  end
-  if args.widget then
-    result:set_widget(args.widget)
-  end
-  return result
-end
-
+--[[
+--------------------------------------------------------------------------------
+         Vertical decorated widget
+--------------------------------------------------------------------------------
+--]]
 
 function common.decorated(args)
   args = args or {}
@@ -285,16 +305,11 @@ end
 
 
 
-
-
-
-
-
-
-
-
-
-
+--[[
+--------------------------------------------------------------------------------
+         Horizontal decorated widget
+--------------------------------------------------------------------------------
+--]]
 
 function common.decorated_horizontal(args)
   local decorated = {
@@ -347,7 +362,7 @@ function common.decorated_horizontal(args)
     local fg = color_args.fg
     local bg
     if color_args.name then
-      bg = get_color(color_args.name)
+      bg = beautiful[color_args.name]
     else
       bg = color_args.bg
     end
@@ -379,13 +394,11 @@ function common.decorated_horizontal(args)
     return self:set_color({fg=fg})
   end
 
-  --- Make widget invisible
   function decorated:hide()
     self.lie_layout:reset()
     self.lie_visible = false
   end
 
-  --- Make widget visible again
   function decorated:show()
     if self.lie_visible then return end
     for _, this_separator in ipairs(self.left_separator_widgets) do
@@ -435,17 +448,6 @@ function common.decorated_horizontal(args)
   decorated:set_normal()
   decorated:show()
   return decorated
-end
-
-
-function common.panel_shape(widget)
-  local shaped = wibox.container.background(widget)
-  shaped:set_shape(gears.shape.rounded_rect, beautiful.panel_widget_border_radius)
-  shaped.shape_clip = true
-  shaped.shape_border_width = beautiful.panel_widget_border_width or 0
-  shaped.shape_border_color = beautiful.panel_widget_border_color or beautiful.border_normal
-  setmetatable(shaped,        { __index = widget })
-  return shaped
 end
 
 
