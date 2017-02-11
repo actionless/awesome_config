@@ -96,8 +96,6 @@ function common.centered(widget)
 end
 
 
-
-
 function common.constraint(args)
   args = args or {}
   local strategy = args.strategy or "exact"
@@ -114,23 +112,6 @@ function common.constraint(args)
   end
   return result
 end
-
-
-local function init_list_layout(layout, widgets)
-  widgets = widgets or {}
-  for _, widget in ipairs(widgets) do
-    layout:add(widget)
-  end
-  return layout
-end
-common.flex = {}
-function common.flex.horizontal(widgets)
-  return init_list_layout(wibox.layout.flex.horizontal(), widgets)
-end
-function common.flex.vertical(widgets)
-  return init_list_layout(wibox.layout.flex.vertical(), widgets)
-end
-
 
 
 function common.decorated(args)
@@ -443,84 +424,14 @@ function common.decorated_horizontal(args)
 end
 
 
-local AWESOME_METHODS = {
-  "set_forced_height",
-  "set_shape",
-  "set_fg",
-  "_private",
-  "get_bg",
-  "before_draw_children",
-  "get_forced_height",
-  "set_opacity",
-  "get_shape_border_color",
-  "set_tooltip",
-  "get_fg",
-  "set_shape_border_color",
-  "index",
-  "get_all_children",
-  "fit",
-  "_signals",
-  "get_opacity",
-  "widget_name",
-  "set_bg",
-  "get_widget",
-  "emit_signal",
-  "get_shape_clip",
-  "set_bgimage",
-  "set_children",
-  "mt",
-  "after_draw_children",
-  "weak_connect_signal",
-  "get_shape",
-  "modulename",
-  "set_shape_border_width",
-  "get_shape_border_width",
-  "set_shape_clip",
-  "set_widget",
-  "get_bgimage",
-  "get_preferred_size",
-  "get_children",
-  "draw",
-  "get_forced_width",
-  "set_menu",
-  "is_widget",
-  "get_visible",
-  "setup",
-  "set_visible",
-  "set_forced_width",
-  "layout",
-
-  --"add_signal",
-  --"buttons",
-  --"disconnect_signal",
-  --"connect_signal",
-}
-
 function common.panel_shape(widget)
   local shaped = wibox.container.background(widget)
   shaped:set_shape(gears.shape.rounded_rect, beautiful.panel_widget_border_radius)
   shaped.shape_clip = true
   shaped.shape_border_width = beautiful.panel_widget_border_width or 0
   shaped.shape_border_color = beautiful.panel_widget_border_color or beautiful.border_normal
+  setmetatable(shaped,        { __index = widget })
   return shaped
-end
-
-function common.newdecoration(args)
-  args = args or {}
-  local widget = args.widget
-  local bg = args.bg
-  local fg = args.fg
-  local shape = args.shape
-  local shape_args = args.shape_args or {}
-  local background = wibox.container.background(widget, bg)
-  background:set_fg(fg)
-  background:set_shape(shape, h_table.unpack(shape_args))
-  for k, v in pairs(widget) do
-    if not h_table.hasvalue(AWESOME_METHODS, k) then
-      background[k] = v
-    end
-  end
-  return background
 end
 
 
