@@ -289,6 +289,10 @@ theme.left_panel_internal_corner_radius = 30
   --theme.layout_tiletop		= layout_icons_dir .. "tiletop.png"
   --theme.layout_fairv		= layout_icons_dir .. "fairv.png"
   --theme.layout_fairh		= layout_icons_dir .. "fairh.png"
+  --
+  local themes_path = awful.util.get_themes_dir()
+  theme.layout_fair = themes_path.."default/layouts/fairhw.png"
+  --
   --theme.layout_spiral		= layout_icons_dir .. "spiral.png"
   --theme.layout_dwindle		= layout_icons_dir .. "dwindle.png"
   --theme.layout_max		= layout_icons_dir .. "max.png"
