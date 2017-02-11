@@ -1,4 +1,5 @@
 local awful = require("awful")
+require("awful.layout.dynamic")
 local gears = require("gears")
 local beautiful = require("beautiful")
 local lcars_layout = require("actionless.lcars_layout")
