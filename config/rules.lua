@@ -4,14 +4,30 @@ local capi = {
 }
 
 
+local function apply_delayed_rule(c)
+  if not c.class and not c.name then
+    local begin_message = {"begin", c.class, c.name}
+    local f
+    f = function(_c)
+        _c:disconnect_signal("property::class", f)
+        if _c.class == "Spotify" then
+            awful.rules.apply(_c)
+        else
+          nlog(begin_message)
+          nlog({"end", _c.class, _c.name})
+        end
+    end
+    c:connect_signal("property::class", f)
+  end
+end
+
+
 local rules = {}
 
 function rules.init(awesome_context)
 
-  -- Rules to apply to new clients (through the "manage" signal).
   awful.rules.rules = {
 
-      -- All clients will match this rule.
       { rule = { },
         properties = {
           --border_width = beautiful.border_width,
@@ -23,30 +39,22 @@ function rules.init(awesome_context)
           placement = awful.placement.no_overlap+awful.placement.no_offscreen,
           size_hints_honor = false,
           screen = awful.screen.preferred,
+          slave = true,
         },
-        callback = function(c)
-          awful.client.setslave(c)
-          if not c.class and not c.name then
-            nlog({"begin", c.class, c.name})
-            local f
-            f = function(_c)
-                nlog({"end", _c.class, _c.name})
-                _c:disconnect_signal("property::class", f)
-                if _c.class == "Spotify" then
-                    awful.rules.apply(_c)
-                end
-            end
-            c:connect_signal("property::class", f)
-          end
-        end
+        callback = apply_delayed_rule,
+        --callback = function(c)
+          ----awful.client.setslave(c)
+          --apply_delayed_rule(c)
+        --end
       },
-      -- Add titlebars to normal clients and dialogs
       { rule = {type = "dialog"},
         properties = {
           titlebars_enabled = true,
           ontop = true
         },
       },
+
+      -- Applications:
 
       { rule = { class = "Skype" },
         properties = {
@@ -85,11 +93,14 @@ function rules.init(awesome_context)
       },
 
   }
+
   --awful.ewmh.add_activate_filter(function(c, source)
       --nlog({source, c.class})
       --if source=="rules" and c.class == "Firefox-developer-edition" then
         --return false
       --end
   --end)
+  --
 end
+
 return rules
