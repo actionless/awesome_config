@@ -22,62 +22,76 @@ function common.widget(args)
   args = args or {}
 
   local show_icon = args.show_icon or beautiful.show_widget_icon
-  local widget = {}
-    widget.lie_layout = wibox.layout.fixed.horizontal()
-    if show_icon then
-        widget.icon_widget = wibox.widget.imagebox()
-        widget.icon_widget:set_resize(beautiful.hidpi or false)
-        widget.lie_layout:add(widget.icon_widget)
-    end
-      widget.text_widget = wibox.widget.textbox('')
-    widget.lie_layout:add(widget.text_widget)
-  widget.widget_bg = wibox.container.background()
-  widget.widget_bg:set_widget(widget.lie_layout)
+  local widget_bg = wibox.container.background()
+  widget_bg.lie_layout = wibox.layout.fixed.horizontal()
+  if show_icon then
+    widget_bg.icon_widget = wibox.widget.imagebox()
+    widget_bg.icon_widget:set_resize(beautiful.hidpi or false)
+    widget_bg.lie_layout:add(widget_bg.icon_widget)
+  end
+  widget_bg.text_widget = wibox.widget.textbox('')
+  widget_bg.lie_layout:add(widget_bg.text_widget)
+  if args.margin then
+    widget_bg.margin = wibox.container.margin(
+      widget_bg.lie_layout,
+      args.margin.left, args.margin.right,
+      args.margin.top, args.margin.bottom,
+      args.margin.color, args.margin.draw_empty
+    )
+    widget_bg:set_widget(widget_bg.margin)
+  else
+    widget_bg:set_widget(widget_bg.lie_layout)
+  end
 
-  function widget:set_image(...)
+  function widget_bg:set_image(...)
     if self.icon_widget then
-      return self.icon_widget:set_image(...)
+      return self.icon_widget_bg:set_image(...)
     end
   end
 
-  function widget:set_text(...)
+  function widget_bg:set_font(...)
+    return self.text_widget:set_font(...)
+  end
+
+  widget_bg.text_widget.lie_set_text = widget_bg.text_widget.set_text
+  function widget_bg.text_widget:set_text(text, ...)
+    if not show_icon and (not text or text == '') then
+      widget_bg.visible = false
+    else
+      widget_bg.visible = true
+      return self:lie_set_text(text, ...)
+    end
+  end
+
+  widget_bg.text_widget.lie_set_markup = widget_bg.text_widget.set_markup
+  function widget_bg.text_widget:set_markup(text, ...)
+    if not show_icon and (not text or text == '') then
+      widget_bg.visible = false
+    else
+      widget_bg.visible = true
+      return self:lie_set_markup(text, ...)
+    end
+  end
+
+  function widget_bg:set_text(...)
     return self.text_widget:set_text(...)
   end
 
-  function widget:set_markup(...)
+  function widget_bg:set_markup(...)
     return self.text_widget:set_markup(...)
   end
 
-  function widget:set_bg(...)
-    self.widget_bg:set_bg(...)
-  end
-
-  function widget:set_fg(...)
-    self.widget_bg:set_fg(...)
-  end
-
-  function widget:set_icon(name)
+  function widget_bg:set_icon(name)
     if show_icon then
       local icon = beautiful.get()['widget_' .. name]
       --gears.debug.assert(icon, ":set_icon failed: icon is missing: " .. name)
-      return self.icon_widget:set_image(icon)
+      return self.icon_widget_bg:set_image(icon)
     end
   end
 
-  function widget:buttons(...)
-    return self.widget:buttons(...)
-  end
+  widget_bg:set_text(args.text)
 
-  function widget:show()
-    self.widget_bg:set_widget(self.lie_layout)
-  end
-
-  function widget:hide()
-    self.widget_bg:set_widget(nil)
-  end
-
-  setmetatable(widget.widget_bg, { __index = widget.text_widget })
-  return setmetatable(widget, { __index = widget.widget_bg })
+  return widget_bg
 end
 
 
