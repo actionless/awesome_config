@@ -28,7 +28,9 @@ read_globals = {
     "tag",
     "window",
     "unpack",
+    "jit",
 }
+
 -- May not be read-only due to client.focus
 globals = {
     "client",
