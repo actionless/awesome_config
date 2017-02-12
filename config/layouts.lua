@@ -1,5 +1,4 @@
 local awful = require("awful")
-require("awful.layout.dynamic")
 local gears = require("gears")
 local beautiful = require("beautiful")
 local lcars_layout = require("actionless.lcars_layout")
@@ -9,6 +8,10 @@ local layouts = {}
 
 
 function layouts.init(context)
+
+  if context.DEVEL_DYNAMIC_LAYOUTS then
+    require("awful.layout.dynamic")
+  end
 
   -- Table of layouts to cover with awful.layout.inc, order matters.
   context.layouts = {

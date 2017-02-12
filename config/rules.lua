@@ -39,13 +39,16 @@ function rules.init(awesome_context)
           placement = awful.placement.no_overlap+awful.placement.no_offscreen,
           size_hints_honor = false,
           screen = awful.screen.preferred,
-          slave = true,
+          --slave = true,
+          --slave = awesome_context.DEVEL_DYNAMIC_LAYOUTS,
         },
-        callback = apply_delayed_rule,
-        --callback = function(c)
-          ----awful.client.setslave(c)
-          --apply_delayed_rule(c)
-        --end
+        --callback = apply_delayed_rule,
+        callback = function(c)
+          --if not awesome_context.DEVEL_DYNAMIC_LAYOUTS then
+            awful.client.setslave(c)
+          --end
+          apply_delayed_rule(c)
+        end
       },
       { rule = {type = "dialog"},
         properties = {

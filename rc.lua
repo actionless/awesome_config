@@ -1,4 +1,5 @@
 pcall(function() jit.on() end)
+
 --[[
 OH HI
 --]]
@@ -19,6 +20,7 @@ local colorscheme = xresources.get_current_theme()
 
 local terminal = 'st'
 
+--@TODO: make a PR with `-b` feature to `xst`
 local function st_color_line(theme_table)
   local colors = {}
   for k, v in pairs(theme_table) do
@@ -40,16 +42,20 @@ log = debug.log
 
 context = {
 
+  DEVEL_DYNAMIC_LAYOUTS = true,
+  --DEVEL_DYNAMIC_LAYOUTS = false,
+
   modkey = "Mod4",
   altkey = "Mod1",
 
   theme_dir = awful.util.getdir("config") .. "/themes/lcars-xresources-hidpi/theme.lua",
+  --theme_dir = awful.util.getdir("config") .. "/themes/gtk/theme.lua",
+  --theme_dir = awful.util.getdir("config") .. "/themes/twmish/theme.lua",
 
   config = {
     net_preset = 'netctl-auto',
     wlan_if = 'wlp12s0',
     eth_if = 'enp0s25',
-    cpu_cores_num = 2,
     music_players = { 'spotify', 'clementine' },
   },
 
@@ -58,7 +64,7 @@ context = {
     editor_cmd = terminal .. " -e " .. editor,
     compositor = "killall compton; compton",
     file_manager = "nautilus",
-    tmux = terminal .. " -e tmux",
+    tmux = terminal .. " -e bash \\-c tmux",
     tmux_run   = terminal .. " -e tmux new-session ",
     scrot_preview_cmd = [['mv $f ~/images/ && viewnior ~/images/$f']],
   },

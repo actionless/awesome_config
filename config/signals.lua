@@ -36,26 +36,6 @@ local function extremely_delayed_call(callback, deepness)
   return wrapper()
 end
 
-local function set_default_screen_padding(s)
-  s.padding = {
-    left = beautiful.screen_padding,
-    right = beautiful.screen_padding,
-    top = beautiful.screen_padding,
-    bottom = beautiful.screen_padding,
-  }
-end
-
-local function set_mwfact_screen_padding(t)
-  local s = t.screen
-  local padding = s.geometry.width * (1-t.master_width_factor) / 2
-  s.padding = {
-    left=padding,
-    right=padding,
-    top = beautiful.screen_padding,
-    bottom = beautiful.screen_padding,
-  }
-end
-
 local function apply_shape(draw, shape, ...)
   local client_tag = draw.first_tag
   if not client_tag then
@@ -116,7 +96,37 @@ end
 
 local signals = {}
 
-function signals.init(_)
+function signals.init(awesome_context)
+
+  local function set_default_screen_padding(s)
+    if not awesome_context.DEVEL_DYNAMIC_LAYOUTS then return end
+    s.padding = {
+      left = beautiful.screen_padding,
+      right = beautiful.screen_padding,
+      top = beautiful.screen_padding,
+      bottom = beautiful.screen_padding,
+    }
+  end
+
+  local function set_mwfact_screen_padding(t)
+    if not awesome_context.DEVEL_DYNAMIC_LAYOUTS then return end
+    local s = t.screen
+    local padding = s.geometry.width * (1-t.master_width_factor) / 2
+    s.padding = {
+      left=padding,
+      right=padding,
+      top = beautiful.screen_padding,
+      bottom = beautiful.screen_padding,
+    }
+  end
+
+  local function choose_screen_padding(s, t, num_tiled)
+    if num_tiled > 1 then
+      set_default_screen_padding(s)
+    else
+      set_mwfact_screen_padding(t)
+    end
+  end
 
   local function on_client_focus(c)
     local s = c.screen
@@ -125,6 +135,7 @@ function signals.init(_)
     local num_tiled = #awful.client.tiled(s)
 
     --c.border_color = beautiful.border_focus
+    --
 
     if persistent.titlebar.get() and (
       num_tiled > 1 or (
@@ -132,7 +143,7 @@ function signals.init(_)
       )
     ) then
       log("F: tile: titlebars enabled explicitly")
-      set_default_screen_padding(s)
+      choose_screen_padding(s, t, num_tiled)
       titlebar.make_titlebar(c, beautiful._titlebar_bg_focus, beautiful.titlebar_shadow_focus)
     elseif c.maximized then
       log("F: maximized")
@@ -140,11 +151,11 @@ function signals.init(_)
       titlebar.remove_border(c)
     elseif c.floating then
       log("F: floating client")
-      set_default_screen_padding(s)
+      choose_screen_padding(s, t, num_tiled)
       titlebar.make_titlebar(c, beautiful._titlebar_bg_focus, beautiful.titlebar_shadow_focus)
     elseif layout == awful.layout.suit.floating then
       log("F: floating layout")
-      set_default_screen_padding(s)
+      choose_screen_padding(s, t, num_tiled)
       titlebar.make_titlebar(c, beautiful._titlebar_bg_focus, beautiful.titlebar_shadow_focus)
     elseif num_tiled > 1 then
       log("F: multiple tiling clients")
@@ -163,7 +174,8 @@ function signals.init(_)
         titlebar.make_border(c, beautiful._titlebar_bg_focus, beautiful.titlebar_shadow_focus)
       end
     else
-      nlog('Signals: F: How did that happened?')
+      log("F: zero tiling clients -- other tag?")
+      return on_client_unfocus(c) --luacheck: ignore
     end
 
     c.border_color = beautiful.border_focus
