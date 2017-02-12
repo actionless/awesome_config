@@ -2,6 +2,7 @@ local beautiful = require("beautiful")
 local awful = require("awful")
 local wibox = require("wibox")
 local gears = require("gears")
+local dpi = beautiful.xresources.apply_dpi
 
 local capi = {
   screen = screen,
@@ -169,10 +170,17 @@ function widget_loader.init(awesome_context)
 
     -- promptbox
     sw.promptbox = awful.widget.prompt()
+    sw.promptbox.widget = widgets.common.widget({
+      margin = { left = dpi(8), right = dpi(8), }
+    })
     sw.promptbox.fg = beautiful.panel_widget_fg_warning
     sw.promptbox.bg = beautiful.panel_widget_bg_warning
+    sw.promptbox.shape_border_width = beautiful.panel_widget_border_width or 0
+    sw.promptbox.shape_clip = true
     sw.promptbox.shape = function(_c, _w, _h)
-      return gears.shape.rounded_rect(_c, _w, _h, beautiful.panel_widget_border_radius)
+      return gears.shape.rounded_rect(
+        _c, _w, _h, beautiful.panel_widget_border_radius
+      )
     end
 
     -- tasklist
