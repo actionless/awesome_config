@@ -1,118 +1,53 @@
 local gears = require("gears")
 local awful = require("awful")
 local xresources = require("beautiful.xresources")
+local theme_assets = require("beautiful.theme_assets")
 local dpi = xresources.apply_dpi
 local create_theme = require("actionless.common_theme").create_theme
-local helpers = require("actionless.helpers")
 local color_utils = require("utils").color
-local parse = require("utils.parse")
+local gtk_util = require("utils.gtk")
 
 
 local theme_name = "gtk"
+local gsc = gtk_util.get_theme_variables()
 
-local oomox_theme_keys = {}
-for _, key in ipairs({
-  "BG",
-  "FG",
-  "MENU_BG",
-  "MENU_FG",
-  "SEL_BG",
-  "SEL_FG",
-  "TXT_BG",
-  "TXT_FG",
-  "BTN_BG",
-  "BTN_FG",
-  "HDR_BTN_BG",
-  "HDR_BTN_FG",
-
-  "ROUNDNESS",
-  "GRADIENT",
-
-  "ICONS_LIGHT_FOLDER",
-  "ICONS_LIGHT",
-  "ICONS_MEDIUM",
-  "ICONS_DARK",
-}) do
-  oomox_theme_keys[key] = key
-end
-
-local oomox_theme_name = "retro/uzi"
-pcall(function()
-  if OOMOX_THEME_NAME then
-    oomox_theme_name = OOMOX_THEME_NAME
-  end
-end)
-
-local gtk = parse.find_values_in_file(
-  os.getenv("HOME").."/projects/oomox/colors/"..oomox_theme_name,
-  "(.*)=(.*)",
-  oomox_theme_keys,
-  function(value)
-    return "#"..value
-  end
-)
-gtk.ROUNDNESS = tonumber(gtk.ROUNDNESS:sub(2,#gtk.ROUNDNESS))
-gtk.GRADIENT = tonumber(gtk.GRADIENT:sub(2,#gtk.GRADIENT))
-gtk.MENU_BG = color_utils.darker(gtk.MENU_BG, -math.ceil(gtk.GRADIENT*10))
-log(gtk)
-
-pcall(function()
-  if OOMOX_SEL_BG then
-    gtk.SEL_BG = OOMOX_SEL_BG
-  end
-end)
-
-
-local MAIN_COLOR = gtk.SEL_BG
-if oomox_theme_name == 'retro/uzi' then
-  MAIN_COLOR = gtk.BTN_BG
-end
+local MAIN_COLOR = gsc.selected_bg_color
 
 local theme_dir = awful.util.getdir("config").."/themes/"..theme_name
 --local theme = dofile("/usr/share/awesome/themes/xresources/theme.lua")
 local theme = {}
 
-theme.gtk = gtk
+theme.gtk = gsc
 
-theme.fg = gtk.FG
-theme.fg_normal = gtk.FG
-theme.bg = gtk.BG
-theme.bg_normal = gtk.BG
-theme.fg_focus		= gtk.SEL_FG
-theme.bg_focus		= gtk.SEL_BG
+theme.fg = gsc.fg_color
+theme.fg_normal = gsc.fg_color
+theme.bg = gsc.bg_color
+theme.bg_normal = gsc.bg_color
+theme.fg_focus = gsc.selected_fg_color
+theme.bg_focus = gsc.selected_bg_color
 
-theme.panel_fg = gtk.MENU_FG
-theme.panel_bg = gtk.MENU_BG
+theme.panel_fg = gsc.menubar_fg_color
+theme.panel_bg = gsc.menubar_bg_color
 
-theme.panel_widget_bg = gtk.TXT_BG
-theme.panel_widget_fg = gtk.TXT_FG
+theme.panel_widget_bg = gsc.base_color
+theme.panel_widget_fg = gsc.text_color
 
-theme.border_radius = dpi(gtk.ROUNDNESS*1.0)
-theme.panel_widget_border_radius = dpi(gtk.ROUNDNESS*0.7)
+theme.border_radius = dpi(gsc.roundness*1.0)
+theme.panel_widget_border_radius = dpi(gsc.roundness*0.7)
 --theme.border_radius = dpi(5)
 --theme.panel_widget_border_radius = dpi(5)
 theme.panel_widget_border_width = dpi(2)
---theme.panel_widget_border_color = color_utils.mix(gtk.MENU_FG, gtk.MENU_BG, 0.5)
-theme.panel_widget_border_color = color_utils.mix(gtk.MENU_FG, gtk.MENU_BG, 0.3)
-
-theme.notification_border_radius = theme.border_radius
-if theme.notification_border_radius > 0 then
-  theme.notification_shape = function(cr,w,h)
-    gears.shape.rounded_rect(
-      cr, w, h, theme.notification_border_radius
-    )
-  end
-end
+--theme.panel_widget_border_color = color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color, 0.5)
+theme.panel_widget_border_color = color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color, 0.3)
 
 
-theme.widget_close_bg = gtk.HDR_BTN_BG
-theme.widget_close_fg = gtk.HDR_BTN_FG
+theme.widget_close_bg = gsc.header_button_bg_color
+theme.widget_close_fg = gsc.header_button_fg_color
 
-theme.tasklist_fg_focus = gtk.MENU_FG
-theme.tasklist_fg_normal = gtk.MENU_FG
-theme.tasklist_bg_focus = gtk.MENU_BG
-theme.tasklist_bg_normal = gtk.MENU_BG
-
+theme.tasklist_fg_focus = theme.panel_fg
+theme.tasklist_fg_normal = theme.panel_fg
+theme.tasklist_bg_focus = theme.panel_bg
+theme.tasklist_bg_normal = theme.panel_bg
 theme.xrdb = xresources.get_current_theme()
 
 theme.dir = theme_dir
@@ -128,9 +63,9 @@ theme.color = xresources.get_current_theme()
 
 -- PANEL COLORS:
 --
-theme.panel_taglist = gtk.TXT_BG
+theme.panel_taglist = gsc.base_color
 theme.panel_close = MAIN_COLOR
---theme.panel_tasklist = gtk.MENU_BG
+--theme.panel_tasklist = gsc.menubar_bg_color
 theme.panel_media = MAIN_COLOR
 theme.panel_info = theme.xrdb.color13
 theme.panel_layoutbox = theme.xrdb.color7
@@ -212,9 +147,9 @@ theme.menu_border_color = theme.xrdb.color1
 
 
 theme.apw_fg_color = MAIN_COLOR
-theme.apw_fg_color = gtk.SEL_BG
---theme.apw_bg_color = color_utils.darker(gtk.MENU_BG, 40)
-theme.apw_bg_color = gtk.TXT_BG
+theme.apw_fg_color = gsc.selected_bg_color
+--theme.apw_bg_color = color_utils.darker(gsc.menubar_bg_color, 40)
+theme.apw_bg_color = gsc.base_color
 theme.apw_mute_bg_color = "theme.xrdb.color1"
 theme.apw_mute_fg_color = "theme.xrdb.color9"
 
@@ -222,28 +157,28 @@ theme.apw_mute_fg_color = "theme.xrdb.color9"
 --theme.taglist_squares_sel       = "theme.null"
 --theme.taglist_squares_unsel     = "theme.null"
 --theme.taglist_fg_focus		= "theme.theme"
-theme.taglist_fg_focus		= gtk.SEL_FG
-theme.taglist_bg_focus		= gtk.SEL_BG
-theme.taglist_fg_occupied	= gtk.TXT_FG
-theme.taglist_bg_occupied	= gtk.TXT_BG
+theme.taglist_fg_focus		= gsc.selected_fg_color
+theme.taglist_bg_focus		= gsc.selected_bg_color
+theme.taglist_fg_occupied	= gsc.text_color
+theme.taglist_bg_occupied	= gsc.base_color
 
-theme.taglist_fg_occupied	= gtk.HDR_BTN_FG
-theme.taglist_bg_occupied	= gtk.HDR_BTN_BG
+theme.taglist_fg_occupied = gsc.header_button_fg_color
+theme.taglist_bg_occupied = gsc.header_button_bg_color
 
 
-theme.border_normal = gtk.MENU_BG
+theme.border_normal = gsc.menubar_bg_color
 theme.border_focus = MAIN_COLOR
-theme.titlebar_border = gtk.MENU_BG
-theme.titlebar_fg_normal	= color_utils.mix(gtk.MENU_FG, gtk.MENU_BG)
+theme.titlebar_border = gsc.menubar_bg_color
+theme.titlebar_fg_normal	= color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color)
 theme.titlebar_bg_normal	= "theme.titlebar_border"
 if theme.border_radius > 0 then
-  theme.titlebar_fg_focus		= gtk.MENU_FG
+  theme.titlebar_fg_focus		= gsc.menubar_fg_color
   theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
 else
   --theme.titlebar_fg_focus		= theme.titlebar_border
   --theme.titlebar_bg_focus		= theme.bg_focus
-  theme.titlebar_fg_focus		= gtk.SEL_FG
-  theme.titlebar_bg_focus		= gtk.SEL_BG
+  theme.titlebar_fg_focus		= gsc.selected_fg_color
+  theme.titlebar_bg_focus		= gsc.selected_bg_color
 end
 pcall(function()
   if OOMOX_BORDER then
@@ -275,7 +210,7 @@ theme.panel_widget_spacing_small = dpi(4)
 theme.panel_widget_bg_error = theme.xrdb.color1
 theme.panel_widget_fg_error = theme.xrdb.color15
 
---theme.widget_music_bg = color_utils.mix(MAIN_COLOR, gtk.MENU_FG, 0.6)
+--theme.widget_music_bg = color_utils.mix(MAIN_COLOR, gsc.menubar_fg_color, 0.6)
 theme.widget_music_bg = MAIN_COLOR
 --theme.widget_music_fg = MAIN_COLOR
 
@@ -291,15 +226,20 @@ theme = create_theme({ theme_name=theme_name, theme=theme, })
 --theme.border_focus = theme.border_focus .."66"
 
 -- Recolor titlebar icons:
-local theme_assets
-pcall(function()
-  theme_assets = dofile("/usr/share/awesome/themes/xresources/assets.lua")
-end)
-if not theme_assets then
-  theme_assets = dofile(helpers.get_nix_xresources_theme_path().."/assets.lua")
-end
 theme = theme_assets.recolor_layout(theme, theme.fg_normal)
 theme = theme_assets.recolor_titlebar_normal(theme, theme.titlebar_fg_normal)
 theme = theme_assets.recolor_titlebar_focus(theme, theme.titlebar_fg_focus)
+
+theme.notification_border_radius = theme.border_radius
+if theme.notification_border_radius > 0 then
+  theme.notification_shape = function(cr,w,h)
+    gears.shape.rounded_rect(
+      cr, w, h, theme.notification_border_radius
+    )
+  end
+else
+  theme.notification_shape = nil
+end
+
 
 return theme
