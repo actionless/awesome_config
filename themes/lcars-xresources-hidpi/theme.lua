@@ -1,3 +1,4 @@
+local gears = require("gears")
 local awful = require("awful")
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
@@ -91,6 +92,12 @@ theme.panel_padding_bottom = dpi(3)
 theme.border_radius = dpi(8)
 theme.notification_border_radius = dpi(8)
 theme.panel_widget_border_radius = dpi(4)
+
+theme.notification_shape = function(cr,w,h)
+  gears.shape.rounded_rect(
+    cr, w, h, theme.notification_border_radius
+  )
+end
 
 theme.border_width = dpi(4)
 theme.useless_gap = dpi(5)
