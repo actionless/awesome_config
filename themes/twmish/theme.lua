@@ -87,6 +87,7 @@ theme.panel_bg = gtk.SEL_BG
 
 theme.panel_widget_bg = gtk.TXT_BG
 theme.panel_widget_fg = gtk.TXT_FG
+theme.panel_widget_fg_warning = theme.panel_widget_fg
 
 theme.border_radius = dpi(gtk.ROUNDNESS*2)
 theme.panel_widget_border_radius = dpi(gtk.ROUNDNESS*0.7)

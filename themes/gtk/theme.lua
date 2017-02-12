@@ -1,3 +1,4 @@
+local gears = require("gears")
 local awful = require("awful")
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
@@ -86,13 +87,23 @@ theme.panel_bg = gtk.MENU_BG
 theme.panel_widget_bg = gtk.TXT_BG
 theme.panel_widget_fg = gtk.TXT_FG
 
-theme.border_radius = dpi(gtk.ROUNDNESS*2)
+theme.border_radius = dpi(gtk.ROUNDNESS*1.0)
 theme.panel_widget_border_radius = dpi(gtk.ROUNDNESS*0.7)
 --theme.border_radius = dpi(5)
 --theme.panel_widget_border_radius = dpi(5)
 theme.panel_widget_border_width = dpi(2)
 --theme.panel_widget_border_color = color_utils.mix(gtk.MENU_FG, gtk.MENU_BG, 0.5)
 theme.panel_widget_border_color = color_utils.mix(gtk.MENU_FG, gtk.MENU_BG, 0.3)
+
+theme.notification_border_radius = theme.border_radius
+if theme.notification_border_radius > 0 then
+  theme.notification_shape = function(cr,w,h)
+    gears.shape.rounded_rect(
+      cr, w, h, theme.notification_border_radius
+    )
+  end
+end
+
 
 theme.widget_close_bg = gtk.HDR_BTN_BG
 theme.widget_close_fg = gtk.HDR_BTN_FG
@@ -243,7 +254,7 @@ end)
 pcall(function()
   if OOMOX_SEL_BORDER then
     theme.border_focus = OOMOX_SEL_BORDER
-    theme.titlebar_bg_focus = OOMOX_SEL_BORDER
+    --theme.titlebar_bg_focus = OOMOX_SEL_BORDER
   end
 end)
 
