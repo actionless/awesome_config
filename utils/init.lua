@@ -10,6 +10,7 @@ local utils = {
   pickle = require("utils.pickle"),
   db = require("utils.db"),
   tmux = require("utils.tmux"),
+  gtk = require("utils.gtk"),
 }
 
 return utils
