@@ -27,10 +27,20 @@ function layouts.init(context)
 
   -- {{{ Wallpaper
   if beautiful.wallpaper then
-    local wallpaper_layout = beautiful.wallpaper_layout or "tiled"
+    local function set_wallpaper(s)
+      if type(beautiful.wallpaper) == "string" then
+        local wallpaper_layout = beautiful.wallpaper_layout or "tiled"
+        gears.wallpaper[wallpaper_layout](beautiful.wallpaper, s)
+      else
+        gears.wallpaper.set(beautiful.wallpaper(s), s)
+      end
+    end
+    --local helpers = require("actionless.helpers")
     awful.screen.connect_for_each_screen(function(s)
-      gears.wallpaper[wallpaper_layout](beautiful.wallpaper, s)
+      set_wallpaper(s)
+      --helpers.newinterval(100, function()set_wallpaper(s) end)
     end)
+    screen.connect_signal("property::geometry", set_wallpaper)
   elseif beautiful.wallpaper_cmd then
       awful.spawn.with_shell(beautiful.wallpaper_cmd)
   end
