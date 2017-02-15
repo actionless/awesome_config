@@ -79,7 +79,7 @@ function gtk.get_theme_variables()
     {"wm_title_unfocused_color", "wm_title_unfocused", "menubar_bg_color"},
     {"wm_icons_unfocused_color", "wm_icons_unfocused", "menubar_fg_color"},
   }) do
-    local result_key, style_context_key, fallback_key = table.unpack(color_data)
+    local result_key, style_context_key, fallback_key = (unpack or table.unpack)(color_data)
     result[result_key] = lookup_gtk_color_to_hex(style_context, style_context_key) or
       result[fallback_key]
   end
