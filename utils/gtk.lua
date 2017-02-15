@@ -43,51 +43,40 @@ function gtk.get_theme_variables()
   local style_context = window:get_style_context()
   local result = {}
 
-  result.bg_color = lookup_gtk_color_to_hex(style_context, "theme_bg_color")
-  result.fg_color = lookup_gtk_color_to_hex(style_context, "theme_fg_color")
-  result.base_color = lookup_gtk_color_to_hex(style_context, "theme_base_color")
-  result.text_color = lookup_gtk_color_to_hex(style_context, "theme_text_color")
-  result.selected_bg_color = lookup_gtk_color_to_hex(style_context, "theme_selected_bg_color")
-  result.selected_fg_color = lookup_gtk_color_to_hex(style_context, "theme_selected_fg_color")
+  for _, color_data in ipairs({
+    {"bg_color", "theme_bg_color"},
+    {"fg_color", "theme_fg_color"},
+    {"base_color", "theme_base_color"},
+    {"text_color", "theme_text_color"},
+    {"selected_bg_color", "theme_selected_bg_color"},
+    {"selected_fg_color", "theme_selected_fg_color"},
+    --
+    {"tooltip_bg_color", "theme_tooltip_bg_color", "bg_color"},
+    {"tooltip_fg_color", "theme_tooltip_fg_color", "fg_color"},
+    {"osd_bg_color", "osd_bg", "tooltip_bg_color"},
+    {"osd_fg_color", "osd_fg", "tooltip_fg_color"},
+    {"osd_border_color", "osd_borders_color", "osd_fg_color"},
+    {"menubar_bg_color", "menubar_bg_color", "bg_color"},
+    {"menubar_fg_color", "menubar_fg_color", "fg_color"},
+    --
+    {"button_bg_color", "button_bg_color", "bg_color"},
+    {"button_fg_color", "button_fg_color", "fg_color"},
+    {"header_button_bg_color", "header_button_bg_color", "menubar_bg_color"},
+    {"header_button_fg_color", "header_button_fg_color", "menubar_fg_color"},
+    --
+    {"wm_bg_color", "wm_bg", "menubar_bg_color"},
+    {"wm_border_focused_color", "wm_border_focused", "selected_bg_color"},
+    {"wm_title_focused_color", "wm_title_focused", "menubar_bg_color"},
+    {"wm_icons_focused_color", "wm_icons_focused", "menubar_fg_color"},
+    {"wm_border_unfocused_color", "wm_border_unfocused", "wm_bg_color"},
+    {"wm_title_unfocused_color", "wm_title_unfocused", "menubar_bg_color"},
+    {"wm_icons_unfocused_color", "wm_icons_unfocused", "menubar_fg_color"},
+  }) do
+    local result_key, style_context_key, fallback_key = table.unpack(color_data)
+    result[result_key] = lookup_gtk_color_to_hex(style_context, style_context_key) or
+      result[fallback_key]
+  end
 
-  result.tooltip_bg_color = lookup_gtk_color_to_hex(style_context, "theme_tooltip_bg_color") or
-    result.bg_color
-  result.tooltip_fg_color = lookup_gtk_color_to_hex(style_context, "theme_tooltip_fg_color") or
-    result.fg_color
-  result.osd_bg_color = lookup_gtk_color_to_hex(style_context, "osd_bg") or
-    result.tooltip_bg_color
-  result.osd_fg_color = lookup_gtk_color_to_hex(style_context, "osd_fg") or
-    result.tooltip_fg_color
-  result.osd_border_color = lookup_gtk_color_to_hex(style_context, "osd_borders_color") or
-    result.osd_fg_color
-  result.menubar_bg_color = lookup_gtk_color_to_hex(style_context, "menubar_bg_color") or
-    result.bg_color
-  result.menubar_fg_color = lookup_gtk_color_to_hex(style_context, "menubar_fg_color") or
-    result.fg_color
-
-  result.button_bg_color = lookup_gtk_color_to_hex(style_context, "button_bg_color") or
-    result.bg_color
-  result.button_fg_color = lookup_gtk_color_to_hex(style_context, "button_fg_color") or
-    result.fg_color
-  result.header_button_bg_color = lookup_gtk_color_to_hex(style_context, "header_button_bg_color") or
-    result.menubar_bg_color
-  result.header_button_fg_color = lookup_gtk_color_to_hex(style_context, "header_button_fg_color") or
-    result.menubar_fg_color
-
-  result.wm_bg_color = lookup_gtk_color_to_hex(style_context, "wm_bg") or
-    result.menubar_bg_color
-  result.wm_border_focused_color = lookup_gtk_color_to_hex(style_context, "wm_border_focused") or
-    result.selected_bg_color
-  result.wm_title_focused_color = lookup_gtk_color_to_hex(style_context, "wm_title_focused") or
-    result.menubar_bg_color
-  result.wm_icons_focused_color = lookup_gtk_color_to_hex(style_context, "wm_icons_focused") or
-    result.menubar_fg_color
-  result.wm_border_unfocused_color = lookup_gtk_color_to_hex(style_context, "wm_border_unfocused") or
-    result.wm_bg_color
-  result.wm_title_unfocused_color = lookup_gtk_color_to_hex(style_context, "wm_title_unfocused") or
-    result.menubar_bg_color
-  result.wm_icons_unfocused_color = lookup_gtk_color_to_hex(style_context, "wm_icons_unfocused") or
-    result.menubar_fg_color
   result.roundness = lookup_gtk_color_fake_int(style_context, "roundness") or 0
   result.spacing = lookup_gtk_color_fake_int(style_context, "spacing") or xresources.apply_dpi(3)
 
