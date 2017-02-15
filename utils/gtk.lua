@@ -35,13 +35,20 @@ function gtk.get_theme_variables()
     return gtk.cached_theme_variables
   end
 
+  local result = {}
   local lgi = require('lgi')
   local Gtk = lgi.Gtk
-  local window = Gtk.Window{
-    --on_destroy = Gtk.main_quit,
-  }
+  local window
+  pcall(function()
+    window = Gtk.Window{
+      --on_destroy = Gtk.main_quit,
+    }
+  end)
+  if not window then
+    print("Seems like GTK+3 is not installed or theme is not set correctly.")
+    return result
+  end
   local style_context = window:get_style_context()
-  local result = {}
 
   for _, color_data in ipairs({
     {"bg_color", "theme_bg_color"},
