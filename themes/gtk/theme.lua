@@ -215,9 +215,6 @@ theme.widget_music_bg = MAIN_COLOR
 --theme.widget_music_fg = MAIN_COLOR
 
 
---theme.wallpaper_cmd     = "hsetroot -solid \"" .. theme.bg .. "\""
---
-
 theme = create_theme({ theme_name=theme_name, theme=theme, })
 
 --theme.titlebar_bg_normal = theme.titlebar_bg_normal .."66"

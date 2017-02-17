@@ -34,7 +34,7 @@ function common_theme.generate_theme(theme_dir)
 
   -- Use plain color:
   theme.wallpaper = nil
-  theme.wallpaper_cmd     = "hsetroot"
+  theme.wallpaper_cmd     = "nitrogen --restore"
   -- Use nitrogen:
   --theme.wallpaper_cmd     = "nitrogen --restore"
   -- Use wallpaper tile:

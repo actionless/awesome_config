@@ -168,7 +168,6 @@ theme.tasklist_fg_focus = theme.xrdb.foreground
 theme.widget_close_bg = "theme.panel_widget_bg"
 theme.widget_close_error_color_on_hover = true
 
---theme.wallpaper_cmd     = "hsetroot -solid \"" .. theme.bg .. "\""
 
 theme = create_theme({ theme_name=theme_name, theme=theme, })
 
