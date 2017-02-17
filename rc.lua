@@ -43,7 +43,7 @@ log = debug.log
 context = {
 
   DEVEL_DYNAMIC_LAYOUTS = true,
-  --DEVEL_DYNAMIC_LAYOUTS = false,
+  DEVEL_DYNAMIC_LAYOUTS = false,
 
   modkey = "Mod4",
   altkey = "Mod1",
