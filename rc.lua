@@ -91,6 +91,7 @@ end
 
 local persistent = require("actionless.persistent")
 
+awful.spawn.with_shell("xsettingsd")
 local beautiful	= require("beautiful")
 beautiful.init(context.theme_dir)
 
