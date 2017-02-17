@@ -84,8 +84,11 @@ function gtk.get_theme_variables()
       result[fallback_key]
   end
 
-  result.roundness = lookup_gtk_color_fake_int(style_context, "roundness") or 0
-  result.spacing = lookup_gtk_color_fake_int(style_context, "spacing") or xresources.apply_dpi(3)
+  result.roundness = lookup_gtk_color_fake_int(style_context, "roundness") or xresources.apply_dpi(2)
+  result.spacing = lookup_gtk_color_fake_int(style_context, "spacing")
+  if result.spacing == nil then
+    result.spacing = xresources.apply_dpi(3)
+  end
 
   gtk.cached_theme_variables = result
   window:destroy()
