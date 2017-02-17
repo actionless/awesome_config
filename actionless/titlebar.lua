@@ -25,8 +25,7 @@ local function get_buttons(c)
     awful.button({ }, 2, function()
       client.focus = c
       c:raise()
-      c.maximized_horizontal = not c.maximized_horizontal
-      c.maximized_vertical   = not c.maximized_vertical
+      c.maximized = not c.maximized
     end),
     awful.button({ }, 3, function()
       client.focus = c
