@@ -7,6 +7,8 @@ local autorun = {}
 
 function autorun.init(awesome_context)
 
+  awful.spawn.with_shell('pgrep vmtoolsd && /usr/bin/vmware-user-suid-wrapper')
+
   --local kensinton =12
   local kensington = nil
   --local sanwa_pad = 12
