@@ -35,11 +35,7 @@ function layouts.init(context)
         gears.wallpaper.set(beautiful.wallpaper(s), s)
       end
     end
-    --local helpers = require("actionless.helpers")
-    awful.screen.connect_for_each_screen(function(s)
-      set_wallpaper(s)
-      --helpers.newinterval(100, function()set_wallpaper(s) end)
-    end)
+    awful.screen.connect_for_each_screen(set_wallpaper)
     screen.connect_signal("property::geometry", set_wallpaper)
   elseif beautiful.wallpaper_cmd then
       awful.spawn.with_shell(beautiful.wallpaper_cmd)
