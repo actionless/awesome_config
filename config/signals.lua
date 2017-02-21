@@ -98,6 +98,7 @@ local signals = {}
 
 function signals.init(awesome_context)
 
+
   local function set_default_screen_padding(s)
     if not awesome_context.DEVEL_DYNAMIC_LAYOUTS then return end
     s.padding = {
@@ -126,59 +127,6 @@ function signals.init(awesome_context)
     else
       set_mwfact_screen_padding(t)
     end
-  end
-
-  local function on_client_focus(c)
-    local s = c.screen
-    local t = s.selected_tag
-    local layout = awful.layout.get(s)
-    local num_tiled = #awful.client.tiled(s)
-
-    --c.border_color = beautiful.border_focus
-    --
-
-    if persistent.titlebar.get() and (
-      num_tiled > 1 or (
-        num_tiled > 0 and t.master_fill_policy ~= 'expand'
-      )
-    ) then
-      log("F: tile: titlebars enabled explicitly")
-      choose_screen_padding(s, t, num_tiled)
-      titlebar.make_titlebar(c, beautiful._titlebar_bg_focus, beautiful.titlebar_shadow_focus)
-    elseif c.maximized then
-      log("F: maximized")
-      set_default_screen_padding(s)
-      titlebar.remove_border(c)
-    elseif c.floating then
-      log("F: floating client")
-      choose_screen_padding(s, t, num_tiled)
-      titlebar.make_titlebar(c, beautiful._titlebar_bg_focus, beautiful.titlebar_shadow_focus)
-    elseif layout == awful.layout.suit.floating then
-      log("F: floating layout")
-      choose_screen_padding(s, t, num_tiled)
-      titlebar.make_titlebar(c, beautiful._titlebar_bg_focus, beautiful.titlebar_shadow_focus)
-    elseif num_tiled > 1 then
-      log("F: multiple tiling clients")
-      set_default_screen_padding(s)
-      c.border_width = beautiful.border_width
-      titlebar.make_border(c, beautiful._titlebar_bg_focus, beautiful.titlebar_shadow_focus)
-    elseif num_tiled == 1 then
-      if t.master_fill_policy == 'expand' and screen.count() == 1 then
-        log("F: one tiling client: expand")
-        set_default_screen_padding(s)
-        titlebar.remove_border(c)
-      else
-        log("F: one tiling client")
-        set_mwfact_screen_padding(t)
-        c.border_width = beautiful.border_width
-        titlebar.make_border(c, beautiful._titlebar_bg_focus, beautiful.titlebar_shadow_focus)
-      end
-    else
-      log("F: zero tiling clients -- other tag?")
-      return on_client_unfocus(c) --luacheck: ignore
-    end
-
-    c.border_color = beautiful.border_focus
   end
 
   local function _on_client_unfocus (c)
@@ -238,6 +186,60 @@ function signals.init(awesome_context)
         end
       end
     end)
+  end
+
+
+  local function on_client_focus(c)
+    local s = c.screen
+    local t = s.selected_tag
+    local layout = awful.layout.get(s)
+    local num_tiled = #awful.client.tiled(s)
+
+    --c.border_color = beautiful.border_focus
+    --
+
+    if persistent.titlebar.get() and (
+      num_tiled > 1 or (
+        num_tiled > 0 and t.master_fill_policy ~= 'expand'
+      )
+    ) then
+      log("F: tile: titlebars enabled explicitly")
+      choose_screen_padding(s, t, num_tiled)
+      titlebar.make_titlebar(c, beautiful._titlebar_bg_focus, beautiful.titlebar_shadow_focus)
+    elseif c.maximized then
+      log("F: maximized")
+      set_default_screen_padding(s)
+      titlebar.remove_border(c)
+    elseif c.floating then
+      log("F: floating client")
+      choose_screen_padding(s, t, num_tiled)
+      titlebar.make_titlebar(c, beautiful._titlebar_bg_focus, beautiful.titlebar_shadow_focus)
+    elseif layout == awful.layout.suit.floating then
+      log("F: floating layout")
+      choose_screen_padding(s, t, num_tiled)
+      titlebar.make_titlebar(c, beautiful._titlebar_bg_focus, beautiful.titlebar_shadow_focus)
+    elseif num_tiled > 1 then
+      log("F: multiple tiling clients")
+      set_default_screen_padding(s)
+      c.border_width = beautiful.border_width
+      titlebar.make_border(c, beautiful._titlebar_bg_focus, beautiful.titlebar_shadow_focus)
+    elseif num_tiled == 1 then
+      if t.master_fill_policy == 'expand' and screen.count() == 1 then
+        log("F: one tiling client: expand")
+        set_default_screen_padding(s)
+        titlebar.remove_border(c)
+      else
+        log("F: one tiling client")
+        set_mwfact_screen_padding(t)
+        c.border_width = beautiful.border_width
+        titlebar.make_border(c, beautiful._titlebar_bg_focus, beautiful.titlebar_shadow_focus)
+      end
+    else
+      log("F: zero tiling clients -- other tag?")
+      return on_client_unfocus(c) --luacheck: ignore
+    end
+
+    c.border_color = beautiful.border_focus
   end
 
 
