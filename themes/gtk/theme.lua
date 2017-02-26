@@ -129,6 +129,9 @@ theme.useless_gap = dpi(5)
 theme.border_width = dpi(5)
 theme.useless_gap = dpi(4)
 
+theme.border_width = dpi(4)
+theme.useless_gap = dpi(4)
+
 theme.base_border_width = theme.border_width
 theme.border_width = 0
 
@@ -159,6 +162,16 @@ theme.apw_mute_fg_color = "theme.xrdb.color9"
 --theme.taglist_fg_focus		= "theme.theme"
 theme.taglist_fg_focus		= gsc.selected_fg_color
 theme.taglist_bg_focus		= gsc.selected_bg_color
+--theme.taglist_bg_focus		= {
+        --type  = "linear" ,
+        --from  = { 0, 0, },
+        --to    = { 0, theme.panel_height, },
+        --stops = {
+            --{ 0, gsc.selected_bg_color },
+            --{ 0.49, color_utils.darker(gsc.selected_bg_color, -20)..88 },
+            --{ 1, gsc.selected_bg_color },
+        --}
+    --}
 theme.taglist_fg_occupied	= gsc.text_color
 theme.taglist_bg_occupied	= gsc.base_color
 
@@ -194,19 +207,10 @@ pcall(function()
 end)
 
 
-
---if color_utils.is_dark(theme.xrdb.background) then
-  --theme.border_normal = color_utils.darker(theme.xrdb.background, -20)
---else
-  --theme.border_normal = color_utils.darker(theme.xrdb.background, 20)
---end
---theme.titlebar_border           = theme.border_normal
-
 theme.panel_widget_spacing = dpi(10)
 theme.panel_widget_spacing_medium = dpi(8)
 theme.panel_widget_spacing_small = dpi(4)
 
---theme.panel_widget_bg		= theme.xrdb.color3
 theme.panel_widget_bg_error = theme.xrdb.color1
 theme.panel_widget_fg_error = theme.xrdb.color15
 
@@ -223,7 +227,7 @@ theme = create_theme({ theme_name=theme_name, theme=theme, })
 --theme.border_focus = theme.border_focus .."66"
 
 -- Recolor titlebar icons:
-theme = theme_assets.recolor_layout(theme, theme.fg_normal)
+theme = theme_assets.recolor_layout(theme, theme.panel_fg)
 theme = theme_assets.recolor_titlebar_normal(theme, theme.titlebar_fg_normal)
 theme = theme_assets.recolor_titlebar_focus(theme, theme.titlebar_fg_focus)
 
@@ -236,6 +240,24 @@ if theme.notification_border_radius > 0 then
   end
 else
   theme.notification_shape = nil
+end
+
+if color_utils.is_dark(theme.panel_bg) then
+  theme.clock_fg = color_utils.darker(theme.panel_fg, -16)
+  --theme.tasklist_fg_focus = color_utils.darker(theme.xrdb.foreground, 12)
+else
+  theme.clock_fg = color_utils.darker(theme.panel_fg, 16)
+end
+
+if awesome.composite_manager_running and false then
+  --theme.titlebar_bg_normal = theme.titlebar_bg_normal .."66"
+  theme.border = theme.border .."66"
+  theme.border_normal       = theme.border_normal .."66"
+  theme.border_focus        = theme.border_focus .."66"
+  theme.titlebar_bg_normal  = theme.titlebar_bg_normal.."dd"
+  theme._titlebar_bg_normal = theme.titlebar_bg_normal.."dd"
+  theme.titlebar_bg_focus   = theme.titlebar_bg_focus.."dd"
+  theme._titlebar_bg_focus  = theme.titlebar_bg_focus.."dd"
 end
 
 
