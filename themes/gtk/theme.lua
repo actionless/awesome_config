@@ -180,31 +180,26 @@ theme.taglist_bg_occupied = gsc.header_button_bg_color
 
 
 theme.border_normal = gsc.menubar_bg_color
-theme.border_focus = MAIN_COLOR
+theme.border_focus = gsc.wm_border_focused_color
 theme.titlebar_border = gsc.menubar_bg_color
 theme.titlebar_fg_normal	= color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color)
 theme.titlebar_bg_normal	= "theme.titlebar_border"
+theme.notification_border_radius = "theme.border_radius"
 if theme.border_radius > 0 then
   theme.titlebar_fg_focus		= gsc.menubar_fg_color
   theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
+  theme.notification_shape = function(cr,w,h)
+    gears.shape.rounded_rect(
+      cr, w, h, theme.notification_border_radius
+    )
+  end
 else
   --theme.titlebar_fg_focus		= theme.titlebar_border
   --theme.titlebar_bg_focus		= theme.bg_focus
   theme.titlebar_fg_focus		= gsc.selected_fg_color
   theme.titlebar_bg_focus		= gsc.selected_bg_color
+  theme.notification_shape = nil
 end
-pcall(function()
-  if OOMOX_BORDER then
-    theme.border_normal = OOMOX_BORDER
-    theme.titlebar_border = OOMOX_BORDER
-  end
-end)
-pcall(function()
-  if OOMOX_SEL_BORDER then
-    theme.border_focus = OOMOX_SEL_BORDER
-    --theme.titlebar_bg_focus = OOMOX_SEL_BORDER
-  end
-end)
 
 
 theme.panel_widget_spacing = dpi(10)
@@ -217,6 +212,7 @@ theme.panel_widget_fg_error = theme.xrdb.color15
 --theme.widget_music_bg = color_utils.mix(MAIN_COLOR, gsc.menubar_fg_color, 0.6)
 theme.widget_music_bg = MAIN_COLOR
 --theme.widget_music_fg = MAIN_COLOR
+--
 
 
 theme = create_theme({ theme_name=theme_name, theme=theme, })
@@ -230,17 +226,6 @@ theme = create_theme({ theme_name=theme_name, theme=theme, })
 theme = theme_assets.recolor_layout(theme, theme.panel_fg)
 theme = theme_assets.recolor_titlebar_normal(theme, theme.titlebar_fg_normal)
 theme = theme_assets.recolor_titlebar_focus(theme, theme.titlebar_fg_focus)
-
-theme.notification_border_radius = theme.border_radius
-if theme.notification_border_radius > 0 then
-  theme.notification_shape = function(cr,w,h)
-    gears.shape.rounded_rect(
-      cr, w, h, theme.notification_border_radius
-    )
-  end
-else
-  theme.notification_shape = nil
-end
 
 if color_utils.is_dark(theme.panel_bg) then
   theme.clock_fg = color_utils.darker(theme.panel_fg, -16)
