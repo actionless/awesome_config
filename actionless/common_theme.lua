@@ -202,6 +202,8 @@ theme.left_panel_internal_corner_radius = 30
   theme.notification_border_width = 4
   theme.notification_margin = 16
 
+  theme.hotkeys_shape = "theme.notification_shape"
+
   theme.textbox_widget_margin_top	= 1
   theme.awful_widget_height	= 14
   theme.awful_widget_margin_top	= 2
