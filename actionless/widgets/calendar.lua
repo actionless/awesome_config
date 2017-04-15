@@ -26,12 +26,12 @@ function calendar:show(t_out, inc_offset)
   local tims = t_out or 0
   local f, c_text, c_title
   local today = tonumber(os.date('%d'))
-  local init_t = 'cal  | sed -r -e "s/(^| )( '
+  local init_t = 'cal -m  | sed -r -e "s/(^| )( '
 
   if offs == 0
   then -- current month showing, today highlighted
     if today >= 10 then
-      init_t = 'cal  | sed -r -e "s/(^| )('
+      init_t = 'cal -m | sed -r -e "s/(^| )('
     end
     self.offset = 0
     self.notify_icon = self.icons .. today .. ".png"
@@ -62,7 +62,7 @@ function calendar:show(t_out, inc_offset)
       if month <= 0 then month = 1 end
     end
     self.notify_icon = nil
-    f = io.popen('cal ' .. month .. ' ' .. year)
+    f = io.popen('cal -m ' .. month .. ' ' .. year)
   end
 
   c_title = f:read()
