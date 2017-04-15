@@ -52,7 +52,7 @@ local function apply_shape(draw, shape, ...)
   ) then
     return
   end
-  log{"Shape", num_tiled, client_tag.master_fill_policy}
+  log{"Shape", num_tiled, client_tag.master_fill_policy, draw.name}
 
   local geo = draw:geometry()
   local shape_args = ...
@@ -129,12 +129,28 @@ function signals.init(awesome_context)
     end
   end
 
+  local function clog(c, msg)
+      log(msg .. " " .. c.name .. " " .. tostring(c:tags()[1]))
+  end
+
   local function _on_client_unfocus (c)
-    local s = c.screen
-    local t = s.selected_tag
-    local layout = awful.layout.get(s)
-    local num_tiled = #awful.client.tiled(s)
-    if num_tiled == 0 then return end
+    local t = c:tags()[1]
+    local s = t.screen
+    local layout = t.layout
+    local num_tiled = 0
+    if t == s.selected_tag then
+      num_tiled = #awful.client.tiled(s)
+    else
+      for _, tc in ipairs(t:clients()) do
+        if not tc.floating
+          and not tc.fullscreen
+          and not tc.maximized_vertical
+          and not tc.maximized_horizontal
+        then
+          num_tiled = num_tiled + 1
+        end
+      end
+    end
 
     if persistent.titlebar.get() and (
       num_tiled > 1 or (
@@ -149,7 +165,7 @@ function signals.init(awesome_context)
       titlebar.make_titlebar(c, beautiful._titlebar_bg_normal, beautiful.titlebar_shadow_normal)
       c.border_color = beautiful.titlebar_border
     elseif layout == awful.layout.suit.floating then
-      log("U: floating layout")
+      clog(c, "U: floating layout")
       titlebar.make_titlebar(c, beautiful._titlebar_bg_normal, beautiful.titlebar_shadow_normal)
       c.border_color = beautiful.titlebar_border
     elseif num_tiled > 1 then
@@ -274,6 +290,7 @@ function signals.init(awesome_context)
       extremely_delayed_call(function()
         --local tagged
         --tagged = function()
+    --nlog(c.name.."|"..tostring(c.floating).."|"..tostring(c==c.focus))
           if c == client.focus then
             on_client_focus(c)
           else
@@ -307,8 +324,10 @@ function signals.init(awesome_context)
   end)
 
   local pending_shapes = {}
-  client.connect_signal("property::geometry", function (c)
+  --client.connect_signal("property::geometry", function (c)
+  client.connect_signal("property::size", function (c)
     if (
+      -- @TODO: figure it out and uncomment
       not beautiful.border_radius or beautiful.border_radius == 0
     ) or (
       not c.valid
