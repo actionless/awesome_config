@@ -286,23 +286,16 @@ function signals.init(awesome_context)
 
   -- New client appears
   client.connect_signal("manage", function (c)
-    if awesome.startup then
+    --if awesome.startup then
       extremely_delayed_call(function()
         --local tagged
-        --tagged = function()
-    --nlog(c.name.."|"..tostring(c.floating).."|"..tostring(c==c.focus))
           if c == client.focus then
             on_client_focus(c)
           else
-            --log("manage")
             on_client_unfocus(c, true)
           end
-          --c.disconnect_signal("tagged", tagged)
-        --end
-        --c.connect_signal("tagged", tagged)
-        --c.connect_signal("request::activate", tagged)
       end)
-    end
+    --end
   end)
 
   client.connect_signal("focus", function(c)
