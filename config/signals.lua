@@ -55,7 +55,8 @@ local function apply_shape(draw, shape, ...)
   log{"Shape", num_tiled, client_tag.master_fill_policy, draw.name}
 
   local geo = draw:geometry()
-  local shape_args = ...
+  --local shape_args = ...
+  local shape_args = (client_tag:get_gap() ~= 0) and ... or 0
   local border = beautiful.base_border_width
   local titlebar_height = border
   --local titlebar_height = titlebar.is_enabled(draw) and beautiful.titlebar_height or border
