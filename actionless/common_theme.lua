@@ -5,6 +5,7 @@
 
 local awful = require("awful")
 local xresources = require("beautiful").xresources
+local dpi = xresources.apply_dpi
 
 local h_string = require("utils.string")
 local h_table = require("utils.table")
@@ -95,6 +96,13 @@ function common_theme.generate_theme(theme_dir)
   theme.bg_urgent		= "theme.error"
   theme.bg_minimize	= "theme.alt_bg"
   theme.hotkeys_modifiers_fg	= "theme.xrdb.color8"
+
+  -- @TODO: check is_dark_bg ?
+  theme.hotkeys_label_bg	= "theme.xrdb.foreground"
+  theme.hotkeys_label_fg	= "theme.xrdb.background"
+  theme.hotkeys_border_color = "theme.hotkeys_modifiers_fg"
+  theme.hotkeys_border_width = dpi(2)
+
   theme.screen_padding		= 0
 
   theme.panel_bg		= "theme.bg"
@@ -189,8 +197,6 @@ theme.left_panel_internal_corner_radius = 30
   theme.titlebar_bg_focus	= "theme.bg"
   theme.titlebar_fg_normal	= "theme.tasklist_fg_normal"
   --theme.titlebar_bg_normal	= "theme.bg"
-
-  theme.hotkeys_widget_fg = "theme.bg"
 
   theme.notification_opacity	= 0.8
   theme.notification_font	= "theme.sans_font"
