@@ -185,6 +185,7 @@ theme.titlebar_border = gsc.menubar_bg_color
 theme.titlebar_fg_normal	= color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color)
 theme.titlebar_bg_normal	= "theme.titlebar_border"
 theme.notification_border_radius = "theme.border_radius"
+
 if theme.border_radius > 0 then
   theme.titlebar_fg_focus		= gsc.menubar_fg_color
   theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
@@ -196,11 +197,10 @@ if theme.border_radius > 0 then
 else
   --theme.titlebar_fg_focus		= theme.titlebar_border
   --theme.titlebar_bg_focus		= theme.bg_focus
-  theme.titlebar_fg_focus		= gsc.selected_fg_color
-  theme.titlebar_bg_focus		= gsc.selected_bg_color
+  --theme.titlebar_fg_focus		= gsc.selected_fg_color
+  theme.titlebar_bg_focus		= gsc.wm_border_focused_color
   theme.notification_shape = nil
 end
-
 
 theme.panel_widget_spacing = dpi(10)
 theme.panel_widget_spacing_medium = dpi(8)
@@ -210,7 +210,8 @@ theme.panel_widget_bg_error = theme.xrdb.color1
 theme.panel_widget_fg_error = theme.xrdb.color15
 
 --theme.widget_music_bg = color_utils.mix(MAIN_COLOR, gsc.menubar_fg_color, 0.6)
-theme.widget_music_bg = MAIN_COLOR
+--theme.widget_music_bg = MAIN_COLOR
+theme.widget_music_bg = "theme.border_focus"
 --theme.widget_music_fg = MAIN_COLOR
 --
 
@@ -244,6 +245,5 @@ if awesome.composite_manager_running and false then
   theme.titlebar_bg_focus   = theme.titlebar_bg_focus.."dd"
   theme._titlebar_bg_focus  = theme.titlebar_bg_focus.."dd"
 end
-
 
 return theme

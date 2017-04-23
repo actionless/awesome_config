@@ -155,8 +155,13 @@ theme.titlebar_fg_normal	= "theme.tasklist_fg_normal"
 theme.titlebar_bg_normal	= "theme.titlebar_border"
 theme.titlebar_fg_focus		= "theme.titlebar_fg_normal"
 theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
---theme.titlebar_bg_focus		= "theme.border_focus"
 theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
+
+if theme.border_radius == 0 then
+  theme.border_focus = "theme.xrdb.color10"
+  theme.titlebar_bg_focus		= "theme.border_focus"
+  theme.titlebar_fg_focus		= "theme.xrdb.background"
+end
 
 
 --theme.titlebar_border           = theme.border_normal
