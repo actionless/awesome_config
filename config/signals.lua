@@ -135,6 +135,7 @@ function signals.init(awesome_context)
   end
 
   local function _on_client_unfocus (c)
+    if c.minimized then return end
     local t = c:tags()[1]
     local s = t.screen
     local layout = t.layout
