@@ -1,5 +1,3 @@
-local xresources = require("beautiful.xresources")
-
 local gtk = {
   cached_theme_variables = nil
 }
@@ -23,13 +21,6 @@ local function lookup_gtk_color_to_hex(_style_context, color_name)
     "#" .. string.format("%2.2x", m()) .. string.format("%2.2x", m()) .. string.format("%2.2x", m())
   )
 end
-
-local function lookup_gtk_color_fake_int(_style_context, color_name)
-  --kill it please
-  local m = get_gtk_color_matcher(_style_context, color_name)
-  return m and tonumber(m())
-end
-
 
 function gtk.get_theme_variables()
   if gtk.cached_theme_variables then
@@ -95,14 +86,8 @@ function gtk.get_theme_variables()
   radius_property:unset()
   button:destroy()
 
-    -- SHITTY HACKS:
-  result.spacing = lookup_gtk_color_fake_int(style_context, "spacing")
-  if result.spacing == nil then
-    result.spacing = xresources.apply_dpi(3)
-  end
-
-  gtk.cached_theme_variables = result
   window:destroy()
+  gtk.cached_theme_variables = result
   return result
 end
 
