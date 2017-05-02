@@ -10,10 +10,10 @@ local function get_gtk_color_matcher(_style_context, color_name)
   local color = _style_context:lookup_color(color_name)
   if not color then return nil end
   local hex = color:to_string()
-  print("found "..color_name.." = "..hex)
     --color:free()
   return hex:gmatch("[0-9]+")
 end
+
 
 local function lookup_gtk_color_to_hex(_style_context, color_name)
   local m = get_gtk_color_matcher(_style_context, color_name)
@@ -21,6 +21,7 @@ local function lookup_gtk_color_to_hex(_style_context, color_name)
     "#" .. string.format("%2.2x", m()) .. string.format("%2.2x", m()) .. string.format("%2.2x", m())
   )
 end
+
 
 function gtk.get_theme_variables()
   if gtk.cached_theme_variables then
@@ -76,19 +77,25 @@ function gtk.get_theme_variables()
       result[fallback_key]
   end
   local font = style_context:get_font("NORMAL")
-  result["font_family"] = font:get_family()
-  result["font_size"] = font:get_size()/1024
+  result.font_family = font:get_family()
+  result.font_size = font:get_size()/1024
 
   local button = Gtk.Button()
   local button_style_context = button:get_style_context()
-  local radius_property = button_style_context:get_property("border-radius", "NORMAL")
-  result.roundness = radius_property.value
-  radius_property:unset()
+  for result_key, style_context_property in pairs({
+    border_radius="border-radius",
+    border_width="border-top-width",
+  }) do
+    local property = button_style_context:get_property(style_context_property, "NORMAL")
+    result[result_key] = property.value
+    property:unset()
+  end
   button:destroy()
 
   window:destroy()
   gtk.cached_theme_variables = result
   return result
 end
+
 
 return gtk
