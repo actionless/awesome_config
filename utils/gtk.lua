@@ -88,8 +88,14 @@ function gtk.get_theme_variables()
   result["font_family"] = font:get_family()
   result["font_size"] = font:get_size()/1024
 
+  local button = Gtk.Button()
+  local button_style_context = button:get_style_context()
+  local radius_property = button_style_context:get_property("border-radius", "NORMAL")
+  result.roundness = radius_property.value
+  radius_property:unset()
+  button:destroy()
+
     -- SHITTY HACKS:
-  result.roundness = lookup_gtk_color_fake_int(style_context, "roundness") or xresources.apply_dpi(2)
   result.spacing = lookup_gtk_color_fake_int(style_context, "spacing")
   if result.spacing == nil then
     result.spacing = xresources.apply_dpi(3)
