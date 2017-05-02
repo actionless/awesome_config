@@ -25,6 +25,7 @@ local function lookup_gtk_color_to_hex(_style_context, color_name)
 end
 
 local function lookup_gtk_color_fake_int(_style_context, color_name)
+  --kill it please
   local m = get_gtk_color_matcher(_style_context, color_name)
   return m and tonumber(m())
 end
@@ -83,7 +84,11 @@ function gtk.get_theme_variables()
     result[result_key] = lookup_gtk_color_to_hex(style_context, style_context_key) or
       result[fallback_key]
   end
+  local font = style_context:get_font("NORMAL")
+  result["font_family"] = font:get_family()
+  result["font_size"] = font:get_size()/1024
 
+    -- SHITTY HACKS:
   result.roundness = lookup_gtk_color_fake_int(style_context, "roundness") or xresources.apply_dpi(2)
   result.spacing = lookup_gtk_color_fake_int(style_context, "spacing")
   if result.spacing == nil then
