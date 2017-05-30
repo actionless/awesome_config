@@ -32,11 +32,12 @@ theme.panel_bg = gsc.menubar_bg_color
 theme.panel_widget_bg = gsc.base_color
 theme.panel_widget_fg = gsc.text_color
 
-theme.border_radius = dpi(gsc.roundness*1.0)
-theme.panel_widget_border_radius = dpi(gsc.roundness*0.7)
+theme.border_radius = dpi(gsc.border_radius*1.0)
+theme.panel_widget_border_radius = dpi(gsc.border_radius*0.8)
+--theme.panel_widget_border_radius = dpi(gsc.border_radius*1.0)
 --theme.border_radius = dpi(5)
 --theme.panel_widget_border_radius = dpi(5)
-theme.panel_widget_border_width = dpi(2)
+theme.panel_widget_border_width = dpi(gsc.border_width)
 --theme.panel_widget_border_color = color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color, 0.5)
 theme.panel_widget_border_color = color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color, 0.3)
 
@@ -123,14 +124,16 @@ theme.panel_padding_bottom = dpi(3)
 --theme.border_width = dpi(3)
 --theme.useless_gap = dpi(6)
 
-theme.border_width = dpi(4)
-theme.useless_gap = dpi(5)
+--theme.border_width = dpi(4)
+--theme.useless_gap = dpi(5)
 
-theme.border_width = dpi(5)
+--theme.border_width = dpi(5)
+--theme.useless_gap = dpi(4)
+
+--theme.border_width = dpi(4)
 theme.useless_gap = dpi(4)
 
-theme.border_width = dpi(4)
-theme.useless_gap = dpi(4)
+theme.border_width = dpi(gsc.border_width) * 4
 
 theme.base_border_width = theme.border_width
 theme.border_width = 0
