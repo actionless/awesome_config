@@ -8,6 +8,8 @@ local client = client
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 
+local color_utils = require("utils.color")
+
 --
 --bg=beautiful.desktop_bg,
 local TRANSPARENT = "#00000000"
@@ -33,6 +35,26 @@ local function get_buttons(c)
       awful.mouse.client.resize(c)
     end)
   )
+end
+
+local function attach_highlight_on_hover(tb, c)
+  tb:connect_signal("mouse::enter", function(_)
+    if c == client.focus then
+      c.border_color = color_utils.darker(beautiful.border_focus, -40)
+      --c.border_color = color_utils.darker(beautiful.border_focus, -50)
+    else
+      --c.border_color = color_utils.darker(beautiful.border_normal, -40)
+      c.border_color = color_utils.darker(beautiful.border_normal, -50)
+      --c.border_color = color_utils.mix(beautiful.border_normal, beautiful.border_focus, 0.6)
+    end
+  end)
+  tb:connect_signal("mouse::leave", function(_)
+    if c == client.focus then
+      c.border_color = beautiful.border_focus
+    else
+      c.border_color = beautiful.border_normal
+    end
+  end)
 end
 
 function titlebar.remove_titlebar(c)
@@ -67,13 +89,14 @@ function titlebar.make_border(c, color, shadow, is_titlebar)
   end
   --c.border_width = 0
   --c.border_color = beautiful.border_normal
+  local tbt, tbb, tbl, tbr
 
   if shadow then 
 
     local SHADOW = shadow
 
     if not is_titlebar then
-      local tbt = awful.titlebar(c,{size= beautiful.base_border_width or 5, position="top"})
+      tbt = awful.titlebar(c,{size= beautiful.base_border_width or 5, position="top"})
       tbt:setup {
         buttons = get_buttons(c),
           {
@@ -103,7 +126,7 @@ function titlebar.make_border(c, color, shadow, is_titlebar)
     end
 
     --               Left titlebar                --
-    local tbl = awful.titlebar(c,{size= beautiful.base_border_width or 5,position="left"})
+    tbl = awful.titlebar(c,{size= beautiful.base_border_width or 5,position="left"})
     tbl:setup {
             {
               left   = beautiful.base_border_width,
@@ -116,7 +139,7 @@ function titlebar.make_border(c, color, shadow, is_titlebar)
       widget    = wibox.container.background
     }
 
-    local tbr = awful.titlebar(c,{size= (beautiful.base_border_width or 5)+(beautiful.border_shadow_width or 0),position="right"})
+    tbr = awful.titlebar(c,{size= (beautiful.base_border_width or 5)+(beautiful.border_shadow_width or 0),position="right"})
     tbr:setup{
       buttons = get_buttons(c),
       id="main_layout",
@@ -159,7 +182,7 @@ function titlebar.make_border(c, color, shadow, is_titlebar)
       layout = wibox.layout.align.horizontal,
     }
 
-    local tbb = awful.titlebar(c,{size= (beautiful.base_border_width or 5) + (beautiful.border_shadow_width or 0),position="bottom"})
+    tbb = awful.titlebar(c,{size= (beautiful.base_border_width or 5) + (beautiful.border_shadow_width or 0),position="bottom"})
     tbb:setup{
       buttons = get_buttons(c),
       id="main_layout",
@@ -217,7 +240,7 @@ function titlebar.make_border(c, color, shadow, is_titlebar)
 
     if not is_titlebar then
       --               Top titlebar                --
-      local tbt = awful.titlebar(c,{size= beautiful.base_border_width or 5, position="top"})
+      tbt = awful.titlebar(c,{size= beautiful.base_border_width or 5, position="top"})
       tbt:setup {
         buttons = get_buttons(c),
         id     = "main_layout",
@@ -225,7 +248,7 @@ function titlebar.make_border(c, color, shadow, is_titlebar)
       }
     end
     --               Left titlebar                --
-    local tbl = awful.titlebar(c,{size= beautiful.base_border_width or 5,position="left"})
+    tbl = awful.titlebar(c,{size= beautiful.base_border_width or 5,position="left"})
     tbl:setup {
       buttons = get_buttons(c),
       --bg        = beautiful.titlebar_bg_left or beautiful.titlebar_bg_sides or beautiful.fg_normal,
@@ -236,7 +259,7 @@ function titlebar.make_border(c, color, shadow, is_titlebar)
     }
 
     --               Right titlebar                --
-    local tbr = awful.titlebar(c,{size= beautiful.base_border_width or 5,position="right"})
+    tbr = awful.titlebar(c,{size= beautiful.base_border_width or 5,position="right"})
     tbr:setup {
       buttons = get_buttons(c),
       --bgimage   = beautiful.titlebar_bgimage_right,
@@ -244,16 +267,30 @@ function titlebar.make_border(c, color, shadow, is_titlebar)
       widget    = wibox.container.background
     }
     --              Bottom titlebar                --
-    local tbb = awful.titlebar(c,{size= beautiful.base_border_width or 5,position="bottom"})
+    tbb = awful.titlebar(c,{size= beautiful.base_border_width or 5,position="bottom"})
     tbb:setup {
       buttons = get_buttons(c),
       id     = "main_layout",
       layout = wibox.container.background,
     }
 
+    if tbt then
+      attach_highlight_on_hover(tbt, c)
+    end
+    attach_highlight_on_hover(tbb, c)
+    attach_highlight_on_hover(tbl, c)
+    attach_highlight_on_hover(tbr, c)
+    --for _, tb in ipairs({tbt, tbb, tbl, tbr}) do
+      --if tb then
+        --attach_highlight_on_hover(tb, c)
+      --end
+    --end
+    --
   end
 
 end
+
+
 
 function titlebar.make_titlebar(c, color, shadow)
   if titlebar.is_enabled(c) and not shadow then
@@ -350,8 +387,8 @@ function titlebar.make_titlebar(c, color, shadow)
       }
   else
     tbt:setup(titlebar_setup)
+    attach_highlight_on_hover(tbt, c)
   end
-
 
   --c.skip_taskbar = true
 end
