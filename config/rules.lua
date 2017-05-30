@@ -84,6 +84,11 @@ function rules.init(awesome_context)
           ontop = false,
         },
       },
+      { rule = { class = "qBittorent"},
+        properties = {
+          tag=capi.screen.primary.tags[6],
+        },
+      },
 
       { rule = { class = "Onboard"},
         callback = function(c)
