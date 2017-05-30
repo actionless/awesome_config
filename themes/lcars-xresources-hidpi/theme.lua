@@ -36,13 +36,6 @@ theme.panel_layoutbox = theme.xrdb.color7
 --theme.widget_layoutbox_bg = theme.panel_layoutbox
 --theme.widget_layoutbox_fg = theme.panel_widget_fg
 
--- WALLPAPER:
--- Use nitrogen:
-theme.wallpaper = nil
-theme.wallpaper_cmd     = "nitrogen --restore"
--- Use wallpaper tile:
---theme.wallpaper = theme_dir .. '/umbreon_pattern.png'
-
 -- PANEL DECORATIONS:
 --
 theme.show_widget_icon = false
@@ -105,14 +98,17 @@ theme.useless_gap = dpi(5)
 
 theme.border_width = dpi(5)
 theme.useless_gap = dpi(4)
+--theme.useless_gap_edge_left = 0
+--theme.useless_gap_edge_bottom = 0
+--theme.useless_gap_edge_right = 0
 
 theme.border_width = dpi(4)
 theme.border_radius = dpi(5)
 
 local gtk_util = require("utils.gtk")
 local gsc = gtk_util.get_theme_variables()
-theme.border_radius = dpi(gsc.roundness*1.0)
-theme.panel_widget_border_radius = dpi(gsc.roundness*0.7)
+theme.border_radius = dpi(gsc.border_radius*1.0)
+theme.panel_widget_border_radius = dpi(gsc.border_radius*0.8)
 
 theme.base_border_width = theme.border_width
 theme.border_width = 0
@@ -192,7 +188,8 @@ if awesome.composite_manager_running then
   theme.border_normal       = theme.border_normal .."66"
   theme.border_focus        = theme.border_focus .."66"
   theme.titlebar_bg_normal  = theme.titlebar_bg_normal.."dd"
-  theme._titlebar_bg_normal = theme.titlebar_bg_normal.."dd"
+  --theme._titlebar_bg_normal = theme.titlebar_bg_normal.."dd"
+  theme._titlebar_bg_normal = theme.titlebar_bg_normal.."66"
   theme.titlebar_bg_focus   = theme.titlebar_bg_focus.."dd"
   theme._titlebar_bg_focus  = theme.titlebar_bg_focus.."dd"
 end
@@ -215,5 +212,11 @@ else
   theme.clock_fg = color_utils.darker(theme.xrdb.foreground, 16)
   --theme.border_normal = color_utils.darker(theme.xrdb.background, 20)
 end
+
+-- WALLPAPER:
+--theme.wallpaper_layout = "tiled"
+theme.wallpaper = nil
+theme.wallpaper_cmd     = "nitrogen --restore"
+
 
 return theme
