@@ -123,7 +123,8 @@ local function round_up_client_corners(c, force, reference)
     local num_tiled = #awful.client.tiled(c.screen)
     local client_tag = c.first_tag
     log{"Shape", num_tiled, client_tag.master_fill_policy, c.name}
-    if not force and (c.maximized or (
+    --if not force and (c.maximized or (
+    if (c.maximized or (
       #c:tags() < 1
     ) or (
       (num_tiled<=1 and client_tag.master_fill_policy=='expand')
