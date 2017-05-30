@@ -37,7 +37,8 @@ function menus.init(context)
     { "edit config", context.cmds.editor_cmd .. " " .. awesome.conffile },
     { "restart", awesome.restart },
     { "quit", function() awesome.quit() end},
-    { "quit2", function() awesome.quit(2) end},
+    { "quit2 (argb)", function() awesome.quit(2) end},
+    { "quit3 (openbox)", function() awesome.quit(3) end},
     { "poweroff", "poweroff" },
   }
 
