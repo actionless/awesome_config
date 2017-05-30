@@ -62,6 +62,7 @@ function autorun.init(awesome_context)
 
   --run_once("megasync")
   run_once("dropbox")
+  awful.spawn.spawn("gpaste-client start")
 
   for _, item in ipairs(awesome_context.autorun) do
     awful.spawn.with_shell(item)
