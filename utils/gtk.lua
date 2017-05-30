@@ -4,14 +4,11 @@ local gtk = {
 
 
 local function get_gtk_color_matcher(_style_context, color_name)
-  --local m = _style_context:lookup_color(color_name):to_string():gmatch("[0-9]+")
-  --return "#" .. string.format("%2.2x", m()) .. string.format("%2.2x", m()) .. string.format("%2.2x", m())
-  --
   local color = _style_context:lookup_color(color_name)
   if not color then return nil end
-  local hex = color:to_string()
-    --color:free()
-  return hex:gmatch("[0-9]+")
+  local rgb = color:to_string()
+  --color:free()
+  return rgb:gmatch("[0-9]+")
 end
 
 
@@ -41,6 +38,8 @@ function gtk.get_theme_variables()
     print("Seems like GTK+3 is not installed or theme is not set correctly.")
     return result
   end
+  --window:set_override_redirect(true)
+  --window:set_override_redirect(true)
   local style_context = window:get_style_context()
 
   for _, color_data in ipairs({
@@ -76,9 +75,10 @@ function gtk.get_theme_variables()
     result[result_key] = lookup_gtk_color_to_hex(style_context, style_context_key) or
       result[fallback_key]
   end
-  local font = style_context:get_font("NORMAL")
-  result.font_family = font:get_family()
-  result.font_size = font:get_size()/1024
+  local font = style_context:get_font(Gtk.StateFlags.NORMAL)
+  --result.font_family = font:get_family()
+  --result.font_size = font:get_size()/1024
+  result.font = font:to_string()
 
   local button = Gtk.Button()
   local button_style_context = button:get_style_context()
@@ -86,7 +86,7 @@ function gtk.get_theme_variables()
     border_radius="border-radius",
     border_width="border-top-width",
   }) do
-    local property = button_style_context:get_property(style_context_property, "NORMAL")
+    local property = button_style_context:get_property(style_context_property, Gtk.StateFlags.NORMAL)
     result[result_key] = property.value
     property:unset()
   end
