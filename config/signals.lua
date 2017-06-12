@@ -8,6 +8,13 @@ local titlebar	= require("actionless.titlebar")
 local persistent = require("actionless.persistent")
 
 
+-- enable autofocus
+require("awful.autofocus")
+
+-- disable popups when hovering titlebar buttons
+awful.titlebar.enable_tooltip = false
+
+
 local debug_messages_enabled = false
 --local debug_messages_enabled = true
 local log = function(...) if debug_messages_enabled then nlog(...) end end
