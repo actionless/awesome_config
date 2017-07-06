@@ -837,6 +837,10 @@ awesome_context.clientkeys = awful.util.table.join(
   bind_key({ modkey,        }, "m",
     function (c)
       c.maximized = not c.maximized
+      if not c.maximized then
+        c.maximized_horizontal = c.maximized
+        c.maximized_vertical   = c.maximized
+      end
       c:raise()
     end,
     "maximize client", CLIENT_MANIPULATION

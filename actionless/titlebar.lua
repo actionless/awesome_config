@@ -61,21 +61,25 @@ function titlebar.remove_titlebar(c)
   if not titlebar.is_enabled(c) then
     return
   end
+  local geom = c:geometry()
   local tb = awful.titlebar(c,{size= beautiful.base_border_width or 5, position="top"})
   tb:setup {
     buttons = get_buttons(c),
     id     = "main_layout",
     layout = wibox.container.background,
   }
+  c:geometry(geom)
 end
 
 function titlebar.remove_border(c)
   if not (titlebar.border_is_enabled(c) or titlebar.is_enabled(c)) then
     return
   end
+  local geom = c:geometry()
   for _, position in ipairs({"top", "bottom", "right", "left"}) do
     awful.titlebar.hide(c, position)
   end
+  c:geometry(geom)
 end
 
 function titlebar.make_border(c, color, shadow, is_titlebar)
