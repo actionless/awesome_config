@@ -94,7 +94,6 @@ function common_theme.generate_theme(theme_dir)
   theme.bg_focus		= "theme.theme"
   theme.fg_urgent		= "theme.bg"
   theme.bg_urgent		= "theme.error"
-  theme.bg_minimize	= "theme.alt_bg"
   theme.hotkeys_modifiers_fg	= "theme.xrdb.color8"
 
   -- @TODO: check is_dark_bg ?
@@ -166,7 +165,7 @@ theme.left_panel_internal_corner_radius = 30
   theme.tasklist_fg_normal	= "theme.fg"
   theme.tasklist_bg_normal	= "theme.bg"
   theme.tasklist_fg_minimize	= "theme.bg"
-  theme.tasklist_bg_minimize	= "theme.bg_minimize"
+  theme.tasklist_bg_minimize	= "theme.alt_bg"
 
   theme.widget_netctl_bg = "theme.panel_media"
   theme.widget_netctl_fg = "theme.panel_widget_fg"
