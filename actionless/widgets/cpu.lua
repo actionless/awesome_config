@@ -97,16 +97,18 @@ local function worker(args)
 
     local result_string = ''
     local counter = 0
+    local num_records = h_table.getn(result)
     for pid, percent in h_table.spairs(result, function(t,a,b) return t[b] < t[a] end) do
       result_string = result_string .. string.format("%5s %5.2f %s", pid, percent, names[pid])
       counter = counter + 1
-      if counter == cpu.list_len then
+      if counter == cpu.list_len or counter == num_records then
         break
       end
       result_string = result_string .. '\n'
     end
     if result_string ~= '' then
-      result_string = "  PID  %CPU COMMAND\n" .. result_string
+      --result_string = "  PID  %CPU COMMAND\n" .. result_string
+      result_string = '  PID  %CPU COMMAND\n'..'<span font="'  .. tostring(beautiful.text_font)  .. '">' .. result_string .. '</span>'
     else
       result_string = "no running processes atm"
     end

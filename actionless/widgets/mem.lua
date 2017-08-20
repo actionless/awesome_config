@@ -88,16 +88,17 @@ local function worker(args)
     end
 
     local result_string = ' %MEM COMMAND\n'
+    result_string = result_string .. '<span font="'  .. tostring(beautiful.text_font)  .. '">'
     local counter = 0
     for k, v in h_table.spairs(result, function(t,a,b) return t[b] < t[a] end) do
       result_string = result_string .. string.format("%5.1f %s", v, k)
       counter = counter + 1
       if counter == mem.list_len then
         break
-      else
-        result_string = result_string .. '\n'
       end
+      result_string = result_string .. '\n'
     end
+    result_string = result_string .. '</span>'
 
     mem.notification = naughty.notify({
       text = result_string,

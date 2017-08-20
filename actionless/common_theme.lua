@@ -53,6 +53,7 @@ function common_theme.generate_theme(theme_dir)
   --theme.sans_font = "PT Sans Bold 10.3"
   -- use ~/.fonts.conf, Luke ;)
   theme.font = "Monospace Bold 10"
+  theme.text_font = "Monospace 10"
   theme.small_font = "Monospace 6"
   theme.sans_font = "Sans Bold 10"
   -- Don't use sans font:
