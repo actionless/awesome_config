@@ -195,11 +195,23 @@ if awesome.composite_manager_running then
   theme._titlebar_bg_focus  = theme.titlebar_bg_focus.."dd"
 end
 
--- Recolor titlebar icons:
 local theme_assets = require("beautiful.theme_assets")
 theme = theme_assets.recolor_layout(theme, theme.fg_normal)
-theme = theme_assets.recolor_titlebar_normal(theme, theme.titlebar_fg_normal)
-theme = theme_assets.recolor_titlebar_focus(theme, theme.titlebar_fg_focus)
+-- Recolor titlebar icons:
+theme = theme_assets.recolor_titlebar_focus(
+  theme, theme.titlebar_fg_focus
+)
+theme = theme_assets.recolor_titlebar(
+  theme, color_utils.darker(theme.titlebar_fg_focus, -70), "focus", "hover"
+)
+theme = theme_assets.recolor_titlebar_normal(
+  theme, theme.titlebar_fg_normal
+)
+theme = theme_assets.recolor_titlebar(
+  theme, color_utils.darker(theme.titlebar_fg_normal, -70), "normal", "hover"
+)
+theme = theme_assets.recolor_titlebar(theme, theme.xrdb.color1, "focus", "press")
+theme = theme_assets.recolor_titlebar(theme, theme.xrdb.color1, "normal", "press")
 
 
 if color_utils.is_dark(theme.xrdb.background) then
