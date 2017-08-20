@@ -130,7 +130,7 @@ end
 --- Perform an action for the given menu item.
 -- @param o The menu item.
 -- @return if the function processed the callback, new awful.prompt command, new awful.prompt prompt text.
-local function perform_action(o)
+local function perform_action(o, with_shell)
     if not o then return end
     if o.key then
         current_category = o.key
@@ -147,7 +147,11 @@ local function perform_action(o)
         ----------
         local command = shownitems[current_item].cmdline
         command = command:gsub("^TERM:", menubar.term_prefix)
-        awful.spawn.spawn(command)
+        if with_shell then
+            awful.spawn.with_shell(command)
+        else
+            awful.spawn.spawn(command)
+        end
         -- Let awful.prompt execute dummy exec_callback and
         -- done_callback to stop the keygrabber properly.
         return false
@@ -327,7 +331,7 @@ local function prompt_keypressed_callback(mod, key, comm)
             shownitems[current_item].cmdline = "TERM:"
                     .. shownitems[current_item].cmdline
         end
-        return perform_action(shownitems[current_item])
+        return perform_action(shownitems[current_item], mod.Shift)
     end
     return false
 end
