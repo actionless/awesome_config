@@ -1,6 +1,7 @@
 local color = {}
 
 function color.darker(color_value, darker_n)
+  darker_n = darker_n or 10
     local result = "#"
     for s in color_value:gmatch("[a-fA-F0-9][a-fA-F0-9]") do
         local bg_numeric_value = tonumber("0x"..s) - darker_n
