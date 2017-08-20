@@ -7,6 +7,8 @@ local autorun = {}
 
 function autorun.init(awesome_context)
 
+  run_once("lxsession -a -n -r")
+  run_once("lxpolkit")
   awful.spawn.with_shell('pgrep vmtoolsd && /usr/bin/vmware-user-suid-wrapper')
   --awful_spawn.with_shell("/home/lie/.screenlayout/awesome.sh")
 
