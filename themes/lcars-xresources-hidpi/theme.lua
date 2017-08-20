@@ -138,7 +138,8 @@ theme.apw_mute_fg_color = "theme.xrdb.color9"
 theme.taglist_fg_focus		= "theme.bg"
 --theme.taglist_bg_focus		= "theme.xrdb.color6"
 if color_utils.is_dark(theme.xrdb.background) then
-  theme.taglist_bg_focus		= "theme.xrdb.color15"
+  --theme.taglist_bg_focus		= "theme.xrdb.color15"
+  theme.taglist_bg_focus		= color_utils.darker(theme.panel_taglist, -60)
 else
   theme.taglist_bg_focus		= "theme.xrdb.color0"
 end
