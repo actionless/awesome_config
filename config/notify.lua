@@ -7,6 +7,7 @@ local notify = {}
 
 function notify.init(_)
 
+  naughty.config.padding = beautiful.useless_gap
   naughty.config.defaults.opacity = beautiful.notification_opacity
   naughty.config.defaults.font = beautiful.notification_font
   naughty.config.defaults.bg = beautiful.notification_bg
