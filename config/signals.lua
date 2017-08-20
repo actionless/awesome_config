@@ -119,7 +119,7 @@ local function round_up_client_corners(c, force, reference)
     pending_shapes[c]
   ) or (
     #c:tags() < 1
-  )) then
+  )) or beautiful.skip_rounding_for_crazy_borders then
     --nlog('R1 F='..(force and force or 'nil').. ', R='..reference..', C='.. c.name)
     return
   end

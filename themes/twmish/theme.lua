@@ -13,6 +13,9 @@ local theme_name = "twmish"
 local theme_dir = awful.util.getdir("config").."/themes/"..theme_name
 --local theme = dofile("/usr/share/awesome/themes/xresources/theme.lua")
 local theme = {}
+
+theme.skip_rounding_for_crazy_borders = true
+
 local gsc = gtk_util.get_theme_variables()
 theme.gtk = gsc
 
