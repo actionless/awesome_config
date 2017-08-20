@@ -37,20 +37,22 @@ function autorun.init(awesome_context)
     awful.spawn.with_shell('xinput set-prop ' .. sanwa_pad .. ' "Evdev Wheel Emulation Inertia" 50')
     awful.spawn.with_shell('xinput set-prop ' .. sanwa_pad .. ' "Evdev Wheel Emulation Timeout" 200')
   end
-  
+
   -- keyboard settings:
   awful.spawn.with_shell("xset r rate 250 25")
   --awful.spawn.with_shell("xset r rate 175 17")
   --awful.spawn.with_shell("xset r rate 250 10")
   awful.spawn.with_shell("xset b off") -- turn off beep
-  run_once("setxkbmap -layout us,ru -variant ,winkeys -option grp:caps_toggle,grp_led:caps,terminate:ctrl_alt_bksp,compose:ralt")
-  
+  run_once(
+    "setxkbmap -layout us,ru -variant ,winkeys -option grp:caps_toggle,grp_led:caps,terminate:ctrl_alt_bksp,compose:ralt"
+  )
+
   --run_once("redshift")
   --run_once(awesome_context.cmds.compositor)
-  
+
   run_once("pulseaudio")
   awful.spawn.with_shell("start-pulseaudio-x11")
-  
+
   for _, item in ipairs(awesome_context.autorun) do
     awful.spawn.with_shell(item)
   end
