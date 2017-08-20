@@ -73,8 +73,6 @@ if local_settings_result ~= true then
 end
 
 
-
-
 local beautiful	= require("beautiful")
 beautiful.init(context.theme_dir)
 
