@@ -18,6 +18,7 @@ local theme_dir = awful.util.getdir("config").."/themes/"..theme_name
 local theme = {}
 
 theme.gtk = gsc
+theme.xrdb = xresources.get_current_theme()
 
 theme.fg = gsc.fg_color
 theme.fg_normal = gsc.fg_color
@@ -38,6 +39,7 @@ theme.panel_widget_border_radius = dpi(gsc.border_radius*0.8)
 --theme.border_radius = dpi(5)
 --theme.panel_widget_border_radius = dpi(5)
 theme.panel_widget_border_width = dpi(gsc.border_width)
+theme.panel_widget_border_width = dpi(gsc.border_width*2)
 --theme.panel_widget_border_color = color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color, 0.5)
 theme.panel_widget_border_color = color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color, 0.3)
 
@@ -49,7 +51,8 @@ theme.tasklist_fg_focus = theme.panel_fg
 theme.tasklist_fg_normal = theme.panel_fg
 theme.tasklist_bg_focus = theme.panel_bg
 theme.tasklist_bg_normal = theme.panel_bg
-theme.xrdb = xresources.get_current_theme()
+theme.tasklist_fg_minimize	= theme.xrdb.background
+theme.tasklist_bg_minimize	= theme.xrdb.color4
 
 theme.dir = theme_dir
 theme.icons_dir = theme.dir .. "/icons/"
