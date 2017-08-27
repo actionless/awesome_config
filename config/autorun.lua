@@ -10,7 +10,7 @@ function autorun.init(awesome_context)
   run_once("lxsession -a -n -r")
   run_once("lxpolkit")
   awful.spawn.with_shell('pgrep vmtoolsd && /usr/bin/vmware-user-suid-wrapper')
-  --awful_spawn.with_shell("/home/lie/.screenlayout/awesome.sh")
+  --awful_spawn.with_shell(os.getenv('HOME').."/.screenlayout/awesome.sh")
 
   --local kensinton =12
   local kensington = nil
@@ -44,7 +44,7 @@ function autorun.init(awesome_context)
   --awful.spawn.with_shell("xset r rate 250 10")
   awful.spawn.with_shell("xset b off") -- turn off beep
   run_once(
-    "setxkbmap -layout us,ru -variant ,winkeys -option grp:caps_toggle,grp_led:caps,terminate:ctrl_alt_bksp,compose:ralt"
+   "setxkbmap -layout us,ru -variant ,winkeys -option grp:caps_toggle,grp_led:caps,terminate:ctrl_alt_bksp,compose:ralt"
   )
 
   --run_once("redshift")

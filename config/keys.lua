@@ -140,7 +140,7 @@ local globalkeys = awful.util.table.join(
     "turn off display", AWESOME_COLOR
   ),
   bind_key({ modkey,  }, "o",
-    function() awful.spawn.with_shell("/home/lie/.screenlayout/cycle.sh") end,
+    function() awful.spawn.with_shell(os.getenv('HOME').."/.screenlayout/cycle.sh") end,
     "rotate display", AWESOME_COLOR
   ),
 
