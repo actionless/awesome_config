@@ -139,6 +139,9 @@ theme.useless_gap = dpi(4)
 theme.border_width = dpi(gsc.border_width) * 4
 
 theme.base_border_width = theme.border_width
+if theme.base_border_width <= 1 then
+  theme.base_border_width = dpi(2)
+end
 theme.border_width = 0
 
 theme.panel_height = theme.basic_panel_height + theme.panel_padding_bottom
