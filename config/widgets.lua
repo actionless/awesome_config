@@ -116,12 +116,18 @@ function widget_loader.init(awesome_context)
       valign = "bottom",
       fg=beautiful.clock_fg,
     })
-    widgets.calendar:attach(w.lcars_textclock, {fg=beautiful.theme, position="top_left"})
+    awful.widget.calendar_popup.month({}):attach(w.lcars_textclock, "tl", {on_hover=true})
   end
   local markup = require("utils.markup")
   local textclock = wibox.widget.textclock(markup.fg(beautiful.clock_fg or beautiful.panel_fg, "%H:%M"))
   w.textclock = textclock
-  widgets.calendar:attach(w.textclock, {fg=(beautiful.calendar_fg or beautiful.theme), position="top_right"})
+  beautiful.calendar_month_padding = 40
+  beautiful.calendar_month_border_color = beautiful.notification_border_color
+  beautiful.calendar_month_border_width = beautiful.notification_border_width
+  awful.widget.calendar_popup.month({
+    spacing=dpi(3),
+    margin=beautiful.useless_gap*6,
+  }):attach(w.textclock, nil, {on_hover=true})
 
 
   w.screen = {}

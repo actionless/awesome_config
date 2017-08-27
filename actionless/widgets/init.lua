@@ -11,7 +11,6 @@ local widgets = {
 	lcarslist		= require("actionless.widgets.lcarslist"),
 	cpu			= require("actionless.widgets.cpu"),
 	mem			= require("actionless.widgets.mem"),
-	calendar		= require("actionless.widgets.calendar"),
         kbd                     = require("actionless.widgets.kbd"),
 }
 
