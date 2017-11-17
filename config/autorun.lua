@@ -43,7 +43,7 @@ function autorun.init(awesome_context)
   --awful.spawn.with_shell("xset r rate 175 17")
   --awful.spawn.with_shell("xset r rate 250 10")
   awful.spawn.with_shell("xset b off") -- turn off beep
-  run_once(
+  awful.spawn.with_shell(
    "setxkbmap -layout us,ru -variant ,winkeys -option grp:caps_toggle,grp_led:caps,terminate:ctrl_alt_bksp,compose:ralt"
   )
 
