@@ -1,4 +1,5 @@
 local awful = require("awful")
+local beautiful = require("beautiful")
 local capi = {
   screen = screen
 }
@@ -93,14 +94,37 @@ function rules.init(awesome_context)
         },
       },
 
-      { rule = { class = "Onboard"},
+      { rule = { name = "xfce4-panel"},
+        properties = {
+          valid=false,
+        },
         callback = function(c)
-          nlog(c)
-          c.focusable = false
           c.valid = false
-          c.ontop = true
-          c.sticky = true
+          c.focusable = false
+        end,
+      },
+
+      { rule = { class = "Pidgin"},
+        properties = {
+          tag=capi.screen.primary.tags[10],
+        },
+      },
+      { rule = { class = "Pidgin", role = "buddy_list"},
+        properties = {
+          placement = awful.placement.top_right,
+        },
+        callback = function(c)
+          local wa = c.screen.workarea
+          local g = c:geometry()
+          g.x = wa.x + wa.width - g.width - (beautiful.useless_gap*9) - (beautiful.border_width*2)
+          g.y = wa.y + (beautiful.useless_gap*6)
+          c:geometry(g)
         end
+      },
+      { rule = { class = "Pidgin", role = "smiley_dialog"},
+        properties = {
+          placement = awful.placement.centered,
+        },
       },
 
   }
