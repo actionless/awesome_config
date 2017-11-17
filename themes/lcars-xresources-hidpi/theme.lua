@@ -107,8 +107,8 @@ theme.border_radius = dpi(5)
 
 local gtk_util = require("utils.gtk")
 local gsc = gtk_util.get_theme_variables()
-theme.border_radius = dpi(gsc.border_radius*1.0)
-theme.panel_widget_border_radius = dpi(gsc.border_radius*0.8)
+theme.border_radius = dpi((gsc.border_radius or 1)*1.0)
+theme.panel_widget_border_radius = dpi((gsc.border_radius or 1)*0.8)
 
 theme.base_border_width = theme.border_width
 theme.border_width = 0
