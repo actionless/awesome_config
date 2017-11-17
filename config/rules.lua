@@ -36,7 +36,10 @@ function rules.init(awesome_context)
           raise = true,
           keys = awesome_context.clientkeys,
           buttons = awesome_context.clientbuttons,
-          placement = awful.placement.no_overlap+awful.placement.no_offscreen,
+          placement =
+            awful.placement.centered +
+            awful.placement.no_overlap, --+
+            --awful.placement.no_offscreen,
           size_hints_honor = false,
           screen = awful.screen.preferred,
           --slave = true,
