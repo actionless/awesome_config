@@ -127,6 +127,7 @@ function widget_loader.init(awesome_context)
   awful.widget.calendar_popup.month({
     spacing=dpi(3),
     margin=beautiful.useless_gap*6,
+    opacity=beautiful.notification_opacity,
   }):attach(w.textclock, nil, {on_hover=true})
 
 
