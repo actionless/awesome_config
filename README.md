@@ -1,4 +1,4 @@
-﻿awesome_config
+﻿awesome wm config
 ==============
 
 #### Installation
@@ -12,7 +12,7 @@ cd awesome
 git submodule init
 git submodule update
 # optionally copy config with machine-specific variables
-wget https://gist.githubusercontent.com/actionless/229eef7795915068bad9/raw/08c2df45abcc3cb9b08737cadd9058bbfe005e40/local.lua -O config/local.lua
+cp config/local.lua.example config/local.lua
 ```
 
  - [lcars](http://i.imgur.com/8C6l5ko.gifv) layout
