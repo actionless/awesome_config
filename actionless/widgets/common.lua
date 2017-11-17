@@ -332,10 +332,15 @@ function common.decorated_horizontal(args)
 
   -- give set_bg and set_fg methods to ones don't have it:
   for i, widget in ipairs(decorated.lie_widget_list) do
+    if widget.set_font then
+      widget:set_font(args.font or beautiful.panel_widget_font or beautiful.font)
+    end
     if (decorated.fg and not widget.set_fg) or (decorated.bg and not widget.set_bg) then
       local bg_widget = setmetatable(wibox.container.background(widget), widget)
-      bg_widget.set_font = function(...)
-        widget.set_font(...)
+      if widget.set_font then
+        bg_widget.set_font = function(...)
+          widget.set_font(...)
+        end
       end
       bg_widget.set_markup = function(...)
         widget.set_markup(...)
@@ -442,7 +447,9 @@ function common.decorated_horizontal(args)
   end
 
   function decorated:set_font(...)
-    return self.lie_widget:set_font(...)
+    if self.lie_widget.set_font then
+      return self.lie_widget:set_font(...)
+    end
   end
 
   decorated:set_normal()
