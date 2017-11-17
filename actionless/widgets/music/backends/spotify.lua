@@ -88,7 +88,7 @@ function spotify.resize_cover(
 )
   awful.spawn.with_line_callback(
     string.format(
-      "wget %s -O %s",
+      "curl -L -s %s -o %s",
       player_status.cover_url,
       output_coverart_path
     ),{
