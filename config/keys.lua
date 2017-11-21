@@ -48,12 +48,10 @@ awful.layout.suit.tile.resize_jump_to_corner = false
       end),
     awful.button({ modkey }, 1, awful.mouse.client.move),
     awful.button({ modkey }, 3, function(c)
-      awful.mouse.client.resize(c, nil, {jump_to_corner=false})
-      --awful.mouse.client.resize(c, nil, {})
+      awful.mouse.resize(c, nil, {jump_to_corner=false})
     end),
     awful.button({ modkey, "Control" }, 1, function(c)
-      awful.mouse.client.resize(c, nil, {jump_to_corner=false})
-      --awful.mouse.client.resize(c, nil, {})
+      awful.mouse.resize(c, nil, {jump_to_corner=false})
     end)
   )
 
@@ -173,7 +171,7 @@ local globalkeys = awful.util.table.join(
           textbox = awesome_context.widgets.screen[s.index].promptbox.widget,
           exe_callback = function(new_name)
             if not new_name or #new_name == 0 then return end
-            persistent.tag.rename(new_name, tag, s, tag_id)
+            tag.name = new_name
           end
         })
     end,
@@ -362,7 +360,10 @@ local globalkeys = awful.util.table.join(
   ),
 
   bind_key({ modkey, altkey }, "e",
-    function () persistent.tag.togglemfpol() end,
+    function ()
+      awful.tag.togglemfpol()
+      awful.screen.focused().selected_tag:emit_signal("property::layout")
+    end,
     "toggle expand master", LAYOUT_MANIPULATION
   ),
   bind_key({ modkey, altkey }, "g",
@@ -706,7 +707,7 @@ awesome_context.clientkeys = awful.util.table.join(
         g.width = g.width + RESIZE_STEP
         c:geometry(g)
       else
-        persistent.tag.incmwfact(0.05)
+        awful.tag.incmwfact(0.05)
       end
     end,
     "master size+", LAYOUT_MANIPULATION
@@ -718,7 +719,7 @@ awesome_context.clientkeys = awful.util.table.join(
         g.width = g.width - RESIZE_STEP
         c:geometry(g)
       else
-        persistent.tag.incmwfact(-0.05)
+        awful.tag.incmwfact(-0.05)
       end
     end,
     "master size-", LAYOUT_MANIPULATION
@@ -756,7 +757,7 @@ awesome_context.clientkeys = awful.util.table.join(
         g.width = g.width + RESIZE_STEP
         c:geometry(g)
       else
-        persistent.tag.incmwfact(0.05)
+        awful.tag.incmwfact(0.05)
       end
     end,
     "master size+", LAYOUT_MANIPULATION
@@ -768,7 +769,7 @@ awesome_context.clientkeys = awful.util.table.join(
         g.width = g.width - RESIZE_STEP
         c:geometry(g)
       else
-        persistent.tag.incmwfact(-0.05)
+        awful.tag.incmwfact(-0.05)
       end
     end,
     "master size-", LAYOUT_MANIPULATION
