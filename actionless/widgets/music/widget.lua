@@ -203,8 +203,10 @@ local function worker(args)
       --player.widget:set_warning()
       --player.separator_widget:set_text("⏸")
       player.separator_widget:set_text("-")
-      player.widget:set_fg(beautiful.panel_fg)
-      player.widget:set_bg(beautiful.panel_bg)
+      player.widget:set_color({
+        bg=args.pause_bg or beautiful.panel_bg,
+        fg=args.pause_fg or beautiful.panel_fg,
+      })
     elseif player_status.state == "stop" then
       -- stop
       player.separator_widget:set_text("")
