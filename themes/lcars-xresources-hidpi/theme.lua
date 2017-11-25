@@ -83,7 +83,7 @@ theme.panel_padding_bottom = dpi(3)
 --theme.notification_border_radius = dpi(10)
 --theme.panel_widget_border_radius = dpi(4)
 
-theme.border_radius = dpi(8)
+--theme.border_radius = dpi(8)
 theme.notification_border_radius = dpi(8)
 theme.panel_widget_border_radius = dpi(4)
 
@@ -103,7 +103,7 @@ theme.useless_gap = dpi(4)
 --theme.useless_gap_edge_right = 0
 
 theme.border_width = dpi(4)
-theme.border_radius = dpi(5)
+--theme.border_radius = dpi(5)
 
 local gtk_util = require("utils.gtk")
 local gsc = gtk_util.get_theme_variables()
@@ -127,7 +127,7 @@ theme.menu_width		= dpi(150)
 theme.menu_border_color = theme.xrdb.color1
 
 --theme.apw_fg_color = "theme.xrdb.color8"
-theme.apw_bg_color = "theme.xrdb.color8"
+theme.apw_bg_color = "theme.xrdb.color1"
 theme.apw_mute_bg_color = "theme.xrdb.color1"
 theme.apw_mute_fg_color = "theme.xrdb.color9"
 
