@@ -42,7 +42,7 @@ end
 
 db.get_or_set = function(key, fallback_value)
     local value = db.get(key)
-    if not value then 
+    if not value then
       value = fallback_value
       db.set(key, value)
     end
