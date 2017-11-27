@@ -11,17 +11,6 @@ local persistent = {
   lcarslist = {},
 }
 
-local function get_tag_and_screen(t, s, tag_id)
-  if t then
-    s = s or t.screen
-  else
-    s = s or awful.screen.focused()
-    t = s.selected_tag
-  end
-  tag_id = tag_id or t.index
-  return t, (s and s.index), tag_id
-end
-
 -------------------------------------------------------------------------------
 -- Titlebar
 -------------------------------------------------------------------------------
@@ -50,6 +39,32 @@ end
 -- Tag
 -------------------------------------------------------------------------------
 
+--Tag helpers:
+
+local function get_tag_and_screen(t, s, tag_id)
+  if t then
+    s = s or t.screen
+  else
+    s = s or awful.screen.focused()
+    t = s.selected_tag
+  end
+  tag_id = tag_id or t.index
+  return t, (s and s.index), tag_id
+end
+
+function persistent.tag._connect_signal(signal_name, tag_callback)
+  tag.connect_signal(signal_name, function(_t)
+    if not awesome.startup then
+      local t, screen_id, tag_id = get_tag_and_screen(_t)
+      if t and screen_id and tag_id then
+          tag_callback(t, screen_id, tag_id)
+      end
+    end
+  end)
+end
+
+--Tag params getters:
+
 function persistent.tag.get_all_names(s, fallback)
   return db.get_or_set("tag_names_"..s.index, fallback)
 end
@@ -66,17 +81,7 @@ function persistent.tag.get_all_layouts(s, fallback)
   return db.get_or_set("tag_layout_ids_"..s.index, fallback)
 end
 
-
-function persistent.tag._connect_signal(signal_name, tag_callback)
-  tag.connect_signal(signal_name, function(_t)
-    if not awesome.startup then
-      local t, screen_id, tag_id = get_tag_and_screen(_t)
-      if t and screen_id and tag_id then
-          tag_callback(t, screen_id, tag_id)
-      end
-    end
-  end)
-end
+--Tag params setters and signals:
 
 function persistent.tag.master_width_factor_save(t, screen_id, tag_id)
   local db_id = "tag_mwfact_"..screen_id
@@ -113,11 +118,10 @@ persistent.tag._connect_signal(
 )
 
 function persistent.tag.layout_save(t, screen_id, tag_id)
-  local layout = t.layout
   db.update_child(
     "tag_layout_ids_"..screen_id,
     tag_id,
-    helpers.layout_get_id(layout)
+    helpers.layout_get_id(t.layout)
   )
 end
 persistent.tag._connect_signal(
