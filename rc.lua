@@ -25,7 +25,7 @@ nlog = debug.nlog
 log = debug.log
 context = {
 
-  DEVEL_DYNAMIC_LAYOUTS = true,
+  --DEVEL_DYNAMIC_LAYOUTS = true,
   DEVEL_DYNAMIC_LAYOUTS = false,
 
   modkey = "Mod4",
@@ -98,14 +98,14 @@ if context.after_config_loaded then
   context.after_config_loaded()
 end
 
-local delayed_call = require("gears.timer").delayed_call
-delayed_call(function()
-  local helpers = require('actionless.helpers')
-  local wlppr = require('actionless.wlppr')
-  helpers.newinterval(701, wlppr.load_new, true)
+--local delayed_call = require("gears.timer").delayed_call
+--delayed_call(function()
+  --local helpers = require('actionless.helpers')
+  --local wlppr = require('actionless.wlppr')
+  --helpers.newinterval(701, wlppr.load_new, true)
   --helpers.newinterval(500, change_wallpaper)
   --helpers.newinterval(300, change_wallpaper_best)
-end)
+--end)
 
 ------------------------------------------------------------------------------
 ------------------------------------------------------------------------------
