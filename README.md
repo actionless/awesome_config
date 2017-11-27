@@ -3,7 +3,7 @@
 
 #### Installation
 
-Warning, it works only with git master branch of Awesome WM, not stable version.
+Works with Awesome WM 4.2
 
 ```sh
 cd ~/.config/
