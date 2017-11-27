@@ -7,16 +7,8 @@
 
 local awesome_menu_gen = require("menubar.menu_gen")
 local awesome_menu_utils = require("menubar.utils")
-local pairs = pairs
-local ipairs = ipairs
-local table = table
-local string = string
-local next = next
 
 local menugen = {}
-
---Built in menubar should be checking local applications directory
-awesome_menu_gen.all_menu_dirs = { '/usr/share/applications/', '/usr/local/share/applications/', '~/.local/share/applications' }
 
 --Expecting an wm_name of awesome omits too many applications and tools
 awesome_menu_utils.wm_name = ""
