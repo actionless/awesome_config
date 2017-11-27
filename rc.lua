@@ -7,6 +7,9 @@ os.setlocale(os.getenv("LANG"))
 local awful_util = require("awful.util")
 local awful_spawn = require("awful.spawn")
 
+local userconfdir = awful_util.get_configuration_dir()
+package.path = package.path .. ';' .. userconfdir .. 'third_party/?.lua;' .. userconfdir .. 'third_party/?/init.lua'
+
 -- run settings daemon
 awful_spawn.with_shell("xsettingsd")
 --awful_spawn.with_shell("gnome-session")
