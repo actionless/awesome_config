@@ -33,7 +33,7 @@ local wibox = require("wibox")
 
 -- menubar
 local menubar_module = { mt = {} }
-menubar_module.menu_gen = require("actionless.menubar.menu_gen")
+menubar_module.menu_gen = require("menubar.menu_gen")
 menubar_module.utils = require("actionless.menubar.utils")
 menubar_module.dmenugen = require("actionless.menubar.dmenugen")
 local compute_text_width = menubar_module.utils.compute_text_width
