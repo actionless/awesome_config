@@ -12,10 +12,9 @@ local beautiful = require("beautiful")
 local wibox = require("wibox")
 local imagebox = require("wibox.widget.imagebox")
 local textbox = require("wibox.widget.textbox")
+local delayed_call = require("gears.timer").delayed_call
 
 local h_string = require("utils.string")
-local persistent = require("actionless.persistent")
-local delayed_call = require("gears.timer").delayed_call
 
 --- Layoutbox widget "class".
 
@@ -73,11 +72,7 @@ local function worker(args)
       table.insert(layouts_menu_items, {
         layout.name,
         function()
-            persistent.layout.set(
-                layout,
-                layoutbox.screen.selected_tag,
-                layoutbox.screen
-            )
+            awful.layout.set(layout, layoutbox.screen.selected_tag)
         end,
         beautiful["layout_"..layout.name]
       })

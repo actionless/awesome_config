@@ -47,7 +47,7 @@ function layouts.init(context)
   awful.screen.connect_for_each_screen(function(s)
 
     local enabled_layouts = {}
-    for i, id in ipairs(persistent.layout.get_all_ids(s, {
+    for i, id in ipairs(persistent.tag.get_all_layouts(s, {
       1, 1, 1, 1, 1, 1,
       1, 1, 1, 4, 1, 1,
     })) do

@@ -19,26 +19,7 @@ local function get_tag_and_screen(tag, screen, tag_id)
     tag = screen.selected_tag
   end
   tag_id = tag_id or tag.index
-  return tag, screen.index, tag_id
-end
-
--------------------------------------------------------------------------------
--- Layout
--------------------------------------------------------------------------------
-
-function persistent.layout.get_all_ids(screen, fallback)
-  return db.get_or_set("tag_layout_ids_"..screen.index, fallback)
-end
-
-function persistent.layout.set(layout, tag, screen, tag_id)
-  --@TODO: change on layout signal
-  tag, screen, tag_id = get_tag_and_screen(tag, screen, tag_id)
-  awful.layout.set(layout, tag)
-  db.update_child(
-    "tag_layout_ids_"..screen,
-    tag_id,
-    helpers.layout_get_id(layout)
-  )
+  return tag, (screen and screen.index), tag_id
 end
 
 -------------------------------------------------------------------------------
@@ -81,16 +62,23 @@ function persistent.tag.get_all_mfpol(screen, fallback)
   return db.get_or_set("tag_mfpol_"..screen.index, fallback)
 end
 
+function persistent.tag.get_all_layouts(screen, fallback)
+  return db.get_or_set("tag_layout_ids_"..screen.index, fallback)
+end
+
+
 function persistent.tag._connect_signal(signal_name, tag_callback)
-  tag.connect_signal(signal_name, function(t)
+  tag.connect_signal(signal_name, function(_t)
     if not awesome.startup then
-      tag_callback(t)
+      local t, screen_id, tag_id = get_tag_and_screen(_t)
+      if t and screen_id and tag_id then
+          tag_callback(t, screen_id, tag_id)
+      end
     end
   end)
 end
 
-function persistent.tag.master_width_factor_save(_t)
-  local t, screen_id, tag_id = get_tag_and_screen(_t, nil, nil)
+function persistent.tag.master_width_factor_save(t, screen_id, tag_id)
   local db_id = "tag_mwfact_"..screen_id
   local current_mwfacts = db.get(db_id)
   current_mwfacts[tag_id] = t.master_width_factor
@@ -101,8 +89,7 @@ persistent.tag._connect_signal(
   persistent.tag.master_width_factor_save
 )
 
-function persistent.tag.master_fill_policy_save(_t)
-  local t, screen_id, tag_id = get_tag_and_screen(_t, nil, nil)
+function persistent.tag.master_fill_policy_save(t, screen_id, tag_id)
   local db_id = "tag_mfpol_"..screen_id
   local layout_expand_masters = db.get(db_id)
   layout_expand_masters[tag_id] = t.master_fill_policy
@@ -113,10 +100,9 @@ persistent.tag._connect_signal(
   persistent.tag.master_fill_policy_save
 )
 
-function persistent.tag.name_save(_t)
-  local t, s, tag_id = get_tag_and_screen(_t)
+function persistent.tag.name_save(t, screen_id, tag_id)
   db.update_child(
-    "tag_names_"..s,
+    "tag_names_"..screen_id,
     tag_id,
     t.name
   )
@@ -126,5 +112,17 @@ persistent.tag._connect_signal(
   persistent.tag.name_save
 )
 
+function persistent.tag.layout_save(t, screen_id, tag_id)
+  local layout = t.layout
+  db.update_child(
+    "tag_layout_ids_"..screen_id,
+    tag_id,
+    helpers.layout_get_id(layout)
+  )
+end
+persistent.tag._connect_signal(
+  "property::layout",
+  persistent.tag.layout_save
+)
 
 return persistent
