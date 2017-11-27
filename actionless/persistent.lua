@@ -11,15 +11,15 @@ local persistent = {
   lcarslist = {},
 }
 
-local function get_tag_and_screen(tag, screen, tag_id)
-  if tag then
-    screen = screen or tag.screen
+local function get_tag_and_screen(t, s, tag_id)
+  if t then
+    s = s or t.screen
   else
-    screen = screen or awful.screen.focused()
-    tag = screen.selected_tag
+    s = s or awful.screen.focused()
+    t = s.selected_tag
   end
-  tag_id = tag_id or tag.index
-  return tag, (screen and screen.index), tag_id
+  tag_id = tag_id or t.index
+  return t, (s and s.index), tag_id
 end
 
 -------------------------------------------------------------------------------
@@ -50,20 +50,20 @@ end
 -- Tag
 -------------------------------------------------------------------------------
 
-function persistent.tag.get_all_names(screen, fallback)
-  return db.get_or_set("tag_names_"..screen.index, fallback)
+function persistent.tag.get_all_names(s, fallback)
+  return db.get_or_set("tag_names_"..s.index, fallback)
 end
 
-function persistent.tag.get_all_mwfact(screen, fallback)
-  return db.get_or_set("tag_mwfact_"..screen.index, fallback)
+function persistent.tag.get_all_mwfact(s, fallback)
+  return db.get_or_set("tag_mwfact_"..s.index, fallback)
 end
 
-function persistent.tag.get_all_mfpol(screen, fallback)
-  return db.get_or_set("tag_mfpol_"..screen.index, fallback)
+function persistent.tag.get_all_mfpol(s, fallback)
+  return db.get_or_set("tag_mfpol_"..s.index, fallback)
 end
 
-function persistent.tag.get_all_layouts(screen, fallback)
-  return db.get_or_set("tag_layout_ids_"..screen.index, fallback)
+function persistent.tag.get_all_layouts(s, fallback)
+  return db.get_or_set("tag_layout_ids_"..s.index, fallback)
 end
 
 
