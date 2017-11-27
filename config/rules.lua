@@ -3,6 +3,7 @@ local beautiful = require("beautiful")
 local capi = {
   screen = screen
 }
+local dpi = beautiful.xresources.apply_dpi
 
 
 local function apply_delayed_rule(c)
@@ -80,14 +81,17 @@ function rules.init(awesome_context)
       { rule = { class = "Transmission-gtk"},
         properties = {
           tag=capi.screen.primary.tags[6],
-        },
-      },
+      }, },
       { rule = { class = "Transmission-gtk", role = "tr-info" },
         properties = {
           floating = false,
           ontop = false,
-        },
-      },
+      }, },
+      { rule = { class = "Transmission-gtk", name = "Torrent Options" },
+        properties = {
+          width = dpi(800),
+      }, },
+
       { rule = { class = "qBittorent"},
         properties = {
           tag=capi.screen.primary.tags[6],
