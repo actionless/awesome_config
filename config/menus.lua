@@ -103,9 +103,9 @@ function menus.init(context)
 
   -- Menubar configuration
   awesome_menubar.utils.terminal = context.cmds.terminal
-  context.menu.menubar = menubar.create()
   -- @TODO: for some reason this is crashing
   --context.menu.menubar = awesome_menubar.get()
+  context.menu.menubar = menubar.create()
 
   -- D-Menubar configuration
   menubar.utils.terminal = context.cmds.terminal
