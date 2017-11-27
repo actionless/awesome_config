@@ -1,6 +1,6 @@
 --[[
-	Licensed under GNU General Public License v2
-	* (c) 2014 Yauheni Kirylau
+        Licensed under GNU General Public License v2
+        * (c) 2014 Yauheni Kirylau
 --]]
 
 local awful = require("awful")
@@ -231,18 +231,13 @@ theme.left_panel_internal_corner_radius = 30
 
   local common_icons_dir = icons_dir .. "common/"
 
-  theme.icon_down 		= common_icons_dir .. "arrow_down.png"
   theme.icon_left 		= common_icons_dir .. "arrow_left.png"
   theme.icon_right 		= common_icons_dir .. "arrow_right.png"
-
-  theme.menu_submenu_icon		= common_icons_dir .. "submenu.png"
-  theme.dropdown_icon		= theme.icon_down
 
   --theme.taglist_squares_sel	= common_icons_dir .. "square_sel.png"
   --theme.taglist_squares_unsel	= common_icons_dir .. "square_unsel.png"
   theme.taglist_squares_sel	= nil
   theme.taglist_squares_unsel	= nil
-
   --theme.taglist_squares_sel_empty	= nil
   --theme.taglist_squares_unsel_empty	= nil
 
@@ -267,7 +262,6 @@ theme.left_panel_internal_corner_radius = 30
   theme.widget_temp		= widgets_icons_dir .. "temp.png"
   theme.widget_net		= widgets_icons_dir .. "net.png"
   theme.widget_hdd		= widgets_icons_dir .. "hdd.png"
-  theme.widget_task		= widgets_icons_dir .. "task.png"
 
   theme.widget_net_wifi	        = widgets_icons_dir .. "net_wireless.png"
   theme.widget_net_wired		= widgets_icons_dir .. "net_wired.png"
@@ -276,38 +270,11 @@ theme.left_panel_internal_corner_radius = 30
   theme.widget_music_pause      	= widgets_icons_dir .. "music_pause.png"
   theme.widget_music_play		= widgets_icons_dir .. "music_play.png"
   theme.widget_music_stop		= widgets_icons_dir .. "music_stop.png"
-  theme.widget_vol_high		= widgets_icons_dir .. "vol_high.png"
-  theme.widget_vol		= widgets_icons_dir .. "vol.png"
-  theme.widget_vol_low		= widgets_icons_dir .. "vol_low.png"
-  theme.widget_vol_no		= widgets_icons_dir .. "vol_no.png"
-  theme.widget_vol_mute		= widgets_icons_dir .. "vol_mute.png"
-  theme.widget_mail		= widgets_icons_dir .. "mail.png"
-  theme.widget_mail_on		= widgets_icons_dir .. "mail_on.png"
 
   theme.tasklist_disable_icon = true
   --theme.tasklist_floating = "*"
   --theme.tasklist_maximized_horizontal = "_"
   --theme.tasklist_maximized_vertical = "|"
-
-  --local layout_icons_dir = icons_dir .. "layout/"
-  --theme.layout_icons_dir = layout_icons_dir
-  --theme.layout_tile		= layout_icons_dir .. "tile.png"
-  --theme.layout_tilegaps		= layout_icons_dir .. "tilegaps.png"
-  --theme.layout_tileleft		= layout_icons_dir .. "tileleft.png"
-  --theme.layout_tilebottom		= layout_icons_dir .. "tilebottom.png"
-  --theme.layout_tiletop		= layout_icons_dir .. "tiletop.png"
-  --theme.layout_fairv		= layout_icons_dir .. "fairv.png"
-  --theme.layout_fairh		= layout_icons_dir .. "fairh.png"
-  --
-  local themes_path = awful.util.get_themes_dir()
-  theme.layout_fair = themes_path.."default/layouts/fairhw.png"
-  --
-  --theme.layout_spiral		= layout_icons_dir .. "spiral.png"
-  --theme.layout_dwindle		= layout_icons_dir .. "dwindle.png"
-  --theme.layout_max		= layout_icons_dir .. "max.png"
-  --theme.layout_fullscreen		= layout_icons_dir .. "fullscreen.png"
-  --theme.layout_magnifier		= layout_icons_dir .. "magnifier.png"
-  --theme.layout_floating		= layout_icons_dir .. "floating.png"
 
   theme.layout_uselesstile		= theme.layout_tile
   theme.layout_uselesstiletop		= theme.layout_tiletop
