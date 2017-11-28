@@ -13,6 +13,8 @@ git submodule init
 git submodule update
 # optionally copy config with machine-specific variables
 cp config/local.lua.example config/local.lua
+# on Arch Linux or Manjaro:
+makepkg -fi --syncdeps
 ```
 
  - [lcars](http://i.imgur.com/8C6l5ko.gifv) layout
