@@ -5,7 +5,6 @@ Licensed under GNU General Public License v2
 * (c) 2010-2012, Peter Hofmann
 --]]
 
-local debug  = require("debug")
 local awful = require("awful")
 local gears = require("gears")
 local beautiful = require("beautiful")
@@ -16,7 +15,6 @@ local helpers = {}
 
 
 helpers.font = string.match(beautiful.get().font or "monospace 8", "([%a, ]+) %d+")
-helpers.dir    = debug.getinfo(1, 'S').source:match[[^@(.*/).*$]]
 
 
 function helpers.newinterval(timeout, fun, nostart)
