@@ -17,14 +17,6 @@ local tmux_swap_bydirection = require("actionless.utils.tmux").swap_bydirection
 local wlppr = require("actionless.wlppr")
 
 
-local revelation = require("third_party.revelation")
-revelation.fg = beautiful.revelation_fg
-revelation.border_color = beautiful.revelation_border_color
-revelation.bg = beautiful.revelation_bg
-revelation.font = beautiful.revelation_font
-revelation.init()
-
-
 local keys = {}
 function keys.init(awesome_context)
 
@@ -33,6 +25,13 @@ function keys.init(awesome_context)
   local altkey = awesome_context.altkey
 
   local shell_commands = awesome_context.cmds
+
+  local revelation = require("third_party.revelation")
+  revelation.fg = beautiful.revelation_fg
+  revelation.border_color = beautiful.revelation_border_color
+  revelation.bg = beautiful.revelation_bg
+  revelation.font = beautiful.revelation_font
+  revelation.init()
 
 
   -- {{{ Client mouse bindings
