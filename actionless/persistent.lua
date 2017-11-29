@@ -2,7 +2,6 @@ local awful = require("awful")
 
 local db = require("utils.db")
 
-local helpers = require("actionless.helpers")
 
 local persistent = {
   layout = {},
@@ -40,6 +39,17 @@ end
 -------------------------------------------------------------------------------
 
 --Tag helpers:
+--
+
+local function get_layout_id(layout)
+  local layout_name = awful.layout.getname(layout)
+  for layout_id, layout2 in ipairs(awful.layout.layouts) do
+    if layout_name == awful.layout.getname(layout2) then
+      return layout_id
+    end
+  end
+end
+
 
 local function get_tag_and_screen(t, s, tag_id)
   if t then
@@ -121,7 +131,7 @@ function persistent.tag.layout_save(t, screen_id, tag_id)
   db.update_child(
     "tag_layout_ids_"..screen_id,
     tag_id,
-    helpers.layout_get_id(t.layout)
+    get_layout_id(t.layout)
   )
 end
 persistent.tag._connect_signal(

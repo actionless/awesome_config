@@ -96,14 +96,4 @@ function helpers.client_floats(c)
 end
 
 
-function helpers.layout_get_id(layout)
-  local layout_name = awful.layout.getname(layout)
-  for layout_id, layout2 in ipairs(awful.layout.layouts) do
-    if layout_name == awful.layout.getname(layout2) then
-      return layout_id
-    end
-  end
-end
-
-
 return helpers
