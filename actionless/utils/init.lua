@@ -1,16 +1,17 @@
 local utils = {
-  menugen = require("actionless.utils.menugen"),
-  markup = require("actionless.utils.markup"),
-  parse = require("actionless.utils.parse"),
-  table = require("actionless.utils.table"),
-  string = require("actionless.utils.string"),
-  inspect = require("actionless.utils.inspect"),
-  debug = require("actionless.utils.debug"),
   color = require("actionless.utils.color"),
-  pickle = require("actionless.utils.pickle"),
   db = require("actionless.utils.db"),
-  tmux = require("actionless.utils.tmux"),
+  debug = require("actionless.utils.debug"),
   gtk = require("actionless.utils.gtk"),
+  inspect = require("actionless.utils.inspect"),
+  markup = require("actionless.utils.markup"),
+  menugen = require("actionless.utils.menugen"),
+  parse = require("actionless.utils.parse"),
+  pickle = require("actionless.utils.pickle"),
+  spawn = require("actionless.utils.spawn"),
+  string = require("actionless.utils.string"),
+  table = require("actionless.utils.table"),
+  tmux = require("actionless.utils.tmux"),
 }
 
 return utils

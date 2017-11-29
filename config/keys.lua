@@ -11,6 +11,7 @@ local capi = {
 local awesome_menubar = require("menubar")
 
 local helpers = require("actionless.helpers")
+local run_once = require("actionless.utils.spawn").run_once
 local menu_addon = require("actionless.menu_addon")
 local persistent = require("actionless.persistent")
 local tmux_swap_bydirection = require("actionless.utils.tmux").swap_bydirection
@@ -136,7 +137,7 @@ function keys.init(awesome_context)
     ),
 
     bind_key({ modkey,  "Control"  }, "s",
-      function() helpers.run_once("xscreensaver-command -lock") end,
+      function() run_once("xscreensaver-command -lock") end,
       "xscreensaver lock", AWESOME_COLOR
     ),
     bind_key({ modkey,  "Control"  }, "d",
