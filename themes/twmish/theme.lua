@@ -2,9 +2,7 @@ local awful = require("awful")
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
 local create_theme = require("actionless.common_theme").create_theme
-local helpers = require("actionless.helpers")
 local color_utils = require("utils").color
-local parse = require("utils.parse")
 
 local gtk_util = require("utils.gtk")
 
@@ -19,20 +17,8 @@ theme.skip_rounding_for_crazy_borders = true
 local gsc = gtk_util.get_theme_variables()
 theme.gtk = gsc
 
-local gtk = {}
-
-pcall(function()
-  if OOMOX_SEL_BG then
-    gsc.selected_bg_color = OOMOX_SEL_BG
-  end
-end)
-
 
 local MAIN_COLOR = gsc.selected_bg_color
-if oomox_theme_name == 'retro/uzi' then
-  MAIN_COLOR = gsc.button_bg_color
-end
-
 
 theme.fg = gsc.selected_fg_color
 theme.fg_normal = gsc.selected_fg_color
@@ -220,19 +206,6 @@ else
   theme._titlebar_bg_focus		= gsc.selected_bg_color
 end
 theme.titlebar_fg_normal	= "theme.titlebar_fg_focus"
-pcall(function()
-  if OOMOX_BORDER then
-    theme.border_normal = OOMOX_BORDER
-    theme.titlebar_border = OOMOX_BORDER
-  end
-end)
-pcall(function()
-  if OOMOX_SEL_BORDER then
-    theme.border_focus = OOMOX_SEL_BORDER
-    theme.titlebar_bg_focus = OOMOX_SEL_BORDER
-  end
-end)
-
 
 
 --if color_utils.is_dark(theme.xrdb.background) then
