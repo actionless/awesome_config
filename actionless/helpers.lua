@@ -6,37 +6,11 @@ Licensed under GNU General Public License v2
 --]]
 
 local awful = require("awful")
-local gears = require("gears")
 local beautiful = require("beautiful")
 
 
 -- helper functions for internal use
 local helpers = {}
-
-
-helpers.font = string.match(beautiful.get().font or "monospace 8", "([%a, ]+) %d+")
-
-
-function helpers.newinterval(timeout, fun, nostart)
-  local t = gears.timer {timeout = timeout or 5}
-  t:connect_signal("timeout", function(...)
-    t:stop()
-    fun(...)
-    t:again()
-  end)
-  t:start()
-  if not nostart then
-    t:emit_signal("timeout")
-  end
-end
-
-function helpers.newdelay(timeout, fun)
-  local function wrapped_fun(...)
-    fun(...)
-    return false
-  end
-  gears.timer.weak_start_new(timeout, wrapped_fun)
-end
 
 
 function helpers.run_once(cmd)
@@ -60,32 +34,16 @@ function helpers.get_nix_xresources_theme_path()
 end
 
 
-localstorage = {}
-function helpers.tag_getproperty(t, key)
-  return localstorage[key] and localstorage[key][t.index]
-end
-function helpers.tag_setproperty(t, key, value)
-  if not localstorage[key] then
-    localstorage[key] = {}
-  end
-  localstorage[key][t.index] = value
-end
-
-
 function helpers.tag_toggle_gap(t)
   t = t or awful.screen.focused().selected_tag
   local current_gap = t.gap
-  local prev_gap = helpers.tag_getproperty(t, "prev_useless_gap")
-    or ((current_gap>0) and 0 or beautiful.useless_gap)
-  if prev_gap == current_gap then
-    if current_gap == 0 then
-      prev_gap = beautiful.useless_gap
-    else
-      prev_gap = 0
-    end
+  local new_gap
+  if current_gap == 0 then
+    new_gap = beautiful.useless_gap
+  else
+    new_gap = 0
   end
-  helpers.tag_setproperty(t, "prev_useless_gap", current_gap)
-  t.gap = prev_gap
+  t.gap = new_gap
 end
 
 

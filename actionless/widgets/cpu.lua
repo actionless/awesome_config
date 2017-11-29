@@ -6,12 +6,11 @@
 local naughty      = require("naughty")
 local beautiful    = require("beautiful")
 local awful = require("awful")
+local gears_timer = require("gears.timer")
 
 local h_table      = require("utils.table")
 local h_string      = require("utils.string")
 local parse = require("utils.parse")
-local helpers = require("actionless.helpers")
-local newinterval = helpers.newinterval
 local common_widget = require("actionless.widgets.common").decorated
 
 
@@ -108,7 +107,8 @@ local function worker(args)
     end
     if result_string ~= '' then
       --result_string = "  PID  %CPU COMMAND\n" .. result_string
-      result_string = '  PID  %CPU COMMAND\n'..'<span font="'  .. tostring(beautiful.text_font)  .. '">' .. result_string .. '</span>'
+      result_string = '  PID  %CPU COMMAND\n'..
+        '<span font="'  .. tostring(beautiful.text_font)  .. '">' .. result_string .. '</span>'
     else
       result_string = "no running processes atm"
     end
@@ -139,7 +139,12 @@ local function worker(args)
       ))
   end
 
-  newinterval(update_interval, cpu.update)
+  gears_timer({
+    callback=cpu.update,
+    timeout=update_interval,
+    autostart=true,
+    call_now=true,
+  })
 
   return setmetatable(cpu, { __index = cpu.widget })
 end

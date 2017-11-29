@@ -4,9 +4,9 @@
 --]]
 
 local awful		= require("awful")
+local gears_timer = require("gears.timer")
+
 local parse		= require("utils.parse")
-local helpers		= require("actionless.helpers")
-local dbus = dbus -- luacheck: ignore
 
 local mopidy = {}
 
@@ -17,17 +17,24 @@ function mopidy.init(player_widget)
   mopidy.host = player_widget.host or "127.0.0.1"
   mopidy.port = player_widget.port or "6600"
   mopidy.password = player_widget.password or [[""]]
-  --if not timer_added then
-    --helpers.newinterval(2, function() return mopidy.update(player_widget.parse_status) end)
-    --timer_added = true
-  --end
-  dbus.add_match("session", "path='/org/mpris/MediaPlayer2',interface='org.freedesktop.DBus.Properties',member='PropertiesChanged'")
+
+  dbus.add_match(
+    "session",
+    "path='/org/mpris/MediaPlayer2',interface='org.freedesktop.DBus.Properties',member='PropertiesChanged'"
+  )
   dbus.connect_signal(
     "org.freedesktop.DBus.Properties",
     function()
       mopidy.update(player_widget.parse_status)
     end)
-  helpers.newinterval(10, function() return mopidy.update(player_widget.parse_status) end)
+
+  gears_timer({
+    callback=function() return mopidy.update(player_widget.parse_status) end,
+    timeout=10,
+    autostart=true,
+    call_now=true,
+  })
+
   mopidy.update(player_widget.parse_status)
 end
 -------------------------------------------------------------------------------

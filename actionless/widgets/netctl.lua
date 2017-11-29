@@ -5,31 +5,39 @@
 
 local beautiful		= require("beautiful")
 local awful             = require("awful")
+local gears_timer = require("gears.timer")
 
-local helpers           = require("actionless.helpers")
-local common_widget	= require("actionless.widgets.common").widget
+local common_widget	= require("actionless.widgets.common").decorated
 local parse		= require("utils.parse")
 
 
 local netctl = {
-  lie_widget = common_widget()
+  widget = common_widget()
 }
 
 local function worker(args)
   args = args or {}
   local update_interval = args.update_interval or 5
-  local font = args.font or beautiful.tasklist_font or beautiful.font
-  local bg = args.bg or beautiful.panel_bg or beautiful.bg
-  local fg = args.fg or beautiful.panel_fg or beautiful.fg
+  local bg = args.bg or beautiful.panel_widget_bg or beautiful.panel_bg or beautiful.bg
+  local fg = args.fg or beautiful.panel_widget_fg or beautiful.panel_fg or beautiful.fg
+  local font = args.font or beautiful.panel_widget_font or beautiful.panel_font or beautiful.font
   netctl.timeout = args.timeout or 0
   netctl.font = args.font or font
 
-  netctl.lie_widget:set_bg(bg)
-  netctl.lie_widget:set_fg(fg)
+  netctl.widget:set_bg(bg)
+  netctl.widget:set_fg(fg)
 
   netctl.preset = args.preset or 'bond' -- or netctl or netctl-auto
   netctl.wlan_if = args.wlan_if or 'wlan0'
   netctl.eth_if = args.eth_if or 'eth0'
+
+  local function do_update(cmd, match, fallback)
+    awful.spawn.easy_async(
+      cmd,
+      function(stdout)
+        netctl.update_widget(stdout:match(match) or fallback)
+      end)
+  end
 
   function netctl.update()
     if netctl.preset == 'bond' then
@@ -39,26 +47,18 @@ local function worker(args)
     elseif netctl.preset == 'netctl' then
       netctl.netctl_update()
     elseif netctl.preset == 'systemd' then
-      netctl.common_update(
+      do_update(
         "systemctl list-unit-files systemd-networkd.service",
         "systemd%-(networkd)%.service.*enabled.*",
         'networkd...'
       )
     elseif netctl.preset == 'wpa_supplicant' then
-      netctl.common_update(
+      do_update(
         "systemctl status wpa_supplicant.service",
         "Active: active",
         'wpa_supplicant...'
       )
     end
-  end
-
-  function netctl.common_update(cmd, match, fallback)
-    awful.spawn.easy_async(
-      cmd,
-      function(stdout)
-        netctl.update_widget(stdout:match(match) or fallback)
-      end)
   end
 
   function netctl.update_bond()
@@ -106,21 +106,27 @@ local function worker(args)
   end
 
   function netctl.update_widget(network_name)
-    netctl.lie_widget:set_text(network_name)
+    netctl.widget:set_text(network_name)
     if netctl.interface == netctl.eth_if then
-      netctl.lie_widget:set_image(beautiful.lie_widget_net_wired)
+      netctl.widget:set_image(beautiful.widget_net_wired)
     elseif netctl.interface == netctl.wlan_if then
-      netctl.lie_widget:set_icon('net_wifi')
+      netctl.widget:set_icon('net_wifi')
     else
-      netctl.lie_widget:set_image(beautiful.lie_widget_net_searching)
+      netctl.widget:set_image(beautiful.widget_net_searching)
     end
   end
 
-  helpers.newinterval(update_interval, netctl.update)
+  gears_timer({
+    callback=netctl.update,
+    timeout=update_interval,
+    autostart=true,
+    call_now=true,
+  })
 
   return setmetatable(
     netctl,
-    { __index = netctl.lie_widget })
+    { __index = netctl.widget }
+  )
 end
 
 return setmetatable(

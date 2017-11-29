@@ -4,8 +4,9 @@
 --]]
 
 local awful		= require("awful")
+local gears_timer = require("gears.timer")
+
 local parse		= require("utils.parse")
-local helpers           = require("actionless.helpers")
 
 
 local mpd = {
@@ -13,12 +14,17 @@ local mpd = {
 }
 
 function mpd.init(args)
-  args = args or {} 
+  args = args or {}
   mpd.music_dir = args.music_dir or os.getenv("HOME") .. "/Music"
   mpd.host = args.host or "127.0.0.1"
   mpd.port = args.port or "6600"
   mpd.password = args.password or [[""]]
-  helpers.newinterval(2, function() return mpd.update(args.parse_status) end)
+  gears_timer({
+    callback=function() return mpd.update(args.parse_status) end,
+    timeout=2,
+    autostart=true,
+    call_now=true,
+  })
 end
 -------------------------------------------------------------------------------
 function mpd.toggle()

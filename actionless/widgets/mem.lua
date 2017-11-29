@@ -8,12 +8,12 @@
 local naughty = require("naughty")
 local beautiful = require("beautiful")
 local awful = require("awful")
+local gears_timer = require("gears.timer")
 
 local h_table = require("utils.table")
 local h_string = require("utils.string")
 local parse = require("utils.parse")
 local common_widget= require("actionless.widgets.common").decorated
-local helpers = require("actionless.helpers")
 
 -- Memory usage (ignoring caches)
 local mem = {
@@ -129,7 +129,14 @@ local function worker(args)
       ))
   end
 
-  helpers.newinterval(update_interval, mem.update)
+  gears_timer({
+    callback=mem.update,
+    timeout=update_interval,
+    autostart=true,
+    call_now=true,
+  })
+
   return setmetatable(mem, { __index = mem.widget })
-end
+end -- worker
+
 return setmetatable(mem, { __call = function(_, ...) return worker(...) end })

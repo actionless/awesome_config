@@ -38,8 +38,9 @@ function widget_loader.init(awesome_context)
     preset = conf.net_preset,
     wlan_if = conf.wlan_if,
     eth_if = conf.eth_if,
-    fg = beautiful.widget_netctl_bg,
-    bg = beautiful.widget_netctl_fg,
+    horizontal=true,
+    --fg = beautiful.widget_netctl_bg,
+    --bg = beautiful.widget_netctl_fg,
   })
   -- MUSIC
   w.music = widgets.music.widget({
@@ -67,9 +68,9 @@ function widget_loader.init(awesome_context)
         --h_sep,
         --sep_media,
 
-        --wibox.widget.textbox(' '),
-        --w.netctl,
-        --wibox.widget.textbox(' '),
+        wibox.widget.textbox(' '),
+        w.netctl,
+        wibox.widget.textbox(' '),
 
         --sep_media,
         --h_sep,
@@ -92,13 +93,13 @@ function widget_loader.init(awesome_context)
     horizontal=true,
   })
   -- Sensor
-  --w.temp = widgets.temp({
-    --update_interval = 10,
-    --sensor = awesome_context.sensor,
-    --warning = 75,
-    ----bg = beautiful.widget_temp_bg,
-    ----fg = beautiful.widget_temp_fg,
-  --})
+  w.temp = widgets.temp({
+    update_interval = 10,
+    sensor = awesome_context.sensor,
+    warning = 75,
+    --bg = beautiful.widget_temp_bg,
+    --fg = beautiful.widget_temp_fg,
+  })
   -- Battery
   if awesome_context.have_battery then
     w.bat = widgets.bat({
@@ -106,6 +107,7 @@ function widget_loader.init(awesome_context)
       bg = beautiful.widget_bat_bg,
       fg = beautiful.widget_bat_fg,
       show_when_charged=false,
+      horizontal=true,
     })
   end
 
@@ -178,8 +180,10 @@ function widget_loader.init(awesome_context)
     -- promptbox
     sw.promptbox = awful.widget.prompt()
     sw.promptbox.widget = widgets.common.widget({
-      margin = { left = dpi(8), right = dpi(8), }
+      margin = { left = dpi(8), right = dpi(8), },
+      show_icon = false,
     })
+    sw.promptbox.widget:set_text(nil)
     sw.promptbox.fg = beautiful.panel_widget_fg_warning
     sw.promptbox.bg = beautiful.panel_widget_bg_warning
     sw.promptbox.shape_border_width = beautiful.panel_widget_border_width or 0

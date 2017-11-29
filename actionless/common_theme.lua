@@ -31,8 +31,6 @@ function common_theme.generate_theme(theme_dir)
 
   theme.dir = theme_dir
 
-  theme.hidpi = false
-
   -- Use plain color:
   theme.wallpaper = nil
   theme.wallpaper_cmd     = "nitrogen --restore"

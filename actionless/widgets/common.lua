@@ -66,12 +66,16 @@ end
 function common.widget(args)
   args = args or {}
 
-  local show_icon = args.show_icon or beautiful.show_widget_icon
+  local show_icon = args.show_icon
+  if show_icon == nil then
+    show_icon = beautiful.show_widget_icon
+  end
+
   local widget_bg = wibox.container.background()
   widget_bg.lie_layout = wibox.layout.fixed.horizontal()
   if show_icon then
     widget_bg.icon_widget = wibox.widget.imagebox()
-    widget_bg.icon_widget:set_resize(beautiful.hidpi or false)
+    widget_bg.icon_widget:set_resize(beautiful.xresources.get_dpi() > 96)
     widget_bg.lie_layout:add(widget_bg.icon_widget)
   end
   widget_bg.text_widget = wibox.widget.textbox('')
@@ -90,7 +94,7 @@ function common.widget(args)
 
   function widget_bg:set_image(...)
     if self.icon_widget then
-      return self.icon_widget_bg:set_image(...)
+      return self.icon_widget:set_image(...)
     end
   end
 
@@ -130,11 +134,13 @@ function common.widget(args)
     if show_icon then
       local icon = beautiful.get()['widget_' .. name]
       --gears.debug.assert(icon, ":set_icon failed: icon is missing: " .. name)
-      return self.icon_widget_bg:set_image(icon)
+      return self.icon_widget:set_image(icon)
     end
   end
 
-  widget_bg:set_text(args.text)
+  if args.text then
+    widget_bg:set_text(args.text)
+  end
 
   return widget_bg
 end
@@ -150,6 +156,9 @@ end
 
 function common.decorated(args)
   args = args or {}
+  if args.horizontal == nil and args.orientation == nil then
+    args.horizontal = true
+  end
 
   if args.horizontal or args.orientation == "horizontal" then
     return common.decorated_horizontal(args)

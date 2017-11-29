@@ -35,7 +35,7 @@ function sneaky_tray.initialize()
         awful.button({ }, 3, function() end)
     ))
     st.arrow = wibox.widget.imagebox(beautiful.icon_left)
-    st.arrow:set_resize(beautiful.hidpi or false)
+    st.arrow:set_resize(beautiful.xresources.get_dpi() > 96)
     st.widget:add(st.container)
     st.widget:add(st.arrow)
 

@@ -1,11 +1,13 @@
 local awful_util = require("awful.util")
+local gears_timer = require("gears.timer")
+
 local pickle = require("utils.pickle")
-local helpers = require("actionless.helpers")
 
 
 local db = {
   file_table = nil,
-  was_changed = false
+  was_changed = false,
+  auto_write_timeout = 60,
 }
 
 db.filename = awful_util.getdir("config") .. "/config/config.db"
@@ -17,7 +19,12 @@ db.init = function()
       db.file_table = {}
       db.write()
     end
-    helpers.newinterval(60, db.write)
+    gears_timer({
+      callback=db.write,
+      timeout=db.auto_write_timeout,
+      autostart=true,
+      call_now=false,
+    })
     awesome.connect_signal('exit', db.write)
   end
 end

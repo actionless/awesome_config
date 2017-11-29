@@ -4,10 +4,9 @@
 --]]
 local beautiful = require("beautiful")
 local awful = require("awful")
+local gears_timer = require("gears.timer")
 
-local helpers = require("actionless.helpers")
 local parse = require("utils.parse")
-local common_widget= require("actionless.widgets.common").widget
 local decorated_widget= require("actionless.widgets.common").decorated
 
 
@@ -22,7 +21,6 @@ local function worker(args)
   local bg = args.bg or beautiful.panel_widget_bg or beautiful.panel_fg or beautiful.fg
   local fg = args.fg or beautiful.panel_widget_fg or beautiful.panel_bg or beautiful.bg
 
-  args.widget = common_widget(args)
   temp.widget = decorated_widget(args)
   temp.widget:set_image(beautiful.widget_temp)
 
@@ -46,7 +44,13 @@ local function worker(args)
     temp.widget:set_text(string.format("%2i°C ", coretemp_now))
   end
 
-  helpers.newinterval(update_interval, temp.update)
+  gears_timer({
+    callback=temp.update,
+    timeout=update_interval,
+    autostart=true,
+    call_now=true,
+  })
+
   return temp.widget
 end
 

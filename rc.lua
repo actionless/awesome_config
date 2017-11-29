@@ -101,13 +101,28 @@ if context.after_config_loaded then
   context.after_config_loaded()
 end
 
---local delayed_call = require("gears.timer").delayed_call
+--local gears_timer = require("gears.timer")
+--local delayed_call = gears_timer.delayed_call
 --delayed_call(function()
-  --local helpers = require('actionless.helpers')
   --local wlppr = require('actionless.wlppr')
-  --helpers.newinterval(701, wlppr.load_new, true)
-  --helpers.newinterval(500, change_wallpaper)
-  --helpers.newinterval(300, change_wallpaper_best)
+  --gears_timer({
+    --callback=wlppr.load_new,
+    --timeout=701,
+    --autostart=true,
+    --call_now=false,
+  --})
+  --gears_timer({
+    --callback=wlppr.change_wallpaper,
+    --timeout=500,
+    --autostart=true,
+    --call_now=true,
+  --})
+  ----gears_timer({
+    ----callback=wlppr.change_wallpaper_best,
+    ----timeout=300,
+    ----autostart=true,
+    ----call_now=true,
+  ----})
 --end)
 
 ------------------------------------------------------------------------------
