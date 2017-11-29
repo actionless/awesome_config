@@ -10,10 +10,10 @@ local beautiful		= require("beautiful")
 local string		= { format	= string.format }
 local setmetatable	= setmetatable
 
-local h_string		= require("utils.string")
+local h_string		= require("actionless.utils.string")
 local common = require("actionless.widgets.common")
 local decorated_widget	= common.decorated
-local markup		= require("utils.markup")
+local markup		= require("actionless.utils.markup")
 
 local backend_modules	= require("actionless.widgets.music.backends")
 

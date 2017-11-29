@@ -8,7 +8,7 @@ local client = client
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 
-local color_utils = require("utils.color")
+local color_utils = require("actionless.utils.color")
 
 --
 --bg=beautiful.desktop_bg,

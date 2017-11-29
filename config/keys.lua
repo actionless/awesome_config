@@ -13,7 +13,7 @@ local awesome_menubar = require("menubar")
 local helpers = require("actionless.helpers")
 local menu_addon = require("actionless.menu_addon")
 local persistent = require("actionless.persistent")
-local tmux_swap_bydirection = require("utils.tmux").swap_bydirection
+local tmux_swap_bydirection = require("actionless.utils.tmux").swap_bydirection
 local wlppr = require("actionless.wlppr")
 
 

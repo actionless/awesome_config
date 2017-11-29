@@ -6,8 +6,8 @@
 local dbus = dbus -- luacheck: ignore
 local awful = require("awful")
 
-local h_table = require("utils.table")
-local parse = require("utils.parse")
+local h_table = require("actionless.utils.table")
+local parse = require("actionless.utils.parse")
 
 
 local dbus_cmd = "qdbus org.mpris.MediaPlayer2.clementine "

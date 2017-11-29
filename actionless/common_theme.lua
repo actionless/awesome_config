@@ -7,8 +7,8 @@ local awful = require("awful")
 local xresources = require("beautiful").xresources
 local dpi = xresources.apply_dpi
 
-local h_string = require("utils.string")
-local h_table = require("utils.table")
+local h_string = require("actionless.utils.string")
+local h_table = require("actionless.utils.table")
 local helpers = require("actionless.helpers")
 
 

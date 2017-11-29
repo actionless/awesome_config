@@ -6,7 +6,7 @@
 local awful		= require("awful")
 local gears_timer = require("gears.timer")
 
-local parse		= require("utils.parse")
+local parse		= require("actionless.utils.parse")
 
 
 local mpd = {

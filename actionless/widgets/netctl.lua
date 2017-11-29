@@ -8,7 +8,7 @@ local awful             = require("awful")
 local gears_timer = require("gears.timer")
 
 local common_widget	= require("actionless.widgets.common").decorated
-local parse		= require("utils.parse")
+local parse		= require("actionless.utils.parse")
 
 
 local netctl = {

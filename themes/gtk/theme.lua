@@ -4,8 +4,8 @@ local xresources = require("beautiful.xresources")
 local theme_assets = require("beautiful.theme_assets")
 local dpi = xresources.apply_dpi
 local create_theme = require("actionless.common_theme").create_theme
-local color_utils = require("utils").color
-local gtk_util = require("utils.gtk")
+local color_utils = require("actionless.utils").color
+local gtk_util = require("actionless.utils.gtk")
 
 
 local theme_name = "gtk"

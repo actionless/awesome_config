@@ -22,7 +22,7 @@ require("hotkeys")
 local editor = "vim"
 local terminal = "st"
 
-local debug = require("utils.debug")
+local debug = require("actionless.utils.debug")
 -- GLOBALS:
 nlog = debug.nlog
 log = debug.log
@@ -127,7 +127,7 @@ end
 
 ------------------------------------------------------------------------------
 ------------------------------------------------------------------------------
---local ucolor = require("utils.color")
+--local ucolor = require("actionless.utils.color")
 --local xresources = require("beautiful.xresources")
 --local colorscheme = xresources.get_current_theme()
 

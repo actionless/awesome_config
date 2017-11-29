@@ -4,7 +4,7 @@ local beautiful = require("beautiful")
 local dpi = beautiful.xresources.apply_dpi
 
 local common = require("actionless.widgets.common")
-local h_table = require("utils.table")
+local h_table = require("actionless.utils.table")
 
 local assets = require("config.toolbar_assets")
 

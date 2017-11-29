@@ -8,7 +8,7 @@ local tags = require("awful.tag")
 local capi = { client = client }
 local escape_f = require("awful.util").escape
 
-local table_add = require("utils.table").add
+local table_add = require("actionless.utils.table").add
 
 
 local menu_addon = { mt={} }

@@ -1,7 +1,7 @@
 local awful_util = require("awful.util")
 local gears_timer = require("gears.timer")
 
-local pickle = require("utils.pickle")
+local pickle = require("actionless.utils.pickle")
 
 
 local db = {

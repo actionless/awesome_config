@@ -120,7 +120,7 @@ function widget_loader.init(awesome_context)
     })
     awful.widget.calendar_popup.month({}):attach(w.lcars_textclock, "tl", {on_hover=true})
   end
-  local markup = require("utils.markup")
+  local markup = require("actionless.utils.markup")
   local textclock = wibox.widget.textclock(markup.fg(beautiful.clock_fg or beautiful.panel_fg, "%H:%M"))
   w.textclock = textclock
   beautiful.calendar_month_padding = 40

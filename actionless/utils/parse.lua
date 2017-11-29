@@ -3,8 +3,8 @@
       * (c) 2014  Yauheni Kirylau
 --]]
 
-local h_table = require("utils.table")
-local h_string = require("utils.string")
+local h_table = require("actionless.utils.table")
+local h_string = require("actionless.utils.string")
 
 
 local parse = {}

@@ -11,7 +11,7 @@ local capi = { client = client }
 
 local common = require("actionless.widgets.common")
 local persistent = require("actionless.persistent")
-local color_utils = require("utils.color")
+local color_utils = require("actionless.utils.color")
 
 
 local manage_client = {}
