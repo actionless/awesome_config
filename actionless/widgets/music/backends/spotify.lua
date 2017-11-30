@@ -6,9 +6,9 @@
 local dbus = dbus
 local awful = require("awful")
 
-local h_table = require("actionless.utils.table")
-local h_string = require("actionless.utils.string")
-local parse = require("actionless.utils.parse")
+local h_table = require("actionless.util.table")
+local h_string = require("actionless.util.string")
+local parse = require("actionless.util.parse")
 
 
 -- @TODO: change to native dbus implementation instead of calling qdbus

@@ -7,8 +7,8 @@ local awful = require("awful")
 local xresources = require("beautiful").xresources
 local dpi = xresources.apply_dpi
 
-local h_string = require("actionless.utils.string")
-local h_table = require("actionless.utils.table")
+local h_string = require("actionless.util.string")
+local h_table = require("actionless.util.table")
 
 
 local common_theme = {}
@@ -20,7 +20,7 @@ function common_theme.generate_theme(theme_dir)
     theme = dofile("/usr/share/awesome/themes/xresources/theme.lua")
   end)
   if not theme then
-    local nixos = require("actionless.utils.nixos")
+    local nixos = require("actionless.util.nixos")
     theme = dofile(nixos.get_nix_xresources_theme_path().."/theme.lua")
   end
 

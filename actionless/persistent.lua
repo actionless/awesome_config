@@ -1,6 +1,6 @@
 local awful = require("awful")
 
-local db = require("actionless.utils.db")
+local db = require("actionless.util.db")
 
 
 local persistent = {

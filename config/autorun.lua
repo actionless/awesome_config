@@ -1,6 +1,6 @@
 local awful = require("awful")
 
-local run_once = require("actionless.utils.spawn").run_once
+local run_once = require("actionless.util.spawn").run_once
 
 
 local autorun = {}

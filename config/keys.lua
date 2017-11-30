@@ -11,10 +11,10 @@ local capi = {
 local awesome_menubar = require("menubar")
 
 local helpers = require("actionless.helpers")
-local run_once = require("actionless.utils.spawn").run_once
+local run_once = require("actionless.util.spawn").run_once
 local menu_addon = require("actionless.menu_addon")
 local persistent = require("actionless.persistent")
-local tmux_swap_bydirection = require("actionless.utils.tmux").swap_bydirection
+local tmux_swap_bydirection = require("actionless.util.tmux").swap_bydirection
 local wlppr = require("actionless.wlppr")
 
 

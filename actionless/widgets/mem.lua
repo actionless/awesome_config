@@ -10,9 +10,9 @@ local beautiful = require("beautiful")
 local awful = require("awful")
 local gears_timer = require("gears.timer")
 
-local h_table = require("actionless.utils.table")
-local h_string = require("actionless.utils.string")
-local parse = require("actionless.utils.parse")
+local h_table = require("actionless.util.table")
+local h_string = require("actionless.util.string")
+local parse = require("actionless.util.parse")
 local common_widget= require("actionless.widgets.common").decorated
 
 -- Memory usage (ignoring caches)

@@ -2,9 +2,9 @@ local awful = require("awful")
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
 local create_theme = require("actionless.common_theme").create_theme
-local color_utils = require("actionless.utils").color
+local color_utils = require("actionless.util").color
 
-local gtk_util = require("actionless.utils.gtk")
+local gtk_util = require("actionless.util.gtk")
 
 
 local theme_name = "twmish"

@@ -1,4 +1,4 @@
-local inspect = require("actionless.utils.inspect")
+local inspect = require("actionless.util.inspect")
 local naughty = require("naughty")
 
 local debug_module = {}
