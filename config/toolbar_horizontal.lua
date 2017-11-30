@@ -3,9 +3,8 @@ local beautiful = require("beautiful")
 local dpi = beautiful.xresources.apply_dpi
 local awful = require("awful")
 
-local helpers = require("actionless.helpers")
-local widgets = require("actionless.widgets")
-local common = widgets.common
+local tag_helpers = require("actionless.util.tag")
+local common = require("actionless.widgets").common
 
 
 local toolbar = {}
@@ -36,10 +35,10 @@ function toolbar.init(awesome_context)
 
     local wheel_binding = awful.util.table.join(
       awful.button({		}, 5, function(_)
-        helpers.tag_view_noempty(1, s)
+        tag_helpers.view_noempty(1, s)
       end),
       awful.button({		}, 4, function(_)
-        helpers.tag_view_noempty(-1, s)
+        tag_helpers.view_noempty(-1, s)
       end)
     )
 

@@ -12,6 +12,7 @@ local utils = {
   spawn = require("actionless.util.spawn"),
   string = require("actionless.util.string"),
   table = require("actionless.util.table"),
+  tag = require("actionless.util.tag"),
   tmux = require("actionless.util.tmux"),
 }
 

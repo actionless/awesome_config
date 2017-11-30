@@ -7,10 +7,10 @@ local awful = require("awful")
 local beautiful = require("beautiful")
 
 
-local helpers = {}
+local tag_helpers = {}
 
 
-function helpers.tag_toggle_gap(t)
+function tag_helpers.toggle_gap(t)
   t = t or awful.screen.focused().selected_tag
   local current_gap = t.gap
   local new_gap
@@ -23,7 +23,7 @@ function helpers.tag_toggle_gap(t)
 end
 
 
-function helpers.tag_noempty_list(s)
+function tag_helpers.noempty_list(s)
   s = s or awful.screen.focused()
   local vtags = {}
   for _, t in pairs(s.tags) do
@@ -35,7 +35,7 @@ function helpers.tag_noempty_list(s)
 end
 
 
-function helpers.tag_get_idx(target_tag, tag_list, s)
+function tag_helpers.get_idx(target_tag, tag_list, s)
   s = s or awful.screen.focused()
   tag_list = tag_list or s.tags
   for idx, t in ipairs(tag_list) do
@@ -46,11 +46,11 @@ function helpers.tag_get_idx(target_tag, tag_list, s)
 end
 
 
-function helpers.tag_view_noempty(delta, s)
+function tag_helpers.view_noempty(delta, s)
   s = s or awful.screen.focused()
   local selected_tag = s.selected_tag
-  local noempty_tags = helpers.tag_noempty_list(s)
-  local target_tag_local_idx = helpers.tag_get_idx(selected_tag, noempty_tags, s) + delta
+  local noempty_tags = tag_helpers.noempty_list(s)
+  local target_tag_local_idx = tag_helpers.get_idx(selected_tag, noempty_tags, s) + delta
   if target_tag_local_idx < 1 then
     target_tag_local_idx = #noempty_tags
   elseif target_tag_local_idx > #noempty_tags then
@@ -63,4 +63,4 @@ function helpers.tag_view_noempty(delta, s)
 end
 
 
-return helpers
+return tag_helpers

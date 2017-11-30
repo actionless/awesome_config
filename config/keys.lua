@@ -10,7 +10,7 @@ local capi = {
 }
 local awesome_menubar = require("menubar")
 
-local helpers = require("actionless.helpers")
+local tag_helpers = require("actionless.util.tag")
 local run_once = require("actionless.util.spawn").run_once
 local menu_addon = require("actionless.menu_addon")
 local persistent = require("actionless.persistent")
@@ -62,10 +62,10 @@ function keys.init(awesome_context)
   capi.root.buttons(awful.util.table.join(
     awful.button({ }, 3, function () awesome_context.menu.mainmenu_toggle() end),
     awful.button({ }, 4, function()
-      helpers.tag_view_noempty(-1)
+      tag_helpers.view_noempty(-1)
     end),
     awful.button({ }, 5, function()
-      helpers.tag_view_noempty(1)
+      tag_helpers.view_noempty(1)
     end)
   ))
   -- }}}
@@ -152,13 +152,13 @@ function keys.init(awesome_context)
 
     bind_key({ modkey,        }, ",",
       function()
-        helpers.tag_view_noempty(-1)
+        tag_helpers.view_noempty(-1)
       end,
       "prev tag", TAG_COLOR
     ),
     bind_key({ modkey,        }, ".",
       function()
-        helpers.tag_view_noempty(1)
+        tag_helpers.view_noempty(1)
       end,
       "next tag", TAG_COLOR
     ),
@@ -376,9 +376,9 @@ function keys.init(awesome_context)
     bind_key({ modkey, altkey }, "g",
       function ()
         local s = awful.screen.focused()
-        local tag = s.selected_tag
-        helpers.tag_toggle_gap(tag)
-        tag:emit_signal("property::layout")
+        local t = s.selected_tag
+        tag_helpers.toggle_gap(t)
+        t:emit_signal("property::layout")
       end,
       "toggle useless gap", LAYOUT_MANIPULATION
     ),
