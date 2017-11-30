@@ -18,7 +18,10 @@ local clementine = {
 }
 
 function clementine.init(widget)
-  dbus.add_match("session", "path='/org/mpris/MediaPlayer2',interface='org.freedesktop.DBus.Properties',member='PropertiesChanged'")
+  dbus.add_match(
+    "session",
+    "path='/org/mpris/MediaPlayer2',interface='org.freedesktop.DBus.Properties',member='PropertiesChanged'"
+  )
   dbus.connect_signal(
     "org.freedesktop.DBus.Properties",
     function()

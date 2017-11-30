@@ -21,7 +21,7 @@ function parse.fo_to_lines(f)
   if not f then return nil end
   local lines = {}
   local counter = 1
-  for line in f:lines() do 
+  for line in f:lines() do
     lines[counter] = line
     counter = counter + 1
   end

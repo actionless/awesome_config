@@ -175,14 +175,6 @@ function signals.init(awesome_context)
     }
   end
 
-  local function choose_screen_padding(s, t, num_tiled)
-    if num_tiled > 1 then
-      set_default_screen_padding(s)
-    else
-      set_mwfact_screen_padding(t)
-    end
-  end
-
   local function clog(c, msg)
       log(msg .. " " .. c.name .. " " .. tostring(c:tags()[1]))
   end
@@ -236,7 +228,7 @@ function signals.init(awesome_context)
       if not c.valid or c == client.focus then
         return
       end
-      if force then 
+      if force then
         _on_client_unfocus(c)
         if callback then
           callback(c)

@@ -301,7 +301,7 @@ function titlebar.make_border(c, color, shadow, is_titlebar)
 
   local borders
   if shadow then
-    borders = make_border_with_shadow(c, color, shadow, is_titlebar)
+    make_border_with_shadow(c, color, shadow, is_titlebar)
   else
     borders = make_border_normal(c, color, is_titlebar)
     for _, position in ipairs({"top", "bottom", "left", "right"}) do

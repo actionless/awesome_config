@@ -134,7 +134,7 @@ function assets.top_internal_corner_wibox()
   )
   cr:fill()
   cr:stroke()
-  
+
   wibox_instance:set_widget(wibox.widget.imagebox(img))
   wibox_instance.shape_bounding = img._native
 
