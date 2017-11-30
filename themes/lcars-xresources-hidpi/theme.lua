@@ -189,10 +189,10 @@ if awesome.composite_manager_running then
   theme.border_normal       = theme.border_normal .."66"
   theme.border_focus        = theme.border_focus .."66"
   theme.titlebar_bg_normal  = theme.titlebar_bg_normal.."dd"
-  --theme._titlebar_bg_normal = theme.titlebar_bg_normal.."dd"
-  theme._titlebar_bg_normal = theme.titlebar_bg_normal.."66"
+  --theme.actionless_titlebar_bg_normal = theme.titlebar_bg_normal.."dd"
+  theme.actionless_titlebar_bg_normal = theme.titlebar_bg_normal.."66"
   theme.titlebar_bg_focus   = theme.titlebar_bg_focus.."dd"
-  theme._titlebar_bg_focus  = theme.titlebar_bg_focus.."dd"
+  theme.actionless_titlebar_bg_focus  = theme.titlebar_bg_focus.."dd"
 end
 
 local theme_assets = require("beautiful.theme_assets")

@@ -105,9 +105,6 @@ theme.revelation_border_color = theme.xrdb.color13
 theme.revelation_bg = theme.panel_bg
 theme.revelation_font = "Monospace Bold 24"
 -- FONTS:
---theme.font = "Monospace Bold "..tostring(dpi(10))
---theme.small_font = "Monospace "..tostring(dpi(7))
---theme.sans_font = "Sans Bold "..tostring(dpi(10))
 theme.font = "Monospace Bold 10"
 --theme.font = "Sans Bold 10"
 theme.tasklist_font = theme.font
@@ -115,9 +112,6 @@ theme.small_font = "Monospace 7"
 theme.sans_font = "Sans Bold 10"
 -- Don't use sans font:
 --theme.sans_font	= "theme.font"
-
---theme.font = "Roboto Condensed Bold "..tostring(dpi(10))
---theme.sans_font = "Roboto Condensed Bold "..tostring(dpi(10))
 
 --
 --MISC:
@@ -223,16 +217,11 @@ theme.panel_widget_fg_error = theme.xrdb.color15
 --theme.widget_music_bg = color_utils.mix(MAIN_COLOR, gsc.menubar_fg_color, 0.6)
 --theme.widget_music_bg = MAIN_COLOR
 theme.widget_music_bg = "theme.border_focus"
---theme.widget_music_fg = MAIN_COLOR
 --
 
 
 theme = create_theme({ theme_name=theme_name, theme=theme, })
 
---theme.titlebar_bg_normal = theme.titlebar_bg_normal .."66"
---theme.border = theme.border .."66"
---theme.border_normal = theme.border_normal .."66"
---theme.border_focus = theme.border_focus .."66"
 
 -- Recolor titlebar icons:
 theme = theme_assets.recolor_layout(theme, theme.panel_fg)
@@ -246,15 +235,19 @@ else
   theme.clock_fg = color_utils.darker(theme.panel_fg, 16)
 end
 
-if awesome.composite_manager_running and false then
-  --theme.titlebar_bg_normal = theme.titlebar_bg_normal .."66"
-  theme.border = theme.border .."66"
-  theme.border_normal       = theme.border_normal .."66"
-  theme.border_focus        = theme.border_focus .."66"
+if awesome.composite_manager_running then
+  theme.border = theme.border .."dd"
+  theme.border_normal       = theme.border_normal .."dd"
+  theme.border_focus        = theme.border_focus .."dd"
   theme.titlebar_bg_normal  = theme.titlebar_bg_normal.."dd"
-  theme._titlebar_bg_normal = theme.titlebar_bg_normal.."dd"
   theme.titlebar_bg_focus   = theme.titlebar_bg_focus.."dd"
-  theme._titlebar_bg_focus  = theme.titlebar_bg_focus.."dd"
+end
+
+theme.actionless_titlebar_bg_normal = theme.titlebar_bg_normal
+if theme.border_radius > 0 then
+  theme.actionless_titlebar_bg_focus  = theme.border_focus
+else
+  theme.actionless_titlebar_bg_focus  = theme.gtk.wm_border_focused_color
 end
 
 return theme

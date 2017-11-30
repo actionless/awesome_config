@@ -200,19 +200,19 @@ function signals.init(awesome_context)
       )
     ) then
       log("U: tile: titlebars enabled explicitly")
-      titlebar.make_titlebar(c, beautiful._titlebar_bg_normal, beautiful.titlebar_shadow_normal)
+      titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
       c.border_color = beautiful.border_normal
     elseif c.floating then
       log("U: floating client")
-      titlebar.make_titlebar(c, beautiful._titlebar_bg_normal, beautiful.titlebar_shadow_normal)
+      titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
       c.border_color = beautiful.titlebar_border
     elseif layout == awful.layout.suit.floating then
       clog(c, "U: floating layout")
-      titlebar.make_titlebar(c, beautiful._titlebar_bg_normal, beautiful.titlebar_shadow_normal)
+      titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
       c.border_color = beautiful.titlebar_border
     elseif num_tiled > 1 then
       log("U: multiple tiling clients")
-      titlebar.make_border(c, beautiful._titlebar_bg_normal, beautiful.titlebar_shadow_normal)
+      titlebar.make_border(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
       c.border_color = beautiful.border_normal
     elseif num_tiled == 1 then
       if t.master_fill_policy == 'expand' and screen.count() == 1 then
@@ -220,7 +220,7 @@ function signals.init(awesome_context)
         titlebar.remove_border(c)
       else
         log("U: one tiling client")
-        titlebar.make_border(c, beautiful._titlebar_bg_normal, beautiful.titlebar_shadow_normal)
+        titlebar.make_border(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
         c.border_color = beautiful.border_normal
       end
     else
@@ -272,7 +272,7 @@ function signals.init(awesome_context)
     ) then
       log("F: tile: titlebars enabled explicitly")
       --choose_screen_padding(s, t, num_tiled)
-      titlebar.make_titlebar(c, beautiful._titlebar_bg_focus, beautiful.titlebar_shadow_focus)
+      titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_focus, beautiful.titlebar_shadow_focus)
     elseif c.maximized then
       log("F: maximized")
       --set_default_screen_padding(s)
@@ -280,16 +280,16 @@ function signals.init(awesome_context)
     elseif c.floating then
       log("F: floating client")
       --choose_screen_padding(s, t, num_tiled)
-      titlebar.make_titlebar(c, beautiful._titlebar_bg_focus, beautiful.titlebar_shadow_focus)
+      titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_focus, beautiful.titlebar_shadow_focus)
     elseif layout == awful.layout.suit.floating then
       log("F: floating layout")
       --choose_screen_padding(s, t, num_tiled)
-      titlebar.make_titlebar(c, beautiful._titlebar_bg_focus, beautiful.titlebar_shadow_focus)
+      titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_focus, beautiful.titlebar_shadow_focus)
     elseif num_tiled > 1 then
       log("F: multiple tiling clients")
       --set_default_screen_padding(s)
       c.border_width = beautiful.border_width
-      titlebar.make_border(c, beautiful._titlebar_bg_focus, beautiful.titlebar_shadow_focus)
+      titlebar.make_border(c, beautiful.actionless_titlebar_bg_focus, beautiful.titlebar_shadow_focus)
     elseif num_tiled == 1 then
       if t.master_fill_policy == 'expand' and screen.count() == 1 then
         log("F: one tiling client: expand")
@@ -299,7 +299,7 @@ function signals.init(awesome_context)
         log("F: one tiling client")
         --set_mwfact_screen_padding(t)
         c.border_width = beautiful.border_width
-        titlebar.make_border(c, beautiful._titlebar_bg_focus, beautiful.titlebar_shadow_focus)
+        titlebar.make_border(c, beautiful.actionless_titlebar_bg_focus, beautiful.titlebar_shadow_focus)
       end
     else
       log("F: zero tiling clients -- other tag?")
