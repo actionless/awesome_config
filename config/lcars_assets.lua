@@ -1,6 +1,6 @@
 local wibox = require("wibox")
 local beautiful = require("beautiful")
-local cairo        = require( "lgi"            ).cairo
+local cairo = require("lgi").cairo
 local gears = require("gears")
 
 local assets = {}

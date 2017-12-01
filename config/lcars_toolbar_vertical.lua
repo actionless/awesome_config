@@ -6,7 +6,7 @@ local dpi = beautiful.xresources.apply_dpi
 local common = require("actionless.widgets.common")
 local h_table = require("actionless.util.table")
 
-local assets = require("config.toolbar_assets")
+local assets = require("config.lcars_assets")
 
 
 local toolbar = {}
