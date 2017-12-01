@@ -37,12 +37,17 @@ function toolbar.init(awesome_context)
       nil,
       nil
     )
+    local top_panel_left_margin_to_compensate_left_wibox_rounding = wibox.container.background(
+      common.constraint({width=beautiful.left_panel_width/2}),
+      beautiful.panel_bg
+    )
     local top_panel_left_margin_to_compensate_left_wibox = wibox.container.background(
-      common.constraint({width=beautiful.left_panel_width}),
-      beautiful.fg
+      common.constraint({width=beautiful.left_panel_width/2}),
+      beautiful.panel_widget_bg
     )
     local top_panel_bottomlayout = wibox.layout.align.horizontal(
       wibox.layout.fixed.horizontal(
+        top_panel_left_margin_to_compensate_left_wibox_rounding,
         top_panel_left_margin_to_compensate_left_wibox,
         top_panel_left_margin,
         --loaded_widgets.screen[si].taglist,

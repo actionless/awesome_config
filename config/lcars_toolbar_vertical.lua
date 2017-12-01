@@ -56,9 +56,27 @@ function toolbar.init(awesome_context)
 
 
 
+    local left_panel_top_margin_to_compensate_rounding = wibox.container.background(
+      common.constraint({
+        height=beautiful.left_panel_width/2 - beautiful.panel_height,
+        width=beautiful.left_panel_width/2,
+      }),
+      beautiful.panel_bg
+    )
+    local left_panel_top_margin_to_compensate_height = wibox.container.background(
+      common.constraint({
+        height=beautiful.left_panel_width/2 - beautiful.panel_height,
+        width=beautiful.left_panel_width/2,
+      }),
+      beautiful.panel_widget_bg
+    )
 
     -- INDICATORS LEFT PANEL
     left_panel_widgets[si] = {
+        wibox.layout.fixed.horizontal(
+          left_panel_top_margin_to_compensate_rounding,
+          left_panel_top_margin_to_compensate_height
+        ),
       loaded_widgets.lcars_textclock,
       v_sep,
       common.decorated({widgets={
@@ -142,10 +160,10 @@ function toolbar.init(awesome_context)
         wibox.layout.align.vertical(
           --assets.bottom_top_left_corner_image(),
           wibox.container.background(
-            left_panel_bottom_layouts[si],
+            left_panel_bottom_layouts[si]--,
             --wibox.widget.textbox('test'),
             --beautiful.panel_widget_bg
-            "#00ff00"
+            --"#00ff00"
           ),
           nil
         ),
@@ -161,27 +179,16 @@ function toolbar.init(awesome_context)
       )
     )
 
-    local top_left_corner_image = assets.top_left_corner_image()
-    local top_left_corner_imagebox = wibox.widget.imagebox()
-    top_left_corner_imagebox:set_image(top_left_corner_image)
-    top_left_corner_imagebox:set_resize(false)
 
-    --@TODO: this should be debugged
-    local external_corner_wibox_layout = wibox(top_left_corner_imagebox)
-    --external_corner_wibox_layout = wibox(wibox.container.background(wibox.widget.textbox('test'), "#ff0000"))
-    external_corner_wibox_layout.shape_bounding = top_left_corner_image._native
-    external_corner_wibox_layout:geometry({ x = 0, y = 0, width = 200, height = 200, })
-    external_corner_wibox.border_color="#ff0000"
-    external_corner_wibox.border_width = 10
-    external_corner_wibox[si] = external_corner_wibox_layout
+    leftwibox[si]:set_widget(left_panel_layout)
+    --leftwibox[si]:set_widget(wibox.widget.textbox('test'))
 
+
+    external_corner_wibox[si] = assets.top_left_corner_wibox()
     internal_corner_wibox[si] = assets.internal_corner_wibox()
     top_internal_corner_wibox[si] = assets.top_internal_corner_wibox()
     --top_internal_corner_wibox[si] = assets.internal_corner_wibox()
 
-
-    leftwibox[si]:set_widget(left_panel_layout)
-    --leftwibox[si]:set_widget(wibox.widget.textbox('test'))
 
     internal_corner_wibox[si].visible = false
     --external_corner_wibox[si].visible = false
