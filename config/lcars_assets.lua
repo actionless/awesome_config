@@ -60,7 +60,7 @@ function assets.internal_corner_wibox()
   -- draw border
   local border_radius = internal_corner_radius + beautiful.panel_padding_bottom
   cr.line_width = beautiful.panel_padding_bottom * 2
-  cr:set_source(gears.color(beautiful.panel_widget_fg))
+  cr:set_source(gears.color(beautiful.panel_bg))
   cr:move_to(0, border_radius)
   cr:line_to(0, 0)
   cr:line_to(border_radius, 0)

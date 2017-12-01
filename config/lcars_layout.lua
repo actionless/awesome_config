@@ -1,11 +1,12 @@
 local awful = require("awful")
+local wibox = require("wibox")
 local client = client
 local beautiful = require("beautiful")
 local delayed_call = require("gears.timer").delayed_call
 
 
 local debug_messages_enabled = true
-local debug_messages_enabled = false
+--local debug_messages_enabled = false
 local log = function(...) if debug_messages_enabled then nlog(...) end end
 
 
@@ -64,6 +65,7 @@ local function lcars_unite(t, from)
   log("LCARS: unite|"..from)
   local s = t.screen.index
   local w = awesome_context.topwibox[s]
+  awesome_context.topwibox_layout[s]:reset()
   w:struts({top = beautiful.panel_height})
   w:geometry({height = beautiful.panel_height})
   awful.wibox.set_position(w, "top", s)
@@ -103,9 +105,20 @@ local function lcars_separate(t, from)
   lcars_layout_helper.setlpv(true, t)
   lcars_layout_helper.last_y = computed_y
 
-  w:geometry({height = beautiful.panel_height * 2 + beautiful.panel_padding_bottom})
-  w:struts({top = 0})
-  w:geometry({y = computed_y - beautiful.panel_height - beautiful.panel_padding_bottom })
+  w:remove()
+  w = awful.wibar({
+    height = beautiful.panel_height * 2 + beautiful.panel_padding_bottom,
+  })
+  awesome_context.topwibox_layout[s]:set_first(awesome_context.topwibox_toplayout[s])
+  w:set_widget(awesome_context.topwibox_layout[s])
+  --w:geometry({height = beautiful.panel_height * 8 + beautiful.panel_padding_bottom})
+  --w.height = beautiful.panel_height * 8 + beautiful.panel_padding_bottom
+  nlog(w:struts())
+  w:struts({top = 0, bottom=0})
+  nlog(w:struts())
+  w:geometry({y = computed_y - beautiful.panel_height - beautiful.panel_padding_bottom, x=beautiful.left_panel_width })
+  --w.visible = false
+  --nlog({y = computed_y - beautiful.panel_height * 1 - beautiful.panel_padding_bottom * 1 })
 
   awesome_context.leftwibox_separator[s]:set_height(computed_y)
 
@@ -115,7 +128,9 @@ local function lcars_separate(t, from)
     y = computed_y-beautiful.panel_height - beautiful.left_panel_internal_corner_radius
   })
 
-  awesome_context.topwibox_layout[s]:set_first(awesome_context.topwibox_toplayout[s])
+    --awesome_context.topwibox_layout[s]:set_third(
+      --awesome_context.topwibox_layout_fallback[s]
+    --)
 
 
   awesome_context.left_panel_top_layouts[s]:reset()

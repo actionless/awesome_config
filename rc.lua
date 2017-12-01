@@ -94,6 +94,7 @@ config.signals.init(context)
 local persistent = require("actionless.persistent")
 if persistent.lcarslist.get() then
   config.lcars_toolbar_vertical.init(context)
+  config.lcars_toolbar_horizontal.init(context)
   config.lcars_layout.init(context)
 end
 config.rules.init(context)
