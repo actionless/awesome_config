@@ -40,11 +40,11 @@ end
 local function attach_highlight_on_hover(tb, c)
   tb:connect_signal("mouse::enter", function(_)
     if c == client.focus then
-      c.border_color = color_utils.darker(beautiful.actionless_titlebar_bg_focus, -40)
-      --c.border_color = color_utils.darker(beautiful.border_focus, -50)
+      --c.border_color = color_utils.darker(beautiful.actionless_titlebar_bg_focus, -40)
+      c.border_color = color_utils.darker(beautiful.border_focus, -50)
     else
-      --c.border_color = color_utils.darker(beautiful.border_normal, -40)
-      c.border_color = color_utils.darker(beautiful.actionless_titlebar_bg_normal, -50)
+      c.border_color = color_utils.darker(beautiful.border_normal, -40)
+      --c.border_color = color_utils.darker(beautiful.actionless_titlebar_bg_normal, -50)
       --c.border_color = color_utils.mix(beautiful.border_normal, beautiful.border_focus, 0.6)
     end
   end)
