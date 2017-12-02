@@ -13,7 +13,6 @@ local mopidy = {}
 function mopidy.init(player_widget)
   player_widget = player_widget or {}
   mopidy.player_cmd = player_widget.args.mopidy_player_command or "xterm -e ncmpcpp"
-  mopidy.music_dir = player_widget.music_dir or os.getenv("HOME") .. "/Music"
   mopidy.host = player_widget.host or "127.0.0.1"
   mopidy.port = player_widget.port or "6600"
   mopidy.password = player_widget.password or [[""]]

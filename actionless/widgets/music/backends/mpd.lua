@@ -15,7 +15,6 @@ local mpd = {
 
 function mpd.init(args)
   args = args or {}
-  mpd.music_dir = args.music_dir or os.getenv("HOME") .. "/Music"
   mpd.host = args.host or "127.0.0.1"
   mpd.port = args.port or "6600"
   mpd.password = args.password or [[""]]
@@ -82,17 +81,6 @@ function mpd.resize_cover(
   player_status, cover_size, default_art, notification_callback
 )
   local _, _, _ = player_status, cover_size, default_art
-  --awful.spawn.easy_async(
-    --string.format(
-      --"%s %q %q %d %q",
-      --cover_script,
-      --mpd.music_dir,
-      --player_status.file,
-      --cover_size,
-      --default_art
-    --),
-    --notification_callback
-  --)
   return notification_callback()
 end
 
