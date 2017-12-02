@@ -141,6 +141,7 @@ function common.widget(args)
   if args.text then
     widget_bg:set_text(args.text)
   end
+  widget_bg:set_font(args.font or beautiful.panel_widget_font or beautiful.font)
 
   return widget_bg
 end
@@ -190,7 +191,10 @@ function common.decorated_vertical(args)
       widget:set_valign("top")
       --widget:set_wrap("char")
     end
-  -- give set_bg and set_fg methods to ones don't have it:
+    if widget.set_font then
+      widget:set_font(args.font or beautiful.panel_widget_font or beautiful.font)
+    end
+    -- give set_bg and set_fg methods to ones don't have it:
     if (decorated.fg and not widget.set_fg) or (decorated.bg and not widget.set_bg) then
       decorated.lie_widget_list[i] = setmetatable(wibox.container.background(widget), widget)
     end

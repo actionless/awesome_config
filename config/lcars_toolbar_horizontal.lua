@@ -20,6 +20,7 @@ function toolbar.init(awesome_context)
   -- Separators
   local separator  = common.constraint({ width=dpi(8), })
   local h_sep = common.constraint({ width=dpi(7) })
+  local border_separator = common.constraint({ width = beautiful.panel_padding_bottom })
 
   awful.screen.connect_for_each_screen(function(s)
     local si = s.index
@@ -52,7 +53,7 @@ function toolbar.init(awesome_context)
         top_panel_left_margin,
         --loaded_widgets.screen[si].taglist,
         top_panel_left_margin,
-        separator,
+        border_separator,
         loaded_widgets.screen[si].manage_client,
         separator,
         loaded_widgets.kbd,

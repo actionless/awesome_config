@@ -45,7 +45,7 @@ function toolbar.init(awesome_context)
     fg=beautiful.clock_fg,
     orientation="vertical",
   })
-  awful.widget.calendar_popup.month({}):attach(lcars_textclock, "tl", {on_hover=true})
+  loaded_widgets.calendar_popup:attach(lcars_textclock, "tl", {on_hover=true})
 
   awful.screen.connect_for_each_screen(function(s)
     local si = s.index
@@ -116,10 +116,13 @@ function toolbar.init(awesome_context)
         --{ __index = apw_widget }
       --),
       --v_sep,
-      common.decorated({widgets={
-        loaded_widgets.cpu,
-        loaded_widgets.mem,
-      }}),
+      common.decorated({
+        widgets={
+          loaded_widgets.cpu,
+          loaded_widgets.mem,
+        },
+        orientation="vertical",
+      }),
       v_sep,
       screen_widgets.lcarslist,
       --loaded_widgets.temp,
