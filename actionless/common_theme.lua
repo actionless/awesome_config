@@ -73,7 +73,6 @@ function common_theme.generate_theme(theme_dir)
   theme.border                  = "theme.bg"
   theme.sel_border              = "theme.xrdb.color10"
   theme.titlebar_border         = "theme.border"
-  theme.titlebar_bg_normal      = "theme.border"
   theme.titlebar_focus_border   = "theme.sel_border"
   theme.base_border_width		= "6"
   --theme.border_width		= "theme.base_border_width"
@@ -194,6 +193,9 @@ theme.left_panel_internal_corner_radius = 30
   theme.titlebar_fg_focus	= "theme.tasklist_fg_focus"
   theme.titlebar_bg_focus	= "theme.bg"
   theme.titlebar_fg_normal	= "theme.tasklist_fg_normal"
+  theme.titlebar_bg_normal      = "theme.border"
+  theme.actionless_titlebar_bg_focus	= "theme.titlebar_bg_focus"
+  theme.actionless_titlebar_bg_normal      = "theme.titlebar_bg_normal"
   --theme.titlebar_bg_normal	= "theme.bg"
 
   theme.notification_opacity	= 0.8
