@@ -43,7 +43,7 @@ local function handle_left_panel_visibility(t)
     )
   else
     awesome_context.topwibox[s]:set_widget(
-      awesome_context.lcars_assets.topwibox_layout_fallback[s]
+      awesome_context.topwibox_layout[s]
     )
   end
   --c:geometry({width=screen[c.screen].workarea.width})
@@ -128,7 +128,7 @@ local function lcars_separate(t, from)
   awesome_context.lcars_assets.top_internal_corner_wibox[s].y = computed_y-beautiful.panel_height - beautiful.left_panel_internal_corner_radius
 
     --awesome_context.lcars_assets.topwibox_layout[s]:set_third(
-      --awesome_context.lcars_assets.topwibox_layout_fallback[s]
+      --awesome_context.topwibox_layout[s]
     --)
 
 
