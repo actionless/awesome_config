@@ -365,15 +365,14 @@ function menubar:show(scr)
 
     local prompt_args = self.prompt_args or {}
     prompt_args.prompt = "Run: "
-    awful.prompt.run(prompt_args, self.instance.prompt.widget,
-                function(s) end,            -- exe_callback function set to do nothing
-                awful.completion.shell,     -- completion_callback
-                menubar.menu_cache_path,
-                nil,
-                function() return self:hide() end,
-                function(query) return self:menulist_update(query, scr) end,
-                prompt_keypressed_callback
-                )
+    prompt_args.textbox = self.instance.prompt.widget
+    prompt_args.exe_callbac = function(_) end
+    prompt_args.completion_callback = awful.completion.shell
+    prompt_args.history_path = menubar.menu_cache_path
+    prompt_args.done_callback = function() return self:hide() end
+    prompt_args.changed_callback = function(query) return self:menulist_update(query, scr) end
+    prompt_args.keypressed_callback = prompt_keypressed_callback
+    awful.prompt.run(prompt_args)
     self.instance.wibox.visible = true
 end
 
@@ -396,7 +395,7 @@ end
 menubar.__index = menubar
 
 return menubar
-end -- 
+end
 ------------------------------------------------------------------------------
 -- menubar.create end
 ------------------------------------------------------------------------------
