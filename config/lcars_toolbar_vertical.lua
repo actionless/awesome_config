@@ -39,6 +39,10 @@ function toolbar.init(awesome_context)
   local external_corner_wibox = {}
   local top_internal_corner_wibox = {}
 
+  local top_left_corner_placeholder = {}
+  local top_left_corner_imagebox = {}
+  local top_left_corner_container = {}
+
   local lcars_textclock = common.decorated({
     widget = wibox.widget.textclock("%H:%M"),
     valign = "bottom",
@@ -76,16 +80,18 @@ function toolbar.init(awesome_context)
 
 
 
-    local left_panel_top_margin_to_compensate_rounding = wibox.container.background(
+    top_left_corner_placeholder[si] = wibox.container.background(
       common.constraint({
         height=beautiful.left_panel_width/2 - beautiful.panel_height,
       }),
       beautiful.panel_bg
     )
+    top_left_corner_imagebox[si] = wibox.widget.imagebox(assets.top_left_corner_image())
+    top_left_corner_container[si] = wibox.container.background(top_left_corner_placeholder[si])
 
     -- INDICATORS LEFT PANEL
     left_panel_widgets[si] = {
-      left_panel_top_margin_to_compensate_rounding,
+      top_left_corner_container[si],
       lcars_textclock,
       v_sep,
       common.decorated({
@@ -190,7 +196,6 @@ function toolbar.init(awesome_context)
 
 
     internal_corner_wibox[si].visible = false
-    --external_corner_wibox[si].visible = false
 
   end)
 
@@ -201,6 +206,10 @@ function toolbar.init(awesome_context)
   awesome_context.external_corner_wibox = external_corner_wibox
   awesome_context.top_internal_corner_wibox = top_internal_corner_wibox
   --awesome_context.top_internal_corner_wibox = internal_corner_wibox
+  --
+  awesome_context.top_left_corner_placeholder = top_left_corner_placeholder
+  awesome_context.top_left_corner_imagebox = top_left_corner_imagebox
+  awesome_context.top_left_corner_container = top_left_corner_container
 
   awesome_context.left_panel_widgets = left_panel_widgets
   awesome_context.left_panel_top_layouts = left_panel_top_layouts

@@ -67,8 +67,9 @@ local function lcars_unite(t, from)
   local w = awesome_context.topwibox[s]
   awesome_context.topwibox_layout[s]:reset()
   w:struts({top = beautiful.panel_height})
-  w:geometry({height = beautiful.panel_height})
+  w.height = beautiful.panel_height
   awful.wibar.set_position(w, "top", s)
+  awesome_context.top_left_corner_container[s]:set_widget(awesome_context.top_left_corner_placeholder[s])
   awesome_context.leftwibox_separator[s]:set_height(0)
   awesome_context.internal_corner_wibox[s].y = beautiful.basic_panel_height
   awesome_context.internal_corner_wibox[s]:apply_shape()
@@ -113,18 +114,19 @@ local function lcars_separate(t, from)
   --nlog(w:struts())
   --w:struts({top = 0, bottom=0})
   --nlog(w:struts())
-  w:geometry({y = computed_y - beautiful.panel_height - beautiful.panel_padding_bottom, x=beautiful.left_panel_width })
+  w.y = computed_y - beautiful.panel_height - beautiful.panel_padding_bottom
+  w.x = beautiful.left_panel_width
   --w.visible = false
   --nlog({y = computed_y - beautiful.panel_height * 1 - beautiful.panel_padding_bottom * 1 })
+
+  awesome_context.top_left_corner_container[s]:set_widget(awesome_context.top_left_corner_imagebox[s])
 
   awesome_context.leftwibox_separator[s]:set_height(computed_y)
 
   awesome_context.internal_corner_wibox[s].y = computed_y+beautiful.basic_panel_height
   awesome_context.internal_corner_wibox[s]:apply_shape()
   awesome_context.top_internal_corner_wibox[s].visible = true
-  awesome_context.top_internal_corner_wibox[s]:geometry({
-    y = computed_y-beautiful.panel_height - beautiful.left_panel_internal_corner_radius
-  })
+  awesome_context.top_internal_corner_wibox[s].y = computed_y-beautiful.panel_height - beautiful.left_panel_internal_corner_radius
 
     --awesome_context.topwibox_layout[s]:set_third(
       --awesome_context.topwibox_layout_fallback[s]
