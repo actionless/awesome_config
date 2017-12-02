@@ -147,6 +147,19 @@ end
 
 
 
+function common.decorated(args)
+  args = args or {}
+  if args.horizontal == nil and args.orientation == nil then
+    args.horizontal = true
+  end
+  if args.horizontal or args.orientation == "horizontal" then
+    return common.decorated_horizontal(args)
+  else
+    return common.decorated_vertical(args)
+  end
+end
+
+
 
 --[[
 --------------------------------------------------------------------------------
@@ -154,24 +167,16 @@ end
 --------------------------------------------------------------------------------
 --]]
 
-function common.decorated(args)
+function common.decorated_vertical(args)
   args = args or {}
-  if args.horizontal == nil and args.orientation == nil then
-    args.horizontal = true
-  end
-
-  if args.horizontal or args.orientation == "horizontal" then
-    return common.decorated_horizontal(args)
-  end
 
   local decorated = {
     lie_widget_list = {},
+    bg = args.bg or beautiful.panel_widget_bg or beautiful.fg or "#ffffff",
+    fg = args.fg or beautiful.panel_widget_fg or beautiful.bg or "#000000",
+    min_height = args.min_height or beautiful.left_widget_min_height,
+    valign = args.valign or "top",
   }
-
-  decorated.bg = args.bg or beautiful.panel_widget_bg or beautiful.fg or "#ffffff"
-  decorated.fg = args.fg or beautiful.panel_widget_fg or beautiful.bg or "#000000"
-  local valign = args.valign or "top"
-  decorated.min_height = args.min_height or beautiful.left_widget_min_height
 
   if args.widget then
     decorated.lie_widget_list = {args.widget}
@@ -192,15 +197,14 @@ function common.decorated(args)
   end
 
   decorated.lie_widget_layout = wibox.layout.fixed.vertical()
-
-  if valign == "top" then
+  if decorated.valign == "top" then
     decorated.internal_widget_layout =
     wibox.layout.align.horizontal(
         nil,
         decorated.lie_widget_layout,
         common.constraint({width=args.padding or beautiful.panel_padding_bottom})
     )
-  elseif valign == "bottom" then
+  elseif decorated.valign == "bottom" then
     decorated.internal_widget_layout = wibox.layout.align.vertical(
         nil,
         nil,
@@ -211,6 +215,7 @@ function common.decorated(args)
         )
     )
   end
+
   decorated.constraint = common.constraint({
     widget = decorated.internal_widget_layout,
     height = decorated.min_height,
@@ -220,20 +225,22 @@ function common.decorated(args)
     decorated.constraint,
     decorated.bg
   )
-
   decorated.lie_layout = wibox.layout.flex.vertical()
   decorated.lie_layout:add(decorated.lie_background)
 
-  --setmetatable(decorated.constraint, { __index = decorated.lie_widget })
+
+  function decorated:init()
+    self:set_normal()
+    self:show()
+  end
+
   function decorated:set_text(...)
     return self.lie_widget:set_text(...)
   end
+
   function decorated:set_markup(...)
     return self.lie_widget:set_markup(...)
   end
-
-  setmetatable(decorated.lie_layout, { __index = decorated.constraint })
-  setmetatable(decorated,        { __index = decorated.lie_layout })
 
   --- Set widget color
   -- @param args. "fg", "bg", "name" - "err", "warn", "b", "f" or 1..16
@@ -306,8 +313,10 @@ function common.decorated(args)
     })
   end
 
-  decorated:set_normal()
-  decorated:show()
+  decorated:init()
+  --setmetatable(decorated.constraint, { __index = decorated.lie_widget })
+  setmetatable(decorated.lie_layout, { __index = decorated.constraint })
+  setmetatable(decorated,        { __index = decorated.lie_layout })
   return decorated
 end
 
