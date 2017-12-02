@@ -57,12 +57,17 @@ context = {
   --theme_dir = awful_util.getdir("config") .. "/themes/gtk/theme.lua",
   --theme_dir = awful_util.getdir("config") .. "/themes/twmish/theme.lua",
 
+  -- @TODO: rename to 'widget_config'
   config = {
     net_preset = 'netctl-auto',
     wlan_if = 'wlp12s0',
     eth_if = 'enp0s25',
     music_players = { 'spotify', 'clementine' },
   },
+  -- @TODO: move to 'widget_config'
+  have_battery = true,
+  sensor = "Core 0",
+  apw_on_the_left = false,
 
   cmds = {
     terminal = terminal,
@@ -78,13 +83,10 @@ context = {
 
   autorun = {},
 
-  have_battery = true,
-  sensor = "Core 0",
-
-  apw_on_the_left = false,
-
+  -- place for custom callbacks:
   before_config_loaded = nil,
   after_config_loaded = nil,
+
 
   -- can't be overriden in local settings:
   widgets = {},
