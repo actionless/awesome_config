@@ -2,7 +2,8 @@ local awful = require("awful")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 
-local common = require("actionless.widgets.common")
+local widgets = require("actionless.widgets")
+local common = widgets.common
 local h_table = require("actionless.util.table")
 
 local assets = require("config.lcars_assets")
@@ -38,9 +39,28 @@ function toolbar.init(awesome_context)
   local external_corner_wibox = {}
   local top_internal_corner_wibox = {}
 
+  local lcars_textclock = common.decorated({
+    widget = wibox.widget.textclock("%H:%M"),
+    valign = "bottom",
+    fg=beautiful.clock_fg,
+    orientation="vertical",
+  })
+  awful.widget.calendar_popup.month({}):attach(lcars_textclock, "tl", {on_hover=true})
+
   awful.screen.connect_for_each_screen(function(s)
     local si = s.index
     local screen_widgets = loaded_widgets.screen[si]
+
+    -- layoutbox
+    local lcars_layoutbox = widgets.layoutbox({
+      screen = s,
+      fg = beautiful.widget_layoutbox_fg,
+      bg = beautiful.widget_layoutbox_bg,
+      --valign = "bottom",
+      --bg = theme.color.color8, -- 6
+      horizontal = false,
+    })
+
 
     leftwibox[si] = awful.wibar({
       position = "left",
@@ -59,34 +79,26 @@ function toolbar.init(awesome_context)
     local left_panel_top_margin_to_compensate_rounding = wibox.container.background(
       common.constraint({
         height=beautiful.left_panel_width/2 - beautiful.panel_height,
-        width=beautiful.left_panel_width/2,
       }),
       beautiful.panel_bg
-    )
-    local left_panel_top_margin_to_compensate_height = wibox.container.background(
-      common.constraint({
-        height=beautiful.left_panel_width/2 - beautiful.panel_height,
-        width=beautiful.left_panel_width/2,
-      }),
-      beautiful.panel_widget_bg
     )
 
     -- INDICATORS LEFT PANEL
     left_panel_widgets[si] = {
-        wibox.layout.fixed.horizontal(
-          left_panel_top_margin_to_compensate_rounding,
-          left_panel_top_margin_to_compensate_height
-        ),
-      loaded_widgets.lcars_textclock,
+      left_panel_top_margin_to_compensate_rounding,
+      lcars_textclock,
       v_sep,
-      common.decorated({widgets={
-        screen_widgets.layoutbox.textbox,
-        wibox.layout.fixed.horizontal(
-          screen_widgets.layoutbox.n_master,
-          wibox.widget.textbox(' '),
-          screen_widgets.layoutbox.n_col
-        ),
-      }}),
+      common.decorated({
+        widgets={
+          lcars_layoutbox.textbox,
+          wibox.layout.fixed.horizontal(
+            screen_widgets.layoutbox.n_master,
+            wibox.widget.textbox(' '),
+            screen_widgets.layoutbox.n_col
+          ),
+        },
+        orientation="vertical",
+      }),
       v_sep,
       --common.constraint({
         --widget=loaded_widgets.music,
@@ -157,25 +169,9 @@ function toolbar.init(awesome_context)
       leftwibox_separator[si],
       wibox.layout.align.horizontal(
         nil,
-        wibox.layout.align.vertical(
-          --assets.bottom_top_left_corner_image(),
-          wibox.container.background(
-            left_panel_bottom_layouts[si]--,
-            --wibox.widget.textbox('test'),
-            --beautiful.panel_widget_bg
-            --"#00ff00"
-          ),
-          nil
-        ),
+        left_panel_bottom_layouts[si],
         -- right margin:
-        wibox.layout.fixed.vertical(
-          wibox.container.background(
-            common.constraint({height=beautiful.basic_panel_height, width=beautiful.panel_padding_bottom}),
-            --beautiful.panel_fg
-            "#ff0000"
-          ),
-          common.constraint({width=beautiful.panel_padding_bottom})
-        )
+        common.constraint({width=beautiful.panel_padding_bottom})
       )
     )
 

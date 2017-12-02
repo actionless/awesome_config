@@ -9,7 +9,6 @@ function assets.top_left_corner_image()
   local radius = beautiful.left_panel_width / 2
   local img = cairo.ImageSurface(cairo.Format.ARGB32, beautiful.left_panel_width, radius)
   local cr = cairo.Context(img)
-  cr:set_source(gears.color(beautiful.panel_widget_bg))
   cr:move_to(0, radius)
   cr:line_to(radius*2, radius)
   cr:line_to(radius*2, 0)
@@ -19,18 +18,15 @@ function assets.top_left_corner_image()
     0, 0,
     0, radius
   )
+  cr:set_source(gears.color(beautiful.panel_widget_bg))
   cr:fill()
   return img
-  --local top_left_corner_imagebox = wibox.widget.imagebox()
-  --top_left_corner_imagebox:set_image(img)
-  --top_left_corner_imagebox:set_resize(false)
-  --return top_left_corner_imagebox
 end
 
 function assets.top_left_corner_wibox()
   local external_corner_wibox_layout = wibox()
   external_corner_wibox_layout.height = beautiful.left_panel_width / 2
-  external_corner_wibox_layout.width  = beautiful.left_panel_width / 2
+  external_corner_wibox_layout.width  = beautiful.left_panel_width - beautiful.panel_padding_bottom
   external_corner_wibox_layout.x = 0
   external_corner_wibox_layout.y = 0
   external_corner_wibox_layout.opacity = beautiful.panel_opacity
@@ -112,7 +108,10 @@ function assets.internal_corner_wibox()
   local internal_corner_imagebox = wibox.widget.imagebox()
   internal_corner_imagebox:set_image(img)
   w:set_widget(internal_corner_imagebox)
-  w.shape_bounding = img._native
+  function w:apply_shape()
+    self.shape_bounding = img._native
+  end
+  w:apply_shape()
   return w
 end
 

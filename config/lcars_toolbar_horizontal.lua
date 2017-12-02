@@ -26,7 +26,7 @@ function toolbar.init(awesome_context)
 
     local top_panel_left_margin = wibox.container.background(
       common.constraint({width=dpi(100)}),
-      beautiful.fg
+      beautiful.panel_widget_bg
     )
     -- TOP PANEL:
     local top_panel_toplayout = wibox.layout.align.horizontal(

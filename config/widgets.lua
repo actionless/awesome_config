@@ -51,7 +51,7 @@ function widget_loader.init(awesome_context)
       bg = beautiful.panel_bg,
       force_no_bgimage=true,
       horizontal=true,
-      left_separators = lcarslist_enabled and {} or { 'arrl' },
+      --left_separators = lcarslist_enabled and {} or { 'arrl' },
       mopidy_player_command = awesome_context.cmds.tmux_run .. "ncmpcpp",
       enable_notifications = false,
       --valign = "bottom",
@@ -112,14 +112,6 @@ function widget_loader.init(awesome_context)
   end
 
   -- Textclock
-  if lcarslist_enabled then
-    w.lcars_textclock = widgets.common.decorated({
-      widget = wibox.widget.textclock("%H:%M"),
-      valign = "bottom",
-      fg=beautiful.clock_fg,
-    })
-    awful.widget.calendar_popup.month({}):attach(w.lcars_textclock, "tl", {on_hover=true})
-  end
   local markup = require("actionless.util.markup")
   local textclock = wibox.widget.textclock(markup.fg(beautiful.clock_fg or beautiful.panel_fg, "%H:%M"))
   w.textclock = textclock
@@ -267,25 +259,15 @@ function widget_loader.init(awesome_context)
         tasklist_addon.list_update,
         wibox.layout.fixed.vertical()
       )
-      -- layoutbox
-      sw.layoutbox = widgets.layoutbox({
-        screen = s,
-        fg = beautiful.widget_layoutbox_fg,
-        bg = beautiful.widget_layoutbox_bg,
-        --valign = "bottom",
-        --bg = theme.color.color8, -- 6
-        horizontal = false,
-      })
-    else
-      sw.layoutbox = widgets.layoutbox({
-        screen = s,
-        fg = beautiful.widget_layoutbox_bg,
-        bg = beautiful.widget_layoutbox_fg,
-        --valign = "bottom",
-        --bg = theme.color.color8, -- 6
-        horizontal = true,
-      })
     end
+    sw.layoutbox = widgets.layoutbox({
+      screen = s,
+      fg = beautiful.widget_layoutbox_bg,
+      bg = beautiful.widget_layoutbox_fg,
+      --valign = "bottom",
+      --bg = theme.color.color8, -- 6
+      horizontal = true,
+    })
 
 
 

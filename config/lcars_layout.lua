@@ -32,12 +32,12 @@ local function handle_left_panel_visibility(t)
   else
     lcars_layout_helper.is_visible = visible
   end
-  --awesome_context.leftwibox[1]:struts({left=0})
-  awesome_context.leftwibox[1].visible = visible
-  awesome_context.internal_corner_wibox[1].visible = visible
-  awesome_context.external_corner_wibox[1].visible = visible
-  awesome_context.topwibox[1].stretch = 1
   local s = t.screen.index
+  --awesome_context.leftwibox[s]:struts({left=0})
+  awesome_context.leftwibox[s].visible = visible
+  awesome_context.internal_corner_wibox[s].visible = visible
+  awesome_context.external_corner_wibox[s].visible = visible
+  awesome_context.topwibox[s].stretch = 1
   if visible then
     awesome_context.topwibox[s]:set_widget(
       awesome_context.topwibox_layout[s]
@@ -68,9 +68,10 @@ local function lcars_unite(t, from)
   awesome_context.topwibox_layout[s]:reset()
   w:struts({top = beautiful.panel_height})
   w:geometry({height = beautiful.panel_height})
-  awful.wibox.set_position(w, "top", s)
+  awful.wibar.set_position(w, "top", s)
   awesome_context.leftwibox_separator[s]:set_height(0)
-  awesome_context.internal_corner_wibox[s]:geometry({y = beautiful.basic_panel_height})
+  awesome_context.internal_corner_wibox[s].y = beautiful.basic_panel_height
+  awesome_context.internal_corner_wibox[s]:apply_shape()
   awesome_context.topwibox_layout[s]:set_first(nil)
   awesome_context.top_internal_corner_wibox[s].visible = false
 
@@ -105,24 +106,21 @@ local function lcars_separate(t, from)
   lcars_layout_helper.setlpv(true, t)
   lcars_layout_helper.last_y = computed_y
 
-  w:remove()
-  w = awful.wibar({
-    height = beautiful.panel_height * 2 + beautiful.panel_padding_bottom,
-  })
   awesome_context.topwibox_layout[s]:set_first(awesome_context.topwibox_toplayout[s])
   w:set_widget(awesome_context.topwibox_layout[s])
   --w:geometry({height = beautiful.panel_height * 8 + beautiful.panel_padding_bottom})
   --w.height = beautiful.panel_height * 8 + beautiful.panel_padding_bottom
-  nlog(w:struts())
-  w:struts({top = 0, bottom=0})
-  nlog(w:struts())
+  --nlog(w:struts())
+  --w:struts({top = 0, bottom=0})
+  --nlog(w:struts())
   w:geometry({y = computed_y - beautiful.panel_height - beautiful.panel_padding_bottom, x=beautiful.left_panel_width })
   --w.visible = false
   --nlog({y = computed_y - beautiful.panel_height * 1 - beautiful.panel_padding_bottom * 1 })
 
   awesome_context.leftwibox_separator[s]:set_height(computed_y)
 
-  awesome_context.internal_corner_wibox[s]:geometry({y = computed_y+beautiful.basic_panel_height})
+  awesome_context.internal_corner_wibox[s].y = computed_y+beautiful.basic_panel_height
+  awesome_context.internal_corner_wibox[s]:apply_shape()
   awesome_context.top_internal_corner_wibox[s].visible = true
   awesome_context.top_internal_corner_wibox[s]:geometry({
     y = computed_y-beautiful.panel_height - beautiful.left_panel_internal_corner_radius
@@ -154,6 +152,7 @@ local function lcars_separate(t, from)
 end
 
 
+
 local function tag_callback(t, from)
   if not t then t = awful.screen.focused().selected_tag end
   if not t.selected then return end
@@ -167,10 +166,12 @@ end
 
 tag.connect_signal("property::selected", function (t)
   handle_left_panel_visibility(t)
-  if t.selected then
-    return tag_callback(t, "t:selected")
-  end
+  return tag_callback(t, "t:selected")
 end)
+tag.connect_signal("property::layout", function (t)
+  return tag_callback(t, "t:layout")
+end)
+
 client.connect_signal("tagged", function (_, t)
   --handle_left_panel_visibility(t)
   return tag_callback(t, "c:tagged on " .. t.name)
@@ -184,15 +185,6 @@ client.connect_signal("property::minimized", function (c)
   return tag_callback(t, "c:min")
 end)
 
-
-tag.connect_signal("property::layout", function (t)
-  log("t:layout")
-  if awful.tag.getproperty(t, "layout").name == 'lcars' then
-    lcars_separate(t, 'prop')
-  else
-    lcars_unite(t, 'prop')
-  end
-end)
 
 local function size_change_callback(t, from)
   if awful.tag.getproperty(t, 'layout').name == 'lcars' then
