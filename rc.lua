@@ -50,6 +50,8 @@ context = {
 
   modkey = "Mod4",
   altkey = "Mod1",
+  clientbuttons = nil,
+  clientkeys = nil,
 
   theme_dir = awful_util.getdir("config") .. "/themes/lcars-xresources-hidpi/theme.lua",
   --theme_dir = awful_util.getdir("config") .. "/themes/gtk/theme.lua",
@@ -64,26 +66,33 @@ context = {
 
   cmds = {
     terminal = terminal,
+    terminal_light = terminal,  -- @TODO: add it
     editor_cmd = terminal .. " -e " .. editor,
     compositor = "killall compton; compton",
     file_manager = "nautilus",
     tmux = terminal .. " -e bash \\-c tmux",
+    tmux_light = terminal .. " -e bash \\-c tmux",  -- @TODO: add it
     tmux_run   = terminal .. " -e tmux new-session ",
     scrot_preview_cmd = [['mv $f ~/images/ && viewnior ~/images/$f']],
   },
 
   autorun = {},
-  widgets = {},
-  menu = {},
 
   have_battery = true,
-  new_top = true,
+  new_top = true,  -- @TODO: remove it
   sensor = "Core 0",
 
   apw_on_the_left = false,
 
   before_config_loaded = nil,
   after_config_loaded = nil,
+
+  -- can't be overriden in local settings:
+  widgets = {},
+  menu = {},
+  topwibox = {},
+  topwibox_layout = {},
+  lcars_assets = {},
 }
 
 

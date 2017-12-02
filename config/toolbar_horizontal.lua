@@ -28,7 +28,6 @@ function toolbar.init(awesome_context)
     separator
   )
 
-  awesome_context.topwibox_layout_fallback = {}
   -- Create a wibox for each screen and add it
   awful.screen.connect_for_each_screen(function(s)
     local si = s.index
@@ -153,10 +152,10 @@ function toolbar.init(awesome_context)
       )
     end
 
-    awesome_context.topwibox_layout_fallback[si] = layout  -- this one!
+    awesome_context.topwibox_layout[si] = layout  -- this one!
 
     awesome_context.topwibox[si]:set_widget(
-      awesome_context.topwibox_layout_fallback[si]
+      awesome_context.topwibox_layout[si]
     )
   end)
 

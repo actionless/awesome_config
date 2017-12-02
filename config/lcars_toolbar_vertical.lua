@@ -199,21 +199,21 @@ function toolbar.init(awesome_context)
 
   end)
 
-    awesome_context.leftwibox = leftwibox
 
-  awesome_context.leftwibox_separator = leftwibox_separator
-  awesome_context.internal_corner_wibox = internal_corner_wibox
-  awesome_context.external_corner_wibox = external_corner_wibox
-  awesome_context.top_internal_corner_wibox = top_internal_corner_wibox
-  --awesome_context.top_internal_corner_wibox = internal_corner_wibox
+    awesome_context.lcars_assets.leftwibox = leftwibox
+
+  awesome_context.lcars_assets.leftwibox_separator = leftwibox_separator
+  awesome_context.lcars_assets.internal_corner_wibox = internal_corner_wibox
+  awesome_context.lcars_assets.external_corner_wibox = external_corner_wibox
+  awesome_context.lcars_assets.top_internal_corner_wibox = top_internal_corner_wibox
   --
-  awesome_context.top_left_corner_placeholder = top_left_corner_placeholder
-  awesome_context.top_left_corner_imagebox = top_left_corner_imagebox
-  awesome_context.top_left_corner_container = top_left_corner_container
+  awesome_context.lcars_assets.top_left_corner_placeholder = top_left_corner_placeholder
+  awesome_context.lcars_assets.top_left_corner_imagebox = top_left_corner_imagebox
+  awesome_context.lcars_assets.top_left_corner_container = top_left_corner_container
 
-  awesome_context.left_panel_widgets = left_panel_widgets
-  awesome_context.left_panel_top_layouts = left_panel_top_layouts
-  awesome_context.left_panel_bottom_layouts = left_panel_bottom_layouts
+  awesome_context.lcars_assets.left_panel_widgets = left_panel_widgets
+  awesome_context.lcars_assets.left_panel_top_layouts = left_panel_top_layouts
+  awesome_context.lcars_assets.left_panel_bottom_layouts = left_panel_bottom_layouts
 
 end
 return toolbar

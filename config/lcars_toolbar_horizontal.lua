@@ -126,8 +126,8 @@ function toolbar.init(awesome_context)
 
   end)
 
-  awesome_context.topwibox_layout = topwibox_layout  -- this one!
-  awesome_context.topwibox_toplayout = topwibox_toplayout
+  awesome_context.lcars_assets.topwibox_layout = topwibox_layout  -- this one!
+  awesome_context.lcars_assets.topwibox_toplayout = topwibox_toplayout
 
 end
 return toolbar
