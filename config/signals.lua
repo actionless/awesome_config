@@ -6,6 +6,7 @@ local cairo = require("lgi").cairo
 
 local titlebar	= require("actionless.titlebar")
 local persistent = require("actionless.persistent")
+local tag_helpers = require("actionless.util.tag")
 
 
 -- enable autofocus
@@ -17,33 +18,18 @@ awful.titlebar.enable_tooltip = false
 
 local debug_messages_enabled = false
 --local debug_messages_enabled = true
-local log = function(...) if debug_messages_enabled then nlog(...) end end
 
-
-local function get_num_tiled(t, s)
-  s = s or t.screen
-  local num_tiled
-  if t == s.selected_tag then
-    num_tiled = #awful.client.tiled(s)
-  else
-    num_tiled = 0
-    for _, tc in ipairs(t:clients()) do
-      if not tc.floating
-        and not tc.fullscreen
-        and not tc.maximized_vertical
-        and not tc.maximized_horizontal
-      then
-        num_tiled = num_tiled + 1
-      end
-    end
-  end
-  return num_tiled
+local function clog(msg, c)
+  --if debug_messages_enabled then nlog(...) end
+    --log(msg .. " " .. c.name .. " " .. tostring(c:tags()[1]))
+  --if c.class == "Spotify" then nlog(msg) end
 end
+
 
 
 awful.tag.object.get_gap = function(t)
   t = t or awful.screen.focused().selected_tag
-  if get_num_tiled(t) == 1 and t.master_fill_policy == "expand" then
+  if #tag_helpers.get_tiled(t) == 1 and t.master_fill_policy == "expand" then
     return 0
   end
   return awful.tag.getproperty(t, "useless_gap") or beautiful.useless_gap or 0
@@ -127,7 +113,7 @@ local function round_up_client_corners(c, force, reference)
   pending_shapes[c] = true
   --delayed_call(apply_shape, c, gears.shape.rounded_rect, beautiful.border_radius)
   delayed_call(function()
-    local num_tiled = #awful.client.tiled(c.screen)
+    local num_tiled = #tag_helpers.get_tiled(c.first_tag)
     local client_tag = c.first_tag
     log{"Shape", num_tiled, client_tag.master_fill_policy, c.name}
     --if not force and (c.maximized or (
@@ -143,6 +129,7 @@ local function round_up_client_corners(c, force, reference)
       return
     end
     apply_shape(c, gears.shape.rounded_rect, beautiful.border_radius)
+    clog("apply_shape "..reference, c)
     pending_shapes[c] = nil
     --nlog('OK F='..(force and "true" or 'nil').. ', R='..reference..', C='.. c.name)
   end)
@@ -175,43 +162,38 @@ function signals.init(awesome_context)
     }
   end
 
-  local function clog(c, msg)
-      log(msg .. " " .. c.name .. " " .. tostring(c:tags()[1]))
-  end
-
   local function _on_client_unfocus (c)
     if c.minimized then return end
-    local t = c:tags()[1]
-    local s = t.screen
+    local t = c.first_tag
     local layout = t.layout
-    local num_tiled = get_num_tiled(t, s)
+    local num_tiled = #tag_helpers.get_tiled(t)
 
     if persistent.titlebar.get() and (
       num_tiled > 1 or (
         num_tiled > 0 and t.master_fill_policy ~= 'expand'
       )
     ) then
-      log("U: tile: titlebars enabled explicitly")
+      clog("U: tile: titlebars enabled explicitly", c)
       titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
       c.border_color = beautiful.border_normal
     elseif c.floating then
-      log("U: floating client")
+      clog("U: floating client", c)
       titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
       c.border_color = beautiful.titlebar_border
     elseif layout == awful.layout.suit.floating then
-      clog(c, "U: floating layout")
+      clog(c, "U: floating layout", c)
       titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
       c.border_color = beautiful.titlebar_border
     elseif num_tiled > 1 then
-      log("U: multiple tiling clients")
+      clog("U: multiple tiling clients", c)
       titlebar.make_border(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
       c.border_color = beautiful.border_normal
     elseif num_tiled == 1 then
       if t.master_fill_policy == 'expand' and screen.count() == 1 then
-        log("U: one tiling client: expand")
+        clog("U: one tiling client: expand", c)
         titlebar.remove_border(c)
       else
-        log("U: one tiling client")
+        clog("U: one tiling client", c)
         titlebar.make_border(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
         c.border_color = beautiful.border_normal
       end
@@ -250,9 +232,9 @@ function signals.init(awesome_context)
 
   local function on_client_focus(c)
     local s = c.screen
-    local t = s.selected_tag
+    local t = c.first_tag
     local layout = awful.layout.get(s)
-    local num_tiled = #awful.client.tiled(s)
+    local num_tiled = #tag_helpers.get_tiled(t)
 
     --c.border_color = beautiful.border_focus
     --
@@ -262,39 +244,39 @@ function signals.init(awesome_context)
         num_tiled > 0 and t.master_fill_policy ~= 'expand'
       )
     ) then
-      log("F: tile: titlebars enabled explicitly")
+      clog("F: tile: titlebars enabled explicitly")
       --choose_screen_padding(s, t, num_tiled)
       titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_focus, beautiful.titlebar_shadow_focus)
     elseif c.maximized then
-      log("F: maximized")
+      clog("F: maximized")
       --set_default_screen_padding(s)
       titlebar.remove_border(c)
     elseif c.floating then
-      log("F: floating client")
+      clog("F: floating client")
       --choose_screen_padding(s, t, num_tiled)
       titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_focus, beautiful.titlebar_shadow_focus)
     elseif layout == awful.layout.suit.floating then
-      log("F: floating layout")
+      clog("F: floating layout")
       --choose_screen_padding(s, t, num_tiled)
       titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_focus, beautiful.titlebar_shadow_focus)
     elseif num_tiled > 1 then
-      log("F: multiple tiling clients")
+      clog("F: multiple tiling clients")
       --set_default_screen_padding(s)
       c.border_width = beautiful.border_width
       titlebar.make_border(c, beautiful.actionless_titlebar_bg_focus, beautiful.titlebar_shadow_focus)
     elseif num_tiled == 1 then
       if t.master_fill_policy == 'expand' and screen.count() == 1 then
-        log("F: one tiling client: expand")
+        clog("F: one tiling client: expand")
         --set_default_screen_padding(s)
         titlebar.remove_border(c)
       else
-        log("F: one tiling client")
+        clog("F: one tiling client")
         --set_mwfact_screen_padding(t)
         c.border_width = beautiful.border_width
         titlebar.make_border(c, beautiful.actionless_titlebar_bg_focus, beautiful.titlebar_shadow_focus)
       end
     else
-      log("F: zero tiling clients -- other tag?")
+      clog("F: zero tiling clients -- other tag?")
       return on_client_unfocus(c) --luacheck: ignore
     end
 
@@ -331,6 +313,7 @@ function signals.init(awesome_context)
   client.connect_signal("manage", function (c)
     --if awesome.startup then
       --extremely_delayed_call(function()
+      --clog(awesome.startup, c)
       delayed_call(function()
         --local tagged
           if c == client.focus then
