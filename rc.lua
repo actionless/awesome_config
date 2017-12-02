@@ -1,33 +1,46 @@
--- enable jit if on luajit
+-- Enable jit if on luajit
 pcall(function() jit.on() end)
 
--- localization
+-- Localization
 os.setlocale(os.getenv("LANG"))
+
 
 local awful_util = require("awful.util")
 local awful_spawn = require("awful.spawn")
 local run_once = require("actionless.util.spawn").run_once
 
+
+-- Add third-party modules to lua path
 local userconfdir = awful_util.get_configuration_dir()
 package.path = package.path .. ';' .. userconfdir .. 'third_party/?.lua;' .. userconfdir .. 'third_party/?/init.lua'
 
--- run settings daemon
+
+-- Run session and settings daemon
+-------------------------------------------------------------------------------
+-- option a)
 run_once("lxsession -a -n -r")
 run_once("lxpolkit")
 awful_spawn.with_shell("xsettingsd")
+-- option b)
 --awful_spawn.with_shell("gnome-session")
 --awful_spawn.with_shell("/usr/lib/gnome-settings-daemon/gnome-settings-daemon")
 
--- enable all available hotkey help maps
+
+-- Enable all available hotkey help maps
+-------------------------------------------------------------------------------
 require("awful.hotkeys_popup.keys")
 require("hotkeys")
 
 
--- GLOBALS:
+-- GLOBAL debug helpers:
+-------------------------------------------------------------------------------
 local debug = require("actionless.util.debug")
 nlog = debug.nlog
 log = debug.log
 
+
+-- GLOBAL config object:
+-------------------------------------------------------------------------------
 local editor = "vim"
 local terminal = "st"
 context = {
@@ -69,8 +82,13 @@ context = {
 
   apw_on_the_left = false,
 
+  before_config_loaded = nil,
+  after_config_loaded = nil,
 }
 
+
+-- Override config from local settings file
+-------------------------------------------------------------------------------
 local local_settings_result, local_settings_details = pcall(function()
   context = require("config.local").init(context) or context
 end)
@@ -80,9 +98,14 @@ if local_settings_result ~= true then
 end
 
 
+-- Init theme
+-------------------------------------------------------------------------------
 local beautiful	= require("beautiful")
 beautiful.init(context.theme_dir)
 
+
+-- Init config
+-------------------------------------------------------------------------------
 if context.before_config_loaded then
   context.before_config_loaded()
 end
@@ -106,4 +129,6 @@ if context.after_config_loaded then
   context.after_config_loaded()
 end
 
+-- END
+-------------------------------------------------------------------------------
 -- vim: set shiftwidth=2:
