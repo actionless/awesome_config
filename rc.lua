@@ -6,11 +6,14 @@ os.setlocale(os.getenv("LANG"))
 
 local awful_util = require("awful.util")
 local awful_spawn = require("awful.spawn")
+local run_once = require("actionless.util.spawn").run_once
 
 local userconfdir = awful_util.get_configuration_dir()
 package.path = package.path .. ';' .. userconfdir .. 'third_party/?.lua;' .. userconfdir .. 'third_party/?/init.lua'
 
 -- run settings daemon
+run_once("lxsession -a -n -r")
+run_once("lxpolkit")
 awful_spawn.with_shell("xsettingsd")
 --awful_spawn.with_shell("gnome-session")
 --awful_spawn.with_shell("/usr/lib/gnome-settings-daemon/gnome-settings-daemon")
@@ -19,13 +22,14 @@ awful_spawn.with_shell("xsettingsd")
 require("awful.hotkeys_popup.keys")
 require("hotkeys")
 
-local editor = "vim"
-local terminal = "st"
 
-local debug = require("actionless.util.debug")
 -- GLOBALS:
+local debug = require("actionless.util.debug")
 nlog = debug.nlog
 log = debug.log
+
+local editor = "vim"
+local terminal = "st"
 context = {
 
   --DEVEL_DYNAMIC_LAYOUTS = true,
@@ -101,65 +105,5 @@ config.rules.init(context)
 if context.after_config_loaded then
   context.after_config_loaded()
 end
-
---local gears_timer = require("gears.timer")
---local delayed_call = gears_timer.delayed_call
---delayed_call(function()
-  --local wlppr = require('actionless.wlppr')
-  --gears_timer({
-    --callback=wlppr.load_new,
-    --timeout=701,
-    --autostart=true,
-    --call_now=false,
-  --})
-  --gears_timer({
-    --callback=wlppr.change_wallpaper,
-    --timeout=500,
-    --autostart=true,
-    --call_now=true,
-  --})
-  ----gears_timer({
-    ----callback=wlppr.change_wallpaper_best,
-    ----timeout=300,
-    ----autostart=true,
-    ----call_now=true,
-  ----})
---end)
-
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
---local ucolor = require("actionless.util.color")
---local xresources = require("beautiful.xresources")
---local colorscheme = xresources.get_current_theme()
-
-----@TODO: make a PR with `-b` feature to `xst`
---local function st_color_line(theme_table)
-  --local colors = {}
-  --for k, v in pairs(theme_table) do
-    --table.insert(colors, (
-      --k:match("color(.*)") or
-      --(k=='background' and "257") or
-      --(k=='foreground' and "256")
-    --).."="..v)
-  --end
-  --return table.concat(colors, ",")
---end
-
---local inverted_colorscheme = awful.util.table.clone(colorscheme)
---inverted_colorscheme.background, inverted_colorscheme.foreground =
-  --inverted_colorscheme.foreground, inverted_colorscheme.background
---local is_dark_bg = ucolor.is_dark(inverted_colorscheme.background)
---for i=0,15 do
-  --inverted_colorscheme["color"..tostring(i)] = ucolor.darker(
-    --inverted_colorscheme["color"..tostring(i)], is_dark_bg and -40 or 40
-  --)
---end
-
---context.cmds.terminal_light = 'st -b "' .. st_color_line(inverted_colorscheme)
-  --.. '" -f "'..'Monospace'..':pixelsize='..tostring(xresources.apply_dpi(13))..'" '
---context.cmds.tmux_light = context.cmds.terminal_light .. " -e tmux"
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-
 
 -- vim: set shiftwidth=2:
