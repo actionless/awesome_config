@@ -254,11 +254,9 @@ function widget_loader.init(awesome_context)
     if lcarslist_enabled then
       sw.lcarslist = widgets.lcarslist(
         s,
-        awful.widget.tasklist.filter.alltags,
+        awful.widget.taglist.filter.noempty,
         tasklist_buttons,
-        nil,
-        tasklist_addon.list_update,
-        wibox.layout.fixed.vertical()
+        tasklist_addon.list_update
       )
     end
     sw.layoutbox = widgets.layoutbox({

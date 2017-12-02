@@ -29,13 +29,9 @@ local dpi = beautiful.xresources.apply_dpi
 local a_common = require("actionless.widgets.common")
 
 
-local tasklist = { mt = {} }
+local lcarslist = { mt = {} }
 
--- Public structures
-tasklist.filter = {}
-
-
-function tasklist.taglist_label(t, w, args)
+local function taglist_label(t, w, args)
     if not args then args = {} end
     local theme = beautiful.get()
     local fg_focus = args.fg_focus or theme.taglist_fg_focus or theme.fg_focus
@@ -46,52 +42,16 @@ function tasklist.taglist_label(t, w, args)
     local fg_occupied = args.fg_occupied or theme.taglist_fg_occupied
     local bg_empty = args.bg_empty or theme.taglist_bg_empty
     local fg_empty = args.fg_empty or theme.taglist_fg_empty
-    local taglist_squares_sel = args.squares_sel or theme.taglist_squares_sel
-    local taglist_squares_unsel = args.squares_unsel or theme.taglist_squares_unsel
     local taglist_squares_sel_empty = args.squares_sel_empty or theme.taglist_squares_sel_empty
-    local taglist_squares_unsel_empty = args.squares_unsel_empty or theme.taglist_squares_unsel_empty
-    local taglist_squares_resize = theme.taglist_squares_resize or args.squares_resize or "true"
-    local taglist_disable_icon = args.taglist_disable_icon or theme.taglist_disable_icon or false
-    local font = args.font or theme.taglist_font or theme.font or ""
-    local text = nil
-    local sel = capi.client.focus
     local bg_color = nil
     local fg_color = nil
-    local bg_image
-    local icon
-    local bg_resize = false
     local is_selected = false
     local cls = t:clients()
-    if sel then
-        if taglist_squares_sel then
-            -- Check that the selected clients is tagged with 't'.
-            local seltags = sel:tags()
-            for _, v in ipairs(seltags) do
-                if v == t then
-                    bg_image = taglist_squares_sel
-                    bg_resize = taglist_squares_resize == "true"
-                    is_selected = true
-                    break
-                end
-            end
-        end
-    end
-    if #cls == 0 and t.selected and taglist_squares_sel_empty then
-        bg_image = taglist_squares_sel_empty
-        bg_resize = taglist_squares_resize == "true"
-    elseif not is_selected then
+    if not (#cls == 0 and t.selected and taglist_squares_sel_empty) and not is_selected then
         if #cls > 0 then
-            if taglist_squares_unsel then
-                bg_image = taglist_squares_unsel
-                bg_resize = taglist_squares_resize == "true"
-            end
             if bg_occupied then bg_color = bg_occupied end
             if fg_occupied then fg_color = fg_occupied end
         else
-            if taglist_squares_unsel_empty then
-                bg_image = taglist_squares_unsel_empty
-                bg_resize = taglist_squares_resize == "true"
-            end
             if bg_empty then bg_color = bg_empty end
             if fg_empty then fg_color = fg_empty end
         end
@@ -105,34 +65,6 @@ function tasklist.taglist_label(t, w, args)
         fg_color = fg_focus
     end
 
-    local t_name = t.name
-
-    if args.is_separator then
-        t_name=" "
-    else
-        local lenth_chars = 12
-        t_name = string.format("%"..lenth_chars.."."..lenth_chars.."s", t_name)
-    end
-
-    if not tag.getproperty(t, "icon_only") then
-        text = "<span font_desc='"..font.."'>"
-        if fg_color then
-            text = text .. "<span color='" .. util.ensure_pango_color(fg_color) ..
-                "'>" .. (util.escape(t_name) or "") .. "</span>"
-        else
-            text = text .. (util.escape(t_name) or "")
-        end
-        text = text .. "</span>"
-    end
-    if not taglist_disable_icon then
-        if t.icon and type(t.icon) == "image" then
-            icon = t.icon
-        elseif t.icon then
-            icon = surface.load(t.icon)
-        end
-    end
-
-    --return text, bg_color, bg_image, not taglist_disable_icon and icon or nil
     w:set_bg(bg_color)
     w:set_fg(fg_color)
     return w
@@ -145,19 +77,19 @@ local function tasklist_label(c, args)
     local fg_normal = util.ensure_pango_color(args.fg_normal or theme.panel_widget_bg or theme.fg_normal, "white")
     local bg_normal = args.bg_normal or theme.panel_widget_fg or theme.bg_normal or "#000000"
 
-    local fg_focus = util.ensure_pango_color(args.fg_focus or theme.color.color3 or theme.tasklist_fg_focus or theme.fg_focus, fg_normal)
+    --local fg_focus = util.ensure_pango_color(args.fg_focus or theme.color.color3 or theme.tasklist_fg_focus or theme.fg_focus, fg_normal)
+    local fg_focus = fg_normal
     local bg_focus = args.bg_focus or theme.taglist_bg_focus or theme.bg_focus or "#000000"
 
     local fg_urgent = util.ensure_pango_color(args.fg_urgent or theme.tasklist_fg_urgent or theme.fg_urgent, fg_normal)
     local bg_urgent = args.bg_urgent or theme.tasklist_bg_urgent or theme.bg_urgent or bg_normal
     local fg_minimize = util.ensure_pango_color(args.fg_minimize or theme.tasklist_fg_minimize or theme.fg_minimize, fg_normal)
     local bg_minimize = args.bg_minimize or theme.panel_widget_bg_disabled or theme.tasklist_bg_minimize or theme.bg_minimize or bg_normal
-    local bg_image_normal = args.bg_image_normal or theme.bg_image_normal
     local bg_image_focus = args.bg_image_focus or theme.bg_image_focus
     local bg_image_urgent = args.bg_image_urgent or theme.bg_image_urgent
     local bg_image_minimize = args.bg_image_minimize or theme.bg_image_minimize
     local tasklist_disable_icon = args.tasklist_disable_icon or theme.tasklist_disable_icon or false
-    local font = args.font or theme.font -- theme.tasklist_font or theme.font or ""
+    local font = args.font or theme.panel_widget_font or theme.panel_font or theme.font -- theme.tasklist_font or theme.font or ""
     local bg = nil
     local text = "<span font_desc='"..font.."'>"
     local name = ""
@@ -167,13 +99,12 @@ local function tasklist_label(c, args)
     local lenth_chars = 12
 
     if c.is_tag then
-        --if c.is_separator then
-            --args.is_separator = true
-        --end
-        --return tasklist.taglist_label(c.tag, args)
         name = c.tag.name
         name = string.format("%"..lenth_chars.."."..lenth_chars.."s", name)
-        name = "<span color='"..bg_minimize.."'>"..name.."</span>"
+        local tag_fg_color = c.tag.selected and (
+            theme.taglist_fg_focus or theme.fg_focus
+        ) or bg_minimize
+        name = "<span color='"..tag_fg_color.."'>"..name.."</span>"
         return name
     end
 
@@ -224,7 +155,8 @@ local function tasklist_label(c, args)
     end
     if focused then
         bg = bg_focus
-        text = text .. "<span color='"..fg_focus.."'>"..name.."</span>"
+        --text = text .. "<span color='"..fg_focus.."'>"..name.."</span>"
+        text = text .. "<span font_desc='"..(beautiful.taglist_font or beautiful.font).."'>"..name.."</span>"
         bg_image = bg_image_focus
     elseif c.urgent then
         bg = bg_urgent
@@ -245,24 +177,23 @@ local function tasklist_label(c, args)
 end
 
 
-local function tag_group(t, buttons, filter, data, update_function)
+local function tag_group(t, buttons, data, update_function)
     local clients = {}
     table.insert(clients, {tag=t, is_tag=true})
     for _, c in ipairs(t:clients()) do
-        --if not (c.skip_taskbar or c.hidden or c.type == "splash" or c.type == "dock" or c.type == "desktop") and filter(c, s) then
-            table.insert(clients, c)
-        --end
+        table.insert(clients, c)
     end
 
     local clients_on_tag = flex.vertical()
-    local function label(c) return tasklist_label(c, style) end
+    local function label(c) return tasklist_label(c) end
     update_function(clients_on_tag, buttons, label, data, clients)
 
     local widget = a_common.decorated({
-        widget=clients_on_tag,
-        min_height = dpi(100)
+        widget = clients_on_tag,
+        min_height = dpi(100),
+        orientation = "vertical",
     })
-    tasklist.taglist_label(t, widget)
+    taglist_label(t, widget)
     return widget
 end
 
@@ -275,13 +206,13 @@ local v_sep = wibox.container.background(
     beautiful.panel_bg
 )
 
-local function tasklist_update(s, w, buttons, filter, data, style, update_function, tag_filter)
+local function tasklist_update(s, w, buttons, tag_filter, data, update_function)
     tag_filter = tag_filter or function() return true end
     w:reset()
     for _, t in ipairs(s.tags) do
         -- @TODO: cache tag_group widgets for the tags
         if not tag.getproperty(t, "hide") and tag_filter(t) then
-            w:add(tag_group(t, buttons, filter, data, update_function))
+            w:add(tag_group(t, buttons, data, update_function))
             w:add(v_sep)
         end
     end
@@ -296,11 +227,8 @@ end
 -- @param screen The screen to draw tasklist for.
 -- @param filter Filter function to define what clients will be listed.
 -- @param buttons A table with buttons binding to set.
--- @param style The style overrides default theme.
 -- @param[opt] update_function Function to create a tag widget on each
 --   update. See `awful.widget.common.list_update`.
--- @tparam[opt] table base_widget Container widget for tag widgets. Default
---   is `wibox.layout.flex.horizontal`.
 -- @param base_widget.bg_normal The background color for unfocused client.
 -- @param base_widget.bg_normal The background color for unfocused client.
 -- @param base_widget.fg_normal The foreground color for unfocused client.
@@ -318,9 +246,9 @@ end
 -- @param base_widget.maximized_horizontal Symbol to use for clients that have been horizontally maximized.
 -- @param base_widget.maximized_vertical Symbol to use for clients that have been vertically maximized.
 -- @param base_widget.font The font.
-function tasklist.new(screen, filter, buttons, style, update_function, base_widget)
-    local uf = update_function or common.list_update
-    local w = base_widget or flex.horizontal()
+function lcarslist.new(screen, tag_filter, buttons, tasklist_update_function)
+    local base_widget = wibox.layout.fixed.vertical()
+    tasklist_update_function = tasklist_update_function or common.list_update
 
     local data = setmetatable({}, { __mode = 'k' })
 
@@ -328,11 +256,11 @@ function tasklist.new(screen, filter, buttons, style, update_function, base_widg
     local u = function ()
         -- Add a delayed callback for the first update.
         if not queued_update then
-            timer.delayed_call(function()
-                queued_update = false
-                tasklist_update(screen, w, buttons, filter, data, style, uf, awful.widget.taglist.filter.noempty)
-            end)
             queued_update = true
+            timer.delayed_call(function()
+                tasklist_update(screen, base_widget, buttons, tag_filter, data, tasklist_update_function)
+                queued_update = false
+            end)
         end
     end
     tag.attached_connect_signal(screen, "property::selected", u)
@@ -363,87 +291,13 @@ function tasklist.new(screen, filter, buttons, style, update_function, base_widg
     capi.client.connect_signal("focus", u)
     capi.client.connect_signal("unfocus", u)
     u()
-    return w
+    return base_widget
 end
 
---- Filtering function to include all clients.
--- @param c The client.
--- @param screen The screen we are drawing on.
--- @return true
-function tasklist.filter.allscreen(c, screen)
-    return true
+function lcarslist.mt:__call(...)
+    return lcarslist.new(...)
 end
 
---- Filtering function to include the clients from all tags on the screen.
--- @param c The client.
--- @param screen The screen we are drawing on.
--- @return true if c is on screen, false otherwise
-function tasklist.filter.alltags(c, screen)
-    -- Only print client on the same screen as this widget
-    return c.screen == screen
-end
-
---- Filtering function to include only the clients from currently selected tags.
--- @param c The client.
--- @param screen The screen we are drawing on.
--- @return true if c is in a selected tag on screen, false otherwise
-function tasklist.filter.currenttags(c, screen)
-    -- Only print client on the same screen as this widget
-    if c.screen ~= screen then return false end
-    -- Include sticky client too
-    if c.sticky then return true end
-    local tags = screen.tags
-    for k, t in ipairs(tags) do
-        if t.selected then
-            local ctags = c:tags()
-            for _, v in ipairs(ctags) do
-                if v == t then
-                    return true
-                end
-            end
-        end
-    end
-    return false
-end
-
---- Filtering function to include only the minimized clients from currently selected tags.
--- @param c The client.
--- @param screen The screen we are drawing on.
--- @return true if c is in a selected tag on screen and is minimized, false otherwise
-function tasklist.filter.minimizedcurrenttags(c, screen)
-    -- Only print client on the same screen as this widget
-    if c.screen ~= screen then return false end
-    -- Check client is minimized
-    if not c.minimized then return false end
-    -- Include sticky client
-    if c.sticky then return true end
-    for k, t in ipairs(screen.tags) do
-        -- Select only minimized clients
-        if t.selected then
-            local ctags = c:tags()
-            for _, v in ipairs(ctags) do
-                if v == t then
-                    return true
-                end
-            end
-        end
-    end
-    return false
-end
-
---- Filtering function to include only the currently focused client.
--- @param c The client.
--- @param screen The screen we are drawing on.
--- @return true if c is focused on screen, false otherwise
-function tasklist.filter.focused(c, screen)
-    -- Only print client on the same screen as this widget
-    return c.screen == screen and capi.client.focus == c
-end
-
-function tasklist.mt:__call(...)
-    return tasklist.new(...)
-end
-
-return setmetatable(tasklist, tasklist.mt)
+return setmetatable(lcarslist, lcarslist.mt)
 
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80
