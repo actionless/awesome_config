@@ -36,7 +36,6 @@ local function worker(args)
 
   mem.list_len = args.list_length or 10
 
-  local new_top = args.new_top or true
   mem.command = "top -o \\%MEM -b -n 1 -w 512"
 
   function mem.hide_notification()
@@ -77,8 +76,8 @@ local function worker(args)
       )
     ) do
       local values = h_string.split(line, ' ')
-      local percent = values[new_top and 8 or 10]
-      local name = values[new_top and 11 or 12]
+      local percent = values[8]
+      local name = values[11]
       percent = percent + 0
       if result[name] then
         result[name] = result[name] + percent

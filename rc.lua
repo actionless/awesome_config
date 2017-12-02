@@ -79,7 +79,6 @@ context = {
   autorun = {},
 
   have_battery = true,
-  new_top = true,  -- @TODO: remove it
   sensor = "Core 0",
 
   apw_on_the_left = false,

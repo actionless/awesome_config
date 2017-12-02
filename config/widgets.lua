@@ -81,14 +81,12 @@ function widget_loader.init(awesome_context)
     update_interval = 2,
     list_length = 20,
     --bg = beautiful.color["6"],
-    new_top = awesome_context.new_top,
     horizontal=true,
   })
   -- CPU
   w.cpu = widgets.cpu({
     update_interval = 2,
     list_length = 20,
-    new_top = awesome_context.new_top,
     horizontal=true,
   })
   -- Sensor

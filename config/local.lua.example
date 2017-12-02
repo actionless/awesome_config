@@ -23,7 +23,6 @@ function local_config.init(awesome_context)
 
   awesome_context.have_battery = false
   awesome_context.sensor = "temp1"
-  awesome_context.new_top = true
 
 
   awesome_context.before_config_loaded = function()
@@ -46,3 +45,6 @@ function local_config.init(awesome_context)
 end
 
 return local_config
+
+
+-- vim: set ft=lua:
