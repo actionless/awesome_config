@@ -229,13 +229,11 @@ theme.left_panel_internal_corner_radius = 30
   local icons_dir = theme.dir .. "/icons/"
   theme.icons_dir = icons_dir
 
-  local common_icons_dir = icons_dir .. "common/"
+  theme.icon_left 		= icons_dir .. "arrow_left.png"
+  theme.icon_right 		= icons_dir .. "arrow_right.png"
 
-  theme.icon_left 		= common_icons_dir .. "arrow_left.png"
-  theme.icon_right 		= common_icons_dir .. "arrow_right.png"
-
-  --theme.taglist_squares_sel	= common_icons_dir .. "square_sel.png"
-  --theme.taglist_squares_unsel	= common_icons_dir .. "square_unsel.png"
+  --theme.taglist_squares_sel	= icons_dir .. "square_sel.png"
+  --theme.taglist_squares_unsel	= icons_dir .. "square_unsel.png"
   theme.taglist_squares_sel	= nil
   theme.taglist_squares_unsel	= nil
   --theme.taglist_squares_sel_empty	= nil
