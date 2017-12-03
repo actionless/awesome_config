@@ -239,35 +239,32 @@ theme.left_panel_internal_corner_radius = 30
   --theme.taglist_squares_sel_empty	= nil
   --theme.taglist_squares_unsel_empty	= nil
 
+  --theme.widget_tray_left	= icons_dir .. "tray_left.png"
+  --theme.widget_tray_right	= icons_dir .. "tray_right.png"
+  theme.widget_tray_left	= nil
+  theme.widget_tray_right	= nil
 
-  local widgets_icons_dir = icons_dir .. "widgets/"
+  theme.widget_ac		= icons_dir .. "ac.png"
+  theme.widget_ac_charging	= icons_dir .. "ac_charging.png"
+  theme.widget_ac_charging_low	= icons_dir .. "ac_charging_low.png"
 
-  --theme.widget_tray_left			= widgets_icons_dir .. "tray_left.png"
-  --theme.widget_tray_right			= widgets_icons_dir .. "tray_right.png"
-  theme.widget_tray_left			= nil
-  theme.widget_tray_right			= nil
+  theme.widget_battery		= icons_dir .. "battery.png"
+  theme.widget_battery_low	= icons_dir .. "battery_low.png"
+  theme.widget_battery_empty	= icons_dir .. "battery_empty.png"
 
-  theme.widget_ac			= widgets_icons_dir .. "ac.png"
-  theme.widget_ac_charging	= widgets_icons_dir .. "ac_charging.png"
-  theme.widget_ac_charging_low	= widgets_icons_dir .. "ac_charging_low.png"
+  theme.widget_mem		= icons_dir .. "mem.png"
+  theme.widget_cpu		= icons_dir .. "cpu.png"
+  theme.widget_temp		= icons_dir .. "temp.png"
+  theme.widget_net		= icons_dir .. "net.png"
+  theme.widget_hdd		= icons_dir .. "hdd.png"
 
-  theme.widget_battery		= widgets_icons_dir .. "battery.png"
-  theme.widget_battery_low	= widgets_icons_dir .. "battery_low.png"
-  theme.widget_battery_empty	= widgets_icons_dir .. "battery_empty.png"
+  theme.widget_net_wifi	        = icons_dir .. "net_wireless.png"
+  theme.widget_net_wired	= icons_dir .. "net_wired.png"
+  theme.widget_net_searching	= icons_dir .. "net_searching.png"
 
-  theme.widget_mem		= widgets_icons_dir .. "mem.png"
-  theme.widget_cpu		= widgets_icons_dir .. "cpu.png"
-  theme.widget_temp		= widgets_icons_dir .. "temp.png"
-  theme.widget_net		= widgets_icons_dir .. "net.png"
-  theme.widget_hdd		= widgets_icons_dir .. "hdd.png"
-
-  theme.widget_net_wifi	        = widgets_icons_dir .. "net_wireless.png"
-  theme.widget_net_wired		= widgets_icons_dir .. "net_wired.png"
-  theme.widget_net_searching	= widgets_icons_dir .. "net_searching.png"
-
-  theme.widget_music_pause      	= widgets_icons_dir .. "music_pause.png"
-  theme.widget_music_play		= widgets_icons_dir .. "music_play.png"
-  theme.widget_music_stop		= widgets_icons_dir .. "music_stop.png"
+  theme.widget_music_pause      = icons_dir .. "music_pause.png"
+  theme.widget_music_play	= icons_dir .. "music_play.png"
+  theme.widget_music_stop	= icons_dir .. "music_stop.png"
 
   theme.tasklist_disable_icon = true
   --theme.tasklist_floating = "*"
@@ -280,9 +277,6 @@ theme.left_panel_internal_corner_radius = 30
   theme.layout_uselessfair		= theme.layout_fairv
   theme.layout_uselessfairh		= theme.layout_fairh
   theme.layout_uselesspiral		= theme.layout_spiral
-
-  local titlebar_icons_dir = icons_dir .. "titlebar/"
-  theme.titlebar_icons_dir = titlebar_icons_dir
 
 return theme
 end
