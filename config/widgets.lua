@@ -38,7 +38,6 @@ function widget_loader.init(awesome_context)
     preset = conf.net_preset,
     wlan_if = conf.wlan_if,
     eth_if = conf.eth_if,
-    horizontal=true,
     --fg = beautiful.widget_netctl_bg,
     --bg = beautiful.widget_netctl_fg,
   })
@@ -49,7 +48,6 @@ function widget_loader.init(awesome_context)
       fg = beautiful.widget_music_bg,
       bg = beautiful.panel_bg,
       force_no_bgimage=true,
-      horizontal=true,
       --left_separators = lcarslist_enabled and {} or { 'arrl' },
       mopidy_player_command = awesome_context.cmds.tmux_run .. "ncmpcpp",
       enable_notifications = false,
@@ -81,13 +79,11 @@ function widget_loader.init(awesome_context)
     update_interval = 2,
     list_length = 20,
     --bg = beautiful.color["6"],
-    horizontal=true,
   })
   -- CPU
   w.cpu = widgets.cpu({
     update_interval = 2,
     list_length = 20,
-    horizontal=true,
   })
   -- Sensor
   w.temp = widgets.temp({
@@ -104,7 +100,6 @@ function widget_loader.init(awesome_context)
       bg = beautiful.widget_bat_bg,
       fg = beautiful.widget_bat_fg,
       show_when_charged=false,
-      horizontal=true,
     })
   end
 
