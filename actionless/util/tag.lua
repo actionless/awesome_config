@@ -64,18 +64,19 @@ end
 
 
 function tag_helpers.get_tiled(t)
-    local clients = t:clients()
-    local tclients = {}
-    -- Remove floating clients
-    for _, c in pairs(clients) do
-        if not c.floating
-            and not c.fullscreen
-            and not c.maximized_vertical
-            and not c.maximized_horizontal then
-            table.insert(tclients, c)
-        end
+  local clients = t:clients()
+  local tiled_clients = {}
+  for _, c in pairs(clients) do
+    if not c.floating
+      and not c.fullscreen
+      and not c.maximized_vertical
+      and not c.maximized_horizontal
+      and not c.minimized
+    then
+      table.insert(tiled_clients, c)
     end
-    return tclients
+  end
+  return tiled_clients
 end
 
 
