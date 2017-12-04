@@ -75,27 +75,34 @@ function common.widget(args)
   widget_bg.lie_layout = wibox.layout.fixed.horizontal()
   if show_icon then
     widget_bg.icon_widget = wibox.widget.imagebox()
-    widget_bg.icon_widget:set_resize(beautiful.xresources.get_dpi() > 96)
+    widget_bg.icon_widget.resize = beautiful.xresources.get_dpi() > 96
     widget_bg.lie_layout:add(widget_bg.icon_widget)
   end
   widget_bg.text_widget = wibox.widget.textbox('')
   widget_bg.lie_layout:add(widget_bg.text_widget)
   if args.margin then
-    widget_bg.margin = wibox.container.margin(
+    local margin_widget = wibox.container.margin(
       widget_bg.lie_layout,
       args.margin.left, args.margin.right,
       args.margin.top, args.margin.bottom,
       args.margin.color, args.margin.draw_empty
     )
-    widget_bg:set_widget(widget_bg.margin)
+    widget_bg:set_widget(margin_widget)
   else
     widget_bg:set_widget(widget_bg.lie_layout)
   end
 
-  function widget_bg:set_image(...)
-    if self.icon_widget then
-      return self.icon_widget:set_image(...)
+  function widget_bg:set_image(image)
+    if not self.icon_widget then
+      return
     end
+    image = image and gears.surface.load(image)
+    if not image then
+      return
+    end
+    local ratio = beautiful.basic_panel_height / image.height
+    self.icon_widget.forced_width = math.ceil(image.width * ratio)
+    self.icon_widget:set_image(image)
   end
 
   function widget_bg:set_font(...)
@@ -104,7 +111,7 @@ function common.widget(args)
 
   widget_bg.text_widget.lie_set_text = widget_bg.text_widget.set_text
   function widget_bg.text_widget:set_text(text, ...)
-    if not show_icon and (not text or text == '') then
+    if not self.icon_widget and (not text or text == '') then
       widget_bg.visible = false
     else
       widget_bg.visible = true
@@ -114,7 +121,7 @@ function common.widget(args)
 
   widget_bg.text_widget.lie_set_markup = widget_bg.text_widget.set_markup
   function widget_bg.text_widget:set_markup(text, ...)
-    if not show_icon and (not text or text == '') then
+    if not self.icon_widget and (not text or text == '') then
       widget_bg.visible = false
     else
       widget_bg.visible = true
@@ -131,9 +138,9 @@ function common.widget(args)
   end
 
   function widget_bg:set_icon(name)
-    if show_icon then
+    if self.icon_widget then
       local icon = beautiful.get()['widget_' .. name]
-      --gears.debug.assert(icon, ":set_icon failed: icon is missing: " .. name)
+      gears.debug.assert(icon, ":set_icon failed: icon is missing: " .. name)
       return self.icon_widget:set_image(icon)
     end
   end
