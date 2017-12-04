@@ -22,7 +22,7 @@ local debug_messages_enabled = false
 local function clog(msg, c)
   --if debug_messages_enabled then nlog(...) end
     --log(msg .. " " .. c.name .. " " .. tostring(c:tags()[1]))
-  --if c.class == "Spotify" then nlog(msg) end
+  if c and c.class == "Spotify" then nlog(msg) end
 end
 
 
@@ -37,11 +37,7 @@ end
 
 
 local function apply_shape(draw, shape, ...)
-  local client_tag = draw.first_tag
-  if not client_tag then
-    nlog('no client tag')
-    return
-  end
+  local client_tag = draw.first_tag  -- @TODO: fix when multiple tags are selected
 
   local geo = draw:geometry()
 
@@ -113,13 +109,17 @@ local function round_up_client_corners(c, force, reference)
   pending_shapes[c] = true
   --delayed_call(apply_shape, c, gears.shape.rounded_rect, beautiful.border_radius)
   delayed_call(function()
-    local num_tiled = #tag_helpers.get_tiled(c.first_tag)
-    local client_tag = c.first_tag
+    local client_tag = c.first_tag  -- @TODO: fix when multiple tags are selected
+    if not client_tag then
+      nlog('no client tag')
+      return
+    end
+    local num_tiled = #tag_helpers.get_tiled(client_tag)
     clog({"Shape", num_tiled, client_tag.master_fill_policy, c.name}, c)
     --if not force and (c.maximized or (
-    if (c.maximized or (
-      #c:tags() < 1
-    ) or (
+    if (
+      c.maximized
+    or (
       (num_tiled<=1 and client_tag.master_fill_policy=='expand')
       and not c.floating
       and client_tag.layout.name ~= "floating"
@@ -164,7 +164,7 @@ function signals.init(awesome_context)
 
   local function _on_client_unfocus (c)
     if c.minimized then return end
-    local t = c.first_tag
+    local t = c.first_tag  -- @TODO: fix when multiple tags are selected
     local layout = t.layout
     local num_tiled = #tag_helpers.get_tiled(t)
 
@@ -216,6 +216,7 @@ function signals.init(awesome_context)
           callback(c)
         end
       end
+      -- @TODO: remove above ?
       for _, sel_tag in ipairs(c.screen.selected_tags) do
         for _, cli_tag in ipairs(c:tags()) do
           if sel_tag.index == cli_tag.index then
@@ -232,7 +233,7 @@ function signals.init(awesome_context)
 
   local function on_client_focus(c)
     local s = c.screen
-    local t = c.first_tag
+    local t = c.first_tag  -- @TODO: fix when multiple tags are selected
     local layout = awful.layout.get(s)
     local num_tiled = #tag_helpers.get_tiled(t)
 
