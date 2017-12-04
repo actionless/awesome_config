@@ -295,9 +295,9 @@ function signals.init(awesome_context)
     end
   end
 
-  tag.connect_signal("property::master_width_factor", on_master_fill_change)
-  tag.connect_signal("property::master_fill_policy", on_master_fill_change)
-  tag.connect_signal("property::layout", function (t)
+  --tag.connect_signal("property::master_width_factor", on_master_fill_change)
+  --tag.connect_signal("property::master_fill_policy", on_master_fill_change)
+  local function on_tag_signal(t)
     --t = t or awful.screen.focused().selected_tag
     for _, c in ipairs(t:clients()) do
       if c == client.focus then
@@ -305,6 +305,14 @@ function signals.init(awesome_context)
       else
         --log("tag::property::layout")
         on_client_unfocus(c)
+      end
+    end
+  end
+  tag.connect_signal("property::layout", on_tag_signal)
+  screen.connect_signal("tag::history::update", function (s)
+    if #s.selected_tags > 1 then
+      for _, t in ipairs(s.selected_tags) do
+        on_tag_signal(t)
       end
     end
   end)
