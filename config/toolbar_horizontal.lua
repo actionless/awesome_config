@@ -81,16 +81,9 @@ function toolbar.init(awesome_context)
     -- RIGHT side
     --
 
-    local right_layout_left = wibox.layout.fixed.horizontal(
+    local right_layout_left = wibox.layout.flex.horizontal(
       loaded_widgets.music
     )
-
-    local right_layout_right = wibox.layout.fixed.horizontal(
-      separator
-    )
-    if not awesome_context.apw_on_the_left then
-      right_layout_right:add(apw)
-    end
 
     local indicators_layout = wibox.layout.fixed.horizontal(
       iseparator,
@@ -110,6 +103,12 @@ function toolbar.init(awesome_context)
     end
     indicators_layout = common.panel_shape(indicators_layout)
 
+    local right_layout_right = wibox.layout.fixed.horizontal(
+      separator
+    )
+    if not awesome_context.apw_on_the_left then
+      right_layout_right:add(apw)
+    end
     right_layout_right:add(
       indicators_layout,
       separator,
