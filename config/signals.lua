@@ -109,13 +109,13 @@ local function round_up_client_corners(c, force, reference)
     --nlog('R1 F='..(force and force or 'nil').. ', R='..reference..', C='.. c.name)
     return
   end
-  --log{"Geometry", c:tags()}
+  --clog({"Geometry", c:tags()}, c)
   pending_shapes[c] = true
   --delayed_call(apply_shape, c, gears.shape.rounded_rect, beautiful.border_radius)
   delayed_call(function()
     local num_tiled = #tag_helpers.get_tiled(c.first_tag)
     local client_tag = c.first_tag
-    log{"Shape", num_tiled, client_tag.master_fill_policy, c.name}
+    clog({"Shape", num_tiled, client_tag.master_fill_policy, c.name}, c)
     --if not force and (c.maximized or (
     if (c.maximized or (
       #c:tags() < 1
