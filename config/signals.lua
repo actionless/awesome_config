@@ -139,29 +139,6 @@ local signals = {}
 
 function signals.init(awesome_context)
 
-
-  local function set_default_screen_padding(s)
-    if not awesome_context.DEVEL_DYNAMIC_LAYOUTS then return end
-    s.padding = {
-      left = beautiful.screen_padding,
-      right = beautiful.screen_padding,
-      top = beautiful.screen_padding,
-      bottom = beautiful.screen_padding,
-    }
-  end
-
-  local function set_mwfact_screen_padding(t)
-    if not awesome_context.DEVEL_DYNAMIC_LAYOUTS then return end
-    local s = t.screen
-    local padding = s.geometry.width * (1-t.master_width_factor) / 2
-    s.padding = {
-      left=padding,
-      right=padding,
-      top = beautiful.screen_padding,
-      bottom = beautiful.screen_padding,
-    }
-  end
-
   local function _on_client_unfocus (c)
     if c.minimized then return end
     local t = c.first_tag  -- @TODO: fix when multiple tags are selected
@@ -278,24 +255,14 @@ function signals.init(awesome_context)
   end
 
 
-  --local function on_master_fill_change(t)
-    --if t.layout == 'floating' then return end
-    --if t.master_fill_policy == 'always_master_width_factor' or (
-      --t.master_fill_policy == 'master_width_factor' and #awful.client.tiled(t.screen) == 1
-    --) then
-      --set_mwfact_screen_padding(t)
-    --else
-      --set_default_screen_padding(t.screen)
-    --end
-  --end
-  --tag.connect_signal("property::master_width_factor", on_master_fill_change)
-  --tag.connect_signal("property::master_fill_policy", on_master_fill_change)
-
-  local function on_client_signal(c)
+  local function on_client_signal(c, callback)
     if c == client.focus then
       on_client_focus(c)
+      if callback then
+        callback(c)
+      end
     else
-      on_client_unfocus(c)
+      on_client_unfocus(c, callback)
     end
   end
 
@@ -317,22 +284,13 @@ function signals.init(awesome_context)
 
   -- New client appears
   client.connect_signal("manage", function (c)
+    local callback
     if awesome.startup then
-      delayed_call(function()
-          if c == client.focus then
-            on_client_focus(c)
-            round_up_client_corners(c, false, "MF")
-          else
-            on_client_unfocus(c, function(_c)
-              round_up_client_corners(_c, false, "MU")
-            end)
-          end
-      end)
-    else
-      delayed_call(function()
-        on_client_signal(c)
-      end)
+      callback = round_up_client_corners
     end
+    delayed_call(function()
+      on_client_signal(c, callback)
+    end)
   end)
 
   client.connect_signal("focus", function(c)
