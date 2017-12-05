@@ -33,8 +33,11 @@ theme.panel_bg = gsc.menubar_bg_color
 theme.panel_widget_bg = gsc.base_color
 theme.panel_widget_fg = gsc.text_color
 
-local gtk_border_radius = gsc.border_radius or 1
-local gtk_border_width = gsc.border_width or 1
+local gtk_border_radius = gsc.border_radius
+local gtk_border_width = gsc.border_width
+if gtk_border_width < 1 then
+  gtk_border_width = 1
+end
 theme.border_radius = dpi(gtk_border_radius*1.0)
 theme.panel_widget_border_radius = dpi(gtk_border_radius*0.8)
 --theme.panel_widget_border_radius = dpi(gtk_border_radius*1.0)
@@ -124,9 +127,6 @@ theme.useless_gap = dpi(4)
 theme.border_width = dpi(gtk_border_width) * 4
 
 theme.base_border_width = theme.border_width
-if theme.base_border_width <= 1 then
-  theme.base_border_width = dpi(2)
-end
 theme.border_width = 0
 
 theme.panel_height = theme.basic_panel_height + theme.panel_padding_bottom
