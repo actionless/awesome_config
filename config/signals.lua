@@ -71,8 +71,15 @@ local function _on_client_unfocus (c)
   end
 end
 
-local function on_client_unfocus(c, callback)
+local function on_client_unfocus(c, force, callback)
   --return _on_client_unfocus(c)
+  if force then
+    _on_client_unfocus(c)
+    if callback then
+      callback(c)
+    end
+    return
+  end
   delayed_call(function()
     if not c.valid or c == client.focus then
       return
@@ -247,14 +254,11 @@ end
 --=============================================================================
 -- Common signal handlers
 
-local function on_client_signal(c, callback)
+local function on_client_signal(c)
   if c == client.focus then
     on_client_focus(c)
-    if callback then
-      callback(c)
-    end
   else
-    on_client_unfocus(c, callback)
+    on_client_unfocus(c)
   end
 end
 
@@ -302,12 +306,20 @@ function signals.init(_)
 
   -- New client appears
   client.connect_signal("manage", function (c)
-    local callback
-    if awesome.startup then
-      callback = round_up_client_corners
-    end
+    local awesome_startup = awesome.startup
     delayed_call(function()
-      on_client_signal(c, callback)
+        if c == client.focus then
+          on_client_focus(c)
+          if awesome_startup then
+            round_up_client_corners(c, false, "MF")
+          end
+        else
+          on_client_unfocus(c, true, function(_c)
+            if awesome_startup then
+              round_up_client_corners(_c, false, "MU")
+            end
+          end)
+        end
     end)
   end)
 
