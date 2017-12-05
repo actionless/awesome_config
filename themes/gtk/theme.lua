@@ -88,17 +88,6 @@ theme.wallpaper_cmd     = "nitrogen --restore"
 -- PANEL DECORATIONS:
 --
 theme.show_widget_icon = false
---theme.widget_decoration_arrl = ''
---theme.widget_decoration_arrr = ''
-
--- deprecated :
---theme.widget_decoration_arrl = ''
---theme.widget_decoration_arrr = ''
-
-theme.widget_decoration_arrl = '퟾'
-theme.widget_decoration_arrr = '퟿'
-theme.widget_decoration_arrl = '퟼'
-theme.widget_decoration_arrr = '퟽'
 
 theme.revelation_fg = theme.xrdb.color13
 theme.revelation_border_color = theme.xrdb.color13
@@ -192,13 +181,20 @@ theme.titlebar_bg_normal	= "theme.titlebar_border"
 theme.notification_border_radius = "theme.border_radius"
 
 if theme.border_radius > 0 then
-  theme.titlebar_fg_focus		= gsc.menubar_fg_color
-  theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
-  theme.notification_shape = function(cr,w,h)
+  local rounded_rect_shape = function(cr,w,h)
     gears.shape.rounded_rect(
       cr, w, h, theme.notification_border_radius
     )
   end
+  local less_rounded_rect_shape = function(cr,w,h)
+    gears.shape.rounded_rect(
+      cr, w, h, theme.panel_widget_border_radius
+    )
+  end
+  theme.titlebar_fg_focus		= gsc.menubar_fg_color
+  theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
+  theme.notification_shape = rounded_rect_shape
+  theme.tasklist_shape_minimized = less_rounded_rect_shape
 else
   --theme.titlebar_fg_focus		= theme.titlebar_border
   --theme.titlebar_bg_focus		= theme.bg_focus
