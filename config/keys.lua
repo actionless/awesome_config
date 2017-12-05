@@ -368,17 +368,13 @@ function keys.init(awesome_context)
 
     bind_key({ modkey, altkey }, "e",
       function ()
-        awful.tag.togglemfpol()
-        awful.screen.focused().selected_tag:emit_signal("property::layout")
+        tag_helpers.togglemfpol()
       end,
       "toggle expand master", LAYOUT_MANIPULATION
     ),
     bind_key({ modkey, altkey }, "g",
       function ()
-        local s = awful.screen.focused()
-        local t = s.selected_tag
-        tag_helpers.toggle_gap(t)
-        t:emit_signal("property::layout")
+        tag_helpers.toggle_gap()
       end,
       "toggle useless gap", LAYOUT_MANIPULATION
     ),

@@ -23,6 +23,16 @@ function tag_helpers.toggle_gap(t)
 end
 
 
+function tag_helpers.togglemfpol(t)
+    t = t or awful.screen.focused().selected_tag
+    if t.master_fill_policy == "expand" then
+        t.master_fill_policy = "master_width_factor"
+    else
+        t.master_fill_policy = "expand"
+    end
+end
+
+
 function tag_helpers.noempty_list(s)
   s = s or awful.screen.focused()
   local vtags = {}

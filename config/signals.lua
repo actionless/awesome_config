@@ -301,8 +301,10 @@ function signals.init(_)
     end
   end)
 
-  -- Tag layout changed
+  -- Tag property changed
   tag.connect_signal("property::layout", on_tag_signal)
+  tag.connect_signal("property::master_fill_policy", on_tag_signal)
+  tag.connect_signal("property::gap", on_tag_signal)
 
   -- New client appears
   client.connect_signal("manage", function (c)
