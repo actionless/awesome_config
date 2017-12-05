@@ -156,6 +156,12 @@ function widget_loader.init(awesome_context)
         --helpers.tag_view_noempty(1)
       --end)
     )
+
+    --sw.taglist = awful.widget.taglist{
+        --screen = s,
+        --filter = awful.widget.taglist.filter.noempty,
+        --buttons = sw.taglist.buttons
+    --}
     sw.taglist = awful.widget.taglist(
         s,
         awful.widget.taglist.filter.noempty,
@@ -234,6 +240,12 @@ function widget_loader.init(awesome_context)
       --end)
     )
 
+    --sw.tasklist = awful.widget.tasklist{
+      --screen = s,
+      --filter = awful.widget.tasklist.filter.minimizedcurrenttags,
+      --buttons = tasklist_buttons,
+      --update_function = tasklist_addon.sorted_update,
+    --}
     sw.tasklist = awful.widget.tasklist(
       s,
       awful.widget.tasklist.filter.minimizedcurrenttags,

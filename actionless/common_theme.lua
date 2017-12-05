@@ -125,6 +125,8 @@ function common_theme.generate_theme(theme_dir)
   theme.panel_widget_spacing_medium = 16
   theme.panel_widget_spacing_small = 8
 
+  theme.tasklist_spacing = "theme.panel_padding_bottom"
+
   theme.left_panel_width = 120
   theme.left_widget_min_height = 120
 theme.left_panel_internal_corner_radius = 30
