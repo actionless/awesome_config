@@ -78,6 +78,7 @@ local function worker(args)
       local values = h_string.split(line, ' ')
       local percent = values[8]
       local name = values[11]
+      if name == 'Web' then name = 'firefox' end
       percent = percent + 0
       if result[name] then
         result[name] = result[name] + percent
