@@ -203,19 +203,11 @@ function signals.init(awesome_context)
     end
   end
 
-  local function on_client_unfocus(c, force, callback)
+  local function on_client_unfocus(c, callback)
     --return _on_client_unfocus(c)
     delayed_call(function()
       if not c.valid or c == client.focus then
         return
-      end
-      if force then
-        _on_client_unfocus(c)
-        if callback then
-          return callback(c)
-        else
-          return
-        end
       end
       -- Actually draw changes only if client is visible:
       for _, sel_tag in ipairs(c.screen.selected_tags) do
@@ -279,7 +271,7 @@ function signals.init(awesome_context)
       end
     else
       clog("F: zero tiling clients -- other tag?")
-      return on_client_unfocus(c) --luacheck: ignore
+      return on_client_unfocus(c)
     end
 
     c.border_color = beautiful.border_focus
@@ -329,11 +321,9 @@ function signals.init(awesome_context)
       delayed_call(function()
           if c == client.focus then
             on_client_focus(c)
-            --round_up_client_corners(c, true, "MF")
             round_up_client_corners(c, false, "MF")
           else
-            on_client_unfocus(c, false, function(_c)
-              --round_up_client_corners(_c, true, "MU")
+            on_client_unfocus(c, function(_c)
               round_up_client_corners(_c, false, "MU")
             end)
           end
