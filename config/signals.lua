@@ -16,15 +16,23 @@ require("awful.autofocus")
 awful.titlebar.enable_tooltip = false
 
 
-local debug_messages_enabled = false
---local debug_messages_enabled = true
-
 local function clog(msg, c)
-  --if debug_messages_enabled then nlog(...) end
+  --nlog(msg)
     --log(msg .. " " .. c.name .. " " .. tostring(c:tags()[1]))
-  if c and c.class == "Spotify" then nlog(msg) end
+  --if c and c.class == "Spotify" then nlog(msg) end
 end
 
+
+local function choose_tag(c)
+  for _, sel_tag in ipairs(c.screen.selected_tags) do
+    for _, cli_tag in ipairs(c:tags()) do
+      if sel_tag.index == cli_tag.index then
+        return cli_tag
+      end
+    end
+  end
+  return c.first_tag
+end
 
 
 awful.tag.object.get_gap = function(t)
@@ -37,15 +45,12 @@ end
 
 
 local function apply_shape(draw, shape, ...)
-  local client_tag = draw.first_tag  -- @TODO: fix when multiple tags are selected
+  local client_tag = choose_tag(draw)
 
   local geo = draw:geometry()
 
-  --local shape_args = ...
-  --local shape_args = (client_tag.layout.name == "floating" or client_tag:get_gap() ~= 0) and ... or 0
+  -- Draw outer shape only if floating layout or useless gaps
   local shape_args = 0
-  --nlog({draw.name, client_tag.name, client_tag:get_gap()})
-  --@TODO: :get_gap() not correct on startup!!!
   if client_tag.layout.name == "floating" or client_tag:get_gap() ~= 0 then
     shape_args = ...
   end
@@ -102,20 +107,20 @@ local function round_up_client_corners(c, force, reference)
   ) or (
     #c:tags() < 1
   )) or beautiful.skip_rounding_for_crazy_borders then
-    --nlog('R1 F='..(force and force or 'nil').. ', R='..reference..', C='.. c.name)
+    clog('R1 F='..(force and force or 'nil').. ', R='..(reference or '')..', C='.. c.name, c)
     return
   end
   --clog({"Geometry", c:tags()}, c)
   pending_shapes[c] = true
   --delayed_call(apply_shape, c, gears.shape.rounded_rect, beautiful.border_radius)
   delayed_call(function()
-    local client_tag = c.first_tag  -- @TODO: fix when multiple tags are selected
+    local client_tag = choose_tag(c)
     if not client_tag then
       nlog('no client tag')
       return
     end
     local num_tiled = #tag_helpers.get_tiled(client_tag)
-    --clog({"Shape", num_tiled, client_tag.master_fill_policy, c.name}, c)
+    clog({"Shape", num_tiled, client_tag.master_fill_policy, c.name}, c)
     --if not force and (c.maximized or (
     if (
       c.maximized
@@ -129,7 +134,7 @@ local function round_up_client_corners(c, force, reference)
       return
     end
     apply_shape(c, gears.shape.rounded_rect, beautiful.border_radius)
-    clog("apply_shape "..reference, c)
+    clog("apply_shape "..(reference or 'no_ref'), c)
     pending_shapes[c] = nil
     --nlog('OK F='..(force and "true" or 'nil').. ', R='..reference..', C='.. c.name)
   end)
@@ -141,7 +146,7 @@ function signals.init(awesome_context)
 
   local function _on_client_unfocus (c)
     if c.minimized then return end
-    local t = c.first_tag  -- @TODO: fix when multiple tags are selected
+    local t = choose_tag(c)
     local layout = t.layout
     local num_tiled = #tag_helpers.get_tiled(t)
 
@@ -202,9 +207,8 @@ function signals.init(awesome_context)
 
 
   local function on_client_focus(c)
-    local s = c.screen
-    local t = c.first_tag  -- @TODO: fix when multiple tags are selected
-    local layout = awful.layout.get(s)
+    local t = choose_tag(c)
+    local layout = t.layout
     local num_tiled = #tag_helpers.get_tiled(t)
 
     --c.border_color = beautiful.border_focus
@@ -267,13 +271,13 @@ function signals.init(awesome_context)
   end
 
   local function on_tag_signal(t)
-    --t = t or awful.screen.focused().selected_tag
     for _, c in ipairs(t:clients()) do
       on_client_signal(c)
     end
   end
 
   tag.connect_signal("property::layout", on_tag_signal)
+
   screen.connect_signal("tag::history::update", function (s)
     if #s.selected_tags > 1 then
       for _, t in ipairs(s.selected_tags) do
