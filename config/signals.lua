@@ -115,7 +115,7 @@ local function round_up_client_corners(c, force, reference)
       return
     end
     local num_tiled = #tag_helpers.get_tiled(client_tag)
-    clog({"Shape", num_tiled, client_tag.master_fill_policy, c.name}, c)
+    --clog({"Shape", num_tiled, client_tag.master_fill_policy, c.name}, c)
     --if not force and (c.maximized or (
     if (
       c.maximized
@@ -205,7 +205,6 @@ function signals.init(awesome_context)
 
   local function on_client_unfocus(c, force, callback)
     --return _on_client_unfocus(c)
-    --extremely_delayed_call(function()
     delayed_call(function()
       if not c.valid or c == client.focus then
         return
@@ -213,10 +212,12 @@ function signals.init(awesome_context)
       if force then
         _on_client_unfocus(c)
         if callback then
-          callback(c)
+          return callback(c)
+        else
+          return
         end
       end
-      -- @TODO: remove above ?
+      -- Actually draw changes only if client is visible:
       for _, sel_tag in ipairs(c.screen.selected_tags) do
         for _, cli_tag in ipairs(c:tags()) do
           if sel_tag.index == cli_tag.index then
@@ -285,30 +286,34 @@ function signals.init(awesome_context)
   end
 
 
-  local function on_master_fill_change(t)
-    if t.layout == 'floating' then return end
-    if t.master_fill_policy == 'always_master_width_factor' or (
-      t.master_fill_policy == 'master_width_factor' and #awful.client.tiled(t.screen) == 1
-    ) then
-      set_mwfact_screen_padding(t)
+  --local function on_master_fill_change(t)
+    --if t.layout == 'floating' then return end
+    --if t.master_fill_policy == 'always_master_width_factor' or (
+      --t.master_fill_policy == 'master_width_factor' and #awful.client.tiled(t.screen) == 1
+    --) then
+      --set_mwfact_screen_padding(t)
+    --else
+      --set_default_screen_padding(t.screen)
+    --end
+  --end
+  --tag.connect_signal("property::master_width_factor", on_master_fill_change)
+  --tag.connect_signal("property::master_fill_policy", on_master_fill_change)
+
+  local function on_client_signal(c)
+    if c == client.focus then
+      on_client_focus(c)
     else
-      set_default_screen_padding(t.screen)
+      on_client_unfocus(c)
     end
   end
 
-  --tag.connect_signal("property::master_width_factor", on_master_fill_change)
-  --tag.connect_signal("property::master_fill_policy", on_master_fill_change)
   local function on_tag_signal(t)
     --t = t or awful.screen.focused().selected_tag
     for _, c in ipairs(t:clients()) do
-      if c == client.focus then
-        on_client_focus(c)
-      else
-        --log("tag::property::layout")
-        on_client_unfocus(c)
-      end
+      on_client_signal(c)
     end
   end
+
   tag.connect_signal("property::layout", on_tag_signal)
   screen.connect_signal("tag::history::update", function (s)
     if #s.selected_tags > 1 then
@@ -320,23 +325,24 @@ function signals.init(awesome_context)
 
   -- New client appears
   client.connect_signal("manage", function (c)
-    --if awesome.startup then
-      --extremely_delayed_call(function()
-      --clog(awesome.startup, c)
+    if awesome.startup then
       delayed_call(function()
-        --local tagged
           if c == client.focus then
             on_client_focus(c)
-            round_up_client_corners(c, true, "MF")
-            --nlog("|MF| "..c.name)
+            --round_up_client_corners(c, true, "MF")
+            round_up_client_corners(c, false, "MF")
           else
-            on_client_unfocus(c, true, function(_c)
-              round_up_client_corners(_c, true, "MU")
-              --nlog("|MU| "..c.name)
+            on_client_unfocus(c, false, function(_c)
+              --round_up_client_corners(_c, true, "MU")
+              round_up_client_corners(_c, false, "MU")
             end)
           end
       end)
-    --end
+    else
+      delayed_call(function()
+        on_client_signal(c)
+      end)
+    end
   end)
 
   client.connect_signal("focus", function(c)
@@ -349,11 +355,7 @@ function signals.init(awesome_context)
 
   client.connect_signal("property::maximized", function (c)
     delayed_call(function()
-      if c == client.focus then
-        on_client_focus(c)
-      else
-        on_client_unfocus(c)
-      end
+      on_client_signal(c)
     end)
   end)
 
