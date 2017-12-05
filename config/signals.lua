@@ -212,7 +212,7 @@ local function round_up_client_corners(c, force, reference)
   ) or (
     #c:tags() < 1
   )) or beautiful.skip_rounding_for_crazy_borders then
-    clog('R1 F='..(force and force or 'nil').. ', R='..(reference or '')..', C='.. c.name, c)
+    clog('R1 F='..(force and force or 'nil').. ', R='..(reference or '')..', C='.. (c and c.name or '<no name>'), c)
     return
   end
   --clog({"Geometry", c:tags()}, c)
