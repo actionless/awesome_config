@@ -37,7 +37,8 @@ function autorun.init(awesome_context)
     --from workstation:
     --awful.spawn.with_shell('xinput set-prop ' .. sanwa_pad .. ' "Evdev Wheel Emulation Inertia" 50')
     --from vm:
-    awful.spawn.with_shell('xinput set-prop ' .. sanwa_pad .. ' "Evdev Wheel Emulation Inertia" 170')
+    --awful.spawn.with_shell('xinput set-prop ' .. sanwa_pad .. ' "Evdev Wheel Emulation Inertia" 170')
+    awful.spawn.with_shell('xinput set-prop ' .. sanwa_pad .. ' "Evdev Wheel Emulation Inertia" 350')
   end
 
   -- keyboard settings:
