@@ -32,10 +32,10 @@ end
 
 local function _on_client_unfocus (c)
   if c.minimized then return end
+  c.border_color = beautiful.border_normal
   local t = choose_tag(c)
   local layout = t.layout
   local num_tiled = #tag_helpers.get_tiled(t)
-
   if persistent.titlebar.get() and (
     num_tiled > 1 or (
       num_tiled > 0 and t.master_fill_policy ~= 'expand'
@@ -43,7 +43,6 @@ local function _on_client_unfocus (c)
   ) then
     clog("U: tile: titlebars enabled explicitly", c)
     titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
-    c.border_color = beautiful.border_normal
   elseif c.floating then
     clog("U: floating client", c)
     titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
@@ -53,7 +52,6 @@ local function _on_client_unfocus (c)
   elseif num_tiled > 1 then
     clog("U: multiple tiling clients", c)
     titlebar.make_border(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
-    c.border_color = beautiful.border_normal
   elseif num_tiled == 1 then
     if t.master_fill_policy == 'expand' and screen.count() == 1 then
       clog("U: one tiling client: expand", c)
@@ -61,7 +59,6 @@ local function _on_client_unfocus (c)
     else
       clog("U: one tiling client", c)
       titlebar.make_border(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
-      c.border_color = beautiful.border_normal
     end
   else
     nlog('Signals: U: How did that happened?')
