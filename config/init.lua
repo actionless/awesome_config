@@ -1,16 +1,17 @@
 local config = {
-	notify	= require("config.notify"),
 	autorun	= require("config.autorun"),
+	keys	= require("config.keys"),
 	layouts	= require("config.layouts"),
 	menus	= require("config.menus"),
-	toolbar_vertical	= require("config.toolbar_vertical"),
-	toolbar_horizontal      = require("config.toolbar_horizontal"),
-	toolbar_assets          = require("config.toolbar_assets"),
-	lcars_layout            = require("config.lcars_layout"),
-	keys	= require("config.keys"),
+	notify	= require("config.notify"),
 	rules	= require("config.rules"),
 	signals	= require("config.signals"),
 	widgets	= require("config.widgets"),
+	toolbar_horizontal       = require("config.toolbar_horizontal"),
+	lcars_toolbar_vertical	 = require("config.lcars_toolbar_vertical"),
+	lcars_toolbar_horizontal = require("config.lcars_toolbar_horizontal"),
+	lcars_assets             = require("config.lcars_assets"),
+	lcars_layout             = require("config.lcars_layout"),
 }
 
 return config

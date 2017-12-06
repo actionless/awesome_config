@@ -1,14 +1,12 @@
 local awful = require("awful")
 
-local run_once = require("actionless.helpers").run_once
+local run_once = require("actionless.util.spawn").run_once
 
 
 local autorun = {}
 
 function autorun.init(awesome_context)
 
-  run_once("lxsession -a -n -r")
-  run_once("lxpolkit")
   awful.spawn.with_shell('pgrep vmtoolsd && /usr/bin/vmware-user-suid-wrapper')
   --awful_spawn.with_shell(os.getenv('HOME').."/.screenlayout/awesome.sh")
 
@@ -76,6 +74,31 @@ function autorun.init(awesome_context)
     --run_once("mopidy -q 2>&1 >> $HOME/.cache/mopidy.log")
     --run_once("urxvtd")
   end)
+
+
+  --local gears_timer = require("gears.timer")
+  --local delayed_call = gears_timer.delayed_call
+  --delayed_call(function()
+    --local wlppr = require('actionless.wlppr')
+    --gears_timer({
+      --callback=wlppr.load_new,
+      --timeout=701,
+      --autostart=true,
+      --call_now=false,
+    --})
+    --gears_timer({
+      --callback=wlppr.change_wallpaper,
+      --timeout=500,
+      --autostart=true,
+      --call_now=true,
+    --})
+    ----gears_timer({
+      ----callback=wlppr.change_wallpaper_best,
+      ----timeout=300,
+      ----autostart=true,
+      ----call_now=true,
+    ----})
+  --end)
 
 end
 

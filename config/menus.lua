@@ -3,7 +3,7 @@ local awesome_menubar = require("menubar")
 local beautiful = require("beautiful")
 
 local menubar = require("actionless.menubar")
-local menugen = require("utils.menugen")
+local menugen = require("actionless.util.menugen")
 local wlppr = require("actionless.wlppr")
 
 local menus = {}

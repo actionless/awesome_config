@@ -7,9 +7,8 @@ local awful = require("awful")
 local xresources = require("beautiful").xresources
 local dpi = xresources.apply_dpi
 
-local h_string = require("utils.string")
-local h_table = require("utils.table")
-local helpers = require("actionless.helpers")
+local h_string = require("actionless.util.string")
+local h_table = require("actionless.util.table")
 
 
 local common_theme = {}
@@ -21,7 +20,8 @@ function common_theme.generate_theme(theme_dir)
     theme = dofile("/usr/share/awesome/themes/xresources/theme.lua")
   end)
   if not theme then
-    theme = dofile(helpers.get_nix_xresources_theme_path().."/theme.lua")
+    local nixos = require("actionless.util.nixos")
+    theme = dofile(nixos.get_nix_xresources_theme_path().."/theme.lua")
   end
 
   theme.null = nil
@@ -30,8 +30,6 @@ function common_theme.generate_theme(theme_dir)
   theme.xrdb = xresources.get_current_theme()
 
   theme.dir = theme_dir
-
-  theme.hidpi = false
 
   -- Use plain color:
   theme.wallpaper = nil
@@ -42,8 +40,6 @@ function common_theme.generate_theme(theme_dir)
   --theme.wallpaper = theme.dir .. '/pattern.png'
 
   theme.show_widget_icon = false
-  theme.widget_decoration_arrl = ''
-  theme.widget_decoration_arrr = ''
 
   --Source*Pro:
   --theme.font = "Source Code Pro Bold 10.5"
@@ -54,56 +50,42 @@ function common_theme.generate_theme(theme_dir)
   -- use ~/.fonts.conf, Luke ;)
   theme.font = "Monospace Bold 10"
   theme.text_font = "Monospace 10"
-  theme.small_font = "Monospace 6"
   theme.sans_font = "Sans Bold 10"
   -- Don't use sans font:
   --theme.sans_font	= theme.font
 
   -- COLORS:
 
-  theme.error = "theme.xrdb.color9"
-  theme.warning = "theme.xrdb.color10"
-  theme.theme = "theme.xrdb.color13"
-
   theme.bg = "theme.xrdb.background"
   theme.alt_bg = "theme.xrdb.color4"
 
   theme.fg = "theme.xrdb.color7"
-  theme.alt_fg = "theme.xrdb.background"
 
-
-  theme.border                  = "theme.bg"
-  theme.sel_border              = "theme.xrdb.color10"
-  theme.titlebar_border         = "theme.border"
-  theme.titlebar_bg_normal      = "theme.border"
-  theme.titlebar_focus_border   = "theme.sel_border"
-  theme.base_border_width		= "6"
-  --theme.border_width		= "theme.base_border_width"
-  theme.border_width = 0
-  theme.client_border_width = 0
-  theme.border_normal		= "theme.border"
-  theme.border_focus		= "theme.sel_border"
-  theme.border_marked		= "theme.error"
-
-  theme.useless_gap_width = 20
-  theme.useless_gap_width = 40
-  theme.useless_gap = 20
+  theme.error = "theme.xrdb.color9"
+  theme.warning = "theme.xrdb.color10"
 
   theme.fg_normal		= "theme.fg"
   theme.bg_normal		= "theme.bg"
   theme.fg_focus		= "theme.bg"
-  theme.bg_focus		= "theme.theme"
+  theme.bg_focus		= "theme.xrdb.color13"
   theme.fg_urgent		= "theme.bg"
   theme.bg_urgent		= "theme.error"
-  theme.hotkeys_modifiers_fg	= "theme.xrdb.color8"
 
-  -- @TODO: check is_dark_bg ?
-  theme.hotkeys_label_bg	= "theme.xrdb.foreground"
-  theme.hotkeys_label_fg	= "theme.xrdb.background"
-  theme.hotkeys_border_color = "theme.hotkeys_modifiers_fg"
-  theme.hotkeys_border_width = dpi(2)
+  theme.border_normal		= "theme.bg"
+  theme.border_focus		= "theme.xrdb.color10"
+  theme.border_marked		= "theme.error"
+
+  theme.base_border_width	= dpi(3)
+  --theme.border_width		= "theme.base_border_width"
+  theme.border_width = 0
+
+  theme.useless_gap	        = dpi(10)
 
   theme.screen_padding		= 0
+
+  theme.border_radius = 0
+  theme.client_border_radius = "theme.border_radius"
+
 
   theme.panel_bg		= "theme.bg"
   theme.panel_fg		= "theme.fg"
@@ -116,21 +98,28 @@ function common_theme.generate_theme(theme_dir)
   theme.panel_widget_fg_error 	= "theme.bg"
   theme.panel_widget_bg_disabled = "theme.xrdb.color8"
   theme.panel_widget_fg_disabled = "theme.bg"
+
   --theme.panel_opacity		= 0.96
   --theme.panel_opacity		= 0.92
   theme.panel_opacity		= 0.87
-  theme.basic_panel_height	= 18
-  theme.panel_height		= 24
-  theme.panel_padding_bottom	= 6
-  theme.panel_enbolden_details	= false
+
+  theme.basic_panel_height	= dpi(18)
+  theme.panel_height		= dpi(24)
+  theme.panel_padding_bottom	= dpi(6)
+
   theme.panel_widget_border_radius = 4
+
+  -- @TODO: remove this block
+  theme.panel_enbolden_details	= false
   theme.panel_widget_spacing = 20
   theme.panel_widget_spacing_medium = 16
   theme.panel_widget_spacing_small = 8
 
+  theme.tasklist_spacing = "theme.panel_padding_bottom"
+
   theme.left_panel_width = 120
   theme.left_widget_min_height = 120
-theme.left_panel_internal_corner_radius = 30
+  theme.left_panel_internal_corner_radius = 30
   --theme.widget_notification_position = "top_left"
   theme.widget_notification_position = "top_right"
 
@@ -150,7 +139,7 @@ theme.left_panel_internal_corner_radius = 30
   theme.taglist_fg_occupied	= "theme.bg"
   theme.taglist_bg_occupied	= "theme.panel_taglist"
   theme.taglist_fg_empty	= "theme.bg"
-  theme.taglist_bg_empty	= "theme.theme"
+  theme.taglist_bg_empty	= "theme.tasklist_bg_minimize"
   theme.taglist_fg_focus	= "theme.panel_taglist"
   theme.taglist_bg_focus	= "theme.bg"
 
@@ -196,6 +185,9 @@ theme.left_panel_internal_corner_radius = 30
   theme.titlebar_fg_focus	= "theme.tasklist_fg_focus"
   theme.titlebar_bg_focus	= "theme.bg"
   theme.titlebar_fg_normal	= "theme.tasklist_fg_normal"
+  theme.titlebar_bg_normal      = "theme.border_normal"
+  theme.actionless_titlebar_bg_focus	= "theme.titlebar_bg_focus"
+  theme.actionless_titlebar_bg_normal      = "theme.titlebar_bg_normal"
   --theme.titlebar_bg_normal	= "theme.bg"
 
   theme.notification_opacity	= 0.8
@@ -203,7 +195,7 @@ theme.left_panel_internal_corner_radius = 30
   theme.notification_monofont	= "theme.font"
   theme.notification_bg = "theme.bg_normal"
   theme.notification_fg = "theme.fg_normal"
-  theme.notification_border_color = "theme.theme"
+  theme.notification_border_color = "theme.bg_focus"
   theme.notification_border_color = "theme.xrdb.color8"
   theme.notification_border_width = 4
   theme.notification_margin = 16
@@ -224,52 +216,57 @@ theme.left_panel_internal_corner_radius = 30
   theme.apw_bg_color = "theme.panel_bg"
   theme.apw_fg_color = "theme.panel_media"
 
+
+  theme.hotkeys_modifiers_fg	= "theme.xrdb.color8"
+  -- @TODO: check is_dark_bg ?
+  theme.hotkeys_label_bg	= "theme.xrdb.foreground"
+  theme.hotkeys_label_fg	= "theme.xrdb.background"
+  theme.hotkeys_border_color = "theme.hotkeys_modifiers_fg"
+  theme.hotkeys_border_width = dpi(2)
+
+
+
   -- ICONS
 
   local icons_dir = theme.dir .. "/icons/"
   theme.icons_dir = icons_dir
 
-  local common_icons_dir = icons_dir .. "common/"
+  theme.icon_left 		= icons_dir .. "arrow_left.png"
+  theme.icon_right 		= icons_dir .. "arrow_right.png"
 
-  theme.icon_left 		= common_icons_dir .. "arrow_left.png"
-  theme.icon_right 		= common_icons_dir .. "arrow_right.png"
-
-  --theme.taglist_squares_sel	= common_icons_dir .. "square_sel.png"
-  --theme.taglist_squares_unsel	= common_icons_dir .. "square_unsel.png"
+  --theme.taglist_squares_sel	= icons_dir .. "square_sel.png"
+  --theme.taglist_squares_unsel	= icons_dir .. "square_unsel.png"
   theme.taglist_squares_sel	= nil
   theme.taglist_squares_unsel	= nil
   --theme.taglist_squares_sel_empty	= nil
   --theme.taglist_squares_unsel_empty	= nil
 
+  --theme.widget_tray_left	= icons_dir .. "tray_left.png"
+  --theme.widget_tray_right	= icons_dir .. "tray_right.png"
+  theme.widget_tray_left	= nil
+  theme.widget_tray_right	= nil
 
-  local widgets_icons_dir = icons_dir .. "widgets/"
+  theme.widget_ac		= icons_dir .. "ac.png"
+  theme.widget_ac_charging	= icons_dir .. "ac_charging.png"
+  theme.widget_ac_charging_low	= icons_dir .. "ac_charging_low.png"
 
-  --theme.widget_tray_left			= widgets_icons_dir .. "tray_left.png"
-  --theme.widget_tray_right			= widgets_icons_dir .. "tray_right.png"
-  theme.widget_tray_left			= nil
-  theme.widget_tray_right			= nil
+  theme.widget_battery		= icons_dir .. "battery.png"
+  theme.widget_battery_low	= icons_dir .. "battery_low.png"
+  theme.widget_battery_empty	= icons_dir .. "battery_empty.png"
 
-  theme.widget_ac			= widgets_icons_dir .. "ac.png"
-  theme.widget_ac_charging	= widgets_icons_dir .. "ac_charging.png"
-  theme.widget_ac_charging_low	= widgets_icons_dir .. "ac_charging_low.png"
+  theme.widget_mem		= icons_dir .. "mem.png"
+  theme.widget_cpu		= icons_dir .. "cpu.png"
+  theme.widget_temp		= icons_dir .. "temp.png"
+  theme.widget_net		= icons_dir .. "net.png"
+  theme.widget_hdd		= icons_dir .. "hdd.png"
 
-  theme.widget_battery		= widgets_icons_dir .. "battery.png"
-  theme.widget_battery_low	= widgets_icons_dir .. "battery_low.png"
-  theme.widget_battery_empty	= widgets_icons_dir .. "battery_empty.png"
+  theme.widget_net_wifi	        = icons_dir .. "net_wireless.png"
+  theme.widget_net_wired	= icons_dir .. "net_wired.png"
+  theme.widget_net_searching	= icons_dir .. "net_searching.png"
 
-  theme.widget_mem		= widgets_icons_dir .. "mem.png"
-  theme.widget_cpu		= widgets_icons_dir .. "cpu.png"
-  theme.widget_temp		= widgets_icons_dir .. "temp.png"
-  theme.widget_net		= widgets_icons_dir .. "net.png"
-  theme.widget_hdd		= widgets_icons_dir .. "hdd.png"
-
-  theme.widget_net_wifi	        = widgets_icons_dir .. "net_wireless.png"
-  theme.widget_net_wired		= widgets_icons_dir .. "net_wired.png"
-  theme.widget_net_searching	= widgets_icons_dir .. "net_searching.png"
-
-  theme.widget_music_pause      	= widgets_icons_dir .. "music_pause.png"
-  theme.widget_music_play		= widgets_icons_dir .. "music_play.png"
-  theme.widget_music_stop		= widgets_icons_dir .. "music_stop.png"
+  theme.widget_music_pause      = icons_dir .. "music_pause.png"
+  theme.widget_music_play	= icons_dir .. "music_play.png"
+  theme.widget_music_stop	= icons_dir .. "music_stop.png"
 
   theme.tasklist_disable_icon = true
   --theme.tasklist_floating = "*"
@@ -283,11 +280,13 @@ theme.left_panel_internal_corner_radius = 30
   theme.layout_uselessfairh		= theme.layout_fairh
   theme.layout_uselesspiral		= theme.layout_spiral
 
-  local titlebar_icons_dir = icons_dir .. "titlebar/"
-  theme.titlebar_icons_dir = titlebar_icons_dir
-
 return theme
 end
+
+
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+
 
 function common_theme.fill_theme(theme)
   local new_theme = {}

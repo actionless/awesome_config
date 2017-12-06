@@ -6,12 +6,11 @@
 local naughty      = require("naughty")
 local beautiful    = require("beautiful")
 local awful = require("awful")
+local gears_timer = require("gears.timer")
 
-local h_table      = require("utils.table")
-local h_string      = require("utils.string")
-local parse = require("utils.parse")
-local helpers = require("actionless.helpers")
-local newinterval = helpers.newinterval
+local h_table      = require("actionless.util.table")
+local h_string      = require("actionless.util.string")
+local parse = require("actionless.util.parse")
 local common_widget = require("actionless.widgets.common").decorated
 
 
@@ -39,7 +38,6 @@ local function worker(args)
 
   cpu.list_len = args.list_length or 10
 
-  local new_top = args.new_top or true
   cpu.command = "top -o \\%CPU -b -n 1 -w 512 -d 0.05"
 
   function cpu.hide_notification()
@@ -82,8 +80,8 @@ local function worker(args)
       --local pid, percent, name = line:match("^(%d+)%s+(.+)%s+(.*)")
       local values = h_string.split(line, ' ')
       local pid = values[1]
-      local percent = values[new_top and 7 or 9]
-      local name = values[new_top and 11 or 12]
+      local percent = values[7]
+      local name = values[11]
       percent = percent + 0
       if percent and percent ~= 0 and name ~= 'top' then
         if result[pid] then
@@ -108,7 +106,8 @@ local function worker(args)
     end
     if result_string ~= '' then
       --result_string = "  PID  %CPU COMMAND\n" .. result_string
-      result_string = '  PID  %CPU COMMAND\n'..'<span font="'  .. tostring(beautiful.text_font)  .. '">' .. result_string .. '</span>'
+      result_string = '  PID  %CPU COMMAND\n'..
+        '<span font="'  .. tostring(beautiful.text_font)  .. '">' .. result_string .. '</span>'
     else
       result_string = "no running processes atm"
     end
@@ -139,7 +138,12 @@ local function worker(args)
       ))
   end
 
-  newinterval(update_interval, cpu.update)
+  gears_timer({
+    callback=cpu.update,
+    timeout=update_interval,
+    autostart=true,
+    call_now=true,
+  })
 
   return setmetatable(cpu, { __index = cpu.widget })
 end

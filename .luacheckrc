@@ -14,30 +14,30 @@ files["awesomerc.lua"].allow_defined_top = true
 read_globals = {
     "awesome",
     "button",
-    "client",
     "dbus",
     "drawable",
     "drawin",
     "key",
     "keygrabber",
-    "mouse",
     "mousegrabber",
     "root",
-    "screen",
     "selection",
     "tag",
     "window",
+    "table.unpack",
     "unpack",
+    "math.atan2",
     "jit",
 }
 
 -- May not be read-only due to client.focus
 globals = {
+    "screen",
+    "mouse",
     "client",
-    "localstorage",
     "nlog",
     "log",
-    "context"
+    "context",
 }
 
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80

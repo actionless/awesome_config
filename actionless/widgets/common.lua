@@ -7,7 +7,7 @@ local wibox = require("wibox")
 local gears = require("gears")
 local beautiful = require("beautiful")
 
-local h_table = require("utils.table")
+local h_table = require("actionless.util.table")
 
 
 local common = {}
@@ -66,32 +66,43 @@ end
 function common.widget(args)
   args = args or {}
 
-  local show_icon = args.show_icon or beautiful.show_widget_icon
+  local show_icon = args.show_icon
+  if show_icon == nil then
+    show_icon = beautiful.show_widget_icon
+  end
+
   local widget_bg = wibox.container.background()
   widget_bg.lie_layout = wibox.layout.fixed.horizontal()
   if show_icon then
     widget_bg.icon_widget = wibox.widget.imagebox()
-    widget_bg.icon_widget:set_resize(beautiful.hidpi or false)
+    widget_bg.icon_widget.resize = beautiful.xresources.get_dpi() > 96
     widget_bg.lie_layout:add(widget_bg.icon_widget)
   end
   widget_bg.text_widget = wibox.widget.textbox('')
   widget_bg.lie_layout:add(widget_bg.text_widget)
   if args.margin then
-    widget_bg.margin = wibox.container.margin(
+    local margin_widget = wibox.container.margin(
       widget_bg.lie_layout,
       args.margin.left, args.margin.right,
       args.margin.top, args.margin.bottom,
       args.margin.color, args.margin.draw_empty
     )
-    widget_bg:set_widget(widget_bg.margin)
+    widget_bg:set_widget(margin_widget)
   else
     widget_bg:set_widget(widget_bg.lie_layout)
   end
 
-  function widget_bg:set_image(...)
-    if self.icon_widget then
-      return self.icon_widget_bg:set_image(...)
+  function widget_bg:set_image(image)
+    if not self.icon_widget then
+      return
     end
+    image = image and gears.surface.load(image)
+    if not image then
+      return
+    end
+    local ratio = beautiful.basic_panel_height / image.height
+    self.icon_widget.forced_width = math.ceil(image.width * ratio)
+    self.icon_widget:set_image(image)
   end
 
   function widget_bg:set_font(...)
@@ -100,7 +111,7 @@ function common.widget(args)
 
   widget_bg.text_widget.lie_set_text = widget_bg.text_widget.set_text
   function widget_bg.text_widget:set_text(text, ...)
-    if not show_icon and (not text or text == '') then
+    if not self.icon_widget and (not text or text == '') then
       widget_bg.visible = false
     else
       widget_bg.visible = true
@@ -110,7 +121,7 @@ function common.widget(args)
 
   widget_bg.text_widget.lie_set_markup = widget_bg.text_widget.set_markup
   function widget_bg.text_widget:set_markup(text, ...)
-    if not show_icon and (not text or text == '') then
+    if not self.icon_widget and (not text or text == '') then
       widget_bg.visible = false
     else
       widget_bg.visible = true
@@ -127,18 +138,34 @@ function common.widget(args)
   end
 
   function widget_bg:set_icon(name)
-    if show_icon then
+    if self.icon_widget then
       local icon = beautiful.get()['widget_' .. name]
-      --gears.debug.assert(icon, ":set_icon failed: icon is missing: " .. name)
-      return self.icon_widget_bg:set_image(icon)
+      gears.debug.assert(icon, ":set_icon failed: icon is missing: " .. name)
+      return self.icon_widget:set_image(icon)
     end
   end
 
-  widget_bg:set_text(args.text)
+  if args.text then
+    widget_bg:set_text(args.text)
+  end
+  widget_bg:set_font(args.font or beautiful.panel_widget_font or beautiful.font)
 
   return widget_bg
 end
 
+
+
+function common.decorated(args)
+  args = args or {}
+  if args.horizontal == nil and args.orientation == nil then
+    args.horizontal = true
+  end
+  if args.horizontal or args.orientation == "horizontal" then
+    return common.decorated_horizontal(args)
+  else
+    return common.decorated_vertical(args)
+  end
+end
 
 
 
@@ -148,21 +175,16 @@ end
 --------------------------------------------------------------------------------
 --]]
 
-function common.decorated(args)
+function common.decorated_vertical(args)
   args = args or {}
-
-  if args.horizontal or args.orientation == "horizontal" then
-    return common.decorated_horizontal(args)
-  end
 
   local decorated = {
     lie_widget_list = {},
+    bg = args.bg or beautiful.panel_widget_bg or beautiful.fg or "#ffffff",
+    fg = args.fg or beautiful.panel_widget_fg or beautiful.bg or "#000000",
+    min_height = args.min_height or beautiful.left_widget_min_height,
+    valign = args.valign or "top",
   }
-
-  decorated.bg = args.bg or beautiful.panel_widget_bg or beautiful.fg or "#ffffff"
-  decorated.fg = args.fg or beautiful.panel_widget_fg or beautiful.bg or "#000000"
-  local valign = args.valign or "top"
-  decorated.min_height = args.min_height or beautiful.left_widget_min_height
 
   if args.widget then
     decorated.lie_widget_list = {args.widget}
@@ -176,22 +198,24 @@ function common.decorated(args)
       widget:set_valign("top")
       --widget:set_wrap("char")
     end
-  -- give set_bg and set_fg methods to ones don't have it:
+    if widget.set_font then
+      widget:set_font(args.font or beautiful.panel_widget_font or beautiful.font)
+    end
+    -- give set_bg and set_fg methods to ones don't have it:
     if (decorated.fg and not widget.set_fg) or (decorated.bg and not widget.set_bg) then
       decorated.lie_widget_list[i] = setmetatable(wibox.container.background(widget), widget)
     end
   end
 
   decorated.lie_widget_layout = wibox.layout.fixed.vertical()
-
-  if valign == "top" then
+  if decorated.valign == "top" then
     decorated.internal_widget_layout =
     wibox.layout.align.horizontal(
         nil,
         decorated.lie_widget_layout,
         common.constraint({width=args.padding or beautiful.panel_padding_bottom})
     )
-  elseif valign == "bottom" then
+  elseif decorated.valign == "bottom" then
     decorated.internal_widget_layout = wibox.layout.align.vertical(
         nil,
         nil,
@@ -202,6 +226,7 @@ function common.decorated(args)
         )
     )
   end
+
   decorated.constraint = common.constraint({
     widget = decorated.internal_widget_layout,
     height = decorated.min_height,
@@ -211,20 +236,22 @@ function common.decorated(args)
     decorated.constraint,
     decorated.bg
   )
-
   decorated.lie_layout = wibox.layout.flex.vertical()
   decorated.lie_layout:add(decorated.lie_background)
 
-  --setmetatable(decorated.constraint, { __index = decorated.lie_widget })
+
+  function decorated:init()
+    self:set_normal()
+    self:show()
+  end
+
   function decorated:set_text(...)
     return self.lie_widget:set_text(...)
   end
+
   function decorated:set_markup(...)
     return self.lie_widget:set_markup(...)
   end
-
-  setmetatable(decorated.lie_layout, { __index = decorated.constraint })
-  setmetatable(decorated,        { __index = decorated.lie_layout })
 
   --- Set widget color
   -- @param args. "fg", "bg", "name" - "err", "warn", "b", "f" or 1..16
@@ -297,8 +324,10 @@ function common.decorated(args)
     })
   end
 
-  decorated:set_normal()
-  decorated:show()
+  decorated:init()
+  --setmetatable(decorated.constraint, { __index = decorated.lie_widget })
+  setmetatable(decorated.lie_layout, { __index = decorated.constraint })
+  setmetatable(decorated,        { __index = decorated.lie_layout })
   return decorated
 end
 

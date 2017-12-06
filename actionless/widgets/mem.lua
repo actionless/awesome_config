@@ -8,12 +8,12 @@
 local naughty = require("naughty")
 local beautiful = require("beautiful")
 local awful = require("awful")
+local gears_timer = require("gears.timer")
 
-local h_table = require("utils.table")
-local h_string = require("utils.string")
-local parse = require("utils.parse")
+local h_table = require("actionless.util.table")
+local h_string = require("actionless.util.string")
+local parse = require("actionless.util.parse")
 local common_widget= require("actionless.widgets.common").decorated
-local helpers = require("actionless.helpers")
 
 -- Memory usage (ignoring caches)
 local mem = {
@@ -36,7 +36,6 @@ local function worker(args)
 
   mem.list_len = args.list_length or 10
 
-  local new_top = args.new_top or true
   mem.command = "top -o \\%MEM -b -n 1 -w 512"
 
   function mem.hide_notification()
@@ -77,8 +76,9 @@ local function worker(args)
       )
     ) do
       local values = h_string.split(line, ' ')
-      local percent = values[new_top and 8 or 10]
-      local name = values[new_top and 11 or 12]
+      local percent = values[8]
+      local name = values[11]
+      if name == 'Web' then name = 'firefox' end
       percent = percent + 0
       if result[name] then
         result[name] = result[name] + percent
@@ -129,7 +129,14 @@ local function worker(args)
       ))
   end
 
-  helpers.newinterval(update_interval, mem.update)
+  gears_timer({
+    callback=mem.update,
+    timeout=update_interval,
+    autostart=true,
+    call_now=true,
+  })
+
   return setmetatable(mem, { __index = mem.widget })
-end
+end -- worker
+
 return setmetatable(mem, { __call = function(_, ...) return worker(...) end })

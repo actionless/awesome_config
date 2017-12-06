@@ -6,11 +6,7 @@ Licensed under GNU General Public License v2
 local wibox        = require("wibox")
 local math         = require("math")
 local beautiful = require("beautiful")
-
-
-
-local helpers = require("actionless.helpers")
-local newinterval     = helpers.newinterval
+local gears_timer = require("gears.timer")
 
 
 local function scandir(directory)
@@ -24,16 +20,16 @@ local function scandir(directory)
   return result
 end
 
-local rp = {}
-rp.widget = wibox.widget.imagebox()
 
 local function worker(args)
   args = args or {}
 
-  --local interval  = args.interval or 5
   local interval  = args.interval or math.random(5,15)
 
-  rp.dir = args.dir or beautiful.icons_dir .. 'random_pics/'
+  local rp = {
+    widget=wibox.widget.imagebox(),
+    dir = args.dir or beautiful.icons_dir .. 'random_pics/'
+  }
   rp.image_list = scandir(rp.dir)
 
   function rp.random_image()
@@ -45,12 +41,14 @@ local function worker(args)
     rp.widget:set_image(rp.random_image())
   end
 
-  rp.widget:set_image(rp.random_image())
-
-  -- random timer id is for possibility to
-  -- run different instance of the widget simultaneously
-  newinterval(interval, rp.update)
-  return rp.widget
+  gears_timer({
+    callback=rp.update,
+    timeout=interval,
+    autostart=true,
+    call_now=true,
+  })
+  return setmetatable(rp, { __index = rp.widget })
 end
+
 
 return setmetatable({}, { __call = function(_, ...) return worker(...) end })

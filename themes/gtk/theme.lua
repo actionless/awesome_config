@@ -4,8 +4,8 @@ local xresources = require("beautiful.xresources")
 local theme_assets = require("beautiful.theme_assets")
 local dpi = xresources.apply_dpi
 local create_theme = require("actionless.common_theme").create_theme
-local color_utils = require("utils").color
-local gtk_util = require("utils.gtk")
+local color_utils = require("actionless.util").color
+local gtk_util = require("actionless.util.gtk")
 
 
 local theme_name = "gtk"
@@ -33,8 +33,11 @@ theme.panel_bg = gsc.menubar_bg_color
 theme.panel_widget_bg = gsc.base_color
 theme.panel_widget_fg = gsc.text_color
 
-local gtk_border_radius = gsc.border_radius or 1
-local gtk_border_width = gsc.border_width or 1
+local gtk_border_radius = gsc.border_radius
+local gtk_border_width = gsc.border_width
+if gtk_border_width < 1 then
+  gtk_border_width = 1
+end
 theme.border_radius = dpi(gtk_border_radius*1.0)
 theme.panel_widget_border_radius = dpi(gtk_border_radius*0.8)
 --theme.panel_widget_border_radius = dpi(gtk_border_radius*1.0)
@@ -88,36 +91,18 @@ theme.wallpaper_cmd     = "nitrogen --restore"
 -- PANEL DECORATIONS:
 --
 theme.show_widget_icon = false
---theme.widget_decoration_arrl = ''
---theme.widget_decoration_arrr = ''
-
--- deprecated :
---theme.widget_decoration_arrl = ''
---theme.widget_decoration_arrr = ''
-
-theme.widget_decoration_arrl = '퟾'
-theme.widget_decoration_arrr = '퟿'
-theme.widget_decoration_arrl = '퟼'
-theme.widget_decoration_arrr = '퟽'
 
 theme.revelation_fg = theme.xrdb.color13
 theme.revelation_border_color = theme.xrdb.color13
 theme.revelation_bg = theme.panel_bg
 theme.revelation_font = "Monospace Bold 24"
 -- FONTS:
---theme.font = "Monospace Bold "..tostring(dpi(10))
---theme.small_font = "Monospace "..tostring(dpi(7))
---theme.sans_font = "Sans Bold "..tostring(dpi(10))
 theme.font = "Monospace Bold 10"
 --theme.font = "Sans Bold 10"
 theme.tasklist_font = theme.font
-theme.small_font = "Monospace 7"
 theme.sans_font = "Sans Bold 10"
 -- Don't use sans font:
 --theme.sans_font	= "theme.font"
-
---theme.font = "Roboto Condensed Bold "..tostring(dpi(10))
---theme.sans_font = "Roboto Condensed Bold "..tostring(dpi(10))
 
 --
 --MISC:
@@ -141,9 +126,6 @@ theme.useless_gap = dpi(4)
 theme.border_width = dpi(gtk_border_width) * 4
 
 theme.base_border_width = theme.border_width
-if theme.base_border_width <= 1 then
-  theme.base_border_width = dpi(2)
-end
 theme.border_width = 0
 
 theme.panel_height = theme.basic_panel_height + theme.panel_padding_bottom
@@ -170,7 +152,6 @@ theme.apw_mute_fg_color = "theme.xrdb.color9"
 
 --theme.taglist_squares_sel       = "theme.null"
 --theme.taglist_squares_unsel     = "theme.null"
---theme.taglist_fg_focus		= "theme.theme"
 theme.taglist_fg_focus		= gsc.selected_fg_color
 theme.taglist_bg_focus		= gsc.selected_bg_color
 --theme.taglist_bg_focus		= {
@@ -192,24 +173,29 @@ theme.taglist_bg_occupied = gsc.header_button_bg_color
 
 theme.border_normal = gsc.menubar_bg_color
 theme.border_focus = gsc.wm_border_focused_color
-theme.titlebar_border = gsc.menubar_bg_color
 theme.titlebar_fg_normal	= color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color)
-theme.titlebar_bg_normal	= "theme.titlebar_border"
+theme.titlebar_bg_normal	= gsc.menubar_bg_color
 theme.notification_border_radius = "theme.border_radius"
 
 if theme.border_radius > 0 then
-  theme.titlebar_fg_focus		= gsc.menubar_fg_color
-  theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
-  theme.notification_shape = function(cr,w,h)
+  local rounded_rect_shape = function(cr,w,h)
     gears.shape.rounded_rect(
       cr, w, h, theme.notification_border_radius
     )
   end
+  local less_rounded_rect_shape = function(cr,w,h)
+    gears.shape.rounded_rect(
+      cr, w, h, theme.panel_widget_border_radius
+    )
+  end
+  theme.titlebar_fg_focus		= gsc.menubar_fg_color
+  theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
+  theme.notification_shape = rounded_rect_shape
+  theme.tasklist_shape_minimized = less_rounded_rect_shape
 else
-  --theme.titlebar_fg_focus		= theme.titlebar_border
-  --theme.titlebar_bg_focus		= theme.bg_focus
-  --theme.titlebar_fg_focus		= gsc.selected_fg_color
+  theme.titlebar_fg_focus		= gsc.selected_fg_color
   theme.titlebar_bg_focus		= gsc.wm_border_focused_color
+  --theme.actionless_titlebar_bg_focus = gsc.wm_border_focused_color
   theme.notification_shape = nil
 end
 
@@ -223,16 +209,14 @@ theme.panel_widget_fg_error = theme.xrdb.color15
 --theme.widget_music_bg = color_utils.mix(MAIN_COLOR, gsc.menubar_fg_color, 0.6)
 --theme.widget_music_bg = MAIN_COLOR
 theme.widget_music_bg = "theme.border_focus"
---theme.widget_music_fg = MAIN_COLOR
---
 
+
+-------------------------------------------------------------------------------
 
 theme = create_theme({ theme_name=theme_name, theme=theme, })
 
---theme.titlebar_bg_normal = theme.titlebar_bg_normal .."66"
---theme.border = theme.border .."66"
---theme.border_normal = theme.border_normal .."66"
---theme.border_focus = theme.border_focus .."66"
+-------------------------------------------------------------------------------
+
 
 -- Recolor titlebar icons:
 theme = theme_assets.recolor_layout(theme, theme.panel_fg)
@@ -246,15 +230,22 @@ else
   theme.clock_fg = color_utils.darker(theme.panel_fg, 16)
 end
 
-if awesome.composite_manager_running and false then
-  --theme.titlebar_bg_normal = theme.titlebar_bg_normal .."66"
-  theme.border = theme.border .."66"
-  theme.border_normal       = theme.border_normal .."66"
-  theme.border_focus        = theme.border_focus .."66"
+if awesome.composite_manager_running then
+  theme.border_normal       = theme.border_normal .."dd"
+  theme.border_focus        = theme.border_focus .."dd"
   theme.titlebar_bg_normal  = theme.titlebar_bg_normal.."dd"
-  theme._titlebar_bg_normal = theme.titlebar_bg_normal.."dd"
   theme.titlebar_bg_focus   = theme.titlebar_bg_focus.."dd"
-  theme._titlebar_bg_focus  = theme.titlebar_bg_focus.."dd"
+end
+
+theme.actionless_titlebar_bg_normal = theme.titlebar_bg_normal
+if theme.border_radius > 0 then
+  theme.actionless_titlebar_bg_focus  = theme.border_focus
+else
+  theme.actionless_titlebar_bg_focus  = theme.gtk.wm_border_focused_color
+end
+
+if theme.border_radius > dpi(15) then
+  theme.border_radius = dpi(15)
 end
 
 return theme

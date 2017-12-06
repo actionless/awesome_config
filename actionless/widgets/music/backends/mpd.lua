@@ -4,8 +4,9 @@
 --]]
 
 local awful		= require("awful")
-local parse		= require("utils.parse")
-local helpers           = require("actionless.helpers")
+local gears_timer = require("gears.timer")
+
+local parse		= require("actionless.util.parse")
 
 
 local mpd = {
@@ -13,12 +14,16 @@ local mpd = {
 }
 
 function mpd.init(args)
-  args = args or {} 
-  mpd.music_dir = args.music_dir or os.getenv("HOME") .. "/Music"
+  args = args or {}
   mpd.host = args.host or "127.0.0.1"
   mpd.port = args.port or "6600"
   mpd.password = args.password or [[""]]
-  helpers.newinterval(2, function() return mpd.update(args.parse_status) end)
+  gears_timer({
+    callback=function() return mpd.update(args.parse_status) end,
+    timeout=2,
+    autostart=true,
+    call_now=true,
+  })
 end
 -------------------------------------------------------------------------------
 function mpd.toggle()
@@ -76,17 +81,6 @@ function mpd.resize_cover(
   player_status, cover_size, default_art, notification_callback
 )
   local _, _, _ = player_status, cover_size, default_art
-  --awful.spawn.easy_async(
-    --string.format(
-      --"%s %q %q %d %q",
-      --cover_script,
-      --mpd.music_dir,
-      --player_status.file,
-      --cover_size,
-      --default_art
-    --),
-    --notification_callback
-  --)
   return notification_callback()
 end
 

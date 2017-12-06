@@ -6,8 +6,8 @@
 local dbus = dbus -- luacheck: ignore
 local awful = require("awful")
 
-local h_table = require("utils.table")
-local parse = require("utils.parse")
+local h_table = require("actionless.util.table")
+local parse = require("actionless.util.parse")
 
 
 local dbus_cmd = "qdbus org.mpris.MediaPlayer2.clementine "
@@ -18,7 +18,10 @@ local clementine = {
 }
 
 function clementine.init(widget)
-  dbus.add_match("session", "path='/org/mpris/MediaPlayer2',interface='org.freedesktop.DBus.Properties',member='PropertiesChanged'")
+  dbus.add_match(
+    "session",
+    "path='/org/mpris/MediaPlayer2',interface='org.freedesktop.DBus.Properties',member='PropertiesChanged'"
+  )
   dbus.connect_signal(
     "org.freedesktop.DBus.Properties",
     function()

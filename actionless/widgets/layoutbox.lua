@@ -14,7 +14,7 @@ local imagebox = require("wibox.widget.imagebox")
 local textbox = require("wibox.widget.textbox")
 local delayed_call = require("gears.timer").delayed_call
 
-local h_string = require("utils.string")
+local h_string = require("actionless.util.string")
 
 --- Layoutbox widget "class".
 

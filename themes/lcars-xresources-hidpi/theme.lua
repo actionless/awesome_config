@@ -3,7 +3,7 @@ local awful = require("awful")
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
 local create_theme = require("actionless.common_theme").create_theme
-local color_utils = require("utils.color")
+local color_utils = require("actionless.util.color")
 
 local theme_name = "lcars-xresources-hidpi"
 
@@ -39,35 +39,17 @@ theme.panel_layoutbox = theme.xrdb.color7
 -- PANEL DECORATIONS:
 --
 theme.show_widget_icon = false
---theme.widget_decoration_arrl = ''
---theme.widget_decoration_arrr = ''
-
--- deprecated :
---theme.widget_decoration_arrl = ''
---theme.widget_decoration_arrr = ''
-
-theme.widget_decoration_arrl = '퟾'
-theme.widget_decoration_arrr = '퟿'
-theme.widget_decoration_arrl = '퟼'
-theme.widget_decoration_arrr = '퟽'
 
 theme.revelation_fg = theme.xrdb.color13
 theme.revelation_border_color = theme.xrdb.color13
 theme.revelation_bg = theme.panel_bg
 theme.revelation_font = "Monospace Bold 24"
 -- FONTS:
---theme.font = "Monospace Bold "..tostring(dpi(10))
---theme.small_font = "Monospace "..tostring(dpi(7))
---theme.sans_font = "Sans Bold "..tostring(dpi(10))
 theme.font = "Monospace Bold 10"
 theme.tasklist_font = theme.font
-theme.small_font = "Monospace 7"
 theme.sans_font = "Sans Bold 10"
 -- Don't use sans font:
 --theme.sans_font	= "theme.font"
-
---theme.font = "Roboto Condensed Bold "..tostring(dpi(10))
---theme.sans_font = "Roboto Condensed Bold "..tostring(dpi(10))
 
 --
 --MISC:
@@ -105,7 +87,7 @@ theme.useless_gap = dpi(4)
 theme.border_width = dpi(4)
 --theme.border_radius = dpi(5)
 
-local gtk_util = require("utils.gtk")
+local gtk_util = require("actionless.util.gtk")
 local gsc = gtk_util.get_theme_variables()
 theme.border_radius = dpi((gsc.border_radius or 1)*1.0)
 theme.panel_widget_border_radius = dpi((gsc.border_radius or 1)*0.8)
@@ -127,14 +109,13 @@ theme.menu_width		= dpi(150)
 theme.menu_border_color = theme.xrdb.color1
 
 --theme.apw_fg_color = "theme.xrdb.color8"
-theme.apw_bg_color = "theme.xrdb.color1"
+theme.apw_bg_color = "theme.xrdb.color8"
 theme.apw_mute_bg_color = "theme.xrdb.color1"
 theme.apw_mute_fg_color = "theme.xrdb.color9"
 
 
 --theme.taglist_squares_sel       = "theme.null"
 --theme.taglist_squares_unsel     = "theme.null"
---theme.taglist_fg_focus		= "theme.theme"
 theme.taglist_fg_focus		= "theme.bg"
 --theme.taglist_bg_focus		= "theme.xrdb.color6"
 if color_utils.is_dark(theme.xrdb.background) then
@@ -146,10 +127,8 @@ end
 --theme.taglist_bg_focus		= "theme.xrdb.color8"
 --theme.taglist_fg_focus		= "theme.xrdb.foreground"
 
---theme.titlebar_fg_focus		= "theme.titlebar_border"
---theme.titlebar_bg_focus		= "theme.titlebar_focus_border"
 theme.titlebar_fg_normal	= "theme.tasklist_fg_normal"
-theme.titlebar_bg_normal	= "theme.titlebar_border"
+theme.titlebar_bg_normal	= "theme.border_normal"
 theme.titlebar_fg_focus		= "theme.titlebar_fg_normal"
 theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
 theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
@@ -161,7 +140,6 @@ if theme.border_radius == 0 then
 end
 
 
---theme.titlebar_border           = theme.border_normal
 
 theme.panel_widget_spacing = dpi(10)
 theme.panel_widget_spacing_medium = dpi(8)
@@ -185,14 +163,13 @@ theme = create_theme({ theme_name=theme_name, theme=theme, })
 
 if awesome.composite_manager_running then
   --theme.titlebar_bg_normal = theme.titlebar_bg_normal .."66"
-  theme.border = theme.border .."66"
   theme.border_normal       = theme.border_normal .."66"
   theme.border_focus        = theme.border_focus .."66"
   theme.titlebar_bg_normal  = theme.titlebar_bg_normal.."dd"
-  --theme._titlebar_bg_normal = theme.titlebar_bg_normal.."dd"
-  theme._titlebar_bg_normal = theme.titlebar_bg_normal.."66"
+  --theme.actionless_titlebar_bg_normal = theme.titlebar_bg_normal.."dd"
+  theme.actionless_titlebar_bg_normal = theme.titlebar_bg_normal.."66"
   theme.titlebar_bg_focus   = theme.titlebar_bg_focus.."dd"
-  theme._titlebar_bg_focus  = theme.titlebar_bg_focus.."dd"
+  theme.actionless_titlebar_bg_focus  = theme.titlebar_bg_focus.."dd"
 end
 
 local theme_assets = require("beautiful.theme_assets")

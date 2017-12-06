@@ -38,19 +38,17 @@ function widget_loader.init(awesome_context)
     preset = conf.net_preset,
     wlan_if = conf.wlan_if,
     eth_if = conf.eth_if,
-    fg = beautiful.widget_netctl_bg,
-    bg = beautiful.widget_netctl_fg,
+    --fg = beautiful.widget_netctl_bg,
+    --bg = beautiful.widget_netctl_fg,
   })
   -- MUSIC
   w.music = widgets.music.widget({
       update_interval = 5,
       backends = conf.music_players,
-      music_dir = conf.music_dir,
       fg = beautiful.widget_music_bg,
       bg = beautiful.panel_bg,
       force_no_bgimage=true,
-      horizontal=true,
-      left_separators = lcarslist_enabled and {} or { 'arrl' },
+      --left_separators = lcarslist_enabled and {} or { 'arrl' },
       mopidy_player_command = awesome_context.cmds.tmux_run .. "ncmpcpp",
       enable_notifications = false,
       --valign = "bottom",
@@ -67,9 +65,9 @@ function widget_loader.init(awesome_context)
         --h_sep,
         --sep_media,
 
-        --wibox.widget.textbox(' '),
-        --w.netctl,
-        --wibox.widget.textbox(' '),
+        wibox.widget.textbox(' '),
+        w.netctl,
+        wibox.widget.textbox(' '),
 
         --sep_media,
         --h_sep,
@@ -81,24 +79,20 @@ function widget_loader.init(awesome_context)
     update_interval = 2,
     list_length = 20,
     --bg = beautiful.color["6"],
-    new_top = awesome_context.new_top,
-    horizontal=true,
   })
   -- CPU
   w.cpu = widgets.cpu({
     update_interval = 2,
     list_length = 20,
-    new_top = awesome_context.new_top,
-    horizontal=true,
   })
   -- Sensor
-  --w.temp = widgets.temp({
-    --update_interval = 10,
-    --sensor = awesome_context.sensor,
-    --warning = 75,
-    ----bg = beautiful.widget_temp_bg,
-    ----fg = beautiful.widget_temp_fg,
-  --})
+  w.temp = widgets.temp({
+    update_interval = 10,
+    sensor = awesome_context.sensor,
+    warning = 75,
+    --bg = beautiful.widget_temp_bg,
+    --fg = beautiful.widget_temp_fg,
+  })
   -- Battery
   if awesome_context.have_battery then
     w.bat = widgets.bat({
@@ -110,25 +104,18 @@ function widget_loader.init(awesome_context)
   end
 
   -- Textclock
-  if lcarslist_enabled then
-    w.lcars_textclock = widgets.common.decorated({
-      widget = wibox.widget.textclock("%H:%M"),
-      valign = "bottom",
-      fg=beautiful.clock_fg,
-    })
-    awful.widget.calendar_popup.month({}):attach(w.lcars_textclock, "tl", {on_hover=true})
-  end
-  local markup = require("utils.markup")
+  local markup = require("actionless.util.markup")
   local textclock = wibox.widget.textclock(markup.fg(beautiful.clock_fg or beautiful.panel_fg, "%H:%M"))
   w.textclock = textclock
   beautiful.calendar_month_padding = 40
   beautiful.calendar_month_border_color = beautiful.notification_border_color
   beautiful.calendar_month_border_width = beautiful.notification_border_width
-  awful.widget.calendar_popup.month({
+  w.calendar_popup = awful.widget.calendar_popup.month({
     spacing=dpi(3),
     margin=beautiful.useless_gap*6,
     opacity=beautiful.notification_opacity,
-  }):attach(w.textclock, nil, {on_hover=true})
+  })
+  w.calendar_popup:attach(w.textclock, nil, {on_hover=true})
 
 
   w.screen = {}
@@ -169,6 +156,12 @@ function widget_loader.init(awesome_context)
         --helpers.tag_view_noempty(1)
       --end)
     )
+
+    --sw.taglist = awful.widget.taglist{
+        --screen = s,
+        --filter = awful.widget.taglist.filter.noempty,
+        --buttons = sw.taglist.buttons
+    --}
     sw.taglist = awful.widget.taglist(
         s,
         awful.widget.taglist.filter.noempty,
@@ -178,8 +171,10 @@ function widget_loader.init(awesome_context)
     -- promptbox
     sw.promptbox = awful.widget.prompt()
     sw.promptbox.widget = widgets.common.widget({
-      margin = { left = dpi(8), right = dpi(8), }
+      margin = { left = dpi(8), right = dpi(8), },
+      show_icon = false,
     })
+    sw.promptbox.widget:set_text(nil)
     sw.promptbox.fg = beautiful.panel_widget_fg_warning
     sw.promptbox.bg = beautiful.panel_widget_bg_warning
     sw.promptbox.shape_border_width = beautiful.panel_widget_border_width or 0
@@ -245,6 +240,12 @@ function widget_loader.init(awesome_context)
       --end)
     )
 
+    --sw.tasklist = awful.widget.tasklist{
+      --screen = s,
+      --filter = awful.widget.tasklist.filter.minimizedcurrenttags,
+      --buttons = tasklist_buttons,
+      --update_function = tasklist_addon.sorted_update,
+    --}
     sw.tasklist = awful.widget.tasklist(
       s,
       awful.widget.tasklist.filter.minimizedcurrenttags,
@@ -257,31 +258,19 @@ function widget_loader.init(awesome_context)
     if lcarslist_enabled then
       sw.lcarslist = widgets.lcarslist(
         s,
-        awful.widget.tasklist.filter.alltags,
+        awful.widget.taglist.filter.noempty,
         tasklist_buttons,
-        nil,
-        tasklist_addon.list_update,
-        wibox.layout.fixed.vertical()
+        tasklist_addon.list_update
       )
-      -- layoutbox
-      sw.layoutbox = widgets.layoutbox({
-        screen = s,
-        fg = beautiful.widget_layoutbox_fg,
-        bg = beautiful.widget_layoutbox_bg,
-        --valign = "bottom",
-        --bg = theme.color.color8, -- 6
-        horizontal = false,
-      })
-    else
-      sw.layoutbox = widgets.layoutbox({
-        screen = s,
-        fg = beautiful.widget_layoutbox_bg,
-        bg = beautiful.widget_layoutbox_fg,
-        --valign = "bottom",
-        --bg = theme.color.color8, -- 6
-        horizontal = true,
-      })
     end
+    sw.layoutbox = widgets.layoutbox({
+      screen = s,
+      fg = beautiful.widget_layoutbox_bg,
+      bg = beautiful.widget_layoutbox_fg,
+      --valign = "bottom",
+      --bg = theme.color.color8, -- 6
+      horizontal = true,
+    })
 
 
 

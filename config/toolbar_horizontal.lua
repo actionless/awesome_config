@@ -3,9 +3,8 @@ local beautiful = require("beautiful")
 local dpi = beautiful.xresources.apply_dpi
 local awful = require("awful")
 
-local helpers = require("actionless.helpers")
-local widgets = require("actionless.widgets")
-local common = widgets.common
+local tag_helpers = require("actionless.util.tag")
+local common = require("actionless.widgets").common
 
 
 local toolbar = {}
@@ -29,17 +28,16 @@ function toolbar.init(awesome_context)
     separator
   )
 
-  awesome_context.topwibox_layout_fallback = {}
   -- Create a wibox for each screen and add it
   awful.screen.connect_for_each_screen(function(s)
     local si = s.index
 
     local wheel_binding = awful.util.table.join(
       awful.button({		}, 5, function(_)
-        helpers.tag_view_noempty(1, s)
+        tag_helpers.view_noempty(1, s)
       end),
       awful.button({		}, 4, function(_)
-        helpers.tag_view_noempty(-1, s)
+        tag_helpers.view_noempty(-1, s)
       end)
     )
 
@@ -83,16 +81,9 @@ function toolbar.init(awesome_context)
     -- RIGHT side
     --
 
-    local right_layout_left = wibox.layout.fixed.horizontal(
+    local right_layout_left = wibox.layout.flex.horizontal(
       loaded_widgets.music
     )
-
-    local right_layout_right = wibox.layout.fixed.horizontal(
-      separator
-    )
-    if not awesome_context.apw_on_the_left then
-      right_layout_right:add(apw)
-    end
 
     local indicators_layout = wibox.layout.fixed.horizontal(
       iseparator,
@@ -112,6 +103,12 @@ function toolbar.init(awesome_context)
     end
     indicators_layout = common.panel_shape(indicators_layout)
 
+    local right_layout_right = wibox.layout.fixed.horizontal(
+      separator
+    )
+    if not awesome_context.apw_on_the_left then
+      right_layout_right:add(apw)
+    end
     right_layout_right:add(
       indicators_layout,
       separator,
@@ -154,10 +151,10 @@ function toolbar.init(awesome_context)
       )
     end
 
-    awesome_context.topwibox_layout_fallback[si] = layout  -- this one!
+    awesome_context.topwibox_layout[si] = layout  -- this one!
 
     awesome_context.topwibox[si]:set_widget(
-      awesome_context.topwibox_layout_fallback[si]
+      awesome_context.topwibox_layout[si]
     )
   end)
 
