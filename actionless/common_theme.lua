@@ -102,6 +102,9 @@ function common_theme.generate_theme(theme_dir)
 
   theme.screen_padding		= 0
 
+  theme.border_radius = 0
+  theme.client_border_radius = "theme.border_radius"
+
   theme.panel_bg		= "theme.bg"
   theme.panel_fg		= "theme.fg"
   theme.panel_widget_bg		= "theme.fg"

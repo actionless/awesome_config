@@ -156,7 +156,7 @@ end
 --=============================================================================
 -- Window shape
 
-local function apply_shape(draw, shape, shape_args)
+local function apply_shape(draw, shape, outer_shape_args, inner_shape_args)
 
   local geo = draw:geometry()
 
@@ -173,7 +173,7 @@ local function apply_shape(draw, shape, shape_args)
   cr:set_operator(cairo.Operator.SOURCE)
   cr:set_source_rgba(1,1,1,1)
 
-  shape(cr, geo.width, geo.height, shape_args)
+  shape(cr, geo.width, geo.height, outer_shape_args)
   cr:fill()
   draw.shape_bounding = img._native
 
@@ -189,7 +189,7 @@ local function apply_shape(draw, shape, shape_args)
     cr,
     geo.width-border*2,
     geo.height-titlebar_height-border,
-    beautiful.border_radius*0.75
+    inner_shape_args
   )
   cr:fill()
   draw.shape_clip = img._native
@@ -202,7 +202,7 @@ local pending_shapes = {}
 local function round_up_client_corners(c, force, reference)
   if not force and ((
     -- @TODO: figure it out and uncomment
-    not beautiful.border_radius or beautiful.border_radius == 0
+    not beautiful.client_border_radius or beautiful.client_border_radius == 0
   ) or (
     not c.valid
   ) or (
@@ -238,11 +238,12 @@ local function round_up_client_corners(c, force, reference)
       return
     end
     -- Draw outer shape only if floating layout or useless gaps
-    local shape_args = 0
+    local outer_shape_args = 0
     if client_tag.layout.name == "floating" or client_tag:get_gap() ~= 0 then
-      shape_args = beautiful.border_radius
+      outer_shape_args = beautiful.client_border_radius
     end
-    apply_shape(c, gears.shape.rounded_rect, shape_args)
+    local inner_shape_args = beautiful.client_border_radius*0.75
+    apply_shape(c, gears.shape.rounded_rect, outer_shape_args, inner_shape_args)
     clog("apply_shape "..(reference or 'no_ref'), c)
     pending_shapes[c] = nil
     --nlog('OK F='..(force and "true" or 'nil').. ', R='..reference..', C='.. c.name)
