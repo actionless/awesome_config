@@ -11,7 +11,7 @@ local tag_helpers = require("actionless.util.tag")
 
 local function clog(msg, c) -- luacheck: ignore
   --nlog(msg)
-    --log(msg .. " " .. c.name .. " " .. tostring(c:tags()[1]))
+  --log(msg .. " " .. c.name .. " " .. tostring(c:tags()[1]))
   --if c and c.class == "Spotify" then nlog(msg) end
 end
 
@@ -156,16 +156,9 @@ end
 --=============================================================================
 -- Window shape
 
-local function apply_shape(draw, shape, ...)
-  local client_tag = choose_tag(draw)
+local function apply_shape(draw, shape, shape_args)
 
   local geo = draw:geometry()
-
-  -- Draw outer shape only if floating layout or useless gaps
-  local shape_args = 0
-  if client_tag.layout.name == "floating" or client_tag:get_gap() ~= 0 then
-    shape_args = ...
-  end
 
   local border = beautiful.base_border_width
   local titlebar_height = border
@@ -244,7 +237,12 @@ local function round_up_client_corners(c, force, reference)
       --nlog('R2 F='..(force and force or 'nil').. ', R='..reference..', C='.. c.name)
       return
     end
-    apply_shape(c, gears.shape.rounded_rect, beautiful.border_radius)
+    -- Draw outer shape only if floating layout or useless gaps
+    local shape_args = 0
+    if client_tag.layout.name == "floating" or client_tag:get_gap() ~= 0 then
+      shape_args = beautiful.border_radius
+    end
+    apply_shape(c, gears.shape.rounded_rect, shape_args)
     clog("apply_shape "..(reference or 'no_ref'), c)
     pending_shapes[c] = nil
     --nlog('OK F='..(force and "true" or 'nil').. ', R='..reference..', C='.. c.name)
