@@ -250,4 +250,8 @@ else
   theme.actionless_titlebar_bg_focus  = theme.gtk.wm_border_focused_color
 end
 
+if theme.border_radius > dpi(15) then
+  theme.border_radius = dpi(15)
+end
+
 return theme
