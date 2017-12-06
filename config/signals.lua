@@ -237,7 +237,8 @@ local function round_up_client_corners(c, force, reference)
     if client_tag.layout.name == "floating" or client_tag:get_gap() ~= 0 then
       outer_shape_args = beautiful.client_border_radius
     end
-    local inner_shape_args = beautiful.client_border_radius*0.75
+    --local inner_shape_args = beautiful.client_border_radius*0.75
+    local inner_shape_args = beautiful.client_border_radius - beautiful.base_border_width
     apply_shape(c, gears.shape.rounded_rect, outer_shape_args, inner_shape_args)
     clog("apply_shape "..(reference or 'no_ref'), c)
     pending_shapes[c] = nil
