@@ -40,8 +40,6 @@ function common_theme.generate_theme(theme_dir)
   --theme.wallpaper = theme.dir .. '/pattern.png'
 
   theme.show_widget_icon = false
-  theme.widget_decoration_arrl = ''
-  theme.widget_decoration_arrr = ''
 
   --Source*Pro:
   --theme.font = "Source Code Pro Bold 10.5"
@@ -52,58 +50,42 @@ function common_theme.generate_theme(theme_dir)
   -- use ~/.fonts.conf, Luke ;)
   theme.font = "Monospace Bold 10"
   theme.text_font = "Monospace 10"
-  theme.small_font = "Monospace 6"
   theme.sans_font = "Sans Bold 10"
   -- Don't use sans font:
   --theme.sans_font	= theme.font
 
   -- COLORS:
 
-  theme.error = "theme.xrdb.color9"
-  theme.warning = "theme.xrdb.color10"
-  theme.theme = "theme.xrdb.color13"
-
   theme.bg = "theme.xrdb.background"
   theme.alt_bg = "theme.xrdb.color4"
 
   theme.fg = "theme.xrdb.color7"
-  theme.alt_fg = "theme.xrdb.background"
 
-
-  theme.border                  = "theme.bg"
-  theme.sel_border              = "theme.xrdb.color10"
-  theme.titlebar_border         = "theme.border"
-  theme.titlebar_focus_border   = "theme.sel_border"
-  theme.base_border_width		= "6"
-  --theme.border_width		= "theme.base_border_width"
-  theme.border_width = 0
-  theme.client_border_width = 0
-  theme.border_normal		= "theme.border"
-  theme.border_focus		= "theme.sel_border"
-  theme.border_marked		= "theme.error"
-
-  theme.useless_gap_width = 20
-  theme.useless_gap_width = 40
-  theme.useless_gap = 20
+  theme.error = "theme.xrdb.color9"
+  theme.warning = "theme.xrdb.color10"
 
   theme.fg_normal		= "theme.fg"
   theme.bg_normal		= "theme.bg"
   theme.fg_focus		= "theme.bg"
-  theme.bg_focus		= "theme.theme"
+  theme.bg_focus		= "theme.xrdb.color13"
   theme.fg_urgent		= "theme.bg"
   theme.bg_urgent		= "theme.error"
-  theme.hotkeys_modifiers_fg	= "theme.xrdb.color8"
 
-  -- @TODO: check is_dark_bg ?
-  theme.hotkeys_label_bg	= "theme.xrdb.foreground"
-  theme.hotkeys_label_fg	= "theme.xrdb.background"
-  theme.hotkeys_border_color = "theme.hotkeys_modifiers_fg"
-  theme.hotkeys_border_width = dpi(2)
+  theme.border_normal		= "theme.bg"
+  theme.border_focus		= "theme.xrdb.color10"
+  theme.border_marked		= "theme.error"
+
+  theme.base_border_width	= dpi(3)
+  --theme.border_width		= "theme.base_border_width"
+  theme.border_width = 0
+
+  theme.useless_gap	        = dpi(10)
 
   theme.screen_padding		= 0
 
   theme.border_radius = 0
   theme.client_border_radius = "theme.border_radius"
+
 
   theme.panel_bg		= "theme.bg"
   theme.panel_fg		= "theme.fg"
@@ -116,14 +98,19 @@ function common_theme.generate_theme(theme_dir)
   theme.panel_widget_fg_error 	= "theme.bg"
   theme.panel_widget_bg_disabled = "theme.xrdb.color8"
   theme.panel_widget_fg_disabled = "theme.bg"
+
   --theme.panel_opacity		= 0.96
   --theme.panel_opacity		= 0.92
   theme.panel_opacity		= 0.87
-  theme.basic_panel_height	= 18
-  theme.panel_height		= 24
-  theme.panel_padding_bottom	= 6
-  theme.panel_enbolden_details	= false
+
+  theme.basic_panel_height	= dpi(18)
+  theme.panel_height		= dpi(24)
+  theme.panel_padding_bottom	= dpi(6)
+
   theme.panel_widget_border_radius = 4
+
+  -- @TODO: remove this block
+  theme.panel_enbolden_details	= false
   theme.panel_widget_spacing = 20
   theme.panel_widget_spacing_medium = 16
   theme.panel_widget_spacing_small = 8
@@ -132,7 +119,7 @@ function common_theme.generate_theme(theme_dir)
 
   theme.left_panel_width = 120
   theme.left_widget_min_height = 120
-theme.left_panel_internal_corner_radius = 30
+  theme.left_panel_internal_corner_radius = 30
   --theme.widget_notification_position = "top_left"
   theme.widget_notification_position = "top_right"
 
@@ -152,7 +139,7 @@ theme.left_panel_internal_corner_radius = 30
   theme.taglist_fg_occupied	= "theme.bg"
   theme.taglist_bg_occupied	= "theme.panel_taglist"
   theme.taglist_fg_empty	= "theme.bg"
-  theme.taglist_bg_empty	= "theme.theme"
+  theme.taglist_bg_empty	= "theme.tasklist_bg_minimize"
   theme.taglist_fg_focus	= "theme.panel_taglist"
   theme.taglist_bg_focus	= "theme.bg"
 
@@ -198,7 +185,7 @@ theme.left_panel_internal_corner_radius = 30
   theme.titlebar_fg_focus	= "theme.tasklist_fg_focus"
   theme.titlebar_bg_focus	= "theme.bg"
   theme.titlebar_fg_normal	= "theme.tasklist_fg_normal"
-  theme.titlebar_bg_normal      = "theme.border"
+  theme.titlebar_bg_normal      = "theme.border_normal"
   theme.actionless_titlebar_bg_focus	= "theme.titlebar_bg_focus"
   theme.actionless_titlebar_bg_normal      = "theme.titlebar_bg_normal"
   --theme.titlebar_bg_normal	= "theme.bg"
@@ -208,7 +195,7 @@ theme.left_panel_internal_corner_radius = 30
   theme.notification_monofont	= "theme.font"
   theme.notification_bg = "theme.bg_normal"
   theme.notification_fg = "theme.fg_normal"
-  theme.notification_border_color = "theme.theme"
+  theme.notification_border_color = "theme.bg_focus"
   theme.notification_border_color = "theme.xrdb.color8"
   theme.notification_border_width = 4
   theme.notification_margin = 16
@@ -228,6 +215,16 @@ theme.left_panel_internal_corner_radius = 30
 
   theme.apw_bg_color = "theme.panel_bg"
   theme.apw_fg_color = "theme.panel_media"
+
+
+  theme.hotkeys_modifiers_fg	= "theme.xrdb.color8"
+  -- @TODO: check is_dark_bg ?
+  theme.hotkeys_label_bg	= "theme.xrdb.foreground"
+  theme.hotkeys_label_fg	= "theme.xrdb.background"
+  theme.hotkeys_border_color = "theme.hotkeys_modifiers_fg"
+  theme.hotkeys_border_width = dpi(2)
+
+
 
   -- ICONS
 
@@ -285,6 +282,11 @@ theme.left_panel_internal_corner_radius = 30
 
 return theme
 end
+
+
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+
 
 function common_theme.fill_theme(theme)
   local new_theme = {}

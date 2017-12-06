@@ -321,7 +321,6 @@ function titlebar.make_titlebar(c, color, shadow)
     titlebar.make_border(c, color, shadow, true)
   end
 
-  --c.border_color = beautiful.titlebar_focus_border
   local tbt = awful.titlebar(c, {
       size=beautiful.titlebar_height or 16,
       position = beautiful.titlebar_position,

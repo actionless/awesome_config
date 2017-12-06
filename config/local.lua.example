@@ -33,7 +33,6 @@ function local_config.init(awesome_context)
     beautiful.panel_widget_font = beautiful.tasklist_font
     beautiful.taglist_font =  beautiful.font
     beautiful.titlebar_font =  beautiful.font
-    beautiful.small_font = "Monospace 8"
     beautiful.sans_font = "Sans 11"
   end
 

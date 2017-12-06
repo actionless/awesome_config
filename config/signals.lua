@@ -47,11 +47,9 @@ local function _on_client_unfocus (c)
   elseif c.floating then
     clog("U: floating client", c)
     titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
-    c.border_color = beautiful.titlebar_border
   elseif layout == awful.layout.suit.floating then
     clog(c, "U: floating layout", c)
     titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
-    c.border_color = beautiful.titlebar_border
   elseif num_tiled > 1 then
     clog("U: multiple tiling clients", c)
     titlebar.make_border(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)

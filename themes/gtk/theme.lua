@@ -100,7 +100,6 @@ theme.revelation_font = "Monospace Bold 24"
 theme.font = "Monospace Bold 10"
 --theme.font = "Sans Bold 10"
 theme.tasklist_font = theme.font
-theme.small_font = "Monospace 7"
 theme.sans_font = "Sans Bold 10"
 -- Don't use sans font:
 --theme.sans_font	= "theme.font"
@@ -153,7 +152,6 @@ theme.apw_mute_fg_color = "theme.xrdb.color9"
 
 --theme.taglist_squares_sel       = "theme.null"
 --theme.taglist_squares_unsel     = "theme.null"
---theme.taglist_fg_focus		= "theme.theme"
 theme.taglist_fg_focus		= gsc.selected_fg_color
 theme.taglist_bg_focus		= gsc.selected_bg_color
 --theme.taglist_bg_focus		= {
@@ -175,9 +173,8 @@ theme.taglist_bg_occupied = gsc.header_button_bg_color
 
 theme.border_normal = gsc.menubar_bg_color
 theme.border_focus = gsc.wm_border_focused_color
-theme.titlebar_border = gsc.menubar_bg_color
 theme.titlebar_fg_normal	= color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color)
-theme.titlebar_bg_normal	= "theme.titlebar_border"
+theme.titlebar_bg_normal	= gsc.menubar_bg_color
 theme.notification_border_radius = "theme.border_radius"
 
 if theme.border_radius > 0 then
@@ -196,8 +193,6 @@ if theme.border_radius > 0 then
   theme.notification_shape = rounded_rect_shape
   theme.tasklist_shape_minimized = less_rounded_rect_shape
 else
-  --theme.titlebar_fg_focus		= theme.titlebar_border
-  --theme.titlebar_bg_focus		= theme.bg_focus
   theme.titlebar_fg_focus		= gsc.selected_fg_color
   theme.titlebar_bg_focus		= gsc.wm_border_focused_color
   --theme.actionless_titlebar_bg_focus = gsc.wm_border_focused_color
@@ -236,7 +231,6 @@ else
 end
 
 if awesome.composite_manager_running then
-  theme.border = theme.border .."dd"
   theme.border_normal       = theme.border_normal .."dd"
   theme.border_focus        = theme.border_focus .."dd"
   theme.titlebar_bg_normal  = theme.titlebar_bg_normal.."dd"
