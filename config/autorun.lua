@@ -7,7 +7,7 @@ local autorun = {}
 
 function autorun.init(awesome_context)
 
-  awful.spawn.with_shell('pgrep vmtoolsd && /usr/bin/vmware-user-suid-wrapper')
+  awful.spawn.with_shell('pgrep vmtoolsd >/dev/null && /usr/bin/vmware-user-suid-wrapper')
   --awful_spawn.with_shell(os.getenv('HOME').."/.screenlayout/awesome.sh")
 
   --local kensinton =12
