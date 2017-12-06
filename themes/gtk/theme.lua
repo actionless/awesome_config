@@ -198,8 +198,9 @@ if theme.border_radius > 0 then
 else
   --theme.titlebar_fg_focus		= theme.titlebar_border
   --theme.titlebar_bg_focus		= theme.bg_focus
-  --theme.titlebar_fg_focus		= gsc.selected_fg_color
+  theme.titlebar_fg_focus		= gsc.selected_fg_color
   theme.titlebar_bg_focus		= gsc.wm_border_focused_color
+  --theme.actionless_titlebar_bg_focus = gsc.wm_border_focused_color
   theme.notification_shape = nil
 end
 
@@ -213,10 +214,13 @@ theme.panel_widget_fg_error = theme.xrdb.color15
 --theme.widget_music_bg = color_utils.mix(MAIN_COLOR, gsc.menubar_fg_color, 0.6)
 --theme.widget_music_bg = MAIN_COLOR
 theme.widget_music_bg = "theme.border_focus"
---
 
+
+-------------------------------------------------------------------------------
 
 theme = create_theme({ theme_name=theme_name, theme=theme, })
+
+-------------------------------------------------------------------------------
 
 
 -- Recolor titlebar icons:
