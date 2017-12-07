@@ -293,7 +293,6 @@ function keys.init(awesome_context)
     bind_key({ modkey, "Control"  }, "n",
       function()
         local c = awful.client.restore()
-        -- @TODO: it's a workaround for some strange upstream issue
         if c then client.focus = c end
       end,
       "de-iconify client", CLIENT_MANIPULATION

@@ -26,10 +26,6 @@ function menu_addon.clients_on_tag(args, item_args)
       table.insert(cls_t, {
         escape_f(c.name) or "",
         function ()
-          -- @TODO: i think it can be safely deleted:
-          --if not c:isvisible() then
-          --  tags.viewmore(c:tags(), c.screen)
-          --end
           capi.client.focus = c
           c:raise()
         end,
