@@ -1,6 +1,8 @@
 local capi = {client = client}
 local awful = require("awful")
 local naughty = require("naughty")
+local gears_geometry = require("gears.geometry")
+
 
 local tmux = {}
 
@@ -16,7 +18,7 @@ function tmux.swap_bydirection(dir, c, stacked)
     end
   end
 
-  local target_client_id = awful.util.get_rectangle_in_direction(
+  local target_client_id = gears_geometry.rectangle.get_in_direction(
     dir, client_geometries, focused_client:geometry()
   )
 
