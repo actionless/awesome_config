@@ -1,4 +1,3 @@
-local capi = {client = client}
 local awful = require("awful")
 local naughty = require("naughty")
 local gears_geometry = require("gears.geometry")
@@ -8,7 +7,7 @@ local tmux = {}
 
 function tmux.swap_bydirection(dir, c, stacked)
   local tmux_session_pattern = "%[(%d+)%]"
-  local focused_client = c or capi.client.focus
+  local focused_client = c or client.focus
   if not focused_client then return end
   local visible_clients = awful.client.visible(focused_client.screen, stacked)
   local client_geometries = {}
@@ -32,6 +31,7 @@ function tmux.swap_bydirection(dir, c, stacked)
     "tmux move-window -s %d: -t %d:",
     source_tmux_session, target_tmux_session
   ))
+  client.focus = visible_clients[target_client_id]
 end
 
 return tmux
