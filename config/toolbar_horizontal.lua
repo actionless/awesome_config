@@ -47,91 +47,75 @@ function toolbar.init(awesome_context)
     left_margin:buttons(manage_client._buttons_table)
     left_margin:connect_signal("mouse::enter", manage_client._on_mouse_enter)
     left_margin:connect_signal("mouse::leave", manage_client._on_mouse_leave)
-    local left_layout_left = wibox.layout.fixed.horizontal(
-      left_margin,
-      common.panel_shape(loaded_widgets.screen[si].manage_client),
-      sep,
-      loaded_widgets.screen[si].promptbox,
-      sep,
-      sep,
-      loaded_widgets.kbd,
-      sep
-    )
-    local left_layout_middle = wibox.layout.fixed.horizontal(
-      loaded_widgets.screen[si].tasklist,
-      separator
-    )
-    left_layout_left:buttons(wheel_binding)
-    left_layout_middle:buttons(wheel_binding)
     local left_layout = wibox.widget{
-      left_layout_left,
-      left_layout_middle,
-      awesome_context.apw_on_the_left and apw,
       layout = wibox.layout.align.horizontal,
-      expand = 'inside'
+      expand = 'inside',
+      {
+        layout = wibox.layout.fixed.horizontal,
+        buttons = wheel_binding,
+        left_margin,
+        common.panel_shape(manage_client),
+        sep,
+        loaded_widgets.screen[si].promptbox,
+        sep,
+        sep,
+        loaded_widgets.kbd,
+        sep
+      },
+      {
+        layout = wibox.layout.fixed.horizontal,
+        buttons = wheel_binding,
+        loaded_widgets.screen[si].tasklist,
+        separator
+      },
+      awesome_context.apw_on_the_left and apw,
     }
-
 
     -- CENTER
     local center_layout = common.panel_shape(loaded_widgets.screen[si].taglist)
     center_layout:buttons(wheel_binding)
 
-
     -- RIGHT side
-    --
-
-    local right_layout_left = wibox.layout.flex.horizontal(
-      loaded_widgets.music
-    )
-
     local iseparator  = wibox.container.background(separator, beautiful.panel_widget_bg)
-    local indicators_layout = wibox.layout.fixed.horizontal(
-      iseparator,
-      iseparator,
-      loaded_widgets.mem,
-      iseparator,
-      iseparator,
-      loaded_widgets.cpu,
-      iseparator,
-      iseparator
-    )
-    if loaded_widgets.temp then
-      indicators_layout:add(loaded_widgets.temp)
-    end
-    if loaded_widgets.bat then
-      indicators_layout:add(loaded_widgets.bat)
-    end
-    indicators_layout = common.panel_shape(indicators_layout)
-
-    local right_layout_right = wibox.layout.fixed.horizontal(
-      separator
-    )
-    if not awesome_context.apw_on_the_left then
-      right_layout_right:add(apw)
-    end
-    right_layout_right:add(
-      indicators_layout,
+    local right_layout = wibox.widget{
+      layout = wibox.layout.align.horizontal,
       separator,
-      separator,
-      loaded_widgets.textclock,
-      separator,
-      sep,
-      sep,
-      loaded_widgets.screen[si].layoutbox,
-      separator,
-      sep,
-      si==1 and common.panel_shape(loaded_widgets.systray_toggle) or separator
-    )
-
-    local right_layout = wibox.layout.align.horizontal(
-      separator,
-      right_layout_left,
-      right_layout_right
-    )
-    --right_layout:set_expand('none')
+      {
+        layout = wibox.layout.flex.horizontal,
+        loaded_widgets.music
+      },
+      {
+        layout = wibox.layout.fixed.horizontal,
+        separator,
+        not awesome_context.apw_on_the_left and apw,
+        common.panel_shape(wibox.widget{
+          layout = wibox.layout.fixed.horizontal,
+          iseparator,
+          iseparator,
+          loaded_widgets.mem,
+          iseparator,
+          iseparator,
+          loaded_widgets.cpu,
+          iseparator,
+          iseparator,
+          loaded_widgets.temp and loaded_widgets.temp,
+          loaded_widgets.bat and loaded_widgets.bat,
+        }),
+        separator,
+        separator,
+        loaded_widgets.textclock,
+        separator,
+        sep,
+        sep,
+        loaded_widgets.screen[si].layoutbox,
+        separator,
+        sep,
+        si==1 and common.panel_shape(loaded_widgets.systray_toggle) or separator,
+      }
+    }
 
 
-    -- TOOLBAR
+    -- PANEL LAYOUT
     local layout = wibox.layout.align.horizontal(
       left_layout,
       center_layout,
