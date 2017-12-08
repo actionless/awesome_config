@@ -154,6 +154,11 @@ function common.widget(args)
 end
 
 
+--[[
+--------------------------------------------------------------------------------
+         Decorated widget entrypoint
+--------------------------------------------------------------------------------
+--]]
 
 function common.decorated(args)
   args = args or {}
