@@ -15,8 +15,7 @@ function toolbar.init(awesome_context)
 
   -- Separators
   local sep = common.constraint({ width=dpi(2), })
-  local separator  = common.constraint({ width=dpi(8), })
-  local iseparator  = wibox.container.background(separator, beautiful.panel_widget_bg)
+  local separator  = common.constraint({ width=beautiful.panel_widget_spacing, })
 
   local apw = wibox.layout.fixed.horizontal(
     common.panel_shape(
@@ -85,6 +84,7 @@ function toolbar.init(awesome_context)
       loaded_widgets.music
     )
 
+    local iseparator  = wibox.container.background(separator, beautiful.panel_widget_bg)
     local indicators_layout = wibox.layout.fixed.horizontal(
       iseparator,
       iseparator,

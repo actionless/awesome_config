@@ -65,7 +65,7 @@ local function worker(args)
         layoutbox.n_col,
         layoutbox.mfpol
     )
-    layoutbox.widget.spacing = beautiful.panel_widget_spacing_medium
+    layoutbox.widget.spacing = beautiful.panel_widget_spacing
 
     local layouts_menu_items = {}
     for _, layout in ipairs(awful.layout.layouts) do

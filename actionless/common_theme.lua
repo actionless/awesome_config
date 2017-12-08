@@ -75,17 +75,36 @@ function common_theme.generate_theme(theme_dir)
   theme.border_focus		= "theme.xrdb.color10"
   theme.border_marked		= "theme.error"
 
+  -- GLOBAL BORDERS:
+
   theme.base_border_width	= dpi(3)
   --theme.border_width		= "theme.base_border_width"
   theme.border_width = 0
-
-  theme.useless_gap	        = dpi(10)
-
-  theme.screen_padding		= 0
-
   theme.border_radius = 0
   theme.client_border_radius = "theme.border_radius"
 
+  theme.useless_gap	        = dpi(10)
+  theme.screen_padding		= 0
+
+  -- PANEL OPTIONS:
+
+  --theme.panel_opacity		= 0.96
+  --theme.panel_opacity		= 0.92
+  theme.panel_opacity		= 0.87
+  theme.basic_panel_height	= dpi(18)
+  theme.panel_padding_bottom	= dpi(6)
+  theme.panel_height		= theme.basic_panel_height + theme.panel_padding_bottom
+  theme.panel_widget_spacing	= dpi(8)
+  theme.panel_widget_border_radius = dpi(2)
+
+  theme.left_panel_width = dpi(120)
+  theme.left_widget_min_height = dpi(120)
+  theme.left_panel_internal_corner_radius = dpi(30)
+  --theme.widget_notification_position = "top_left"
+  theme.widget_notification_position = "top_right"
+
+
+  -- PANEL COLORS:
 
   theme.panel_bg		= "theme.bg"
   theme.panel_fg		= "theme.fg"
@@ -99,41 +118,10 @@ function common_theme.generate_theme(theme_dir)
   theme.panel_widget_bg_disabled = "theme.xrdb.color8"
   theme.panel_widget_fg_disabled = "theme.bg"
 
-  --theme.panel_opacity		= 0.96
-  --theme.panel_opacity		= 0.92
-  theme.panel_opacity		= 0.87
-
-  theme.basic_panel_height	= dpi(18)
-  theme.panel_height		= dpi(24)
-  theme.panel_padding_bottom	= dpi(6)
-
-  theme.panel_widget_border_radius = 4
-
-  -- @TODO: remove this block
-  theme.panel_enbolden_details	= false
-  theme.panel_widget_spacing = 20
-  theme.panel_widget_spacing_medium = 16
-  theme.panel_widget_spacing_small = 8
-
-  theme.tasklist_spacing = "theme.panel_padding_bottom"
-
-  theme.left_panel_width = 120
-  theme.left_widget_min_height = 120
-  theme.left_panel_internal_corner_radius = 30
-  --theme.widget_notification_position = "top_left"
-  theme.widget_notification_position = "top_right"
-
-  -- PANEL COLORS:
-  --
-  theme.panel_taglist = "theme.xrdb.color7"
+  theme.panel_taglist = "theme.fg"
   theme.panel_close = "theme.xrdb.color1"
-  theme.panel_tasklist = "theme.xrdb.colorbg"
   theme.panel_media = "theme.xrdb.color14"
-  theme.panel_info = "theme.xrdb.color13"
   theme.panel_layoutbox = "theme.alt_bg"
-
-  theme.widget_taglist_bg = "theme.panel_taglist"
-  theme.widget_taglist_fg = "theme.panel_widget_fg"
 
   theme.taglist_font		= "theme.font"
   theme.taglist_fg_occupied	= "theme.bg"
@@ -143,12 +131,7 @@ function common_theme.generate_theme(theme_dir)
   theme.taglist_fg_focus	= "theme.panel_taglist"
   theme.taglist_bg_focus	= "theme.bg"
 
-  theme.widget_close_bg = "theme.panel_close"
-  theme.widget_close_fg = "theme.panel_widget_fg"
-  --theme.widget_close_left_decorators = { 'arrl' }
-  theme.widget_close_left_decorators = { 'sq', 'sq' }
-  theme.widget_close_right_decorators = { 'sq', 'sq' }
-
+  theme.tasklist_spacing	= "theme.panel_padding_bottom"
   theme.tasklist_font		= "theme.sans_font"
   theme.tasklist_fg_focus	= "theme.alt_bg"
   theme.tasklist_bg_focus	= "theme.bg"
@@ -157,38 +140,29 @@ function common_theme.generate_theme(theme_dir)
   theme.tasklist_fg_minimize	= "theme.bg"
   theme.tasklist_bg_minimize	= "theme.alt_bg"
 
-  theme.widget_netctl_bg = "theme.panel_media"
-  theme.widget_netctl_fg = "theme.panel_widget_fg"
+  theme.widget_close_bg = "theme.panel_close"
+  theme.widget_close_fg = "theme.panel_widget_fg"
   theme.widget_music_bg = "theme.panel_media"
   theme.widget_music_fg = "theme.panel_widget_fg"
-  theme.widget_alsa_bg = "theme.panel_media"
-  theme.widget_alsa_fg = "theme.panel_widget_fg"
-
-  theme.widget_mem_bg  = "theme.panel_info"
-  theme.widget_mem_fg  = "theme.panel_widget_fg"
-  theme.widget_cpu_bg  = "theme.panel_info"
-  theme.widget_cpu_fg  = "theme.panel_widget_fg"
-  theme.widget_temp_bg = "theme.panel_info"
-  theme.widget_temp_fg = "theme.panel_widget_fg"
-  theme.widget_bat_bg  = "theme.panel_info"
-  theme.widget_bat_fg  = "theme.panel_widget_fg"
-
   theme.widget_layoutbox_bg = "theme.panel_layoutbox"
   theme.widget_layoutbox_fg = "theme.panel_widget_fg"
 
+  theme.apw_bg_color = "theme.panel_bg"
+  theme.apw_fg_color = "theme.panel_media"
 
-  theme.titlebar_height		= 28
-  theme.titlebar_opacity	= 0.7
+
+  theme.titlebar_height		= dpi(14)
+  --theme.titlebar_opacity	= 0.7
   theme.titlebar_opacity	= 0.6
   theme.titlebar_position	= 'top'
   theme.titlebar_font		= "theme.font"
   theme.titlebar_fg_focus	= "theme.tasklist_fg_focus"
   theme.titlebar_bg_focus	= "theme.bg"
   theme.titlebar_fg_normal	= "theme.tasklist_fg_normal"
+  --theme.titlebar_bg_normal	= "theme.bg"
   theme.titlebar_bg_normal      = "theme.border_normal"
   theme.actionless_titlebar_bg_focus	= "theme.titlebar_bg_focus"
   theme.actionless_titlebar_bg_normal      = "theme.titlebar_bg_normal"
-  --theme.titlebar_bg_normal	= "theme.bg"
 
   theme.notification_opacity	= 0.8
   theme.notification_font	= "theme.sans_font"
@@ -197,27 +171,16 @@ function common_theme.generate_theme(theme_dir)
   theme.notification_fg = "theme.fg_normal"
   theme.notification_border_color = "theme.bg_focus"
   theme.notification_border_color = "theme.xrdb.color8"
-  theme.notification_border_width = 4
-  theme.notification_margin = 16
+  theme.notification_border_width = dpi(2)
+  theme.notification_margin = dpi(8)
+
+  theme.mouse_finder_color	= "theme.error"
+  theme.menu_border_width		= dpi(3)
+  theme.menu_height		= dpi(18)
+  theme.menu_width		= dpi(140)
 
   theme.hotkeys_shape = "theme.notification_shape"
-
-  theme.textbox_widget_margin_top	= 1
-  theme.awful_widget_height	= 14
-  theme.awful_widget_margin_top	= 2
-  theme.mouse_finder_color	= "theme.error"
-  theme.menu_border_width		= 3
-  theme.menu_height		= 16
-  theme.menu_width		= 140
-
-  theme.player_artist		= "theme.xrdb.color13"
-  theme.player_title      = "theme.panel_media"
-
-  theme.apw_bg_color = "theme.panel_bg"
-  theme.apw_fg_color = "theme.panel_media"
-
-
-  theme.hotkeys_modifiers_fg	= "theme.xrdb.color8"
+  theme.hotkeys_modifiers_fg	= "theme.panel_widget_bg_disabled"
   -- @TODO: check is_dark_bg ?
   theme.hotkeys_label_bg	= "theme.xrdb.foreground"
   theme.hotkeys_label_fg	= "theme.xrdb.background"

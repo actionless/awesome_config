@@ -38,8 +38,6 @@ function widget_loader.init(awesome_context)
     preset = conf.net_preset,
     wlan_if = conf.wlan_if,
     eth_if = conf.eth_if,
-    --fg = beautiful.widget_netctl_bg,
-    --bg = beautiful.widget_netctl_fg,
   })
   -- MUSIC
   w.music = widgets.music.widget({
@@ -78,7 +76,6 @@ function widget_loader.init(awesome_context)
   w.mem = widgets.mem({
     update_interval = 2,
     list_length = 20,
-    --bg = beautiful.color["6"],
   })
   -- CPU
   w.cpu = widgets.cpu({
@@ -90,8 +87,6 @@ function widget_loader.init(awesome_context)
     update_interval = 10,
     sensor = awesome_context.sensor,
     warning = 75,
-    --bg = beautiful.widget_temp_bg,
-    --fg = beautiful.widget_temp_fg,
   })
   -- Battery
   if awesome_context.have_battery then

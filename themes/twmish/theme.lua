@@ -79,12 +79,8 @@ theme.color = xresources.get_current_theme()
 --
 theme.panel_taglist = gsc.base_color
 theme.panel_close = MAIN_COLOR
---theme.panel_tasklist = gsc.menubar_bg_color
 theme.panel_media = MAIN_COLOR
-theme.panel_info = theme.xrdb.color13
 theme.panel_layoutbox = theme.xrdb.color7
---theme.widget_layoutbox_bg = theme.panel_layoutbox
---theme.widget_layoutbox_fg = theme.panel_widget_fg
 
 -- WALLPAPER:
 -- Use nitrogen:
@@ -188,9 +184,7 @@ theme.titlebar_fg_normal	= "theme.titlebar_fg_focus"
   --theme.border_normal = color_utils.darker(theme.xrdb.background, 20)
 --end
 
-theme.panel_widget_spacing = dpi(10)
-theme.panel_widget_spacing_medium = dpi(8)
-theme.panel_widget_spacing_small = dpi(4)
+theme.panel_widget_spacing = dpi(8)
 
 --theme.panel_widget_bg		= theme.xrdb.color3
 theme.panel_widget_bg_error = theme.xrdb.color1

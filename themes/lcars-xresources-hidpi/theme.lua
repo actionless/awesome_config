@@ -29,12 +29,8 @@ theme.xrdb = xresources.get_current_theme()
 --
 theme.panel_taglist = theme.xrdb.color7
 theme.panel_close = theme.xrdb.color1
-theme.panel_tasklist = theme.xrdb.background
 theme.panel_media = theme.xrdb.color14
-theme.panel_info = theme.xrdb.color13
 theme.panel_layoutbox = theme.xrdb.color7
---theme.widget_layoutbox_bg = theme.panel_layoutbox
---theme.widget_layoutbox_fg = theme.panel_widget_fg
 
 -- PANEL DECORATIONS:
 --
@@ -141,9 +137,7 @@ end
 
 
 
-theme.panel_widget_spacing = dpi(10)
-theme.panel_widget_spacing_medium = dpi(8)
-theme.panel_widget_spacing_small = dpi(4)
+theme.panel_widget_spacing = dpi(8)
 
 --theme.panel_widget_bg		= theme.xrdb.color3
 theme.panel_widget_bg_error = theme.xrdb.color1
