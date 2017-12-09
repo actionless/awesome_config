@@ -232,7 +232,7 @@ local function worker(args)
 -------------------------------------------------------------------------------
 function player.resize_cover()
   local notification_callback
-  if player.enable_notifications or player.id then
+  if player.enable_notifications or (player.id and player.id.box.visible) then
     notification_callback = player.show_notification
   else
     notification_callback = function() end
