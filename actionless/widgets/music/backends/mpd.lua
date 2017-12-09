@@ -80,8 +80,10 @@ end
 function mpd.resize_cover(
   player_status, cover_size, default_art, notification_callback
 )
-  local _, _, _ = player_status, cover_size, default_art
-  return notification_callback()
+  if notification_callback then
+    local _, _, _ = player_status, cover_size, default_art
+    return notification_callback()
+  end
 end
 
 return mpd

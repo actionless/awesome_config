@@ -20,7 +20,7 @@ local backend_modules	= require("actionless.widgets.music.backends")
 
 -- player infos
 local player = {
-  id=nil,
+  notification_object=nil,
   cmd=nil,
   player_status = {
     state=nil,
@@ -94,9 +94,9 @@ local function worker(args)
   end
 -------------------------------------------------------------------------------
   function player.hide_notification()
-    if player.id ~= nil then
-      naughty.destroy(player.id)
-      player.id = nil
+    if player.notification_object ~= nil then
+      naughty.destroy(player.notification_object)
+      player.notification_object = nil
     end
   end
 -------------------------------------------------------------------------------
@@ -120,7 +120,7 @@ local function worker(args)
     else
       text = enabled_backends[backend_id]
     end
-    player.id = naughty.notify({
+    player.notification_object = naughty.notify({
       icon = player.cover,
       title = ps.title,
       text = text,
@@ -232,10 +232,8 @@ local function worker(args)
 -------------------------------------------------------------------------------
 function player.resize_cover()
   local notification_callback
-  if player.enable_notifications or (player.id and player.id.box.visible) then
+  if player.enable_notifications or (player.notification_object and player.notification_object.box.visible) then
     notification_callback = player.show_notification
-  else
-    notification_callback = function() end
   end
   -- backend supports it:
   if player.backend.resize_cover then

@@ -91,7 +91,9 @@ function mopidy.parse_metadata(result_string, parse_status_callback)
 end
 
 function mopidy.resize_cover(_, _, _, notification_callback)
-  return notification_callback()
+  if notification_callback then
+    return notification_callback()
+  end
 end
 
 return mopidy
