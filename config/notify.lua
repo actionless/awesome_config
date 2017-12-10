@@ -1,5 +1,8 @@
 local naughty = require("naughty")
 local beautiful = require("beautiful")
+local gfs = require("gears.filesystem")
+local surface = require("gears.surface")
+local util = require("awful.util")
 
 local awesome = awesome
 
@@ -21,6 +24,37 @@ function notify.init(_)
 
   naughty.config.presets.critical.opacity = beautiful.notification_opacity
   naughty.config.presets.critical.font = beautiful.notification_font
+
+  local naughty_max_icon_size = beautiful.notification_max_icon_size
+  -- a) notification icons will be hardcoded to the size:
+  --naughty.config.defaults.icon_size = naughty_max_icon_size
+  -- b) notification icons will be only downscaled if bigger than max size:
+  naughty.config.notify_callback = function(args)
+    if args.icon then
+      local icon = args.icon
+      -- Is this really an URI instead of a path?
+      if type(icon) == "string" and string.sub(icon, 1, 7) == "file://" then
+          icon = string.sub(icon, 8)
+          -- urldecode URI path
+          icon = string.gsub(icon, "%%(%x%x)", function(x) return string.char(tonumber(x, 16)) end )
+      end
+      -- try to guess icon if the provided one is non-existent/readable
+      if type(icon) == "string" and not gfs.file_readable(icon) then
+          icon = util.geticonpath(icon, naughty.config.icon_formats, naughty.config.icon_dirs) or icon
+      end
+      -- is the icon file readable?
+      icon = surface.load_uncached(icon)
+      -- if we have an icon inspect its size
+      if icon then
+          local icon_w = icon:get_width()
+          local icon_h = icon:get_height()
+          if icon_h > naughty_max_icon_size or icon_w > naughty_max_icon_size then
+            args.icon_size = naughty_max_icon_size
+          end
+      end
+    end
+    return args
+  end
 
 
   -- {{{ Error handling

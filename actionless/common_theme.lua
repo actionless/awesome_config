@@ -173,6 +173,7 @@ function common_theme.generate_theme(theme_dir)
   theme.notification_border_color = "theme.xrdb.color8"
   theme.notification_border_width = dpi(2)
   theme.notification_margin = dpi(8)
+  theme.notification_max_icon_size = dpi(180)
 
   theme.mouse_finder_color	= "theme.error"
   theme.menu_border_width		= dpi(3)
