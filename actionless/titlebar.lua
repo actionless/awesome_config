@@ -11,7 +11,6 @@ local beautiful = require("beautiful")
 local color_utils = require("actionless.util.color")
 
 --
---bg=beautiful.desktop_bg,
 local TRANSPARENT = "#00000000"
 
 

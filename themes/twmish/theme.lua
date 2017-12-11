@@ -151,31 +151,22 @@ theme.apw_mute_bg_color = "theme.xrdb.color1"
 theme.apw_mute_fg_color = "theme.xrdb.color9"
 
 
-theme.desktop_bg = "#888888"
-local TODO_BORDER = "#708090"
---theme.border_normal = gsc.menubar_bg_color
-theme.border_normal = TODO_BORDER
---theme.border_normal = "#70809000"
-theme.border_focus = MAIN_COLOR
---theme.border_normal = "#00000000"
---theme.border_focus = "#00000000"
---theme.titlebar_fg_normal	= color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color)
+theme.border_normal = gsc.wm_border_unfocused_color
+theme.border_focus = gsc.wm_border_focused_color
 theme.titlebar_shadow_focus = gsc.fg_color.."cc"
---theme.titlebar_shadow_normal = gsc.fg_color.."32"
 theme.titlebar_shadow_normal = gsc.fg_color.."38"
-theme.titlebar_bg_normal	= TODO_BORDER.."00"
-theme.actionless_titlebar_bg_normal	= TODO_BORDER
+theme.titlebar_bg_normal	= "#00000000"
+theme.actionless_titlebar_bg_normal	= gsc.wm_border_unfocused_color
 if theme.border_radius > 0 then
   theme.titlebar_fg_focus		= gsc.menubar_fg_color
   theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
+  theme.actionless_titlebar_bg_focus	= theme.titlebar_bg_focus
 else
-  --theme.titlebar_bg_focus		= theme.bg_focus
   theme.titlebar_fg_focus		= gsc.selected_fg_color
-  theme.titlebar_bg_focus		= gsc.selected_bg_color
-  theme.titlebar_bg_focus		= gsc.selected_bg_color.."00"
-  theme.actionless_titlebar_bg_focus		= gsc.selected_bg_color
+  theme.titlebar_bg_focus		= "#00000000"
+  theme.actionless_titlebar_bg_focus	= gsc.wm_border_focused_color
 end
-theme.titlebar_fg_normal	= "theme.titlebar_fg_focus"
+theme.titlebar_fg_normal	        = theme.titlebar_fg_focus
 
 
 --if color_utils.is_dark(theme.xrdb.background) then
