@@ -290,7 +290,7 @@ function signals.init(_)
 
   -- Tag changed
   screen.connect_signal("tag::history::update", function (s)
-    if #s.selected_tags > 1 or s.selected_tags[1].name == 'Revelation' then
+    if #s.selected_tags > 1 or s.selected_tags[1] and s.selected_tags[1].name == 'Revelation' then
       for _, t in ipairs(s.selected_tags) do
         on_tag_signal(t)
       end
