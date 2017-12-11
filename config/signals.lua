@@ -27,9 +27,10 @@ local function choose_tag(c)
   return c.first_tag
 end
 
-local function get_num_tiled(c, t)
-  if #c.screen.selected_tags > 1 then
-    return #c.screen.tiled_clients
+local function get_num_tiled(t)
+  local s = t.screen
+  if #s.selected_tags > 1 then
+    return #s.tiled_clients
   end
   return #tag_helpers.get_tiled(t)
 end
@@ -42,7 +43,7 @@ local function _on_client_unfocus (c)
   c.border_color = beautiful.border_normal
   local t = choose_tag(c)
   local layout = t.layout
-  local num_tiled = get_num_tiled(c, t)
+  local num_tiled = get_num_tiled(t)
   if persistent.titlebar.get() and (
     num_tiled > 1 or (
       num_tiled > 0 and t.master_fill_policy ~= 'expand'
@@ -106,7 +107,7 @@ end
 local function on_client_focus(c)
   local t = choose_tag(c)
   local layout = t.layout
-  local num_tiled = get_num_tiled(c, t)
+  local num_tiled = get_num_tiled(t)
 
   --c.border_color = beautiful.border_focus
   --
@@ -214,7 +215,7 @@ local function round_up_client_corners(c, force, reference)
   ) or (
     #c:tags() < 1
   )) or beautiful.skip_rounding_for_crazy_borders then
-    clog('R1 F='..(force and force or 'nil').. ', R='..(reference or '')..', C='.. (c and c.name or '<no name>'), c)
+    clog('R1 F='..(force or 'nil').. ', R='..(reference or '')..', C='.. (c and c.name or '<no name>'), c)
     return
   end
   --clog({"Geometry", c:tags()}, c)
@@ -225,7 +226,7 @@ local function round_up_client_corners(c, force, reference)
       nlog('no client tag')
       return
     end
-    local num_tiled = get_num_tiled(c, client_tag)
+    local num_tiled = get_num_tiled(client_tag)
     clog({"Shape", num_tiled, client_tag.master_fill_policy, c.name}, c)
     --if not force and (c.maximized or (
     if (
@@ -288,7 +289,7 @@ function signals.init(_)
   awful.tag.object.get_gap = function(t)
     t = t or awful.screen.focused().selected_tag
     if not t then return end
-    local num_tiled = get_num_tiled({screen=t.screen}, t)
+    local num_tiled = get_num_tiled(t)
     if num_tiled == 1 and t.master_fill_policy == "expand" then
       return 0
     end
