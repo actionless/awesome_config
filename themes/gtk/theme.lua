@@ -200,9 +200,7 @@ theme.panel_widget_spacing = dpi(8)
 theme.panel_widget_bg_error = theme.xrdb.color1
 theme.panel_widget_fg_error = theme.xrdb.color15
 
---theme.widget_music_bg = color_utils.mix(MAIN_COLOR, gsc.menubar_fg_color, 0.6)
---theme.widget_music_bg = MAIN_COLOR
-theme.widget_music_bg = "theme.border_focus"
+theme.widget_music_bg = color_utils.mix(theme.border_focus, theme.panel_fg, 0.8)
 
 
 -------------------------------------------------------------------------------
