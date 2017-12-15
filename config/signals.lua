@@ -109,7 +109,7 @@ local function on_client_focus(c)
   local layout = t.layout
   local num_tiled = get_num_tiled(t)
 
-  --c.border_color = beautiful.border_focus
+  c.border_color = beautiful.border_focus
   --
 
   if persistent.titlebar.get() and (
@@ -153,7 +153,7 @@ local function on_client_focus(c)
     return on_client_unfocus(c)
   end
 
-  c.border_color = beautiful.border_focus
+  --c.border_color = beautiful.border_focus
 end
 
 --=============================================================================
