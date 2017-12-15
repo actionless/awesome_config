@@ -106,9 +106,9 @@ local function worker(args)
     player.hide_notification()
     if ps.album or ps.date then
       text = string.format(
-        "%s (%s)\n%s",
+        "%s%s\n%s",
         ps.album,
-        ps.date,
+        ps.date and " ("..ps.date..")" or "",
         ps.artist
       )
     elseif ps.artist then
