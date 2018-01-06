@@ -120,7 +120,7 @@ local function on_client_focus(c)
     clog("F: tile: titlebars enabled explicitly")
     --choose_screen_padding(s, t, num_tiled)
     titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_focus, beautiful.titlebar_shadow_focus)
-  elseif c.maximized then
+  elseif c.maximized or c.fullscreen then
     clog("F: maximized")
     --set_default_screen_padding(s)
     titlebar.remove_border(c)
