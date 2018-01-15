@@ -17,10 +17,12 @@ end
 
 
 local function choose_tag(c)
-  for _, sel_tag in ipairs(c.screen.selected_tags) do
-    for _, cli_tag in ipairs(c:tags()) do
-      if sel_tag.index == cli_tag.index then
-        return cli_tag
+  if c.screen and c.screen.selected_tags then
+    for _, sel_tag in ipairs(c.screen.selected_tags) do
+      for _, cli_tag in ipairs(c:tags()) do
+        if sel_tag.index == cli_tag.index then
+          return cli_tag
+        end
       end
     end
   end
@@ -29,7 +31,7 @@ end
 
 local function get_num_tiled(t)
   local s = t.screen
-  if #s.selected_tags > 1 then
+  if s.selected_tags and #s.selected_tags > 1 then
     return #s.tiled_clients
   end
   return #tag_helpers.get_tiled(t)
