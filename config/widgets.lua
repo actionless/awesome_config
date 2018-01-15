@@ -10,6 +10,7 @@ local capi = {
 }
 
 local widgets = require("actionless.widgets")
+local common = require("actionless.widgets").common
 local tasklist_addon = require("actionless.tasklist_addon")
 local persistent = require("actionless.persistent")
 
@@ -28,8 +29,6 @@ function widget_loader.init(awesome_context)
   -- Keyboard layout widget
   w.kbd = widgets.kbd({
     bg = beautiful.warning,
-    left_separators = {'sq'},
-    right_separators = {'sq'},
   })
 
   -- NetCtl
@@ -57,15 +56,16 @@ function widget_loader.init(awesome_context)
   end
   w.volume = require("third_party/apw/widget")
 
+  local separator  = common.constraint({ width=beautiful.panel_widget_spacing, })
   -- systray_toggle
   w.systray_toggle = widgets.sneaky_toggle({
       widgets={
         --h_sep,
         --sep_media,
 
-        wibox.widget.textbox(' '),
+        separator,
         w.netctl,
-        wibox.widget.textbox(' '),
+        separator,
 
         --sep_media,
         --h_sep,
