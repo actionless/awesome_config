@@ -44,15 +44,15 @@ function sneaky_toggle.initialize()
         st.export_widget:add(st.sneaky_tray_container)
     end
 
-        if beautiful.widget_tray_left then
-            st.arrow = wibox.widget.imagebox(beautiful.widget_tray_left)
+        if beautiful.icon_systray_show then
+            st.arrow = wibox.widget.imagebox(beautiful.icon_systray_show)
         else
             st.text_arrow = wibox.widget.textbox('')
         end
         st.export_widget:add(common_widgets.decorated_horizontal({
             left_separators = {'arrl'},
             right_separators = {'arrr', ' '},
-            widget=beautiful.widget_tray_left and st.arrow or st.text_arrow
+            widget=beautiful.icon_systray_show and st.arrow or st.text_arrow
         }))
 
     if not st.show_on_start then
@@ -69,8 +69,8 @@ function sneaky_toggle.toggle()
         sneaky_toggle.container:set_widget(nil)
         sneaky_toggle.container:set_strategy("exact")
         sneaky_toggle.widgetvisible = false
-        if beautiful.widget_tray_left then
-            sneaky_toggle.arrow:set_image(beautiful.widget_tray_left)
+        if beautiful.icon_systray_show then
+            sneaky_toggle.arrow:set_image(beautiful.icon_systray_show)
         else
             sneaky_toggle.text_arrow:set_markup(' &lt; ')
         end
@@ -78,8 +78,8 @@ function sneaky_toggle.toggle()
         sneaky_toggle.container:set_strategy("min")
         sneaky_toggle.container:set_widget(sneaky_toggle.lie_layout)
         sneaky_toggle.widgetvisible = true
-        if beautiful.widget_tray_left then
-            sneaky_toggle.arrow:set_image(beautiful.widget_tray_right)
+        if beautiful.icon_systray_show then
+            sneaky_toggle.arrow:set_image(beautiful.icon_systray_hide)
         else
             sneaky_toggle.text_arrow:set_markup(' &gt; ')
         end

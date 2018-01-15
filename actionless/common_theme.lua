@@ -197,8 +197,10 @@ function common_theme.generate_theme(theme_dir)
   local icons_dir = theme.dir .. "/icons/"
   theme.icons_dir = icons_dir
 
-  theme.icon_left 		= icons_dir .. "arrow_left.png"
-  theme.icon_right 		= icons_dir .. "arrow_right.png"
+  --theme.icon_systray_show 		= icons_dir .. "systray_show.png"
+  --theme.icon_systray_hide 		= icons_dir .. "systray_hide.png"
+  theme.icon_systray_show	= nil
+  theme.icon_systray_hide	= nil
 
   --theme.taglist_squares_sel	= icons_dir .. "square_sel.png"
   --theme.taglist_squares_unsel	= icons_dir .. "square_unsel.png"
@@ -206,11 +208,6 @@ function common_theme.generate_theme(theme_dir)
   theme.taglist_squares_unsel	= nil
   --theme.taglist_squares_sel_empty	= nil
   --theme.taglist_squares_unsel_empty	= nil
-
-  --theme.widget_tray_left	= icons_dir .. "tray_left.png"
-  --theme.widget_tray_right	= icons_dir .. "tray_right.png"
-  theme.widget_tray_left	= nil
-  theme.widget_tray_right	= nil
 
   theme.widget_ac		= icons_dir .. "ac.png"
   theme.widget_ac_charging	= icons_dir .. "ac_charging.png"
