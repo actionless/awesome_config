@@ -217,7 +217,7 @@ local function round_up_client_corners(c, force, reference)
   ) or (
     #c:tags() < 1
   )) or beautiful.skip_rounding_for_crazy_borders then
-    clog('R1 F='..(force or 'nil').. ', R='..(reference or '')..', C='.. (c and c.name or '<no name>'), c)
+    --clog('R1 F='..(force or 'nil').. ', R='..(reference or '')..', C='.. (c and c.name or '<no name>'), c)
     return
   end
   --clog({"Geometry", c:tags()}, c)
@@ -229,7 +229,7 @@ local function round_up_client_corners(c, force, reference)
       return
     end
     local num_tiled = get_num_tiled(client_tag)
-    clog({"Shape", num_tiled, client_tag.master_fill_policy, c.name}, c)
+    --clog({"Shape", num_tiled, client_tag.master_fill_policy, c.name}, c)
     --if not force and (c.maximized or (
     if (
       c.maximized
@@ -251,7 +251,7 @@ local function round_up_client_corners(c, force, reference)
     --local inner_shape_args = beautiful.client_border_radius - beautiful.base_border_width
     --if inner_shape_args < 0 then inner_shape_args = 0 end
     apply_shape(c, gears.shape.rounded_rect, outer_shape_args, inner_shape_args)
-    clog("apply_shape "..(reference or 'no_ref'), c)
+    --clog("apply_shape "..(reference or 'no_ref'), c)
     pending_shapes[c] = nil
     --nlog('OK F='..(force and "true" or 'nil').. ', R='..reference..', C='.. c.name)
   end)
