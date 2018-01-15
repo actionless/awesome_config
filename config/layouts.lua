@@ -20,6 +20,7 @@ function layouts.init(context)
     awful.layout.suit.corner.nw,
     awful.layout.suit.floating,
     awful.layout.suit.fair,
+    awful.layout.suit.fair.horizontal,
     awful.layout.suit.spiral,
   }
   awful.layout.layouts = context.layouts
