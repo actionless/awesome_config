@@ -179,6 +179,8 @@ function common_theme.generate_theme(theme_dir)
   theme.menu_border_width		= dpi(3)
   theme.menu_height		= dpi(18)
   theme.menu_width		= dpi(140)
+  theme.menu_submenu_icon = nil
+  theme.menu_submenu = "▸ "
 
   theme.hotkeys_shape = "theme.notification_shape"
   theme.hotkeys_modifiers_fg	= "theme.panel_widget_bg_disabled"
