@@ -77,12 +77,16 @@ local function _on_client_unfocus (c)
 end
 
 local function on_client_unfocus(c, force, callback)
-  --return _on_client_unfocus(c)
-  if force then
+
+  local function unfocus_sequence()
     _on_client_unfocus(c)
     if callback then
       callback(c)
     end
+  end
+
+  if force then
+    unfocus_sequence()
     return
   end
   delayed_call(function()
@@ -90,13 +94,14 @@ local function on_client_unfocus(c, force, callback)
       return
     end
     -- Actually draw changes only if client is visible:
+    if c.sticky then
+      unfocus_sequence()
+      return
+    end
     for _, sel_tag in ipairs(c.screen.selected_tags) do
       for _, cli_tag in ipairs(c:tags()) do
         if sel_tag.index == cli_tag.index then
-          _on_client_unfocus(c)
-          if callback then
-            callback(c)
-          end
+          unfocus_sequence()
         end
       end
     end

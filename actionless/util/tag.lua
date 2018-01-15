@@ -74,14 +74,24 @@ end
 
 
 function tag_helpers.get_tiled(t)
-  local clients = t:clients()
+  local s = t.screen
+  local visible_clients = s.tiled_clients
+  local clients_on_tag = t:clients()
   local tiled_clients = {}
-  for _, c in pairs(clients) do
+  for _, c in pairs(visible_clients) do
+    if c.valid
+      and c.sticky
+    then
+      table.insert(tiled_clients, c)
+    end
+  end
+  for _, c in pairs(clients_on_tag) do
     if not c.floating
       and not c.fullscreen
       and not c.maximized_vertical
       and not c.maximized_horizontal
       and not c.minimized
+      and not c.sticky
     then
       table.insert(tiled_clients, c)
     end
