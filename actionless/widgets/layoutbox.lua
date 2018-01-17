@@ -55,9 +55,6 @@ local function worker(args)
     layoutbox.mfpol = wibox.container.background()
     layoutbox.mfpol:set_widget(textbox())
 
-    args.left_separators = args.left_separators or {}
-    args.right_separators = args.right_separators or {}
-
 
     layoutbox.widget = wibox.layout.fixed.horizontal(
         layoutbox.layout_icon,

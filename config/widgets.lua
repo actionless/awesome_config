@@ -45,7 +45,6 @@ function widget_loader.init(awesome_context)
       fg = beautiful.widget_music_bg,
       bg = beautiful.panel_bg,
       force_no_bgimage=true,
-      --left_separators = lcarslist_enabled and {} or { 'arrl' },
       mopidy_player_command = awesome_context.cmds.tmux_run .. "ncmpcpp",
       enable_notifications = false,
       --valign = "bottom",
