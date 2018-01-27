@@ -4,9 +4,9 @@ Licensed under GNU General Public License v2
 --]]
 
 local awful = require("awful")
-local client = client
 local wibox = require("wibox")
 local beautiful = require("beautiful")
+local gears_timer = require("gears.timer")
 
 local color_utils = require("actionless.util.color")
 
@@ -36,23 +36,96 @@ local function get_buttons(c)
   )
 end
 
-local function attach_highlight_on_hover(tb, c)
-  tb:connect_signal("mouse::enter", function(_)
-    if c == client.focus then
-      --c.border_color = color_utils.darker(beautiful.actionless_titlebar_bg_focus, -40)
-      c.border_color = color_utils.darker(beautiful.border_focus, -50)
+
+local function mouse_is_on_borders(c)
+  if c ~= mouse.current_client then
+    return
+  end
+  local client_geometry = mouse.object_under_pointer():geometry()
+  local border = beautiful.base_border_width
+  local mouse_coords = mouse.coords()
+
+  local mx = mouse_coords.x
+  local left_border_min = client_geometry.x
+  local left_border_max = client_geometry.x + border
+  local right_border_min = client_geometry.x + client_geometry.width - border
+  local right_border_max = client_geometry.x + client_geometry.width
+
+  local my = mouse_coords.y
+  local top_border_min = client_geometry.y
+  local top_border_max = client_geometry.y + border
+  local bottom_border_min = client_geometry.y + client_geometry.height - border
+  local bottom_border_max = client_geometry.y + client_geometry.height
+
+  if not (
+    (
+      ((mx >= left_border_min) and (mx <= left_border_max)) or
+      ((mx >= right_border_min) and (mx <= right_border_max))
+    ) or (
+      ((my >= top_border_min) and (my <= top_border_max)) or
+      ((my >= bottom_border_min) and (my <= bottom_border_max))
+    )
+  ) then
+    return
+  end
+  return true
+end
+
+
+local function set_client_border_color(c)
+  if c == client.focus then
+    c.border_color = beautiful.border_focus
+  else
+    c.border_color = beautiful.border_normal
+  end
+end
+
+
+local function set_client_hover_border_color(c)
+  if c == client.focus then
+    if color_utils.is_dark(beautiful.border_focus) then
+      c.border_color = color_utils.darker(beautiful.border_focus, -45)
     else
+      c.border_color = color_utils.darker(beautiful.border_focus, 45)
+    end
+  else
+    if color_utils.is_dark(beautiful.border_normal) then
       c.border_color = color_utils.darker(beautiful.border_normal, -40)
-      --c.border_color = color_utils.darker(beautiful.actionless_titlebar_bg_normal, -50)
-      --c.border_color = color_utils.mix(beautiful.border_normal, beautiful.border_focus, 0.6)
-    end
-  end)
-  tb:connect_signal("mouse::leave", function(_)
-    if c == client.focus then
-      c.border_color = beautiful.border_focus
     else
-      c.border_color = beautiful.border_normal
+      c.border_color = color_utils.darker(beautiful.border_normal, 40)
     end
+  end
+end
+
+
+local function attach_highlight_on_hover(titlebar_widget, c)
+  titlebar_widget:connect_signal("mouse::enter", function(_)
+    local timer
+    timer = gears_timer({
+      timeout = 0.15,
+      autostart = true,
+      callback = function()
+        timer:stop()
+        if not mouse_is_on_borders(c) then
+          return
+        end
+        set_client_hover_border_color(c)
+        local unfocus_timer
+        unfocus_timer = gears_timer({
+          timeout = 0.1,
+          autostart = true,
+          callback = function()
+            unfocus_timer:stop()
+            if not mouse_is_on_borders(c) then
+              set_client_border_color(c)
+            end
+          end
+        })
+      end,
+    })
+  end)
+  titlebar_widget:connect_signal("mouse::leave", function(_)
+    set_client_border_color(c)
   end)
 end
 
