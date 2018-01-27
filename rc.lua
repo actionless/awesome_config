@@ -26,9 +26,15 @@ awful_spawn.with_shell("xsettingsd")
 --awful_spawn.with_shell("/usr/lib/gnome-settings-daemon/gnome-settings-daemon")
 
 
--- Enable all available hotkey help maps
+-- Hotkeys help for apps
 -------------------------------------------------------------------------------
-require("awful.hotkeys_popup.keys")
+-- Enable all available hotkey help maps
+local hotkeys_module = require("awful.hotkeys_popup.keys")
+-- Set custom rules for tmux help
+hotkeys_module.tmux.add_rules_for_terminal({ rule_any = {
+  class =  {"st-256color"}
+}})
+-- Load local hotkeys help
 require("hotkeys")
 
 
