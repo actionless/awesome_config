@@ -13,7 +13,7 @@ local fish_rule_any = {name={"fish", "st "}}
 for group_name, group_data in pairs({
     ["Fish"] =             { color="#5f6d93", rule_any=fish_rule_any },
 }) do
-    hotkeys_popup.group_rules[group_name] = group_data
+    hotkeys_popup.add_group_rules(group_name, group_data)
 end
 
 
