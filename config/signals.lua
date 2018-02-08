@@ -237,7 +237,7 @@ local function round_up_client_corners(c, force, reference)
     --clog({"Shape", num_tiled, client_tag.master_fill_policy, c.name}, c)
     --if not force and (c.maximized or (
     if (
-      c.maximized
+      c.maximized or c.fullscreen
     or (
       (num_tiled<=1 and client_tag.master_fill_policy=='expand')
       and not c.floating
@@ -349,6 +349,12 @@ function signals.init(_)
   end)
 
   client.connect_signal("property::maximized", function (c)
+    delayed_call(function()
+      on_client_signal(c)
+    end)
+  end)
+
+  client.connect_signal("property::fullscreen", function (c)
     delayed_call(function()
       on_client_signal(c)
     end)
