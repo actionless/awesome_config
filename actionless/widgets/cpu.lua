@@ -39,6 +39,11 @@ local function worker(args)
   cpu.list_len = args.list_length or 10
 
   cpu.command = "top -o \\%CPU -b -n 1 -w 512 -d 0.05"
+  cpu.columns = args.columns or {
+    pid=1,
+    percent=9,
+    name=12
+  }
 
   function cpu.hide_notification()
     if cpu.notification ~= nil then
@@ -71,17 +76,23 @@ local function worker(args)
     if not notification_id then return end
     local result = {}
     local names = {}
+    local column_headers = h_string.split(
+      h_table.range(
+        parse.string_to_lines(output),
+        6, 6
+      )[1], ' '
+    )
     for _, line in ipairs(
       h_table.range(
         parse.string_to_lines(output),
-        6 + cpu.cores_number
+        7
       )
     ) do
       --local pid, percent, name = line:match("^(%d+)%s+(.+)%s+(.*)")
       local values = h_string.split(line, ' ')
-      local pid = values[1]
-      local percent = values[7]
-      local name = values[11]
+      local pid = values[cpu.columns.pid]
+      local percent = values[cpu.columns.percent]
+      local name = values[cpu.columns.name]
       percent = percent + 0
       if percent and percent ~= 0 and name ~= 'top' then
         if result[pid] then
@@ -105,9 +116,12 @@ local function worker(args)
       result_string = result_string .. '\n'
     end
     if result_string ~= '' then
-      --result_string = "  PID  %CPU COMMAND\n" .. result_string
-      result_string = '  PID  %CPU COMMAND\n'..
-        '<span font="'  .. tostring(beautiful.text_font)  .. '">' .. result_string .. '</span>'
+      result_string = string.format(
+        '%5s %5s %s\n',
+        column_headers[cpu.columns.pid],
+        column_headers[cpu.columns.percent],
+        column_headers[cpu.columns.name]
+      ) .. '<span font="'  .. tostring(beautiful.text_font)  .. '">' .. result_string .. '</span>'
     else
       result_string = "no running processes atm"
     end

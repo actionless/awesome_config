@@ -37,6 +37,10 @@ local function worker(args)
   mem.list_len = args.list_length or 10
 
   mem.command = "top -o \\%MEM -b -n 1 -w 512"
+  mem.columns = args.columns or {
+    percent=10,
+    name=12
+  }
 
   function mem.hide_notification()
     if mem.notification ~= nil then
@@ -69,15 +73,21 @@ local function worker(args)
     if not notification_id then return end
     local result = {}
 
+    local column_headers = h_string.split(
+      h_table.range(
+        parse.string_to_lines(output),
+        6, 6
+      )[1], ' '
+    )
     for _, line in ipairs(
       h_table.range(
         parse.string_to_lines(output),
-        6 + mem.cores_number
+        7
       )
     ) do
       local values = h_string.split(line, ' ')
-      local percent = values[8]
-      local name = values[11]
+      local percent = values[mem.columns.percent]
+      local name = values[mem.columns.name]
       if name == 'Web' then name = 'firefox' end
       percent = percent + 0
       if result[name] then
@@ -87,7 +97,11 @@ local function worker(args)
       end
     end
 
-    local result_string = ' %MEM COMMAND\n'
+    local result_string = string.format(
+      '%5s %s\n',
+      column_headers[mem.columns.percent],
+      column_headers[mem.columns.name]
+    )
     result_string = result_string .. '<span font="'  .. tostring(beautiful.text_font)  .. '">'
     local counter = 0
     for k, v in h_table.spairs(result, function(t,a,b) return t[b] < t[a] end) do
