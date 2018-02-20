@@ -120,7 +120,7 @@ function keys.init(awesome_context)
     ),
     bind_key({ modkey,  "Control" }, "y",
       function() wlppr.save() end,
-      "save to best", "wallpaper"
+      "save", "wallpaper"
     ),
     bind_key({ modkey,  "Control" }, "o",
       function() wlppr.open() end,
