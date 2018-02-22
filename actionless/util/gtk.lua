@@ -8,7 +8,7 @@
 local gears_debug = require("gears.debug")
 local gears_math = require("gears.math")
 local join = require("gears.table").join
-local unpack = unpack or table.unpack -- luacheck: globals unpack (compatibility with Lua 5.1)
+local unpack = unpack or table.unpack -- (compatibility with Lua 5.1)
 
 
 local gtk = {

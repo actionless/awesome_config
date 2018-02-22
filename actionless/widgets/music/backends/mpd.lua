@@ -43,14 +43,18 @@ end
 -------------------------------------------------------------------------------
 function mpd.update(parse_status_callback)
   awful.spawn.easy_async(
+
     [[mpc --format "file:%file%
                     Artist:%artist%
                     Title:%title%
                     Album:%album%
                     Date:%date%"
     ]],
-  -- "function( -- <==workaround for syntax highlighter :)   @TODO
-  function(str) mpd.parse_metadata(str, parse_status_callback) end)
+  -- "function( -- <==workaround for syntax highlighter :)
+
+    function(str) mpd.parse_metadata(str, parse_status_callback) end
+
+  )
 end
 -------------------------------------------------------------------------------
 function mpd.parse_metadata(result_string, parse_status_callback)

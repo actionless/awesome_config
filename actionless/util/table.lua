@@ -3,7 +3,7 @@
 --]]
 
 local a_table = require("awful.util").table
-local unpack    = unpack or table.unpack -- luacheck: globals unpack (compatibility with Lua 5.1)
+local unpack    = unpack or table.unpack -- (compatibility with Lua 5.1)
 
 -- helper functions for internal use
 local table_helpers = { unpack = unpack, }

@@ -4,11 +4,24 @@ std = "min"
 -- Get rid of "unused argument self"-warnings
 self = false
 
--- The unit tests can use busted
-files["spec"].std = "+busted"
+----function f()
+--    --a, b, c = call() ; return a, b  -- unused "c"
+----end
+--unused_secondaries = false
 
--- The default config may set global variables
-files["awesomerc.lua"].allow_defined_top = true
+-- The unit tests can use busted
+--files["spec"].std = "+busted"
+
+--
+ignore = {
+    "212/_.*",
+}
+
+-- The .luacheck config may set global variables
+files[".luacheckrc"] = {
+    allow_defined_top = true,
+    ignore = { "131", "112" },
+}
 
 -- Global objects defined by the C code
 read_globals = {
@@ -28,6 +41,8 @@ read_globals = {
     "unpack",
     "math.atan2",
     "jit",
+    "pack",
+    "unpack"
 }
 
 -- May not be read-only due to client.focus
@@ -39,5 +54,14 @@ globals = {
     "log",
     "context",
 }
+
+exclude_files = {
+    "third_party/*",
+    "actionless/menubar/*",
+    "misc/*",
+    "**/*lcars*", -- @TODO
+}
+
+codes = true
 
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80

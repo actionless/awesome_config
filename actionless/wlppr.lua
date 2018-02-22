@@ -1,6 +1,7 @@
 local awful = require("awful")
 local beautiful = require("beautiful")
 local naughty = require("naughty")
+local pack = pack or table.pack  -- luacheck: ignore 143
 
 local wlppr = {}
 
@@ -10,7 +11,8 @@ local function set_wallpaper(source_script_name)
   awful.spawn.easy_async(
     'bash -c "\
     set -eu; \
-    img=$('..os.getenv('HOME')..'/projects/tumblr/env/bin/python '..os.getenv('HOME')..'/projects/tumblr/' .. 
+    img=$('..os.getenv('HOME')..'/projects/tumblr/env/bin/python '
+      ..os.getenv('HOME')..'/projects/tumblr/' ..
       source_script_name ..
     '); \
     (killall gifview || true) ; \
@@ -19,7 +21,7 @@ local function set_wallpaper(source_script_name)
         test -f ${img}.orig && echo ${img}.orig || echo ${img}\
       ) & \
     ) || nitrogen --save --set-color=\\"'..bg..'\\" --set-tiled ${img}"',
-    function(stderr, stdout, reason, code)
+    function(stderr, stdout, _reason, _code)
       print(' \n')
       print(stdout)
       print(stderr)
@@ -40,7 +42,7 @@ end
 function wlppr.load_new()
   awful.spawn.easy_async(
     ''..os.getenv('HOME')..'/projects/tumblr/env/bin/python '..os.getenv('HOME')..'/projects/tumblr/load_images.py',
-    function(stderr, stdout, reason, code)
+    function(stderr, stdout, _reason, _code)
       print(' \n')
       print(stdout)
       print(stderr)
@@ -51,17 +53,24 @@ end
 
 function wlppr.open()
   awful.spawn.easy_async(
-    'bash -c "viewnior $('..os.getenv('HOME')..'/projects/tumblr/env/bin/python '..os.getenv('HOME')..'/projects/tumblr/get_last_path.py)"',
+    'bash -c "viewnior $('..
+      os.getenv('HOME')..
+      '/projects/tumblr/env/bin/python '..
+      os.getenv('HOME')..'/projects/tumblr/get_last_path.py)"',
     function(...)
-      log(table.pack(...))
+      if ... then
+        log(pack(...))
+      end
     end
   )
 end
 
 function wlppr.save()
   awful.spawn.easy_async(
-    'bash -c "cp $('..os.getenv('HOME')..'/projects/tumblr/env/bin/python '..os.getenv('HOME')..'/projects/tumblr/get_last_path.py)* '..os.getenv('HOME')..'/projects/tumblr/image_log/best/"',
-    function(stderr, stdout, reason, code)
+    'bash -c "cp $('..os.getenv('HOME')..'/projects/tumblr/env/bin/python '..
+      os.getenv('HOME')..'/projects/tumblr/get_last_path.py)* '..
+      os.getenv('HOME')..'/projects/tumblr/image_log/best/"',
+    function(stderr, stdout, _reason, _code)
       print(stdout)
       print(stderr)
       naughty.notify({
@@ -73,8 +82,10 @@ end
 
 function wlppr.save_best()
   awful.spawn.easy_async(
-    'bash -c "cp $('..os.getenv('HOME')..'/projects/tumblr/env/bin/python '..os.getenv('HOME')..'/projects/tumblr/get_last_path.py)* \\"'..os.getenv('HOME')..'/projects/tumblr/image_log/the very best/\\""',
-    function(stderr, stdout, reason, code)
+    'bash -c "cp $('..os.getenv('HOME')..'/projects/tumblr/env/bin/python '..
+      os.getenv('HOME')..'/projects/tumblr/get_last_path.py)* \\"'..
+      os.getenv('HOME')..'/projects/tumblr/image_log/the very best/\\""',
+    function(stderr, stdout, _reason, _code)
       print(stdout)
       print(stderr)
       naughty.notify({
@@ -86,8 +97,10 @@ end
 
 function wlppr.dump()
   awful.spawn.easy_async(
-    'bash -c "mv $('..os.getenv('HOME')..'/projects/tumblr/env/bin/python '..os.getenv('HOME')..'/projects/tumblr/get_last_path.py)* \"'..os.getenv('HOME')..'/projects/tumblr/image_log/dump/\""',
-    function(stderr, stdout, reason, code)
+    'bash -c "mv $('..os.getenv('HOME')..'/projects/tumblr/env/bin/python '..
+      os.getenv('HOME')..'/projects/tumblr/get_last_path.py)* \"'..
+      os.getenv('HOME')..'/projects/tumblr/image_log/dump/\""',
+    function(stderr, stdout, _reason, _code)
       print(stdout)
       print(stderr)
       naughty.notify({

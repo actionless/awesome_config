@@ -30,6 +30,7 @@ local function choose_tag(c)
 end
 
 local function get_num_tiled(t)
+  -- @TODO: add some fix for sticky clients
   local s = t.screen
   if s.selected_tags and #s.selected_tags > 1 then
     return #s.tiled_clients
@@ -209,7 +210,7 @@ end
 
 
 local pending_shapes = {}
-local function round_up_client_corners(c, force, reference)
+local function round_up_client_corners(c, force, reference) -- luacheck: no unused
   if not force and ((
     -- @TODO: figure it out and uncomment
     not beautiful.client_border_radius or beautiful.client_border_radius == 0

@@ -240,4 +240,6 @@ if theme.border_radius > dpi(15) then
   theme.border_radius = dpi(15)
 end
 
+--theme.bg_systray = "#00000000"
+
 return theme
