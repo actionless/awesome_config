@@ -198,6 +198,11 @@ function widget_loader.init(awesome_context)
           c:raise()
         end
       end),
+      awful.button({ }, 2, function(c)
+        client.focus = c
+        c:raise()
+        c.maximized = not c.maximized
+      end),
       awful.button({ }, 3, function (c)
         if c.is_tag then
           return awful.tag.viewtoggle(c.tag)
