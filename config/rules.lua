@@ -131,6 +131,12 @@ function rules.init(awesome_context)
         },
       },
 
+      { rule = { class = "mpv" },
+        properties = {
+          size_hints_honor = true,
+        }
+      },
+
   }
 
   --awful.ewmh.add_activate_filter(function(c, source)
