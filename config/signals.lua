@@ -10,7 +10,9 @@ local tag_helpers = require("actionless.util.tag")
 
 
 local function clog(msg, c) -- luacheck: ignore
-  --nlog(msg)
+  --if c and c.class == 'Firefox' then
+    --nlog({msg, c and c.name})
+  --end
   --log(msg .. " " .. c.name .. " " .. tostring(c:tags()[1]))
   --if c and c.class == "Spotify" then nlog(msg) end
 end
@@ -30,7 +32,7 @@ local function choose_tag(c)
 end
 
 local function get_num_tiled(t)
-  -- @TODO: add some fix for sticky clients
+  -- @TODO: add some fix for sticky clients: DONE?
   local s = t.screen
   if s.selected_tags and #s.selected_tags > 1 then
     return #s.tiled_clients
@@ -125,39 +127,39 @@ local function on_client_focus(c)
       num_tiled > 0 and t.master_fill_policy ~= 'expand'
     )
   ) then
-    clog("F: tile: titlebars enabled explicitly")
+    clog("F: tile: titlebars enabled explicitly", c)
     --choose_screen_padding(s, t, num_tiled)
     titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_focus, beautiful.titlebar_shadow_focus)
   elseif c.maximized or c.fullscreen then
-    clog("F: maximized")
+    clog("F: maximized", c)
     --set_default_screen_padding(s)
     titlebar.remove_border(c)
   elseif c.floating then
-    clog("F: floating client")
+    clog("F: floating client", c)
     --choose_screen_padding(s, t, num_tiled)
     titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_focus, beautiful.titlebar_shadow_focus)
   elseif layout == awful.layout.suit.floating then
-    clog("F: floating layout")
+    clog("F: floating layout", c)
     --choose_screen_padding(s, t, num_tiled)
     titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_focus, beautiful.titlebar_shadow_focus)
   elseif num_tiled > 1 then
-    clog("F: multiple tiling clients")
+    clog("F: multiple tiling clients", c)
     --set_default_screen_padding(s)
     c.border_width = beautiful.border_width
     titlebar.make_border(c, beautiful.actionless_titlebar_bg_focus, beautiful.titlebar_shadow_focus)
   elseif num_tiled == 1 then
     if t.master_fill_policy == 'expand' and screen.count() == 1 then
-      clog("F: one tiling client: expand")
+      clog("F: one tiling client: expand", c)
       --set_default_screen_padding(s)
       titlebar.remove_border(c)
     else
-      clog("F: one tiling client")
+      clog("F: one tiling client", c)
       --set_mwfact_screen_padding(t)
       c.border_width = beautiful.border_width
       titlebar.make_border(c, beautiful.actionless_titlebar_bg_focus, beautiful.titlebar_shadow_focus)
     end
   else
-    clog("F: zero tiling clients -- other tag?")
+    clog("F: zero tiling clients -- other tag?", c)
     return on_client_unfocus(c)
   end
 
@@ -266,17 +268,17 @@ end
 --=============================================================================
 -- Common signal handlers
 
-local function on_client_signal(c)
-  if c == client.focus then
+local function on_client_signal(c, args)
+  if c == client.focus and not args.unfocus_only then
     on_client_focus(c)
   else
     on_client_unfocus(c)
   end
 end
 
-local function on_tag_signal(t)
+local function on_tag_signal(t, args)
   for _, c in ipairs(t:clients()) do
-    on_client_signal(c)
+    on_client_signal(c, args)
   end
 end
 
@@ -308,11 +310,11 @@ function signals.init(_)
 
   -- Tag changed
   screen.connect_signal("tag::history::update", function (s)
-    if #s.selected_tags > 1 or s.selected_tags[1] and s.selected_tags[1].name == 'Revelation' then
+    --if #s.selected_tags > 1 or s.selected_tags[1] and s.selected_tags[1].name == 'Revelation' then
       for _, t in ipairs(s.selected_tags) do
-        on_tag_signal(t)
+        on_tag_signal(t, {unfocus_only = true})
       end
-    end
+    --end
   end)
 
   -- Tag property changed
