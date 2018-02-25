@@ -10,7 +10,7 @@ local tag_helpers = require("actionless.util.tag")
 
 
 local function clog(msg, c) -- luacheck: ignore
-  --if c and c.class == 'Firefox' then
+  --if c and c.class == 'mpv' then
     --nlog({msg, c and c.name})
   --end
   --log(msg .. " " .. c.name .. " " .. tostring(c:tags()[1]))
@@ -56,11 +56,15 @@ local function _on_client_unfocus (c)
   ) then
     clog("U: tile: titlebars enabled explicitly", c)
     titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
+  elseif c.maximized or c.fullscreen then
+    clog("U: maximized", c)
+    --set_default_screen_padding(s)
+    titlebar.remove_border(c)
   elseif c.floating then
     clog("U: floating client", c)
     titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
   elseif layout == awful.layout.suit.floating then
-    clog(c, "U: floating layout", c)
+    clog("U: floating layout", c)
     titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
   elseif num_tiled > 1 then
     clog("U: multiple tiling clients", c)
