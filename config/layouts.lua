@@ -16,6 +16,7 @@ function layouts.init(context)
   -- Table of layouts to cover with awful.layout.inc, order matters.
   context.layouts = {
     awful.layout.suit.tile,
+    awful.layout.suit.tile.left,
     persistent.lcarslist.get() and lcars_layout.top or awful.layout.suit.tile.bottom,
     awful.layout.suit.corner.nw,
     awful.layout.suit.floating,
