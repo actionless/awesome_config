@@ -273,6 +273,7 @@ end
 -- Common signal handlers
 
 local function on_client_signal(c, args)
+  args = args or {}
   if c == client.focus and not args.unfocus_only then
     on_client_focus(c)
   else
