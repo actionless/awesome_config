@@ -6,6 +6,7 @@ local dpi = xresources.apply_dpi
 local create_theme = require("actionless.common_theme").create_theme
 local color_utils = require("actionless.util").color
 local gtk_util = require("actionless.util.gtk")
+local h_string = require("actionless.util.string")
 
 
 local theme_name = "gtk"
@@ -223,10 +224,23 @@ else
 end
 
 if awesome.composite_manager_running then
-  theme.border_normal       = theme.border_normal .."dd"
-  theme.border_focus        = theme.border_focus .."dd"
-  theme.titlebar_bg_normal  = theme.titlebar_bg_normal.."dd"
-  theme.titlebar_bg_focus   = theme.titlebar_bg_focus.."dd"
+  for _, theme_var in ipairs({
+    'border_normal',
+    'border_focus',
+    'titlebar_bg_normal',
+    'titlebar_bg_focus',
+    'actionless_titlebar_bg_normal',
+    'actionless_titlebar_bg_focus',
+  }) do
+    if #theme[theme_var] == 9 then
+      theme[theme_var] = h_string.max_length(theme[theme_var], 7)
+    end
+    if #theme[theme_var] == 7 then
+      theme[theme_var] = theme[theme_var] .."dd"
+      --theme[theme_var] = theme[theme_var] .."88"
+    end
+    --nlog(theme[theme_var])
+  end
 end
 
 theme.actionless_titlebar_bg_normal = theme.titlebar_bg_normal
