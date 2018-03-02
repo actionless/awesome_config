@@ -74,6 +74,7 @@ end
 
 
 local function set_client_border_color(c)
+  --if not titlebar.border_is_hovered(c) then return end
   local color
   if c == client.focus then
     color = beautiful.border_focus
@@ -82,17 +83,25 @@ local function set_client_border_color(c)
   end
   c.border_color = color
 
-  for _, position in ipairs({"top", "bottom", "right", "left"}) do
-    if not (position == 'top' and titlebar.is_enabled(c)) then
-      local tt = c["titlebar_"..position](c, beautiful.base_border_width)
-      local context = {
-          client = c,
-          position = position
-      }
-      local ret = drawable(tt, context, "awful.titlebar")
-      ret:set_bg(color)
-    end
-  end
+  --for _, position in ipairs({"top", "bottom", "right", "left"}) do
+    --if not (position == 'top' and titlebar.is_enabled(c)) then
+      --local tt = c["titlebar_"..position](c, beautiful.base_border_width)
+      --local context = {
+          --client = c,
+          --position = position
+      --}
+      --local ret = drawable(tt, context, "awful.titlebar")
+      --ret:set_bg(color)
+    --end
+  --end
+
+  --if c.floating then
+    --local g = c:geometry()
+    --g.x = g.x + beautiful.base_border_width
+    --g.y = g.y + beautiful.base_border_width
+    --c:geometry(g)
+  --end
+
 end
 
 
@@ -114,17 +123,24 @@ local function set_client_hover_border_color(c)
   end
   c.border_color = color
 
-  for _, position in ipairs({"top", "bottom", "right", "left"}) do
-    if not (position == 'top' and titlebar.is_enabled(c)) then
-      local tt = c["titlebar_"..position](c, beautiful.base_border_width * 2)
-      local context = {
-          client = c,
-          position = position
-      }
-      local ret = drawable(tt, context, "awful.titlebar")
-      ret:set_bg(color)
-    end
-  end
+  --for _, position in ipairs({"top", "bottom", "right", "left"}) do
+    --if not (position == 'top' and titlebar.is_enabled(c)) then
+      --local tt = c["titlebar_"..position](c, beautiful.base_border_width * 2)
+      --local context = {
+          --client = c,
+          --position = position
+      --}
+      --local ret = drawable(tt, context, "awful.titlebar")
+      --ret:set_bg(color)
+    --end
+  --end
+
+  --if c.floating then
+    --local g = c:geometry()
+    --g.x = g.x - beautiful.base_border_width
+    --g.y = g.y - beautiful.base_border_width
+    --c:geometry(g)
+  --end
 
 end
 
@@ -512,7 +528,7 @@ end
 
 function titlebar.is_enabled(c)
   if (
-    c["titlebar_top"](c):geometry()['height'] > beautiful.base_border_width
+    c["titlebar_top"](c):geometry()['height'] > beautiful.base_border_width * 2
     ) then
     return true
   else
@@ -530,6 +546,17 @@ function titlebar.border_is_enabled(c)
     return false
   end
 end
+
+--function titlebar.border_is_hovered(c)
+  --if (
+    --c["titlebar_" .. 'bottom'
+      --](c):geometry()['height'] == beautiful.base_border_width * 2
+    --) then
+    --return true
+  --else
+    --return false
+  --end
+--end
 
 function titlebar.titlebar_toggle(c)
   if titlebar.is_enabled(c) then
