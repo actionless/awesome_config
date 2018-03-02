@@ -596,7 +596,7 @@ function keys.init(awesome_context)
               end
             end
           end,
-          i==1 and "toggle client to tag " .. i .. "(screen #" .. scr .. ")",
+          i==1 and "toggle client on tag " .. i .. "(screen #" .. scr .. ")",
           CLIENT_MANIPULATION
         )
       )
@@ -807,6 +807,12 @@ function keys.init(awesome_context)
     bind_key({ modkey, "Shift"  }, "f",
       awful.client.floating.toggle,
       "toggle client float", CLIENT_MANIPULATION
+    ),
+    bind_key({ modkey, "Shift"  }, "s",
+      function(c)
+        c.sticky = not c.sticky
+      end,
+      "toggle client sticky (on all tags)", CLIENT_MANIPULATION
     ),
     bind_key({ modkey, "Shift"  }, "Return",
       function (c) c:swap(awful.client.getmaster()) end,
