@@ -7,6 +7,7 @@ local awful = require("awful")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 local gears_timer = require("gears.timer")
+local drawable = require("wibox.drawable")
 
 local color_utils = require("actionless.util.color")
 
@@ -42,7 +43,7 @@ local function mouse_is_on_borders(c)
     return
   end
   local client_geometry = mouse.object_under_pointer():geometry()
-  local border = beautiful.base_border_width
+  local border = beautiful.base_border_width * 2
   local mouse_coords = mouse.coords()
 
   local mx = mouse_coords.x
@@ -73,28 +74,58 @@ end
 
 
 local function set_client_border_color(c)
+  local color
   if c == client.focus then
-    c.border_color = beautiful.border_focus
+    color = beautiful.border_focus
   else
-    c.border_color = beautiful.border_normal
+    color = beautiful.border_normal
+  end
+  c.border_color = color
+
+  for _, position in ipairs({"top", "bottom", "right", "left"}) do
+    if not (position == 'top' and titlebar.is_enabled(c)) then
+      local tt = c["titlebar_"..position](c, beautiful.base_border_width)
+      local context = {
+          client = c,
+          position = position
+      }
+      local ret = drawable(tt, context, "awful.titlebar")
+      ret:set_bg(color)
+    end
   end
 end
 
 
 local function set_client_hover_border_color(c)
+  local color
+
   if c == client.focus then
     if color_utils.is_dark(beautiful.border_focus) then
-      c.border_color = color_utils.darker(beautiful.border_focus, -45)
+      color = color_utils.darker(beautiful.border_focus, -45)
     else
-      c.border_color = color_utils.darker(beautiful.border_focus, 45)
+      color = color_utils.darker(beautiful.border_focus, 45)
     end
   else
     if color_utils.is_dark(beautiful.border_normal) then
-      c.border_color = color_utils.darker(beautiful.border_normal, -40)
+      color = color_utils.darker(beautiful.border_normal, -40)
     else
-      c.border_color = color_utils.darker(beautiful.border_normal, 40)
+      color = color_utils.darker(beautiful.border_normal, 40)
     end
   end
+  c.border_color = color
+
+  for _, position in ipairs({"top", "bottom", "right", "left"}) do
+    if not (position == 'top' and titlebar.is_enabled(c)) then
+      local tt = c["titlebar_"..position](c, beautiful.base_border_width * 2)
+      local context = {
+          client = c,
+          position = position
+      }
+      local ret = drawable(tt, context, "awful.titlebar")
+      ret:set_bg(color)
+    end
+  end
+
 end
 
 
