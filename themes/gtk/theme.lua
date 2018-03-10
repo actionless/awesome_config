@@ -19,6 +19,7 @@ local theme_dir = awful.util.getdir("config").."/themes/"..theme_name
 local theme = {}
 
 theme.gtk = gsc
+theme.gsc = gsc
 theme.xrdb = xresources.get_current_theme()
 
 theme.fg = gsc.fg_color
@@ -224,6 +225,7 @@ else
 end
 
 if awesome.composite_manager_running then
+  nlog('composite')
   for _, theme_var in ipairs({
     'border_normal',
     'border_focus',
