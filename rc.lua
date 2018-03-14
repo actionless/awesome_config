@@ -136,6 +136,7 @@ config.keys.init(context)
 config.signals.init(context)
 local persistent = require("actionless.persistent")
 if persistent.lcarslist.get() then
+  --@TODO: somewhere inside a nasty memory leak is hiding:
   config.lcars_toolbar_vertical.init(context)
   config.lcars_toolbar_horizontal.init(context)
   config.lcars_layout.init(context)
