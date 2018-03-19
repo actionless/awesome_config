@@ -82,26 +82,6 @@ local function set_client_border_color(c)
     color = beautiful.border_normal
   end
   c.border_color = color
-
-  --for _, position in ipairs({"top", "bottom", "right", "left"}) do
-    --if not (position == 'top' and titlebar.is_enabled(c)) then
-      --local tt = c["titlebar_"..position](c, beautiful.base_border_width)
-      --local context = {
-          --client = c,
-          --position = position
-      --}
-      --local ret = drawable(tt, context, "awful.titlebar")
-      --ret:set_bg(color)
-    --end
-  --end
-
-  --if c.floating then
-    --local g = c:geometry()
-    --g.x = g.x + beautiful.base_border_width
-    --g.y = g.y + beautiful.base_border_width
-    --c:geometry(g)
-  --end
-
 end
 
 
@@ -122,56 +102,30 @@ local function set_client_hover_border_color(c)
     end
   end
   c.border_color = color
-
-  --for _, position in ipairs({"top", "bottom", "right", "left"}) do
-    --if not (position == 'top' and titlebar.is_enabled(c)) then
-      --local tt = c["titlebar_"..position](c, beautiful.base_border_width * 2)
-      --local context = {
-          --client = c,
-          --position = position
-      --}
-      --local ret = drawable(tt, context, "awful.titlebar")
-      --ret:set_bg(color)
-    --end
-  --end
-
-  --if c.floating then
-    --local g = c:geometry()
-    --g.x = g.x - beautiful.base_border_width
-    --g.y = g.y - beautiful.base_border_width
-    --c:geometry(g)
-  --end
-
 end
-
 
 local function attach_highlight_on_hover(titlebar_widget, c)
   titlebar_widget:connect_signal("mouse::enter", function(_)
-    local timer
-    timer = gears_timer({
-      timeout = 0.15,
+    local titlebar_position = titlebar_widget._widget_context_skeleton.position
+    if titlebar_position == 'top' or titlebar_position == 'bottom' then
+      root.cursor("sb_v_double_arrow")
+    else
+      root.cursor("sb_h_double_arrow")
+    end
+    set_client_hover_border_color(c)
+    unfocus_timer = gears_timer({
+      timeout = 0.1,
       autostart = true,
       callback = function()
-        timer:stop()
+        unfocus_timer:stop()
         if not mouse_is_on_borders(c) then
-          return
+          set_client_border_color(c)
         end
-        set_client_hover_border_color(c)
-        local unfocus_timer
-        unfocus_timer = gears_timer({
-          timeout = 0.1,
-          autostart = true,
-          callback = function()
-            unfocus_timer:stop()
-            if not mouse_is_on_borders(c) then
-              set_client_border_color(c)
-            end
-          end
-        })
-      end,
+      end
     })
   end)
   titlebar_widget:connect_signal("mouse::leave", function(_)
+    root.cursor("left_ptr")
     set_client_border_color(c)
   end)
 end
