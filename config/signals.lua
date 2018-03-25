@@ -44,6 +44,7 @@ end
 -- Unfocused (normal) window logic
 
 local function _on_client_unfocus (c)
+  if not c or not c.valid then return end
   if c.minimized then return end
   c.border_color = beautiful.border_normal
   local t = choose_tag(c)
@@ -119,6 +120,7 @@ end
 -- Focused (active, selected) window logic
 
 local function on_client_focus(c)
+  if not c or not c.valid then return end
   local t = choose_tag(c)
   local layout = t.layout
   local num_tiled = get_num_tiled(t)
@@ -235,6 +237,7 @@ local function round_up_client_corners(c, force, reference) -- luacheck: no unus
   --clog({"Geometry", c:tags()}, c)
   pending_shapes[c] = true
   delayed_call(function()
+    if not c or not c.valid then return end
     local client_tag = choose_tag(c)
     if not client_tag then
       nlog('no client tag')
