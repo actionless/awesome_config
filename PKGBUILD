@@ -24,12 +24,14 @@ depends=(
 	'xsettingsd'  # or use lxsettings-daemon from lxsession
 )
 optdepends=(
-	'gnome-settings-daemon: rc: alternative to xsettingsd'
-	'gnome-session: rc: alternative to lxsession to acompany gnome-settings-daemon'
+	#'gnome-settings-daemon: rc: alternative to xsettingsd'
+	#'gnome-session: rc: alternative to lxsession to acompany gnome-settings-daemon'
 	'gnome-keyring: config/autorun'
 	'gpaste: config/autorun'
 	'pavucontrol: apw: default mixer'
 	'pulseaudio: config/autorun'
+	'plotinus: Ctrl+Shift+P menu in GTK+3 applications'
+	'qt5ct: qt5 theme'
 	#'unclutter: config/autorun: hide mouse pointer'
 	'unclutter-xfixes-git: config/autorun: hide mouse pointer'
 	'xfce4-power-manager: config/autorun,actionless/widgets/bat'
