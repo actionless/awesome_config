@@ -37,4 +37,5 @@ optdepends=(
 	'xfce4-power-manager: config/autorun,actionless/widgets/bat'
 	'xorg-xinput: config/autorun: configure trackball'
 	'xscreensaver: config/autorun,config/keys'
+	'nemo: default file manager'
 )
