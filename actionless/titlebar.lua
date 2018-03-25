@@ -7,7 +7,6 @@ local awful = require("awful")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 local gears_timer = require("gears.timer")
-local drawable = require("wibox.drawable")
 
 local color_utils = require("actionless.util.color")
 
@@ -75,6 +74,7 @@ end
 
 local function set_client_border_color(c)
   --if not titlebar.border_is_hovered(c) then return end
+  if not c or not c.valid then return end
   local color
   if c == client.focus then
     color = beautiful.border_focus
@@ -104,28 +104,40 @@ local function set_client_hover_border_color(c)
   c.border_color = color
 end
 
-local function attach_highlight_on_hover(titlebar_widget, c)
+local function attach_highlight_on_hover(args)
+  args = args or {}
+  local titlebar_widget = args.widget
+  local c = args.client
+  local is_titlebar = args.is_titlebar
+
   titlebar_widget:connect_signal("mouse::enter", function(_)
     local titlebar_position = titlebar_widget._widget_context_skeleton.position
-    if titlebar_position == 'top' or titlebar_position == 'bottom' then
-      root.cursor("sb_v_double_arrow")
-    else
-      root.cursor("sb_h_double_arrow")
+    if not is_titlebar then
+      if titlebar_position == 'top' or titlebar_position == 'bottom' then
+        root.cursor("sb_v_double_arrow")
+      else
+        root.cursor("sb_h_double_arrow")
+      end
     end
     set_client_hover_border_color(c)
+    local unfocus_timer
     unfocus_timer = gears_timer({
-      timeout = 0.1,
+      timeout = 0.3,
       autostart = true,
       callback = function()
-        unfocus_timer:stop()
         if not mouse_is_on_borders(c) then
           set_client_border_color(c)
+          if unfocus_timer.started then
+            unfocus_timer:stop()
+          end
         end
       end
     })
   end)
   titlebar_widget:connect_signal("mouse::leave", function(_)
-    root.cursor("left_ptr")
+    if not is_titlebar then
+      root.cursor("left_ptr")
+    end
     set_client_border_color(c)
   end)
 end
@@ -379,7 +391,7 @@ function titlebar.make_border(c, color, shadow, is_titlebar)
     borders = make_border_normal(c, color, is_titlebar)
     for _, position in ipairs({"top", "bottom", "left", "right"}) do
       if borders[position] then
-        attach_highlight_on_hover(borders[position], c)
+        attach_highlight_on_hover({widget=borders[position], client=c})
       end
     end
   end
@@ -474,7 +486,7 @@ function titlebar.make_titlebar(c, color, shadow)
       }
   else
     tbt:setup(titlebar_setup)
-    attach_highlight_on_hover(tbt, c)
+    attach_highlight_on_hover({widget=tbt, client=c, is_titlebar=true})
   end
 
   --c.skip_taskbar = true
