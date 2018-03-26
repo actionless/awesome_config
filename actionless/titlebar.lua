@@ -73,6 +73,7 @@ end
 
 
 local function set_client_border_color(c)
+  if not beautiful.highlight_border_on_hover then return end
   --if not titlebar.border_is_hovered(c) then return end
   if not c or not c.valid then return end
   local color
@@ -86,6 +87,7 @@ end
 
 
 local function set_client_hover_border_color(c)
+  if not beautiful.highlight_border_on_hover then return end
   local color
 
   if c == client.focus then
@@ -108,16 +110,42 @@ local function attach_highlight_on_hover(args)
   args = args or {}
   local titlebar_widget = args.widget
   local c = args.client
-  local is_titlebar = args.is_titlebar
+
+  local on_hover_titlebar_armed = false
+  local neva_left = false
 
   titlebar_widget:connect_signal("mouse::enter", function(_)
+    if titlebar.is_enabled(c) then
+      neva_left = true
+      return
+    end
     local titlebar_position = titlebar_widget._widget_context_skeleton.position
-    if not is_titlebar then
+    if titlebar_position == 'top' then
+      local titlebar_timer
+      titlebar_timer = gears_timer({
+        timeout = 0.3,
+        autostart = true,
+        callback = function()
+          if mouse_is_on_borders(c) then
+            root.cursor("left_ptr")
+            titlebar.make_titlebar(c)
+            on_hover_titlebar_armed = true
+          end
+          if titlebar_timer.started then
+            titlebar_timer:stop()
+          end
+        end
+      })
+    end
+
+    if mouse_is_on_borders(c) then
       if titlebar_position == 'top' or titlebar_position == 'bottom' then
         root.cursor("sb_v_double_arrow")
       else
         root.cursor("sb_h_double_arrow")
       end
+    else
+      root.cursor("left_ptr")
     end
     set_client_hover_border_color(c)
     local unfocus_timer
@@ -134,12 +162,28 @@ local function attach_highlight_on_hover(args)
       end
     })
   end)
+
   titlebar_widget:connect_signal("mouse::leave", function(_)
-    if not is_titlebar then
-      root.cursor("left_ptr")
-    end
+    root.cursor("left_ptr")
     set_client_border_color(c)
+
+    neva_left = false
+    if not on_hover_titlebar_armed then return end
+    local titlebar_unhover_timer
+    titlebar_unhover_timer = gears_timer({
+      timeout = 0.7,
+      autostart = true,
+      callback = function()
+        if not neva_left then
+          titlebar.make_border(c)
+        end
+        if titlebar_unhover_timer.started then
+          titlebar_unhover_timer:stop()
+        end
+      end
+    })
   end)
+
 end
 
 function titlebar.remove_titlebar(c)
@@ -486,7 +530,7 @@ function titlebar.make_titlebar(c, color, shadow)
       }
   else
     tbt:setup(titlebar_setup)
-    attach_highlight_on_hover({widget=tbt, client=c, is_titlebar=true})
+    attach_highlight_on_hover({widget=tbt, client=c})
   end
 
   --c.skip_taskbar = true

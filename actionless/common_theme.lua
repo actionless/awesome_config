@@ -83,6 +83,8 @@ function common_theme.generate_theme(theme_dir)
   theme.border_radius = 0
   theme.client_border_radius = "theme.border_radius"
 
+  theme.highlight_border_on_hover = false
+
   theme.useless_gap	        = dpi(10)
   theme.screen_padding		= 0
 
