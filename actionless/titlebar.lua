@@ -41,7 +41,9 @@ local function mouse_is_on_borders(c)
   if c ~= mouse.current_client then
     return
   end
-  local client_geometry = mouse.object_under_pointer():geometry()
+  local object_under_pointer = mouse.object_under_pointer()
+  if not object_under_pointer then return end
+  local client_geometry = object_under_pointer:geometry()
   local border = beautiful.base_border_width * 2
   local mouse_coords = mouse.coords()
 
@@ -123,7 +125,7 @@ local function attach_highlight_on_hover(args)
     if titlebar_position == 'top' then
       local titlebar_timer
       titlebar_timer = gears_timer({
-        timeout = 0.3,
+        timeout = 0.7,
         autostart = true,
         callback = function()
           if mouse_is_on_borders(c) then
