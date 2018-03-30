@@ -108,21 +108,33 @@ local function set_client_hover_border_color(c)
   c.border_color = color
 end
 
+local function choose_mouse_pointer(c, titlebar_position)
+  if mouse_is_on_borders(c) then
+    if titlebar_position == 'top' or titlebar_position == 'bottom' then
+      root.cursor("sb_v_double_arrow")
+    else
+      root.cursor("sb_h_double_arrow")
+    end
+  else
+    root.cursor("left_ptr")
+  end
+end
+
 local function attach_highlight_on_hover(args)
   args = args or {}
   local titlebar_widget = args.widget
   local c = args.client
 
+  local titlebar_position = titlebar_widget._widget_context_skeleton.position
+
   local on_hover_titlebar_armed = false
   local neva_left = false
 
   titlebar_widget:connect_signal("mouse::enter", function(_)
-    if titlebar.is_enabled(c) then
-      neva_left = true
-      return
-    end
-    local titlebar_position = titlebar_widget._widget_context_skeleton.position
     if titlebar_position == 'top' then
+      if titlebar.is_enabled(c) then
+        neva_left = true
+      end
       local titlebar_timer
       titlebar_timer = gears_timer({
         timeout = 0.7,
@@ -140,15 +152,7 @@ local function attach_highlight_on_hover(args)
       })
     end
 
-    if mouse_is_on_borders(c) then
-      if titlebar_position == 'top' or titlebar_position == 'bottom' then
-        root.cursor("sb_v_double_arrow")
-      else
-        root.cursor("sb_h_double_arrow")
-      end
-    else
-      root.cursor("left_ptr")
-    end
+    choose_mouse_pointer(c, titlebar_position)
     set_client_hover_border_color(c)
     local unfocus_timer
     unfocus_timer = gears_timer({
@@ -157,6 +161,7 @@ local function attach_highlight_on_hover(args)
       callback = function()
         if not mouse_is_on_borders(c) then
           set_client_border_color(c)
+          choose_mouse_pointer(c, titlebar_position)
           if unfocus_timer.started then
             unfocus_timer:stop()
           end
