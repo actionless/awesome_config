@@ -17,17 +17,8 @@ local gradio = {
   player_cmd = 'gradio'
 }
 
-function gradio.init(widget)
-  dbus.add_match(
-    "session",
-    "path='/org/mpris/MediaPlayer2',interface='org.freedesktop.DBus.Properties',member='PropertiesChanged'"
-  )
-  dbus.connect_signal(
-    "org.freedesktop.DBus.Properties",
-    function()
-      widget.update(gradio.update)
-    end)
-end
+--function gradio.init(_widget)
+--end
 -------------------------------------------------------------------------------
 function gradio.toggle()
   awful.spawn.with_shell(dbus_cmd .. "/org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause")
@@ -69,7 +60,6 @@ function gradio.post_update(result_string, parse_status_callback)
 end
 -------------------------------------------------------------------------------
 function gradio.parse_metadata(result_string, parse_status_callback)
-  log(result_string)
   local player_status = parse.find_values_in_string(
     result_string,
     "([%w]+): (.*)$",
@@ -78,11 +68,24 @@ function gradio.parse_metadata(result_string, parse_status_callback)
       title='title',
       album='album',
       date='year',
-      cover='arturl'
+      cover_url='artUrl'
     }
   )
   h_table.merge(gradio.player_status, player_status)
   parse_status_callback(gradio.player_status)
+end
+-------------------------------------------------------------------------------
+function gradio.resize_cover(
+  player_status, _, output_coverart_path, notification_callback
+)
+  awful.spawn.with_line_callback(
+    string.format(
+      "curl -L -s %s -o %s",
+      player_status.cover_url,
+      output_coverart_path
+    ),{
+    exit=notification_callback
+  })
 end
 
 return gradio

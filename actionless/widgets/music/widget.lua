@@ -65,6 +65,17 @@ local function worker(args)
   local backend_id = 0
   local cached_backends = {}
 
+  dbus.add_match(
+    "session",
+    "path='/org/mpris/MediaPlayer2',interface='org.freedesktop.DBus.Properties',member='PropertiesChanged'"
+  )
+  dbus.connect_signal(
+    "org.freedesktop.DBus.Properties",
+    function()
+      player.update()
+    end
+  )
+
   function player.use_next_backend()
   --[[ music player backends:
 

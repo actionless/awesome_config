@@ -12,20 +12,11 @@ local mopidy = {}
 
 function mopidy.init(player_widget)
   player_widget = player_widget or {}
+  mopidy.player_widget = player_widget
   mopidy.player_cmd = player_widget.args.mopidy_player_command or "xterm -e ncmpcpp"
   mopidy.host = player_widget.host or "127.0.0.1"
   mopidy.port = player_widget.port or "6600"
   mopidy.password = player_widget.password or [[""]]
-
-  dbus.add_match(
-    "session",
-    "path='/org/mpris/MediaPlayer2',interface='org.freedesktop.DBus.Properties',member='PropertiesChanged'"
-  )
-  dbus.connect_signal(
-    "org.freedesktop.DBus.Properties",
-    function()
-      mopidy.update(player_widget.parse_status)
-    end)
 
   gears_timer({
     callback=function() return mopidy.update(player_widget.parse_status) end,
@@ -53,6 +44,9 @@ function mopidy.prev_song()
 end
 -------------------------------------------------------------------------------
 function mopidy.update(parse_status_callback)
+  if mopidy.player_widget.backend ~= mopidy then
+    return
+  end
   awful.spawn.easy_async(
 
     [[mpc --format "file:%file%
