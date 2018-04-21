@@ -51,7 +51,7 @@ function clementine.post_update(result_string, parse_status_callback)
   clementine.player_status.state = state
   if state == 'play' or state == 'pause' then
     awful.spawn.easy_async(
-      dbus_cmd .. "/Player GetMetadata",
+      dbus_cmd .. " /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata",
       function(str) clementine.parse_metadata(str, parse_status_callback) end
     )
   else
