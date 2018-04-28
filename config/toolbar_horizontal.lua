@@ -94,7 +94,9 @@ function toolbar.init(awesome_context)
       separator,
       {
         layout = wibox.layout.flex.horizontal,
-        loaded_widgets.music
+        common.panel_shape(
+          loaded_widgets.music
+        )
       },
       {
         layout = wibox.layout.fixed.horizontal,
