@@ -68,11 +68,14 @@ function toolbar.init(awesome_context)
         loaded_widgets.screen[si].tasklist,
       },
       {
-        layout = wibox.container.background,
-        buttons = wheel_binding,
-        sep,
+        layout = wibox.layout.fixed.horizontal,
+        {
+          layout = wibox.container.background,
+          buttons = wheel_binding,
+          sep,
+        },
+        awesome_context.apw_on_the_left and apw,
       },
-      awesome_context.apw_on_the_left and apw,
       {
         layout = wibox.container.background,
         buttons = wheel_binding,
