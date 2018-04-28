@@ -30,6 +30,7 @@ optdepends=(
 	'gpaste: config/autorun'
 	'pavucontrol: apw: default mixer'
 	'pulseaudio: config/autorun'
+	'kbdd-git: config/autorun: per-window keyboard layout'
 	'plotinus: Ctrl+Shift+P menu in GTK+3 applications'
 	'qt5ct: qt5 theme'
 	#'unclutter: config/autorun: hide mouse pointer'
