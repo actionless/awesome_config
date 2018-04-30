@@ -38,9 +38,7 @@ local function worker(args)
   ))
 
   local function update_widget_data()
-    bat.widget:set_markup(
-      string.format("%-2s%% ", bat.now.percentage)
-    )
+    local widget_text = string.format("%-2s%% ", bat.now.percentage)
     -- charged:
     if bat.now.state == 'fully-charged' then
       if beautiful.widget_ac then
@@ -50,12 +48,15 @@ local function worker(args)
       bat.widget:set_fg(fg)
     -- charging:
     elseif bat.now.state == 'charging' then
+      if not beautiful.show_widget_icon then
+        widget_text = 'c:'..widget_text
+      end
       if bat.now.percentage and bat.now.percentage < 30 then
         if beautiful.widget_ac_charging_low then
           bat.widget:set_image(beautiful.widget_ac_charging_low)
         end
-        bat.widget:set_bg(beautiful.panel_widget_bg_warning)
-        bat.widget:set_fg(beautiful.panel_widget_fg_warning)
+        bat.widget:set_bg(bg)
+        bat.widget:set_fg(fg)
       else
         if beautiful.widget_ac_charging then
           bat.widget:set_image(beautiful.widget_ac_charging)
@@ -85,6 +86,7 @@ local function worker(args)
         bat.widget:set_fg(fg)
       end
     end
+    bat.widget:set_markup(widget_text)
   end
 
   local function post_update(stdout)
