@@ -35,8 +35,8 @@ theme.panel_bg = gsc.menubar_bg_color
 theme.panel_widget_bg = gsc.base_color
 theme.panel_widget_fg = gsc.text_color
 
-local gtk_border_radius = gsc.border_radius
-local gtk_border_width = gsc.border_width
+local gtk_border_radius = gsc.button_border_radius
+local gtk_border_width = gsc.button_border_width
 if gtk_border_width < 1 then
   gtk_border_width = 1
 end
@@ -96,9 +96,11 @@ theme.revelation_bg = theme.panel_bg
 theme.revelation_font = "Monospace Bold 24"
 -- FONTS:
 theme.font = "Monospace Bold 10"
+theme.font          = theme.gtk.font_family .. ' ' .. theme.gtk.font_size
 --theme.font = "Sans Bold 10"
 theme.tasklist_font = theme.font
 theme.sans_font = "Sans Bold 10"
+theme.font          = theme.gtk.font_family .. ' ' .. theme.gtk.font_size
 -- Don't use sans font:
 --theme.sans_font	= "theme.font"
 

@@ -37,8 +37,8 @@ theme.panel_widget_fg = gsc.text_color
 theme.panel_widget_fg_warning = theme.panel_widget_fg
 
 log(gsc)
-theme.border_radius = dpi(gsc.border_radius*2)
-theme.panel_widget_border_radius = dpi(gsc.border_radius*0.7)
+theme.border_radius = dpi(gsc.button_border_radius*2)
+theme.panel_widget_border_radius = dpi(gsc.button_border_radius*0.7)
 --theme.border_radius = dpi(5)
 --theme.panel_widget_border_radius = dpi(5)
 theme.panel_widget_border_width = dpi(2)
