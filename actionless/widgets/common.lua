@@ -46,12 +46,13 @@ function common.constraint(args)
 end
 
 
-function common.panel_shape(widget)
+function common.panel_shape(widget, args)
+  args = args or {}
   local shaped = wibox.container.background(widget)
   shaped:set_shape(gears.shape.rounded_rect, beautiful.panel_widget_border_radius)
   shaped.shape_clip = true
-  shaped.shape_border_width = beautiful.panel_widget_border_width or 0
-  shaped.shape_border_color = beautiful.panel_widget_border_color or beautiful.border_normal
+  shaped.shape_border_width = args.border_width or beautiful.panel_widget_border_width or 0
+  shaped.shape_border_color = args.border_color or beautiful.panel_widget_border_color or beautiful.border_normal
   setmetatable(shaped,        { __index = widget })
   return shaped
 end
