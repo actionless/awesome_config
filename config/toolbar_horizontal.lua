@@ -95,7 +95,10 @@ function toolbar.init(awesome_context)
       {
         layout = wibox.layout.flex.horizontal,
         common.panel_shape(
-          loaded_widgets.music
+          loaded_widgets.music,
+          {
+            border_width = 0,
+          }
         )
       },
       {
