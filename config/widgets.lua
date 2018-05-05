@@ -32,12 +32,12 @@ function widget_loader.init(awesome_context)
   })
 
   -- NetCtl
-  w.netctl = widgets.netctl({
-    update_interval = 5,
-    preset = conf.net_preset,
-    wlan_if = conf.wlan_if,
-    eth_if = conf.eth_if,
-  })
+  --w.netctl = widgets.netctl({
+    --update_interval = 5,
+    --preset = conf.net_preset,
+    --wlan_if = conf.wlan_if,
+    --eth_if = conf.eth_if,
+  --})
   -- MUSIC
   w.music = widgets.music.widget({
       update_interval = 5,
@@ -63,8 +63,8 @@ function widget_loader.init(awesome_context)
         --sep_media,
 
         separator,
-        w.netctl,
-        separator,
+        --w.netctl,
+        --separator,
 
         --sep_media,
         --h_sep,
