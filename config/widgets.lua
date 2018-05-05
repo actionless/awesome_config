@@ -47,6 +47,7 @@ function widget_loader.init(awesome_context)
       force_no_bgimage=true,
       mopidy_player_command = awesome_context.cmds.tmux_run .. "ncmpcpp",
       enable_notifications = false,
+      bold_artist = true,
       --valign = "bottom",
   })
   -- volume
