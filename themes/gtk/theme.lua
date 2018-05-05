@@ -101,6 +101,12 @@ theme.font          = theme.gtk.font_family .. ' ' .. theme.gtk.font_size
 theme.tasklist_font = theme.font
 theme.sans_font = "Sans Bold 10"
 theme.font          = theme.gtk.font_family .. ' ' .. theme.gtk.font_size
+if not theme.font:match('Bold') then
+  local bold_font = theme.gtk.font_family .. ' Bold ' .. theme.gtk.font_size
+  theme.titlebar_font = bold_font
+  theme.taglist_font = bold_font
+end
+
 -- Don't use sans font:
 --theme.sans_font	= "theme.font"
 
