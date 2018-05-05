@@ -9,6 +9,7 @@ local gears_timer = require("gears.timer")
 
 local common_widget	= require("actionless.widgets.common").decorated
 local parse		= require("actionless.util.parse")
+local s_helpers		= require("actionless.util.string")
 
 
 local netctl = {
@@ -17,7 +18,7 @@ local netctl = {
 
 local function worker(args)
   args = args or {}
-  local update_interval = args.update_interval or 5
+  local update_interval = args.update_interval or 15
   local bg = args.bg or beautiful.panel_widget_bg or beautiful.panel_bg or beautiful.bg
   local fg = args.fg or beautiful.panel_widget_fg or beautiful.panel_fg or beautiful.fg
   local font = args.font or beautiful.panel_widget_font or beautiful.panel_font or beautiful.font
@@ -97,15 +98,19 @@ local function worker(args)
 
   function netctl.netctl_update()
     awful.spawn.easy_async(
-      "systemctl list-unit-files 'netctl@*'",
+      "systemctl list-unit-files 'netctl*'",
       function(stdout)
         netctl.update_widget(
-          stdout:match("netctl@(.*)%.service.*enabled"
-          ) or 'nctl...')
+          s_helpers.split(
+            stdout:match("netctl(.*)%.service.*enabled") or 'nctl...',
+            "\n"
+          )[1]
+        )
       end)
   end
 
   function netctl.update_widget(network_name)
+    --nlog(network_name)
     netctl.widget:set_text(network_name)
     if netctl.interface == netctl.eth_if then
       netctl.widget:set_image(beautiful.widget_net_wired)
