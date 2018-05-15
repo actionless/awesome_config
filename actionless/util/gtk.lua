@@ -76,7 +76,7 @@ end
 -- <tr> <td>`fg_color`</td> <td>`theme_fg_color`</td> <td></td> <td></td> <td>Window fg</td> </tr>
 -- <tr> <td>`base_color`</td> <td>`theme_base_color`</td> <td></td> <td></td> <td>Entry bg</td> </tr>
 -- <tr> <td>`text_color`</td> <td>`theme_text_color`</td> <td></td> <td></td> <td>Entry fg</td> </tr>
--- <tr> <td>`button_bg_color`</td> <td>`theme_buton_bg_color`</td> <td>`theme_bg_color`</td> <td></td> <td>Button bg</td> </tr>
+-- <tr> <td>`button_bg_color`</td> <td>`theme_button_bg_color`</td> <td>`theme_bg_color`</td> <td></td> <td>Button bg</td> </tr>
 -- <tr> <td>`button_fg_color`</td> <td>`theme_button_fg_color`</td> <td>`theme_fg_color`</td> <td></td> <td>Button fg</td> </tr>
 -- <tr> <td>`button_border_color`</td> <td></td> <td></td> <td></td> <td>Button border-color</td> </tr>
 -- <tr> <td>`button_border_radius`</td> <td></td> <td></td> <td></td> <td>Button border-radius</td> </tr>
@@ -147,9 +147,12 @@ function gtk.get_theme_variables()
     ))
     local label = Gtk.Label()
     local label_style_context = label:get_style_context()
+    local gdk_scale = os.getenv("GDK_SCALE") or 1.0
+    local xrdb_scale = dpi(10000) / 10000
+    local pt_to_px_ratio = 1+1/3
     result["font_size"] = get_gtk_property(
         label_style_context, "font-size"
-    ) / dpi(1000) * 1000 / (1+1/3)    -- i have no clue why it's 1.(3) times bigger than real
+    ) * gdk_scale / xrdb_scale / pt_to_px_ratio
     result["font_family"] = get_gtk_property(
         label_style_context, "font-family"
     )[1]
@@ -193,21 +196,29 @@ function gtk.get_theme_variables()
         }
     ))
 
-    headerbar:add(label)
-    result = join(result, read_gtk_color_properties_from_widget(
-        label, {
-            menubar_fg_color="color",
-        }
-    ))
+    if result.menubar_bg_color and result.menubar_bg_color ~= "#00000000" then
+        headerbar:add(label)
+        result = join(result, read_gtk_color_properties_from_widget(
+            label, {
+                menubar_fg_color="color",
+            }
+        ))
+    end
 
     headerbar:add(button)
     result = join(result, read_gtk_color_properties_from_widget(
         button, {
             header_button_bg_color="background-color",
-            header_button_fg_color="color",
             header_button_border_color="border-color",
         }
     ))
+    if result.header_button_bg_color and result.header_button_bg_color ~= "#00000000" then
+        result = join(result, read_gtk_color_properties_from_widget(
+            button, {
+                header_button_fg_color="color",
+            }
+        ))
+    end
 
     local error_button = Gtk.Button()
     error_button:get_style_context():add_class("destructive-action")
