@@ -1,40 +1,49 @@
---[[            
-     Licensed under GNU General Public License v2
-      * (c) 2013-2014, Yauheni Kirylau             
+--[[
+Licensed under GNU General Public License v2
+* (c) 2013-2014, Yauheni Kirylau
 --]]
 
-local beautiful = require("beautiful")
+local capi = {
+  awesome=awesome
+}
+local awesome_keyboardlayout = require("awful.widget.keyboardlayout")
 
-local common	= require("actionless.widgets.common")
-
+local common = require("actionless.widgets.common")
 
 local kbd = {}
 kbd.widget = common.widget()
 
 local function worker(args)
-  local args	 = args or {}
-  local bg = args.bg or beautiful.panel_widget_bg_warning or beautiful.fg
-  local fg = args.fg or beautiful.panel_widget_fg_warning or beautiful.bg
-  local layouts = args.layouts or {"eng", "rus"}
-  local default_layout = args.default_layout or "eng"
-  kbd.widget = common.decorated({
-    widget=kbd.widget, bg=bg, fg=fg, widget_inverted=true,
-  })
+  args	 = args or {}
+  args.orientation = args.orientation or "horizontal"
+  args.widget=kbd.widget
+  kbd.widget = common.decorated(args)
   kbd.widget:hide()
 
-  dbus.request_name("session", "ru.gentoo.kbdd")
-  dbus.add_match("session", "interface='ru.gentoo.kbdd',member='layoutChanged'")
-  dbus.connect_signal("ru.gentoo.kbdd", function(...)
-    local data = {...}
-    local layout = data[2] + 1
-    local current_layout = layouts[layout]
-    if current_layout == default_layout then
+  local awesome_keayboardlayout_instance = awesome_keyboardlayout()
+  local replacements = args.replacements or {us="eng", ["ru(winkeys)"]="rus"}
+  local default_layout = args.default_layout or "us"
+
+  local function update_status()
+    local self =  awesome_keayboardlayout_instance
+    self._current = capi.awesome.xkb_get_layout_group()
+    local text = ""
+    if (#self._layout > 0) then
+        text = (self._layout[self._current+1])
+    end
+    if text == default_layout then
       kbd.widget:hide()
     else
       kbd.widget:show()
-      kbd.widget:set_markup(current_layout)
+      kbd.widget:set_markup(replacements[text] or text)
     end
-  end)
+  end
+
+  update_status()
+  capi.awesome.connect_signal("xkb::group_changed",
+    function () update_status() end);
+  capi.awesome.connect_signal("xkb::map_changed",
+    function () update_status() end)
 
   return setmetatable(kbd, { __index = kbd.widget })
 end

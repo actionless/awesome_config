@@ -1,25 +1,53 @@
-awesome_config
+﻿awesome wm config
 ==============
 
-example of config/local.lua: https://gist.github.com/actionless/229eef7795915068bad9
+#### Installation
 
-in `*-xresources` themes panel [adapts](http://imgur.com/a/qIAAa) for current xrdb theme.
+Works with Awesome WM 4.2
 
-![Screenshot](https://raw.githubusercontent.com/actionless/awesome_config/master/screenshots/screenshot.png "Screenshot")
+```sh
+cd ~/.config/
+git clone https://github.com/actionless/awesome_config.git -b devel awesome
+cd awesome
+git submodule init
+git submodule update
+# optionally copy config with machine-specific variables
+cp config/local.lua.example config/local.lua
+# on Arch Linux or Manjaro:
+makepkg -fi --syncdeps
+```
 
-![pokemon_dark](http://i.imgur.com/BWnzpfh.png?1 "pokemon_dark")
+ - [lcars](http://i.imgur.com/8C6l5ko.gifv) layout
+ - in `*-xresources` themes panel [adapts](http://imgur.com/a/qIAAa) for current xrdb theme
+
+`themes/lcars-xresourecs-hidpi/theme.lua`
+![Screenshot](https://github.com/actionless/awesome_config/raw/devel/screenshots/screenshot_new.png "Screenshot")
+
+`themes/twmish/theme.lua` and [this](https://github.com/actionless/oomox/blob/master/colors/retro/classic_x_new) oomox theme
+![Screenshot](https://i.redd.it/hre8tx9vynyx.png "Screenshot")
+
+`themes/gtk/theme.lua` and [this](https://github.com/actionless/oomox/blob/master/colors/retro/uzi) oomox theme
+![Screenshot](http://i.imgur.com/fhl6wYp.png "Screenshot")
+
+Lcars layout:
+![Screenshot](https://raw.githubusercontent.com/actionless/awesome_config/devel/screenshots/screenshot.png "Screenshot")
+
+The same screenshot with other colors set in ~/.Xresources:
+
 
 #### Widget popups
+
+@TODO: upload newer screenshots
 
 ##### CPU
 Shows results from top for last second
 
-![cpu](https://raw.githubusercontent.com/actionless/awesome_config/master/screenshots/cpu.png "cpu")
+![cpu](https://raw.githubusercontent.com/actionless/awesome_config/devel/screenshots/cpu.png "cpu")
 
 ##### Memory
 Shows unified percentage of used memory for all applications' processes
 
-![mem](https://raw.githubusercontent.com/actionless/awesome_config/master/screenshots/mem.png "mem")
+![mem](https://raw.githubusercontent.com/actionless/awesome_config/devel/screenshots/mem.png "mem")
 
 ##### Systray toggle (like in windows xp :) )
 ![st](http://i.imgur.com/HFfERGC.png "st")

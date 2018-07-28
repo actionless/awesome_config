@@ -4,23 +4,23 @@
 --]]
 
 local awful		= require("awful")
+local wibox	= require("wibox")
 local naughty		= require("naughty")
 local beautiful		= require("beautiful")
 local string		= { format	= string.format }
 local setmetatable	= setmetatable
 
-local h_string		= require("utils.string")
-local common_widget	= require("actionless.widgets.common").widget
-local markup		= require("utils.markup")
-local async		= require("utils.async")
+local h_string		= require("actionless.util.string")
+local common = require("actionless.widgets.common")
+local decorated_widget	= common.decorated
+local markup		= require("actionless.util.markup")
 
 local backend_modules	= require("actionless.widgets.music.backends")
-local tag_parser	= require("actionless.widgets.music.tag_parser")
 
 
 -- player infos
 local player = {
-  id=nil,
+  notification_object=nil,
   cmd=nil,
   player_status = {
     state=nil,
@@ -35,21 +35,46 @@ local player = {
 
 
 local function worker(args)
-  local args = args or {}
+  args = args or {}
+  player.args = args
   local timeout = args.timeout or 5
   local default_art = args.default_art or ""
   local enabled_backends = args.backends
                            or { 'mpd', 'cmus', 'spotify', 'clementine', }
   local cover_size = args.cover_size or 100
-  local font = args.font or beautiful.tasklist_font or beautiful.font
-  local fg = args.fg or beautiful.panel_fg or beautiful.fg
-  local artist_color      = beautiful.player_artist or fg or beautiful.fg_normal
-  local title_color      = beautiful.player_title or fg or beautiful.fg_normal
-  player.widget = common_widget(args)
+  player.enable_notifications = args.enable_notifications or false
+  --player.artist_widget = common_widget(args)
+  --player.title_widget = common_widget(args)
+  player.artist_widget = wibox.widget.textbox()
+  player.title_widget = wibox.widget.textbox()
+  player.separator_widget = wibox.widget.textbox("waiting for " .. enabled_backends[1] .. "...")
+  args.widgets = {
+    --wibox.widget.textbox(' '),
+    player.artist_widget,
+    --common.constraint({
+      --height = beautiful.panel_padding_bottom * 2,
+      --width = beautiful.panel_padding_bottom * 2,
+    --}),
+    player.separator_widget,
+    player.title_widget,
+    --wibox.widget.textbox(' '),
+  }
+  player.widget = decorated_widget(args)
 
 
   local backend_id = 0
   local cached_backends = {}
+
+  dbus.add_match(
+    "session",
+    "path='/org/mpris/MediaPlayer2',interface='org.freedesktop.DBus.Properties',member='PropertiesChanged'"
+  )
+  dbus.connect_signal(
+    "org.freedesktop.DBus.Properties",
+    function()
+      player.update()
+    end
+  )
 
   function player.use_next_backend()
   --[[ music player backends:
@@ -76,13 +101,13 @@ local function worker(args)
 
 -------------------------------------------------------------------------------
   function player.run_player()
-    awful.util.spawn_with_shell(player.cmd)
+    awful.spawn.with_shell(player.cmd)
   end
 -------------------------------------------------------------------------------
   function player.hide_notification()
-    if player.id ~= nil then
-      naughty.destroy(player.id)
-      player.id = nil
+    if player.notification_object ~= nil then
+      naughty.destroy(player.notification_object)
+      player.notification_object = nil
     end
   end
 -------------------------------------------------------------------------------
@@ -92,9 +117,9 @@ local function worker(args)
     player.hide_notification()
     if ps.album or ps.date then
       text = string.format(
-        "%s (%s)\n%s",
+        "%s%s\n%s",
         ps.album,
-        ps.date,
+        ps.date and " ("..ps.date..")" or "",
         ps.artist
       )
     elseif ps.artist then
@@ -106,11 +131,12 @@ local function worker(args)
     else
       text = enabled_backends[backend_id]
     end
-    player.id = naughty.notify({
+    player.notification_object = naughty.notify({
       icon = player.cover,
       title = ps.title,
       text = text,
-      timeout = timeout
+      timeout = timeout,
+      position = beautiful.widget_notification_position,
     })
   end
 -------------------------------------------------------------------------------
@@ -156,69 +182,75 @@ local function worker(args)
     local artist = ""
     local title = ""
     local old_title = player.player_status.title
-    player_status = tag_parser.predict_missing_tags(player_status)
     player.player_status = player_status
 
-    if player_status.state == "play" then
+    if player_status.state == "play" or player_status.state == "pause" then
       -- playing
       artist = player_status.artist or "playing"
       title = player_status.title or " "
-      player.widget:set_icon('music_play')
-      if #artist + #title > 60 then
-        if #artist > 25 then
-          artist = h_string.max_length(artist, 15) .. "…"
-        end
-        if #player_status.title > 35 then
-          title = h_string.max_length(title, 25) .. "…"
-        end
-      end
+      --player.widget:set_icon('music_play')
+      --if #artist + #title > 14*10 then
+        --if #artist > 14*5 then
+          --artist = h_string.max_length(artist, 14*5) .. "…"
+        --end
+        --if #player_status.title > 14*5 then
+          --title = h_string.max_length(title, 14*5) .. "…"
+        --end
+      --end
       artist = h_string.escape(artist)
       title = h_string.escape(title)
       -- playing new song
       if player_status.title ~= old_title then
         player.resize_cover()
       end
+    end
+    if player_status.state == "play" then
+      player.widget:set_normal()
+      --player.separator_widget:set_text("⏵")
+      player.separator_widget:set_text("-")
     elseif player_status.state == "pause" then
       -- paused
-      artist = enabled_backends[backend_id]
-      title  = "paused"
-      player.widget:set_icon('music_pause')
-    else
+      --player.widget:set_icon('music_pause')
+      --player.widget:set_warning()
+      --player.separator_widget:set_text("⏸")
+      player.separator_widget:set_text("-")
+      player.widget:set_color({
+        bg=args.pause_bg or beautiful.panel_bg,
+        fg=args.pause_fg or beautiful.panel_fg,
+      })
+    elseif player_status.state == "stop" then
       -- stop
+      player.separator_widget:set_text("")
       artist = enabled_backends[backend_id]
+      title = "stopped"
+      player.widget:set_disabled()
+    else
+      player.separator_widget:set_text("waiting for " .. enabled_backends[backend_id] .. "...")
+      artist = ""
+      title = ""
+      player.widget:set_disabled()
     end
 
-    if player_status.state == "play" or player_status.state == "pause" then
-      artist = markup.fg.color(artist_color, artist)
-      player.widget:set_markup(
-        markup.font(font,
-           " " ..
-          (beautiful.panel_enbolden_details
-            and markup.bold(artist)
-            or artist)
-          .. " " ..
-          markup.fg.color(title_color,
-            title)
-          .. " ")
-      )
-    else
-      if beautiful.show_widget_icon then
-        player.widget:set_icon('music_stop')
-        player.widget:set_text('')
-      else
-        player.widget:set_text('♫')
-      end
-    end
+    --artist = h_string.multiline_limit_word(artist, 14)
+    --title = h_string.multiline_limit_word(title, 14)
+    player.artist_widget:set_markup(
+        args.bold_artist
+          and markup.bold(artist)
+          or artist
+    )
+    player.title_widget:set_markup(title)
   end
 -------------------------------------------------------------------------------
 function player.resize_cover()
+  local notification_callback
+  if player.enable_notifications or (player.notification_object and player.notification_object.box.visible) then
+    notification_callback = player.show_notification
+  end
   -- backend supports it:
   if player.backend.resize_cover then
     return player.backend.resize_cover(
       player.player_status, cover_size, player.cover,
-      function()
-        player.show_notification()
-      end
+      notification_callback
     )
   end
   -- fallback:
@@ -226,16 +258,16 @@ function player.resize_cover()
   if not player.player_status.cover then
     player.player_status.cover = default_art
   end
-  async.execute(
+  awful.spawn.with_line_callback(
     string.format(
       [[convert %q -thumbnail %q -gravity center -background "none" -extent %q %q]],
       player.player_status.cover,
       resize,
       resize,
       player.cover
-    ),
-    player.show_notification
-  )
+    ), {
+    output_done=notification_callback
+  })
 end
 -------------------------------------------------------------------------------
   player.use_next_backend()

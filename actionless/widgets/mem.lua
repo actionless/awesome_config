@@ -5,15 +5,15 @@
       * (c) 2010-2012, Peter Hofmann
 --]]
 
-local naughty      = require("naughty")
-local beautiful    = require("beautiful")
+local naughty = require("naughty")
+local beautiful = require("beautiful")
+local awful = require("awful")
+local gears_timer = require("gears.timer")
 
-local async      = require("utils.async")
-local h_table      = require("utils.table")
-local h_string      = require("utils.string")
-local parse        = require("utils.parse")
-local common_widget= require("actionless.widgets.common").widget
-local newinterval  = require("actionless.helpers").newinterval
+local h_table = require("actionless.util.table")
+local h_string = require("actionless.util.string")
+local parse = require("actionless.util.parse")
+local common_widget= require("actionless.widgets.common").decorated
 
 -- Memory usage (ignoring caches)
 local mem = {
@@ -24,30 +24,23 @@ local mem = {
 local function worker(args)
   args   = args or {}
   local update_interval  = args.update_interval or 5
-  local bg = args.bg or beautiful.panel_fg or beautiful.fg
-  local fg = args.fg or beautiful.panel_bg or beautiful.bg
   mem.timeout = args.timeout or 0
 
-  mem.widget = common_widget()
+  mem.widget = common_widget(args)
   mem.widget:set_image(beautiful.widget_mem)
-  mem.widget:set_fg(fg)
-  mem.widget:set_bg(bg)
   mem.widget:connect_signal(
     "mouse::enter", function () mem.show_notification() end)
   mem.widget:connect_signal(
     "mouse::leave", function () mem.hide_notification() end)
+  mem.cores_number = tonumber(parse.command_to_string('nproc'))
 
   mem.list_len = args.list_length or 10
 
-  --local new_top = args.new_top or false
-  --mem.command = args.command or
-    --new_top and
-    --"COLUMNS=512 top -o \\%MEM -b -n 1" ..
-    --[[ | awk '{printf "%-5s %-4s %s\n", $1, $8, $11}']]
-    --or
-    --"COLUMNS=512 top -o \\%MEM -b -n 1" ..
-    --[[ | awk '{printf "%-5s %-4s %s\n", $1, $10, $12}']]
   mem.command = "top -o \\%MEM -b -n 1 -w 512"
+  mem.columns = args.columns or {
+    percent=10,
+    name=12
+  }
 
   function mem.hide_notification()
     if mem.notification ~= nil then
@@ -66,24 +59,36 @@ local function worker(args)
       timeout = mem.timeout,
       font = beautiful.notification_monofont,
       replaces_id = mem.get_notification_id(),
+      position = beautiful.widget_notification_position,
     })
-    async.execute(mem.command, mem.notification_callback)
+    awful.spawn.easy_async(
+      mem.command,
+      mem.notification_callback_done
+    )
+    mem.update()
   end
 
-  function mem.notification_callback(output)
+  function mem.notification_callback_done(output)
     local notification_id = mem.get_notification_id()
     if not notification_id then return end
     local result = {}
 
+    local column_headers = h_string.split(
+      h_table.range(
+        parse.string_to_lines(output),
+        6, 6
+      )[1], ' '
+    )
     for _, line in ipairs(
       h_table.range(
         parse.string_to_lines(output),
-        14
+        7
       )
     ) do
       local values = h_string.split(line, ' ')
-      local percent = values[8]
-      local name = values[11]
+      local percent = values[mem.columns.percent]
+      local name = values[mem.columns.name]
+      if name == 'Web' then name = 'firefox' end
       percent = percent + 0
       if result[name] then
         result[name] = result[name] + percent
@@ -92,23 +97,29 @@ local function worker(args)
       end
     end
 
-    local result_string = ' %MEM COMMAND\n'
+    local result_string = string.format(
+      '%5s %s\n',
+      column_headers[mem.columns.percent],
+      column_headers[mem.columns.name]
+    )
+    result_string = result_string .. '<span font="'  .. tostring(beautiful.text_font)  .. '">'
     local counter = 0
     for k, v in h_table.spairs(result, function(t,a,b) return t[b] < t[a] end) do
       result_string = result_string .. string.format("%5.1f %s", v, k)
       counter = counter + 1
       if counter == mem.list_len then
         break
-      else
-        result_string = result_string .. '\n'
       end
+      result_string = result_string .. '\n'
     end
+    result_string = result_string .. '</span>'
 
     mem.notification = naughty.notify({
       text = result_string,
       timeout = mem.timeout,
       font = beautiful.notification_monofont,
       replaces_id = mem.get_notification_id(),
+      position = beautiful.widget_notification_position,
     })
   end
 
@@ -129,10 +140,17 @@ local function worker(args)
     mem.widget:set_text(
       string.format(
         "%6s", mem.now.used .. "MB"
-    ))
+      ))
   end
 
-  newinterval("mem", update_interval, mem.update)
+  gears_timer({
+    callback=mem.update,
+    timeout=update_interval,
+    autostart=true,
+    call_now=true,
+  })
+
   return setmetatable(mem, { __index = mem.widget })
-end
+end -- worker
+
 return setmetatable(mem, { __call = function(_, ...) return worker(...) end })

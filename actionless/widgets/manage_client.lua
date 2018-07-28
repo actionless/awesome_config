@@ -10,65 +10,88 @@ local capi = { client = client }
 
 
 local common = require("actionless.widgets.common")
+local persistent = require("actionless.persistent")
+local color_utils = require("actionless.util.color")
 
 
 local manage_client = {}
 
 local function worker(args)
-  local args	 = args or {}
+  args	 = args or {}
   args.bg = args.bg or beautiful.panel_widget_bg or beautiful.fg
   args.fg = args.fg or beautiful.panel_widget_fg or beautiful.bg
-  local widget_screen = args.screen or 1
-  local clientbuttons = args.clientbuttons
-  local clientbuttons_manage = args.clientbuttons_manage
+  args.error_color_on_hover = args.error_color_on_hover or false
+  local widget_screen = args.screen or awful.screen.focused()
 
   local object = {}
   local widget = common.widget()
 
-  widget.is_managing = false
+  widget.is_managing = persistent.titlebar.get()
 
   args.widget = widget
-  widget = common.decorated(args)
-  widget:set_text('X')
-  widget:connect_signal(
-    "mouse::enter", function ()
-      if not widget.is_managing then
+  widget = common.decorated_horizontal(args)
+  widget:set_text(' X ')
+
+  widget._on_mouse_enter = function ()
+    if not widget.is_managing then
+      if args.error_color_on_hover then
         widget:set_error()
       else
-        widget:set_warning()
+        widget:set_bg(color_utils.darker(args.bg, -20))
       end
-    end)
-  widget:connect_signal(
-    "mouse::leave", function ()
-      if not widget.is_managing then
-        widget:set_normal()
-      end
-    end)
-
-  widget:buttons(awful.util.table.join(
+    else
+      widget:set_warning()
+    end
+  end
+  widget._on_mouse_leave = function ()
+    if not widget.is_managing then
+      widget:set_normal()
+    else
+      widget:set_warning()
+    end
+  end
+  widget:connect_signal("mouse::enter", widget._on_mouse_enter)
+  widget:connect_signal("mouse::leave", widget._on_mouse_leave)
+  widget._buttons_table = awful.util.table.join(
     awful.button({ }, 1, function ()
-      capi.client.focus:kill()
-    end),
-    awful.button({ }, 3, function ()
-      local cls = capi.client.get()
       if not widget.is_managing then
-        widget.is_managing = true
-        widget:set_warning()
-        widget:set_text('M')
-        for _, c in pairs(cls) do
-          c:buttons(clientbuttons_manage)
-        end
-      else
-        widget.is_managing = false
-        widget:set_error()
-        widget:set_text('X')
-        for _, c in pairs(cls) do
-          c:buttons(clientbuttons)
-        end
+        capi.client.focus:kill()
       end
+    end),
+    awful.button({ }, 3, function()
+      widget.toggle()
     end)
-  ))
+  )
+  widget:buttons(widget._buttons_table)
 
+  local function update_widget_status()
+    if widget.is_managing then
+      widget:set_warning()
+      widget:set_text('  T  ')
+    else
+      widget:set_normal()
+      widget:set_text('  X  ')
+    end
+  end
+
+  update_widget_status()
+
+  widget.toggle = function()
+    if not widget.is_managing then
+      widget.is_managing = true
+      persistent.titlebar.set(true)
+    else
+      widget.is_managing = false
+      persistent.titlebar.set(false)
+    end
+    update_widget_status()
+    for _, t in ipairs(widget_screen.tags) do
+      t:emit_signal("property::layout")
+      for _, c in ipairs(t:clients()) do
+        c:emit_signal("property::geometry")
+      end
+    end
+  end
   widget:hide()
   capi.client.connect_signal("focus",function(c)
     if c.screen == widget_screen then

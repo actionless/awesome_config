@@ -8,7 +8,7 @@ local tags = require("awful.tag")
 local capi = { client = client }
 local escape_f = require("awful.util").escape
 
-local table_add = require("utils.table").add
+local table_add = require("actionless.util.table").add
 
 
 local menu_addon = { mt={} }
@@ -26,10 +26,6 @@ function menu_addon.clients_on_tag(args, item_args)
       table.insert(cls_t, {
         escape_f(c.name) or "",
         function ()
-          -- @TODO: i think it can be safely deleted:
-          --if not c:isvisible() then
-          --  tags.viewmore(c:tags(), c.screen)
-          --end
           capi.client.focus = c
           c:raise()
         end,

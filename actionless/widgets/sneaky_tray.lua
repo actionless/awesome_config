@@ -12,65 +12,68 @@ local beautiful = require("beautiful")
 
 
 --- widgets.sneaky_tray
-local sneaky_tray = { mt = {}, arrow=false, popup=false }
+local sneaky_tray = { mt = {} }
 
 
 function sneaky_tray.initialize()
-    local st = sneaky_tray
-    st.stupid_bug = drawin({})
-    st.systrayvisible = true
-    st.systray = wibox.layout.fixed.horizontal()
-    st.systray:add(wibox.widget.textbox(' ')) -- left margin
-    st.systray:add(wibox.widget.systray())
-    st.container = wibox.layout.constraint()
-    st.container:set_widget(st.systray)
-    st.container:set_strategy("min")
-    st.widget = wibox.layout.fixed.horizontal()
-    --st.widget:connect_signal(
+    sneaky_tray.stupid_bug = drawin({})
+    sneaky_tray.widget = wibox.layout.fixed.horizontal()
+    --sneaky_tray.widget:connect_signal(
         --"mouse::enter", function ()
-            --st.toggle()
+            --sneaky_tray.toggle()
     --end)
-    st.widget:buttons(awful.util.table.join(
-        awful.button({ }, 1, st.toggle),
-        awful.button({ }, 3, function() end)
-    ))
-    st.arrow = wibox.widget.imagebox(beautiful.icon_left)
-    st.arrow:set_resize(beautiful.hidpi or false)
-    st.widget:add(st.container)
-    st.widget:add(st.arrow)
+        sneaky_tray.container = wibox.container.constraint()
+            sneaky_tray.systray = wibox.widget.systray()
+        sneaky_tray.arrow = wibox.widget.imagebox(beautiful.icon_systray_show)
+        sneaky_tray.arrow:buttons(awful.util.table.join(
+            awful.button({ }, 1, sneaky_tray.toggle)--,
+        ))
+        sneaky_tray.arrow:set_resize(beautiful.xresources.get_dpi() > 96)
+    sneaky_tray.widget:add(sneaky_tray.container)
+    sneaky_tray.widget:add(sneaky_tray.arrow)
 
-    if st.show_on_start == false then
-        st.toggle()
+    if sneaky_tray.show_on_start then
+        sneaky_tray.show()
+    else
+        sneaky_tray.hide()
     end
+end
+
+function sneaky_tray.hide()
+    awesome.systray(sneaky_tray.stupid_bug, 0, 0, 10, true, "#000000", 0, 0)
+    sneaky_tray.container:set_widget(nil)
+    sneaky_tray.container:set_strategy("exact")
+    sneaky_tray.systrayvisible = false
+    sneaky_tray.arrow:set_image(beautiful.icon_systray_show)
+end
+
+function sneaky_tray.show()
+    sneaky_tray.container:set_strategy("min")
+    sneaky_tray.container:set_widget(sneaky_tray.systray)
+    sneaky_tray.systrayvisible = true
+    sneaky_tray.arrow:set_image(beautiful.icon_systray_hide)
 end
 
 function sneaky_tray.toggle()
     if sneaky_tray.systrayvisible then
-        awesome.systray(sneaky_tray.stupid_bug, 0, 0, 10, true, "#000000", 0, 0)
-        sneaky_tray.container:set_widget(nil)
-        sneaky_tray.container:set_strategy("exact")
-        sneaky_tray.systrayvisible = false
-        sneaky_tray.arrow:set_image(beautiful.icon_left)
+        sneaky_tray.hide()
     else
-        sneaky_tray.container:set_strategy("min")
-        sneaky_tray.container:set_widget(sneaky_tray.systray)
-        sneaky_tray.systrayvisible = true
-        sneaky_tray.arrow:set_image(beautiful.icon_right)
+        sneaky_tray.show()
     end
 end
 
 local function worker(args)
-    local args = args or {}
-    sneaky_tray.show_on_start = args.show_on_start or false
+    args = args or {}
+    sneaky_tray.show_on_start = args.show_on_start
     sneaky_tray.initialize()
     return setmetatable(sneaky_tray, { __index = sneaky_tray.widget})
 end
 
 return setmetatable(
-	sneaky_tray,
-	{ __call = function(_, ...)
-		return worker(...)
-	end }
+    sneaky_tray,
+    { __call = function(_, ...)
+        return worker(...)
+    end }
 )
 
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80

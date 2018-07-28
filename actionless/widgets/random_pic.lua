@@ -1,56 +1,54 @@
 --[[
-     Licensed under GNU General Public License v2
-      * (c) 2013-2014, Yauheni Kirylau
+Licensed under GNU General Public License v2
+* (c) 2013-2014, Yauheni Kirylau
 --]]
 
 local wibox        = require("wibox")
 local math         = require("math")
 local beautiful = require("beautiful")
-
-
-
-local helpers = require("actionless.helpers")
-local newinterval     = helpers.newinterval
+local gears_timer = require("gears.timer")
 
 
 local function scandir(directory)
-    local i, popen, result = 0, io.popen, {}
-    for filename in popen('ls -a "'..directory..'"'):lines() do
-        i = i + 1
-		if filename ~= '.' and filename ~= '..' then
-	        table.insert(result,filename)
-		end
+  local i, popen, result = 0, io.popen, {}
+  for filename in popen('ls -a "'..directory..'"'):lines() do
+    i = i + 1
+    if filename ~= '.' and filename ~= '..' then
+      table.insert(result,filename)
     end
-    return result
+  end
+  return result
 end
 
-local rp = {}
-rp.widget = wibox.widget.imagebox()
 
 local function worker(args)
-	local args     = args or {}
+  args = args or {}
 
-	--local interval  = args.interval or 5
-	local interval  = args.interval or math.random(5,15)
+  local interval  = args.interval or math.random(5,15)
 
-	rp.dir = args.dir or beautiful.icons_dir .. 'random_pics/'
-	rp.image_list = scandir(rp.dir)
+  local rp = {
+    widget=wibox.widget.imagebox(),
+    dir = args.dir or beautiful.icons_dir .. 'random_pics/'
+  }
+  rp.image_list = scandir(rp.dir)
 
-	function rp.random_image()
-		local image_name = rp.image_list[ math.random(1, #rp.image_list) ]
-		return rp.dir .. image_name
-	end
-	
-	function rp.update()
-		rp.widget:set_image(rp.random_image())
-	end
-	
-	rp.widget:set_image(rp.random_image())
+  function rp.random_image()
+    local image_name = rp.image_list[ math.random(1, #rp.image_list) ]
+    return rp.dir .. image_name
+  end
 
-	-- random timer id is for possibility to
-	-- run different instance of the widget simultaneously
-	newinterval("random_pic_" .. math.random(1,65535), interval, rp.update)
-	return rp.widget
+  function rp.update()
+    rp.widget:set_image(rp.random_image())
+  end
+
+  gears_timer({
+    callback=rp.update,
+    timeout=interval,
+    autostart=true,
+    call_now=true,
+  })
+  return setmetatable(rp, { __index = rp.widget })
 end
+
 
 return setmetatable({}, { __call = function(_, ...) return worker(...) end })

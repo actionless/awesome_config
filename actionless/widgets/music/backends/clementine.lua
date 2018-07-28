@@ -3,12 +3,11 @@
    * (c) 2014, Yauheni Kirylau
 --]]
 
-local dbus = dbus
+local dbus = dbus -- luacheck: ignore
 local awful = require("awful")
 
-local async = require("utils.async")
-local h_table = require("utils.table")
-local parse = require("utils.parse")
+local h_table = require("actionless.util.table")
+local parse = require("actionless.util.parse")
 
 
 local dbus_cmd = "qdbus org.mpris.MediaPlayer2.clementine "
@@ -19,30 +18,25 @@ local clementine = {
 }
 
 function clementine.init(widget)
-  dbus.add_match("session", "path='/org/mpris/MediaPlayer2',interface='org.freedesktop.DBus.Properties',member='PropertiesChanged'")
-  dbus.connect_signal(
-    "org.freedesktop.DBus.Properties",
-    function(...)
-      widget.update()
-    end)
 end
 -------------------------------------------------------------------------------
 function clementine.toggle()
-  awful.util.spawn_with_shell(dbus_cmd .. "/org/mpris/MediaPlayer2 PlayPause")
+  awful.spawn.with_shell(dbus_cmd .. "/org/mpris/MediaPlayer2 PlayPause")
 end
 
 function clementine.next_song()
-  awful.util.spawn_with_shell(dbus_cmd .. "/org/mpris/MediaPlayer2 Next")
+  awful.spawn.with_shell(dbus_cmd .. "/org/mpris/MediaPlayer2 Next")
 end
 
 function clementine.prev_song()
-  awful.util.spawn_with_shell(dbus_cmd .. "/org/mpris/MediaPlayer2 Previous")
+  awful.spawn.with_shell(dbus_cmd .. "/org/mpris/MediaPlayer2 Previous")
 end
 -------------------------------------------------------------------------------
 function clementine.update(parse_status_callback)
-  async.execute(
+  local callback = function(str) clementine.post_update(str, parse_status_callback) end
+  awful.spawn.easy_async(
     dbus_cmd .. " /org/mpris/MediaPlayer2 PlaybackStatus",
-    function(str) clementine.post_update(str, parse_status_callback) end
+    callback
   )
 end
 -------------------------------------------------------------------------------
@@ -56,8 +50,8 @@ function clementine.post_update(result_string, parse_status_callback)
   end
   clementine.player_status.state = state
   if state == 'play' or state == 'pause' then
-    async.execute(
-      dbus_cmd .. "/Player GetMetadata",
+    awful.spawn.easy_async(
+      dbus_cmd .. " /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata",
       function(str) clementine.parse_metadata(str, parse_status_callback) end
     )
   else

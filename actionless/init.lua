@@ -1,16 +1,16 @@
 local actionless = {
   widgets = require("actionless.widgets"),
-  hotkeys = require("actionless.hotkeys"),
-  hotkey_resources = require("actionless.hotkey_resources"),
-  -- awesome addons
+  util = require("actionless.util"),
+  persistent = require("actionless.persistent"),
   titlebar = require("actionless.titlebar"),
+  common_theme = require("actionless.common_theme"),
+  lcars_layout = require("actionless.lcars_layout"),
+  wlppr = require("actionless.wlppr"),
+  -- awesome addons
   menu_addon = require("actionless.menu_addon"),
   tasklist_addon = require("actionless.tasklist_addon"),
-  -- misc
-  helpers = require("actionless.helpers"),
-  xresources = require("actionless.xresources"),
-  common_theme = require("actionless.common_theme"),
-  iconfont = require("actionless.iconfont"),
+  -- tmp
+  menubar = require("actionless.menubar"),
 }
 
 return actionless

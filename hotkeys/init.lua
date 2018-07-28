@@ -1,5 +1,5 @@
 local hotkeys = {
-  vim	= require("hotkeys.vim"),
+  fish = require("hotkeys.fish")
 }
 
 return hotkeys
