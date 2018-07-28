@@ -4,6 +4,9 @@ pcall(function() jit.on() end)
 -- Localization
 os.setlocale(os.getenv("LANG"))
 
+-- Default icon size
+awesome.set_preferred_icon_size(256)
+
 
 local awful_util = require("awful.util")
 local awful_spawn = require("awful.spawn")

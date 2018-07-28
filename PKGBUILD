@@ -1,5 +1,7 @@
 # Upstream URL: https://github.com/actionless/awesome_config
 
+INSTALL_NO_ARGB_SHORTCUTS=${NOARGB:-0}
+
 pkgname=awesome_config_actionless_meta
 pkgver=0.1
 pkgrel=2
@@ -40,3 +42,20 @@ optdepends=(
 	'xscreensaver: config/autorun,config/keys'
 	'nemo: default file manager'
 )
+
+package() {
+  config_dir=$(pwd)/..
+  if [[ ${INSTALL_NO_ARGB_SHORTCUTS} -eq 1 ]] ; then
+	  install -Dm755 ${config_dir}/packaging/awesome_argb \
+		"$pkgdir/usr/bin/awesome_argb"
+
+	  install -Dm755 ${config_dir}/packaging/awesome_no_argb \
+		"$pkgdir/usr/bin/awesome_no_argb"
+
+	  install -Dm644 ${config_dir}/packaging/awesome_no_argb.desktop \
+		"$pkgdir/usr/share/xsessions/awesome_argb.desktop"
+
+	  install -Dm644 ${config_dir}/packaging/awesome_no_argb.desktop \
+		"$pkgdir/usr/share/xsessions/awesome_no_argb.desktop"
+	fi
+}
