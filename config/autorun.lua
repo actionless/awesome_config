@@ -9,6 +9,7 @@ function autorun.init(awesome_context)
 
   awful.spawn.with_shell('pgrep vmtoolsd >/dev/null && /usr/bin/vmware-user-suid-wrapper')
   --awful_spawn.with_shell(os.getenv('HOME').."/.screenlayout/awesome.sh")
+  --awful.spawn.with_shell('xinput disable 11')
 
   --local kensinton =12
   local kensington = nil
@@ -53,7 +54,6 @@ function autorun.init(awesome_context)
   --run_once("redshift")
   --run_once(awesome_context.cmds.compositor)
 
-  run_once("pulseaudio")
   awful.spawn.with_shell("start-pulseaudio-x11")
 
   for _, item in ipairs(awesome_context.autorun) do
