@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Awesome
+Comment=This session logs you into Awesome
+Type=Application
+Exec=awesome_no_argb
+TryExec=awesome_no_argb
