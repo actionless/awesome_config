@@ -2,7 +2,6 @@ local utils = {
   color = require("actionless.util.color"),
   db = require("actionless.util.db"),
   debug = require("actionless.util.debug"),
-  gtk = require("actionless.util.gtk"),
   inspect = require("actionless.util.inspect"),
   markup = require("actionless.util.markup"),
   menugen = require("actionless.util.menugen"),

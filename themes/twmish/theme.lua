@@ -5,7 +5,7 @@ local create_theme = require("actionless.common_theme").create_theme
 local color_utils = require("actionless.util").color
 local h_string = require("actionless.util.string")
 
-local gtk_util = require("actionless.util.gtk")
+local gtk_util = require("beautiful.gtk")
 
 
 local theme_name = "twmish"

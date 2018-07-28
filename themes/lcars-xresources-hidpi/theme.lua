@@ -4,6 +4,7 @@ local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
 local create_theme = require("actionless.common_theme").create_theme
 local color_utils = require("actionless.util.color")
+local gtk_util = require("beautiful.gtk")
 
 local theme_name = "lcars-xresources-hidpi"
 
@@ -11,6 +12,7 @@ local theme_dir = awful.util.getdir("config").."/themes/"..theme_name
 --local theme = dofile("/usr/share/awesome/themes/xresources/theme.lua")
 local theme = {}
 
+local gsc = gtk_util.get_theme_variables()
 theme.xrdb = xresources.get_current_theme()
 
 theme.dir = theme_dir
@@ -83,8 +85,6 @@ theme.useless_gap = dpi(4)
 theme.border_width = dpi(4)
 --theme.border_radius = dpi(5)
 
-local gtk_util = require("actionless.util.gtk")
-local gsc = gtk_util.get_theme_variables()
 theme.border_radius = dpi((gsc.border_radius or 1)*1.0)
 theme.panel_widget_border_radius = dpi((gsc.border_radius or 1)*0.8)
 
