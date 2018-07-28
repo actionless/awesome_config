@@ -5,7 +5,7 @@
 -- @copyright 2016-2017 Yauheni Kirylau
 -- @module beautiful.gtk
 ---------------------------------------------------------------------------
-local dpi = require("beautiful.xresources").apply_dpi
+local get_dpi = require("beautiful.xresources").get_dpi
 local gears_debug = require("gears.debug")
 local gears_math = require("gears.math")
 local join = require("gears.table").join
@@ -128,7 +128,7 @@ function gtk.get_theme_variables()
         return nil
     end
     local _window_status, window = pcall(function()
-        return Gtk.Window{}
+        return Gtk.Window.new(Gtk.WindowType.TOPLEVEL)
     end)
     if not _window_status or not window then
         gears_debug.print_warning(
@@ -147,8 +147,8 @@ function gtk.get_theme_variables()
     ))
     local label = Gtk.Label()
     local label_style_context = label:get_style_context()
-    local gdk_scale = os.getenv("GDK_SCALE") or 1.0
-    local xrdb_scale = dpi(10000) / 10000
+    local gdk_scale = tonumber(os.getenv("GDK_SCALE") or 1.0)
+    local xrdb_scale = get_dpi() / 96
     local pt_to_px_ratio = 1+1/3
     result["font_size"] = get_gtk_property(
         label_style_context, "font-size"
