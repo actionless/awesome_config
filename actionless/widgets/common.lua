@@ -192,12 +192,19 @@ function common.decorated_vertical(args)
     valign = args.valign or "top",
   }
 
-  if args.widget then
+  if args.widgets then
+    decorated.lie_widget_list = args.widgets
+  elseif args.widget then
     decorated.lie_widget_list = {args.widget}
   else
-    decorated.lie_widget_list = args.widgets or {common.widget(args)}
+    decorated.lie_widget_list = {common.widget(args)}
   end
-  decorated.lie_widget = decorated.lie_widget_list[1]
+  if args.widget then
+    decorated.lie_widget = args.widget
+  else
+    decorated.lie_widget = decorated.lie_widget_list[1]
+  end
+
   for i, widget in ipairs(decorated.lie_widget_list) do
     if widget.set_valign then
       --widget:set_align("right")
@@ -359,10 +366,17 @@ function common.decorated_horizontal(args)
 
   local separator = wibox.widget.textbox(' ')
 
-  if args.widget then
+  if args.widgets then
+    decorated.lie_widget_list = args.widgets
+  elseif args.widget then
     decorated.lie_widget_list = {args.widget}
   else
-    decorated.lie_widget_list = args.widgets or {common.widget(args)}
+    decorated.lie_widget_list = {common.widget(args)}
+  end
+  if args.widget then
+    decorated.lie_widget = args.widget
+  else
+    decorated.lie_widget = decorated.lie_widget_list[1]
   end
 
   -- give set_bg and set_fg methods to ones don't have it:
@@ -385,7 +399,6 @@ function common.decorated_horizontal(args)
   end
 
   decorated.lie_visible = false
-  decorated.lie_widget = decorated.lie_widget_list[1]
   decorated.lie_layout = wibox.layout.fixed.horizontal()
   decorated.lie_background = wibox.container.background()
   decorated.lie_background:set_widget(decorated.lie_layout)

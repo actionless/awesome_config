@@ -5,6 +5,7 @@
 
 local awful = require("awful")
 local beautiful = require("beautiful")
+local dpi = beautiful.xresources.apply_dpi
 
 local capi = { client = client }
 
@@ -25,12 +26,17 @@ local function worker(args)
 
   local object = {}
   local widget = common.widget()
-
   widget.is_managing = persistent.titlebar.get()
 
   args.widget = widget
+  args.widgets = {
+    common.constraint{width=dpi(5)},
+    widget,
+    common.constraint{width=dpi(5)},
+  }
+
   widget = common.decorated_horizontal(args)
-  widget:set_text(' X ')
+  widget:set_text('X')
 
   widget._on_mouse_enter = function ()
     if not widget.is_managing then
