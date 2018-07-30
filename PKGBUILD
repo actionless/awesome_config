@@ -52,7 +52,7 @@ package() {
 	  install -Dm755 ${config_dir}/packaging/awesome_no_argb \
 		"$pkgdir/usr/bin/awesome_no_argb"
 
-	  install -Dm644 ${config_dir}/packaging/awesome_no_argb.desktop \
+	  install -Dm644 ${config_dir}/packaging/awesome_argb.desktop \
 		"$pkgdir/usr/share/xsessions/awesome_argb.desktop"
 
 	  install -Dm644 ${config_dir}/packaging/awesome_no_argb.desktop \
