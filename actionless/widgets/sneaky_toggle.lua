@@ -8,6 +8,7 @@
 local wibox = require("wibox")
 local awful = require("awful")
 local beautiful = require("beautiful")
+local dpi = beautiful.xresources.apply_dpi
 
 local sneaky_tray = require("actionless.widgets.sneaky_tray")
 local common_widgets = require("actionless.widgets.common")
@@ -48,8 +49,14 @@ function sneaky_toggle.initialize()
         awful.button({ }, 1, st.toggle)
     ))
 
+    local widget = st.arrow or st.text_arrow
     st.export_widget:add(common_widgets.decorated_horizontal({
-        widget=st.arrow or st.text_arrow
+        widget=widget,
+        widgets={
+            common_widgets.constraint{width=dpi(5)},
+            widget,
+            common_widgets.constraint{width=dpi(5)},
+        }
     }))
 
     if st.show_on_start then
@@ -69,7 +76,7 @@ function sneaky_toggle.hide()
     if beautiful.icon_systray_show then
         sneaky_toggle.arrow:set_image(beautiful.icon_systray_show)
     else
-        sneaky_toggle.text_arrow:set_markup(' &lt; ')
+        sneaky_toggle.text_arrow:set_markup('&lt;')
     end
 end
 
@@ -83,7 +90,7 @@ function sneaky_toggle.show()
     if beautiful.icon_systray_show then
         sneaky_toggle.arrow:set_image(beautiful.icon_systray_hide)
     else
-        sneaky_toggle.text_arrow:set_markup(' &gt; ')
+        sneaky_toggle.text_arrow:set_markup('&gt;')
     end
 end
 
