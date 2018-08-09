@@ -4,9 +4,9 @@
 --------------------------------------------------------------------------------
 
 local menu = require("awful.menu")
-local tags = require("awful.tag")
 local capi = { client = client }
 local escape_f = require("awful.util").escape
+local awful_screen = require("awful.screen")
 
 local table_add = require("actionless.util.table").add
 
@@ -15,11 +15,9 @@ local menu_addon = { mt={} }
 
 
 function menu_addon.clients_on_tag(args, item_args)
-  local cls = capi.client.focus
-  if not cls then return end
   local cls_t = {}
 
-  local selected_tags = tags.selectedlist(cls.screen)
+  local selected_tags = awful_screen.focused().selected_tags
   for _, t in ipairs(selected_tags) do
     local clients_on_tag = t.clients(t)
     for _, c in ipairs(clients_on_tag) do
