@@ -544,6 +544,7 @@ function titlebar.make_titlebar(c, color, shadow)
 end
 
 function titlebar.is_enabled(c)
+  if not c then return end
   if (
     c["titlebar_top"](c):geometry()['height'] > beautiful.base_border_width * 2
     ) then
@@ -554,6 +555,7 @@ function titlebar.is_enabled(c)
 end
 
 function titlebar.border_is_enabled(c)
+  if not c then return end
   if (
     c["titlebar_" .. beautiful.titlebar_position or 'top'
       ](c):geometry()['height'] == beautiful.base_border_width
