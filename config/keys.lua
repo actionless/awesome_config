@@ -481,6 +481,13 @@ function keys.init(awesome_context)
       end,
       "screenshot focused", SCREENSHOT
     ),
+    bind_key({ "Control", altkey }, "Print",
+      function ()
+        awful.spawn.with_shell(
+        "scrot -u '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. shell_commands.scrot_preview_cmd)
+      end,
+      "screenshot focused without border", SCREENSHOT
+    ),
     bind_key({ altkey        }, "Print",
       function ()
         awful.spawn.with_shell(
