@@ -394,7 +394,8 @@ function common.decorated_horizontal(args)
       bg_widget.set_markup = function(...)
         widget.set_markup(...)
       end
-      decorated.lie_widget_list[i] = setmetatable(bg_widget, widget)
+      decorated.lie_widget_list[i] = bg_widget
+      --decorated.lie_widget_list[i] = setmetatable(bg_widget, widget)
     end
   end
 
@@ -405,7 +406,6 @@ function common.decorated_horizontal(args)
   decorated.wrap_layout = wibox.layout.flex.horizontal()
   decorated.wrap_layout:add(decorated.lie_background)
 
-  setmetatable(decorated.wrap_layout, { __index = decorated.lie_widget })
   setmetatable(decorated,        { __index = decorated.wrap_layout })
 
   --- Set widget color
@@ -498,6 +498,18 @@ function common.decorated_horizontal(args)
     if self.lie_widget.set_font then
       return self.lie_widget:set_font(...)
     end
+  end
+
+  function decorated:set_text(...)
+    return self.lie_widget:set_text(...)
+  end
+
+  function decorated:set_markup(...)
+    return self.lie_widget:set_markup(...)
+  end
+
+  function decorated:set_image(...)
+    return self.lie_widget:set_image(...)
   end
 
   decorated:set_normal()
