@@ -543,10 +543,23 @@ function titlebar.make_titlebar(c, color, shadow)
   --c.skip_taskbar = true
 end
 
-function titlebar.is_enabled(c)
+function titlebar.get_titlebar_widget(c)
   if not c then return end
+
+  local titlebar_function = c["titlebar_" .. (
+    beautiful.titlebar_position or 'top'
+  )]
+  if not titlebar_function then return end
+
+  local tb = titlebar_function(c)
+  return tb
+end
+
+function titlebar.is_enabled(c)
+  local tb = titlebar.get_titlebar_widget(c)
+  if not tb then return end
   if (
-    c["titlebar_top"](c):geometry()['height'] > beautiful.base_border_width * 2
+    tb:geometry()['height'] > beautiful.base_border_width * 2
     ) then
     return true
   else
@@ -555,11 +568,12 @@ function titlebar.is_enabled(c)
 end
 
 function titlebar.border_is_enabled(c)
-  if not c then return end
+  local tb = titlebar.get_titlebar_widget(c)
+  if not tb then return end
+
   if (
-    c["titlebar_" .. beautiful.titlebar_position or 'top'
-      ](c):geometry()['height'] == beautiful.base_border_width
-    ) then
+    tb:geometry()['height'] == beautiful.base_border_width
+  ) then
     return true
   else
     return false
