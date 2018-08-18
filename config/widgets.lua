@@ -240,20 +240,12 @@ function widget_loader.init(awesome_context)
       --end)
     )
 
-    --sw.tasklist = awful.widget.tasklist{
-      --screen = s,
-      --filter = awful.widget.tasklist.filter.minimizedcurrenttags,
-      --buttons = tasklist_buttons,
-      --update_function = tasklist_addon.sorted_update,
-    --}
-    sw.tasklist = awful.widget.tasklist(
-      s,
-      awful.widget.tasklist.filter.minimizedcurrenttags,
-      tasklist_buttons,
-      nil,
-      tasklist_addon.sorted_update
-    )
-
+    sw.tasklist = awful.widget.tasklist{
+      screen = s,
+      filter = awful.widget.tasklist.filter.minimizedcurrenttags,
+      buttons = tasklist_buttons,
+      update_function = tasklist_addon.sorted_update,
+    }
 
     if lcarslist_enabled then
       sw.lcarslist = widgets.lcarslist(
