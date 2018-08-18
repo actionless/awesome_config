@@ -24,6 +24,7 @@ depends=(
 	'xorg-xrdb'
 	'xorg-xset'
 	'xsettingsd'  # or use lxsettings-daemon from lxsession
+	'xst-git'  # default terminal
 )
 optdepends=(
 	#'gnome-settings-daemon: rc: alternative to xsettingsd'

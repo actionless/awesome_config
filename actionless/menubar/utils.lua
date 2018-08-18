@@ -17,6 +17,8 @@ local theme = require("beautiful")
 local glib = require("lgi").GLib
 local wibox = require("wibox")
 
+local awesome_menubar_utils = require("menubar.utils")
+
 local utils = {}
 
 -- NOTE: This icons/desktop files module was written according to the
@@ -26,8 +28,7 @@ local utils = {}
 
 -- Options section
 
---- Terminal which applications that need terminal would open in.
-utils.terminal = 'xterm'
+utils.terminal = awesome_menubar_utils.terminal
 
 --- The default icon for applications that don't provide any icon in
 -- their .desktop files.

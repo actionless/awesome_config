@@ -27,11 +27,16 @@ function menus.init(context)
       { "mEdit", "medit" },
       { "Geany", "geany" },
     }},
-    { "terminal", "xterm" }
+    { "Terminals", {
+      { "XTerm", "xterm" },
+      { "URxvt", "urxvt" },
+      { "st", "st" },
+      { "xst", "xst" },
+    }},
   }
 
   local myawesomemenu = {
-    { "manual", context.cmds.terminal .. " -e man awesome" },
+    { "manual", awesome_menubar.utils.terminal .. " -e man awesome" },
     { "edit config", context.cmds.editor_cmd .. " " .. awesome.conffile },
     { "restart", awesome.restart },
     { "quit", function() awesome.quit() end},
@@ -69,7 +74,7 @@ function menus.init(context)
     { "applications", applications_menu, beautiful.applications_icon },
     --{ "kill compositor", "killall compton" },
     --{ "start compositor", context.cmds.compositor },
-    { "open terminal", context.cmds.terminal }
+    { "open terminal", awesome_menubar.utils.terminal }
   }
 
   function context.menu.mainmenu_show(nomouse)
@@ -102,25 +107,27 @@ function menus.init(context)
   end
 
   -- Menubar configuration
-  awesome_menubar.utils.terminal = context.cmds.terminal
+
   -- @TODO: for some reason this is crashing
   --context.menu.menubar = awesome_menubar.get()
   context.menu.menubar = menubar.create()
 
   -- D-Menubar configuration
-  menubar.utils.terminal = context.cmds.terminal
   menubar.geometry = {
     height = beautiful.panel_height,
     width = screen[awful.screen.focused()].workarea.width,
     x = 0,
     y = screen[awful.screen.focused()].workarea.height - beautiful.panel_height
   }
-  context.menu.dmenubar = menubar.create({
+
+  local dmenubar = menubar.create({
     term_prefix = context.cmds.tmux_run,
   })
-  context.menu.dmenubar.cache_entries = false
-  context.menu.dmenubar.menu_cache_path = awful.util.getdir("cache") .. "/history"
-  context.menu.dmenubar.menu_gen = require("actionless.menubar.dmenugen")
+  dmenubar.cache_entries = false
+  dmenubar.menu_cache_path = awful.util.getdir("cache") .. "/history"
+  dmenubar.menu_gen = require("actionless.menubar.dmenugen")
+
+  context.menu.dmenubar = dmenubar
 
 end
 

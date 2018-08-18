@@ -35,7 +35,7 @@ awful_spawn.with_shell("xsettingsd")
 local hotkeys_module = require("awful.hotkeys_popup.keys")
 -- Set custom rules for tmux help
 hotkeys_module.tmux.add_rules_for_terminal({ rule_any = {
-  class =  {"st-256color"}
+  class =  {"xst-256color"}
 }})
 -- Load local hotkeys help
 require("hotkeys")
@@ -51,7 +51,7 @@ log = debug.log
 -- GLOBAL config object:
 -------------------------------------------------------------------------------
 local editor = "vim"
-local terminal = "st"
+local terminal = "xst"
 context = {
 
   --DEVEL_DYNAMIC_LAYOUTS = true,
@@ -81,13 +81,18 @@ context = {
   cmds = {
     terminal = terminal,
     terminal_light = terminal,  -- @TODO: add it
+
     editor_cmd = terminal .. " -e " .. editor,
+
     compositor = "killall compton; compton",
+
     --file_manager = "nautilus",
     file_manager = "nemo",
-    tmux = terminal .. " -e bash \\-c tmux",
+
+    tmux       = terminal .. " -e bash \\-c tmux",
     tmux_light = terminal .. " -e bash \\-c tmux",  -- @TODO: add it
     tmux_run   = terminal .. " -e tmux new-session ",
+
     scrot_preview_cmd = [['mv $f ~/images/ && viewnior ~/images/$f']],
   },
 
@@ -116,6 +121,10 @@ if local_settings_result ~= true then
   nlog("!!!WARNING: ~/.config/awesome/config/local.lua not found")
   print(local_settings_details)
 end
+
+-- Init default terminal emulator
+-------------------------------------------------------------------------------
+require("menubar.utils").terminal = context.cmds.terminal
 
 
 -- Init theme
