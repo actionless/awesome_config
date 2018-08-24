@@ -99,7 +99,7 @@ theme.font = "Monospace Bold 10"
 theme.font          = theme.gtk.font_family .. ' ' .. theme.gtk.font_size
 --theme.font = "Sans Bold 10"
 theme.tasklist_font = theme.font
-theme.sans_font = "Sans Bold 10"
+theme.sans_font = theme.font
 theme.font          = theme.gtk.font_family .. ' ' .. theme.gtk.font_size
 if not theme.font:match('Bold') then
   local bold_font = theme.gtk.font_family .. ' Bold ' .. theme.gtk.font_size
