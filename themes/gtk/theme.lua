@@ -144,8 +144,14 @@ theme.left_panel_width = dpi(120)
 theme.left_widget_min_height = dpi(120)
 
 theme.menu_height		= dpi(16)
+theme.menu_height		= dpi(20)
+theme.menu_height		= dpi(22)
 theme.menu_width		= dpi(150)
 theme.menu_border_color = theme.xrdb.color1
+--theme.menu_border_color = gsc.header_button_border_color
+theme.menu_border_width		= dpi(gsc.button_border_width)
+theme.menu_bg_normal = gsc.menubar_bg_color
+theme.menu_fg_normal = gsc.menubar_fg_color
 
 
 theme.apw_fg_color = MAIN_COLOR
