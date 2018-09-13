@@ -9,6 +9,8 @@ local beautiful = require("beautiful")
 local gears_timer = require("gears.timer")
 
 local color_utils = require("actionless.util.color")
+local tag_helpers = require("actionless.util.tag")
+local persistent = require("actionless.persistent")
 
 --
 local TRANSPARENT = "#00000000"
@@ -39,10 +41,12 @@ end
 
 local function mouse_is_on_borders(c)
   if c ~= mouse.current_client then
-    return
+    return false
   end
   local object_under_pointer = mouse.object_under_pointer()
-  if not object_under_pointer then return end
+  if not object_under_pointer then
+    return false
+  end
   local client_geometry = object_under_pointer:geometry()
   local border = beautiful.base_border_width * 2
   local mouse_coords = mouse.coords()
@@ -68,7 +72,7 @@ local function mouse_is_on_borders(c)
       ((my >= bottom_border_min) and (my <= bottom_border_max))
     )
   ) then
-    return
+    return false
   end
   return true
 end
@@ -120,6 +124,24 @@ local function choose_mouse_pointer(c, titlebar_position)
   end
 end
 
+local function need_titlebar(c)
+  local t = tag_helpers.get_client_tag(c)
+  local num_tiled = #tag_helpers.get_tiled(t)
+  if (
+    c.floating
+  ) or (
+    persistent.titlebar.get() and (
+      num_tiled > 1 or (
+        num_tiled > 0 and t.master_fill_policy ~= 'expand'
+      )
+    )
+  ) or (
+    t.layout == awful.layout.suit.floating
+  ) then
+    return true
+  end
+end
+
 local function attach_highlight_on_hover(args)
   args = args or {}
   local titlebar_widget = args.widget
@@ -131,6 +153,11 @@ local function attach_highlight_on_hover(args)
   local neva_left = false
 
   titlebar_widget:connect_signal("mouse::enter", function(_)
+    if need_titlebar(c) then
+      choose_mouse_pointer(c, titlebar_position)
+      set_client_hover_border_color(c)
+      return
+    end
     if titlebar_position == 'top' then
       if titlebar.is_enabled(c) then
         neva_left = true
@@ -173,6 +200,7 @@ local function attach_highlight_on_hover(args)
   titlebar_widget:connect_signal("mouse::leave", function(_)
     root.cursor("left_ptr")
     set_client_border_color(c)
+    if need_titlebar(c) then return end
 
     neva_left = false
     if not on_hover_titlebar_armed then return end
