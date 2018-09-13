@@ -13,7 +13,7 @@ local h_table = require("actionless.util.table")
 
 local common_theme = {}
 
-function common_theme.generate_theme(theme_dir)
+function common_theme.create_default_theme(theme_dir)
 
   local theme
   pcall(function()
@@ -23,31 +23,16 @@ function common_theme.generate_theme(theme_dir)
     local nixos = require("actionless.util.nixos")
     theme = dofile(nixos.get_nix_xresources_theme_path().."/theme.lua")
   end
-
+  theme.dir = theme_dir
   theme.null = nil
-  -- TERMINAL COLORSCHEME:
-  --
+
   theme.xrdb = xresources.get_current_theme()
 
-  theme.dir = theme_dir
-
-  -- Use plain color:
   theme.wallpaper = nil
-  theme.wallpaper_cmd     = "nitrogen --restore"
-  -- Use nitrogen:
-  --theme.wallpaper_cmd     = "nitrogen --restore"
-  -- Use wallpaper tile:
-  --theme.wallpaper = theme.dir .. '/pattern.png'
+  theme.wallpaper_cmd = "nitrogen --restore"
 
   theme.show_widget_icon = false
 
-  --Source*Pro:
-  --theme.font = "Source Code Pro Bold 10.5"
-  --theme.sans_font = "Source Sans Pro Bold 10.3"
-  --Meslo+Paratype:
-  --theme.font = "Meslo LG S for Lcarsline Bold 10.5"
-  --theme.sans_font = "PT Sans Bold 10.3"
-  -- use ~/.fonts.conf, Luke ;)
   theme.font = "Monospace Bold 10"
   theme.text_font = "Monospace 10"
   theme.sans_font = "Sans Bold 10"
@@ -78,6 +63,7 @@ function common_theme.generate_theme(theme_dir)
   -- GLOBAL BORDERS:
 
   theme.base_border_width	= dpi(3)
+  ----handled by titlebar (base_border_width) instead:
   --theme.border_width		= "theme.base_border_width"
   theme.border_width = 0
   theme.border_radius = 0
@@ -299,7 +285,7 @@ function common_theme.create_theme(args)
 
   return common_theme.fill_theme(
     h_table.merge(
-      common_theme.generate_theme(theme_dir),
+      common_theme.create_default_theme(theme_dir),
       theme
     )
   )
