@@ -16,7 +16,7 @@ cp config/local.lua.example config/local.lua
 # on Arch Linux or Manjaro:
 makepkg -fi --syncdeps
 # to create awesome_argb and awesome_no_argb wrappers:
-env NOARGB=1 makepkg -fsri
+env NOARGB=y makepkg -fsri
 ```
 
  - [lcars](http://i.imgur.com/8C6l5ko.gifv) layout

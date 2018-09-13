@@ -1,6 +1,11 @@
 # Upstream URL: https://github.com/actionless/awesome_config
 
-INSTALL_NO_ARGB_SHORTCUTS=${NOARGB:-0}
+
+if [[ $(id -u) -eq 0 ]] && [[ -z "${NOARGB:-}" ]] ; then
+	echo "INSTALL_NO_ARGB_SHORTCUTS [y/N]"
+	read NOARGB
+fi
+INSTALL_NO_ARGB_SHORTCUTS=${NOARGB:-n}
 
 pkgname=awesome_config_actionless_meta
 pkgver=0.1
@@ -46,7 +51,7 @@ optdepends=(
 
 package() {
   config_dir=$(pwd)/..
-  if [[ ${INSTALL_NO_ARGB_SHORTCUTS} -eq 1 ]] ; then
+  if [[ ${INSTALL_NO_ARGB_SHORTCUTS} = 'y' ]] ; then
 	  install -Dm755 ${config_dir}/packaging/awesome_argb \
 		"$pkgdir/usr/bin/awesome_argb"
 
