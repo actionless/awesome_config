@@ -74,7 +74,12 @@ end
 
 
 function tag_helpers.get_tiled(t)
+  -- @TODO: add some fix for sticky clients: DONE?
   local s = t.screen
+  if s.selected_tags and #s.selected_tags > 1 then
+    return s.tiled_clients
+  end
+
   local visible_clients = s.tiled_clients
   local clients_on_tag = t:clients()
   local tiled_clients = {}
@@ -97,6 +102,20 @@ function tag_helpers.get_tiled(t)
     end
   end
   return tiled_clients
+end
+
+
+function tag_helpers.get_client_tag(c)
+  if c.screen and c.screen.selected_tags then
+    for _, sel_tag in ipairs(c.screen.selected_tags) do
+      for _, cli_tag in ipairs(c:tags()) do
+        if sel_tag.index == cli_tag.index then
+          return cli_tag
+        end
+      end
+    end
+  end
+  return c.first_tag
 end
 
 

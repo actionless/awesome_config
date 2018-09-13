@@ -18,28 +18,6 @@ local function clog(msg, c) -- luacheck: ignore
 end
 
 
-local function choose_tag(c)
-  if c.screen and c.screen.selected_tags then
-    for _, sel_tag in ipairs(c.screen.selected_tags) do
-      for _, cli_tag in ipairs(c:tags()) do
-        if sel_tag.index == cli_tag.index then
-          return cli_tag
-        end
-      end
-    end
-  end
-  return c.first_tag
-end
-
-local function get_num_tiled(t)
-  -- @TODO: add some fix for sticky clients: DONE?
-  local s = t.screen
-  if s.selected_tags and #s.selected_tags > 1 then
-    return #s.tiled_clients
-  end
-  return #tag_helpers.get_tiled(t)
-end
-
 --=============================================================================
 -- Unfocused (normal) window logic
 
@@ -47,9 +25,9 @@ local function _on_client_unfocus (c)
   if not c or not c.valid then return end
   if c.minimized then return end
   c.border_color = beautiful.border_normal
-  local t = choose_tag(c)
+  local t = tag_helpers.get_client_tag(c)
   local layout = t.layout
-  local num_tiled = get_num_tiled(t)
+  local num_tiled = #tag_helpers.get_tiled(t)
   if persistent.titlebar.get() and (
     num_tiled > 1 or (
       num_tiled > 0 and t.master_fill_policy ~= 'expand'
@@ -121,9 +99,9 @@ end
 
 local function on_client_focus(c)
   if not c or not c.valid then return end
-  local t = choose_tag(c)
+  local t = tag_helpers.get_client_tag(c)
   local layout = t.layout
-  local num_tiled = get_num_tiled(t)
+  local num_tiled = #tag_helpers.get_tiled(t)
 
   c.border_color = beautiful.border_focus
   --
@@ -238,12 +216,12 @@ local function round_up_client_corners(c, force, reference) -- luacheck: no unus
   pending_shapes[c] = true
   delayed_call(function()
     if not c or not c.valid then return end
-    local client_tag = choose_tag(c)
+    local client_tag = tag_helpers.get_client_tag(c)
     if not client_tag then
       nlog('no client tag')
       return
     end
-    local num_tiled = get_num_tiled(client_tag)
+    local num_tiled = #tag_helpers.get_tiled(client_tag)
     --clog({"Shape", num_tiled, client_tag.master_fill_policy, c.name}, c)
     --if not force and (c.maximized or (
     if (
@@ -307,7 +285,7 @@ function signals.init(_)
   awful.tag.object.get_gap = function(t)
     t = t or awful.screen.focused().selected_tag
     if not t then return end
-    local num_tiled = get_num_tiled(t)
+    local num_tiled = #tag_helpers.get_tiled(t)
     if num_tiled == 1 and t.master_fill_policy == "expand" then
       return 0
     end
