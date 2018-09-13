@@ -126,6 +126,7 @@ end
 
 local function need_titlebar(c)
   local t = tag_helpers.get_client_tag(c)
+  if not t then return end
   local num_tiled = #tag_helpers.get_tiled(t)
   if (
     c.floating
