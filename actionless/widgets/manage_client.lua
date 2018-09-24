@@ -30,9 +30,9 @@ local function worker(args)
 
   args.widget = widget
   args.widgets = {
-    common.constraint{width=dpi(5)},
+    common.constraint{width=dpi(10)},
     widget,
-    common.constraint{width=dpi(5)},
+    common.constraint{width=dpi(10)},
   }
 
   widget = common.decorated_horizontal(args)
@@ -73,10 +73,10 @@ local function worker(args)
   local function update_widget_status()
     if widget.is_managing then
       widget:set_warning()
-      widget:set_text('  T  ')
+      widget:set_text('T')
     else
       widget:set_normal()
-      widget:set_text('  X  ')
+      widget:set_text('X')
     end
   end
 
