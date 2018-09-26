@@ -5,7 +5,7 @@
 
 local menu = require("awful.menu")
 local capi = { client = client }
-local escape_f = require("awful.util").escape
+local escape_f = require("gears.string").xml_escape
 local awful_screen = require("awful.screen")
 
 local table_add = require("actionless.util.table").add

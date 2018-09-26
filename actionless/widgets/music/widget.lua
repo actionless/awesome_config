@@ -7,8 +7,7 @@ local awful		= require("awful")
 local wibox	= require("wibox")
 local naughty		= require("naughty")
 local beautiful		= require("beautiful")
-local string		= { format	= string.format }
-local setmetatable	= setmetatable
+local g_string		= require("gears.string")
 
 local h_string		= require("actionless.util.string")
 local common = require("actionless.widgets.common")
@@ -197,8 +196,8 @@ local function worker(args)
           --title = h_string.max_length(title, 14*5) .. "…"
         --end
       --end
-      artist = h_string.escape(artist)
-      title = h_string.escape(title)
+      artist = g_string.xml_escape(artist)
+      title = g_string.xml_escape(title)
       -- playing new song
       if player_status.title ~= old_title then
         player.resize_cover()

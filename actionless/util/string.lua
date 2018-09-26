@@ -27,18 +27,6 @@ function string_helpers.split(str, separator)
   return fields
 end
 
-local xml_entity_names = {
-  ["'"] = "&apos;",
-  ["\""] = "&quot;",
-  ["<"] = "&lt;",
-  [">"] = "&gt;",
-  ["&"] = "&amp;"
-}
-function string_helpers.escape(str)
-  --return str and str:gsub("['&<>\"]", xml_entity_names) or nil
-  return str and str:gsub("[&<>\"]", xml_entity_names) or nil
-end
-
 function string_helpers.getn(unicode_string)
   local _, string_length = string.gsub(unicode_string, "[^\128-\193]", "")
   return string_length
