@@ -1,7 +1,11 @@
 #!/bin/sh
+CACHEDIR=$HOME/.cache
+if test ! -d ${CACHEDIR} ; then
+    mkdir -p ${CACHEDIR}
+fi
 while $(true) ; do
-	awesome $@ >> $HOME/.cache/awesome_stdout  2>> $HOME/.cache/awesome_stderr ||
-        (sleep 2 ; openbox) ||
+    awesome $@ >> ${CACHEDIR}/awesome_stdout  2>> ${CACHEDIR}/awesome_stderr ||
+        (sleep 1 ; openbox) ||
             xterm
-	sleep 2
+    sleep 1
 done

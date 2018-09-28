@@ -1,12 +1,15 @@
 #!/bin/sh
+CACHEDIR=$HOME/.cache
+if test ! -d ${CACHEDIR} ; then
+    mkdir -p ${CACHEDIR}
+fi
 while $(true) ; do
     code=0
-	awesome --no-argb $@ >> $HOME/.cache/awesome_stdout  2>> $HOME/.cache/awesome_stderr || code=$?
+    awesome --no-argb $@ >> ${CACHEDIR}/awesome_stdout  2>> ${CACHEDIR}/awesome_stderr || code=$?
     if [[ ${code} -eq 2 ]] ; then
-        awesome $@ >> $HOME/.cache/awesome_stdout  2>> $HOME/.cache/awesome_stderr
+        awesome $@ >> ${CACHEDIR}/awesome_stdout  2>> ${CACHEDIR}/awesome_stderr
     elif [[ ${code} -ne 0 ]] ; then
-        (sleep 2 ; openbox) ||
-            xterm
-        sleep 2
+        (sleep 1 ; openbox) || xterm
+        sleep 1
     fi
 done
