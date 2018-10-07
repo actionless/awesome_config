@@ -239,7 +239,11 @@ else
 end
 
 if awesome.composite_manager_running then
-  nlog('composite')
+  --local delayed_call = require('gears.timer').delayed_call
+  --delayed_call(function()
+    --nlog('composite')
+  --end)
+
   for _, theme_var in ipairs({
     'border_normal',
     'border_focus',
