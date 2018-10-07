@@ -169,7 +169,8 @@ end
 theme.titlebar_shadow_normal = theme.titlebar_shadow_normal.."38"
 
 theme.titlebar_bg_normal	= "#00000000"
-theme.actionless_titlebar_bg_normal	= gsc.wm_border_unfocused_color
+--theme.actionless_titlebar_bg_normal	= gsc.wm_border_unfocused_color
+theme.actionless_titlebar_bg_normal	= gsc.menubar_bg_color
 --if theme.border_radius > 0 then
   --theme.titlebar_fg_focus		= gsc.menubar_fg_color
   --theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
@@ -179,7 +180,8 @@ theme.actionless_titlebar_bg_normal	= gsc.wm_border_unfocused_color
   theme.titlebar_bg_focus		= "#00000000"
   theme.actionless_titlebar_bg_focus	= gsc.wm_border_focused_color
 --end
-theme.titlebar_fg_normal	        = theme.titlebar_fg_focus
+--theme.titlebar_fg_normal	        = theme.titlebar_fg_focus
+theme.titlebar_fg_normal	        = gsc.menubar_fg_color
 
 
 --if color_utils.is_dark(theme.xrdb.background) then
