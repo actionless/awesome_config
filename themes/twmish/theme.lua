@@ -198,7 +198,8 @@ theme.panel_widget_fg_error = theme.xrdb.color15
 
 --theme.widget_music_bg = color_utils.mix(MAIN_COLOR, gsc.menubar_fg_color, 0.6)
 --theme.widget_music_bg = MAIN_COLOR
-theme.widget_music_bg = gsc.selected_fg_color
+--theme.widget_music_bg = gsc.selected_fg_color
+theme.widget_music_bg = theme.apw_fg_color
 --theme.widget_music_fg = MAIN_COLOR
 
 
