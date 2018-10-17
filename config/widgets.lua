@@ -106,9 +106,16 @@ function widget_loader.init(awesome_context)
   beautiful.calendar_month_border_color = beautiful.notification_border_color
   beautiful.calendar_month_border_width = beautiful.notification_border_width
   w.calendar_popup = awful.widget.calendar_popup.month({
-    spacing=dpi(3),
-    margin=beautiful.useless_gap*6,
+    spacing=dpi(2),
+    margin=beautiful.useless_gap*2,
     opacity=beautiful.notification_opacity,
+    style_month={
+      shape=function(_c, _w, _h)
+        return gears.shape.rounded_rect(
+          _c, _w, _h, beautiful.notification_border_radius
+        )
+      end
+    }
   })
   w.calendar_popup:attach(w.textclock, nil, {on_hover=true})
 
