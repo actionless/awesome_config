@@ -251,6 +251,7 @@ if awesome.composite_manager_running then
     'titlebar_bg_focus',
     'actionless_titlebar_bg_normal',
     'actionless_titlebar_bg_focus',
+    'notification_bg',
   }) do
     if #theme[theme_var] == 9 then
       theme[theme_var] = h_string.max_length(theme[theme_var], 7)

@@ -152,7 +152,8 @@ function common_theme.create_default_theme(theme_dir)
   theme.actionless_titlebar_bg_focus	= "theme.titlebar_bg_focus"
   theme.actionless_titlebar_bg_normal      = "theme.titlebar_bg_normal"
 
-  theme.notification_opacity	= 0.8
+  --theme.notification_opacity	= 0.8
+  theme.notification_opacity	= 1.0
   theme.notification_font	= "theme.sans_font"
   theme.notification_monofont	= "theme.font"
   theme.notification_bg = "theme.bg_normal"
