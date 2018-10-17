@@ -13,6 +13,7 @@ local widgets = require("actionless.widgets")
 local common = require("actionless.widgets").common
 local tasklist_addon = require("actionless.tasklist_addon")
 local persistent = require("actionless.persistent")
+local markup = require("actionless.util.markup")
 
 
 local widget_loader = {}
@@ -99,9 +100,11 @@ function widget_loader.init(awesome_context)
   end
 
   -- Textclock
-  local markup = require("actionless.util.markup")
-  local textclock = wibox.widget.textclock(markup.fg(beautiful.clock_fg or beautiful.panel_fg, "%H:%M"))
+  local textclock = wibox.widget.textclock(markup.fg(
+    beautiful.clock_fg or beautiful.panel_fg, "%H:%M"
+  ))
   w.textclock = textclock
+  -- Calendar
   beautiful.calendar_month_padding = 40
   beautiful.calendar_month_border_color = beautiful.notification_border_color
   beautiful.calendar_month_border_width = beautiful.notification_border_width
@@ -117,6 +120,16 @@ function widget_loader.init(awesome_context)
       end
     }
   })
+  if beautiful.notification_border_radius then
+    w.calendar_popup.border_width = 0
+    w.calendar_popup.bg = "#ff000000"
+    w.calendar_popup.shape = function(_c, _w, _h)
+      return gears.shape.rounded_rect(
+        _c, _w, _h, beautiful.notification_border_radius+1
+      )
+    end
+    w.calendar_popup.shape_clip = true
+  end
   w.calendar_popup:attach(w.textclock, nil, {on_hover=true})
 
 
