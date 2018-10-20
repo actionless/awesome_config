@@ -9,6 +9,11 @@ local unpack    = unpack or table.unpack -- (compatibility with Lua 5.1)
 local table_helpers = { unpack = unpack, }
 
 
+function table_helpers.pack(...)
+  return {...}
+end
+
+
 function table_helpers.spairs(t, order)
 -- http://stackoverflow.com/a/15706820/1850190
 
@@ -123,12 +128,20 @@ function table_helpers.hasvalue(container_table, desired_key)
   return false
 end
 
-function table_helpers.map(container_table, func)
+function table_helpers._map(container_table, func, _pairs_func)
   local result = {}
-  for key, value in pairs(container_table) do
+  for key, value in _pairs_func(container_table) do
     result[key] = func(value)
   end
   return result
+end
+
+function table_helpers.map(container_table, func)
+  return table_helpers._map(container_table, func, pairs)
+end
+
+function table_helpers.imap(container_table, func)
+  return table_helpers._map(container_table, func, ipairs)
 end
 
 function table_helpers.reduce(container_table, func)
