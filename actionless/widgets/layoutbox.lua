@@ -52,8 +52,10 @@ local function worker(args)
     layoutbox.n_col = wibox.container.background()
     layoutbox.n_col:set_widget(textbox())
 
+    local mfpol_textbox = textbox()
+    mfpol_textbox:set_font(beautiful.mono_font or beautiful.font)
     layoutbox.mfpol = wibox.container.background()
-    layoutbox.mfpol:set_widget(textbox())
+    layoutbox.mfpol:set_widget(mfpol_textbox)
 
 
     layoutbox.widget = wibox.layout.fixed.horizontal(
