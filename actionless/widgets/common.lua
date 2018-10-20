@@ -6,6 +6,7 @@
 local wibox = require("wibox")
 local gears = require("gears")
 local beautiful = require("beautiful")
+local dpi = beautiful.xresources.apply_dpi
 
 local h_table = require("actionless.util.table")
 
@@ -515,6 +516,50 @@ function common.decorated_horizontal(args)
   decorated:set_normal()
   decorated:show()
   return decorated
+end
+
+
+function common.text_progressbar(args)
+  local widget = wibox.widget {
+    {
+      {
+          id = "progressbar",
+          max_value     = 1,
+          forced_width  = dpi(20),
+          margins      = {
+            top=beautiful.panel_height - dpi(8),
+            bottom=dpi(3),
+          },
+          color = args.progress_fg or beautiful.bg_focus,
+          background_color = args.progress_bg or beautiful.bg_normal,
+          widget        = wibox.widget.progressbar,
+      },
+      id = "p1",
+      bg = args.bg or beautiful.panel_widget_bg or "#00000000",
+      layout = wibox.container.background,
+    },
+    {
+      {
+        nil,
+        {
+            id = "textbox",
+            widget = wibox.widget.textbox,
+        },
+        nil,
+        id = "t1",
+        layout = wibox.layout.align.horizontal,
+      },
+      id = "t1",
+      left = dpi(4),
+      right = dpi(4),
+      bottom = dpi(5),
+      layout = wibox.container.margin,
+    },
+    layout = wibox.layout.stack
+  }
+  widget.textbox = widget.t1.t1.textbox
+  widget.progressbar = widget.p1.progressbar
+  return widget
 end
 
 
