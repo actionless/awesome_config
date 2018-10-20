@@ -11,7 +11,7 @@ local gears_timer = require("gears.timer")
 local h_table      = require("actionless.util.table")
 local h_string      = require("actionless.util.string")
 local parse = require("actionless.util.parse")
-local common_widget = require("actionless.widgets.common").decorated
+local common_widgets = require("actionless.widgets.common")
 
 
 -- CPU usage
@@ -29,8 +29,13 @@ local function worker(args)
   cpu.cores_number = tonumber(parse.command_to_string('nproc'))
   cpu.timeout = args.timeout or 0
 
-  cpu.widget = common_widget(args)
-  cpu.widget:set_image(beautiful.widget_cpu)
+  args.bg = args.bg or "#00000000"
+  local widget = common_widgets.text_progressbar(args)
+  cpu.widget = common_widgets.decorated{widget=widget}
+  cpu.widget.textbox = widget.textbox
+  cpu.widget.progressbar = widget.progressbar
+
+  --cpu.widget:set_image(beautiful.widget_cpu)
   cpu.widget:connect_signal(
     "mouse::enter", function () cpu.show_notification() end)
   cpu.widget:connect_signal(
@@ -137,19 +142,21 @@ local function worker(args)
   function cpu.update()
     cpu.now.la1, cpu.now.la5, cpu.now.la15 = parse.find_in_file(
       "/proc/loadavg",
-      "^([0-9.]+) ([0-9.]+) ([0-9.]+) .*")
+      "^([0-9.]+) ([0-9.]+) ([0-9.]+) .*"
+    )
+    local msg = string.format(
+      "%-4s", cpu.now.la1
+    )
     if tonumber(cpu.now.la1) > cpu.cores_number * 2 then
       cpu.widget:set_error()
     elseif tonumber(cpu.now.la1) > cpu.cores_number then
       cpu.widget:set_warning()
     else
       cpu.widget:set_normal()
+      msg = 'cpu'
     end
-    cpu.widget:set_text(
-      string.format(
-        "%-4s",
-        cpu.now.la1
-      ))
+    cpu.widget.textbox:set_text(msg)
+    cpu.widget.progressbar:set_value(cpu.now.la1/cpu.cores_number)
   end
 
   gears_timer({

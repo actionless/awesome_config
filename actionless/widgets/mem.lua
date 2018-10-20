@@ -13,7 +13,7 @@ local gears_timer = require("gears.timer")
 local h_table = require("actionless.util.table")
 local h_string = require("actionless.util.string")
 local parse = require("actionless.util.parse")
-local common_widget= require("actionless.widgets.common").decorated
+local common_widgets = require("actionless.widgets.common")
 
 -- Memory usage (ignoring caches)
 local mem = {
@@ -26,13 +26,13 @@ local function worker(args)
   local update_interval  = args.update_interval or 5
   mem.timeout = args.timeout or 0
 
-  mem.widget = common_widget(args)
-  mem.widget:set_image(beautiful.widget_mem)
+  mem.widget = common_widgets.text_progressbar(args)
+
+  --mem.widget:set_image(beautiful.widget_mem)
   mem.widget:connect_signal(
     "mouse::enter", function () mem.show_notification() end)
   mem.widget:connect_signal(
     "mouse::leave", function () mem.hide_notification() end)
-  mem.cores_number = tonumber(parse.command_to_string('nproc'))
 
   mem.list_len = args.list_length or 10
 
@@ -136,11 +136,13 @@ local function worker(args)
       function(v) return math.floor(v / 1024) end)
     mem.now.used = mem.now.total - (mem.now.free + mem.now.buf + mem.now.cache)
     mem.now.swapused = mem.now.swap - mem.now.swapf
+    mem.widget.progressbar:set_value(mem.now.used/mem.now.total)
 
-    mem.widget:set_text(
-      string.format(
-        "%6s", mem.now.used .. "MB"
-      ))
+    --mem.widget.textbox:set_text(
+      --string.format(
+        --"%6s", mem.now.used .. "MB"
+      --))
+    mem.widget.textbox:set_text('mem')
   end
 
   gears_timer({
