@@ -31,17 +31,17 @@ end
 function parse.process_filename(file_name, func, ...)
   local fp = io.open(file_name)
   if fp == nil then return nil end
-  local result = func(fp, ...)
+  local result = h_table.pack(func(fp, ...))
   fp:close()
-  return result
+  return h_table.unpack(result)
 end
 
 function parse.process_command(cmd, func, ...)
   local fp = io.popen(cmd)
   if fp == nil then return nil end
-  local result = func(fp, ...)
+  local result = h_table.pack(func(fp, ...))
   fp:close()
-  return result
+  return h_table.unpack(result)
 end
 
 function parse.filename_to_lines(file_name)
@@ -61,13 +61,15 @@ end
 ----------------------------------------------
 
 function parse.find_in_lines(lines, regex)
-  local match
+  local matches = {}
   for _, line in ipairs(lines) do
-    match = line:match(regex)
-    if match then
-      return match
+    for _, match in ipairs({line:match(regex)}) do
+      if match then
+        matches[#matches+1] = match
+      end
     end
   end
+  return h_table.unpack(matches)
 end
 
 function parse.find_values_in_lines(lines, regex, match_keys, post_func)
