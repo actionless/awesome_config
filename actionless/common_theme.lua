@@ -33,7 +33,8 @@ function common_theme.create_default_theme(theme_dir)
 
   theme.show_widget_icon = false
 
-  theme.font = "Monospace Bold 10"
+  theme.mono_font = "Monospace Bold 10"
+  theme.font = theme.mono_font
   theme.text_font = "Monospace 10"
   theme.sans_font = "Sans Bold 10"
   -- Don't use sans font:
