@@ -16,6 +16,7 @@ function toolbar.init(awesome_context)
   -- Separators
   local sep = common.constraint({ width=dpi(2), })
   local separator  = common.constraint({ width=beautiful.panel_widget_spacing, })
+  local nothing  = common.constraint({ width=0, })
 
   local apw = wibox.layout.fixed.horizontal(
     common.panel_shape(
@@ -42,7 +43,7 @@ function toolbar.init(awesome_context)
 
 
     -- LEFT side
-    local left_margin = awful.util.table.clone(separator)
+    local left_margin = common.constraint({ width=beautiful.panel_padding_bottom, })
     local manage_client = loaded_widgets.screen[si].manage_client
     left_margin:buttons(manage_client._buttons_table)
     left_margin:connect_signal("mouse::enter", manage_client._on_mouse_enter)
@@ -88,6 +89,8 @@ function toolbar.init(awesome_context)
     center_layout:buttons(wheel_binding)
 
     -- RIGHT side
+    local right_margin = common.constraint({ width=beautiful.panel_padding_bottom, })
+    right_margin:buttons(loaded_widgets.systray_toggle._buttons_table)
     local iseparator  = wibox.container.background(separator, beautiful.panel_widget_bg)
     local right_layout = wibox.widget{
       layout = wibox.layout.align.horizontal,
@@ -127,7 +130,10 @@ function toolbar.init(awesome_context)
         loaded_widgets.screen[si].layoutbox,
         separator,
         sep,
-        si==1 and common.panel_shape(loaded_widgets.systray_toggle) or separator,
+        si==1
+          and common.panel_shape(loaded_widgets.systray_toggle)
+          or common.constraint({ width=beautiful.panel_padding_bottom, }),
+        right_margin or nothing,
       }
     }
 

@@ -14,6 +14,9 @@ local beautiful = require("beautiful")
 --- widgets.sneaky_tray
 local sneaky_tray = { mt = {} }
 
+sneaky_tray._buttons_table = awful.util.table.join(
+    awful.button({ }, 1, sneaky_tray.toggle)
+)
 
 function sneaky_tray.initialize()
     sneaky_tray.stupid_bug = drawin({})
@@ -25,9 +28,7 @@ function sneaky_tray.initialize()
         sneaky_tray.container = wibox.container.constraint()
             sneaky_tray.systray = wibox.widget.systray()
         sneaky_tray.arrow = wibox.widget.imagebox(beautiful.icon_systray_show)
-        sneaky_tray.arrow:buttons(awful.util.table.join(
-            awful.button({ }, 1, sneaky_tray.toggle)--,
-        ))
+        sneaky_tray.arrow:buttons(sneaky_tray._buttons_table)
         sneaky_tray.arrow:set_resize(beautiful.xresources.get_dpi() > 96)
     sneaky_tray.widget:add(sneaky_tray.container)
     sneaky_tray.widget:add(sneaky_tray.arrow)
