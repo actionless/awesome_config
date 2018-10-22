@@ -14,8 +14,8 @@ function toolbar.init(awesome_context)
   local loaded_widgets = awesome_context.widgets
 
   -- Separators
-  local sep = common.constraint({ width=dpi(2), })
   local separator  = common.constraint({ width=beautiful.panel_widget_spacing, })
+  local sep = common.constraint({ width=beautiful.panel_widget_spacing/4 })
   local nothing  = common.constraint({ width=0, })
 
   local apw = wibox.layout.fixed.horizontal(
@@ -58,8 +58,6 @@ function toolbar.init(awesome_context)
         common.panel_shape(manage_client),
         sep,
         loaded_widgets.screen[si].promptbox,
-        sep,
-        sep,
         loaded_widgets.kbd,
         sep
       },
