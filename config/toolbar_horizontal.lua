@@ -2,6 +2,7 @@ local wibox = require("wibox")
 local beautiful = require("beautiful")
 local dpi = beautiful.xresources.apply_dpi
 local awful = require("awful")
+local gmath = require("gears.math")
 
 local tag_helpers = require("actionless.util.tag")
 local common = require("actionless.widgets").common
@@ -15,7 +16,7 @@ function toolbar.init(awesome_context)
 
   -- Separators
   local separator  = common.constraint({ width=beautiful.panel_widget_spacing, })
-  local sep = common.constraint({ width=beautiful.panel_widget_spacing/4 })
+  local sep = common.constraint({ width=gmath.round(beautiful.panel_widget_spacing/4) })
   local nothing  = common.constraint({ width=0, })
 
   local apw = wibox.layout.fixed.horizontal(
