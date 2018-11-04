@@ -89,7 +89,7 @@ function rules.init(awesome_context)
       }, },
       { rule = { class = "Transmission-gtk", name = "Torrent Options" },
         properties = {
-          width = dpi(800),
+          width = dpi(700),
       }, },
 
       { rule = { class = "qBittorent"},
