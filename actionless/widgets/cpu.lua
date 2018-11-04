@@ -126,7 +126,7 @@ local function worker(args)
         column_headers[cpu.columns.pid],
         column_headers[cpu.columns.percent],
         column_headers[cpu.columns.name]
-      ) .. '<span font="'  .. tostring(beautiful.text_font)  .. '">' .. result_string .. '</span>'
+      ) .. '<span font="'  .. tostring(beautiful.text_font)  .. '">' .. result_string .. '</span> '
     else
       result_string = "no running processes atm"
     end

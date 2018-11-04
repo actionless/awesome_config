@@ -115,7 +115,7 @@ local function worker(args)
       end
       result_string = result_string .. '\n'
     end
-    result_string = result_string .. '</span>'
+    result_string = result_string .. '</span> '
 
     mem.notification = naughty.notify({
       text = result_string,
