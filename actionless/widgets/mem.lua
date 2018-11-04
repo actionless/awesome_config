@@ -26,7 +26,10 @@ local function worker(args)
   local update_interval  = args.update_interval or 5
   mem.timeout = args.timeout or 0
 
-  mem.widget = common_widgets.text_progressbar(args)
+  local widget = common_widgets.text_progressbar(args)
+  mem.widget = common_widgets.decorated{widget=widget}
+  mem.widget.textbox = widget.textbox
+  mem.widget.progressbar = widget.progressbar
 
   --mem.widget:set_image(beautiful.widget_mem)
   mem.widget:connect_signal(
