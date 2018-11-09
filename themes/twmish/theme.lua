@@ -41,7 +41,13 @@ theme.border_radius = dpi(gsc.button_border_radius*2)
 theme.panel_widget_border_radius = dpi(gsc.button_border_radius*0.7)
 --theme.border_radius = dpi(5)
 --theme.panel_widget_border_radius = dpi(5)
-theme.panel_widget_border_width = dpi(2)
+--theme.panel_widget_border_width = dpi(2)
+local gtk_border_width = gsc.button_border_width
+if gtk_border_width < 1 then
+  gtk_border_width = 1
+end
+local gdk_scale = tonumber(os.getenv("GDK_SCALE") or 1.0)
+theme.panel_widget_border_width = gtk_border_width * gdk_scale
 --theme.panel_widget_border_color = color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color, 0.5)
 theme.panel_widget_border_color = color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color, 0.3)
 theme.notification_border_color = gsc.selected_fg_color
@@ -55,6 +61,16 @@ theme.tasklist_fg_normal = gsc.selected_fg_color
 theme.tasklist_bg_normal = gsc.selected_bg_color
 theme.tasklist_fg_minimize = gsc.selected_bg_color
 theme.tasklist_bg_minimize = gsc.selected_fg_color
+
+local gears = require('gears')
+  local less_rounded_rect_shape = function(cr,w,h)
+    gears.shape.rounded_rect(
+      cr, w, h, theme.panel_widget_border_radius
+    )
+  end
+  theme.tasklist_shape_minimized = less_rounded_rect_shape
+theme.tasklist_shape_border_width_minimized = theme.panel_widget_border_width
+  theme.tasklist_shape_border_color_minimized = theme.panel_widget_border_color
 
 --theme.taglist_squares_sel       = "theme.null"
 --theme.taglist_squares_unsel     = "theme.null"

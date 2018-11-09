@@ -45,10 +45,15 @@ theme.panel_widget_border_radius = dpi(gtk_border_radius*0.8)
 --theme.panel_widget_border_radius = dpi(gtk_border_radius*1.0)
 --theme.border_radius = dpi(5)
 --theme.panel_widget_border_radius = dpi(5)
-theme.panel_widget_border_width = dpi(gtk_border_width)
-theme.panel_widget_border_width = dpi(gtk_border_width*2)
+local gdk_scale = tonumber(os.getenv("GDK_SCALE") or 1.0)
+theme.panel_widget_border_width = gtk_border_width * gdk_scale
+--theme.panel_widget_border_width = dpi(gtk_border_width)
+--theme.panel_widget_border_width = dpi(gtk_border_width*2)
 --theme.panel_widget_border_color = color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color, 0.5)
 theme.panel_widget_border_color = color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color, 0.3)
+theme.panel_widget_border_color = color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color, 0.2)
+--theme.panel_widget_border_color = color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color, 0.15)
+--theme.panel_widget_border_color = color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color, 0.12)
 
 
 theme.widget_close_bg = gsc.header_button_bg_color
@@ -190,7 +195,6 @@ theme.titlebar_fg_normal	= color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_
 theme.titlebar_bg_normal	= gsc.menubar_bg_color
 theme.notification_border_radius = "theme.border_radius"
 
-if theme.border_radius > 0 then
   local rounded_rect_shape = function(cr,w,h)
     gears.shape.rounded_rect(
       cr, w, h, theme.notification_border_radius
@@ -201,18 +205,24 @@ if theme.border_radius > 0 then
       cr, w, h, theme.panel_widget_border_radius
     )
   end
+if theme.border_radius > 0 then
   theme.titlebar_fg_focus		= gsc.menubar_fg_color
   theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
   theme.notification_shape = rounded_rect_shape
-  theme.tasklist_shape_minimized = less_rounded_rect_shape
 else
   theme.titlebar_fg_focus		= gsc.selected_fg_color
   theme.titlebar_bg_focus		= gsc.wm_border_focused_color
   --theme.actionless_titlebar_bg_focus = gsc.wm_border_focused_color
   theme.notification_shape = nil
 end
+theme.tasklist_shape_minimized = less_rounded_rect_shape
+theme.tasklist_shape_border_width_minimized = theme.panel_widget_border_width
+theme.tasklist_shape_border_color_minimized = color_utils.mix(
+  theme.tasklist_fg_minimize, theme.tasklist_bg_minimize, 0.7
+)
 
 theme.panel_widget_spacing = dpi(8)
+theme.tasklist_spacing = gears.math.round(theme.panel_widget_spacing/4)
 
 theme.panel_widget_bg_error = theme.xrdb.color1
 theme.panel_widget_fg_error = theme.xrdb.color15
