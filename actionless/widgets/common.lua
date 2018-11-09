@@ -10,6 +10,8 @@ local dpi = beautiful.xresources.apply_dpi
 
 local h_table = require("actionless.util.table")
 
+local TRANSPARENT = "#00000000"
+
 
 local common = {}
 
@@ -524,30 +526,37 @@ function common.text_progressbar(args)
     or beautiful.panel_widget_progress_fg or beautiful.bg_focus
   local progress_bg = args.progress_bg
     or beautiful.panel_widget_progress_bg or beautiful.bg_normal
-  local border_width = args.progress_border_width
+  local progress_border_width = args.progress_border_width
     or beautiful.panel_widget_progress_border_width or 1
-  local border_color = args.progress_border_color
+  local progress_border_color = args.progress_border_color
     or beautiful.panel_widget_progress_border_color or progress_bg
+
+  local text_margin_bottom = dpi(5)
+  --local progress_margin_bottom = dpi(2)
+  local progress_margin_bottom = dpi(1)
+  local progress_height = dpi(7)
+  local progress_width = dpi(20)
+  local text_margin_left = dpi(4)
+  local text_margin_right = dpi(4)
 
   local widget = wibox.widget {
     {
       {
           id = "progressbar",
           max_value     = 1,
-          forced_width  = dpi(20),
+          forced_width  = progress_width,
           margins      = {
-            top=beautiful.panel_height - dpi(8),
-            --bottom=dpi(3),
-            bottom=dpi(2),
+            bottom=progress_margin_bottom,
+            top=beautiful.panel_height - progress_margin_bottom - progress_height,
           },
           color = progress_fg,
           background_color = progress_bg,
-          border_width = border_width,
-          border_color = border_color,
+          border_width = progress_border_width,
+          border_color = progress_border_color,
           widget        = wibox.widget.progressbar,
       },
       id = "p1",
-      bg = args.bg or beautiful.panel_widget_bg or "#00000000",
+      bg = args.bg or beautiful.panel_widget_bg or TRANSPARENT,
       layout = wibox.container.background,
     },
     {
@@ -558,19 +567,19 @@ function common.text_progressbar(args)
             widget = wibox.widget.textbox,
         },
         nil,
-        id = "t1",
+        id = "t2",
         layout = wibox.layout.align.horizontal,
       },
       id = "t1",
-      left = dpi(4),
-      right = dpi(4),
-      bottom = dpi(5),
+      left  = text_margin_left,
+      right = text_margin_right,
+      bottom = text_margin_bottom,
       layout = wibox.container.margin,
     },
     layout = wibox.layout.stack
   }
 
-  widget.textbox = widget.t1.t1.textbox
+  widget.textbox = widget.t1.t2.textbox
   widget.progressbar = widget.p1.progressbar
   return widget
 end
