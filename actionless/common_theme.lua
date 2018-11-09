@@ -163,7 +163,7 @@ function common_theme.create_default_theme(theme_dir)
   theme.notification_border_color = "theme.xrdb.color8"
   theme.notification_border_width = dpi(2)
   theme.notification_margin = dpi(8)
-  theme.notification_icon_size = dpi(180)
+  theme.notification_icon_size = dpi(120)
   theme.notification_max_width = dpi(500)
   theme.notification_max_height = dpi(1000)
 
