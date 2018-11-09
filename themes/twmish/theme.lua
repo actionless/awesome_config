@@ -50,6 +50,9 @@ local gdk_scale = tonumber(os.getenv("GDK_SCALE") or 1.0)
 theme.panel_widget_border_width = gtk_border_width * gdk_scale
 --theme.panel_widget_border_color = color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color, 0.5)
 theme.panel_widget_border_color = color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color, 0.3)
+theme.panel_widget_progress_bg = gsc.selected_fg_color
+theme.panel_widget_progress_fg = gsc.text_color
+theme.panel_widget_progress_border_color = theme.panel_widget_border_color
 theme.notification_border_color = gsc.selected_fg_color
 
 theme.widget_close_bg = gsc.selected_fg_color
