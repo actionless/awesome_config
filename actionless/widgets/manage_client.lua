@@ -41,7 +41,7 @@ local function worker(args)
   widget._on_mouse_enter = function ()
     if not widget.is_managing then
       if args.error_color_on_hover then
-        widget:set_error()
+        widget:set_bg(beautiful.xrdb.color9)
       else
         widget:set_bg(color_utils.darker(args.bg, -20))
       end
@@ -59,7 +59,9 @@ local function worker(args)
   widget:connect_signal("mouse::enter", widget._on_mouse_enter)
   widget:connect_signal("mouse::leave", widget._on_mouse_leave)
   widget._buttons_table = awful.util.table.join(
-    awful.button({ }, 1, function ()
+    awful.button({ }, 1, function()
+        widget:set_error()
+    end, function ()
       if not widget.is_managing then
         capi.client.focus:kill()
       end
