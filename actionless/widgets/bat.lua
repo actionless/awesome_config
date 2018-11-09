@@ -38,7 +38,7 @@ local function worker(args)
   ))
 
   local function update_widget_data()
-    local widget_text = string.format("%-2s%% ", bat.now.percentage)
+    local widget_text = string.format(" %-2s%% ", bat.now.percentage)
     -- charged:
     if bat.now.state == 'fully-charged' then
       if beautiful.widget_ac then
@@ -98,10 +98,10 @@ local function worker(args)
     )
     bat.now.percentage = h_string.only_digits(bat.now.percentage)
     if bat.now.state == 'fully-charged' and not show_when_charged then
-      bat.widget.visible = false
+      bat.widget:hide()
     else
       update_widget_data()
-      bat.widget.visible = true
+      bat.widget:show()
     end
   end
 
