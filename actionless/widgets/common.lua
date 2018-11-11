@@ -52,8 +52,8 @@ end
 function common.panel_shape(widget, args)
   args = args or {}
   local shaped = wibox.container.background(widget)
-  shaped:set_shape(gears.shape.rounded_rect, beautiful.panel_widget_border_radius)
   shaped.shape_clip = true
+  shaped.shape = function(c, w, h) return gears.shape.rounded_rect(c, w, h, beautiful.panel_widget_border_radius) end
   shaped.shape_border_width = args.border_width or beautiful.panel_widget_border_width or 0
   shaped.shape_border_color = args.border_color or beautiful.panel_widget_border_color or beautiful.border_normal
   setmetatable(shaped,        { __index = widget })
@@ -531,13 +531,16 @@ function common.text_progressbar(args)
   local progress_border_color = args.progress_border_color
     or beautiful.panel_widget_progress_border_color or progress_bg
 
+  local text_margin_left = dpi(4)
+  local text_margin_right = dpi(4)
   local text_margin_bottom = dpi(5)
   --local progress_margin_bottom = dpi(2)
   local progress_margin_bottom = dpi(1)
-  local progress_height = dpi(7)
+  local progress_height = dpi(3)
   local progress_width = dpi(20)
-  local text_margin_left = dpi(4)
-  local text_margin_right = dpi(4)
+  local progress_border_radius = beautiful.panel_widget_border_radius * (
+     progress_height / beautiful.basic_panel_height
+  ) * 2
 
   local widget = wibox.widget {
     {
@@ -547,12 +550,15 @@ function common.text_progressbar(args)
           forced_width  = progress_width,
           margins      = {
             bottom=progress_margin_bottom,
-            top=beautiful.panel_height - progress_margin_bottom - progress_height,
+            top=beautiful.panel_height - progress_margin_bottom - progress_height - beautiful.panel_padding_bottom,
           },
           color = progress_fg,
           background_color = progress_bg,
           border_width = progress_border_width,
           border_color = progress_border_color,
+          shape         = function(c, w, h) return gears.shape.rounded_rect(
+                            c, w, h, progress_border_radius
+                          ) end,
           widget        = wibox.widget.progressbar,
       },
       id = "p1",
