@@ -72,7 +72,7 @@ function toolbar.init(awesome_context)
         {
           layout = wibox.container.background,
           buttons = wheel_binding,
-          sep,
+          awesome_context.apw_on_the_left and separator or sep,
         },
         awesome_context.apw_on_the_left and apw,
       },
