@@ -47,6 +47,7 @@ optdepends=(
 	'xorg-xinput: config/autorun: configure trackball'
 	'xscreensaver: config/autorun,config/keys'
 	'nemo: default file manager'
+	'nitrogen: default wallpaper manager'
 )
 
 package() {
