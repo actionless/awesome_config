@@ -100,9 +100,15 @@ function widget_loader.init(awesome_context)
   end
 
   -- Textclock
-  local textclock = wibox.widget.textclock(markup.fg(
-    beautiful.clock_fg or beautiful.panel_fg, "%H:%M"
-  ))
+  local textclock = wibox.widget.textclock(
+    markup.font(
+      beautiful.bold_font,
+      markup.fg(
+        beautiful.clock_fg or beautiful.panel_fg,
+        "%H:%M"
+      )
+    )
+  )
   w.textclock = textclock
   -- Calendar
   beautiful.calendar_month_padding = 40
