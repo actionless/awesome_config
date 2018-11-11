@@ -66,14 +66,14 @@ theme.tasklist_fg_minimize = gsc.selected_bg_color
 theme.tasklist_bg_minimize = gsc.selected_fg_color
 
 local gears = require('gears')
-  local less_rounded_rect_shape = function(cr,w,h)
-    gears.shape.rounded_rect(
-      cr, w, h, theme.panel_widget_border_radius
-    )
-  end
-  theme.tasklist_shape_minimized = less_rounded_rect_shape
+local less_rounded_rect_shape = function(cr,w,h)
+  gears.shape.rounded_rect(
+    cr, w, h, theme.panel_widget_border_radius
+  )
+end
+theme.tasklist_shape_minimized = less_rounded_rect_shape
 theme.tasklist_shape_border_width_minimized = theme.panel_widget_border_width
-  theme.tasklist_shape_border_color_minimized = theme.panel_widget_border_color
+theme.tasklist_shape_border_color_minimized = theme.panel_widget_border_color
 
 --theme.taglist_squares_sel       = "theme.null"
 --theme.taglist_squares_unsel     = "theme.null"

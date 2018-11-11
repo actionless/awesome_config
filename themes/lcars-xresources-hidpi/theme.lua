@@ -149,6 +149,16 @@ theme.widget_music_fg = theme.bg
 --theme.tasklist_fg_focus = "theme.fg"
 theme.tasklist_fg_focus = theme.xrdb.foreground
 
+local gears = require('gears')
+local less_rounded_rect_shape = function(cr,w,h)
+  gears.shape.rounded_rect(
+    cr, w, h, theme.panel_widget_border_radius
+  )
+end
+theme.tasklist_shape_minimized = less_rounded_rect_shape
+theme.tasklist_shape_border_width_minimized = theme.panel_widget_border_width
+theme.tasklist_shape_border_color_minimized = theme.panel_widget_border_color
+
 theme.widget_close_bg = "theme.panel_widget_bg"
 theme.widget_close_error_color_on_hover = true
 
