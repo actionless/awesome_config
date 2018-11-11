@@ -156,7 +156,6 @@ function common_theme.create_default_theme(theme_dir)
   --theme.notification_opacity	= 0.8
   theme.notification_opacity	= 1.0
   theme.notification_font	= "theme.sans_font"
-  theme.notification_monofont	= "theme.font"
   theme.notification_bg = "theme.bg_normal"
   theme.notification_fg = "theme.fg_normal"
   theme.notification_border_color = "theme.bg_focus"

@@ -65,7 +65,7 @@ local function worker(args)
     cpu.notification = naughty.notify({
       text = "waiting for top...",
       timeout = cpu.timeout,
-      font = beautiful.notification_monofont,
+      font = beautiful.mono_font,
       replaces_id = cpu.get_notification_id(),
       position = beautiful.widget_notification_position,
     })
@@ -133,7 +133,7 @@ local function worker(args)
     cpu.notification = naughty.notify({
       text = result_string,
       timeout = cpu.timeout,
-      font = beautiful.notification_monofont,
+      font = beautiful.mono_font,
       replaces_id = cpu.get_notification_id(),
       position = beautiful.widget_notification_position,
     })

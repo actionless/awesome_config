@@ -60,7 +60,7 @@ local function worker(args)
     mem.notification = naughty.notify({
       text = "waiting for top...",
       timeout = mem.timeout,
-      font = beautiful.notification_monofont,
+      font = beautiful.mono_font,
       replaces_id = mem.get_notification_id(),
       position = beautiful.widget_notification_position,
     })
@@ -120,7 +120,7 @@ local function worker(args)
     mem.notification = naughty.notify({
       text = result_string,
       timeout = mem.timeout,
-      font = beautiful.notification_monofont,
+      font = beautiful.mono_font,
       replaces_id = mem.get_notification_id(),
       position = beautiful.widget_notification_position,
     })
@@ -145,7 +145,7 @@ local function worker(args)
       --string.format(
         --"%6s", mem.now.used .. "MB"
       --))
-    mem.widget.textbox:set_text('mem')
+    mem.widget.textbox:set_text(args.text or 'mem')
   end
 
   gears_timer({
