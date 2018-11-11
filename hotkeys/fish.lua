@@ -1,65 +1,64 @@
----------------------------------------------------------------------------
---- VIM hotkeys for awful.hotkeys_widget
---
--- @author Yauheni Kirylau &lt;yawghen@gmail.com&gt;
--- @copyright 2014-2015 Yauheni Kirylau
--- @release v3.5.2-1236-g984b0a3
--- @module awful.hotkeys_popup.keys.vim
----------------------------------------------------------------------------
-
 local hotkeys_popup = require("awful.hotkeys_popup.widget")
 
 local fish_rule_any = {name={"fish", "st "}}
 for group_name, group_data in pairs({
-    ["Fish"] =             { color="#5f6d93", rule_any=fish_rule_any },
+    ["fish"] =             { color="#5f6d93", rule_any=fish_rule_any },
 }) do
     hotkeys_popup.add_group_rules(group_name, group_data)
 end
 
 
-local vim_keys = {
+local fish_keys = {
 
-    ["Fish"] = {{
+    ["fish"] = {{
         modifiers = {},
         keys = {
             Next="history begin",
             Prior="history end",
+            Tab="complete",
         }
     }, {
         modifiers = {"Ctrl"},
         keys = {
             a="BOL",
-            e="EOL",
             b="one char back",
-            f="one char forward",
             c="cancel",
             d="delete/exit",
+            e="EOL",
+            f="one char forward",
             k="kill from cursor to EOL",
-            u="kill from BOL to cursor",
             l="clear screen",
-            w="kill prev word",
-            y="yank from killring",
-            p="history prev",
             n="history next",
+            p="history prev",
             t="transpose char with prev",
+            u="kill from BOL to cursor",
+            v="paste from clipboard",
+            w="kill prev word",
+            x="copy buffer to clipboard",
+            y="yank from killring",
+            z="send sigstop",
         }
     }, {
         modifiers = {"Alt"},
         keys = {
+            Enter="\\n",
             Left="directory/one word back",
             Right="directory/one word forward",
+            Up="search token in history",
+            Down="search token back in history",
             b="one word back",
-            f="one word forward",
+            c="capitalize word",
             d="kill next word",
-            w="print short help",
+            e="edit line in vim",
+            f="one word forward",
+            h="show man",
             l="ls",
             p="| less;",
-            c="capitalize",
-            u="uppercase",
-            h="show man",
-            Enter="\\n",
-            y="yank pop",
             t="transpose word with prev",
+            u="uppercase word",
+            v="edit in $VISUAL or $EDITOR",
+            w="print short help",
+            y="pop killring value",
             ["."]="search token in history",
 
         }
@@ -69,9 +68,14 @@ local vim_keys = {
             [","]="beginning of buffer",
             ["."]="end of buffer",
         },
+    }, {
+        modifiers = {"Shift"},
+        keys = {
+            Tab="complete and fuzzy search",
+        },
     }},
 }
 
-hotkeys_popup.add_hotkeys(vim_keys)
+hotkeys_popup.add_hotkeys(fish_keys)
 
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80
