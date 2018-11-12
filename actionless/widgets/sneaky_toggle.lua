@@ -56,7 +56,8 @@ function sneaky_toggle.initialize()
             common_widgets.constraint{width=dpi(5)},
             widget,
             common_widgets.constraint{width=dpi(5)},
-        }
+        },
+        spacing = 0,
     }))
 
     if st.show_on_start then
