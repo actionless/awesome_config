@@ -367,7 +367,9 @@ function common.decorated_horizontal(args)
   decorated.bg = args.bg or beautiful.panel_widget_bg or beautiful.fg or "#ffffff"
   decorated.fg = args.fg or beautiful.panel_widget_fg or beautiful.bg or "#000000"
 
-  local separator = wibox.widget.textbox(' ')
+  local spacing = beautiful.panel_widget_spacing or 0
+  if args.spacing ~= nil then spacing=args.spacing end
+  local separator = spacing and common.constraint{width =  spacing}
 
   if args.widgets then
     decorated.lie_widget_list = args.widgets
@@ -462,7 +464,7 @@ function common.decorated_horizontal(args)
     end
     for i, each_widget in ipairs(self.lie_widget_list) do
       self.lie_layout:add(each_widget)
-      if i ~= #self.lie_widget_list then
+      if separator and i ~= #self.lie_widget_list then
         self.lie_layout:add(separator)
       end
     end
