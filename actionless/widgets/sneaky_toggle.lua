@@ -8,7 +8,7 @@
 local wibox = require("wibox")
 local awful = require("awful")
 local beautiful = require("beautiful")
-local dpi = beautiful.xresources.apply_dpi
+local gmath = require("gears.math")
 
 local sneaky_tray = require("actionless.widgets.sneaky_tray")
 local common_widgets = require("actionless.widgets.common")
@@ -18,104 +18,114 @@ local common_widgets = require("actionless.widgets.common")
 local sneaky_toggle = { mt = {} }
 
 
-function sneaky_toggle.initialize()
-    local st = sneaky_toggle
-    st.export_widget = wibox.layout.fixed.horizontal()
+local function widget_factory(args)
+  -- ARGUMENTS: ---------------------------------------------------------------
+    args = args or {}
+    local loaded_widgets = args.widgets
+    local enable_sneaky_tray = args.enable_sneaky_tray
+    local show_on_start = false
+    if args.show_on_start ~= nil then show_on_start = args.show_on_start end
 
-    st.lie_layout = wibox.layout.fixed.horizontal()
-    for _, widget in ipairs(sneaky_toggle.loaded_widgets) do
-        st.lie_layout:add(widget)
+  -- WIDGET: ------------------------------------------------------------------
+    local widget = wibox.layout.fixed.horizontal()
+    local st = {}
+
+    st.user_widgets_layout = wibox.layout.fixed.horizontal()
+    for _, _widget in ipairs(loaded_widgets) do
+        st.user_widgets_layout:add(_widget)
     end
 
     st.container = wibox.container.constraint()
-    st.export_widget:add(st.container)
 
-    if st.enable_sneaky_tray then
+    widget:add(st.container)
+
+    if enable_sneaky_tray then
         st.sneaky_tray = sneaky_tray({
-            show_on_start = st.show_on_start
+            show_on_start = show_on_start
         })
-        st.export_widget:add(st.sneaky_tray.container)
+        widget:add(st.sneaky_tray.container)
     end
 
-    local apply_buttons_widget
+    local padding = args.padding
+    local icon_widget
     if beautiful.icon_systray_show then
-        st.arrow = wibox.widget.imagebox()
-        apply_buttons_widget = st.arrow
+        st.image_arrow = wibox.widget.imagebox()
+        icon_widget = st.image_arrow
     else
-        st.text_arrow = wibox.widget.textbox()
-        apply_buttons_widget = st.text_arrow
+        st.text_arrow = wibox.widget.textbox('&lt;')
+        icon_widget = st.text_arrow
+        if not padding then
+            padding = gmath.round(
+                (beautiful.basic_panel_height - st.text_arrow:get_preferred_size()) / 2
+            )
+        end
     end
-    apply_buttons_widget:buttons(awful.util.table.join(
-        awful.button({ }, 1, st.toggle)
-    ))
-
-    local widget = st.arrow or st.text_arrow
-    st.export_widget:add(common_widgets.decorated_horizontal({
-        widget=widget,
+    local icon_layout = common_widgets.decorated_horizontal({
+        widget=icon_widget,
         widgets={
-            common_widgets.constraint{width=dpi(5)},
-            widget,
-            common_widgets.constraint{width=dpi(5)},
+            common_widgets.constraint{width=padding},
+            icon_widget,
+            common_widgets.constraint{width=padding},
         },
         spacing = 0,
-    }))
+    })
+    icon_layout:buttons(awful.util.table.join(
+        awful.button({ }, 1, function() st:toggle() end)
+    ))
 
-    if st.show_on_start then
-        st.show()
+    widget:add(icon_layout)
+
+  -- METHODS: -----------------------------------------------------------------
+    function st:hide()
+        if self.sneaky_tray then
+            self.sneaky_tray.hide()
+        end
+        self.container:set_widget(nil)
+        self.container:set_strategy("exact")
+        self.widgetvisible = false
+        if self.text_arrow then
+            self.text_arrow:set_markup('&lt;')
+        elseif self.image_arrow then
+            self.image_arrow:set_image(beautiful.icon_systray_show)
+        end
+    end
+
+    function st:show()
+        if self.sneaky_tray then
+            self.sneaky_tray.show()
+        end
+        self.container:set_strategy("min")
+        self.container:set_widget(self.user_widgets_layout)
+        self.widgetvisible = true
+        if self.text_arrow then
+            self.text_arrow:set_markup('&gt;')
+        elseif self.image_arrow then
+            self.image_arrow:set_image(beautiful.icon_systray_hide)
+        end
+    end
+
+    function st:toggle()
+        if self.widgetvisible then
+            self:hide()
+        else
+            self:show()
+        end
+    end
+
+  -- INIT: --------------------------------------------------------------------
+    if show_on_start then
+        st:show()
     else
-        st.hide()
+        st:hide()
     end
-end
 
-function sneaky_toggle.hide()
-    if sneaky_toggle.sneaky_tray then
-        sneaky_toggle.sneaky_tray.hide()
-    end
-    sneaky_toggle.container:set_widget(nil)
-    sneaky_toggle.container:set_strategy("exact")
-    sneaky_toggle.widgetvisible = false
-    if beautiful.icon_systray_show then
-        sneaky_toggle.arrow:set_image(beautiful.icon_systray_show)
-    else
-        sneaky_toggle.text_arrow:set_markup('&lt;')
-    end
-end
-
-function sneaky_toggle.show()
-    if sneaky_toggle.sneaky_tray then
-        sneaky_toggle.sneaky_tray.show()
-    end
-    sneaky_toggle.container:set_strategy("min")
-    sneaky_toggle.container:set_widget(sneaky_toggle.lie_layout)
-    sneaky_toggle.widgetvisible = true
-    if beautiful.icon_systray_show then
-        sneaky_toggle.arrow:set_image(beautiful.icon_systray_hide)
-    else
-        sneaky_toggle.text_arrow:set_markup('&gt;')
-    end
-end
-
-function sneaky_toggle.toggle()
-    if sneaky_toggle.widgetvisible then
-        sneaky_toggle.hide()
-    else
-        sneaky_toggle.show()
-    end
-end
-
-local function worker(args)
-    args = args or {}
-    sneaky_toggle.enable_sneaky_tray = args.enable_sneaky_tray
-    sneaky_toggle.loaded_widgets = args.widgets
-    sneaky_toggle.show_on_start = args.show_on_start or false
-    sneaky_toggle.initialize()
-    return setmetatable(sneaky_toggle, { __index = sneaky_toggle.export_widget})
+    return setmetatable(st, { __index = widget})
 end
 
 return setmetatable(
     sneaky_toggle,
     { __call = function(_, ...)
-        return worker(...)
+        return widget_factory(...)
     end }
 )
 
