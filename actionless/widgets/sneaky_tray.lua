@@ -27,6 +27,8 @@ function sneaky_tray.initialize()
     --end)
         sneaky_tray.container = wibox.container.constraint()
             sneaky_tray.systray = wibox.widget.systray()
+            --sneaky_tray.systray.forced_width =  beautiful.basic_panel_height
+            sneaky_tray.systray.forced_height = beautiful.basic_panel_height
         sneaky_tray.arrow = wibox.widget.imagebox(beautiful.icon_systray_show)
         sneaky_tray.arrow:buttons(sneaky_tray._buttons_table)
         sneaky_tray.arrow:set_resize(beautiful.xresources.get_dpi() > 96)
