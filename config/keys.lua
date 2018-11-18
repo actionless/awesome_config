@@ -137,7 +137,7 @@ function keys.init(awesome_context)
     ),
 
     bind_key({ modkey,  altkey  }, "t",
-      function() awesome_context.widgets.systray_toggle.toggle() end,
+      function() awesome_context.widgets.systray_toggle:toggle() end,
       "toggle systray popup", AWESOME_COLOR
     ),
 
@@ -840,7 +840,7 @@ function keys.init(awesome_context)
     ),
     bind_key({ modkey, "Shift"    }, "t",
       function(c)
-       awesome_context.widgets.screen[c.screen.index].manage_client.toggle()
+       awesome_context.widgets.screen[c.screen.index].manage_client:toggle()
       end,
       "toggle titlebars", AWESOME_COLOR
     ),
