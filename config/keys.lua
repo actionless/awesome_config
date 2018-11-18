@@ -108,6 +108,11 @@ function keys.init(awesome_context)
     end, nil, {
       description = "show help", group=AWESOME_COLOR
     }),
+    awful.key({"Shift", modkey}, "/", function()
+      hkng.show_help(nil, nil, {show_awesome_keys=false})
+    end, nil, {
+      description = "show help for apps", group=AWESOME_COLOR
+    }),
 
     -- bind_key({ modkey,  }, "Control", "show_help"), -- show hotkey on hold
     bind_key({ modkey,  "Control"  }, "w",
