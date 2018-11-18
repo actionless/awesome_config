@@ -269,7 +269,7 @@ function keys.init(awesome_context)
     bind_key({ modkey,       }, "i",
       function ()
         awesome_context.menu.instance = menu_addon.clients_on_tag({
-          theme = {width=capi.screen[awful.screen.focused()].workarea.width},
+          theme = {width=capi.screen[awful.screen.focused()].workarea.width - beautiful.menu_border_width*2},
           coords = {x=0, y=18}
         })
       end,
@@ -278,7 +278,7 @@ function keys.init(awesome_context)
     bind_key({ modkey,       }, "p",
       function ()
         awesome_context.menu.instance = awful.menu.clients({
-          theme = {width=capi.screen[awful.screen.focused()].workarea.width},
+          theme = {width=capi.screen[awful.screen.focused()].workarea.width - beautiful.menu_border_width*2},
           coords = {x=0, y=18}
         })
       end,
