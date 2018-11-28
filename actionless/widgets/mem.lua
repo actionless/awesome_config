@@ -19,6 +19,7 @@ local common_widgets = require("actionless.widgets.common")
 local mem = {
   now = {},
   notification = nil,
+  show_percents = true,
 }
 
 local function worker(args)
@@ -36,6 +37,13 @@ local function worker(args)
     "mouse::enter", function () mem.show_notification() end)
   mem.widget:connect_signal(
     "mouse::leave", function () mem.hide_notification() end)
+
+  mem.widget:buttons(awful.util.table.join(
+    awful.button({ }, 1, function()
+      mem.show_percents = not mem.show_percents
+      mem.show_notification()
+    end)
+  ))
 
   mem.list_len = args.list_length or 10
 
@@ -92,7 +100,8 @@ local function worker(args)
       local percent = values[mem.columns.percent]
       local name = values[mem.columns.name]
       if name == 'Web' then name = 'firefox' end
-      percent = percent + 0
+      if name == 'WebExtensions' then name = 'firefox' end
+      percent = mem.show_percents and (percent + 0) or (percent * 0.01 * mem.now.total)
       if result[name] then
         result[name] = result[name] + percent
       elseif name then
@@ -102,13 +111,13 @@ local function worker(args)
 
     local result_string = string.format(
       '%5s %s\n',
-      column_headers[mem.columns.percent],
+      mem.show_percents and column_headers[mem.columns.percent] or "MiB",
       column_headers[mem.columns.name]
     )
     result_string = result_string .. '<span font="'  .. tostring(beautiful.text_font)  .. '">'
     local counter = 0
     for k, v in h_table.spairs(result, function(t,a,b) return t[b] < t[a] end) do
-      result_string = result_string .. string.format("%5.1f %s", v, k)
+      result_string = result_string .. string.format(mem.show_percents and "%5.1f %s" or "%5d %s", v, k)
       counter = counter + 1
       if counter == mem.list_len then
         break
