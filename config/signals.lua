@@ -28,7 +28,12 @@ local function _on_client_unfocus (c)
   local t = tag_helpers.get_client_tag(c)
   local layout = t.layout
   local num_tiled = #tag_helpers.get_tiled(t)
-  if persistent.titlebar.get() and (
+  if c.titlebars_enabled ==false then
+    clog("F: tile: titlebars disabled explicitly", c)
+    c.border_width = 0
+    --titlebar.make_border(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
+    titlebar.remove_border(c)
+  elseif persistent.titlebar.get() and (
     num_tiled > 1 or (
       num_tiled > 0 and t.master_fill_policy ~= 'expand'
     )
@@ -38,6 +43,7 @@ local function _on_client_unfocus (c)
   elseif c.maximized or c.fullscreen then
     clog("U: maximized", c)
     --set_default_screen_padding(s)
+    c.border_width = 0
     titlebar.remove_border(c)
   elseif c.floating then
     clog("U: floating client", c)
@@ -106,7 +112,12 @@ local function on_client_focus(c)
   c.border_color = beautiful.border_focus
   --
 
-  if persistent.titlebar.get() and (
+  if c.titlebars_enabled ==false then
+    clog("F: tile: titlebars disabled explicitly", c)
+    c.border_width = 0
+    --titlebar.make_border(c, beautiful.actionless_titlebar_bg_focus, beautiful.titlebar_shadow_focus)
+    titlebar.remove_border(c)
+  elseif persistent.titlebar.get() and (
     num_tiled > 1 or (
       num_tiled > 0 and t.master_fill_policy ~= 'expand'
     )
@@ -117,6 +128,7 @@ local function on_client_focus(c)
   elseif c.maximized or c.fullscreen then
     clog("F: maximized", c)
     --set_default_screen_padding(s)
+    c.border_width = 0
     titlebar.remove_border(c)
   elseif c.floating then
     clog("F: floating client", c)
@@ -280,6 +292,7 @@ function signals.init(_)
 
   -- disable popups when hovering titlebar buttons
   awful.titlebar.enable_tooltip = false
+  awful.titlebar.fallback_name = ''
 
   -- remove useless gaps for single expanded window
   awful.tag.object.get_gap = function(t)
