@@ -26,6 +26,8 @@ function menus.init(context)
     { "Text", {
       { "mEdit", "medit" },
       { "Geany", "geany" },
+      { "ghostwriter", "ghostwriter" },
+      { "vnote", "vnote" },
     }},
     { "Terminals", {
       { "XTerm", "xterm" },

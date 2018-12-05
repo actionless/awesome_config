@@ -131,6 +131,15 @@ function rules.init(awesome_context)
         },
       },
 
+      { rule = { class = "ghostwriter", type = "dialog"},
+        properties = {
+          titlebars_enabled = false,
+        },
+        callback = function(c)
+          c.titlebars_enabled = false
+        end,
+      },
+
       { rule = { class = "mpv" },
         properties = {
           size_hints_honor = true,
