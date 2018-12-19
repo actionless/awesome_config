@@ -100,7 +100,9 @@ theme.left_panel_internal_corner_radius = dpi(30)
 theme.left_panel_width = dpi(120)
 theme.left_widget_min_height = dpi(120)
 
-theme.menu_height		= dpi(16)
+--theme.menu_height		= dpi(16)
+--theme.menu_height		= theme.basic_panel_height
+theme.menu_height		= "theme.panel_height"
 theme.menu_width		= dpi(150)
 theme.menu_border_color = theme.xrdb.color1
 
