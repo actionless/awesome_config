@@ -433,6 +433,8 @@ function keys.init(awesome_context)
       function () awesome_context.widgets.music.toggle() end,
       "Pause", MUSIC),
 
+    -- Generic
+    awful.key({}, "XF86AudioPlay", function () awesome_context.widgets.music.toggle() end),
     awful.key({}, "#150", function () awesome_context.widgets.music.prev_song() end),
     awful.key({}, "#148", function () awesome_context.widgets.music.next_song() end),
     -- lenovo keyboard
