@@ -56,6 +56,7 @@ function widget_loader.init(awesome_context)
     beautiful.apw_bg_color = beautiful.panel_bg
   end
   w.volume = require("third_party/apw/widget")
+  w.volume.widget.step = 0.02
 
   local separator  = common.constraint({ width=beautiful.panel_widget_spacing, })
   -- systray_toggle
