@@ -52,7 +52,7 @@ globals = {
     "client",
     "nlog",
     "log",
-    "context",
+    "CONFIG_CONTEXT",
 }
 
 exclude_files = {

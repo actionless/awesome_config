@@ -3,7 +3,6 @@
    * (c) 2014, Yauheni Kirylau
 --]]
 
-local dbus = dbus
 local awful = require("awful")
 
 local h_table = require("actionless.util.table")
@@ -19,7 +18,7 @@ local spotify = {
   player_cmd = 'spotify'
 }
 
-function spotify.init(widget)
+function spotify.init(_widget)
 end
 
 -------------------------------------------------------------------------------

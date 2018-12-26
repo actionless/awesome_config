@@ -9,7 +9,6 @@ local naughty		= require("naughty")
 local beautiful		= require("beautiful")
 local g_string		= require("gears.string")
 
-local h_string		= require("actionless.util.string")
 local common = require("actionless.widgets.common")
 local decorated_widget	= common.decorated
 local markup		= require("actionless.util.markup")

@@ -17,7 +17,7 @@ local clementine = {
   player_cmd = 'clementine'
 }
 
-function clementine.init(widget)
+function clementine.init(_widget)
 end
 -------------------------------------------------------------------------------
 function clementine.toggle()

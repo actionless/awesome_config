@@ -48,11 +48,11 @@ nlog = debug.nlog
 log = debug.log
 
 
--- GLOBAL config object:
+-- Config state object:
 -------------------------------------------------------------------------------
 local editor = "vim"
 local terminal = "xst"
-context = {
+local context = {
 
   --DEVEL_DYNAMIC_LAYOUTS = true,
   DEVEL_DYNAMIC_LAYOUTS = false,
@@ -121,6 +121,8 @@ if local_settings_result ~= true then
   nlog("!!!WARNING: ~/.config/awesome/config/local.lua not found")
   print(local_settings_details)
 end
+-- Make it global for debugging:
+--CONFIG_CONTEXT = context
 
 -- Init default terminal emulator
 -------------------------------------------------------------------------------

@@ -4,7 +4,6 @@
 --------------------------------------------------------------------------------
 
 local menu = require("awful.menu")
-local capi = { client = client }
 local escape_f = require("gears.string").xml_escape
 local awful_screen = require("awful.screen")
 
@@ -24,7 +23,7 @@ function menu_addon.clients_on_tag(args, item_args)
       table.insert(cls_t, {
         escape_f(c.name) or "",
         function ()
-          capi.client.focus = c
+          client.focus = c
           c:raise()
         end,
         c.icon

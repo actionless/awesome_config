@@ -1,10 +1,5 @@
 local naughty = require("naughty")
 local beautiful = require("beautiful")
-local gfs = require("gears.filesystem")
-local surface = require("gears.surface")
-local util = require("awful.util")
-
-local awesome = awesome
 
 local notify = {}
 
