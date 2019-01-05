@@ -1,6 +1,8 @@
 *.bak
 .~
-local.lua
-config.db
+
+config/local.lua
+config/workstation.lua
+config/config.db
 
 runtest.sh

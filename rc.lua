@@ -114,11 +114,19 @@ local context = {
 
 -- Override config from local settings file
 -------------------------------------------------------------------------------
+local workstation_settings_result, workstation_settings_details = pcall(function()
+  context = require("config.workstation").init(context) or context
+end)
+if workstation_settings_result ~= true then
+  log("!!!WARNING: ~/.config/awesome/config/workstation.lua not found")
+  print(workstation_settings_details)
+end
+
 local local_settings_result, local_settings_details = pcall(function()
   context = require("config.local").init(context) or context
 end)
 if local_settings_result ~= true then
-  nlog("!!!WARNING: ~/.config/awesome/config/local.lua not found")
+  log("!!!WARNING: ~/.config/awesome/config/local.lua not found")
   print(local_settings_details)
 end
 -- Make it global for debugging:
