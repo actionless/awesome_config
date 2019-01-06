@@ -7,6 +7,12 @@ local wlppr = require("actionless.wlppr")
 
 local menus = {}
 
+local ICON_SIZE = 256
+
+local function get_icon(category, name)
+  return "/usr/share/icons/gnome/"..ICON_SIZE.."x"..ICON_SIZE.."/"..category.."/"..name..".png"
+end
+
 -- Menu
 -- Create a laucher widget and a main menu
 function menus.init(context)
@@ -33,7 +39,7 @@ function menus.init(context)
     { "quit", function() awesome.quit() end},
     { "quit2 (toggle argb)", function() awesome.quit(2) end},
     { "quit3 (openbox)", function() awesome.quit(3) end},
-    { "poweroff", poweroff },
+    { "poweroff", poweroff, get_icon('actions', 'system-shutdown') },
   }
 
   local applications_menu = {
@@ -69,6 +75,9 @@ function menus.init(context)
 
   local menu_content = {
     { "freedesktop loading...", nil, nil },
+    { "open terminal", awesome_menubar.utils.terminal },
+    --{ "kill compositor", "killall compton" },
+    --{ "start compositor", context.cmds.compositor },
     { "wlppr",
       {{
         "save", wlppr.save,
@@ -82,7 +91,6 @@ function menus.init(context)
       }},
       beautiful.widget_hdd
     },
-    { "awesome", myawesomemenu, beautiful.awesome_icon },
     { "jack",
       {{
         "start", os.getenv("HOME").."/scripts/jack_start.sh",
@@ -94,9 +102,7 @@ function menus.init(context)
       beautiful.widget_vol
     },
     { "applications", applications_menu, beautiful.applications_icon },
-    --{ "kill compositor", "killall compton" },
-    --{ "start compositor", context.cmds.compositor },
-    { "open terminal", awesome_menubar.utils.terminal }
+    { "awesome", myawesomemenu, beautiful.awesome_icon },
   }
 
 
@@ -114,7 +120,8 @@ function menus.init(context)
       menugen.build_menu(function(menulist)
         context.menu.mainmenu:delete(1)
         context.menu.mainmenu:add(
-          {"freedesktop", menulist, beautiful.awesome_icon}, 1
+          { "freedesktop", menulist, get_icon('categories', 'gnome-applications') },
+          1
         )
       end)
     else

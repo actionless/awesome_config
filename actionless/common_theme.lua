@@ -28,6 +28,10 @@ function common_theme.create_default_theme(theme_dir)
 
   theme.xrdb = xresources.get_current_theme()
 
+  --@TODO: 
+  --theme.icon_theme = 'oomox-shiki-noble'
+  theme.icon_theme = 'gnome'
+
   theme.wallpaper = nil
   theme.wallpaper_cmd = "nitrogen --restore"
 
