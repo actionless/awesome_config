@@ -2,12 +2,10 @@ local awful = require("awful")
 local awesome_menubar = require("menubar")
 local beautiful = require("beautiful")
 
-local menubar = require("actionless.menubar")
 local menugen = require("actionless.util.menugen")
 local wlppr = require("actionless.wlppr")
 
 local menus = {}
-
 
 -- Menu
 -- Create a laucher widget and a main menu
@@ -80,6 +78,7 @@ function menus.init(context)
     { "open terminal", awesome_menubar.utils.terminal }
   }
 
+
   function context.menu.mainmenu_show(nomouse)
     local function show_menu()
       local args = {}
@@ -101,6 +100,8 @@ function menus.init(context)
       show_menu()
     end
   end
+
+
   function context.menu.mainmenu_toggle()
     if not context.menu.mainmenu then
       return context.menu.mainmenu_show()
@@ -108,29 +109,6 @@ function menus.init(context)
       return context.menu.mainmenu:toggle()
     end
   end
-
-  -- Menubar configuration
-
-  -- @TODO: for some reason this is crashing
-  --context.menu.menubar = awesome_menubar.get()
-  context.menu.menubar = menubar.create()
-
-  -- D-Menubar configuration
-  menubar.geometry = {
-    height = beautiful.panel_height,
-    width = screen[awful.screen.focused()].workarea.width,
-    x = 0,
-    y = screen[awful.screen.focused()].workarea.height - beautiful.panel_height
-  }
-
-  local dmenubar = menubar.create({
-    term_prefix = context.cmds.tmux_run,
-  })
-  dmenubar.cache_entries = false
-  dmenubar.menu_cache_path = awful.util.getdir("cache") .. "/history"
-  dmenubar.menu_gen = require("actionless.menubar.dmenugen")
-
-  context.menu.dmenubar = dmenubar
 
 end
 
