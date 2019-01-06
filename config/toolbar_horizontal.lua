@@ -110,12 +110,8 @@ function toolbar.init(awesome_context)
         common.panel_shape(wibox.widget{
           layout = wibox.layout.fixed.horizontal,
           iseparator,
-          iseparator,
           loaded_widgets.mem,
-          iseparator,
-          iseparator,
           loaded_widgets.cpu,
-          iseparator,
           iseparator,
           loaded_widgets.temp and loaded_widgets.temp,
           loaded_widgets.bat and loaded_widgets.bat,

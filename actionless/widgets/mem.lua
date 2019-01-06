@@ -148,13 +148,20 @@ local function worker(args)
       function(v) return math.floor(v / 1024) end)
     mem.now.used = mem.now.total - (mem.now.free + mem.now.buf + mem.now.cache)
     mem.now.swapused = mem.now.swap - mem.now.swapf
-    mem.widget.progressbar:set_value(mem.now.used/mem.now.total)
 
-    --mem.widget.textbox:set_text(
-      --string.format(
-        --"%6s", mem.now.used .. "MB"
-      --))
-    mem.widget.textbox:set_text(args.text or 'mem')
+    local msg = string.format(
+      "%6s", mem.now.used .. "MB"
+    )
+    if mem.now.used > mem.now.total * 0.9 then
+      mem.widget:set_error()
+    elseif mem.now.used > mem.now.total * 0.7 then
+      mem.widget:set_warning()
+    else
+      mem.widget:set_normal()
+      msg = args.text or 'mem'
+    end
+    mem.widget.textbox:set_text(msg)
+    mem.widget.progressbar:set_value(mem.now.used/mem.now.total)
   end
 
   gears_timer({

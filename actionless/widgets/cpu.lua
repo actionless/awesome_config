@@ -29,7 +29,6 @@ local function worker(args)
   cpu.cores_number = tonumber(parse.command_to_string('nproc'))
   cpu.timeout = args.timeout or 0
 
-  args.bg = args.bg or "#00000000"
   local widget = common_widgets.text_progressbar(args)
   cpu.widget = common_widgets.decorated{widget=widget}
   cpu.widget.textbox = widget.textbox

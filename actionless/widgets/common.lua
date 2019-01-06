@@ -533,6 +533,9 @@ function common.text_progressbar(args)
   local progress_border_color = args.progress_border_color
     or beautiful.panel_widget_progress_border_color or progress_bg
 
+  local widget_margin_left = beautiful.panel_widget_spacing
+  local widget_margin_right = beautiful.panel_widget_spacing
+
   local text_margin_left = dpi(4)
   local text_margin_right = dpi(4)
   local text_margin_bottom = dpi(5)
@@ -544,51 +547,58 @@ function common.text_progressbar(args)
      progress_height / beautiful.basic_panel_height
   ) * 2
 
-  local widget = wibox.widget {
+  local widget = wibox.widget{
     {
       {
-          id = "progressbar",
-          max_value     = 1,
-          forced_width  = progress_width,
-          margins      = {
-            bottom=progress_margin_bottom,
-            top=beautiful.panel_height - progress_margin_bottom - progress_height - beautiful.panel_padding_bottom,
-          },
-          color = progress_fg,
-          background_color = progress_bg,
-          border_width = progress_border_width,
-          border_color = progress_border_color,
-          shape         = function(c, w, h) return gears.shape.rounded_rect(
-                            c, w, h, progress_border_radius
-                          ) end,
-          widget        = wibox.widget.progressbar,
-      },
-      id = "p1",
-      bg = args.bg or beautiful.panel_widget_bg or TRANSPARENT,
-      layout = wibox.container.background,
-    },
-    {
-      {
-        nil,
         {
-            id = "textbox",
-            widget = wibox.widget.textbox,
+            id = "progressbar",
+            max_value     = 1,
+            forced_width  = progress_width,
+            margins      = {
+              bottom=progress_margin_bottom,
+              top=beautiful.panel_height - progress_margin_bottom - progress_height - beautiful.panel_padding_bottom,
+            },
+            color = progress_fg,
+            background_color = progress_bg,
+            border_width = progress_border_width,
+            border_color = progress_border_color,
+            shape         = function(c, w, h) return gears.shape.rounded_rect(
+                              c, w, h, progress_border_radius
+                            ) end,
+            widget        = wibox.widget.progressbar,
         },
-        nil,
-        id = "t2",
-        layout = wibox.layout.align.horizontal,
+        id = "p1",
+        bg = args.bg or TRANSPARENT,
+        layout = wibox.container.background,
       },
-      id = "t1",
-      left  = text_margin_left,
-      right = text_margin_right,
-      bottom = text_margin_bottom,
-      layout = wibox.container.margin,
+      {
+        {
+          nil,
+          {
+              id = "textbox",
+              widget = wibox.widget.textbox,
+          },
+          nil,
+          id = "t2",
+          layout = wibox.layout.align.horizontal,
+        },
+        id = "t1",
+        left  = text_margin_left,
+        right = text_margin_right,
+        bottom = text_margin_bottom,
+        layout = wibox.container.margin,
+      },
+      id = "w1",
+      layout = wibox.layout.stack
     },
-    layout = wibox.layout.stack
+    id = "w0",
+    left=widget_margin_left,
+    right=widget_margin_right,
+    layout = wibox.container.margin,
   }
 
-  widget.textbox = widget.t1.t2.textbox
-  widget.progressbar = widget.p1.progressbar
+  widget.textbox = widget.w1.t1.t2.textbox
+  widget.progressbar = widget.w1.p1.progressbar
   return widget
 end
 
