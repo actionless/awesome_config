@@ -20,7 +20,6 @@ depends=(
 	'coreutils'
 	'imagemagick'  # music widget (album cover)
 	'lm_sensors'  # temperature widget
-	'lxsession-gtk3' # or 'lxsession'  # needed for lxpolkit
 	'procps-ng'
 	'qt5-tools'  # for qdbus
 	'scrot'
@@ -30,6 +29,10 @@ depends=(
 	'xorg-xset'
 	'xsettingsd'  # or use lxsettings-daemon from lxsession
 	'xst-git'  # default terminal
+
+	#'lxsession-gtk3' # or 'lxsession'  # needed for lxpolkit
+	'mate-session-manager'
+	'mate-polkit'
 )
 optdepends=(
 	#'gnome-settings-daemon: rc: alternative to xsettingsd'
@@ -64,5 +67,11 @@ package() {
 
 	  install -Dm644 ${config_dir}/packaging/awesome_no_argb.desktop \
 		"$pkgdir/usr/share/xsessions/awesome_no_argb.desktop"
+
+	  install -Dm644 ${config_dir}/packaging/mate_awesome.desktop \
+		"$pkgdir/usr/share/xsessions/mate_awesome.desktop"
+
+	  install -Dm644 ${config_dir}/packaging/awesome_argb.desktop \
+		"$pkgdir/usr/share/xsession_current/awesome_argb.desktop"
 	fi
 }

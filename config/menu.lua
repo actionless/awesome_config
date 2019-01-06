@@ -10,8 +10,37 @@ local menus = {}
 -- Menu
 -- Create a laucher widget and a main menu
 function menus.init(context)
+  local term = awesome_menubar.utils.terminal .. " -e "
+
+  local function kill_everybody()
+    for si=1,screen.count() do
+      local s = screen[si]
+      for _, c in ipairs(s.all_clients) do
+        c:kill()
+      end
+    end
+  end
+
+  local function poweroff()
+    kill_everybody()
+    awful.spawn('mate-session-save --gui --shutdown-dialog')
+  end
+
+  local myawesomemenu = {
+    { "manual page", awesome_menubar.utils.terminal .. " -e man awesome" },
+    { "edit config", context.cmds.editor_cmd .. " " .. awesome.conffile },
+    { "reload", awesome.restart },
+    { "quit", function() awesome.quit() end},
+    { "quit2 (toggle argb)", function() awesome.quit(2) end},
+    { "quit3 (openbox)", function() awesome.quit(3) end},
+    { "poweroff", poweroff },
+  }
 
   local applications_menu = {
+    { "Development", {
+      { "Meld", "meld" },
+      { "PTIPython", term .. "ptipython" },
+    }},
     { "Graphics", {
       { "Viewnior", "viewnior" },
       { "Nomacs",   "nomacs" },
@@ -19,14 +48,8 @@ function menus.init(context)
     }},
     { "Multimedia", {
       { "Clementine", "clementine" },
+      { "GRadio", "gradio" },
       { "mpv", "mpv" },
-    }},
-    { "Text", {
-      { "mEdit", "medit" },
-      { "Geany", "geany" },
-      { "ghostwriter", "ghostwriter" },
-      { "retext", "retext" },
-      { "vnote", "vnote" },
     }},
     { "Terminals", {
       { "XTerm", "xterm" },
@@ -34,16 +57,14 @@ function menus.init(context)
       { "st", "st" },
       { "xst", "xst" },
     }},
-  }
-
-  local myawesomemenu = {
-    { "manual", awesome_menubar.utils.terminal .. " -e man awesome" },
-    { "edit config", context.cmds.editor_cmd .. " " .. awesome.conffile },
-    { "restart", awesome.restart },
-    { "quit", function() awesome.quit() end},
-    { "quit2 (argb)", function() awesome.quit(2) end},
-    { "quit3 (openbox)", function() awesome.quit(3) end},
-    { "poweroff", "poweroff" },
+    { "Text", {
+      { "mEdit", "medit" },
+      --{ "Geany", "geany" },
+      { "ghostwriter", "ghostwriter" },  -- or retext?
+      { "Oni", "oni" },
+      { "retext", "retext" },
+      --{ "vnote", "vnote" },  -- replace to mindforger?
+    }},
   }
 
   local menu_content = {

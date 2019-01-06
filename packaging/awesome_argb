@@ -1,10 +1,15 @@
 #!/bin/sh
-CACHEDIR=$HOME/.cache
-if test ! -d ${CACHEDIR} ; then
-    mkdir -p ${CACHEDIR}
+CACHEDIR="$HOME"/.cache
+if test ! -d "${CACHEDIR}" ; then
+    mkdir -p "${CACHEDIR}"
 fi
-while $(true) ; do
-    awesome $@ >> ${CACHEDIR}/awesome_stdout  2>> ${CACHEDIR}/awesome_stderr ||
+while true ; do
+    awesome --replace $@ >> "${CACHEDIR}"/awesome_stdout  2>> "${CACHEDIR}"/awesome_stderr ||
+	(sleep 0.1 && awesome --replace $@ >> "${CACHEDIR}"/awesome_stdout  2>> "${CACHEDIR}"/awesome_stderr ) ||
+	(sleep 0.1 && awesome --replace $@ >> "${CACHEDIR}"/awesome_stdout  2>> "${CACHEDIR}"/awesome_stderr ) ||
+	(sleep 0.1 && awesome --replace $@ >> "${CACHEDIR}"/awesome_stdout  2>> "${CACHEDIR}"/awesome_stderr ) ||
+	(sleep 0.1 && awesome --replace $@ >> "${CACHEDIR}"/awesome_stdout  2>> "${CACHEDIR}"/awesome_stderr ) ||
+	(sleep 0.1 && awesome --replace $@ >> "${CACHEDIR}"/awesome_stdout  2>> "${CACHEDIR}"/awesome_stderr ) ||
         (sleep 1 ; openbox) ||
             xterm
     sleep 1

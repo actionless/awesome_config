@@ -21,8 +21,9 @@ package.path = package.path .. ';' .. userconfdir .. 'third_party/?.lua;' .. use
 -- Run session and settings daemon
 -------------------------------------------------------------------------------
 -- option a)
-run_once("lxsession -a -n -r")
-run_once("lxpolkit")
+--run_once("lxsession -a -n -r -s awesome -e LXDE")
+--run_once("lxpolkit")
+run_once("/usr/lib/mate-polkit/polkit-mate-authentication-agent-1")
 awful_spawn.with_shell("xsettingsd")
 -- option b)
 --awful_spawn.with_shell("gnome-session")
