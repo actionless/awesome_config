@@ -105,9 +105,9 @@ function common_theme.create_default_theme(theme_dir)
   theme.panel_widget_fg		= "theme.bg"
   theme.panel_widget_bg		= "theme.fg"
   theme.panel_widget_bg_warning	= "theme.warning"
-  theme.panel_widget_fg_warning	= "theme.bg"
+  theme.panel_widget_fg_warning	= "theme.panel_bg"
   theme.panel_widget_bg_error 	= "theme.error"
-  theme.panel_widget_fg_error 	= "theme.bg"
+  theme.panel_widget_fg_error 	= "theme.panel_bg"
   theme.panel_widget_bg_disabled = "theme.xrdb.color8"
   theme.panel_widget_fg_disabled = "theme.bg"
 
