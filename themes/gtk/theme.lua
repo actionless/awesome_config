@@ -66,6 +66,34 @@ theme.tasklist_bg_normal = theme.panel_bg
 theme.tasklist_fg_minimize	= theme.xrdb.background
 theme.tasklist_bg_minimize	= theme.xrdb.color4
 
+-------------------------------------------------------------------------------
+-- Colorize tasklist status icons:
+-------------------------------------------------------------------------------
+local markup = require('actionless.util.markup')
+local tasklist_status_icons = {
+  ontop = '⌃',
+  sticky = '▪',
+  above = '▴',
+  below = '▾',
+  floating = '✈',
+  maximized = '<b>+</b>',
+  maximized_horizontal = '⬌',
+  maximized_vertical = '⬍',
+}
+local tasklist_status = theme.bg_focus
+local tasklist_status_template = '%s'
+
+--tasklist_status_template = markup.fg.color(tasklist_status, tasklist_status_template)
+tasklist_status_template = markup.bg.color(
+  tasklist_status, markup.fg.color(theme.panel_bg, ' '..tasklist_status_template..' ')
+)..' '
+
+for icon_name, icon_markup in pairs(tasklist_status_icons) do
+  theme['tasklist_'..icon_name] = string.format(tasklist_status_template, icon_markup)
+end
+-------------------------------------------------------------------------------
+
+
 theme.dir = theme_dir
 theme.icons_dir = theme.dir .. "/icons/"
 
