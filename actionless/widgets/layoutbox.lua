@@ -1,8 +1,5 @@
 ---------------------------------------------------------------------------
--- @author Julien Danjou &lt;julien@danjou.info&gt;
--- @copyright 2009 Julien Danjou
--- @release v3.5.5
--- @ 2013-2014 Yauhen Kirylau
+-- @ 2013-2019 Yauhen Kirylau
 ---------------------------------------------------------------------------
 
 
@@ -15,6 +12,7 @@ local textbox = require("wibox.widget.textbox")
 local delayed_call = require("gears.timer").delayed_call
 
 local h_string = require("actionless.util.string")
+local tag_helpers = require("actionless.util.tag")
 
 --- Layoutbox widget "class".
 
@@ -40,11 +38,13 @@ local function worker(args)
     layoutbox.textbox = textbox()
     if args.horizontal then
         layoutbox.layout_icon:set_widget(layoutbox.imagebox)
-        layoutbox.mfpol_template = "%1.1s"
     else
         layoutbox.layout_icon:set_widget(layoutbox.textbox)
-        layoutbox.mfpol_template = "%s"
     end
+    layoutbox.mfpol_names = args.mfpol_names or {
+        expand='←→',
+        master_width_factor='→←',
+    }
 
     layoutbox.n_master = wibox.container.background()
     layoutbox.n_master:set_widget(textbox())
@@ -52,17 +52,10 @@ local function worker(args)
     layoutbox.n_col = wibox.container.background()
     layoutbox.n_col:set_widget(textbox())
 
-    local mfpol_textbox = textbox()
-    mfpol_textbox:set_font(beautiful.mono_font or beautiful.font)
-    layoutbox.mfpol = wibox.container.background()
-    layoutbox.mfpol:set_widget(mfpol_textbox)
-
-
     layoutbox.widget = wibox.layout.fixed.horizontal(
         layoutbox.layout_icon,
         layoutbox.n_master,
-        layoutbox.n_col,
-        layoutbox.mfpol
+        layoutbox.n_col
     )
     layoutbox.widget.spacing = beautiful.panel_widget_spacing
 
@@ -101,29 +94,39 @@ local function worker(args)
     end
     function layoutbox:update_nmaster(t)
         delayed_call(function()
-            self.n_master.widget:set_text(
-                (t or awful.screen.focused().selected_tag).master_count
-            )
+            t = t or awful.screen.focused().selected_tag
+            if self.layout_name == awful.layout.suit.floating.name then
+                self.n_master.widget:set_text(" ")
+            else
+                self.n_master.widget:set_text(t.master_count)
+            end
         end)
     end
     function layoutbox:update_ncol(t)
         delayed_call(function()
-            self.n_col.widget:set_text(
-                (t or awful.screen.focused().selected_tag).column_count
-            )
+            t = t or awful.screen.focused().selected_tag
+            local num_tiled = #tag_helpers.get_tiled(t)
+            if self.layout_name == awful.layout.suit.floating.name then
+                self.n_col.widget:set_text(" ")
+            else
+                if num_tiled <= t.master_count then return end
+                self.n_col.widget:set_text(t.column_count)
+            end
         end)
     end
     function layoutbox:update_mfpol(t)
-        if h_string.starts(self.layout_name, 'tile') or
-            h_string.starts(self.layout_name, 'corner')
-        then
-            self.mfpol.widget:set_text(string.format(
-                self.mfpol_template,
-                (t or awful.screen.focused().selected_tag).master_fill_policy
-            ))
-        else
-            self.mfpol.widget:set_text(" ")
-        end
+        delayed_call(function()
+            t = t or awful.screen.focused().selected_tag
+            local num_tiled = #tag_helpers.get_tiled(t)
+            if num_tiled > 1 then return end
+            if h_string.starts(self.layout_name, 'tile') or
+                h_string.starts(self.layout_name, 'corner')
+            then
+                self.n_col.widget:set_markup(
+                    self.mfpol_names[t.master_fill_policy]
+                )
+            end
+        end)
     end
     function layoutbox:update_all(t)
         self:update_layout()
@@ -132,7 +135,9 @@ local function worker(args)
         self:update_mfpol(t)
     end
 
+    -- init:
     layoutbox:update_all(nil)
+
     tag.attached_connect_signal(
         layoutbox.screen, "property::selected",
         function(t) layoutbox:update_all(t) end)
@@ -148,6 +153,21 @@ local function worker(args)
     tag.attached_connect_signal(
         layoutbox.screen, "property::master_fill_policy",
         function(t) layoutbox:update_mfpol(t) end)
+    tag.attached_connect_signal(
+        layoutbox.screen, "tagged",
+        function(t)
+            if t ~= awful.screen.focused().selected_tag then return end
+            layoutbox:update_ncol(t)
+            layoutbox:update_mfpol(t)
+        end)
+    tag.attached_connect_signal(
+        layoutbox.screen, "untagged",
+        function(t)
+            if t ~= awful.screen.focused().selected_tag then return end
+            layoutbox:update_ncol(t)
+            layoutbox:update_mfpol(t)
+        end)
+
     return setmetatable(layoutbox, { __index = layoutbox.widget })
 end
 
