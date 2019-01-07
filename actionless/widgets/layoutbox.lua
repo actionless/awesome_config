@@ -44,6 +44,7 @@ local function worker(args)
     layoutbox.mfpol_names = args.mfpol_names or {
         expand='←→',
         master_width_factor='→←',
+        empty='  ',
     }
 
     layoutbox.n_master = wibox.container.background()
@@ -52,6 +53,13 @@ local function worker(args)
     layoutbox.n_col = wibox.container.background()
     layoutbox.n_col:set_widget(textbox())
 
+    --layoutbox.widget = wibox.layout.fixed.horizontal(
+        --layoutbox.layout_icon,
+        --wibox.layout.fixed.horizontal(
+            --layoutbox.n_master,
+            --layoutbox.n_col
+        --)
+    --)
     layoutbox.widget = wibox.layout.fixed.horizontal(
         layoutbox.layout_icon,
         layoutbox.n_master,
@@ -107,10 +115,14 @@ local function worker(args)
             t = t or awful.screen.focused().selected_tag
             local num_tiled = #tag_helpers.get_tiled(t)
             if self.layout_name == awful.layout.suit.floating.name then
-                self.n_col.widget:set_text(" ")
+                self.n_col.widget:set_text(
+                    self.mfpol_names.empty
+                )
             else
                 if num_tiled <= t.master_count then return end
-                self.n_col.widget:set_text(t.column_count)
+                self.n_col.widget:set_text(
+                    string.format("%2.d", t.column_count)
+                )
             end
         end)
     end
