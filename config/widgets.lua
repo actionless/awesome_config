@@ -29,7 +29,8 @@ function widget_loader.init(awesome_context)
 
   -- Keyboard layout widget
   w.kbd = widgets.kbd({
-    bg = beautiful.warning,
+      bg=beautiful.panel_widget_bg_warning,
+      fg=beautiful.panel_widget_fg_warning
   })
 
   -- NetCtl
