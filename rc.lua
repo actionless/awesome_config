@@ -21,11 +21,12 @@ package.path = package.path .. ';' .. userconfdir .. 'third_party/?.lua;' .. use
 -- Run session and settings daemon
 -------------------------------------------------------------------------------
 -- option a)
+awful_spawn.with_shell("xsettingsd")
+--run_once("/usr/lib/mate-polkit/polkit-mate-authentication-agent-1")
+-- option b)
 --run_once("lxsession -a -n -r -s awesome -e LXDE")
 --run_once("lxpolkit")
-run_once("/usr/lib/mate-polkit/polkit-mate-authentication-agent-1")
-awful_spawn.with_shell("xsettingsd")
--- option b)
+-- option c)
 --awful_spawn.with_shell("gnome-session")
 --awful_spawn.with_shell("/usr/lib/gnome-settings-daemon/gnome-settings-daemon")
 
@@ -132,6 +133,7 @@ if local_settings_result ~= true then
 end
 -- Make it global for debugging:
 --CONFIG_CONTEXT = context
+
 
 -- Init default terminal emulator
 -------------------------------------------------------------------------------

@@ -27,9 +27,22 @@ function menus.init(context)
     end
   end
 
+  local function logout()
+    kill_everybody()
+    --awful.spawn('mate-session-save --gui --logout-dialog')
+    awful.spawn('qdbus --literal org.gnome.SessionManager /org/gnome/SessionManager org.gnome.SessionManager.Logout 1')
+  end
+
   local function poweroff()
     kill_everybody()
-    awful.spawn('mate-session-save --gui --shutdown-dialog')
+    --awful.spawn('mate-session-save --gui --shutdown-dialog')
+    awful.spawn('qdbus org.gnome.SessionManager /org/gnome/SessionManager org.gnome.SessionManager.RequestShutdown')
+  end
+
+  local function reboot()
+    kill_everybody()
+    --awful.spawn('mate-session-save --gui --shutdown-dialog')
+    awful.spawn('qdbus org.gnome.SessionManager /org/gnome/SessionManager org.gnome.SessionManager.RequestReboot')
   end
 
   local myawesomemenu = {
@@ -39,6 +52,8 @@ function menus.init(context)
     { "quit", function() awesome.quit() end},
     { "quit2 (toggle argb)", function() awesome.quit(2) end},
     { "quit3 (openbox)", function() awesome.quit(3) end},
+    { "logout", logout, get_icon('actions', 'system-log-out') },
+    { "reboot", reboot, get_icon('actions', 'view-refresh') },
     { "poweroff", poweroff, get_icon('actions', 'system-shutdown') },
   }
 
