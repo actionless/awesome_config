@@ -17,6 +17,9 @@ local MAIN_COLOR = gsc.selected_bg_color
 local theme_dir = awful.util.getdir("config").."/themes/"..theme_name
 --local theme = dofile("/usr/share/awesome/themes/xresources/theme.lua")
 local theme = {}
+theme.dir = theme_dir
+theme.icons_dir = theme.dir .. "/icons/"
+
 
 theme.gtk = gsc
 theme.gsc = gsc
@@ -66,6 +69,11 @@ theme.tasklist_bg_normal = theme.panel_bg
 theme.tasklist_fg_minimize	= theme.xrdb.background
 theme.tasklist_bg_minimize	= theme.xrdb.color4
 
+
+--theme.error = theme.xrdb.color1
+--theme.warning = theme.xrdb.color2
+theme.warning = theme.xrdb.color3
+
 -------------------------------------------------------------------------------
 -- Colorize tasklist status icons:
 -------------------------------------------------------------------------------
@@ -80,7 +88,8 @@ local tasklist_status_icons = {
   maximized_horizontal = '⬌',
   maximized_vertical = '⬍',
 }
-local tasklist_status = theme.bg_focus
+--local tasklist_status = theme.bg_focus
+local tasklist_status = theme.warning
 local tasklist_status_template = '%s'
 
 --tasklist_status_template = markup.fg.color(tasklist_status, tasklist_status_template)
@@ -92,13 +101,6 @@ for icon_name, icon_markup in pairs(tasklist_status_icons) do
   theme['tasklist_'..icon_name] = string.format(tasklist_status_template, icon_markup)
 end
 -------------------------------------------------------------------------------
-
-
-theme.dir = theme_dir
-theme.icons_dir = theme.dir .. "/icons/"
-
---theme.error = theme.xrdb.color1
---theme.warning = theme.xrdb.color2
 
 
 -- TERMINAL COLORSCHEME:
