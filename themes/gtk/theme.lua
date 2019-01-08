@@ -217,7 +217,8 @@ theme.taglist_fg_occupied = gsc.header_button_fg_color
 theme.taglist_bg_occupied = gsc.header_button_bg_color
 
 
-theme.border_normal = gsc.menubar_bg_color
+--theme.border_normal = gsc.menubar_bg_color
+theme.border_normal = gsc.wm_border_unfocused_color
 theme.border_focus = gsc.wm_border_focused_color
 theme.titlebar_fg_normal	= color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color)
 theme.titlebar_bg_normal	= gsc.menubar_bg_color
