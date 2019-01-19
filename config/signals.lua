@@ -322,7 +322,28 @@ function signals.init(_)
   tag.connect_signal("property::gap", on_tag_signal)
 
   -- New client appears
-  client.connect_signal("manage", function (c)
+  client.disconnect_signal("manage", awful.rules.apply)
+  client.connect_signal("manage", function(c)
+      if awesome.startup then
+          local rules = awful.rules.matching_rules(c, awful.rules.rules)
+          for _,rule in ipairs(rules) do
+              if rule.apply_on_restart then
+                  awful.rules.execute(c, rule.properties, { rule.callback })
+              else
+                  local mini_properties = {
+                    buttons = rule.properties.buttons,
+                    keys = rule.properties.keys,
+                    size_hints_honor = rule.properties.size_hints_honor,
+                    raise = rule.properties.raise,
+                  }
+                  awful.rules.execute(c, mini_properties, { })
+              end
+          end
+      else
+          awful.rules.apply(c)
+      end
+  --end)
+  --client.connect_signal("manage", function (c)
     local awesome_startup = awesome.startup
     delayed_call(function()
         if c == client.focus then
