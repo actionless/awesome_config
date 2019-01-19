@@ -19,7 +19,8 @@ theme.dir = theme_dir
 theme.icons_dir = theme.dir .. "/icons/"
 
 --theme.error = theme.xrdb.color1
---theme.warning = theme.xrdb.color2
+theme.warning = theme.xrdb.color11
+theme.warning = theme.xrdb.color10
 
 
 -- TERMINAL COLORSCHEME:
@@ -40,6 +41,7 @@ theme.show_widget_icon = false
 
 theme.revelation_fg = theme.xrdb.color13
 theme.revelation_border_color = theme.xrdb.color13
+theme.revelation_border_width = dpi(3)
 theme.revelation_bg = theme.panel_bg
 theme.revelation_font = "Monospace Bold 24"
 -- FONTS:
@@ -167,7 +169,46 @@ theme.widget_close_error_color_on_hover = true
 theme.bg_systray    = "theme.panel_widget_bg"
 
 
+
+
+
+
 theme = create_theme({ theme_name=theme_name, theme=theme, })
+
+
+
+
+
+
+-------------------------------------------------------------------------------
+-- Colorize tasklist status icons:
+-------------------------------------------------------------------------------
+local markup = require('actionless.util.markup')
+local tasklist_status_icons = {
+  ontop = '⌃',
+  sticky = '▪',
+  above = '▴',
+  below = '▾',
+  floating = '✈',
+  maximized = '<b>+</b>',
+  maximized_horizontal = '⬌',
+  maximized_vertical = '⬍',
+}
+--local tasklist_status = theme.bg_focus
+local tasklist_status = theme.warning
+local tasklist_status_template = '%s'
+
+--tasklist_status_template = markup.fg.color(tasklist_status, tasklist_status_template)
+tasklist_status_template = markup.bg.color(
+  tasklist_status, markup.fg.color(theme.panel_bg, ' '..tasklist_status_template..' ')
+)..' '
+
+for icon_name, icon_markup in pairs(tasklist_status_icons) do
+  theme['tasklist_'..icon_name] = string.format(tasklist_status_template, icon_markup)
+end
+-------------------------------------------------------------------------------
+
+
 
 if awesome.composite_manager_running then
   --theme.titlebar_bg_normal = theme.titlebar_bg_normal .."66"
