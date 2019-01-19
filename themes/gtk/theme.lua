@@ -44,6 +44,7 @@ if gtk_border_width < 1 then
   gtk_border_width = 1
 end
 theme.border_radius = dpi(gtk_border_radius*1.0)
+theme.client_border_radius = theme.border_radius * 0.8
 theme.panel_widget_border_radius = dpi(gtk_border_radius*0.8)
 --theme.panel_widget_border_radius = dpi(gtk_border_radius*1.0)
 --theme.border_radius = dpi(5)
