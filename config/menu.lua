@@ -11,14 +11,24 @@ local wlppr = require("actionless.wlppr")
 
 
 local ICON_SIZES = {
-  ['256x256']='png',
-  ['128x128']='png',
-  ['scalable']='svg',
-  ['32x32']='png',
+  '256x256',
+  '128x128',
+  '64x64',
+  'scalable',
+  '32x32',
+  '24x24',
+  '22x22',
+  'symbolic',
+}
+local FORMATS = {
+  '.svg', '.png', '-symbolic.svg',
 }
 local ICON_THEMES = {
   beautiful.icon_theme,
   'gnome',
+  'Adwaita',
+  'hicolor',
+  --'locolor',
 }
 
 
@@ -31,13 +41,16 @@ local function get_icon(category, name)
       os.getenv('HOME') .. '/.icons/',
       '/usr/share/icons/',
     }) do
-      for icon_size, extension in pairs(ICON_SIZES) do
-        for _, path in ipairs({
-          icon_root .. icon_theme_name .. "/" .. icon_size .. "/" .. category .. "/" .. name .. "." .. extension,
-          icon_root .. icon_theme_name .. "/" .. category .. "/" .. icon_size .. "/" .. name .. "." .. extension,
-        }) do
-          if gfs.file_readable(path) then
-            return path
+      for _, icon_size in ipairs(ICON_SIZES) do
+        for _, extension in ipairs(FORMATS) do
+          for _, path in ipairs({
+            icon_root .. icon_theme_name .. "/" .. icon_size .. "/" .. category .. "/" .. name .. extension,
+            icon_root .. icon_theme_name .. "/" .. category .. "/" .. icon_size .. "/" .. name .. extension,
+          }) do
+            if gfs.file_readable(path) then
+              --log("R:"..path)
+              return path
+            end
           end
         end
       end
@@ -81,7 +94,7 @@ function menus.init(context)
 
   local myawesomemenu = {
     { "hotkeys", function() return false, hotkeys_popup.show_help end},
-    { "manual page", awesome_menubar.utils.terminal .. " -e man awesome" },
+    { "manual page", term .. "man awesome" },
     { "edit config", context.cmds.editor_cmd .. " " .. awesome.conffile },
     { "reload", awesome.restart },
 
@@ -96,39 +109,52 @@ function menus.init(context)
     { "poweroff", poweroff, get_icon('actions', 'system-shutdown') },
   }
 
+  local function app(display_name, name, icon_name)
+    icon_name = icon_name or name
+    return { display_name, name, awesome_menubar.utils.lookup_icon(icon_name) }
+  end
+
+  local function category(display_name, content, icon_name)
+    return { display_name, content, get_icon('categories', 'applications-'..icon_name) }
+  end
+
   local applications_menu = {
-    { "Development", {
-      { "Meld", "meld" },
-      { "PTIPython", term .. "ptipython" },
-    }},
-    { "Graphics", {
-      { "GIMP",     "gimp" },
-      { "Nomacs",   "nomacs" },
-      { "Viewnior", "viewnior" },
-    }},
-    { "Multimedia", {
-      { "Clementine", "clementine" },
-      { "GRadio", "gradio" },
-      { "mpv", "mpv" },
-    }},
-    { "Settings", {
-      { "dconf Editor", "dconf-editor" },
-    }},
-    { "Terminals", {
-      { "st", "st" },
-      { "tmux in xst", "xst-tmux" },
-      { "URxvt", "urxvt" },
-      { "xst", "xst" },
-      { "XTerm", "xterm" },
-    }},
-    { "Text", {
-      --{ "Geany", "geany" },
-      { "ghostwriter", "ghostwriter" },  -- or retext?
-      { "mEdit", "medit" },
-      { "Oni", "oni" },
-      { "retext", "retext" },
-      --{ "vnote", "vnote" },  -- replace to mindforger?
-    }},
+    category("Development", {
+      app("Meld", "meld"),
+      app("PTIPython", term .. "ptipython", "ipython"),
+    }, "development"),
+    category("Graphics", {
+      app("GIMP", "gimp"),
+      app("Nomacs", "nomacs"),
+      app("Viewnior", "viewnior"),
+    }, "graphics"),
+    category("Multimedia", {
+      app("Clementine", "clementine"),
+      app("GRadio", "gradio"),
+      app("mpv", "mpv"),
+    }, "multimedia"),
+    category("Productivity", {
+      app("GNOME To Do", "gnome-todo"),
+      app("QOwnNotes", "QOwnNotes"),
+      --app("vnote", "vnote"),  -- replace to qOwnNotes or mindforger?
+    }, "office"),
+    category("Settings", {
+      app("dconf Editor", "dconf-editor"),
+    }, "system"),
+    {"Terminals", {
+      app("st", "st", 'terminal'),
+      app("tmux in xst", "xst-tmux", 'terminator'),
+      app("URxvt", "urxvt"),
+      app("xst", "xst", 'terminal'),
+      app("XTerm", "xterm"),
+    }, get_icon("apps", "terminal")},
+    category("Text", {
+      --app("Geany", "geany"),
+      app("ghostwriter", "ghostwriter"),  -- or retext?
+      app("Oni", "oni"),
+      app("retext", "retext"),
+      app("xed", "xed"),
+    }, "education-language"),
   }
 
   local menu_content = {
@@ -137,7 +163,7 @@ function menus.init(context)
       get_icon('status', 'image-loading')
     },
     {
-      "open terminal", awesome_menubar.utils.terminal,
+      "open terminal", "bash -c 'xst-tmux || "..awesome_menubar.utils.terminal.."'",
       get_icon('apps', 'terminal')
     },
     --{ "kill compositor", "killall compton" },
@@ -152,15 +178,15 @@ function menus.init(context)
         get_icon('status', 'starred')
       }, {
         "dump", wlppr.dump,
-        get_icon('status', 'trashcan_full')
+        get_icon('status', 'user-trash-full')
       }},
-      get_icon('apps', 'wallpaper')
+      get_icon('apps', 'preferences-desktop-wallpaper')
     },
     {
       "jack",
       {{
         "start", os.getenv("HOME").."/scripts/jack_start.sh",
-        get_icon('status', 'audio-volume-high')
+        get_icon('devices', 'audio-speakers')
       }, {
         "stop", os.getenv("HOME").."/scripts/jack_stop.sh",
         get_icon('actions', 'stop')
@@ -187,7 +213,7 @@ function menus.init(context)
       menugen.build_menu(function(menulist)
         context.menu.mainmenu:delete(1)
         context.menu.mainmenu:add(
-          { "freedesktop", menulist, get_icon('categories', 'gnome-applications') },
+          { "freedesktop", menulist, get_icon('categories', 'applications-accessories') },
           1
         )
       end)
