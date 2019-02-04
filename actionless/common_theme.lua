@@ -9,6 +9,7 @@ local dpi = xresources.apply_dpi
 
 local h_string = require("actionless.util.string")
 local h_table = require("actionless.util.table")
+local h_parse = require("actionless.util.parse")
 
 
 local common_theme = {}
@@ -28,9 +29,9 @@ function common_theme.create_default_theme(theme_dir)
 
   theme.xrdb = xresources.get_current_theme()
 
-  --@TODO: 
-  --theme.icon_theme = 'oomox-shiki-noble'
-  theme.icon_theme = 'gnome'
+  theme.icon_theme = h_parse.find_in_file(
+    os.getenv("HOME").."/.xsettingsd", '^Net/IconThemeName.*"(.*)"'
+  ) or "gnome"
 
   theme.wallpaper = nil
   theme.wallpaper_cmd = "nitrogen --restore"
