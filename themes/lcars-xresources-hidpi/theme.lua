@@ -2,9 +2,13 @@ local gears = require("gears")
 local awful = require("awful")
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
+local gtk_util = require("beautiful.gtk")
+
 local create_theme = require("actionless.common_theme").create_theme
 local color_utils = require("actionless.util.color")
-local gtk_util = require("beautiful.gtk")
+local h_string = require("actionless.util.string")
+
+
 
 local theme_name = "lcars-xresources-hidpi"
 
@@ -195,7 +199,10 @@ local tasklist_status_icons = {
   maximized_vertical = '⬍',
 }
 --local tasklist_status = theme.bg_focus
-local tasklist_status = theme.warning
+--local tasklist_status = theme.warning.."aa"
+--local tasklist_status = h_string.max_length(theme.warning.."aa", 9)
+local tasklist_status = h_string.max_length(theme.warning.."bb", 9)
+--local tasklist_status = h_string.max_length(theme.warning.."cc", 9)
 local tasklist_status_template = '%s'
 
 --tasklist_status_template = markup.fg.color(tasklist_status, tasklist_status_template)
