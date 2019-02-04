@@ -37,7 +37,8 @@ local menus = {}
 
 local function get_icon(category, name)
   if category == 'apps' or category == 'categories' then
-    return awesome_menubar.utils.lookup_icon(name)
+    local awesome_found = awesome_menubar.utils.lookup_icon(name)
+    if awesome_found then return awesome_found end
   end
   for _, icon_theme_name in ipairs(ICON_THEMES) do
     for _, icon_root in ipairs({
