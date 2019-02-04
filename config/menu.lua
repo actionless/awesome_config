@@ -36,6 +36,9 @@ local menus = {}
 
 
 local function get_icon(category, name)
+  if category == 'apps' or category == 'categories' then
+    return awesome_menubar.utils.lookup_icon(name)
+  end
   for _, icon_theme_name in ipairs(ICON_THEMES) do
     for _, icon_root in ipairs({
       os.getenv('HOME') .. '/.icons/',
