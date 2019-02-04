@@ -122,28 +122,36 @@ function menus.init(context)
   end
 
   local applications_menu = {
+
     category("Development", {
       app("Meld", "meld"),
       app("PTIPython", term .. "ptipython", "ipython"),
     }, "development"),
+
     category("Graphics", {
+      app("gcolor3", "gcolor3", "nl.hjdskes.gcolor3"),
       app("GIMP", "gimp"),
       app("Nomacs", "nomacs"),
       app("Viewnior", "viewnior"),
     }, "graphics"),
+
     category("Multimedia", {
       app("Clementine", "clementine"),
       app("GRadio", "gradio"),
       app("mpv", "mpv"),
     }, "multimedia"),
+
     category("Productivity", {
-      app("GNOME To Do", "gnome-todo"),
+      app("Go For It!", "com.github.jmoerman.go-for-it"),
+      --app("GNOME To Do", "gnome-todo"),
       app("QOwnNotes", "QOwnNotes"),
       --app("vnote", "vnote"),  -- replace to qOwnNotes or mindforger?
     }, "office"),
+
     category("Settings", {
       app("dconf Editor", "dconf-editor"),
     }, "system"),
+
     {"Terminals", {
       app("st", "st", 'terminal'),
       app("tmux in xst", "xst-tmux", 'terminator'),
@@ -151,13 +159,15 @@ function menus.init(context)
       app("xst", "xst", 'terminal'),
       app("XTerm", "xterm"),
     }, get_icon("apps", "terminal")},
+
     category("Text", {
       --app("Geany", "geany"),
       app("ghostwriter", "ghostwriter"),  -- or retext?
       app("Oni", "oni"),
       app("retext", "retext"),
-      app("xed", "xed"),
+      app("xed", "xed", "accessories-text-editor"),
     }, "education-language"),
+
   }
 
   local menu_content = {
