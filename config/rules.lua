@@ -61,6 +61,12 @@ function rules.init(awesome_context)
           ontop = true
         },
       },
+      { rule = {class = "Nemo", instance = "file_progress"},
+        properties = {
+          titlebars_enabled = true,
+          ontop = true,
+        },
+      },
 
       -- Applications:
 
