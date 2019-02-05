@@ -18,18 +18,20 @@ depends=(
 	'awesome'
 	'bash'
 	'coreutils'
+	'qt5-tools'  # for qdbus (music widget, shutdown menu)
+
 	'imagemagick'  # music widget (album cover)
 	'lm_sensors'  # temperature widget
-	'procps-ng'
-	'qt5-tools'  # for qdbus
-	'scrot'
-	'tmux'
+	'procps-ng'  # mem and cpu widgets
 	'upower'  # for battery widget
-	'xorg-xrdb'
-	'xorg-xset'
-	'xsettingsd'  # or use lxsettings-daemon from lxsession
-	'xst-git'  # default terminal
 
+	'xorg-xrdb'  # reload Xresources on awesome WM reload
+	'xorg-xset'  # config/autorun: keyboard tweaks
+	'xst-git'  # default terminal
+	'tmux'  # default terminal multiplexer
+	'scrot'  # config/keys: default screenshot tool
+
+	'xsettingsd'  # or use lxsettings-daemon from lxsession
 	#'lxsession-gtk3' # or 'lxsession'  # needed for lxpolkit
 	'mate-session-manager'
 	'mate-polkit'
