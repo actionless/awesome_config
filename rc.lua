@@ -10,7 +10,6 @@ awesome.set_preferred_icon_size(256)
 
 local awful_util = require("awful.util")
 local awful_spawn = require("awful.spawn")
-local run_once = require("actionless.util.spawn").run_once
 
 
 -- Add third-party modules to lua path
@@ -22,10 +21,10 @@ package.path = package.path .. ';' .. userconfdir .. 'third_party/?.lua;' .. use
 -------------------------------------------------------------------------------
 -- option a)
 awful_spawn.with_shell("xsettingsd")
---run_once("/usr/lib/mate-polkit/polkit-mate-authentication-agent-1")
+--awful_spawn.once("/usr/lib/mate-polkit/polkit-mate-authentication-agent-1")
 -- option b)
---run_once("lxsession -a -n -r -s awesome -e LXDE")
---run_once("lxpolkit")
+--awful_spawn.once("lxsession -a -n -r -s awesome -e LXDE")
+--awful_spawn.once("lxpolkit")
 -- option c)
 --awful_spawn.with_shell("gnome-session")
 --awful_spawn.with_shell("/usr/lib/gnome-settings-daemon/gnome-settings-daemon")
