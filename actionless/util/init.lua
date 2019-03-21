@@ -8,7 +8,6 @@ local utils = {
   nixos = require("actionless.util.nixos"),
   parse = require("actionless.util.parse"),
   pickle = require("actionless.util.pickle"),
-  spawn = require("actionless.util.spawn"),
   string = require("actionless.util.string"),
   table = require("actionless.util.table"),
   tag = require("actionless.util.tag"),

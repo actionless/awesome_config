@@ -141,13 +141,17 @@ local function worker(args)
       "([%a]+):[%s]+([%d]+).+",
       { total = "MemTotal",
         free = "MemFree",
+        available = "MemAvailable",
         buf = "Buffers",
         cache = "Cached",
-        swap = "SwapTotal",
-        swapf = "SwapFree" },
+        --shared = "Shmem",
+        --swap = "SwapTotal",
+        --swapf = "SwapFree",
+      },
       function(v) return math.floor(v / 1024) end)
-    mem.now.used = mem.now.total - (mem.now.free + mem.now.buf + mem.now.cache)
-    mem.now.swapused = mem.now.swap - mem.now.swapf
+    --mem.now.used = mem.now.total - (mem.now.free + mem.now.buf + mem.now.cache)
+    mem.now.used = mem.now.total - mem.now.available
+    --mem.now.swapused = mem.now.swap - mem.now.swapf
 
     local msg = string.format(
       "%6s", mem.now.used .. "MB"

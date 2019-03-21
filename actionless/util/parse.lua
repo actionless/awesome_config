@@ -85,7 +85,7 @@ function parse.find_values_in_lines(lines, regex, match_keys, post_func)
       if key == match_key then
         if post_func then value = post_func(value) end
         result_values[result_key] = value
-        match_keys[key] = nil
+        match_keys[result_key] = nil
         match_keys_length = match_keys_length - 1
       end
     end
