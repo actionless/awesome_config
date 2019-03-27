@@ -7,7 +7,8 @@ if [[ $(id -u) -eq 0 ]] && [[ -z "${NOARGB:-}" ]] ; then
 fi
 INSTALL_NO_ARGB_SHORTCUTS=${NOARGB:-n}
 
-pkgname=awesome_config_actionless_meta
+pkgname=actionless_awesome_config_meta
+conflicts=(awesome_config_actionless_meta)
 pkgver=0.1
 pkgrel=2
 pkgdesc="Awesome config dependencies"
