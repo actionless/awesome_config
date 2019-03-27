@@ -158,7 +158,7 @@ local function worker(args)
     )
     if mem.now.used > mem.now.total * 0.9 then
       mem.widget:set_error()
-    elseif mem.now.used > mem.now.total * 0.7 then
+    elseif mem.now.used > mem.now.total * 0.8 then
       mem.widget:set_warning()
     else
       mem.widget:set_normal()
