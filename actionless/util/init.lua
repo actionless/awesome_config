@@ -9,6 +9,7 @@ local utils = {
   parse = require("actionless.util.parse"),
   pickle = require("actionless.util.pickle"),
   string = require("actionless.util.string"),
+  spawn = require("actionless.util.spawn"),
   table = require("actionless.util.table"),
   tag = require("actionless.util.tag"),
   tmux = require("actionless.util.tmux"),
