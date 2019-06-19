@@ -76,7 +76,18 @@ local context = {
   },
   -- @TODO: move to 'widget_config'
   have_battery = true,
-  sensor = "Core 0",
+  sensors = {
+    gpu = {
+      device = 'amdgpu-pci-0100',
+      sensor = 'temp1',
+      warning = 89,
+    },
+    cpu = {
+      device = 'k10temp-pci-00c3',
+      sensor = 'temp1',
+      warning = 65,
+    },
+  },
   apw_on_the_left = false,
 
   cmds = {

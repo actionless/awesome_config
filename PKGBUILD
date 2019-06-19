@@ -10,7 +10,7 @@ INSTALL_NO_ARGB_SHORTCUTS=${NOARGB:-n}
 pkgname=actionless_awesome_config_meta
 conflicts=(awesome_config_actionless_meta)
 pkgver=0.1
-pkgrel=2
+pkgrel=3
 pkgdesc="Awesome config dependencies"
 arch=('x86_64' 'i686')
 url="https://github.com/actionless/awesome_config"
@@ -23,6 +23,7 @@ depends=(
 
 	'imagemagick'  # music widget (album cover)
 	'lm_sensors'  # temperature widget
+	'jq'  # temperature widget
 	'procps-ng'  # mem and cpu widgets
 	'upower'  # for battery widget
 
