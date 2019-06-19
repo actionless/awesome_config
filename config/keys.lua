@@ -440,10 +440,8 @@ function keys.init(awesome_context)
     -- lenovo keyboard
     awful.key({}, "#173", function () awesome_context.widgets.music.prev_song() end),
     awful.key({}, "#171", function () awesome_context.widgets.music.next_song() end),
-    awful.key({}, "#172", function () awesome_context.widgets.music.toggle() end),
     -- lcars keyboard
-    awful.key({}, "#180", function () awesome_context.widgets.music.toggle() end),
-    awful.key({}, "#163", function () awesome_context.widgets.music.next_song() end),
+    --awful.key({}, "#163", function () awesome_context.widgets.music.next_song() end),
 
     bind_key({ modkey }, "c",
       function () os.execute("xsel -p -o | xsel -i -b") end,
