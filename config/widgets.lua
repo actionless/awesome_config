@@ -88,8 +88,7 @@ function widget_loader.init(awesome_context)
   -- Sensor
   w.temp = widgets.temp({
     update_interval = 10,
-    sensor = awesome_context.sensor,
-    warning = 75,
+    sensors = awesome_context.sensors,
   })
   -- Battery
   if awesome_context.have_battery then
