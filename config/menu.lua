@@ -11,10 +11,10 @@ local wlppr = require("actionless.wlppr")
 
 
 local ICON_SIZES = {
+  'scalable',
   '256x256',
   '128x128',
   '64x64',
-  'scalable',
   '32x32',
   '24x24',
   '22x22',
