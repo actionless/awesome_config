@@ -73,7 +73,7 @@ function autorun.init(awesome_context)
 
   local delayed_call = require("gears.timer").delayed_call
   delayed_call(function()
-    spawn{"gpaste-client", "start"}
+    --spawn{"gpaste-client", "start"}
     --with_shell("eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)")
     run_once{"xfce4-power-manager"}
     --run_once{"xscreensaver -no-splash"}
