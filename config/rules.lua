@@ -96,7 +96,17 @@ function rules.init(awesome_context)
       { rule = { class = "Transmission-gtk", name = "Torrent Options" },
         properties = {
           width = dpi(700),
-      }, },
+          height = dpi(900),
+          --placement = awful.placement.center,
+        },
+        callback = function(c)
+          local wa = c.screen.workarea
+          local g = c:geometry()
+          g.x = (wa.width - g.width) / 2
+          g.y = (wa.height - g.height) / 2
+          c:geometry(g)
+        end
+      },
 
       { rule = { class = "qBittorent"},
         properties = {
