@@ -224,6 +224,7 @@ local function round_up_client_corners(c, force, reference) -- luacheck: no unus
     --clog('R1 F='..(force or 'nil').. ', R='..(reference or '')..', C='.. (c and c.name or '<no name>'), c)
     return
   end
+
   --clog({"Geometry", c:tags()}, c)
   pending_shapes[c] = true
   delayed_call(function()
@@ -255,7 +256,16 @@ local function round_up_client_corners(c, force, reference) -- luacheck: no unus
     local inner_shape_args = beautiful.client_border_radius*0.75
     --local inner_shape_args = beautiful.client_border_radius - beautiful.base_border_width
     --if inner_shape_args < 0 then inner_shape_args = 0 end
-    apply_shape(c, gears.shape.rounded_rect, outer_shape_args, inner_shape_args)
+
+    if not awesome.composite_manager_running then
+      apply_shape(c, gears.shape.rounded_rect, outer_shape_args, inner_shape_args)
+    else
+      -- needed for compoton's shadow:
+      c.shape = function(cr, w, h) gears.shape.rounded_rect(
+        cr, w, h, beautiful.client_border_radius*0.9
+      ) end
+    end
+
     --clog("apply_shape "..(reference or 'no_ref'), c)
     pending_shapes[c] = nil
     --nlog('OK F='..(force and "true" or 'nil').. ', R='..reference..', C='.. c.name)

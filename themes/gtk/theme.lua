@@ -237,7 +237,7 @@ theme.notification_border_radius = "theme.border_radius"
       cr, w, h, theme.panel_widget_border_radius
     )
   end
-if theme.border_radius > 0 then
+if theme.border_radius > 0 and not awesome.composite_manager_running then
   theme.titlebar_fg_focus		= gsc.menubar_fg_color
   theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
   theme.notification_shape = rounded_rect_shape
@@ -300,7 +300,8 @@ if awesome.composite_manager_running then
       theme[theme_var] = h_string.max_length(theme[theme_var], 7)
     end
     if #theme[theme_var] == 7 then
-      theme[theme_var] = theme[theme_var] .."dd"
+      --theme[theme_var] = theme[theme_var] .."dd"
+      theme[theme_var] = theme[theme_var] .."ee"
       --theme[theme_var] = theme[theme_var] .."88"
     end
     --nlog(theme[theme_var])
