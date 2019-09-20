@@ -162,6 +162,10 @@ function rules.init(awesome_context)
         }
       },
 
+      { rule = { class = "Oomox", },
+        properties = {
+          floating = true,
+      }, },
   }
 
   --awful.ewmh.add_activate_filter(function(c, source)
