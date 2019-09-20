@@ -91,8 +91,10 @@ theme.useless_gap = dpi(4)
 theme.border_width = dpi(4)
 --theme.border_radius = dpi(5)
 
-theme.border_radius = dpi((gsc.border_radius or 1)*1.0)
-theme.panel_widget_border_radius = dpi((gsc.border_radius or 1)*0.8)
+theme.border_radius = dpi((gsc.button_border_radius or 1)*1.0)
+theme.client_border_radius = theme.border_radius * 2
+--theme.client_border_radius = 0
+theme.panel_widget_border_radius = dpi((gsc.button_border_radius or 1)*0.8)
 
 theme.base_border_width = theme.border_width
 theme.border_width = 0
@@ -137,7 +139,7 @@ theme.titlebar_fg_focus		= "theme.titlebar_fg_normal"
 theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
 theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
 
-if theme.border_radius == 0 then
+if theme.client_border_radius == 0 then
   theme.border_focus = "theme.xrdb.color10"
   theme.titlebar_bg_focus		= "theme.border_focus"
   theme.titlebar_fg_focus		= "theme.xrdb.background"
