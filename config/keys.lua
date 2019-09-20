@@ -464,6 +464,11 @@ function keys.init(awesome_context)
       "file manager", PROGRAMS
     ),
 
+    bind_key({ modkey, altkey }, "m",
+      function() awful.spawn.with_shell('mpv-xsel') end,
+      "mpv-xsel", PROGRAMS
+    ),
+
     bind_key({ modkey, "Control"  }, "r",
       function()
         awful.spawn.easy_async('bash -c "xrdb -merge $HOME/.Xresources ; pgrep "^st\\$" | xargs kill -s USR1"',

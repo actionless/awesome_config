@@ -210,6 +210,7 @@ function menus.init(context)
     },
     { "applications", applications_menu, get_icon('apps', 'menu-editor') },
     { "awesome", myawesomemenu, beautiful.awesome_icon },
+    { "mpv-xsel", "mpv-xsel", get_icon('apps', 'mpv') },
   }
 
 
