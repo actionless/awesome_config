@@ -10,6 +10,7 @@ local capi = {
 }
 local awesome_menubar = require("menubar")
 local run_once = require("awful.spawn").once
+local gears_timer = require('gears.timer')
 
 local tag_helpers = require("actionless.util.tag")
 local menu_addon = require("actionless.menu_addon")
@@ -465,8 +466,34 @@ function keys.init(awesome_context)
     ),
 
     bind_key({ modkey, altkey }, "m",
-      function() awful.spawn.with_shell('mpv-xsel') end,
+      function() awful.spawn.with_shell('mpv "$(xsel -b)"') end,
       "mpv-xsel", PROGRAMS
+    ),
+    awful.key.new({ modkey, "Control" }, "m",
+      nil, function()
+        root.fake_input('key_release'  , 'Super_L')
+
+        root.fake_input('key_press'  , 'Control_L')
+        root.fake_input('key_press'  , 'l')
+        root.fake_input('key_release', 'l')
+        local ctrl_c_timer
+        ctrl_c_timer = gears_timer{
+          timeout   = 0.1,
+          call_now  = false,
+          autostart = true,
+          callback=function()
+            root.fake_input('key_release'  , 'Super_L')
+            root.fake_input('key_release', 'Control_L')
+            root.fake_input('key_press'  , 'Control_L')
+            root.fake_input('key_press'  , 'c')
+            root.fake_input('key_release', 'c')
+            root.fake_input('key_release', 'Control_L')
+            awful.spawn.with_shell('mpv "$(xsel -b)"')
+            ctrl_c_timer:stop()
+          end
+        }
+      end,
+      {description="mpv-xsel from browser", group=PROGRAMS}
     ),
 
     bind_key({ modkey, "Control"  }, "r",
