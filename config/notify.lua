@@ -19,6 +19,8 @@ function notify.init(_)
 
   naughty.config.presets.critical.opacity = beautiful.notification_opacity
   naughty.config.presets.critical.font = beautiful.notification_font
+  naughty.config.presets.critical.bg = beautiful.fg_urgent
+  naughty.config.presets.critical.fg = beautiful.bg_urgent
 
   -- {{{ Error handling
   -- Check if awesome encountered an error during startup and fell back to
