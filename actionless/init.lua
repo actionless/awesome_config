@@ -6,6 +6,7 @@ local actionless = {
   common_theme = require("actionless.common_theme"),
   lcars_layout = require("actionless.lcars_layout"),
   wlppr = require("actionless.wlppr"),
+  mpv = require("actionless.mpv"),
   -- awesome addons
   menu_addon = require("actionless.menu_addon"),
   tasklist_addon = require("actionless.tasklist_addon"),
