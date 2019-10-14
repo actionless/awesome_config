@@ -49,8 +49,12 @@ theme.revelation_border_width = dpi(3)
 theme.revelation_bg = theme.panel_bg
 theme.revelation_font = "Monospace Bold 24"
 -- FONTS:
-theme.font = "Monospace Bold 10"
+theme.bold_font = "Monospace Bold 10"
+theme.font = "Monospace 10"
+--theme.font = theme.bold_font
+--theme.tasklist_font = "Monospace 10"
 theme.tasklist_font = theme.font
+theme.taglist_font = theme.bold_font
 theme.sans_font = "Sans Bold 10"
 -- Don't use sans font:
 --theme.sans_font	= "theme.font"
