@@ -13,9 +13,9 @@ function notify.init(_)
   naughty.config.defaults.border_color = beautiful.notification_border_color
   naughty.config.defaults.border_width = beautiful.notification_border_width
   naughty.config.defaults.margin = beautiful.notification_margin
-  naughty.config.defaults.max_width = (beautiful.notification_width or
-    math.ceil(screen[1].geometry.width / 3)
-  )
+  --naughty.config.defaults.max_width = (beautiful.notification_width or
+    --math.ceil(screen[1].geometry.width / 3)
+  --)
 
   naughty.config.presets.low.opacity = beautiful.notification_opacity
   naughty.config.presets.low.font = beautiful.notification_font
