@@ -17,6 +17,7 @@ local persistent = require("actionless.persistent")
 local tmux_swap_bydirection = require("actionless.util.tmux").swap_bydirection
 local wlppr = require("actionless.wlppr")
 local mpv = require("actionless.mpv")
+local kbd_helpers = require('actionless.keyboard')
 
 
 local keys = {}
@@ -113,6 +114,15 @@ function keys.init(awesome_context)
       hkng.show_help(nil, nil, {show_awesome_keys=false})
     end, nil, {
       description = "show help for apps", group=AWESOME_COLOR
+    }),
+
+    awful.key({ modkey}, ";", function()
+      kbd_helpers.release_modifiers()
+      root.fake_input('key_press'  , 'Menu')
+    end, function()
+      root.fake_input('key_release', 'Menu')
+    end, {
+      description = "context menu", group=GROUP_MENU
     }),
 
     -- bind_key({ modkey,  }, "Control", "show_help"), -- show hotkey on hold
