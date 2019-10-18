@@ -108,11 +108,13 @@ local function worker(args)
       end
     end
 
+    local pid_width = 7
+
     local result_string = ''
     local counter = 0
     local num_records = h_table.getn(result)
     for pid, percent in h_table.spairs(result, function(t,a,b) return t[b] < t[a] end) do
-      result_string = result_string .. string.format("%5s %5.2f %s", pid, percent, names[pid])
+      result_string = result_string .. string.format("%"..pid_width.."s %6.2f %s", pid, percent, names[pid])
       counter = counter + 1
       if counter == cpu.list_len or counter == num_records then
         break
@@ -121,7 +123,7 @@ local function worker(args)
     end
     if result_string ~= '' then
       result_string = string.format(
-        '%5s %5s %s\n',
+        '%'..pid_width..'s %6s %s\n',
         column_headers[cpu.columns.pid],
         column_headers[cpu.columns.percent],
         column_headers[cpu.columns.name]
