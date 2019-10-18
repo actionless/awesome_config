@@ -121,6 +121,9 @@ theme.wallpaper = nil
 theme.wallpaper_cmd     = "nitrogen --restore"
 -- Use wallpaper tile:
 --theme.wallpaper = theme_dir .. '/umbreon_pattern.png'
+-- Specify wallpaper layout:
+--theme.wallpaper_layout = 'maximized'
+--theme.wallpaper = theme_dir .. '/much_awesome.svg'
 
 -- PANEL DECORATIONS:
 --
