@@ -86,7 +86,7 @@ function keys.init(awesome_context)
   local TAG_COLOR = "tag"
   local CLIENT_FOCUS = "client: focus"
   local CLIENT_MOVE = "client: move"
-  local UTILS = "menu"
+  local GROUP_MENU = "menu"
   local AWESOME_COLOR = "awesome"
   local CLIENT_MANIPULATION = "client"
   local LAYOUT_MANIPULATION = "layout"
@@ -275,7 +275,7 @@ function keys.init(awesome_context)
     -- Menus
     bind_key({ modkey,       }, "w",
       function () awesome_context.menu.mainmenu_show(true) end,
-      "aWesome menu", UTILS
+      "aWesome menu", GROUP_MENU
     ),
     bind_key({ modkey,       }, "i",
       function ()
@@ -284,7 +284,7 @@ function keys.init(awesome_context)
           coords = {x=0, y=18}
         })
       end,
-      "clients on current tag menu", UTILS
+      "clients on current tag menu", GROUP_MENU
     ),
     bind_key({ modkey,       }, "p",
       function ()
@@ -293,7 +293,7 @@ function keys.init(awesome_context)
           coords = {x=0, y=18}
         })
       end,
-      "all clients menu", UTILS
+      "all clients menu", GROUP_MENU
     ),
     bind_key({ modkey, "Control"}, "p",
       --function() awesome_context.menu.menubar:show() end,
