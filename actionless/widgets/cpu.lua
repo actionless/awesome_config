@@ -28,6 +28,7 @@ local function worker(args)
   local update_interval  = args.update_interval or 5
   cpu.cores_number = tonumber(parse.command_to_string('nproc'))
   cpu.timeout = args.timeout or 0
+  cpu.show_pid = args.show_pid or false
 
   local widget = common_widgets.text_progressbar(args)
   cpu.widget = common_widgets.decorated{widget=widget}
@@ -114,7 +115,11 @@ local function worker(args)
     local counter = 0
     local num_records = h_table.getn(result)
     for pid, percent in h_table.spairs(result, function(t,a,b) return t[b] < t[a] end) do
-      result_string = result_string .. string.format("%"..pid_width.."s %6.2f %s", pid, percent, names[pid])
+      if cpu.show_pid then
+        result_string = result_string .. string.format("%"..pid_width.."s %6.2f %s", pid, percent, names[pid])
+      else
+        result_string = result_string .. string.format("%6.2f %s", percent, names[pid])
+      end
       counter = counter + 1
       if counter == cpu.list_len or counter == num_records then
         break
@@ -122,12 +127,20 @@ local function worker(args)
       result_string = result_string .. '\n'
     end
     if result_string ~= '' then
-      result_string = string.format(
-        '%'..pid_width..'s %6s %s\n',
-        column_headers[cpu.columns.pid],
-        column_headers[cpu.columns.percent],
-        column_headers[cpu.columns.name]
-      ) .. '<span font="'  .. tostring(beautiful.text_font)  .. '">' .. result_string .. '</span> '
+      if cpu.show_pid then
+        result_string = string.format(
+          '%'..pid_width..'s %6s %s\n',
+          column_headers[cpu.columns.pid],
+          column_headers[cpu.columns.percent],
+          column_headers[cpu.columns.name]
+        ) .. '<span font="'  .. tostring(beautiful.text_font)  .. '">' .. result_string .. '</span> '
+      else
+        result_string = string.format(
+          '%6s %s\n',
+          column_headers[cpu.columns.percent],
+          column_headers[cpu.columns.name]
+        ) .. '<span font="'  .. tostring(beautiful.text_font)  .. '">' .. result_string .. '</span> '
+      end
     else
       result_string = "no running processes atm"
     end
