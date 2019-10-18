@@ -1,15 +1,15 @@
 --[[
      Licensed under GNU General Public License v2
-      * (c) 2013-2014, Yauheni Kirylau
+      * (c) 2013-2019, Yauheni Kirylau
 --]]
 
-local naughty      = require("naughty")
-local beautiful    = require("beautiful")
+local naughty = require("naughty")
+local beautiful = require("beautiful")
 local awful = require("awful")
 local gears_timer = require("gears.timer")
 
-local h_table      = require("actionless.util.table")
-local h_string      = require("actionless.util.string")
+local h_table = require("actionless.util.table")
+local h_string = require("actionless.util.string")
 local parse = require("actionless.util.parse")
 local common_widgets = require("actionless.widgets.common")
 
@@ -126,24 +126,30 @@ local function worker(args)
       end
       result_string = result_string .. '\n'
     end
-    if result_string ~= '' then
+
+    if result_string == '' then
+      result_string = "no running processes atm"
+    else
+      local header_string
       if cpu.show_pid then
-        result_string = string.format(
+        header_string = string.format(
           '%'..pid_width..'s %6s %s\n',
           column_headers[cpu.columns.pid],
           column_headers[cpu.columns.percent],
           column_headers[cpu.columns.name]
-        ) .. '<span font="'  .. tostring(beautiful.text_font)  .. '">' .. result_string .. '</span> '
+        )
       else
-        result_string = string.format(
+        header_string = string.format(
           '%6s %s\n',
           column_headers[cpu.columns.percent],
           column_headers[cpu.columns.name]
-        ) .. '<span font="'  .. tostring(beautiful.text_font)  .. '">' .. result_string .. '</span> '
+        )
       end
-    else
-      result_string = "no running processes atm"
+      result_string = (header_string ..
+        '<span font="'  .. tostring(beautiful.text_font)  .. '">' .. result_string .. '</span> '
+      )
     end
+
     cpu.notification = naughty.notify({
       text = result_string,
       timeout = cpu.timeout,
