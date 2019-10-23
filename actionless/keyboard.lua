@@ -21,11 +21,19 @@ function keyboard.chain_with_interval(funcs, interval)
   }
 end
 
+local MODIFIERS = {
+  Shift={"Shift_L", "Shift_R"},
+  Control={"Control_L", "Control_R"},
+  Mod1={"Alt_L",},
+  Mod4={"Super_L", "Super_R"},
+}
+
 function keyboard.release_modifiers()
-  root.fake_input('key_release'  , 'Super_L')
-  root.fake_input('key_release'  , 'Control_L')
-  root.fake_input('key_release'  , 'Super_R')
-  root.fake_input('key_release'  , 'Control_R')
+  for _, a_modifier in ipairs(awesome._active_modifiers) do
+    for _, x_modifier in ipairs(MODIFIERS[a_modifier]) do
+      root.fake_input('key_release', x_modifier)
+    end
+  end
 end
 
 return keyboard
