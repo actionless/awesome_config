@@ -43,7 +43,7 @@ local function worker(args)
 
   cpu.list_len = args.list_length or 10
 
-  cpu.command = "top -o \\%CPU -b -n 1 -w 512 -d 0.05"
+  cpu.command = "top -o \\%CPU -b -n 1 -w 512"
   cpu.columns = args.columns or {
     pid=1,
     percent=9,
