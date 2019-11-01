@@ -55,6 +55,8 @@ theme.font = "Monospace 10"
 --theme.tasklist_font = "Monospace 10"
 theme.tasklist_font = theme.font
 theme.taglist_font = theme.bold_font
+--theme.titlebar_font = theme.bold_font
+theme.titlebar_font_focus = theme.bold_font
 theme.sans_font = "Sans Bold 10"
 -- Don't use sans font:
 --theme.sans_font	= "theme.font"
