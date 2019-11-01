@@ -543,8 +543,10 @@ function titlebar.make_titlebar(c, color, shadow)
     titlebar.make_border(c, color, shadow, true)
   end
 
+  local client_is_focused = client.focus == c
+
   color = (
-    client.focus == c
+    client_is_focused
     and (
       awesome.composite_manager_running
       and beautiful.actionless_titlebar_bg_focus
@@ -577,6 +579,10 @@ function titlebar.make_titlebar(c, color, shadow)
       opacity = beautiful.titlebar_opacity,
     }
   )
+  local font = beautiful.titlebar_font_normal or beautiful.titlebar_font
+  if client_is_focused then
+    font = beautiful.titlebar_font_focus or beautiful.titlebar_font
+  end
   local titlebar_setup = {
       {
         {
@@ -593,7 +599,7 @@ function titlebar.make_titlebar(c, color, shadow)
             {
               widget = awful.titlebar.widget.titlewidget(c),
               align = "center",
-              font = beautiful.titlebar_font,
+              font = font,
             },
             layout = wibox.layout.flex.horizontal,
           },
