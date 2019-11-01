@@ -11,7 +11,7 @@ local tag_helpers = require("actionless.util.tag")
 
 local function clog(msg, c) -- luacheck: ignore
   --if c and c.class == 'mpv' then
-    --nlog({msg, c and c.name})
+  --  nlog({msg, c and c.name})
   --end
   --log(msg .. " " .. c.name .. " " .. tostring(c:tags()[1]))
   --if c and c.class == "Spotify" then nlog(msg) end
@@ -45,6 +45,9 @@ local function _on_client_unfocus (c)
     --set_default_screen_padding(s)
     c.border_width = 0
     titlebar.remove_border(c)
+  elseif c.floating and c.class == 'mpv' then
+    clog("U: floating mpv", c)
+    titlebar.make_border(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
   elseif c.floating then
     clog("U: floating client", c)
     titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
@@ -130,6 +133,9 @@ local function on_client_focus(c)
     --set_default_screen_padding(s)
     c.border_width = 0
     titlebar.remove_border(c)
+  elseif c.floating and c.class == 'mpv' then
+    clog("F: floating mpv", c)
+    titlebar.make_border(c, beautiful.actionless_titlebar_bg_focus, beautiful.titlebar_shadow_focus)
   elseif c.floating then
     clog("F: floating client", c)
     --choose_screen_padding(s, t, num_tiled)

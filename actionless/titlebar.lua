@@ -130,7 +130,7 @@ local function need_titlebar(c)
   if not t then return end
   local num_tiled = #tag_helpers.get_tiled(t)
   if (
-    c.floating
+    c.floating and c.class ~= 'mpv'
   ) or (
     persistent.titlebar.get() and (
       num_tiled > 1 or (
