@@ -94,6 +94,13 @@ function widget_loader.init(awesome_context)
     update_interval = 2,
     list_length = 20,
   })
+  for _, widget in ipairs({w.mem, w.cpu}) do
+    widget:buttons({
+        awful.button({		}, 1, function()
+          awful.spawn(awesome_context.cmds.system_monitor)
+        end),
+    })
+  end
   -- Sensor
   w.temp = widgets.temp({
     update_interval = 10,

@@ -55,6 +55,7 @@ optdepends=(
 	'xscreensaver: config/autorun,config/keys'
 	'nemo: default file manager'
 	'nitrogen: default wallpaper manager'
+	'gnome-system-monitor: default action when click on cpu/mem widgets'
 )
 
 package() {
