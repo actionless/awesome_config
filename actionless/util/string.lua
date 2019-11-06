@@ -27,6 +27,24 @@ function string_helpers.split(str, separator)
   return fields
 end
 
+function string_helpers.rstrip(str, chars)
+  chars = chars or {' ', '\n', '\t'}
+  local strip_needed = true
+  while strip_needed do
+
+    strip_needed = false
+    for _, char in ipairs(chars) do
+      if string_helpers.ends(str, char) then
+        str = string.sub(str, 1, -2)
+        strip_needed = true
+        break
+      end
+    end
+
+  end
+  return str
+end
+
 function string_helpers.getn(unicode_string)
   local _, string_length = string.gsub(unicode_string, "[^\128-\193]", "")
   return string_length

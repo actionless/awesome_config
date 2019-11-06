@@ -12,6 +12,7 @@ local widgets = {
 	cpu			= require("actionless.widgets.cpu"),
 	mem			= require("actionless.widgets.mem"),
         kbd                     = require("actionless.widgets.kbd"),
+        arch_updates                     = require("actionless.widgets.arch_updates"),
 }
 
 return widgets

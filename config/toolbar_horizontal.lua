@@ -117,6 +117,7 @@ function toolbar.init(awesome_context)
           loaded_widgets.bat and loaded_widgets.bat,
         }),
         separator,
+        loaded_widgets.updates,
         separator,
         loaded_widgets.textclock,
         separator,

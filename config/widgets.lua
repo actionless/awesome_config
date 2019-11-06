@@ -115,6 +115,11 @@ function widget_loader.init(awesome_context)
       show_when_charged=false,
     })
   end
+  -- Arch updates
+  w.updates = widgets.arch_updates({
+      bg = beautiful.panel_widget_fg_warning,
+      fg = beautiful.panel_widget_bg_warning,
+  })
 
   -- Textclock
   local textclock = wibox.widget.textclock(
