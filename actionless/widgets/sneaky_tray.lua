@@ -65,7 +65,7 @@ function sneaky_tray.toggle()
     end
 end
 
-local function worker(args)
+local function get_widget(args)
     args = args or {}
     sneaky_tray.show_on_start = args.show_on_start
     sneaky_tray.initialize()
@@ -75,7 +75,7 @@ end
 return setmetatable(
     sneaky_tray,
     { __call = function(_, ...)
-        return worker(...)
+        return get_widget(...)
     end }
 )
 

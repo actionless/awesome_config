@@ -44,11 +44,11 @@ end
 function spotify.update(parse_status_callback)
   awful.spawn.easy_async(
     dbus_cmd .. "PlaybackStatus",
-    function(str) spotify.post_update(str, parse_status_callback) end
+    function(str) spotify._post_update(str, parse_status_callback) end
   )
 end
 -------------------------------------------------------------------------------
-function spotify.post_update(result_string, parse_status_callback)
+function spotify._post_update(result_string, parse_status_callback)
   spotify.player_status = {}
   local state = nil
   if result_string:match("Playing") then

@@ -89,7 +89,7 @@ local function worker(args)
     bat.widget:set_markup(widget_text)
   end
 
-  local function post_update(stdout)
+  local function _post_update(stdout)
     bat.now = parse.find_values_in_string(
       stdout, "[ ]+(.*):[ ]+(.*)",
       { percentage='percentage',
@@ -108,7 +108,7 @@ local function worker(args)
   local function update()
     awful.spawn.easy_async(
       'upower -i /org/freedesktop/UPower/devices/' .. device,
-      post_update)
+      _post_update)
   end
 
   gears_timer({

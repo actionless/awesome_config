@@ -21,7 +21,7 @@ local tag_helpers = require("actionless.util.tag")
 -- symbol of the current tag.
 -- @param screen The screen object that the layout will be represented for.
 -- @return An imagebox widget configured as a layoutbox.
-local function worker(args)
+local function create_widget(args)
 
     local layoutbox = {
         menu = nil,
@@ -184,6 +184,6 @@ local function worker(args)
 end
 
 
-return setmetatable({}, { __call = function(_, ...) return worker(...) end })
+return setmetatable({}, { __call = function(_, ...) return create_widget(...) end })
 
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80

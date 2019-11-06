@@ -33,14 +33,14 @@ function clementine.prev_song()
 end
 -------------------------------------------------------------------------------
 function clementine.update(parse_status_callback)
-  local callback = function(str) clementine.post_update(str, parse_status_callback) end
+  local callback = function(str) clementine._post_update(str, parse_status_callback) end
   awful.spawn.easy_async(
     dbus_cmd .. " /org/mpris/MediaPlayer2 PlaybackStatus",
     callback
   )
 end
 -------------------------------------------------------------------------------
-function clementine.post_update(result_string, parse_status_callback)
+function clementine._post_update(result_string, parse_status_callback)
   clementine.player_status = {}
   local state = nil
   if result_string:match("Playing") then

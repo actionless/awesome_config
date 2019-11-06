@@ -32,7 +32,7 @@ local player = {
 }
 
 
-local function worker(args)
+function player.init(args)
   args = args or {}
   player.args = args
   local timeout = args.timeout or 5
@@ -275,7 +275,7 @@ end
 return setmetatable(
   player,
   { __call = function(_, ...)
-      return worker(...)
+      return player.init(...)
     end
   }
 )

@@ -33,14 +33,14 @@ function gradio.prev_song()
 end
 -------------------------------------------------------------------------------
 function gradio.update(parse_status_callback)
-  local callback = function(str) gradio.post_update(str, parse_status_callback) end
+  local callback = function(str) gradio._post_update(str, parse_status_callback) end
   awful.spawn.easy_async(
     dbus_cmd .. " /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlaybackStatus",
     callback
   )
 end
 -------------------------------------------------------------------------------
-function gradio.post_update(result_string, parse_status_callback)
+function gradio._post_update(result_string, parse_status_callback)
   gradio.player_status = {}
   local state = nil
   if result_string:match("Playing") then
