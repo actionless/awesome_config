@@ -144,7 +144,7 @@ if local_settings_result ~= true then
   print(local_settings_details)
 end
 -- Make it global for debugging:
---CONFIG_CONTEXT = context
+CONFIG_CONTEXT = context
 
 
 -- Init default terminal emulator
