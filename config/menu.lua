@@ -114,6 +114,7 @@ function menus.init(context)
   }
 
   local function app(display_name, name, icon_name)
+    name = name or display_name
     icon_name = icon_name or name
     return { display_name, name, awesome_menubar.utils.lookup_icon(icon_name) }
   end
@@ -167,6 +168,7 @@ function menus.init(context)
       app("Oni", "oni"),
       app("retext", "retext"),
       app("xed", "xed", "accessories-text-editor"),
+      app("marker", "marker", "com.github.fabiocolacio.marker"),
     }, "education-language"),
 
   }
