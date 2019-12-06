@@ -9,7 +9,8 @@ local naughty = require("naughty")
 
 local parse = require("actionless.util.parse")
 local h_string = require("actionless.util.string")
-local decorated_widget= require("actionless.widgets.common").decorated
+local decorated_widget = require("actionless.widgets.common").decorated
+local markup = require("actionless.util.markup")
 
 local cpu = require("actionless.widgets.cpu")
 
@@ -53,6 +54,10 @@ end
 
 function updates._check_updates_callback(updates_str)
   updates.updates = updates_str
+    :gsub(" +", " ")
+    :gsub("^%s", "")
+    :gsub("\n%s", "\n")
+    :gsub('->', markup.fg.color(beautiful.notification_border_color, '->'))
   local updates_found = #(parse.string_to_lines(updates_str))
   if updates_found > 0 then
     updates.widget:show()
