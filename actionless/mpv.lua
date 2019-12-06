@@ -35,9 +35,12 @@ function mpv.play_browser_url()
           title = 'Opening in mpv...',
           text = filepath,
         }
-        awful_spawn.with_line_callback(
-          {'mpv', filepath},
-          {stderr=function() end}
+        --awful_spawn.with_line_callback(
+          --{'mpv', filepath},
+          --{stderr=function() end}
+        --)
+        awful_spawn(
+          {'mpv', filepath}
         )
       end
     end
