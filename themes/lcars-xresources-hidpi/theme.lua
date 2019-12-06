@@ -51,6 +51,7 @@ theme.revelation_font = "Monospace Bold 24"
 -- FONTS:
 theme.bold_font = "Monospace Bold 10"
 theme.font = "Monospace 10"
+theme.mono_font = theme.font
 --theme.font = theme.bold_font
 --theme.tasklist_font = "Monospace 10"
 theme.tasklist_font = theme.font
