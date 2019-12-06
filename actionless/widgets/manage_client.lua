@@ -107,9 +107,9 @@ local function widget_factory(args)
     awful.button({ }, 1, function()
         widget:set_error()
     end, function ()
-      if not widget.titlebars_forced_globally then
+      --if not widget.titlebars_forced_globally then
         capi.client.focus:kill()
-      end
+      --end
     end),
     awful.button({ }, 3, function()
       widget:toggle()
