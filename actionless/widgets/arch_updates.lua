@@ -25,6 +25,7 @@ function updates.show_notification()
     font = beautiful.mono_font,
     replaces_id = updates.notification and updates.notification.id,
     position = beautiful.widget_notification_position,
+    timeout=0,
   })
 end
 
