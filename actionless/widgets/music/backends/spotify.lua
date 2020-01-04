@@ -4,7 +4,6 @@
 --]]
 
 local awful = require("awful")
-local gears_timer = require("gears.timer")
 
 local h_table = require("actionless.util.table")
 local h_string = require("actionless.util.string")
@@ -20,12 +19,6 @@ local spotify = {
 }
 
 function spotify.init(player_widget)
-  gears_timer({
-    callback=function() return spotify.update(player_widget.parse_status) end,
-    timeout=20,
-    autostart=true,
-    call_now=false,
-  })
 end
 
 -------------------------------------------------------------------------------

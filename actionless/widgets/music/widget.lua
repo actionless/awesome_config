@@ -8,6 +8,7 @@ local wibox	= require("wibox")
 local naughty		= require("naughty")
 local beautiful		= require("beautiful")
 local g_string		= require("gears.string")
+local gears_timer = require("gears.timer")
 
 local common = require("actionless.widgets.common")
 local decorated_widget	= common.decorated
@@ -94,7 +95,12 @@ function player.init(args)
     end
     player.backend = cached_backends[backend_id]
     player.cmd = args.player_cmd or player.backend.player_cmd
-    player.update()
+    gears_timer({
+      callback=player.update,
+      timeout=20,
+      autostart=true,
+      call_now=true,
+    })
   end
 
 -------------------------------------------------------------------------------

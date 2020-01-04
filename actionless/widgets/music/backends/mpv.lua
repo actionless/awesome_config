@@ -10,55 +10,55 @@ local h_table = require("actionless.util.table")
 local parse = require("actionless.util.parse")
 
 
-local dbus_cmd = "qdbus org.mpris.MediaPlayer2.gradio "
+local dbus_cmd = "qdbus org.mpris.MediaPlayer2.mpv "
 
-local gradio = {
+local mpv = {
   player_status = {},
-  player_cmd = 'gradio'
+  player_cmd = 'mpv'
 }
 
---function gradio.init(_widget)
+--function mpv.init(_widget)
 --end
 -------------------------------------------------------------------------------
-function gradio.toggle()
+function mpv.toggle()
   awful.spawn.with_shell(dbus_cmd .. "/org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause")
 end
 
-function gradio.next_song()
+function mpv.next_song()
   awful.spawn.with_shell(dbus_cmd .. "/org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next")
 end
 
-function gradio.prev_song()
+function mpv.prev_song()
   awful.spawn.with_shell(dbus_cmd .. "/org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous")
 end
 -------------------------------------------------------------------------------
-function gradio.update(parse_status_callback)
+function mpv.update(parse_status_callback)
   awful.spawn.easy_async(
     dbus_cmd .. " /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlaybackStatus",
-    function(str) gradio._post_update(str, parse_status_callback) end
+    function(str) mpv._post_update(str, parse_status_callback) end
   )
 end
 -------------------------------------------------------------------------------
-function gradio._post_update(result_string, parse_status_callback)
-  gradio.player_status = {}
+function mpv._post_update(result_string, parse_status_callback)
+  mpv.player_status = {}
   local state = nil
   if result_string:match("Playing") then
     state  = 'play'
   elseif result_string:match("Paused") then
     state = 'pause'
   end
-  gradio.player_status.state = state
+  mpv.player_status.state = state
   if state == 'play' or state == 'pause' then
     awful.spawn.easy_async(
       dbus_cmd .. " /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata",
-      function(str) gradio.parse_metadata(str, parse_status_callback) end
+      function(str) mpv.parse_metadata(str, parse_status_callback) end
     )
   else
-    parse_status_callback(gradio.player_status)
+    parse_status_callback(mpv.player_status)
   end
 end
 -------------------------------------------------------------------------------
-function gradio.parse_metadata(result_string, parse_status_callback)
+function mpv.parse_metadata(result_string, parse_status_callback)
   local player_status = parse.find_values_in_string(
     result_string,
     "([%w]+): (.*)$",
@@ -70,11 +70,11 @@ function gradio.parse_metadata(result_string, parse_status_callback)
       cover_url='artUrl'
     }
   )
-  h_table.merge(gradio.player_status, player_status)
-  parse_status_callback(gradio.player_status)
+  h_table.merge(mpv.player_status, player_status)
+  parse_status_callback(mpv.player_status)
 end
 -------------------------------------------------------------------------------
-function gradio.resize_cover(
+function mpv.resize_cover(
   player_status, _, output_coverart_path, notification_callback
 )
   awful.spawn.with_line_callback(
@@ -87,4 +87,4 @@ function gradio.resize_cover(
   })
 end
 
-return gradio
+return mpv

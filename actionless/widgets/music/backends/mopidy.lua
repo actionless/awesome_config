@@ -24,8 +24,6 @@ function mopidy.init(player_widget)
     autostart=true,
     call_now=true,
   })
-
-  mopidy.update(player_widget.parse_status)
 end
 -------------------------------------------------------------------------------
 function mopidy.toggle()
