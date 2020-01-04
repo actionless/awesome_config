@@ -132,6 +132,7 @@ function menus.init(context)
 
     category("Graphics", {
       app("gcolor3", "gcolor3", "nl.hjdskes.gcolor3"),
+      app("Drawing", "drawing", "com.github.maoschanz.drawing"),
       app("GIMP", "gimp"),
       app("Nomacs", "nomacs"),
       app("Viewnior", "viewnior"),
