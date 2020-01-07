@@ -146,7 +146,7 @@ function cpu.update()
     cpu.widget:set_warning()
   else
     cpu.widget:set_normal()
-    msg = 'cpu'
+    msg = cpu.widget_text
   end
   cpu.widget.textbox:set_text(msg)
   cpu.widget.progressbar:set_value(cpu.now.la1/cpu.cores_number)
@@ -159,6 +159,7 @@ function cpu.init(args)
   cpu.timeout = args.timeout or 0
   cpu.show_pid = args.show_pid or false
   cpu.list_len = args.list_length or 10
+  cpu.widget_text = args.text or 'CPU'
 
   local widget = common_widgets.text_progressbar(args)
   cpu.widget = common_widgets.decorated{widget=widget}

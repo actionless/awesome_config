@@ -148,7 +148,7 @@ function mem.init(args)
   local update_interval  = args.update_interval or 5
   mem.timeout = args.timeout or 0
   mem.list_len = args.list_length or 10
-  mem.widget_text = args.text or 'mem'
+  mem.widget_text = args.text or 'RAM'
 
   local widget = common_widgets.text_progressbar(args)
   mem.widget = common_widgets.decorated{widget=widget}
