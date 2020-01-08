@@ -37,6 +37,9 @@ function temp._post_update(str)
     local this_temp = tonumber(temperatures[sensor_counter])
     if this_temp >= warning_temp then
       temp.widget:show()
+      if beautiful.show_widget_icon and beautiful.widget_temp_high then
+        temp.widget:set_image(beautiful.widget_temp_high)
+      end
       temp.widget:set_bg(beautiful.panel_widget_bg_error)
       temp.widget:set_fg(beautiful.panel_widget_fg_error)
       if (this_temp - warning_temp) >= max_temp_delta then
@@ -55,7 +58,6 @@ end
 function temp.init(args)
   args = args or {}
   local update_interval = args.update_interval or 10
-  --local warning = args.warning or 75
   temp.sensors = args.sensors
   if not temp.sensors then
     nlog('Temperature widget: ".sensors" arg is unset')
@@ -65,7 +67,9 @@ function temp.init(args)
   temp.fg = args.fg or beautiful.panel_widget_fg or beautiful.panel_bg or beautiful.bg
 
   temp.widget = decorated_widget(args)
-  temp.widget:set_image(beautiful.widget_temp)
+  if beautiful.show_widget_icon and beautiful.widget_temp then
+    temp.widget:set_image(beautiful.widget_temp)
+  end
 
   gears_timer({
     callback=temp.update,
