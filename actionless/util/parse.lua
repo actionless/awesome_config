@@ -10,6 +10,7 @@ local h_string = require("actionless.util.string")
 local parse = {}
 
 function parse.string_to_lines(str)
+  if (not str) or (str == '') then return {} end
   return h_string.split(str, '\n')
 end
 
