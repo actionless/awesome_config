@@ -166,7 +166,11 @@ function cpu.init(args)
   cpu.widget.textbox = widget.textbox
   cpu.widget.progressbar = widget.progressbar
 
-  --cpu.widget:set_image(beautiful.widget_cpu)
+  if beautiful.show_widget_icon and beautiful.widget_cpu then
+    cpu.widget_text = args.text or ''
+    cpu.widget:set_image(beautiful.widget_cpu)
+  end
+
   cpu.widget:connect_signal(
     "mouse::enter", function () cpu.show_notification() end
   )

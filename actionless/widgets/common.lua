@@ -575,6 +575,10 @@ function common.text_progressbar(args)
         {
           nil,
           {
+              id = "imagebox",
+              widget = wibox.widget.imagebox,
+          },
+          {
               id = "textbox",
               widget = wibox.widget.textbox,
           },
@@ -599,6 +603,28 @@ function common.text_progressbar(args)
 
   widget.textbox = widget.w1.t1.t2.textbox
   widget.progressbar = widget.w1.p1.progressbar
+
+  local show_icon = args.show_icon
+  if show_icon == nil then
+    show_icon = beautiful.show_widget_icon
+  end
+  if show_icon then
+    widget.icon_widget = widget.w1.t1.t2.imagebox
+  end
+
+  function widget:set_image(image)
+    if not self.icon_widget then
+      return
+    end
+    image = image and gears.surface.load(image)
+    if not image then
+      return
+    end
+    local ratio = beautiful.basic_panel_height / image.height
+    self.icon_widget.forced_width = math.ceil(image.width * ratio)
+    self.icon_widget:set_image(image)
+  end
+
   return widget
 end
 

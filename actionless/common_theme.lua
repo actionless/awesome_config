@@ -6,15 +6,19 @@
 local awful = require("awful")
 local xresources = require("beautiful").xresources
 local dpi = xresources.apply_dpi
+local g_string = require("gears.string")
+local surface = require("gears.surface")
+local recolor_image = require("gears.color").recolor_image
 
 local h_string = require("actionless.util.string")
+
 local h_table = require("actionless.util.table")
 local h_parse = require("actionless.util.parse")
 
 
 local common_theme = {}
 
-function common_theme.create_default_theme(theme_dir)
+function common_theme.create_default_theme(theme_dir, icons_dir)
 
   local theme
   pcall(function()
@@ -189,7 +193,7 @@ function common_theme.create_default_theme(theme_dir)
 
   -- ICONS
 
-  local icons_dir = theme.dir .. "/icons/"
+  icons_dir = icons_dir or (theme.dir .. "/icons/")
   theme.icons_dir = icons_dir
 
   --theme.icon_systray_show 		= icons_dir .. "systray_show.png"
@@ -226,6 +230,8 @@ function common_theme.create_default_theme(theme_dir)
   theme.widget_music_play	= icons_dir .. "music_play.png"
   theme.widget_music_stop	= icons_dir .. "music_stop.png"
 
+  theme.recolor_widget_icons = true
+
   theme.tasklist_disable_icon = true
   --theme.tasklist_floating = "*"
   --theme.tasklist_maximized_horizontal = "_"
@@ -245,36 +251,64 @@ end
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 
+function common_theme.recolor_widget_icons(theme, color)
+  for full_name, value in pairs(theme) do
+    if (
+        type(value)=="string" and
+        g_string.startswith(value, theme.icons_dir) and
+        (value ~= theme.icons_dir)
+    ) then
+      local image = surface.duplicate_surface(theme[full_name])
+      theme[full_name] = recolor_image(image, color)
+    end
+  end
+  return theme
+end
 
-function common_theme.fill_theme(theme)
+-------------------------------------------------------------------------------
+
+function common_theme.fill_theme(theme, recursion_counter)
   local new_theme = {}
   local templates_found = false
+  recursion_counter = recursion_counter or 0
   for key, value in pairs(theme) do
-    if type(value)=="string" and h_string.starts(value, "theme.") then
+    if type(value)=="string" and g_string.startswith(value, "theme.") then
+      --local actual_key_path = g_string.split(value, ".")
       local actual_key_path = h_string.split(value, ".")
       local actual_value = theme
       for i=2,#actual_key_path do
         actual_value = actual_value[actual_key_path[i]]
       end
       new_theme[key] = actual_value
-      if actual_value and type(actual_value)=="string" and h_string.starts(actual_value, "theme.") then
+      if actual_value and type(actual_value)=="string" and g_string.startswith(actual_value, "theme.") then
         templates_found = true
       end
     else
       new_theme[key] = value
     end
   end
-  if templates_found then
-    new_theme = common_theme.fill_theme(new_theme)
+  if templates_found and recursion_counter < 100 then
+    recursion_counter = recursion_counter + 1
+    new_theme = common_theme.fill_theme(new_theme, recursion_counter)
+  elseif recursion_counter > 10 then
+    print("common_theme: recursion counter is " + tostring(recursion_counter))
+  end
+
+  if new_theme.show_widget_icon and new_theme.recolor_widget_icons then
+    local color = new_theme.panel_widget_fg
+    new_theme = common_theme.recolor_widget_icons(new_theme, color)
   end
   return new_theme
 end
 
+-------------------------------------------------------------------------------
+--
 function common_theme.create_theme(args)
   args = args or {}
-  local theme_dir = args.theme_dir
   local theme_name = args.theme_name
   local theme = args.theme or {}
+  local theme_dir = args.theme_dir or theme.dir
+  local icons_dir = args.icons_dir or theme.icons_dir
 
   if not theme then
     error("theme is not provided")
@@ -290,7 +324,7 @@ function common_theme.create_theme(args)
 
   return common_theme.fill_theme(
     h_table.merge(
-      common_theme.create_default_theme(theme_dir),
+      common_theme.create_default_theme(theme_dir, icons_dir),
       theme
     )
   )

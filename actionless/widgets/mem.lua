@@ -157,7 +157,12 @@ function mem.init(args)
   mem.widget = common_widgets.decorated{widget=widget}
   mem.widget.textbox = widget.textbox
   mem.widget.progressbar = widget.progressbar
-  --mem.widget:set_image(beautiful.widget_mem)
+
+  if beautiful.show_widget_icon and beautiful.widget_mem then
+    mem.widget_text = args.text or ''
+    mem.widget:set_image(beautiful.widget_mem)
+  end
+
   mem.widget:connect_signal(
     "mouse::enter", function () mem.show_notification() end
   )
