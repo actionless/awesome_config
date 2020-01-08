@@ -158,8 +158,10 @@ function mem.init(args)
   mem.widget.textbox = widget.textbox
   mem.widget.progressbar = widget.progressbar
 
-  if beautiful.show_widget_icon and beautiful.widget_mem then
+  if beautiful.show_widget_icon then
     mem.widget_text = args.text or ''
+  end
+  if beautiful.widget_mem then
     mem.widget:set_image(beautiful.widget_mem)
   end
 

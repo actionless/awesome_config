@@ -166,8 +166,10 @@ function cpu.init(args)
   cpu.widget.textbox = widget.textbox
   cpu.widget.progressbar = widget.progressbar
 
-  if beautiful.show_widget_icon and beautiful.widget_cpu then
+  if beautiful.show_widget_icon then
     cpu.widget_text = args.text or ''
+  end
+  if beautiful.widget_cpu then
     cpu.widget:set_image(beautiful.widget_cpu)
   end
 
