@@ -9,8 +9,8 @@ INSTALL_NO_ARGB_SHORTCUTS=${NOARGB:-n}
 
 pkgname=actionless_awesome_config_meta
 conflicts=(awesome_config_actionless_meta)
-pkgver=0.1
-pkgrel=3
+pkgver=0.2
+pkgrel=1
 pkgdesc="Awesome config dependencies"
 arch=('x86_64' 'i686')
 url="https://github.com/actionless/awesome_config"
@@ -32,6 +32,7 @@ depends=(
 	'xst-git'  # default terminal
 	'tmux'  # default terminal multiplexer
 	'scrot'  # config/keys: default screenshot tool
+	'slop'  # config/keys: helper for default screenshot tool
 
 	'xsettingsd'  # or use lxsettings-daemon from lxsession
 	#'lxsession-gtk3' # or 'lxsession'  # needed for lxpolkit
