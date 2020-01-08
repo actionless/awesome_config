@@ -55,10 +55,10 @@ function cpu.notification_callback_done(output)
   local result = {}
   local names = {}
   local column_headers = h_string.split(
-    h_table.range(
+    h_string.lstrip(h_table.range(
       parse.string_to_lines(output),
       6, 6
-    )[1], ' '
+    )[1]), ' '
   )
   for _, line in ipairs(
     h_table.range(
@@ -66,12 +66,12 @@ function cpu.notification_callback_done(output)
       7
     )
   ) do
-    --local pid, percent, name = line:match("^(%d+)%s+(.+)%s+(.*)")
+    line = h_string.lstrip(line)
     local values = h_string.split(line, ' ')
     local pid = values[cpu.columns.pid]
     local percent = values[cpu.columns.percent]
     local name = values[cpu.columns.name]
-    percent = percent + 0
+    if percent then percent = percent + 0 end
     if percent and percent ~= 0 and name ~= 'top' then
       if result[pid] then
         result[pid] = (result[pid] + percent)/2

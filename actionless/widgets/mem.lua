@@ -58,10 +58,10 @@ function mem._show_notification_callback(output)
   local result = {}
 
   local column_headers = h_string.split(
-    h_table.range(
+    h_string.lstrip(h_table.range(
       parse.string_to_lines(output),
       6, 6
-    )[1], ' '
+    )[1]), ' '
   )
   for _, line in ipairs(
     h_table.range(
@@ -69,16 +69,19 @@ function mem._show_notification_callback(output)
       7
     )
   ) do
+    line = h_string.lstrip(line)
     local values = h_string.split(line, ' ')
     local percent = values[mem.columns.percent]
-    local name = values[mem.columns.name]
-    if name == 'Web' then name = 'firefox' end
-    if name == 'WebExtensions' then name = 'firefox' end
-    percent = mem.show_percents and (percent + 0) or (percent * 0.01 * mem.now.total)
-    if result[name] then
-      result[name] = result[name] + percent
-    elseif name then
-      result[name] = percent
+    if percent then
+      local name = values[mem.columns.name]
+      if name == 'Web' then name = 'firefox' end
+      if name == 'WebExtensions' then name = 'firefox' end
+      percent = mem.show_percents and (percent + 0) or (percent * 0.01 * mem.now.total)
+      if result[name] then
+        result[name] = result[name] + percent
+      elseif name then
+        result[name] = percent
+      end
     end
   end
 

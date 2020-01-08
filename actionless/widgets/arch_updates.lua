@@ -54,6 +54,7 @@ end
 
 
 function updates._check_updates_callback(updates_str)
+  updates_str = h_string.strip(updates_str)
   updates.updates = updates_str
     :gsub(" +", " ")
     :gsub("^%s", "")

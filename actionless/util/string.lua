@@ -4,6 +4,9 @@
 --]]
 
 -- helper functions for internal use
+
+local gstring = require('gears.string')
+
 local string_helpers = {}
 
 function string_helpers.starts(String,Start)
@@ -19,12 +22,39 @@ function string_helpers.only_digits(str)
   return tonumber(str:match("%d+"))
 end
 
-function string_helpers.split(str, separator)
-  separator = separator or ":"
-  local fields = {}
-  local pattern = string.format("([^%s]+)", separator)
-  str:gsub(pattern, function(c) fields[#fields+1] = c end)
-  return fields
+function string_helpers.split(str, delimiter)
+    delimiter = delimiter or "\n"
+    local result = {}
+    if gstring.startswith(str, delimiter) then
+        result[#result+1] = ""
+    end
+    local pattern = string.format("([^%s]+)", delimiter)
+    str:gsub(pattern, function(c) result[#result+1] = c end)
+    if gstring.endswith(str, delimiter) then
+        result[#result+1] = ""
+    end
+    if #result == 0 then
+        result[#result+1] = str
+    end
+    return result
+end
+
+function string_helpers.lstrip(str, chars)
+  chars = chars or {' ', '\n', '\t'}
+  local strip_needed = true
+  while strip_needed do
+
+    strip_needed = false
+    for _, char in ipairs(chars) do
+      if gstring.startswith(str, char) then
+        str = string.sub(str, 2)
+        strip_needed = true
+        break
+      end
+    end
+
+  end
+  return str
 end
 
 function string_helpers.rstrip(str, chars)
@@ -42,6 +72,12 @@ function string_helpers.rstrip(str, chars)
     end
 
   end
+  return str
+end
+
+function string_helpers.strip(str, chars)
+  str = string_helpers.lstrip(str, chars)
+  str = string_helpers.rstrip(str, chars)
   return str
 end
 
