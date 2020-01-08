@@ -63,7 +63,7 @@ function updates._check_updates_callback(updates_str)
   local updates_found = #(parse.string_to_lines(updates_str))
   if updates_found > 0 then
     updates.widget:show()
-    updates.widget:set_text(string.format(" %i ", updates_found))
+    updates.widget:set_text(string.format("%i ", updates_found))
   else
     updates.widget:hide()
   end

@@ -219,6 +219,7 @@ function common_theme.create_default_theme(theme_dir, icons_dir)
   theme.widget_mem		= icons_dir .. "mem.png"
   theme.widget_cpu		= icons_dir .. "cpu.png"
   theme.widget_hdd		= icons_dir .. "hdd.png"
+  theme.widget_updates		= icons_dir .. "updates.png"
 
   theme.widget_temp		= icons_dir .. "temp.png"
   theme.widget_temp_high	= icons_dir .. "temp_high.png"
