@@ -142,8 +142,14 @@ function cpu.update()
   )
   if tonumber(cpu.now.la1) > cpu.cores_number * 2 then
     cpu.widget:set_error()
+    if beautiful.widget_cpu_critical then
+      cpu.widget:set_image(beautiful.widget_cpu_critical)
+    end
   elseif tonumber(cpu.now.la1) > cpu.cores_number then
     cpu.widget:set_warning()
+    if beautiful.widget_cpu_high then
+      cpu.widget:set_image(beautiful.widget_cpu_high)
+    end
   else
     cpu.widget:set_normal()
     msg = cpu.widget_text
