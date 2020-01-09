@@ -162,12 +162,27 @@ function player.init(args)
     player.backend.prev_song()
   end
 
+  function player.seek()
+    if player.backend.seek then
+      player.backend.seek()
+    else
+      naughty.notification({
+        title = 'music widget error',
+        text = enabled_backends[backend_id] .. " not supports Seek",
+        timeout = timeout,
+        position = beautiful.widget_notification_position,
+        urgency='critical',
+      })
+    end
+  end
+
   player.widget:connect_signal(
     "mouse::enter", function () player.show_notification() end)
   player.widget:connect_signal(
     "mouse::leave", function () player.hide_notification() end)
   player.widget:buttons(awful.util.table.join(
     awful.button({ }, 1, player.toggle),
+    awful.button({ }, 2, player.seek),
     awful.button({ }, 3, function()
       player.use_next_backend()
       player.show_notification()
