@@ -5,6 +5,7 @@ local backends = {
   mopidy = require("actionless.widgets.music.backends.mopidy"),
   gradio = require("actionless.widgets.music.backends.gradio"),
   mpv = require("actionless.widgets.music.backends.mpv"),
+  headset = require("actionless.widgets.music.backends.headset"),
 }
 
 return backends
