@@ -79,7 +79,8 @@ function common.widget(args)
   widget_bg.lie_layout = wibox.layout.fixed.horizontal()
   if show_icon then
     widget_bg.icon_widget = wibox.widget.imagebox()
-    widget_bg.icon_widget.resize = beautiful.xresources.get_dpi() > 96
+    --widget_bg.icon_widget.resize = beautiful.xresources.get_dpi() > 96
+    --widget_bg.icon_widget.resize = false
     widget_bg.lie_layout:add(widget_bg.icon_widget)
   end
   widget_bg.text_widget = wibox.widget.textbox('')
@@ -104,6 +105,7 @@ function common.widget(args)
     if not image then
       return
     end
+    self.icon_widget:set_resize(image.height > beautiful.basic_panel_height)
     local ratio = beautiful.basic_panel_height / image.height
     self.icon_widget.forced_width = math.ceil(image.width * ratio)
     self.icon_widget:set_image(image)
@@ -620,6 +622,7 @@ function common.text_progressbar(args)
     if not image then
       return
     end
+    widget.icon_widget:set_resize(image.height > beautiful.basic_panel_height)
     local ratio = beautiful.basic_panel_height / image.height
     self.icon_widget.forced_width = math.ceil(image.width * ratio)
     self.icon_widget:set_image(image)
