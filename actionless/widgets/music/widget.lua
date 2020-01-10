@@ -13,6 +13,7 @@ local gears_timer = require("gears.timer")
 local common = require("actionless.widgets.common")
 local decorated_widget	= common.decorated
 local markup		= require("actionless.util.markup")
+local db = require("actionless.util.db")
 
 local backend_modules	= require("actionless.widgets.music.backends")
 
@@ -46,7 +47,7 @@ function player.init(args)
   --player.title_widget = common_widget(args)
   player.artist_widget = wibox.widget.textbox()
   player.title_widget = wibox.widget.textbox()
-  player.separator_widget = wibox.widget.textbox("waiting for " .. enabled_backends[1] .. "...")
+  player.separator_widget = wibox.widget.textbox("loading...")
   args.widgets = {
     --wibox.widget.textbox(' '),
     player.artist_widget,
@@ -61,7 +62,7 @@ function player.init(args)
   player.widget = decorated_widget(args)
 
 
-  local backend_id = 0
+  local backend_id = db.get_or_set("widget_music_backend", 1)
   local cached_backends = {}
 
   dbus.add_match(
@@ -75,7 +76,7 @@ function player.init(args)
     end
   )
 
-  function player.use_next_backend()
+  function player.use_next_backend(index)
   --[[ music player backends:
 
       backend should have methods:
@@ -87,7 +88,8 @@ function player.init(args)
       * .init(args)
       * .resize_cover(coversize, default_art, show_notification_callback)
   --]]
-    backend_id = backend_id + 1
+    index = index or 1
+    backend_id = backend_id + index
     if backend_id > #enabled_backends then backend_id = 1 end
     if backend_id > #cached_backends then
       cached_backends[backend_id] = backend_modules[enabled_backends[backend_id]]
@@ -101,6 +103,7 @@ function player.init(args)
       autostart=true,
       call_now=true,
     })
+    db.set('widget_music_backend', backend_id)
   end
 
 -------------------------------------------------------------------------------
@@ -289,7 +292,7 @@ function player.resize_cover()
   })
 end
 -------------------------------------------------------------------------------
-  player.use_next_backend()
+  player.use_next_backend(0)
   return setmetatable(player, { __index = player.widget })
 end
 
