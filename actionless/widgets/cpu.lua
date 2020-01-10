@@ -153,6 +153,9 @@ function cpu.update()
   else
     cpu.widget:set_normal()
     msg = cpu.widget_text
+    if beautiful.widget_cpu then
+      cpu.widget:set_image(beautiful.widget_cpu)
+    end
   end
   cpu.widget.textbox:set_text(msg)
   cpu.widget.progressbar:set_value(cpu.now.la1/cpu.cores_number)
