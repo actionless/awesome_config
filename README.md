@@ -3,7 +3,7 @@
 
 #### Installation
 
-Works with Awesome WM 4.2
+Works with Awesome WM 4.3
 
 ```sh
 cd ~/.config/
