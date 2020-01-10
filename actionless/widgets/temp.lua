@@ -30,28 +30,34 @@ end
 
 function temp._post_update(str)
   local max_temp_delta = 0
+  local max_temp_sensor_temp
+  local max_temp_sensor_name
+
   local temperatures = parse.string_to_lines(str)
   local sensor_counter = 1
   for sensor_name, sensor_data in pairs(temp.sensors) do
     local warning_temp = sensor_data.warning
     local this_temp = tonumber(temperatures[sensor_counter])
-    if this_temp >= warning_temp then
-      temp.widget:show()
-      if beautiful.widget_temp_high then
-        temp.widget:set_image(beautiful.widget_temp_high)
-      end
-      temp.widget:set_bg(beautiful.panel_widget_bg_error)
-      temp.widget:set_fg(beautiful.panel_widget_fg_error)
-      if (this_temp - warning_temp) >= max_temp_delta then
-        max_temp_delta = this_temp - warning_temp
-        temp.widget:set_text(string.format(" %s: %2i°C ", sensor_name, this_temp))
-      end
-    elseif max_temp_delta == 0 then
-      temp.widget:hide()
-      temp.widget:set_bg(temp.bg)
-      temp.widget:set_fg(temp.fg)
+    if (this_temp - warning_temp) >= max_temp_delta then
+      max_temp_delta = this_temp - warning_temp
+      max_temp_sensor_temp = this_temp
+      max_temp_sensor_name = sensor_name
     end
     sensor_counter = sensor_counter + 1
+  end
+
+  if max_temp_delta > 0 then
+    temp.widget:set_text(string.format(" %s: %2i°C ", max_temp_sensor_name, max_temp_sensor_temp))
+    if beautiful.widget_temp_high then
+      temp.widget:set_image(beautiful.widget_temp_high)
+    end
+    temp.widget:set_bg(beautiful.panel_widget_bg_error)
+    temp.widget:set_fg(beautiful.panel_widget_fg_error)
+    temp.widget:show()
+  else
+    temp.widget:hide()
+    temp.widget:set_bg(temp.bg)
+    temp.widget:set_fg(temp.fg)
   end
 end
 
