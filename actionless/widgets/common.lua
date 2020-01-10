@@ -106,8 +106,8 @@ function common.widget(args)
       return
     end
     self.icon_widget:set_resize(image.height > beautiful.basic_panel_height)
-    local ratio = beautiful.basic_panel_height / image.height
-    self.icon_widget.forced_width = math.ceil(image.width * ratio)
+    --local ratio = beautiful.basic_panel_height / image.height
+    --self.icon_widget.forced_width = math.ceil(image.width * ratio)
     self.icon_widget:set_image(image)
   end
 
@@ -544,7 +544,7 @@ function common.text_progressbar(args)
   --local progress_margin_bottom = dpi(2)
   local progress_margin_bottom = dpi(1)
   local progress_height = dpi(3)
-  local progress_width = dpi(20)
+  local progress_width = beautiful.panel_widget_width or dpi(20)
   local progress_border_radius = beautiful.panel_widget_border_radius * (
      progress_height / beautiful.basic_panel_height
   ) * 2
@@ -577,16 +577,21 @@ function common.text_progressbar(args)
         {
           nil,
           {
-              id = "imagebox",
-              widget = wibox.widget.imagebox,
-          },
-          {
-              id = "textbox",
-              widget = wibox.widget.textbox,
+            {
+                id = "imagebox",
+                widget = wibox.widget.imagebox,
+            },
+            {
+                id = "textbox",
+                widget = wibox.widget.textbox,
+            },
+            id = "t3",
+            layout = wibox.layout.fixed.horizontal,
           },
           nil,
           id = "t2",
           layout = wibox.layout.align.horizontal,
+          expand = 'none',
         },
         id = "t1",
         left  = text_margin_left,
@@ -603,7 +608,7 @@ function common.text_progressbar(args)
     layout = wibox.container.margin,
   }
 
-  widget.textbox = widget.w1.t1.t2.textbox
+  widget.textbox = widget.w1.t1.t2.t3.textbox
   widget.progressbar = widget.w1.p1.progressbar
 
   local show_icon = args.show_icon
@@ -611,7 +616,7 @@ function common.text_progressbar(args)
     show_icon = beautiful.show_widget_icon
   end
   if show_icon then
-    widget.icon_widget = widget.w1.t1.t2.imagebox
+    widget.icon_widget = widget.w1.t1.t2.t3.imagebox
   end
 
   function widget:set_image(image)
@@ -623,8 +628,8 @@ function common.text_progressbar(args)
       return
     end
     widget.icon_widget:set_resize(image.height > beautiful.basic_panel_height)
-    local ratio = beautiful.basic_panel_height / image.height
-    self.icon_widget.forced_width = math.ceil(image.width * ratio)
+    --local ratio = beautiful.basic_panel_height / image.height
+    --self.icon_widget.forced_width = math.ceil(image.width * ratio)
     self.icon_widget:set_image(image)
   end
 
