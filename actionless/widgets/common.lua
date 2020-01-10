@@ -81,7 +81,9 @@ function common.widget(args)
     widget_bg.icon_widget = wibox.widget.imagebox()
     --widget_bg.icon_widget.resize = beautiful.xresources.get_dpi() > 96
     --widget_bg.icon_widget.resize = false
-    widget_bg.lie_layout:add(widget_bg.icon_widget)
+    local vert_center = wibox.layout.align.vertical(nil, widget_bg.icon_widget, nil)
+    vert_center.expand = "none"
+    widget_bg.lie_layout:add(vert_center)
   end
   widget_bg.text_widget = wibox.widget.textbox('')
   widget_bg.lie_layout:add(widget_bg.text_widget)
@@ -578,8 +580,15 @@ function common.text_progressbar(args)
           nil,
           {
             {
-                id = "imagebox",
-                widget = wibox.widget.imagebox,
+              nil,
+              {
+                  id = "imagebox",
+                  widget = wibox.widget.imagebox,
+              },
+              nil,
+              id = "t4",
+              layout = wibox.layout.align.vertical,
+              expand = 'none',
             },
             {
                 id = "textbox",
@@ -616,7 +625,7 @@ function common.text_progressbar(args)
     show_icon = beautiful.show_widget_icon
   end
   if show_icon then
-    widget.icon_widget = widget.w1.t1.t2.t3.imagebox
+    widget.icon_widget = widget.w1.t1.t2.t3.t4.imagebox
   end
 
   function widget:set_image(image)
