@@ -13,6 +13,7 @@ local parse = require("actionless.util.parse")
 local function create(name, args)
   args = args or {}
   local cmd = args.cmd or name
+  local seek = args.seek or false
 
   local dbus_cmd = "qdbus org.mpris.MediaPlayer2."..name.." "
 
@@ -36,6 +37,7 @@ local function create(name, args)
   function backend.prev_song()
     awful.spawn.with_shell(dbus_cmd .. "/org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous")
   end
+
   -------------------------------------------------------------------------------
   function backend.update(parse_status_callback)
     awful.spawn.easy_async(
@@ -43,6 +45,7 @@ local function create(name, args)
       function(str) backend._post_update(str, parse_status_callback) end
     )
   end
+
   -------------------------------------------------------------------------------
   function backend._post_update(result_string, parse_status_callback)
     backend.player_status = {}
@@ -62,6 +65,7 @@ local function create(name, args)
       parse_status_callback(backend.player_status)
     end
   end
+
   -------------------------------------------------------------------------------
   function backend.parse_metadata(result_string, parse_status_callback)
     local player_status = parse.find_values_in_string(
@@ -78,6 +82,7 @@ local function create(name, args)
     h_table.merge(backend.player_status, player_status)
     parse_status_callback(backend.player_status)
   end
+
   -------------------------------------------------------------------------------
   function backend.resize_cover(
     player_status, _, output_coverart_path, notification_callback
@@ -92,6 +97,16 @@ local function create(name, args)
     })
   end
 
+  -------------------------------------------------------------------------------
+  if seek then
+    function backend.seek()
+      awful.spawn.with_shell(
+        backend.dbus_prefix .. "/org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Seek "..tostring(seek*1000000)
+      )
+    end
+  end
+
+  -------------------------------------------------------------------------------
   return backend
 end
 

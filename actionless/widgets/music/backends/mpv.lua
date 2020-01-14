@@ -5,4 +5,4 @@
 
 local mpris_creator = require("actionless.widgets.music.mpris_creator")
 
-return mpris_creator('mpv')
+return mpris_creator('mpv', {seek=30})
