@@ -91,7 +91,7 @@ function player.init(args)
     index = index or 1
     backend_id = backend_id + index
     if backend_id > #enabled_backends then backend_id = 1 end
-    if backend_id > #cached_backends then
+    if not cached_backends[backend_id] then
       cached_backends[backend_id] = backend_modules[enabled_backends[backend_id]]
       if cached_backends[backend_id].init then cached_backends[backend_id].init(player) end
     end
