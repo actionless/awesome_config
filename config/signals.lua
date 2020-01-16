@@ -267,6 +267,13 @@ function signals.init(_)
     end)
   end)
 
+  -- when clients dissapears let's update all tags where it was before:
+  client.connect_signal("unmanage", function(c)
+      for _, t in ipairs(c.screen.selected_tags) do
+        on_tag_signal(t)
+      end
+  end)
+
   -- Other client callbacks:
 
   client.connect_signal("focus", function(c)
