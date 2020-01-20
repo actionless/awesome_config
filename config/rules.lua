@@ -84,6 +84,13 @@ function rules.init(awesome_context)
         }
       },
 
+      { rule = { class = "Gradio" },
+        properties = {
+          tag=capi.screen.primary.tags[7],
+          raise=false
+        }
+      },
+
       { rule = { class = "Transmission-gtk"},
         properties = {
           tag=capi.screen.primary.tags[6],
