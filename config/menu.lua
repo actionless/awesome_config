@@ -4,6 +4,7 @@ local hotkeys_popup = require("awful.hotkeys_popup").widget
 local awesome_menubar = require("menubar")
 local beautiful = require("beautiful")
 local gfs = require("gears.filesystem")
+local gears_timer = require("gears.timer")
 
 
 local menugen = require("actionless.util.menugen")
@@ -62,38 +63,71 @@ local function get_icon(category, name)
   end
 end
 
-
 -- Menu
 -- Create a laucher widget and a main menu
 function menus.init(context)
   local term = awesome_menubar.utils.terminal .. " -e "
 
-  local function kill_everybody()
+  local kill_timer
+
+  local function cancel_kill()
+    if kill_timer then
+      kill_timer:stop()
+      kill_timer = nil
+    end
+  end
+
+  local function kill_everybody(callback)
+    cancel_kill()
+
     for si=1,screen.count() do
       local s = screen[si]
       for _, c in ipairs(s.all_clients) do
         c:kill()
       end
     end
+
+    local clients_remains = 0
+    for si=1,screen.count() do
+      local s = screen[si]
+      for _, _ in ipairs(s.all_clients) do
+        clients_remains = clients_remains + 1
+      end
+    end
+    if clients_remains == 0 then
+      if callback then
+        callback()
+      end
+    else
+      nlog("there are "..tostring(clients_remains).." clients are still running")
+      if not kill_timer then
+        kill_timer = gears_timer({
+          callback=function() kill_everybody(callback) end,
+          timeout=3,
+          autostart=true,
+          call_now=false,
+        })
+      end
+    end
   end
 
-  local function logout()
-    kill_everybody()
-    --awful_spawn('mate-session-save --gui --logout-dialog')
-    awful_spawn('qdbus --literal org.gnome.SessionManager /org/gnome/SessionManager org.gnome.SessionManager.Logout 1')
-  end
+  --local function session_logout()
+  --  kill_everybody()
+  --  --awful_spawn('mate-session-save --gui --logout-dialog')
+  --  awful_spawn('qdbus --literal org.gnome.SessionManager /org/gnome/SessionManager org.gnome.SessionManager.Logout 1')
+  --end
 
-  local function poweroff()
-    kill_everybody()
-    --awful_spawn('mate-session-save --gui --shutdown-dialog')
-    awful_spawn('qdbus org.gnome.SessionManager /org/gnome/SessionManager org.gnome.SessionManager.RequestShutdown')
-  end
+  --local function session_poweroff()
+  --  kill_everybody()
+  --  --awful_spawn('mate-session-save --gui --shutdown-dialog')
+  --  awful_spawn('qdbus org.gnome.SessionManager /org/gnome/SessionManager org.gnome.SessionManager.RequestShutdown')
+  --end
 
-  local function reboot()
-    kill_everybody()
-    --awful_spawn('mate-session-save --gui --shutdown-dialog')
-    awful_spawn('qdbus org.gnome.SessionManager /org/gnome/SessionManager org.gnome.SessionManager.RequestReboot')
-  end
+  --local function session_reboot()
+  --  kill_everybody()
+  --  --awful_spawn('mate-session-save --gui --shutdown-dialog')
+  --  awful_spawn('qdbus org.gnome.SessionManager /org/gnome/SessionManager org.gnome.SessionManager.RequestReboot')
+  --end
 
 
   local myawesomemenu = {
@@ -102,15 +136,33 @@ function menus.init(context)
     { "edit config", context.cmds.editor_cmd .. " " .. awesome.conffile },
     { "reload", awesome.restart },
 
+    { "reboot", function()
+      kill_everybody(function()
+        awful_spawn("reboot")
+      end)
+    end, get_icon('actions', 'view-refresh') },
+    { "poweroff", function()
+      kill_everybody(function()
+        awful_spawn("poweroff")
+      end)
+    end, get_icon('actions', 'system-shutdown') },
+
     -- Without X Session Manager:
-    --{ "quit", function() awesome.quit() end},
-    --{ "quit2 (toggle argb)", function() awesome.quit(2) end},
-    --{ "quit3 (openbox)", function() awesome.quit(3) end},
+    { "quit", function()
+      awesome.quit()
+    end},
+    { "quit2 (toggle argb)", function()
+      awesome.quit(2)
+    end},
+    { "quit3 (openbox)", function()
+      awesome.quit(3)
+    end},
+    { "cancel quit", cancel_kill},
 
     -- With X Session Manager:
-    { "logout", logout, get_icon('actions', 'system-log-out') },
-    { "reboot", reboot, get_icon('actions', 'view-refresh') },
-    { "poweroff", poweroff, get_icon('actions', 'system-shutdown') },
+    --{ "logout", session_logout, get_icon('actions', 'system-log-out') },
+    --{ "reboot", session_reboot, get_icon('actions', 'view-refresh') },
+    --{ "poweroff", session_poweroff, get_icon('actions', 'system-shutdown') },
   }
 
   local function app(display_name, name, icon_name)
