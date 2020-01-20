@@ -244,7 +244,7 @@ function signals.init(_)
                     "size_hints_honor",
                     "raise",
                   }) do
-                    if rule.properties[prop] then
+                    if rule.properties[prop] ~= nil then
                       mini_properties[prop] = rule.properties[prop]
                     end
                   end
