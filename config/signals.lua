@@ -1,6 +1,7 @@
 local awful = require("awful")
 local beautiful = require("beautiful")
 local delayed_call = require("gears.timer").delayed_call
+local g_table = require("gears.table")
 
 local titlebar	= require("actionless.titlebar")
 local persistent = require("actionless.persistent")
@@ -236,13 +237,20 @@ function signals.init(_)
               if rule.apply_on_restart then
                   awful.rules.execute(c, rule.properties, { rule.callback })
               else
-                  local mini_properties = {
-                    buttons = rule.properties.buttons,
-                    keys = rule.properties.keys,
-                    size_hints_honor = rule.properties.size_hints_honor,
-                    raise = rule.properties.raise,
-                  }
+                  local mini_properties = {}
+                  for _, prop in ipairs({
+                    "buttons",
+                    "keys",
+                    "size_hints_honor",
+                    "raise",
+                  }) do
+                    if rule.properties[prop] then
+                      mini_properties[prop] = rule.properties[prop]
+                    end
+                  end
+                if #(g_table.keys(mini_properties)) > 0 then
                   awful.rules.execute(c, mini_properties, { })
+                end
               end
           end
       else
