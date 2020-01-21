@@ -103,7 +103,7 @@ function menus.init(context)
       if not kill_timer then
         kill_timer = gears_timer({
           callback=function() kill_everybody(callback) end,
-          timeout=3,
+          timeout=1,
           autostart=true,
           call_now=false,
         })
