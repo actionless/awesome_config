@@ -636,9 +636,13 @@ function common.text_progressbar(args)
     if not image then
       return
     end
-    widget.icon_widget:set_resize(image.height > beautiful.basic_panel_height)
-    --local ratio = beautiful.basic_panel_height / image.height
-    --self.icon_widget.forced_width = math.ceil(image.width * ratio)
+    local need_resize = image.height > beautiful.basic_panel_height
+    widget.icon_widget:set_resize(need_resize)
+    if need_resize then
+      --local ratio = beautiful.basic_panel_height / image.height
+      --self.icon_widget.forced_width = math.ceil(image.width * ratio)
+      self.icon_widget.forced_height = math.ceil(beautiful.basic_panel_height)
+    end
     self.icon_widget:set_image(image)
   end
 
