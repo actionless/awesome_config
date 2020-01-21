@@ -19,14 +19,23 @@ local updates = {}
 
 
 function updates.show_notification()
-  updates.notification = naughty.notify({
-    title = "updates available:",
-    text = h_string.rstrip(updates.updates),
-    font = beautiful.mono_font,
-    replaces_id = updates.notification and updates.notification.id,
-    position = beautiful.widget_notification_position,
-    timeout=0,
-  })
+  if updates.updates then
+    updates.notification = naughty.notify({
+      title = "updates available:",
+      text = h_string.rstrip(updates.updates),
+      font = beautiful.mono_font,
+      replaces_id = updates.notification and updates.notification.id,
+      position = beautiful.widget_notification_position,
+      timeout=0,
+    })
+  else
+    updates.notification = naughty.notify({
+      title = "no updates",
+      replaces_id = updates.notification and updates.notification.id,
+      position = beautiful.widget_notification_position,
+      timeout=0,
+    })
+  end
 end
 
 
