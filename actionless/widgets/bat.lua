@@ -6,6 +6,7 @@
 local awful		= require("awful")
 local beautiful		= require("beautiful")
 local gears_timer = require("gears.timer")
+local dpi = beautiful.xresources.apply_dpi
 
 local h_string 		= require("actionless.util.string")
 local parse 		= require("actionless.util.parse")
@@ -15,6 +16,7 @@ local common_widget	= require("actionless.widgets.common").decorated
 
 local function worker(args)
   args = args or {}
+  args.margin = args.margin or {left = dpi(3), right=dpi(5)}
   local update_interval = args.update_interval or 30
   local device = args.device or "battery_BAT0"
   local bg = args.bg or beautiful.panel_fg or beautiful.fg
@@ -38,7 +40,7 @@ local function worker(args)
   ))
 
   local function update_widget_data()
-    local widget_text = string.format(" %-2s%% ", bat.now.percentage)
+    local widget_text = string.format("%-2s%%", bat.now.percentage)
     -- charged:
     if bat.now.state == 'fully-charged' then
       if beautiful.widget_ac then
