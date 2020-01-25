@@ -112,7 +112,7 @@ function widget_loader.init(awesome_context)
       update_interval = 30,
       bg = beautiful.widget_bat_bg,
       fg = beautiful.widget_bat_fg,
-      show_when_charged=false,
+      show_when_charged=awesome_context.config.bat_show_when_charged or false,
     })
   end
   -- Arch updates
