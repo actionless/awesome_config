@@ -537,8 +537,8 @@ function common.text_progressbar(args)
   local progress_border_color = args.progress_border_color
     or beautiful.panel_widget_progress_border_color or progress_bg
 
-  local widget_margin_left = beautiful.panel_widget_spacing
-  local widget_margin_right = beautiful.panel_widget_spacing
+  local widget_margin_left = beautiful.panel_widget_spacing or dpi(3)
+  local widget_margin_right = beautiful.panel_widget_spacing or dpi(3)
 
   local text_margin_left = dpi(4)
   local text_margin_right = dpi(4)
