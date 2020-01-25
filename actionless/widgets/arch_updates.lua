@@ -5,6 +5,7 @@
 local beautiful = require("beautiful")
 local awful = require("awful")
 local gears_timer = require("gears.timer")
+local g_string = require("gears.string")
 local naughty = require("naughty")
 
 local parse = require("actionless.util.parse")
@@ -64,17 +65,24 @@ end
 
 function updates._check_updates_callback(updates_str)
   updates_str = h_string.strip(updates_str)
-  updates.updates = updates_str
-    :gsub(" +", " ")
-    :gsub("^%s", "")
-    :gsub("\n%s", "\n")
-    :gsub('->', markup.fg.color(beautiful.notification_border_color, '->'))
-  local updates_found = #(parse.string_to_lines(updates_str))
-  if updates_found > 0 then
-    updates.widget:show()
-    updates.widget:set_text(string.format("%i ", updates_found))
+  if g_string.startswith(updates_str, "Do you want to retry") then
+      updates.widget:set_error()
+      updates.widget:set_text('x ')
+      updates.widget:show()
   else
-    updates.widget:hide()
+    updates.updates = updates_str
+      :gsub(" +", " ")
+      :gsub("^%s", "")
+      :gsub("\n%s", "\n")
+      :gsub('->', markup.fg.color(beautiful.notification_border_color, '->'))
+    local updates_found = #(parse.string_to_lines(updates_str))
+    if updates_found > 0 then
+      updates.widget:set_normal()
+      updates.widget:set_text(string.format("%i ", updates_found))
+      updates.widget:show()
+    else
+      updates.widget:hide()
+    end
   end
 end
 
