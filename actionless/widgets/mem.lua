@@ -139,10 +139,10 @@ function mem.update()
       "%6s swp:%s", mem.now.used .. "MB", mem.now.swapused .. "MB"
     )
     mem.widget:set_error()
-    widget_icon = beautiful.widget_mem
+    widget_icon = beautiful.widget_mem_critical
   elseif mem.now.used > mem.now.total * 0.8 then
     mem.widget:set_warning()
-    widget_icon = beautiful.widget_mem
+    widget_icon = beautiful.widget_mem_high
   else
     mem.widget:set_normal()
     msg = mem.widget_text

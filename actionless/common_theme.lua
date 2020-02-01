@@ -217,9 +217,12 @@ function common_theme.create_default_theme(theme_dir, icons_dir)
   theme.widget_battery_low	= icons_dir .. "battery_low.png"
   theme.widget_battery_empty	= icons_dir .. "battery_empty.png"
 
-  theme.widget_mem		= icons_dir .. "mem.png"
   theme.widget_hdd		= icons_dir .. "hdd.png"
   theme.widget_updates		= icons_dir .. "updates.png"
+
+  theme.widget_mem		= icons_dir .. "mem.png"
+  theme.widget_mem_high		= icons_dir .. "mem_high.png"
+  theme.widget_mem_critical	= icons_dir .. "mem_critical.png"
 
   theme.widget_cpu		= icons_dir .. "cpu.png"
   theme.widget_cpu_high		= icons_dir .. "cpu_high.png"
