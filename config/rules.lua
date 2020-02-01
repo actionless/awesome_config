@@ -91,6 +91,11 @@ function rules.init(awesome_context)
         }
       },
 
+      { rule = { class = "Tixati"},
+        properties = {
+          tag=capi.screen.primary.tags[6],
+      }, },
+
       { rule = { class = "Transmission-gtk"},
         properties = {
           tag=capi.screen.primary.tags[6],
