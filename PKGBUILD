@@ -19,7 +19,6 @@ depends=(
 	'awesome'
 	'bash'
 	'coreutils'
-	'qt5-tools'  # for qdbus (music widget, shutdown menu)
 
 	'imagemagick'  # music widget (album cover)
 	'lm_sensors'  # temperature widget
