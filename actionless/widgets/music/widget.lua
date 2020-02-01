@@ -270,7 +270,11 @@ function player.init(args)
 function player.resize_cover()
   local notification_callback
   if player.enable_notifications or (player.notification_object and player.notification_object.box.visible) then
-    notification_callback = player.show_notification
+    notification_callback = function(...)
+      if player.enable_notifications or (player.notification_object and player.notification_object.box.visible) then
+        player.show_notification(...)
+      end
+    end
   end
   -- backend supports it:
   if player.backend.resize_cover then
@@ -283,7 +287,9 @@ function player.resize_cover()
   if not player.player_status.cover then
     player.player_status.cover = default_art
   end
-  notification_callback()
+  if notification_callback then
+    notification_callback()
+  end
 end
 -------------------------------------------------------------------------------
   player.use_next_backend(0)
