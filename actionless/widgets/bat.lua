@@ -22,7 +22,6 @@ local function worker(args)
   local bg = args.bg or beautiful.panel_fg or beautiful.fg
   local fg = args.fg or beautiful.panel_bg or beautiful.bg
   local show_when_charged = args.show_when_charged or false
-
   local exec = args.exec or "xfce4-power-manager-settings"
 
   local bat = {
@@ -38,6 +37,9 @@ local function worker(args)
       awful.spawn.with_shell(exec)
     end)
   ))
+  if beautiful.widget_ac then
+    bat.widget:set_image(beautiful.widget_ac)
+  end
 
   local function update_widget_data()
     local widget_text = string.format("%-2s%%", bat.now.percentage)
