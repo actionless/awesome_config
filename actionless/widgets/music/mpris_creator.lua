@@ -4,9 +4,9 @@
 --]]
 
 local dbus = dbus -- luacheck: ignore
-local awful = require("awful")
 local Gio = require("lgi").Gio
 local GLib = require("lgi").GLib
+local a_image = require("actionless.util.async_web_image")
 
 local dbus_connection = assert(Gio.bus_get_sync(Gio.BusType.SESSION))
 local default_parameters = GLib.Variant('()', {})
@@ -27,8 +27,9 @@ local function create(name, args)
     player_cmd = cmd,
   }
 
-  --function backend.init(_widget)
-  --end
+  function backend.init(widget)
+    backend.player = widget
+  end
   -------------------------------------------------------------------------------
   local function dbus_call(action, dbus_args)
     dbus_args = dbus_args or {}
@@ -140,14 +141,16 @@ local function create(name, args)
   function backend.resize_cover(
     player_status, _, output_coverart_path, notification_callback
   )
-    awful.spawn.with_line_callback(
-      string.format(
-        "curl -L -s %s -o %s",
+    if player_status.cover_url and (
+      player_status.cover_url ~= backend.player.last_cover_url
+    ) then
+      a_image.save_image_async(
         player_status.cover_url,
-        output_coverart_path
-      ),{
-      exit=notification_callback
-    })
+        output_coverart_path,
+        notification_callback
+      )
+    end
+    backend.player.last_cover_url = player_status.cover_url
   end
 
   -------------------------------------------------------------------------------

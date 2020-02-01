@@ -20,7 +20,6 @@ depends=(
 	'bash'
 	'coreutils'
 
-	'imagemagick'  # music widget (album cover)
 	'lm_sensors'  # temperature widget
 	'jq'  # temperature widget
 	'procps-ng'  # mem and cpu widgets
@@ -35,12 +34,14 @@ depends=(
 
 	'xsettingsd'  # or use lxsettings-daemon from lxsession
 	#'lxsession-gtk3' # or 'lxsession'  # needed for lxpolkit
-	'mate-session-manager'
-	'mate-polkit'
 )
 optdepends=(
+	'mate-session-manager: mate session'
+	'mate-polkit: mate session'
+
 	#'gnome-settings-daemon: rc: alternative to xsettingsd'
 	#'gnome-session: rc: alternative to lxsession to acompany gnome-settings-daemon'
+
 	'gnome-keyring: config/autorun'
 	'gpaste: config/autorun'
 	'pavucontrol: apw: default mixer'

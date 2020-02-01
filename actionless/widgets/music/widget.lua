@@ -276,20 +276,10 @@ function player.resize_cover()
     )
   end
   -- fallback:
-  local resize = string.format('%sx%s', cover_size, cover_size)
   if not player.player_status.cover then
     player.player_status.cover = default_art
   end
-  awful.spawn.with_line_callback(
-    string.format(
-      [[convert %q -thumbnail %q -gravity center -background "none" -extent %q %q]],
-      player.player_status.cover,
-      resize,
-      resize,
-      player.cover
-    ), {
-    output_done=notification_callback
-  })
+  notification_callback()
 end
 -------------------------------------------------------------------------------
   player.use_next_backend(0)

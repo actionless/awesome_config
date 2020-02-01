@@ -1,4 +1,5 @@
 local utils = {
+  async_web_image = require("actionless.util.async_web_image"),
   color = require("actionless.util.color"),
   db = require("actionless.util.db"),
   debug = require("actionless.util.debug"),
