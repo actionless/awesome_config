@@ -133,19 +133,26 @@ function mem.update()
   local msg = string.format(
     "%6s", mem.now.used .. "MB"
   )
+  local widget_icon
   if (mem.now.used > mem.now.total * 0.9) or (mem.now.swapused > mem.now.swap * 0.8) then
     msg = string.format(
       "%6s swp:%s", mem.now.used .. "MB", mem.now.swapused .. "MB"
     )
     mem.widget:set_error()
+    widget_icon = beautiful.widget_mem
   elseif mem.now.used > mem.now.total * 0.8 then
     mem.widget:set_warning()
+    widget_icon = beautiful.widget_mem
   else
     mem.widget:set_normal()
     msg = mem.widget_text
+    widget_icon = beautiful.widget_mem
   end
-  mem.widget.textbox:set_text(msg)
+  mem.widget:set_text(msg)
   mem.widget.progressbar:set_value(mem.now.used/mem.now.total)
+  if widget_icon then
+    mem.widget:set_image(widget_icon)
+  end
 end
 
 
@@ -158,14 +165,10 @@ function mem.init(args)
 
   local widget = common_widgets.text_progressbar(args)
   mem.widget = common_widgets.decorated{widget=widget}
-  mem.widget.textbox = widget.textbox
   mem.widget.progressbar = widget.progressbar
 
   if beautiful.show_widget_icon then
     mem.widget_text = args.text or ''
-  end
-  if beautiful.widget_mem then
-    mem.widget:set_image(beautiful.widget_mem)
   end
 
   mem.widget:connect_signal(

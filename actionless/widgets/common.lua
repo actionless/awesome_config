@@ -629,6 +629,12 @@ function common.text_progressbar(args)
   end
 
   function widget:set_image(image)
+    if (image == self.old_image) and (self.textbox.text == self.old_text) then
+      return
+    end
+    widget.old_image = image
+    widget.old_text = self.textbox.text
+
     if not self.icon_widget then
       return
     end
@@ -639,11 +645,20 @@ function common.text_progressbar(args)
     local need_resize = image.height > beautiful.basic_panel_height
     widget.icon_widget:set_resize(need_resize)
     if need_resize then
-      --local ratio = beautiful.basic_panel_height / image.height
-      --self.icon_widget.forced_width = math.ceil(image.width * ratio)
+      if self.textbox.text and self.textbox.text ~= '' then
+        local ratio = beautiful.basic_panel_height / image.height
+        self.icon_widget.forced_width = math.ceil(image.width * ratio)
+      else
+        self.icon_widget.forced_width = nil
+      end
       self.icon_widget.forced_height = math.ceil(beautiful.basic_panel_height)
     end
     self.icon_widget:set_image(image)
+  end
+
+  function widget:set_text(text)
+    self.textbox:set_text(text)
+    self:set_image(self.old_image)
   end
 
   return widget

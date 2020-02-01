@@ -140,25 +140,23 @@ function cpu.update()
   local msg = string.format(
     "%-4s", cpu.now.la1
   )
+  local widget_icon
   if tonumber(cpu.now.la1) > cpu.cores_number * 2 then
     cpu.widget:set_error()
-    if beautiful.widget_cpu_critical then
-      cpu.widget:set_image(beautiful.widget_cpu_critical)
-    end
+    widget_icon = beautiful.widget_cpu_critical
   elseif tonumber(cpu.now.la1) > cpu.cores_number then
     cpu.widget:set_warning()
-    if beautiful.widget_cpu_high then
-      cpu.widget:set_image(beautiful.widget_cpu_high)
-    end
+    widget_icon = beautiful.widget_cpu_high
   else
     cpu.widget:set_normal()
     msg = cpu.widget_text
-    if beautiful.widget_cpu then
-      cpu.widget:set_image(beautiful.widget_cpu)
-    end
+    widget_icon = beautiful.widget_cpu
   end
-  cpu.widget.textbox:set_text(msg)
+  cpu.widget:set_text(msg)
   cpu.widget.progressbar:set_value(cpu.now.la1/cpu.cores_number)
+  if widget_icon then
+    cpu.widget:set_image(widget_icon)
+  end
 end
 
 function cpu.init(args)
@@ -172,7 +170,6 @@ function cpu.init(args)
 
   local widget = common_widgets.text_progressbar(args)
   cpu.widget = common_widgets.decorated{widget=widget}
-  cpu.widget.textbox = widget.textbox
   cpu.widget.progressbar = widget.progressbar
 
   if beautiful.show_widget_icon then
