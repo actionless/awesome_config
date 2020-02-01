@@ -139,7 +139,7 @@ function player.init(args)
       text = enabled_backends[backend_id]
     end
     player.notification_object = naughty.notify({
-      icon = player.cover,
+      icon = ps.cover_url and player.cover or nil,
       title = ps.title,
       text = text,
       timeout = timeout,
