@@ -658,7 +658,9 @@ function common.text_progressbar(args)
 
   function widget:set_text(text)
     self.textbox:set_text(text)
-    self:set_image(self.old_image)
+    if self.old_image then
+      self:set_image(self.old_image)
+    end
   end
 
   return widget
