@@ -261,6 +261,10 @@ function player.init(args)
           or artist
     )
     player.title_widget:set_markup(title)
+
+    if player.notification_object and player.notification_object.box.visible then
+      player.show_notification()
+    end
   end
 -------------------------------------------------------------------------------
 function player.resize_cover()
