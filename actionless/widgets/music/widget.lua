@@ -30,7 +30,9 @@ local player = {
     date=nil,
     file=nil
   },
-  cover="/tmp/awesome_cover.png"
+  old_player_status = {},
+  cover="/tmp/awesome_cover.png",
+  keys = {'state', 'artist', 'title', 'album', 'cover_art', 'file', 'date'},
 }
 
 
@@ -195,12 +197,24 @@ function player.init(args)
   ))
 -------------------------------------------------------------------------------
   function player.update()
+    for _, key in ipairs(player.keys) do
+      player.old_player_status[key] = player.player_status[key]
+    end
     player.backend.update(function(player_status)
         player.parse_status(player_status)
     end)
   end
 -------------------------------------------------------------------------------
   function player.parse_status(player_status)
+    local status_updated = false
+    for _, key in ipairs(player.keys) do
+      if player.old_player_status[key] ~= player_status[key] then
+        status_updated = true
+        break
+      end
+    end
+    if not status_updated then return end
+
     local artist = ""
     local title = ""
     local old_title = player.player_status.title

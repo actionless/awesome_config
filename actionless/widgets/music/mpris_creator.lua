@@ -90,12 +90,11 @@ local function create(name, args)
   -------------------------------------------------------------------------------
   function backend._post_update(result, parse_status_callback)
     if not result then
-      parse_status_callback(backend.player_status)
+      parse_status_callback({})
       return
     end
 
     local result_string = result[1].PlaybackStatus
-    backend.player_status = {}
     local state = nil
     if result_string:match("Playing") then
       state  = 'play'
