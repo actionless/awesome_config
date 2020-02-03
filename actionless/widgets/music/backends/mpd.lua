@@ -81,7 +81,7 @@ function mpd.parse_metadata(result_string, parse_status_callback)
   parse_status_callback(player_status)
 end
 -------------------------------------------------------------------------------
-function mpd.resize_cover(
+function mpd.get_coverart(
   player_status, cover_size, default_art, notification_callback
 )
   if notification_callback then

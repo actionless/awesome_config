@@ -137,7 +137,7 @@ local function create(name, args)
   end
 
   -------------------------------------------------------------------------------
-  function backend.resize_cover(
+  function backend.get_coverart(
     player_status, _, output_coverart_path, notification_callback
   )
     if player_status.cover_url and (

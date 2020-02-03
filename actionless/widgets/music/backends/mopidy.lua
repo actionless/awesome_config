@@ -86,7 +86,7 @@ function mopidy.parse_metadata(result_string, parse_status_callback)
   parse_status_callback(player_status)
 end
 
-function mopidy.resize_cover(_, _, _, notification_callback)
+function mopidy.get_coverart(_, _, _, notification_callback)
   if notification_callback then
     return notification_callback()
   end

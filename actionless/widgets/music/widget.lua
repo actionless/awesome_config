@@ -88,7 +88,7 @@ function player.init(args)
       * .update (parse_status_callback)
       optional:
       * .init(args)
-      * .resize_cover(coversize, default_art, show_notification_callback)
+      * .get_coverart(coversize, default_art, show_notification_callback)
   --]]
     index = index or 1
     backend_id = backend_id + index
@@ -237,7 +237,7 @@ function player.init(args)
       title = g_string.xml_escape(title)
       -- playing new song
       if player_status.title ~= old_title then
-        player.resize_cover()
+        player.get_coverart()
       end
     end
     if player_status.state == "play" then
@@ -281,7 +281,7 @@ function player.init(args)
     end
   end
 -------------------------------------------------------------------------------
-function player.resize_cover()
+function player.get_coverart()
   local notification_callback
   if player.enable_notifications or (player.notification_object and player.notification_object.box.visible) then
     notification_callback = function(...)
@@ -291,8 +291,8 @@ function player.resize_cover()
     end
   end
   -- backend supports it:
-  if player.backend.resize_cover then
-    return player.backend.resize_cover(
+  if player.backend.get_coverart then
+    return player.backend.get_coverart(
       player.player_status, cover_size, player.cover,
       notification_callback
     )
