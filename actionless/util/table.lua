@@ -14,12 +14,18 @@ function table_helpers.pack(...)
 end
 
 
+function table_helpers.keys(t)
+  local keys = {}
+  for k in pairs(t) do keys[#keys+1] = k end
+  return keys
+end
+
+
 function table_helpers.spairs(t, order)
 -- http://stackoverflow.com/a/15706820/1850190
 
     -- collect the keys
-    local keys = {}
-    for k in pairs(t) do keys[#keys+1] = k end
+    local keys = table_helpers.keys(t)
 
     -- if order function given, sort by it by passing the table and keys a, b,
     -- otherwise just sort the keys
@@ -43,8 +49,7 @@ function table_helpers.rpairs(t)
 -- http://stackoverflow.com/a/15706820/1850190
 
     -- collect the keys
-    local keys = {}
-    for k in pairs(t) do keys[#keys+1] = k end
+    local keys = table_helpers.keys(t)
 
     -- return the iterator function
     local i = #keys
