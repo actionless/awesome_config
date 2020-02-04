@@ -9,10 +9,6 @@ local gstring = require('gears.string')
 
 local string_helpers = {}
 
-function string_helpers.starts(String,Start)
-   return string.sub(String,1,string.len(Start))==Start
-end
-
 function string_helpers.ends(String,End)
    return End=='' or string.sub(String,-string.len(End))==End
 end

@@ -10,8 +10,8 @@ local wibox = require("wibox")
 local imagebox = require("wibox.widget.imagebox")
 local textbox = require("wibox.widget.textbox")
 local delayed_call = require("gears.timer").delayed_call
+local g_string = require('gears.string')
 
-local h_string = require("actionless.util.string")
 local tag_helpers = require("actionless.util.tag")
 
 --- Layoutbox widget "class".
@@ -131,8 +131,8 @@ local function create_widget(args)
             t = t or awful.screen.focused().selected_tag
             local num_tiled = #tag_helpers.get_tiled(t)
             if num_tiled > 1 then return end
-            if h_string.starts(self.layout_name, 'tile') or
-                h_string.starts(self.layout_name, 'corner')
+            if g_string.startswith(self.layout_name, 'tile') or
+                g_string.startswith(self.layout_name, 'corner')
             then
                 self.n_col.widget:set_markup(
                     self.mfpol_names[t.master_fill_policy]
