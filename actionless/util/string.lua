@@ -9,10 +9,6 @@ local gstring = require('gears.string')
 
 local string_helpers = {}
 
-function string_helpers.ends(String,End)
-   return End=='' or string.sub(String,-string.len(End))==End
-end
-
 function string_helpers.only_digits(str)
   if not str then return nil end
   return tonumber(str:match("%d+"))
@@ -60,7 +56,7 @@ function string_helpers.rstrip(str, chars)
 
     strip_needed = false
     for _, char in ipairs(chars) do
-      if string_helpers.ends(str, char) then
+      if gstring.endswith(str, char) then
         str = string.sub(str, 1, -2)
         strip_needed = true
         break
