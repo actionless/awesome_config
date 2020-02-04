@@ -6,7 +6,10 @@
 local dbus = dbus -- luacheck: ignore
 local Gio = require("lgi").Gio
 local GLib = require("lgi").GLib
+local g_string		= require("gears.string")
+
 local a_image = require("actionless.util.async_web_image")
+
 
 local dbus_connection = assert(Gio.bus_get_sync(Gio.BusType.SESSION))
 local default_parameters = GLib.Variant('()', {})
@@ -143,13 +146,21 @@ local function create(name, args)
     if player_status.cover_url and (
       player_status.cover_url ~= backend.player.last_cover_url
     ) then
-      a_image.save_image_async(
-        player_status.cover_url,
-        output_coverart_path,
-        notification_callback
-      )
+      backend.player.last_cover_url = player_status.cover_url
+      if g_string.startswith(player_status.cover_url, '/') or
+        g_string.startswith(player_status.cover_url, 'file://')
+      then
+        if notification_callback then
+          notification_callback()
+        end
+      else
+        a_image.save_image_async(
+          player_status.cover_url,
+          output_coverart_path,
+          notification_callback
+        )
+      end
     end
-    backend.player.last_cover_url = player_status.cover_url
   end
 
   -------------------------------------------------------------------------------
