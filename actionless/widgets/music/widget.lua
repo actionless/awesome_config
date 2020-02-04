@@ -31,7 +31,7 @@ local player = {
     file=nil
   },
   old_player_status = {},
-  cover="/tmp/awesome_cover.png",
+  coverart_file_path="/tmp/awesome_cover",
   keys = {'state', 'artist', 'title', 'album', 'cover_art', 'file', 'date'},
 }
 
@@ -40,7 +40,7 @@ function player.init(args)
   args = args or {}
   player.args = args
   local timeout = args.timeout or 5
-  local default_art = args.default_art or ""
+  local default_art = args.default_art
   local enabled_backends = args.backends
                            or { 'mpd', 'cmus', 'spotify', 'clementine', }
   local cover_size = args.cover_size or 100
@@ -99,6 +99,7 @@ function player.init(args)
     end
     player.backend = cached_backends[backend_id]
     player.cmd = args.player_cmd or player.backend.player_cmd
+    player.parse_status(player.player_status, player.backend, true)
     gears_timer({
       callback=player.update,
       timeout=20,
@@ -108,6 +109,10 @@ function player.init(args)
     db.set('widget_music_backend', backend_id)
   end
 
+-------------------------------------------------------------------------------
+  function player.get_coverart_path()
+    return player.coverart_file_path..'_'..enabled_backends[backend_id]..".png"
+  end
 -------------------------------------------------------------------------------
   function player.run_player()
     awful.spawn.with_shell(player.cmd)
@@ -140,8 +145,20 @@ function player.init(args)
     else
       text = enabled_backends[backend_id]
     end
+    local cover_url = ps.cover_url
+    if not cover_url then
+      cover_url = default_art
+    else
+      if g_string.startswith(cover_url, 'file://') then
+        cover_url = string.sub(cover_url, 8)
+      end
+      if not g_string.startswith(cover_url, '/') then
+        cover_url = player.get_coverart_path()
+      end
+    end
+
     player.notification_object = naughty.notify({
-      icon = ps.cover_url and player.cover or nil,
+      icon = cover_url,
       title = ps.title,
       text = text,
       timeout = timeout,
@@ -201,12 +218,13 @@ function player.init(args)
       player.old_player_status[key] = player.player_status[key]
     end
     player.backend.update(function(player_status)
-        player.parse_status(player_status)
+        player.parse_status(player_status, player.backend)
     end)
   end
 -------------------------------------------------------------------------------
-  function player.parse_status(player_status)
-    local status_updated = false
+  function player.parse_status(player_status, backend, force)
+    if backend ~= player.backend then return end
+    local status_updated = force or false
     for _, key in ipairs(player.keys) do
       if player.old_player_status[key] ~= player_status[key] then
         status_updated = true
@@ -283,24 +301,26 @@ function player.init(args)
 -------------------------------------------------------------------------------
 function player.get_coverart()
   local notification_callback
+  local current_backend = player.backend
   if player.enable_notifications or (player.notification_object and player.notification_object.box.visible) then
-    notification_callback = function(...)
-      if player.enable_notifications or (player.notification_object and player.notification_object.box.visible) then
-        player.show_notification(...)
+    notification_callback = function()
+      if player.enable_notifications or (
+        player.notification_object and player.notification_object.box.visible
+      ) and (
+        current_backend == player.backend
+      ) then
+        player.show_notification()
       end
     end
   end
   -- backend supports it:
   if player.backend.get_coverart then
     return player.backend.get_coverart(
-      player.player_status, cover_size, player.cover,
+      player.player_status, cover_size, player.get_coverart_path(),
       notification_callback
     )
   end
   -- fallback:
-  if not player.player_status.cover then
-    player.player_status.cover = default_art
-  end
   if notification_callback then
     notification_callback()
   end
