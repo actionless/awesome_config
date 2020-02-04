@@ -112,6 +112,7 @@ function string_helpers.multiline_limit(unicode_string, max_length) --char
   end
   return result
 end
+
 function string_helpers.multiline_limit_word(unicode_string, max_length)
   local words = string_helpers.split(unicode_string, ' ')
 
