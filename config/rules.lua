@@ -50,6 +50,7 @@ function rules.init(awesome_context)
         --callback = apply_delayed_rule,
         callback = function(c)
           --if not awesome_context.DEVEL_DYNAMIC_LAYOUTS then
+            c:deny("autoactivate", "mouse_enter")
             awful.client.setslave(c)
           --end
           apply_delayed_rule(c)
