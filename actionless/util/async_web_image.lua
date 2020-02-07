@@ -48,7 +48,7 @@ local function create_save_callback(filepath)
       end
       if surface then
           surface:write_to_png(filepath)
-          log("Got surface")
+          log("saved "..filepath)
       end
   end
   return my_callback
@@ -63,14 +63,15 @@ function module.save_image_async(url, filepath, callback)
     if #cache_keys > CACHE_SIZE then
       cache[cache_keys[cache_keys[1] ~= url and 1 or 2]] = nil
     end
-    return callback(cache[url], nil)
+    local surface = cache[url]
+    create_save_callback(filepath)(surface, nil)
+    return callback(surface, nil)
   end
   module.async_load_image(
     url,
     function(surface, err)
       log('savin '..url..' as '..filepath)
       create_save_callback(filepath)(surface, err)
-      log('saved '..url..' as '..filepath)
       cache[url] = surface
       if callback then
         callback(surface, err)
