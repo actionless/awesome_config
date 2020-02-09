@@ -116,6 +116,8 @@ local context = {
   before_config_loaded = {},
   after_config_loaded = {},
 
+  extra_global_keys = {},
+
 
   -- can't be overriden in local settings:
   widgets = {},

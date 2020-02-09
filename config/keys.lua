@@ -18,6 +18,7 @@ local tmux_swap_bydirection = require("actionless.util.tmux").swap_bydirection
 local wlppr = require("actionless.wlppr")
 local mpv = require("actionless.mpv")
 local kbd_helpers = require('actionless.keyboard')
+local h_table = require('actionless.util.table')
 
 
 local keys = {}
@@ -633,6 +634,9 @@ function keys.init(awesome_context)
     end
   end
 
+  globalkeys = awful.util.table.join(globalkeys,
+    h_table.unpack(awesome_context.extra_global_keys)
+  )
   -- Set keys
   capi.root.keys(globalkeys)
   -- }}}
