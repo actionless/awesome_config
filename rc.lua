@@ -113,8 +113,8 @@ local context = {
   autorun = {},
 
   -- place for custom callbacks:
-  before_config_loaded = nil,
-  after_config_loaded = nil,
+  before_config_loaded = {},
+  after_config_loaded = {},
 
 
   -- can't be overriden in local settings:
@@ -160,8 +160,8 @@ beautiful.init(context.theme_dir)
 
 -- Init config
 -------------------------------------------------------------------------------
-if context.before_config_loaded then
-  context.before_config_loaded()
+for _, callback in ipairs(context.before_config_loaded) do
+  callback()
 end
 local config = require("config")
 config.notify.init(context)
@@ -181,8 +181,8 @@ if persistent.lcarslist.get() then
   config.lcars_layout.init(context)
 end
 config.rules.init(context)
-if context.after_config_loaded then
-  context.after_config_loaded()
+for _, callback in ipairs(context.after_config_loaded) do
+  callback()
 end
 
 -- END

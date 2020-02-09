@@ -1,7 +1,8 @@
 local spawn = require("awful.spawn")
-local pgrep_run_once = require("actionless.util.spawn").run_once
 local run_once = spawn.once
 local with_shell = spawn.with_shell
+
+local pgrep_run_once = require("actionless.util.spawn").run_once
 
 
 local autorun = {}

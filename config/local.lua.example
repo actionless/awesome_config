@@ -24,8 +24,7 @@ function local_config.init(awesome_context)
   awesome_context.have_battery = false
   awesome_context.sensor = "temp1"
 
-
-  awesome_context.before_config_loaded = function()
+  awesome_context.before_config_loaded[#(awesome_context.before_config_loaded)+1] = function()
     -- size fixes for Fanstasque Sans Mono:
     local beautiful = require("beautiful")
     beautiful.font = "Monospace Bold 11"
@@ -36,9 +35,8 @@ function local_config.init(awesome_context)
     beautiful.sans_font = "Sans 11"
   end
 
-  awesome_context.after_config_loaded = function()
-  end
-
+  --awesome_context.after_config_loaded[#(awesome_context.after_config_loaded)+1] = function()
+  --end
 
   return awesome_context
 end
