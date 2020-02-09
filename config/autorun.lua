@@ -9,7 +9,7 @@ local autorun = {}
 
 function autorun.init(awesome_context)
 
-  with_shell('pgrep vmtoolsd >/dev/null && /usr/bin/vmware-user-suid-wrapper')
+  --with_shell('pgrep vmtoolsd >/dev/null && /usr/bin/vmware-user-suid-wrapper')
   --with_shell(os.getenv('HOME').."/.screenlayout/awesome.sh")
   --with_shell('xinput disable "ELAN Touchscreen"')
 
