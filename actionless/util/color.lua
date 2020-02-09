@@ -40,4 +40,20 @@ function color.is_dark(color_value)
     return is_dark_bg
 end
 
+function color.choose_contrast_color(reference, candidate1, candidate2)
+    if color.is_dark(reference) then
+        if not color.is_dark(candidate1) then
+            return candidate1
+        else
+            return candidate2
+        end
+    else
+        if color.is_dark(candidate1) then
+            return candidate1
+        else
+            return candidate2
+        end
+    end
+end
+
 return color

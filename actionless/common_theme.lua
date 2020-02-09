@@ -14,6 +14,7 @@ local h_string = require("actionless.util.string")
 
 local h_table = require("actionless.util.table")
 local h_parse = require("actionless.util.parse")
+local h_color = require("actionless.util.color")
 
 
 local common_theme = {}
@@ -331,12 +332,16 @@ function common_theme.create_theme(args)
     end
   end
 
-  return common_theme.fill_theme(
+  theme = common_theme.fill_theme(
     h_table.merge(
       common_theme.create_default_theme(theme_dir, icons_dir),
       theme
     )
   )
+  theme.fg_urgent = h_color.choose_contrast_color(
+    theme.bg_urgent, theme.fg, theme.bg
+  )
+  return theme
 end
 
 return common_theme
