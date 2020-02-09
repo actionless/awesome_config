@@ -10,7 +10,7 @@ INSTALL_NO_ARGB_SHORTCUTS=${NOARGB:-n}
 pkgname=actionless_awesome_config_meta
 conflicts=(awesome_config_actionless_meta)
 pkgver=0.2
-pkgrel=1
+pkgrel=2
 pkgdesc="Awesome config dependencies"
 arch=('x86_64' 'i686')
 url="https://github.com/actionless/awesome_config"
@@ -42,21 +42,23 @@ optdepends=(
 	#'gnome-settings-daemon: rc: alternative to xsettingsd'
 	#'gnome-session: rc: alternative to lxsession to acompany gnome-settings-daemon'
 
-	'gnome-keyring: config/autorun'
-	'gpaste: config/autorun'
 	'pavucontrol: apw: default mixer'
-	'pulseaudio: config/autorun'
-	'kbdd-git: config/autorun: per-window keyboard layout'
 	'plotinus: Ctrl+Shift+P menu in GTK+3 applications'
 	'qt5ct: qt5 theme'
+	'nemo: default file manager'
+	'nitrogen: default wallpaper manager'
+	'gnome-system-monitor: default action when click on cpu/mem widgets'
+
+	'gnome-keyring: config/autorun'
+	'gpaste: config/autorun'
+	'pulseaudio: config/autorun'
+	'kbdd-git: config/autorun: per-window keyboard layout'
 	#'unclutter: config/autorun: hide mouse pointer'
 	'unclutter-xfixes-git: config/autorun: hide mouse pointer'
 	'xfce4-power-manager: config/autorun,actionless/widgets/bat'
 	'xorg-xinput: config/autorun: configure trackball'
 	'xscreensaver: config/autorun,config/keys'
-	'nemo: default file manager'
-	'nitrogen: default wallpaper manager'
-	'gnome-system-monitor: default action when click on cpu/mem widgets'
+	'autolight: config/autorun: laptop: adaptive brightness'
 )
 
 package() {
