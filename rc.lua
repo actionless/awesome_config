@@ -74,7 +74,7 @@ local context = {
     eth_if = 'enp0s25',
     music_players = { 'spotify', 'clementine' },
   },
-  -- @TODO: move to 'widget_config'
+  -- @TODO: move to 'widget_config'?
   have_battery = true,
   sensors = {
     gpu = {
