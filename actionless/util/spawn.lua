@@ -12,12 +12,7 @@ function spawn.run_once(cmd)
   if type(cmd) == "table" then
     cmd = table.concat(cmd, " ")
   end
-  local findme = cmd
-  local firstspace = cmd:find(" ")
-  if firstspace then
-    findme = cmd:sub(0, firstspace-1)
-  end
-  awful_spawn.with_shell("pgrep -u $USER -x " .. findme .. " > /dev/null || (" .. cmd .. ")")
+  awful_spawn.with_shell('ps x | grep -v grep | grep "'..cmd..'" || '..cmd)
 end
 
 return spawn
