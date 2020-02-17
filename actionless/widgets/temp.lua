@@ -17,11 +17,10 @@ function temp.update()
   local jq_queries = {}
   for _, sensor_data in pairs(temp.sensors) do
     table.insert(jq_queries, string.format(
-      --'."%s".%s.%s_input',
-      '."%s".%s.temp1_input',
+      '."%s"."%s"."%s_input"',
       sensor_data.device,
       sensor_data.sensor,
-      sensor_data.sensor
+      sensor_data.sensor_input or sensor_data.sensor
     ))
   end
   local cmd = "sensors -Aj | jq '" .. table.concat(jq_queries, ",") .. "'"
