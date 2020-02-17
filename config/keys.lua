@@ -9,7 +9,6 @@ local capi = {
   awesome = awesome,
 }
 local awesome_menubar = require("menubar")
-local run_once = require("awful.spawn").once
 
 local tag_helpers = require("actionless.util.tag")
 local menu_addon = require("actionless.menu_addon")
@@ -154,7 +153,7 @@ function keys.init(awesome_context)
     ),
 
     bind_key({ modkey,  "Control"  }, "s",
-      function() run_once{"xscreensaver-command", "-lock"} end,
+      function() awful.spawn{"xscreensaver-command", "-lock"} end,
       "xscreensaver lock", AWESOME_COLOR
     ),
     bind_key({ modkey,  "Control"  }, "d",

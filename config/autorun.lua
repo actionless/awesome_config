@@ -1,8 +1,7 @@
 local spawn = require("awful.spawn")
-local run_once = spawn.once
 local with_shell = spawn.with_shell
 
-local pgrep_run_once = require("actionless.util.spawn").run_once
+local run_once = require("actionless.util.spawn").run_once
 
 
 local autorun = {}
@@ -79,7 +78,7 @@ function autorun.init(awesome_context)
     run_once{"xfce4-power-manager"}
     --run_once{"xscreensaver -no-splash"}
     --run_once{"unclutter -root"}
-    pgrep_run_once{"unclutter"}
+    run_once{"unclutter"}
     --run_once{"touchegg"}
     --run_once{"megasync"}
     --run_once{"dropbox"}
