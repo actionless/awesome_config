@@ -10,3 +10,6 @@ runtest.sh
 icons/**/*copy).png
 icons/**/*_2.png
 icons/**/*_3.png
+
+.SRCINFO
+last_installed.txt
