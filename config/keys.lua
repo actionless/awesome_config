@@ -582,62 +582,81 @@ function keys.init(awesome_context)
   )
 
   local diff = nil
-  for scr = 1, 2 do
+  local screen_count = screen.count()
+  for scr = 1, screen_count do
     for i = 1, 12 do
 
-      if scr == 1 then
-        -- num keys:
-        diff = 9
-      elseif scr == 2 then
-        -- f-keys:
-        if i>10 then
-          diff = 84
-        else
-          diff = 66
-        end
+      local skip = false
+
+      -- in case of 3 screens
+      if scr == 2 and screen_count > 2 and i>6 then
+        -- F1..F6 will work for the screen #2
+        skip = true
+      end
+      if scr == 3 and i<7 then
+        -- and F7..F12 will work for the screen #3
+        skip = true
       end
 
-      globalkeys = awful.util.table.join(globalkeys,
-        bind_key({ modkey }, "#" .. i + diff,
-          function ()
-            local tag = capi.screen[scr].tags[i]
-            if tag then tag:view_only() end
-          end,
-          i==1 and "go to tag " .. i .. "(screen #" .. scr .. ")",
-          TAG_COLOR
-        ),
-        bind_key({ modkey, "Control" }, "#" .. i + diff,
-          function ()
-            local tag = capi.screen[scr].tags[i]
-            if tag then awful.tag.viewtoggle(tag) end
-          end,
-          i==1 and "toggle tag " .. i .. "(screen #" .. scr .. ")",
-          TAG_COLOR
-        ),
-        bind_key({ modkey, "Shift" }, "#" .. i + diff,
-          function ()
-            if client.focus then
-              local tag = capi.screen[scr].tags[i]
-              if tag then client.focus:move_to_tag(tag) end
-             end
-          end,
-          i==1 and "move client to tag " .. i .. "(screen #" .. scr .. ")",
-          CLIENT_MOVE
-        ),
-        bind_key({ modkey, "Control", "Shift" }, "#" .. i + diff,
-          function ()
-            if client.focus then
+      if not skip then
+
+        if scr == 1 then
+          -- num keys:
+          diff = 9
+        elseif scr >= 2 then
+          -- f-keys:
+          if i>10 then
+            diff = 84
+          else
+            diff = 66
+          end
+        end
+
+        globalkeys = awful.util.table.join(globalkeys,
+          bind_key({ modkey }, "#" .. i + diff,
+            function ()
               local tag = capi.screen[scr].tags[i]
               if tag then
-                client.focus:toggle_tag(tag)
+                tag:view_only()
+                awful.screen.focus(capi.screen[scr])
               end
-            end
-          end,
-          i==1 and "toggle client on tag " .. i .. "(screen #" .. scr .. ")",
-          CLIENT_MANIPULATION
+            end,
+            i==1 and "go to tag " .. i .. "(screen #" .. scr .. ")",
+            TAG_COLOR
+          ),
+          bind_key({ modkey, "Control" }, "#" .. i + diff,
+            function ()
+              local tag = capi.screen[scr].tags[i]
+              if tag then awful.tag.viewtoggle(tag) end
+            end,
+            i==1 and "toggle tag " .. i .. "(screen #" .. scr .. ")",
+            TAG_COLOR
+          ),
+          bind_key({ modkey, "Shift" }, "#" .. i + diff,
+            function ()
+              if client.focus then
+                local tag = capi.screen[scr].tags[i]
+                if tag then client.focus:move_to_tag(tag) end
+               end
+            end,
+            i==1 and "move client to tag " .. i .. "(screen #" .. scr .. ")",
+            CLIENT_MOVE
+          ),
+          bind_key({ modkey, "Control", "Shift" }, "#" .. i + diff,
+            function ()
+              if client.focus then
+                local tag = capi.screen[scr].tags[i]
+                if tag then
+                  client.focus:toggle_tag(tag)
+                end
+              end
+            end,
+            i==1 and "toggle client on tag " .. i .. "(screen #" .. scr .. ")",
+            CLIENT_MANIPULATION
+          )
         )
-      )
 
+      end
     end
   end
 
