@@ -9,14 +9,17 @@ INSTALL_NO_ARGB_SHORTCUTS=${NOARGB:-n}
 
 pkgname=actionless_awesome_config_meta
 conflicts=(awesome_config_actionless_meta)
-pkgver=0.2
-pkgrel=2
+pkgver=0.3
+pkgrel=1
 pkgdesc="Awesome config dependencies"
 arch=('x86_64' 'i686')
 url="https://github.com/actionless/awesome_config"
 license=('GPLv3')
 depends=(
 	'awesome'
+	'xorg-server'
+	'lightdm'
+	'lightdm-gtk-greeter'
 	'bash'
 	'coreutils'
 
@@ -24,6 +27,7 @@ depends=(
 	'jq'  # temperature widget
 	'procps-ng'  # mem and cpu widgets
 	'upower'  # for battery widget
+	'pacman-contrib'  # for updates widget
 
 	'xorg-xrdb'  # reload Xresources on awesome WM reload
 	'xorg-xset'  # config/autorun: keyboard tweaks
