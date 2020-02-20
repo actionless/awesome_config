@@ -203,11 +203,19 @@ function keys.init(awesome_context)
 
     -- By direction screen focus
     bind_key({ modkey,        }, "Next",
-      function() awful.screen.focus_relative(1) end,
+      function()
+        awesome_context.widgets.screen[awful.screen.focused().index].manage_client:hide()
+        awful.screen.focus_relative(1)
+        awesome_context.widgets.screen[awful.screen.focused().index].manage_client:show()
+      end,
       "next screen", TAG_COLOR
     ),
     bind_key({ modkey,        }, "Prior",
-      function() awful.screen.focus_relative(-1) end,
+      function()
+        awesome_context.widgets.screen[awful.screen.focused().index].manage_client:hide()
+        awful.screen.focus_relative(-1)
+        awesome_context.widgets.screen[awful.screen.focused().index].manage_client:show()
+      end,
       "prev screen", TAG_COLOR
     ),
 
