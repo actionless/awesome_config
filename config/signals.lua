@@ -2,6 +2,7 @@ local awful = require("awful")
 local beautiful = require("beautiful")
 local delayed_call = require("gears.timer").delayed_call
 local g_table = require("gears.table")
+local ruled = require("ruled")
 
 local titlebar	= require("actionless.titlebar")
 local persistent = require("actionless.persistent")
@@ -229,13 +230,13 @@ function signals.init(_)
   tag.connect_signal("property::gap", on_tag_signal)
 
   -- New client appears
-  client.disconnect_signal("manage", awful.rules.apply)
-  client.connect_signal("manage", function(c)
+  client.disconnect_signal("request::manage", ruled.client.apply)
+  client.connect_signal("request::manage", function(c)
       if awesome.startup then
-          local rules = awful.rules.matching_rules(c, awful.rules.rules)
+          local rules = ruled.client.matching_rules(c, ruled.client.rules)
           for _,rule in ipairs(rules) do
               if rule.apply_on_restart then
-                  awful.rules.execute(c, rule.properties, { rule.callback })
+                  ruled.client.execute(c, rule.properties, { rule.callback })
               else
                   local mini_properties = {}
                   for _, prop in ipairs({
@@ -249,12 +250,12 @@ function signals.init(_)
                     end
                   end
                 if #(g_table.keys(mini_properties)) > 0 then
-                  awful.rules.execute(c, mini_properties, { })
+                  ruled.client.execute(c, mini_properties, { })
                 end
               end
           end
       else
-          awful.rules.apply(c)
+          ruled.client.apply(c)
       end
   --end)
   --client.connect_signal("manage", function (c)
