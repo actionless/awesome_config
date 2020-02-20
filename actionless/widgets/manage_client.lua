@@ -7,6 +7,7 @@ local awful = require("awful")
 local beautiful = require("beautiful")
 local dpi = beautiful.xresources.apply_dpi
 local wibox = require('wibox')
+local delayed_call = require("gears.timer").delayed_call
 
 local capi = { client = client }
 
@@ -68,7 +69,13 @@ local function widget_factory(args)
   -- INIT: --------------------------------------------------------------------
   widget.titlebars_forced_globally = persistent.titlebar.get()
   widget:_update_status()
-  widget:hide()
+  delayed_call(function()
+    if widget_screen == awful.screen.focused() then
+      widget:show()
+    else
+      widget:hide()
+    end
+  end)
 
   -- EVENTS: ------------------------------------------------------------------
   capi.client.connect_signal("focus",function(c)
@@ -78,6 +85,14 @@ local function widget_factory(args)
   end)
   capi.client.connect_signal("unfocus",function(c)
     if c.screen == widget_screen then
+      widget:hide()
+    end
+  end)
+  -- Tag changed
+  screen.connect_signal("tag::history::update", function (s)
+    if s == widget_screen then
+      widget:show()
+    else
       widget:hide()
     end
   end)
