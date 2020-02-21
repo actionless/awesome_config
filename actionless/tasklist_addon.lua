@@ -10,15 +10,33 @@ local awful = require("awful")
 local tasklist_addon = {}
 
 function tasklist_addon.sorted_update(w, buttons, label, data, clients)
+
     local focused_client = client.focus
-    if focused_client and focused_client.skip_taskbar then
-        focused_client = nil
+    local screen_focused_client = nil
+
+    for idx, c in ipairs(clients) do
+        if c == focused_client then
+            screen_focused_client = table.remove(clients, idx)
+            break
+        end
     end
-    local sorted_clients = focused_client and {focused_client, } or {}
+
+    local sorted_clients = screen_focused_client and {
+        screen_focused_client,
+    } or {}
     for _, c in ipairs(clients) do
         table.insert(sorted_clients, c)
     end
-    return awful.widget.common.list_update(w, buttons, label, data, sorted_clients)
+
+    return awful.widget.common.list_update(
+        w, buttons, label, data, sorted_clients
+    )
+end
+
+function tasklist_addon.current_and_minimizedcurrenttags(c, s)
+    return (
+        c.screen==s and c == client.focus and not c.skip_taskbar
+    ) or awful.widget.tasklist.filter.minimizedcurrenttags(c, s)
 end
 
 return tasklist_addon

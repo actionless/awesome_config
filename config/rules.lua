@@ -1,5 +1,6 @@
 local awful = require("awful")
 local beautiful = require("beautiful")
+local ruled = require("ruled")
 local capi = {
   screen = screen
 }
@@ -28,7 +29,8 @@ local rules = {}
 
 function rules.init(awesome_context)
 
-  awful.rules.rules = {
+  ruled.client.connect_signal("request::rules", function()
+    for _, rule in ipairs({
 
       { rule = { },
         properties = {
@@ -49,19 +51,21 @@ function rules.init(awesome_context)
         },
         --callback = apply_delayed_rule,
         callback = function(c)
+          c:deny("autoactivate", "mouse_enter")
           --if not awesome_context.DEVEL_DYNAMIC_LAYOUTS then
-            c:deny("autoactivate", "mouse_enter")
             awful.client.setslave(c)
           --end
           apply_delayed_rule(c)
         end
       },
+
       { rule = {type = "dialog"},
         properties = {
           titlebars_enabled = true,
           ontop = true
         },
       },
+
       { rule = {class = "Nemo", instance = "file_progress"},
         properties = {
           titlebars_enabled = true,
@@ -178,8 +182,13 @@ function rules.init(awesome_context)
       { rule = { class = "Oomox", },
         properties = {
           floating = true,
-      }, },
-  }
+        },
+      },
+
+    }) do
+      ruled.client.append_rule(rule)
+    end
+  end)
 
   --awful.ewmh.add_activate_filter(function(c, source)
       --nlog({source, c.class})

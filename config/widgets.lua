@@ -290,7 +290,7 @@ function widget_loader.init(awesome_context)
 
     sw.tasklist = awful.widget.tasklist{
       screen = s,
-      filter = awful.widget.tasklist.filter.minimizedcurrenttags,
+      filter = tasklist_addon.current_and_minimizedcurrenttags,
       buttons = tasklist_buttons,
       update_function = tasklist_addon.sorted_update,
     }
