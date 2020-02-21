@@ -9,7 +9,7 @@ local dpi = beautiful.xresources.apply_dpi
 local wibox = require('wibox')
 local delayed_call = require("gears.timer").delayed_call
 
-local capi = { client = client }
+local capi = { client = client, screen = screen }
 
 
 local common = require("actionless.widgets.common")
@@ -90,7 +90,7 @@ local function widget_factory(args)
   end)
   -- Tag changed
   screen.connect_signal("tag::history::update", function (s)
-    if s == widget_screen then
+    if capi.screen.count() > 1 and s == widget_screen then
       widget:show()
     else
       widget:hide()
