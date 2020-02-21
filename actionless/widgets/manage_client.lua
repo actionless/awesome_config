@@ -80,6 +80,7 @@ local function widget_factory(args)
   -- EVENTS: ------------------------------------------------------------------
   capi.client.connect_signal("focus",function(c)
     if c.screen == widget_screen then
+      widget:_update_status()
       widget:show()
     end
   end)
@@ -91,18 +92,25 @@ local function widget_factory(args)
   -- Tag changed
   screen.connect_signal("tag::history::update", function (s)
     if capi.screen.count() > 1 and s == widget_screen then
+      widget:set_text(' ')
       widget:show()
     else
       widget:hide()
     end
   end)
 
+  local function focused_client_on_this_screen()
+    return client.focus and (client.focus.screen == widget_screen)
+  end
+
   widget._on_mouse_enter = function ()
     if not widget.titlebars_forced_globally then
-      if args.error_color_on_hover then
-        widget:set_bg(beautiful.xrdb.color9)
-      else
-        widget:set_bg(color_utils.darker(args.bg, -20))
+      if focused_client_on_this_screen() then
+        if args.error_color_on_hover then
+          widget:set_bg(beautiful.xrdb.color9)
+        else
+          widget:set_bg(color_utils.darker(args.bg, -20))
+        end
       end
     else
       widget:set_warning()
@@ -120,11 +128,15 @@ local function widget_factory(args)
 
   widget._buttons_table = awful.util.table.join(
     awful.button({ }, 1, function()
+      if focused_client_on_this_screen() then
         widget:set_error()
+      end
     end, function ()
+      if focused_client_on_this_screen() then
       --if not widget.titlebars_forced_globally then
         capi.client.focus:kill()
       --end
+      end
     end),
     awful.button({ }, 3, function()
       widget:toggle()
