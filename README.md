@@ -3,7 +3,8 @@
 
 #### Installation
 
-Works with Awesome WM 4.3
+ - `awesome43` branch of this config works with AwesomeWM 4.3
+ - `master` branch of this config works with AwesomeWM git `master`
 
 ```sh
 cd ~/.config/
