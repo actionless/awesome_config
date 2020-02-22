@@ -91,12 +91,19 @@ local function widget_factory(args)
   end)
   -- Tag changed
   screen.connect_signal("tag::history::update", function (s)
-    if capi.screen.count() > 1 and s == widget_screen then
+    if (
+      capi.screen.count() < 2
+    ) or (
+      s == widget.prev_focused_screen
+    ) then return end
+
+    if s == widget_screen then
       widget:set_text(' ')
       widget:show()
     else
       widget:hide()
     end
+    widget.prev_focused_screen = s
   end)
 
   local function focused_client_on_this_screen()
