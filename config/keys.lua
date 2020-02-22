@@ -617,8 +617,11 @@ function keys.init(awesome_context)
             function ()
               local tag = capi.screen[scr].tags[i]
               if tag then
+                local current_screen = awful.screen.focused()
                 tag:view_only()
-                awful.screen.focus(capi.screen[scr])
+                if capi.screen[scr] ~= current_screen then
+                  awful.screen.focus(capi.screen[scr])
+                end
               end
             end,
             i==1 and "go to tag " .. i .. "(screen #" .. scr .. ")",
