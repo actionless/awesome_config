@@ -16,6 +16,8 @@ local persistent = require("actionless.persistent")
 local markup = require("actionless.util.markup")
 
 
+local TRANSPARENT = "#00000000"
+
 local widget_loader = {}
 
 function widget_loader.init(awesome_context)
@@ -141,16 +143,33 @@ function widget_loader.init(awesome_context)
     margin=beautiful.useless_gap*2,
     opacity=beautiful.notification_opacity,
     style_month={
+      bg_color = TRANSPARENT,
+      border_color = TRANSPARENT,
+    },
+    style_header={
+      bg_color = TRANSPARENT,
+      fg_color = beautiful.notification_fg,
+    },
+    style_weekday={
+      bg_color = TRANSPARENT,
+      fg_color = beautiful.notification_border_color,
+    },
+    style_focus={
       shape=function(_c, _w, _h)
         return gears.shape.rounded_rect(
           _c, _w, _h, beautiful.notification_border_radius
         )
-      end
-    }
+      end,
+    },
+    style_normal={
+      bg_color = TRANSPARENT,
+      fg_color = beautiful.notification_fg,
+    },
   })
+  w.calendar_popup.bg = beautiful.notification_bg
+  w.calendar_popup.border_width = beautiful.notification_border_width
+  w.calendar_popup.border_color = beautiful.notification_border_color
   if beautiful.notification_border_radius then
-    w.calendar_popup.border_width = 0
-    w.calendar_popup.bg = "#ff000000"
     w.calendar_popup.shape = function(_c, _w, _h)
       return gears.shape.rounded_rect(
         _c, _w, _h, beautiful.notification_border_radius+1
