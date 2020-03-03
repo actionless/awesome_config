@@ -13,6 +13,7 @@ local theme_name = "gtk"
 local gsc = gtk_util.get_theme_variables()
 
 local MAIN_COLOR = gsc.selected_bg_color
+local TRANSPARENT = "#00000000"
 
 local theme_dir = awful.util.getdir("config").."/themes/"..theme_name
 --local theme = dofile("/usr/share/awesome/themes/xresources/theme.lua")
@@ -65,7 +66,8 @@ theme.widget_close_fg = gsc.header_button_fg_color
 
 theme.tasklist_fg_focus = theme.panel_fg
 theme.tasklist_fg_normal = theme.panel_fg
-theme.tasklist_bg_focus = theme.panel_bg
+--theme.tasklist_bg_focus = theme.panel_bg
+theme.tasklist_bg_focus = TRANSPARENT
 theme.tasklist_bg_normal = theme.panel_bg
 theme.tasklist_fg_minimize	= theme.xrdb.background
 theme.tasklist_bg_minimize	= theme.xrdb.color4
@@ -240,16 +242,20 @@ theme.notification_border_radius = "theme.border_radius"
       cr, w, h, theme.panel_widget_border_radius
     )
   end
-if theme.border_radius > 0 and not awesome.composite_manager_running then
-  theme.titlebar_fg_focus		= gsc.menubar_fg_color
+
   theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
   theme.notification_shape = rounded_rect_shape
+if theme.border_radius > 0 and not awesome.composite_manager_running then
+  theme.titlebar_fg_focus		= gsc.menubar_fg_color
+  --theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
+  --theme.notification_shape = rounded_rect_shape
 else
   theme.titlebar_fg_focus		= gsc.selected_fg_color
-  theme.titlebar_bg_focus		= gsc.wm_border_focused_color
-  --theme.actionless_titlebar_bg_focus = gsc.wm_border_focused_color
-  theme.notification_shape = nil
+  --theme.titlebar_bg_focus		= gsc.wm_border_focused_color
+  ----theme.actionless_titlebar_bg_focus = gsc.wm_border_focused_color
+  --theme.notification_shape = nil
 end
+
 theme.tasklist_shape_minimized = less_rounded_rect_shape
 theme.tasklist_shape_border_width_minimized = theme.panel_widget_border_width
 theme.tasklist_shape_border_color_minimized = color_utils.mix(
@@ -284,6 +290,18 @@ else
   theme.clock_fg = color_utils.darker(theme.panel_fg, 16)
 end
 
+theme.actionless_titlebar_bg_normal = theme.titlebar_bg_normal
+if theme.border_radius > 0 then
+  theme.actionless_titlebar_bg_focus  = theme.border_focus
+else
+  theme.actionless_titlebar_bg_focus  = theme.gtk.wm_border_focused_color
+end
+
+if theme.border_radius > dpi(15) then
+  theme.border_radius = dpi(15)
+end
+
+
 if awesome.composite_manager_running then
   --local delayed_call = require('gears.timer').delayed_call
   --delayed_call(function()
@@ -298,28 +316,21 @@ if awesome.composite_manager_running then
     'actionless_titlebar_bg_normal',
     'actionless_titlebar_bg_focus',
     'notification_bg',
+    'panel_bg',
+    'menu_bg_normal',
+    'notification_bg',
   }) do
     if #theme[theme_var] == 9 then
       theme[theme_var] = h_string.max_length(theme[theme_var], 7)
     end
     if #theme[theme_var] == 7 then
       --theme[theme_var] = theme[theme_var] .."dd"
+      --theme[theme_var] = theme[theme_var] .."ee"
       theme[theme_var] = theme[theme_var] .."ee"
       --theme[theme_var] = theme[theme_var] .."88"
     end
-    --nlog(theme[theme_var])
+    --nlog(theme_var..'='..theme[theme_var])
   end
-end
-
-theme.actionless_titlebar_bg_normal = theme.titlebar_bg_normal
-if theme.border_radius > 0 then
-  theme.actionless_titlebar_bg_focus  = theme.border_focus
-else
-  theme.actionless_titlebar_bg_focus  = theme.gtk.wm_border_focused_color
-end
-
-if theme.border_radius > dpi(15) then
-  theme.border_radius = dpi(15)
 end
 
 --theme.bg_systray = "#00000000"
