@@ -554,6 +554,9 @@ function titlebar.make_titlebar(c, color, shadow)
     )
     or beautiful.actionless_titlebar_bg_normal
   )
+  if shadow and client_is_focused then
+    color = beautiful.actionless_titlebar_bg_focus
+  end
 
   local function _setup_widget(position)
     local w = awful.titlebar(c,{size= beautiful.base_border_width or 5, position=position})
