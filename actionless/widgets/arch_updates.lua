@@ -7,6 +7,7 @@ local awful = require("awful")
 local gears_timer = require("gears.timer")
 local g_string = require("gears.string")
 local naughty = require("naughty")
+local gmath = require('gears.math')
 
 local parse = require("actionless.util.parse")
 local h_string = require("actionless.util.string")
@@ -67,7 +68,7 @@ function updates._check_updates_callback(updates_str)
   updates_str = h_string.strip(updates_str)
   if g_string.startswith(updates_str, "Do you want to retry") then
       updates.widget:set_error()
-      updates.widget:set_text('x ')
+      updates.widget:set_text('x')
       updates.widget:show()
   else
     updates.updates = updates_str
@@ -78,7 +79,7 @@ function updates._check_updates_callback(updates_str)
     local updates_found = #(parse.string_to_lines(updates_str))
     if updates_found > 0 then
       updates.widget:set_normal()
-      updates.widget:set_text(string.format("%i ", updates_found))
+      updates.widget:set_text(updates_found)
       updates.widget:show()
     else
       updates.widget:hide()
@@ -89,11 +90,20 @@ end
 
 function updates.init(args)
   args = args or {}
+  args.margin = args.margin or {
+    left = gmath.round(beautiful.panel_widget_spacing/2),
+    right = gmath.round(beautiful.panel_widget_spacing/2)
+  }
   local update_interval = args.update_interval or 60
   updates.helper = args.helper or "pikaur"
 
   updates.widget = decorated_widget(args)
-  updates.widget:set_image(beautiful.widget_updates)
+  if beautiful.show_widget_icon and beautiful.widget_updates then
+    updates.widget:set_image(beautiful.widget_updates)
+  else
+    updates.widget:hide()
+  end
+
   updates.widget:connect_signal(
     "mouse::enter", function () updates.show_notification() end
   )
