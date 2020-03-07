@@ -142,12 +142,15 @@ theme.font          = theme.gtk.font_family .. ' ' .. theme.gtk.font_size
 theme.tasklist_font = theme.font
 theme.sans_font = theme.font
 theme.font          = theme.gtk.font_family .. ' ' .. theme.gtk.font_size
+theme.bold_font = theme.font
 theme.mono_font          = "Monospace Bold " .. theme.gtk.font_size
 if not theme.font:match('Bold') then
   local bold_font = theme.gtk.font_family .. ' Bold ' .. theme.gtk.font_size
+  theme.bold_font = bold_font
   theme.titlebar_font = bold_font
   theme.taglist_font = bold_font
 end
+--theme.hotkeys_description_font = theme.sans_font
 
 -- Don't use sans font:
 --theme.sans_font	= "theme.font"
