@@ -10,6 +10,7 @@ local utils = {
   nixos = require("actionless.util.nixos"),
   parse = require("actionless.util.parse"),
   pickle = require("actionless.util.pickle"),
+  shutdown = require("actionless.util.shutdown"),
   spawn = require("actionless.util.spawn"),
   string = require("actionless.util.string"),
   table = require("actionless.util.table"),

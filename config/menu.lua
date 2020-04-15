@@ -4,11 +4,11 @@ local hotkeys_popup = require("awful.hotkeys_popup").widget
 local awesome_menubar = require("menubar")
 local beautiful = require("beautiful")
 local gfs = require("gears.filesystem")
-local gears_timer = require("gears.timer")
 
 
 local menugen = require("actionless.util.menugen")
 local wlppr = require("actionless.wlppr")
+local shutdown = require("actionless.util.shutdown")
 
 
 local ICON_SIZES = {
@@ -68,68 +68,6 @@ end
 function menus.init(context)
   local term = awesome_menubar.utils.terminal .. " -e "
 
-  local kill_timer
-
-  local function cancel_kill()
-    if kill_timer then
-      kill_timer:stop()
-      kill_timer = nil
-    end
-  end
-
-  local function kill_everybody(callback)
-    cancel_kill()
-
-    for si=1,screen.count() do
-      local s = screen[si]
-      for _, c in ipairs(s.all_clients) do
-        c:kill()
-      end
-    end
-
-    local clients_remains = 0
-    for si=1,screen.count() do
-      local s = screen[si]
-      for _, _ in ipairs(s.all_clients) do
-        clients_remains = clients_remains + 1
-      end
-    end
-    if clients_remains == 0 then
-      if callback then
-        callback()
-      end
-    else
-      nlog("there are "..tostring(clients_remains).." clients are still running")
-      if not kill_timer then
-        kill_timer = gears_timer({
-          callback=function() kill_everybody(callback) end,
-          timeout=1,
-          autostart=true,
-          call_now=false,
-        })
-      end
-    end
-  end
-
-  --local function session_logout()
-  --  kill_everybody()
-  --  --awful_spawn('mate-session-save --gui --logout-dialog')
-  --  awful_spawn('qdbus --literal org.gnome.SessionManager /org/gnome/SessionManager org.gnome.SessionManager.Logout 1')
-  --end
-
-  --local function session_poweroff()
-  --  kill_everybody()
-  --  --awful_spawn('mate-session-save --gui --shutdown-dialog')
-  --  awful_spawn('qdbus org.gnome.SessionManager /org/gnome/SessionManager org.gnome.SessionManager.RequestShutdown')
-  --end
-
-  --local function session_reboot()
-  --  kill_everybody()
-  --  --awful_spawn('mate-session-save --gui --shutdown-dialog')
-  --  awful_spawn('qdbus org.gnome.SessionManager /org/gnome/SessionManager org.gnome.SessionManager.RequestReboot')
-  --end
-
-
   local myawesomemenu = {
     { "hotkeys", function() return false, hotkeys_popup.show_help end},
     { "manual page", term .. "man awesome" },
@@ -137,12 +75,12 @@ function menus.init(context)
     { "reload", awesome.restart },
 
     { "reboot", function()
-      kill_everybody(function()
+      shutdown.kill_everybody(function()
         awful_spawn("reboot")
       end)
     end, get_icon('actions', 'view-refresh') },
     { "poweroff", function()
-      kill_everybody(function()
+      shutdown.kill_everybody(function()
         awful_spawn("poweroff")
       end)
     end, get_icon('actions', 'system-shutdown') },
@@ -157,7 +95,8 @@ function menus.init(context)
     { "quit3 (openbox)", function()
       awesome.quit(3)
     end},
-    { "cancel quit", cancel_kill},
+    { "force shutdown", shutdown.skip_kill},
+    { "cancel shutdown", shutdown.cancel_kill},
 
     -- With X Session Manager:
     --{ "logout", session_logout, get_icon('actions', 'system-log-out') },
