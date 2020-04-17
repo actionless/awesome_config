@@ -24,7 +24,9 @@ function layouts.init(context)
     awful.layout.suit.fair.horizontal,
     awful.layout.suit.spiral,
   }
-  awful.layout.layouts = context.layouts
+  tag.connect_signal("request::default_layouts", function()
+      awful.layout.append_default_layouts(context.layouts)
+  end)
   -- }}}
 
   -- {{{ Wallpaper
