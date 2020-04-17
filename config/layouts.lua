@@ -14,18 +14,17 @@ function layouts.init(context)
   end
 
   -- Table of layouts to cover with awful.layout.inc, order matters.
-  context.layouts = {
-    awful.layout.suit.tile,
-    awful.layout.suit.tile.left,
-    persistent.lcarslist.get() and lcars_layout.top or awful.layout.suit.tile.bottom,
-    awful.layout.suit.corner.nw,
-    awful.layout.suit.floating,
-    awful.layout.suit.fair,
-    awful.layout.suit.fair.horizontal,
-    awful.layout.suit.spiral,
-  }
   tag.connect_signal("request::default_layouts", function()
-      awful.layout.append_default_layouts(context.layouts)
+    awful.layout.append_default_layouts({
+      awful.layout.suit.tile,
+      awful.layout.suit.tile.left,
+      persistent.lcarslist.get() and lcars_layout.top or awful.layout.suit.tile.bottom,
+      awful.layout.suit.corner.nw,
+      awful.layout.suit.floating,
+      awful.layout.suit.fair,
+      awful.layout.suit.fair.horizontal,
+      awful.layout.suit.spiral,
+    })
   end)
   -- }}}
 
