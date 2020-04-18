@@ -88,12 +88,12 @@ function widget_loader.init(awesome_context)
 
   -- MEM
   w.mem = widgets.mem({
-    update_interval = 2,
+    update_interval = 5,
     list_length = 20,
   })
   -- CPU
   w.cpu = widgets.cpu({
-    update_interval = 2,
+    update_interval = 5,
     list_length = 20,
   })
   for _, widget in ipairs({w.mem, w.cpu}) do
@@ -105,13 +105,13 @@ function widget_loader.init(awesome_context)
   end
   -- Sensor
   w.temp = widgets.temp({
-    update_interval = 10,
+    update_interval = 20,
     sensors = awesome_context.sensors,
   })
   -- Battery
   if awesome_context.have_battery then
     w.bat = widgets.bat({
-      update_interval = 30,
+      update_interval = 100,
       bg = beautiful.widget_bat_bg,
       fg = beautiful.widget_bat_fg,
       show_when_charged=awesome_context.config.bat_show_when_charged or false,
