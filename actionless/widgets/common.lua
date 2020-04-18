@@ -632,8 +632,8 @@ function common.text_progressbar(args)
     if (image == self.old_image) and (self.textbox.text == self.old_text) then
       return
     end
-    widget.old_image = image
-    widget.old_text = self.textbox.text
+    self.old_image = image
+    self.old_text = self.textbox.text
 
     if not self.icon_widget then
       return
@@ -643,7 +643,7 @@ function common.text_progressbar(args)
       return
     end
     local need_resize = image.height > beautiful.basic_panel_height
-    widget.icon_widget:set_resize(need_resize)
+    self.icon_widget:set_resize(need_resize)
     if need_resize then
       if self.textbox.text and self.textbox.text ~= '' then
         local ratio = beautiful.basic_panel_height / image.height
