@@ -3,14 +3,20 @@ local naughty = require("naughty")
 
 local debug_module = {}
 
+local function eprint(text)
+  io.stderr:write(text..'\n')
+end
+
 function debug_module.log(object)
-  io.stderr:write(inspect(object)..'\n')
+  eprint(inspect(object))
 end
 
 function debug_module.nlog(object)
+  local formatted = inspect(object)
+  eprint("nlog: " .. formatted)
   naughty.notify{
     title="DEBUG",
-    text=inspect(object),
+    text=formatted,
     timeout=60,
   }
 end
