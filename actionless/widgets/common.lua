@@ -103,6 +103,10 @@ function common.widget(args)
     if not self.icon_widget then
       return
     end
+    if (image == self.old_image) then
+      return
+    end
+    self.old_image = image
     image = image and gears.surface.load(image)
     if not image then
       return
@@ -629,20 +633,22 @@ function common.text_progressbar(args)
   end
 
   function widget:set_image(image)
+    if not self.icon_widget then
+      return
+    end
     if (image == self.old_image) and (self.textbox.text == self.old_text) then
       return
     end
     self.old_image = image
     self.old_text = self.textbox.text
 
-    if not self.icon_widget then
-      return
-    end
     image = image and gears.surface.load(image)
     if not image then
       return
     end
-    local need_resize = image.height > beautiful.basic_panel_height
+    local need_resize = image.height > (
+      beautiful.basic_panel_height - progress_height - progress_margin_bottom*2
+    )
     self.icon_widget:set_resize(need_resize)
     if need_resize then
       if self.textbox.text and self.textbox.text ~= '' then
