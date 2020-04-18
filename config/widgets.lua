@@ -108,6 +108,10 @@ function widget_loader.init(awesome_context)
     update_interval = 20,
     sensors = awesome_context.sensors,
   })
+  w.disk = widgets.disk({
+    update_interval = 200,
+    rules = awesome_context.config.disk_warnings,
+  })
   -- Battery
   if awesome_context.have_battery then
     w.bat = widgets.bat({

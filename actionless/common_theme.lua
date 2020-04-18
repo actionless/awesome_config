@@ -240,6 +240,9 @@ function common_theme.create_default_theme(theme_dir, icons_dir)
   theme.widget_music_play	= icons_dir .. "music_play.png"
   theme.widget_music_stop	= icons_dir .. "music_stop.png"
 
+  theme.widget_disk		= icons_dir .. "disk.png"
+  theme.widget_disk_high	= icons_dir .. "disk_high.png"
+
   theme.recolor_widget_icons = true
 
   theme.tasklist_disable_icon = true

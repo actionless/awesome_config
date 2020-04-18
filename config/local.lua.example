@@ -44,6 +44,13 @@ function local_config.init(awesome_context)
   --  },
   --}
 
+  --conf.disk_warnings = {
+  --  ['/dev/sda8'] = {
+  --    pcent=80,
+  --    avail=10485760,  -- 10GiB
+  --  }
+  --}
+
 
   awesome_context.before_config_loaded[#(awesome_context.before_config_loaded)+1] = function()
     -- size fixes for Fanstasque Sans Mono:
