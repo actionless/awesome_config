@@ -32,6 +32,9 @@ function string_helpers.split(str, delimiter)
 end
 
 function string_helpers.lstrip(str, chars)
+  if type(chars) == 'string' then
+    chars = {chars,}
+  end
   chars = chars or {' ', '\n', '\t'}
   local strip_needed = true
   while strip_needed do
@@ -50,6 +53,9 @@ function string_helpers.lstrip(str, chars)
 end
 
 function string_helpers.rstrip(str, chars)
+  if type(chars) == 'string' then
+    chars = {chars,}
+  end
   chars = chars or {' ', '\n', '\t'}
   local strip_needed = true
   while strip_needed do
