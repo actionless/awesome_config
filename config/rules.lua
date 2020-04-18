@@ -43,7 +43,25 @@ function rules.init(awesome_context)
           placement =
             awful.placement.centered +
             awful.placement.no_overlap +
-            awful.placement.no_offscreen,
+            setmetatable(
+              {
+                is_placement = true,
+                context = {},
+              },
+              {
+                __call = function(_self, c, args)
+                  args.honor_workarea = true
+                  local bm = beautiful.useless_gap + beautiful.base_border_width
+                  args.margins = {
+                    left = bm,
+                    right = bm*2,
+                    top = bm,
+                    bottom = bm + beautiful.titlebar_height + beautiful.base_border_width,
+                  }
+                  return awful.placement.no_offscreen(c, args)
+                end
+              }
+            ),
           size_hints_honor = false,
           screen = awful.screen.preferred,
           --slave = true,
