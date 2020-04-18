@@ -22,7 +22,28 @@ function local_config.init(awesome_context)
   --}
 
   awesome_context.have_battery = false
-  awesome_context.sensor = "temp1"
+
+  --awesome_context.sensors = {
+  --  cpu = {
+  --    device = 'coretemp-isa-0000',
+  --    sensor = 'Package id 0',
+  --    sensor_input = 'temp1',
+  --    warning = 90,
+  --  },
+  --  cpu0 = {
+  --    device = 'coretemp-isa-0000',
+  --    sensor = 'Core 0',
+  --    sensor_input = 'temp2',
+  --    warning = 90,
+  --  },
+  --  cpu1 = {
+  --    device = 'coretemp-isa-0000',
+  --    sensor = 'Core 1',
+  --    sensor_input = 'temp3',
+  --    warning = 90,
+  --  },
+  --}
+
 
   awesome_context.before_config_loaded[#(awesome_context.before_config_loaded)+1] = function()
     -- size fixes for Fanstasque Sans Mono:
