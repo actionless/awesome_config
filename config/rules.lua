@@ -7,7 +7,7 @@ local capi = {
 local dpi = beautiful.xresources.apply_dpi
 
 
-local function apply_delayed_rule(c)
+local function apply_delayed_rule(c)  -- luacheck: no unused
   if not c.class and not c.name then
     local begin_message = {"begin", c.class, c.name}
     local f
@@ -55,7 +55,7 @@ function rules.init(awesome_context)
           --if not awesome_context.DEVEL_DYNAMIC_LAYOUTS then
             awful.client.setslave(c)
           --end
-          apply_delayed_rule(c)
+          --apply_delayed_rule(c)
         end
       },
 
