@@ -78,7 +78,7 @@ function keys.init(awesome_context)
   awful.menu.menu_keys.down = { "Down", "j" }
   awful.menu.menu_keys.up = { "Up", "k" }
   awful.menu.menu_keys.enter = { "Right", "l" }
-  awful.menu.menu_keys.close = { "Escape", '#133', 'q' }
+  awful.menu.menu_keys.close = { "Escape", '#133', 'q', 'w', }
   -- }}}
 
 
@@ -282,7 +282,7 @@ function keys.init(awesome_context)
 
     -- Menus
     bind_key({ modkey,       }, "w",
-      function () awesome_context.menu.mainmenu_show(true) end,
+      function () awesome_context.menu.mainmenu_toggle(true) end,
       "aWesome menu", GROUP_MENU
     ),
     bind_key({ modkey,       }, "i",

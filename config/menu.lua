@@ -238,11 +238,11 @@ function menus.init(context)
   end
 
 
-  function context.menu.mainmenu_toggle()
-    if not context.menu.mainmenu then
-      return context.menu.mainmenu_show()
+  function context.menu.mainmenu_toggle(nomouse)
+    if context.menu.mainmenu and context.menu.mainmenu.wibox.visible then
+      return context.menu.mainmenu:hide()
     else
-      return context.menu.mainmenu:toggle()
+      return context.menu.mainmenu_show(nomouse)
     end
   end
 
