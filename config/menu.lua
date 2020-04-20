@@ -5,10 +5,13 @@ local awesome_menubar = require("menubar")
 local beautiful = require("beautiful")
 local gfs = require("gears.filesystem")
 
-
 local menugen = require("actionless.util.menugen")
 local wlppr = require("actionless.wlppr")
 local shutdown = require("actionless.util.shutdown")
+local menu_addon = require("actionless.menu_addon")
+
+
+awful_menu.entry = menu_addon.menu_entry
 
 
 local ICON_SIZES = {
