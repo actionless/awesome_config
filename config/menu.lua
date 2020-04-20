@@ -29,8 +29,9 @@ local FORMATS = {
 }
 local ICON_THEMES = {
   beautiful.icon_theme,
-  'gnome',
   'Adwaita',
+  'gnome',
+  'breeze',
   'hicolor',
   --'locolor',
 }
