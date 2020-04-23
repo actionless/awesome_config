@@ -112,7 +112,8 @@ function player.init(args)
 
 -------------------------------------------------------------------------------
   function player.get_coverart_path()
-    return player.coverart_file_path..'_'..enabled_backends[backend_id]..".png"
+    local ps = player.player_status
+    return player.coverart_file_path..'_'..enabled_backends[backend_id]..'_'..(ps.cover_url:gsub('/', '_') or ".png")
   end
 -------------------------------------------------------------------------------
   function player.run_player()
@@ -161,13 +162,15 @@ function player.init(args)
       end
     end
 
-    player.notification_object = naughty.notify({
-      icon = cover_url,
-      title = ps.title,
-      text = text,
-      timeout = timeout,
-      position = beautiful.widget_notification_position,
-    })
+    if not player.notification_object then
+      player.notification_object = naughty.notification({
+        timeout = timeout,
+        position = beautiful.widget_notification_position,
+      })
+    end
+    player.notification_object.icon = cover_url
+    player.notification_object.title = ps.title
+    player.notification_object.text = text
   end
 -------------------------------------------------------------------------------
   function player.toggle()
@@ -298,7 +301,7 @@ function player.init(args)
     )
     player.title_widget:set_markup(title)
 
-    if player.notification_object and player.notification_object.box.visible then
+    if player.notification_object then
       player.show_notification()
     end
   end
@@ -306,10 +309,10 @@ function player.init(args)
 function player.get_coverart()
   local notification_callback
   local current_backend = player.backend
-  if player.enable_notifications or (player.notification_object and player.notification_object.box.visible) then
+  if player.enable_notifications or (player.notification_object) then
     notification_callback = function()
       if player.enable_notifications or (
-        player.notification_object and player.notification_object.box.visible
+        player.notification_object
       ) and (
         current_backend == player.backend
       ) then
