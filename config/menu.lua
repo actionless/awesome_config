@@ -80,16 +80,18 @@ function menus.init(context)
     { "edit config", context.cmds.editor_cmd .. " " .. awesome.conffile },
     { "reload", awesome.restart },
 
+    { "hibernate", "xscreensaver-command -lock ; sudo systemctl hibernate", get_icon("apps", "system-hibernate") },
+
     { "reboot", function()
       shutdown.kill_everybody(function()
         awful_spawn("reboot")
       end)
-    end, get_icon('actions', 'view-refresh') },
+    end, get_icon('apps', 'system-restart') },
     { "poweroff", function()
       shutdown.kill_everybody(function()
         awful_spawn("poweroff")
       end)
-    end, get_icon('actions', 'system-shutdown') },
+    end, get_icon('apps', 'system-shutdown') },
 
     -- Without X Session Manager:
     { "quit", function()
