@@ -100,11 +100,14 @@ function widget_loader.init(awesome_context)
     list_length = 20,
   })
   for _, widget in ipairs({w.mem, w.cpu}) do
-    widget:buttons({
-        awful.button({		}, 1, function()
-          awful.spawn(awesome_context.cmds.system_monitor)
-        end),
-    })
+    local buttons = widget:buttons()
+    buttons = awful.util.table.join(buttons,
+      awful.button({		}, 1,
+      function()
+        awful.spawn(awesome_context.cmds.system_monitor)
+      end)
+    )
+    widget:buttons(buttons)
   end
   -- Sensor
   w.temp = widgets.temp({
