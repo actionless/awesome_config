@@ -125,6 +125,7 @@ function menus.init(context)
   local applications_menu = {
 
     category("Development", {
+      app("Git-Cola", "git-cola"),
       app("Meld", "meld"),
       app("PTIPython", term .. "ptipython", "ipython"),
     }, "development"),
@@ -164,11 +165,15 @@ function menus.init(context)
 
     category("Text", {
       --app("Geany", "geany"),
-      app("ghostwriter", "ghostwriter"),  -- or retext?
-      app("Oni", "oni"),
-      app("retext", "retext"),
+      app("Oni", "oni"),  -- replace to onivim2 or get rid of it at all
       app("xed", "xed", "accessories-text-editor"),
-      app("marker", "marker", "com.github.fabiocolacio.marker"),
+    }, "office"),
+
+    category("Markdown", {
+      app("abricotine"),  -- best inline
+      app("ghostwriter"),  -- good inline + preview
+      app("retext"),  -- classic + preview (Qt)
+      app("marker", "marker", "com.github.fabiocolacio.marker"),  -- classic + preview (GTK)
     }, "education-language"),
 
   }
