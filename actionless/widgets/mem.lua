@@ -178,7 +178,7 @@ function mem.init(args)
     "mouse::leave", function () mem.hide_notification() end
   )
   mem.widget:buttons(awful.util.table.join(
-    awful.button({ }, 1, function()
+    awful.button({ }, 3, function()
       mem.show_percents = not mem.show_percents
       mem.show_notification()
     end)
