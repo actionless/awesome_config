@@ -49,13 +49,20 @@ function common.constraint(args)
 end
 
 
+function common.set_panel_shape(bg_widget, args)
+  args = args or {}
+  bg_widget.shape_clip = true
+  bg_widget.shape = function(c, w, h) return gears.shape.rounded_rect(c, w, h, beautiful.panel_widget_border_radius) end
+  bg_widget.shape_border_width = args.border_width or beautiful.panel_widget_border_width or 0
+  bg_widget.shape_border_color = args.border_color or beautiful.panel_widget_border_color or beautiful.border_normal
+  return bg_widget
+end
+
+
 function common.panel_shape(widget, args)
   args = args or {}
   local shaped = wibox.container.background(widget)
-  shaped.shape_clip = true
-  shaped.shape = function(c, w, h) return gears.shape.rounded_rect(c, w, h, beautiful.panel_widget_border_radius) end
-  shaped.shape_border_width = args.border_width or beautiful.panel_widget_border_width or 0
-  shaped.shape_border_color = args.border_color or beautiful.panel_widget_border_color or beautiful.border_normal
+  common.set_panel_shape(shaped, args)
   setmetatable(shaped,        { __index = widget })
   return shaped
 end
