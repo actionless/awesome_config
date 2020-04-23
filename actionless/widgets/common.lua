@@ -384,7 +384,13 @@ function common.decorated_horizontal(args)
 
   local spacing = beautiful.panel_widget_spacing or 0
   if args.spacing ~= nil then spacing=args.spacing end
-  local separator = spacing and common.constraint{width =  spacing}
+  local separator = spacing and common.constraint{width = spacing}
+  if args.margin_left then
+    decorated.left_separator_widgets = {common.constraint{width = args.margin_left, }}
+  end
+  if args.margin_right then
+    decorated.right_separator_widgets = {common.constraint{width = args.margin_right, }}
+  end
 
   if args.widgets then
     decorated.lie_widget_list = args.widgets
@@ -423,7 +429,8 @@ function common.decorated_horizontal(args)
   decorated.lie_layout = wibox.layout.fixed.horizontal()
   decorated.lie_background = wibox.container.background()
   decorated.lie_background:set_widget(decorated.lie_layout)
-  decorated.wrap_layout = wibox.layout.flex.horizontal()
+  --decorated.wrap_layout = wibox.layout.flex.horizontal()
+  decorated.wrap_layout = wibox.layout.fixed.horizontal()
   decorated.wrap_layout:add(decorated.lie_background)
 
   setmetatable(decorated,        { __index = decorated.wrap_layout })
@@ -469,13 +476,23 @@ function common.decorated_horizontal(args)
 
   function decorated:hide()
     self.lie_layout:reset()
+    if #self.left_separator_widgets > 0 then
+      self.wrap_layout:remove_widgets(
+        h_table.unpack(self.left_separator_widgets)
+      )
+    end
+    if #self.right_separator_widgets > 0 then
+      self.wrap_layout:remove_widgets(
+        h_table.unpack(self.right_separator_widgets)
+      )
+    end
     self.lie_visible = false
   end
 
   function decorated:show()
     if self.lie_visible then return end
     for _, this_separator in ipairs(self.left_separator_widgets) do
-      self.lie_layout:add(this_separator)
+      self.wrap_layout:insert(1, this_separator)
     end
     for i, each_widget in ipairs(self.lie_widget_list) do
       self.lie_layout:add(each_widget)
@@ -484,7 +501,7 @@ function common.decorated_horizontal(args)
       end
     end
     for _, this_separator in ipairs(self.right_separator_widgets) do
-      self.lie_layout:add(this_separator)
+      self.wrap_layout:add(this_separator)
     end
     self.lie_visible = true
   end
