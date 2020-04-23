@@ -21,22 +21,21 @@ local updates = {}
 
 
 function updates.show_notification()
-  if updates.updates then
-    updates.notification = naughty.notify({
-      title = "updates available:",
-      text = h_string.rstrip(updates.updates),
+  if not updates.notification then
+    updates.notification = naughty.notification({
+      position = beautiful.widget_notification_position,
       font = beautiful.mono_font,
-      replaces_id = updates.notification and updates.notification.id,
-      position = beautiful.widget_notification_position,
       timeout=0,
+      max_width = math.ceil(awful.screen.focused().workarea.width / 2),
     })
+  end
+  local n = updates.notification
+  if updates.updates then
+    n.title = "updates available:"
+    n.message = h_string.rstrip(updates.updates)
   else
-    updates.notification = naughty.notify({
-      title = "no updates",
-      replaces_id = updates.notification and updates.notification.id,
-      position = beautiful.widget_notification_position,
-      timeout=0,
-    })
+    n.title = "no updates"
+    n.message = ''
   end
 end
 
