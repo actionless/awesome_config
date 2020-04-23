@@ -83,7 +83,10 @@ function widget_loader.init(awesome_context)
 
         --sep_media,
         --h_sep,
-      }, enable_sneaky_tray = true,
+      },
+      enable_sneaky_tray = true,
+      margin_right = beautiful.panel_padding_bottom,
+      panel_shape = true,
   })
 
   -- MEM

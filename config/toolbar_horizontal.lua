@@ -17,7 +17,6 @@ function toolbar.init(awesome_context)
   -- Separators
   local separator  = common.constraint({ width=beautiful.panel_widget_spacing, })
   local sep = common.constraint({ width=gmath.round(beautiful.panel_widget_spacing/4) })
-  local nothing  = common.constraint({ width=0, })
 
   local apw = wibox.layout.fixed.horizontal(
     common.panel_shape(
@@ -88,8 +87,6 @@ function toolbar.init(awesome_context)
     center_layout:buttons(wheel_binding)
 
     -- RIGHT side
-    local right_margin = common.constraint({ width=beautiful.panel_padding_bottom, })
-    right_margin:buttons(loaded_widgets.systray_toggle._buttons_table)
     local iseparator  = wibox.container.background(separator, beautiful.panel_widget_bg)
     local right_layout = wibox.widget{
       layout = wibox.layout.align.horizontal,
@@ -128,9 +125,8 @@ function toolbar.init(awesome_context)
         separator,
         sep,
         si==1
-          and common.panel_shape(loaded_widgets.systray_toggle)
+          and loaded_widgets.systray_toggle
           or common.constraint({ width=beautiful.panel_padding_bottom, }),
-        right_margin or nothing,
       }
     }
 
