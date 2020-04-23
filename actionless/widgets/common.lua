@@ -540,6 +540,10 @@ function common.decorated_horizontal(args)
     end
   end
 
+  function decorated:get_text(...)
+    return self.lie_widget:get_text(...)
+  end
+
   function decorated:set_text(...)
     return self.lie_widget:set_text(...)
   end
