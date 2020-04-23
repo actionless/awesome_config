@@ -374,7 +374,7 @@ end
 function common.decorated_horizontal(args)
   local decorated = {
     left_separator_widgets = {},
-    widget_list = {},
+    lie_widget_list = {},
     right_separator_widgets = {},
   }
 
