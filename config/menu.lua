@@ -15,9 +15,11 @@ awful_menu.entry = menu_addon.menu_entry
 
 
 local ICON_SIZES = {
-  'scalable',
+  '512x512',
   '256x256',
+  'scalable',
   '128x128',
+  '96x96',
   '64x64',
   '32x32',
   '24x24',
@@ -29,8 +31,8 @@ local FORMATS = {
 }
 local ICON_THEMES = {
   beautiful.icon_theme,
-  'Adwaita',
   'gnome',
+  'Adwaita',
   'breeze',
   'hicolor',
   --'locolor',
