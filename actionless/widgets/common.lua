@@ -432,6 +432,9 @@ function common.decorated_horizontal(args)
   --decorated.wrap_layout = wibox.layout.flex.horizontal()
   decorated.wrap_layout = wibox.layout.fixed.horizontal()
   decorated.wrap_layout:add(decorated.lie_background)
+  if args.panel_shape then
+    decorated.lie_background = common.set_panel_shape(decorated.lie_background)
+  end
 
   setmetatable(decorated,        { __index = decorated.wrap_layout })
 
