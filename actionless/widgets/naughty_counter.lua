@@ -10,7 +10,6 @@ local beautiful = require('beautiful')
 local dpi = beautiful.xresources.apply_dpi
 
 local common = require("actionless.widgets.common")
-local markup = require("actionless.util.markup")
 local db = require("actionless.util.db")
 
 
@@ -38,22 +37,31 @@ local function widget_factory(args)
   naughty_counter.widget = common.decorated(args)
   naughty_counter.saved_notifications = db.get_or_set(DB_ID, {})
   naughty_counter.prev_count = db.get_or_set(DB_ID_READ_COUNT, 0)
+  naughty_counter.scroll_offset = 0
 
 
-  local function action_button(text, callback)
+  function naughty_counter:widget_action_button(text, callback, widget_args)
     local bg_color = beautiful.notification_bg or beautiful.bg_normal
     local fg_color = beautiful.notification_fg or beautiful.fg_normal
+    widget_args = widget_args or {}
+    local label = {
+      markup = text,
+      font = beautiful.notification_font or "Sans 8",
+      widget = wibox.widget.textbox,
+    }
+    if widget_args.align == 'middle' then
+      label = {
+        nil,
+        label,
+        nil,
+        expand='outside',
+        layout = wibox.layout.align.horizontal,
+      }
+    end
     local widget = common.set_panel_shape(wibox.widget{
       {
         {
-          {
-            {
-              markup = text,
-              font = beautiful.notification_font or "Sans 8",
-              widget = wibox.widget.textbox,
-            },
-            layout = wibox.layout.fixed.horizontal
-          },
+          label,
           layout = wibox.layout.fixed.vertical
         },
         margins = beautiful.notification_panel_button_padding or dpi(5),
@@ -107,7 +115,7 @@ local function widget_factory(args)
     self:update_counter()
   end
 
-  local function notification_widget(notification, idx, unread)
+  function naughty_counter:widget_notification(notification, idx, unread)
     notification.args = notification.args or {}
     local bg_color = beautiful.notification_bg or beautiful.bg_normal
     local fg_color = beautiful.notification_fg or beautiful.fg_normal
@@ -150,10 +158,10 @@ local function widget_factory(args)
     end
     if notification.args.run then
       actions:add(common.constraint({height=actions.spacing}))
-      actions:add(action_button('Open', default_action))
+      actions:add(self:widget_action_button('Open', default_action))
     end
     for _, action in pairs(notification.actions or {}) do
-      actions:add(action_button(action:get_name(), function()
+      actions:add(self:widget_action_button(action:get_name(), function()
         action:invoke(notification)
       end))
     end
@@ -164,10 +172,28 @@ local function widget_factory(args)
         end
       end),
       awful.button({ }, 3, function()
-        naughty_counter:remove_notification(widget.lie_idx)
+        self:remove_notification(widget.lie_idx)
       end)
     ))
     return widget
+  end
+
+  function naughty_counter:widget_panel_label(text)
+    local fg = beautiful.notification_panel_fg or beautiful.panel_fg or beautiful.fg_normal
+    return wibox.widget{
+      nil,
+      {
+        {
+          text=text,
+          widget=wibox.widget.textbox
+        },
+        fg=fg,
+        layout = wibox.container.background,
+      },
+      nil,
+      expand='outside',
+      layout=wibox.layout.align.horizontal,
+    }
   end
 
   function naughty_counter:refresh_notifications()
@@ -176,31 +202,30 @@ local function widget_factory(args)
     margin.margins = beautiful.notification_panel_margin or dpi(10)
     layout.spacing = beautiful.notification_panel_spacing or dpi(10)
     if #self.saved_notifications > 0 then
-      layout:add(action_button(
-        '  X   Clear Notifications',
+      layout:add(self:widget_action_button(
+        '  X  Clear Notifications  ',
         function()
           self:remove_all_notifications()
-        end
+        end,
+        {align='middle'}
       ))
       local unread_count = #self.saved_notifications - self.prev_count
+      if self.scroll_offset > 0 then
+          --text='^^^',
+        layout:add(self:widget_panel_label('↑ ↑'))
+      end
       for idx, n in ipairs(naughty_counter.saved_notifications) do
-        layout:add(
-          notification_widget(n, idx, idx<=unread_count)
-        )
+        if idx >= self.scroll_offset then
+          layout:add(
+            self:widget_notification(n, idx, idx<=unread_count)
+          )
+        end
       end
     else
-      layout:add(wibox.widget.textbox(markup.fg(
-        beautiful.notification_panel_fg or beautiful.panel_fg or beautiful.fg_normal,
-        'No notifications'
-      )))
+      layout:add(self:widget_panel_label('No notifications'))
     end
     margin:set_widget(layout)
     self.sidebar.bg = beautiful.notification_panel_bg or beautiful.panel_bg or beautiful.bg_normal
-
-    --local scroll = wibox.container.scroll.vertical(margin)
-    --scroll:pause()
-    --scroll:set_speed(dpi(30))
-    --self.sidebar:set_widget(scroll)
 
     self.sidebar:set_widget(margin)
   end
@@ -221,6 +246,20 @@ local function widget_factory(args)
         ontop = true,
         type='dock',
       })
+      self.sidebar:buttons(awful.util.table.join(
+        awful.button({ }, 4, function()
+          naughty_counter.scroll_offset = math.max(
+            naughty_counter.scroll_offset - 1, 0
+          )
+          self:refresh_notifications()
+        end),
+        awful.button({ }, 5, function()
+          naughty_counter.scroll_offset = math.min(
+            naughty_counter.scroll_offset + 1, #self.saved_notifications
+          )
+          self:refresh_notifications()
+        end)
+      ))
       self:refresh_notifications()
     end
     if self.sidebar.visible then
