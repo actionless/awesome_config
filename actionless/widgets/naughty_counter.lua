@@ -255,7 +255,7 @@ local function widget_factory(args)
         end),
         awful.button({ }, 5, function()
           naughty_counter.scroll_offset = math.min(
-            naughty_counter.scroll_offset + 1, #self.saved_notifications
+            naughty_counter.scroll_offset + 1, #self.saved_notifications - 1
           )
           self:refresh_notifications()
         end)
