@@ -234,6 +234,7 @@ theme.border_focus = gsc.wm_border_focused_color
 theme.titlebar_fg_normal	= color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color)
 theme.titlebar_bg_normal	= gsc.menubar_bg_color
 theme.notification_border_radius = "theme.border_radius"
+theme.notification_panel_bg = h_string.max_length(gsc.menubar_bg_color, 7) .. "aa"
 
   local rounded_rect_shape = function(cr,w,h)
     gears.shape.rounded_rect(
@@ -306,6 +307,8 @@ end
 
 
 if awesome.composite_manager_running then
+  --theme.notification_border_width = 0
+  theme['notification_bg'] = h_string.max_length(theme['notification_bg'], 7)..'cc'
   --local delayed_call = require('gears.timer').delayed_call
   --delayed_call(function()
     --nlog('composite')
@@ -321,7 +324,6 @@ if awesome.composite_manager_running then
     'notification_bg',
     'panel_bg',
     'menu_bg_normal',
-    'notification_bg',
   }) do
     if #theme[theme_var] == 9 then
       theme[theme_var] = h_string.max_length(theme[theme_var], 7)

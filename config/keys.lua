@@ -544,6 +544,12 @@ function keys.init(awesome_context)
       revelation,
       "Revelation", AWESOME_COLOR
     ),
+    bind_key({modkey, altkey}, "n",
+      function()
+        awesome_context.widgets.naughty_counter:toggle_sidebox()
+      end,
+      "notifications sidebox", AWESOME_COLOR
+    ),
 
     bind_key({modkey, altkey}, "p",
       function()

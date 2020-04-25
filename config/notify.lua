@@ -1,9 +1,10 @@
 local naughty = require("naughty")
 local beautiful = require("beautiful")
+local ruled = require("ruled")
+local awful = require("awful")
 
 local notify = {}
-
-function notify.init(_)
+function notify.init(awesome_context)
 
   naughty.config.padding = beautiful.useless_gap
   naughty.config.defaults.opacity = beautiful.notification_opacity
@@ -13,9 +14,6 @@ function notify.init(_)
   naughty.config.defaults.border_color = beautiful.notification_border_color
   naughty.config.defaults.border_width = beautiful.notification_border_width
   naughty.config.defaults.margin = beautiful.notification_margin
-  --naughty.config.defaults.max_width = (beautiful.notification_width or
-    --math.ceil(screen[1].geometry.width / 3)
-  --)
 
   naughty.config.presets.low.opacity = beautiful.notification_opacity
   naughty.config.presets.low.font = beautiful.notification_font
@@ -24,6 +22,61 @@ function notify.init(_)
   naughty.config.presets.critical.font = beautiful.notification_font
   naughty.config.presets.critical.bg = beautiful.fg_urgent
   naughty.config.presets.critical.fg = beautiful.bg_urgent
+
+  ruled.notification.connect_signal('request::rules', function()
+    ruled.notification.append_rules{
+      {
+        -- All notifications will match this rule.
+        rule       = { },
+        except = {app_name = ''},
+        properties = {
+          screen           = awful.screen.preferred,
+          implicit_timeout = 5,
+        },
+        callback = function(notification)
+          --log('except_blank')
+          --log(notification.app_name)
+          awesome_context.widgets.naughty_counter:add_notification(notification)
+        end
+      --},{
+      --  rule       = { app_name = '' },
+      --  properties = {
+      --    screen           = awful.screen.preferred,
+      --    implicit_timeout = 10,
+      --  },
+      --  callback = function(notification)
+      --    --log('rule_blank')
+      --    --log(notification.app_name)
+      --  end
+      }
+    }
+  end)
+
+  naughty.persistence_enabled = true
+  naughty.connect_signal('request::preset', function(n, _, args)
+    n.args = args
+  end)
+  naughty.connect_signal('request::display', function(n, _, args)
+    if (
+      n.app_name ~= '' and
+      awesome_context.widgets.naughty_counter and
+      awesome_context.widgets.naughty_counter.sidebar and
+      awesome_context.widgets.naughty_counter.sidebar.visible
+    ) then
+      return
+    end
+    local box = naughty.layout.box {notification = n}
+    if args.run then
+      local buttons = box:buttons()
+      buttons = awful.util.table.join(buttons,
+        awful.button({}, 1,
+        function()
+          args.run(n)
+        end)
+      )
+      box:buttons(buttons)
+    end
+  end)
 
   -- {{{ Error handling
   -- Check if awesome encountered an error during startup and fell back to
@@ -49,5 +102,6 @@ function notify.init(_)
     end)
   end
   -- }}}
+
 end
 return notify

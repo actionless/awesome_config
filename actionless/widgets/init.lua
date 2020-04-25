@@ -14,6 +14,7 @@ local widgets = {
         kbd                     = require("actionless.widgets.kbd"),
         arch_updates            = require("actionless.widgets.arch_updates"),
         disk                    = require("actionless.widgets.disk"),
+        naughty_counter         = require("actionless.widgets.naughty_counter"),
 }
 
 return widgets

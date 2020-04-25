@@ -189,6 +189,7 @@ function widget_loader.init(awesome_context)
   end
   w.calendar_popup:attach(w.textclock, nil, {on_hover=true})
 
+  w.naughty_counter = widgets.naughty_counter()
 
   w.screen = {}
   awful.screen.connect_for_each_screen(function(s)

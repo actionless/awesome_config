@@ -127,6 +127,7 @@ function toolbar.init(awesome_context)
         si==1
           and loaded_widgets.systray_toggle
           or common.constraint({ width=beautiful.panel_padding_bottom, }),
+        loaded_widgets.naughty_counter,
       }
     }
 
