@@ -113,7 +113,9 @@ function player.init(args)
 -------------------------------------------------------------------------------
   function player.get_coverart_path()
     local ps = player.player_status
-    return player.coverart_file_path..'_'..enabled_backends[backend_id]..'_'..(ps.cover_url:gsub('/', '_') or ".png")
+    if ps.cover_url then
+      return player.coverart_file_path..'_'..enabled_backends[backend_id]..'_'..(ps.cover_url:gsub('/', '_') or ".png")
+    end
   end
 -------------------------------------------------------------------------------
   function player.run_player()
