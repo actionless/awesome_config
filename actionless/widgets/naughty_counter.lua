@@ -215,7 +215,7 @@ local function widget_factory(args)
         layout:add(self:widget_panel_label('↑ ↑'))
       end
       for idx, n in ipairs(naughty_counter.saved_notifications) do
-        if idx >= self.scroll_offset then
+        if idx > self.scroll_offset then
           layout:add(
             self:widget_notification(n, idx, idx<=unread_count)
           )
