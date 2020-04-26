@@ -177,7 +177,7 @@ function common_theme.create_default_theme(theme_dir, icons_dir)
   theme.notification_max_width = math.ceil(screen[1].geometry.width / 3)
   theme.notification_spacing = dpi(8)
   --
-  theme.notification_panel_width = math.ceil(screen[1].geometry.width / 4)
+  theme.notification_sidebar_width = math.ceil(screen[1].geometry.width / 4)
   theme.notification_border_radius = dpi(2)
 
   theme.mouse_finder_color	= "theme.error"

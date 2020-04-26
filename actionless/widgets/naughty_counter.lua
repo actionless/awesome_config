@@ -33,6 +33,8 @@ local function widget_factory(args)
     end
   end
   args.panel_shape = true
+  args.fg = args.fg or beautiful.notification_counter_fg
+  args.bg = args.bg or beautiful.notification_counter_bg
 
   naughty_counter.widget = common.decorated(args)
   naughty_counter.saved_notifications = db.get_or_set(DB_ID, {})
@@ -64,7 +66,7 @@ local function widget_factory(args)
           label,
           layout = wibox.layout.fixed.vertical
         },
-        margins = beautiful.notification_panel_button_padding or dpi(5),
+        margins = beautiful.notification_sidebar_button_padding or dpi(5),
         layout = wibox.container.margin,
       },
       bg = bg_color,
@@ -119,7 +121,7 @@ local function widget_factory(args)
     notification.args = notification.args or {}
     local bg_color = beautiful.notification_bg or beautiful.bg_normal
     local fg_color = beautiful.notification_fg or beautiful.fg_normal
-    local panel_padding = beautiful.notification_panel_padding or dpi(10)
+    local panel_padding = beautiful.notification_sidebar_padding or dpi(10)
     local actions = wibox.layout.fixed.vertical()
     actions.spacing = math.ceil(panel_padding/2)
     local widget = wibox.widget{
@@ -179,7 +181,7 @@ local function widget_factory(args)
   end
 
   function naughty_counter:widget_panel_label(text)
-    local fg = beautiful.notification_panel_fg or beautiful.panel_fg or beautiful.fg_normal
+    local fg = beautiful.notification_sidebar_fg or beautiful.panel_fg or beautiful.fg_normal
     return wibox.widget{
       nil,
       {
@@ -199,8 +201,8 @@ local function widget_factory(args)
   function naughty_counter:refresh_notifications()
     local layout = wibox.layout.fixed.vertical()
     local margin = wibox.container.margin()
-    margin.margins = beautiful.notification_panel_margin or dpi(10)
-    layout.spacing = beautiful.notification_panel_spacing or dpi(10)
+    margin.margins = beautiful.notification_sidebar_margin or dpi(10)
+    layout.spacing = beautiful.notification_sidebar_spacing or dpi(10)
     if #self.saved_notifications > 0 then
       layout:add(self:widget_action_button(
         '  X  Clear Notifications  ',
@@ -225,7 +227,7 @@ local function widget_factory(args)
       layout:add(self:widget_panel_label('No notifications'))
     end
     margin:set_widget(layout)
-    self.sidebar.bg = beautiful.notification_panel_bg or beautiful.panel_bg or beautiful.bg_normal
+    self.sidebar.bg = beautiful.notification_sidebar_bg or beautiful.panel_bg or beautiful.bg_normal
 
     self.sidebar:set_widget(margin)
   end
@@ -233,7 +235,7 @@ local function widget_factory(args)
   function naughty_counter:toggle_sidebox()
     if not self.sidebar then
       local width = (
-        beautiful.notification_panel_width or
+        beautiful.notification_sidebar_width or
         beautiful.notification_max_width or
         dpi(300)
       )

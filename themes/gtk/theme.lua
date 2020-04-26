@@ -234,7 +234,7 @@ theme.border_focus = gsc.wm_border_focused_color
 theme.titlebar_fg_normal	= color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color)
 theme.titlebar_bg_normal	= gsc.menubar_bg_color
 theme.notification_border_radius = "theme.border_radius"
-theme.notification_panel_bg = h_string.max_length(gsc.menubar_bg_color, 7) .. "aa"
+theme.notification_sidebar_bg = h_string.max_length(gsc.menubar_bg_color, 7) .. "aa"
 
   local rounded_rect_shape = function(cr,w,h)
     gears.shape.rounded_rect(
