@@ -247,6 +247,8 @@ function common_theme.create_default_theme(theme_dir, icons_dir)
   theme.widget_disk		= icons_dir .. "disk.png"
   theme.widget_disk_high	= icons_dir .. "disk_high.png"
 
+  theme.widget_notifications	= icons_dir .. "notifications.png"
+
   theme.recolor_widget_icons = true
 
   theme.tasklist_disable_icon = true

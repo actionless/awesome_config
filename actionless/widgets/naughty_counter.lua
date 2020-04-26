@@ -307,7 +307,11 @@ local function widget_factory(args)
     end)
   ))
 
-
+  if beautiful.show_widget_icon and beautiful.widget_notifications then
+    naughty_counter.widget:set_image(beautiful.widget_notifications)
+  else
+    naughty_counter.widget:hide()
+  end
   naughty_counter:update_counter()
 
   return setmetatable(naughty_counter, { __index = naughty_counter.widget })
