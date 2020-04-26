@@ -89,23 +89,33 @@ theme.warning = theme.xrdb.color3
 -------------------------------------------------------------------------------
 local markup = require('actionless.util.markup')
 local tasklist_status_icons = {
-  ontop = '⌃',
+  ontop = '^',
   sticky = '▪',
   above = '▴',
   below = '▾',
   floating = '✈',
-  maximized = '<b>+</b>',
+  maximized = '+',
   maximized_horizontal = '⬌',
   maximized_vertical = '⬍',
 }
---local tasklist_status = theme.bg_focus
-local tasklist_status = theme.warning
+local tasklist_status = theme.bg_focus
+--local tasklist_status = theme.warning
 local tasklist_status_template = '%s'
 
---tasklist_status_template = markup.fg.color(tasklist_status, tasklist_status_template)
-tasklist_status_template = markup.bg.color(
-  tasklist_status, markup.fg.color(theme.panel_bg, ' '..tasklist_status_template..' ')
-)..' '
+if theme.border_radius > 0 then
+  tasklist_status_template = markup.font("Meslo LG S Regular for Lcarsline",
+    markup.fg.color(tasklist_status, '') ..
+    markup.bg.color(
+      tasklist_status,
+      markup.fg.color(theme.panel_bg, tasklist_status_template)
+    ) ..
+    markup.fg.color(tasklist_status, '')
+  )..' '
+else
+  tasklist_status_template = markup.bg.color(
+    tasklist_status, markup.fg.color(theme.panel_bg, ' '..tasklist_status_template..' ')
+  )..' '
+end
 
 for icon_name, icon_markup in pairs(tasklist_status_icons) do
   theme['tasklist_'..icon_name] = string.format(tasklist_status_template, icon_markup)
