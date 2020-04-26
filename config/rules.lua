@@ -51,13 +51,15 @@ function rules.init(awesome_context)
               {
                 __call = function(_self, c, args)
                   args.honor_workarea = true
-                  local bm = beautiful.useless_gap + beautiful.base_border_width
-                  args.margins = {
-                    left = bm,
-                    right = bm*2,
-                    top = bm,
-                    bottom = bm + beautiful.titlebar_height + beautiful.base_border_width,
-                  }
+                  if not c.maximized then
+                      local bm = beautiful.useless_gap + beautiful.base_border_width
+                      args.margins = {
+                        left = bm,
+                        right = bm*2,
+                        top = bm,
+                        bottom = bm + beautiful.titlebar_height + beautiful.base_border_width,
+                      }
+                  end
                   return awful.placement.no_offscreen(c, args)
                 end
               }
