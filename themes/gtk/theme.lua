@@ -44,9 +44,16 @@ local gtk_border_width = gsc.button_border_width
 if gtk_border_width < 1 then
   gtk_border_width = 1
 end
-theme.border_radius = dpi(gtk_border_radius*1.0)
-theme.client_border_radius = theme.border_radius * 0.8
-theme.panel_widget_border_radius = dpi(gtk_border_radius*0.8)
+
+--theme.border_radius = dpi(gtk_border_radius*1.0)
+--theme.client_border_radius = theme.border_radius * 0.8
+--theme.panel_widget_border_radius = dpi(gtk_border_radius*0.8)
+------ the 3 lines above confirmed to display well with 1x scaling
+------ @TODO: double-check on hidpi setup if GDK_SCALE need to be used or not
+theme.border_radius = dpi(gtk_border_radius*0.8)
+theme.client_border_radius = "theme.border_radius"
+theme.panel_widget_border_radius = "theme.border_radius"
+
 --theme.panel_widget_border_radius = dpi(gtk_border_radius*1.0)
 --theme.border_radius = dpi(5)
 --theme.panel_widget_border_radius = dpi(5)
