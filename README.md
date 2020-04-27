@@ -24,7 +24,7 @@ env NOARGB=y makepkg -fsri
  - in `*-xresources` themes panel [adapts](http://imgur.com/a/qIAAa) for current xrdb theme
 
 `themes/lcars-xresourecs-hidpi/theme.lua`
-![Screenshot](https://github.com/actionless/awesome_config/raw/devel/screenshots/screenshot_new.png "Screenshot")
+![Screenshot](https://raw.githubusercontent.com/actionless/awesome_config/master/screenshots/screenshot_new.png "Screenshot")
 
 `themes/twmish/theme.lua` and [this](https://github.com/actionless/oomox/blob/master/colors/retro/classic_x_new) oomox theme
 ![Screenshot](https://i.redd.it/hre8tx9vynyx.png "Screenshot")
