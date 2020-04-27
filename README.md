@@ -55,9 +55,6 @@ Shows unified percentage of used memory for all applications' processes
 ##### Systray toggle (like in windows xp :) )
 ![st](http://i.imgur.com/HFfERGC.png "st")
 
-##### Calendar (taken from Lain widgetkit)
-![cal](http://i.imgur.com/pB5n12b.png "cal")
-
 ##### Music (supports mpd, cmus, clementine, spotify at the _same_ time)
 ![music](http://i.imgur.com/W7ur5SQ.png "music")
 
