@@ -8,7 +8,7 @@
 
 ```sh
 cd ~/.config/
-git clone https://github.com/actionless/awesome_config.git -b devel awesome
+git clone https://github.com/actionless/awesome_config.git awesome
 cd awesome
 git submodule init
 git submodule update
