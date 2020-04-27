@@ -6,7 +6,6 @@ local dpi = xresources.apply_dpi
 local create_theme = require("actionless.common_theme").create_theme
 local color_utils = require("actionless.util").color
 local gtk_util = require("beautiful.gtk")
-local h_string = require("actionless.util.string")
 
 
 local theme_name = "gtk"
@@ -251,7 +250,7 @@ theme.border_focus = gsc.wm_border_focused_color
 theme.titlebar_fg_normal	= color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color)
 theme.titlebar_bg_normal	= gsc.menubar_bg_color
 theme.notification_border_radius = "theme.border_radius"
-theme.notification_sidebar_bg = h_string.max_length(gsc.menubar_bg_color, 7) .. "aa"
+theme.notification_sidebar_bg = color_utils.transparentize(gsc.menubar_bg_color, 0.66)
 
   local rounded_rect_shape = function(cr,w,h)
     gears.shape.rounded_rect(
@@ -324,13 +323,6 @@ end
 
 
 if awesome.composite_manager_running then
-  --theme.notification_border_width = 0
-  theme['notification_bg'] = h_string.max_length(theme['notification_bg'], 7)..'cc'
-  --local delayed_call = require('gears.timer').delayed_call
-  --delayed_call(function()
-    --nlog('composite')
-  --end)
-
   for _, theme_var in ipairs({
     'border_normal',
     'border_focus',
@@ -342,19 +334,13 @@ if awesome.composite_manager_running then
     'panel_bg',
     'menu_bg_normal',
   }) do
-    if #theme[theme_var] == 9 then
-      theme[theme_var] = h_string.max_length(theme[theme_var], 7)
-    end
-    if #theme[theme_var] == 7 then
-      --theme[theme_var] = theme[theme_var] .."dd"
-      --theme[theme_var] = theme[theme_var] .."ee"
-      theme[theme_var] = theme[theme_var] .."ee"
-      --theme[theme_var] = theme[theme_var] .."88"
-    end
-    --nlog(theme_var..'='..theme[theme_var])
+    --theme[theme_var] = color_utils.transparentize(theme[theme_var], 86)
+    theme[theme_var] = color_utils.transparentize(theme[theme_var], 93)
+    --theme[theme_var] = color_utils.transparentize(theme[theme_var], 53)
   end
+  theme['notification_bg'] = color_utils.transparentize(theme['notification_bg'], 0.8)
 end
 
---theme.bg_systray = "#00000000"
+--theme.bg_systray = TRANSPARENT
 
 return theme

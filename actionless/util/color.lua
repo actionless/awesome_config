@@ -1,3 +1,6 @@
+local h_string = require('actionless.util.string')
+
+
 local color = {}
 
 function color.darker(color_value, darker_n)
@@ -54,6 +57,11 @@ function color.choose_contrast_color(reference, candidate1, candidate2)
             return candidate2
         end
     end
+end
+
+function color.transparentize(hex_color, opacity)
+  if (opacity < 0) or (opacity > 1) then error("Opacity should be within 0 and 1") end
+  return h_string.max_length(hex_color, 7) .. string.format("%2.2x", opacity*255)
 end
 
 return color
