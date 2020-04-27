@@ -33,7 +33,7 @@ env NOARGB=y makepkg -fsri
 ![Screenshot](http://i.imgur.com/fhl6wYp.png "Screenshot")
 
 Lcars layout:
-![Screenshot](https://raw.githubusercontent.com/actionless/awesome_config/devel/screenshots/screenshot.png "Screenshot")
+![Screenshot](https://raw.githubusercontent.com/actionless/awesome_config/master/screenshots/screenshot.png "Screenshot")
 
 The same screenshot with other colors set in ~/.Xresources:
 
@@ -45,12 +45,12 @@ The same screenshot with other colors set in ~/.Xresources:
 ##### CPU
 Shows results from top for last second
 
-![cpu](https://raw.githubusercontent.com/actionless/awesome_config/devel/screenshots/cpu.png "cpu")
+![cpu](https://raw.githubusercontent.com/actionless/awesome_config/master/screenshots/cpu.png "cpu")
 
 ##### Memory
 Shows unified percentage of used memory for all applications' processes
 
-![mem](https://raw.githubusercontent.com/actionless/awesome_config/devel/screenshots/mem.png "mem")
+![mem](https://raw.githubusercontent.com/actionless/awesome_config/master/screenshots/mem.png "mem")
 
 ##### Systray toggle (like in windows xp :) )
 ![st](http://i.imgur.com/HFfERGC.png "st")
