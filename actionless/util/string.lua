@@ -86,7 +86,7 @@ end
 
 function string_helpers.max_length(unicode_string, max_length)
   if not unicode_string then return nil end
-  if #unicode_string <= max_length then
+  if string_helpers.getn(unicode_string) <= max_length then
     return unicode_string
   end
   local result = ''
