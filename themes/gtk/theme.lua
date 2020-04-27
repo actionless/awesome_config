@@ -97,8 +97,11 @@ local tasklist_status_icons = {
   maximized_horizontal = '⬌',
   maximized_vertical = '⬍',
 }
-local tasklist_status = theme.bg_focus
+--local tasklist_status = theme.bg_focus
 --local tasklist_status = theme.warning
+--local tasklist_status = theme.xrdb.color12
+--local tasklist_status = theme.xrdb.color14
+local tasklist_status = theme.xrdb.color6
 local tasklist_status_template = '%s'
 
 if theme.border_radius > 0 then
