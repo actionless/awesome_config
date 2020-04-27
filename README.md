@@ -32,10 +32,6 @@ env NOARGB=y makepkg -fsri
 `themes/gtk/theme.lua` and [this](https://github.com/actionless/oomox/blob/master/colors/retro/uzi) oomox theme
 ![Screenshot](http://i.imgur.com/fhl6wYp.png "Screenshot")
 
-Lcars layout:
-![Screenshot](https://raw.githubusercontent.com/actionless/awesome_config/master/screenshots/screenshot.png "Screenshot")
-
-The same screenshot with other colors set in ~/.Xresources:
 
 
 #### Widget popups
