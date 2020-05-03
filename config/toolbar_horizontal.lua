@@ -22,7 +22,7 @@ function toolbar.init(awesome_context)
     common.panel_shape(
       common.constraint({
         widget=loaded_widgets.volume,
-        width=dpi(120),
+        width=awesome_context.apw_width or dpi(120),
       })
     ),
     separator
