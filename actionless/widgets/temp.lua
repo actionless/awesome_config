@@ -3,6 +3,7 @@
       * (c) 2013-2014, Yauheni Kirylau
 --]]
 local beautiful = require("beautiful")
+local dpi = beautiful.xresources.apply_dpi
 local awful = require("awful")
 local gears_timer = require("gears.timer")
 
@@ -46,7 +47,7 @@ function temp._post_update(str)
   end
 
   if max_temp_delta > 0 then
-    temp.widget:set_text(string.format(" %s: %2i°C ", max_temp_sensor_name, max_temp_sensor_temp))
+    temp.widget:set_text(string.format(" %s: %2i°C", max_temp_sensor_name, max_temp_sensor_temp))
     if beautiful.widget_temp_high then
       temp.widget:set_image(beautiful.widget_temp_high)
     end
@@ -62,6 +63,10 @@ end
 
 function temp.init(args)
   args = args or {}
+  args.margin = args.margin or {
+    left = math.ceil(beautiful.panel_widget_spacing / 2) or dpi(3),
+    right = math.ceil(beautiful.panel_widget_spacing / 2) or dpi(3),
+  }
   local update_interval = args.update_interval or 10
   temp.sensors = args.sensors
   if not temp.sensors then
