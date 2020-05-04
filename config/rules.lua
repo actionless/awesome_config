@@ -50,9 +50,6 @@ function rules.init(awesome_context)
               },
               {
                 __call = function(_self, c, args)
-                  if c.fullscreen then
-                    return c.screen.geometry
-                  end
                   args.honor_workarea = true
                   if not c.maximized then
                       local bm = beautiful.useless_gap + beautiful.base_border_width
@@ -66,7 +63,8 @@ function rules.init(awesome_context)
                   return awful.placement.no_offscreen(c, args)
                 end
               }
-            ),
+            --),
+            ) + awful.placement.skip_fullscreen,
           size_hints_honor = false,
           screen = awful.screen.preferred,
           --slave = true,
