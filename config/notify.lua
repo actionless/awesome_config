@@ -27,27 +27,17 @@ function notify.init(awesome_context)
     ruled.notification.append_rules{
       {
         -- All notifications will match this rule.
-        rule       = { },
-        except = {app_name = ''},
+        rule       = {},
         properties = {
           screen           = awful.screen.preferred,
           implicit_timeout = 5,
         },
+      },{
+        rule       = { },
+        except_any = {app_name = {'', "xfce4-power-manager"}},
         callback = function(notification)
-          --log('except_blank')
-          --log(notification.app_name)
           awesome_context.widgets.naughty_counter:add_notification(notification)
         end
-      --},{
-      --  rule       = { app_name = '' },
-      --  properties = {
-      --    screen           = awful.screen.preferred,
-      --    implicit_timeout = 10,
-      --  },
-      --  callback = function(notification)
-      --    --log('rule_blank')
-      --    --log(notification.app_name)
-      --  end
       }
     }
   end)
