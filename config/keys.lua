@@ -589,8 +589,12 @@ function keys.init(awesome_context)
 
   local diff = nil
   local screen_count = screen.count()
+  local max_tag = 12
+  if screen_count == 1 then
+    max_tag = 24
+  end
   for scr = 1, screen_count do
-    for i = 1, 12 do
+    for i = 1, max_tag do
 
       local skip = false
 
@@ -607,8 +611,14 @@ function keys.init(awesome_context)
       if not skip then
 
         if scr == 1 then
-          -- num keys:
-          diff = 9
+          if i <= 12 then
+            -- num keys:
+            diff = 9
+          elseif i>22 then
+            diff = 72
+          else
+            diff = 54
+          end
         elseif scr >= 2 then
           -- f-keys:
           if i>10 then

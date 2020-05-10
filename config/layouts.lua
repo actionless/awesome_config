@@ -49,6 +49,11 @@ function layouts.init(context)
   -- Define a tag table which hold all screen tags.
   awful.screen.connect_for_each_screen(function(s)
 
+    local max_tag = 12
+    if screen.count() == 1 then
+      max_tag = 24
+    end
+
     local enabled_layouts = {}
     for i, id in ipairs(persistent.tag.get_all_layouts(s, {
       1, 1, 1, 1, 1, 1,
@@ -56,16 +61,22 @@ function layouts.init(context)
     })) do
       enabled_layouts[i] = awful.layout.layouts[id]
     end
-    local tags = awful.tag(
-      persistent.tag.get_all_names(s, {
-        '1:bs', '2:web',  '3:ww', '4:im',   '5:mm', '6',
-        '7:sp', '8',      '9:sd', '10:nl',  '11',  '12'
-      }),
-      s,
-      enabled_layouts
-    )
 
-    for tag_number, mwfact in ipairs(persistent.tag.get_all_mwfact(s, {
+    local tag_names = persistent.tag.get_all_names(s, {
+      '1:bs', '2:web',  '3:ww', '4:im',   '5:mm', '6',
+      '7:sp', '8',      '9:sd', '10:nl',  '11',  '12'
+    })
+
+    local num_tags = #tag_names
+    for i = 1, max_tag - num_tags do
+      local tag_idx = max_tag - num_tags + i
+      table.insert(enabled_layouts, awful.layout.layouts[1])
+      table.insert(tag_names, tostring(tag_idx))
+    end
+
+    local tags = awful.tag(tag_names, s, enabled_layouts)
+
+    for tag_number, mwfact in pairs(persistent.tag.get_all_mwfact(s, {
     --1     2     3      4     5     6
       0.60, 0.75, 0.50,  0.50, 0.50, 0.50,
     --7     8     9      10    11    12
