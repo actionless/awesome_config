@@ -55,7 +55,7 @@ function layouts.init(context)
     end
 
     local enabled_layouts = {}
-    for i, id in ipairs(persistent.tag.get_all_layouts(s, {
+    for i, id in pairs(persistent.tag.get_all_layouts(s, {
       1, 1, 1, 1, 1, 1,
       1, 1, 1, 4, 1, 1,
     })) do
@@ -85,7 +85,7 @@ function layouts.init(context)
         tags[tag_number].master_width_factor = mwfact
     end
 
-    for tag_number, mfpol in ipairs(persistent.tag.get_all_mfpol(s, {
+    for tag_number, mfpol in pairs(persistent.tag.get_all_mfpol(s, {
     --1                      2                      3
       "master_width_factor", "expand",              "master_width_factor",
     --4                      5                      6

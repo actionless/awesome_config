@@ -101,6 +101,7 @@ function table_helpers.add(container, addition)
 end
 
 function table_helpers.getn(container_table)
+  --- #table for hashtables
   local number_of_items = 0
   for _, _ in pairs(container_table) do
     number_of_items = number_of_items + 1
