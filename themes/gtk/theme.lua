@@ -104,20 +104,9 @@ local tasklist_status_icons = {
 local tasklist_status = theme.xrdb.color6
 local tasklist_status_template = '%s'
 
-if theme.border_radius > 0 then
-  tasklist_status_template = markup.font("Meslo LG S Regular for Lcarsline",
-    markup.fg.color(tasklist_status, '') ..
-    markup.bg.color(
-      tasklist_status,
-      markup.fg.color(theme.panel_bg, tasklist_status_template)
-    ) ..
-    markup.fg.color(tasklist_status, '')
-  )..' '
-else
-  tasklist_status_template = markup.bg.color(
-    tasklist_status, markup.fg.color(theme.panel_bg, ' '..tasklist_status_template..' ')
-  )..' '
-end
+tasklist_status_template = markup.bg.color(
+  tasklist_status, markup.fg.color(theme.panel_bg, ' '..tasklist_status_template..' ')
+)..' '
 
 for icon_name, icon_markup in pairs(tasklist_status_icons) do
   theme['tasklist_'..icon_name] = string.format(tasklist_status_template, icon_markup)
