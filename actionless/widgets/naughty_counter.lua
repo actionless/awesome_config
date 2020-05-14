@@ -99,6 +99,22 @@ local function widget_factory(args)
     db.set(DB_ID, mini_notifications)
   end
 
+  function naughty_counter:update_counter()
+    self.widget:set_text(#naughty_counter.saved_notifications)
+    local num_notifications = #naughty_counter.saved_notifications
+    if num_notifications > 0 then
+      local unread_count = #self.saved_notifications - self.prev_count
+      if unread_count > 0 then
+        self.widget:set_warning()
+      else
+        self.widget:set_normal()
+      end
+      self.widget:show()
+    else
+      self.widget:hide()
+    end
+  end
+
   function naughty_counter:remove_notification(idx)
     table.remove(self.saved_notifications, idx)
     self:write_notifications_to_db()
@@ -232,6 +248,11 @@ local function widget_factory(args)
     self.sidebar:set_widget(margin)
   end
 
+  function naughty_counter:mark_all_as_read()
+    self.prev_count = #self.saved_notifications
+    db.set(DB_ID_READ_COUNT, self.prev_count)
+  end
+
   function naughty_counter:toggle_sidebox()
     if not self.sidebar then
       local width = (
@@ -266,22 +287,12 @@ local function widget_factory(args)
     end
     if self.sidebar.visible then
       self.sidebar.visible = false
-      self.prev_count = #self.saved_notifications
-      db.set(DB_ID_READ_COUNT, self.prev_count)
+      self:mark_all_as_read()
     else
       self:refresh_notifications()
       self.sidebar.visible = true
     end
-    naughty_counter.widget:set_normal()
-  end
-
-  function naughty_counter:update_counter()
-    self.widget:set_text(#naughty_counter.saved_notifications)
-    if #naughty_counter.saved_notifications > 0 then
-      self.widget:show()
-    else
-      self.widget:hide()
-    end
+    self.widget:set_normal()
   end
 
   function naughty_counter:add_notification(notification)
@@ -294,7 +305,6 @@ local function widget_factory(args)
     table.insert(naughty_counter.saved_notifications, 1, notification)
     self:write_notifications_to_db()
     self:update_counter()
-    self.widget:set_warning()
     if self.sidebar and self.sidebar.visible then
       self:refresh_notifications()
     end
@@ -304,6 +314,13 @@ local function widget_factory(args)
   naughty_counter.widget:buttons(awful.util.table.join(
     awful.button({ }, 1, function()
       naughty_counter:toggle_sidebox()
+    end),
+    awful.button({ }, 3, function()
+      if naughty_counter.sidebar then
+        naughty_counter.sidebar.visible = false
+      end
+      naughty_counter:mark_all_as_read()
+      naughty_counter:update_counter()
     end)
   ))
 
