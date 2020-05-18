@@ -1,3 +1,4 @@
+local awful_spawn = require("awful.spawn")
 local gears_timer = require("gears.timer")
 
 
@@ -21,6 +22,10 @@ end
 function module.kill_everybody(callback, retries)
   retries = retries or 0
   module.cancel_kill()
+
+  -- kill (sigterm) firefox instead of closing:
+  -- otherwise only the last window would be restored on start
+  awful_spawn('killall firefox')
 
   for si=1,screen.count() do
     local s = screen[si]
