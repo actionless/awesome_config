@@ -145,7 +145,7 @@ function widget_loader.init(awesome_context)
   )
   w.textclock = textclock
   -- Calendar
-  beautiful.calendar_month_padding = 40
+  beautiful.calendar_month_padding = dpi(20)
   beautiful.calendar_month_border_color = beautiful.notification_border_color
   beautiful.calendar_month_border_width = beautiful.notification_border_width
   w.calendar_popup = awful.widget.calendar_popup.month({
