@@ -129,7 +129,7 @@ function widget_loader.init(awesome_context)
   end
   -- Arch updates
   w.updates = widgets.arch_updates({
-      bg = beautiful.panel_widget_fg_warning,
+      bg = TRANSPARENT,
       fg = beautiful.panel_widget_bg_warning,
   })
 
