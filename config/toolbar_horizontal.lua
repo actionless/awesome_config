@@ -92,7 +92,8 @@ function toolbar.init(awesome_context)
       layout = wibox.layout.align.horizontal,
       separator,
       {
-        layout = wibox.layout.flex.horizontal,
+        --layout = wibox.layout.flex.horizontal,
+        layout = wibox.layout.fixed.horizontal,
         common.panel_shape(
           loaded_widgets.music,
           {
@@ -133,10 +134,15 @@ function toolbar.init(awesome_context)
 
 
     -- PANEL LAYOUT
+    local width = s.geometry.width
+    local w3 = width/3
     local layout = wibox.layout.align.horizontal(
-      left_layout,
-      center_layout,
-      right_layout
+      wibox.container.constraint(left_layout, 'max', w3*0.1),
+      --left_layout,
+      wibox.container.constraint(center_layout, 'max', w3*1.1),
+      --center_layout,
+      wibox.container.constraint(right_layout, 'max', w3*1.8)
+      --right_layout
     )
     layout:set_expand('outside')
 

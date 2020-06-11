@@ -427,6 +427,7 @@ function common.decorated_horizontal(args)
 
   decorated.lie_visible = false
   decorated.lie_layout = wibox.layout.fixed.horizontal()
+  --decorated.lie_layout.fill_space = true
   decorated.lie_background = wibox.container.background()
   decorated.lie_background:set_widget(decorated.lie_layout)
   --decorated.wrap_layout = wibox.layout.flex.horizontal()
