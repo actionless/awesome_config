@@ -121,7 +121,8 @@ function widget_loader.init(awesome_context)
   -- Battery
   if awesome_context.have_battery then
     w.bat = widgets.bat({
-      update_interval = 100,
+      update_interval = 30,
+      --update_interval = 100,
       bg = beautiful.widget_bat_bg,
       fg = beautiful.widget_bat_fg,
       show_when_charged=awesome_context.config.bat_show_when_charged or false,
