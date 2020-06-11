@@ -174,7 +174,8 @@ function common_theme.create_default_theme(theme_dir, icons_dir)
   theme.notification_border_width = dpi(2)
   theme.notification_margin = dpi(8)
   theme.notification_icon_size = dpi(200)
-  theme.notification_max_width = math.ceil(screen[1].geometry.width / 3)
+  --theme.notification_max_width = math.ceil(screen[1].geometry.width / 3)
+  theme.notification_max_width = math.ceil(screen[1].geometry.width / 2)
   --theme.notification_spacing = dpi(8)
   theme.notification_spacing = dpi(4)
   --
@@ -244,6 +245,7 @@ function common_theme.create_default_theme(theme_dir, icons_dir)
   theme.widget_music_pause      = icons_dir .. "music_pause.png"
   theme.widget_music_play	= icons_dir .. "music_play.png"
   theme.widget_music_stop	= icons_dir .. "music_stop.png"
+  theme.widget_music_off        = icons_dir .. "music_off.png"
 
   theme.widget_disk		= icons_dir .. "disk.png"
   theme.widget_disk_high	= icons_dir .. "disk_high.png"

@@ -7,6 +7,7 @@ local awful		= require("awful")
 local wibox	= require("wibox")
 local naughty		= require("naughty")
 local beautiful		= require("beautiful")
+local dpi = beautiful.xresources.apply_dpi
 local g_string		= require("gears.string")
 local gears_timer = require("gears.timer")
 
@@ -40,19 +41,23 @@ local player = {
 function player.init(args)
   args = args or {}
   player.args = args
+  args.spacing = 0
   local timeout = args.timeout or 5
   local default_art = args.default_art
   local enabled_backends = args.backends
                            or { 'mpd', 'cmus', 'spotify', 'clementine', }
   local cover_size = args.cover_size or 100
   player.enable_notifications = args.enable_notifications or false
-  --player.artist_widget = common_widget(args)
-  --player.title_widget = common_widget(args)
+  player.icon_widget = common.widget({margin={
+    left=beautiful.show_widget_icon and dpi(4) or 0,
+    right=beautiful.show_widget_icon and dpi(4) or 0
+  }})
   player.artist_widget = wibox.widget.textbox()
-  player.title_widget = wibox.widget.textbox()
   player.separator_widget = wibox.widget.textbox("loading...")
+  player.title_widget = common.widget({margin={right=beautiful.show_widget_icon and dpi(4) or 0}})
   args.widgets = {
     --wibox.widget.textbox(' '),
+    beautiful.show_widget_icon and player.icon_widget or wibox.widget.textbox(''),
     player.artist_widget,
     --common.constraint({
       --height = beautiful.panel_padding_bottom * 2,
@@ -148,6 +153,9 @@ function player.init(args)
       )
     else
       text = enabled_backends[backend_id]
+      if ps.state == nil then
+        text = "waiting for " .. text .. "…"
+      end
     end
     local cover_url = ps.cover_url
     if not cover_url then
@@ -249,9 +257,8 @@ function player.init(args)
 
     if player_status.state == "play" or player_status.state == "pause" then
       -- playing
-      artist = player_status.artist or "playing"
-      title = player_status.title or " "
-      --player.widget:set_icon('music_play')
+      artist = player_status.artist or (player_status.title and '' or "playing")
+      title = player_status.title or ""
       --if #artist + #title > 14*10 then
         --if #artist > 14*5 then
           --artist = h_string.max_length(artist, 14*5) .. "…"
@@ -266,32 +273,39 @@ function player.init(args)
       if player_status.title ~= old_title then
         player.get_coverart()
       end
+      player.separator_widget:set_text(player_status.artist and " - " or "")
     end
     if player_status.state == "play" then
       player.widget:set_normal()
       --player.separator_widget:set_text("⏵")
-      player.separator_widget:set_text("-")
+      player.icon_widget:set_image(beautiful.widget_music_play)
     elseif player_status.state == "pause" then
       -- paused
       --player.widget:set_icon('music_pause')
       --player.widget:set_warning()
       --player.separator_widget:set_text("⏸")
-      player.separator_widget:set_text("-")
       player.widget:set_color({
         bg=args.pause_bg or beautiful.panel_bg,
         fg=args.pause_fg or beautiful.panel_fg,
       })
+      player.icon_widget:set_image(beautiful.widget_music_pause)
     elseif player_status.state == "stop" then
       -- stop
       player.separator_widget:set_text("")
       artist = enabled_backends[backend_id]
       title = "stopped"
       player.widget:set_disabled()
+      player.icon_widget:set_image(beautiful.widget_music_stop)
     else
-      player.separator_widget:set_text("waiting for " .. enabled_backends[backend_id] .. "...")
+      if beautiful.show_widget_icon then
+        player.separator_widget:set_text("")
+      else
+        player.separator_widget:set_text("waiting for " .. enabled_backends[backend_id] .. "… ")
+      end
       artist = ""
       title = ""
       player.widget:set_disabled()
+      player.icon_widget:set_image(beautiful.widget_music_off)
     end
 
     --artist = h_string.multiline_limit_word(artist, 14)
