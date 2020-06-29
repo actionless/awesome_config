@@ -76,7 +76,7 @@ function rules.init(awesome_context)
           --if not awesome_context.DEVEL_DYNAMIC_LAYOUTS then
             awful.client.setslave(c)
           --end
-          --apply_delayed_rule(c)
+          apply_delayed_rule(c)
         end
       },
 
