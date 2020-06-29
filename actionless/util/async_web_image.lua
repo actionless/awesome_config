@@ -44,7 +44,7 @@ end
 local function create_save_callback(filepath)
   local function my_callback(surface, err)
       if err then
-          log("Error occurred:", err)
+          log("Error occurred: " .. err)
       end
       if surface then
           surface:write_to_png(filepath)
