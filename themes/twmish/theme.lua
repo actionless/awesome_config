@@ -121,12 +121,21 @@ theme.revelation_border_color = theme.xrdb.color13
 theme.revelation_bg = theme.panel_bg
 theme.revelation_font = "Monospace Bold 24"
 -- FONTS:
-theme.font = "Monospace Bold 10"
+--theme.font = "Monospace Bold 10"
+theme.thin_font = "Monospace 9"
+theme.font = "Monospace Bold 9"
 --theme.font = "Sans Bold 10"
-theme.tasklist_font = theme.font
-theme.sans_font = "Sans Bold 10"
+theme.sans_font = "Sans Bold 9"
 -- Don't use sans font:
 --theme.sans_font	= "theme.font"
+--
+theme.bold_font = theme.font
+theme.mono_font = theme.font
+theme.tasklist_font = theme.font
+theme.titlebar_font = theme.bold_font
+theme.taglist_font = theme.bold_font
+theme.notification_font = theme.font
+theme.text_font = theme.thin_font
 
 --
 --MISC:
