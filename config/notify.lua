@@ -2,6 +2,7 @@ local naughty = require("naughty")
 local beautiful = require("beautiful")
 local ruled = require("ruled")
 local awful = require("awful")
+local gears = require("gears")
 
 local notify = {}
 function notify.init(awesome_context)
@@ -56,7 +57,15 @@ function notify.init(awesome_context)
     ) then
       return
     end
-    local box = naughty.layout.box {notification = n}
+    local box = naughty.layout.box{
+      notification = n,
+      -- workaround for https://github.com/awesomeWM/awesome/issues/3081 :
+      shape = function(cr,w,h)
+        gears.shape.rounded_rect(
+          cr, w, h, beautiful.notification_border_radius+beautiful.notification_border_width+1
+        )
+      end,
+    }
     if args.run then
       local buttons = box:buttons()
       buttons = awful.util.table.join(buttons,
