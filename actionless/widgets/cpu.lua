@@ -166,7 +166,7 @@ function cpu.init(args)
   cpu.timeout = args.timeout or 0
   cpu.show_pid = args.show_pid or false
   cpu.list_len = args.list_length or 10
-  cpu.widget_text = args.text or 'CPU'
+  cpu.widget_text = args.text or beautiful.widget_cpu_text or 'CPU'
 
   local widget = common_widgets.text_progressbar(args)
   cpu.widget = common_widgets.decorated{widget=widget}
