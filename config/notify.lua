@@ -57,6 +57,7 @@ function notify.init(awesome_context)
     ) then
       return
     end
+    n:set_title('<b>'..n:get_title()..'</b>')
     local box = naughty.layout.box{
       notification = n,
       -- workaround for https://github.com/awesomeWM/awesome/issues/3081 :
