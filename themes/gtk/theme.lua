@@ -82,6 +82,7 @@ theme.tasklist_bg_minimize	= theme.xrdb.color4
 --theme.error = theme.xrdb.color1
 --theme.warning = theme.xrdb.color2
 theme.warning = theme.xrdb.color3
+theme.panel_widget_fg_warning = theme.xrdb.background
 
 -------------------------------------------------------------------------------
 -- Colorize tasklist status icons:
