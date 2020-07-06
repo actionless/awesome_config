@@ -232,7 +232,9 @@ function widget_loader.init(awesome_context)
     )
 
     local shaped_widget_side_padding =  math.floor(
-      beautiful.panel_widget_spacing/2 + beautiful.panel_widget_border_radius/4
+      beautiful.panel_widget_spacing/2 + math.min(
+        beautiful.panel_widget_border_radius, beautiful.basic_panel_height/3.5
+      )
     )
     local function update_taglist_padding(self, c3, index, objects) --luacheck: no unused args
       if beautiful.panel_widget_border_radius > 0 then
