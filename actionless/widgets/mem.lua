@@ -90,7 +90,7 @@ function mem._show_notification_callback(output)
     mem.show_percents and column_headers[mem.columns.percent] or "MiB",
     column_headers[mem.columns.name]
   )
-  result_string = result_string .. '<span font="'  .. tostring(beautiful.text_font)  .. '">'
+  result_string = result_string .. '<span font="'  .. tostring(beautiful.mono_text_font)  .. '">'
   local counter = 0
   for k, v in h_table.spairs(result, function(t,a,b) return t[b] < t[a] end) do
     result_string = result_string .. string.format(mem.show_percents and "%5.1f %s" or "%5d %s", v, k)

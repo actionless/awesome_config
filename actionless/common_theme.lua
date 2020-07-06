@@ -45,7 +45,7 @@ function common_theme.create_default_theme(theme_dir, icons_dir)
 
   theme.mono_font = "Monospace Bold 10"
   theme.font = theme.mono_font
-  theme.text_font = "Monospace 10"
+  theme.mono_text_font = "Monospace 10"
   theme.sans_font = "Sans Bold 10"
   -- Don't use sans font:
   --theme.sans_font	= theme.font

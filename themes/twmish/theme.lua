@@ -135,7 +135,7 @@ theme.tasklist_font = theme.font
 theme.titlebar_font = theme.bold_font
 theme.taglist_font = theme.bold_font
 theme.notification_font = theme.font
-theme.text_font = theme.thin_font
+theme.mono_text_font = theme.thin_font
 
 --
 --MISC:

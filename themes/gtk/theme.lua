@@ -144,21 +144,25 @@ theme.revelation_fg = theme.xrdb.color13
 theme.revelation_border_color = theme.xrdb.color13
 theme.revelation_bg = theme.panel_bg
 theme.revelation_font = "Monospace Bold 24"
+
 -- FONTS:
-theme.font = "Monospace Bold 10"
 theme.font          = theme.gtk.font_family .. ' ' .. theme.gtk.font_size
---theme.font = "Sans Bold 10"
-theme.tasklist_font = theme.font
 theme.sans_font = theme.font
-theme.font          = theme.gtk.font_family .. ' ' .. theme.gtk.font_size
-theme.bold_font = theme.font
-theme.mono_font          = "Monospace Bold " .. theme.gtk.font_size
+
+theme.taglist_font = theme.font
+theme.tasklist_font = theme.font
 if not theme.font:match('Bold') then
   local bold_font = theme.gtk.font_family .. ' Bold ' .. theme.gtk.font_size
   theme.bold_font = bold_font
   theme.titlebar_font = bold_font
   theme.taglist_font = bold_font
+else
+  theme.bold_font = theme.font
 end
+
+theme.mono_font          = "Monospace Bold " .. theme.gtk.font_size - 1
+theme.mono_text_font          = "Monospace " .. theme.gtk.font_size - 1
+--theme.mono_text_font = theme.mono_font
 --theme.hotkeys_description_font = theme.sans_font
 
 -- Don't use sans font:

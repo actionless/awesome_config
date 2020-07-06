@@ -119,7 +119,7 @@ function cpu.notification_callback_done(output)
       )
     end
     result_string = (header_string ..
-      '<span font="'  .. tostring(beautiful.text_font)  .. '">' .. result_string .. '</span> '
+      '<span font="'  .. tostring(beautiful.mono_text_font)  .. '">' .. result_string .. '</span> '
     )
   end
 
