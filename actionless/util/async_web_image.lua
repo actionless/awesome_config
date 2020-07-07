@@ -65,7 +65,9 @@ function module.save_image_async(url, filepath, callback)
     end
     local surface = cache[url]
     create_save_callback(filepath)(surface, nil)
-    return callback(surface, nil)
+    if callback then
+      return callback(surface, nil)
+    end
   end
   module.async_load_image(
     url,
