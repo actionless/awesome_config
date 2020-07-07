@@ -179,7 +179,7 @@ function player.init(args)
       })
     end
     player.notification_object.icon = cover_url
-    player.notification_object.title = '<b>'..ps.title..'</b>'
+    player.notification_object.title = '<b>'..(ps.title or '')..'</b>'
     player.notification_object.text = text
   end
 -------------------------------------------------------------------------------
