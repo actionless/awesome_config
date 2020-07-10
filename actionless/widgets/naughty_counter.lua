@@ -255,6 +255,8 @@ local function widget_factory(args)
   end
 
   function naughty_counter:remove_unread()
+    self.scroll_offset = 0
+    self:refresh_notifications()
     local num_notifications = #self.saved_notifications
     if num_notifications > 0 then
       local unread_count = #self.saved_notifications - self.prev_count
@@ -283,14 +285,14 @@ local function widget_factory(args)
       })
       self.sidebar:buttons(awful.util.table.join(
         awful.button({ }, 4, function()
-          naughty_counter.scroll_offset = math.max(
-            naughty_counter.scroll_offset - 1, 0
+          self.scroll_offset = math.max(
+            self.scroll_offset - 1, 0
           )
           self:refresh_notifications()
         end),
         awful.button({ }, 5, function()
-          naughty_counter.scroll_offset = math.min(
-            naughty_counter.scroll_offset + 1, #self.saved_notifications - 1
+          self.scroll_offset = math.min(
+            self.scroll_offset + 1, #self.saved_notifications - 1
           )
           self:refresh_notifications()
         end)
