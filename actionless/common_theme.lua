@@ -209,6 +209,9 @@ function common_theme.create_default_theme(theme_dir, icons_dir)
   theme.icon_systray_show	= nil
   theme.icon_systray_hide	= nil
 
+  theme.icon_layout_expand = icons_dir .. "expand.svg"
+  theme.icon_layout_master_width_factor = icons_dir .. "master_width_factor.svg"
+
   --theme.taglist_squares_sel	= icons_dir .. "square_sel.png"
   --theme.taglist_squares_unsel	= icons_dir .. "square_unsel.png"
   theme.taglist_squares_sel	= nil

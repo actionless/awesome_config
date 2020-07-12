@@ -6,6 +6,8 @@ local dpi = xresources.apply_dpi
 local create_theme = require("actionless.common_theme").create_theme
 local color_utils = require("actionless.util").color
 local gtk_util = require("beautiful.gtk")
+local recolor_image = require("gears.color").recolor_image
+local surface = require("gears.surface")
 
 
 local theme_name = "gtk"
@@ -299,6 +301,13 @@ theme = create_theme({ theme_name=theme_name, theme=theme, })
 theme = theme_assets.recolor_layout(theme, theme.panel_fg)
 theme = theme_assets.recolor_titlebar_normal(theme, theme.titlebar_fg_normal)
 theme = theme_assets.recolor_titlebar_focus(theme, theme.titlebar_fg_focus)
+for full_name, color in pairs({
+  icon_layout_expand=theme.panel_fg,
+  icon_layout_master_width_factor=theme.panel_fg,
+}) do
+  theme[full_name] = recolor_image(surface.duplicate_surface(theme[full_name]), color)
+end
+
 
 if color_utils.is_dark(theme.panel_bg) then
   theme.clock_fg = color_utils.darker(theme.panel_fg, -16)

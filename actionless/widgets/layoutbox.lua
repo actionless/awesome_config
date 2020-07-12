@@ -13,6 +13,7 @@ local delayed_call = require("gears.timer").delayed_call
 local g_string = require('gears.string')
 
 local tag_helpers = require("actionless.util.tag")
+local common = require("actionless.widgets.common")
 
 --- Layoutbox widget "class".
 
@@ -35,17 +36,21 @@ local function create_widget(args)
     layoutbox.layout_icon = wibox.container.background()
     layoutbox.imagebox = imagebox()
     layoutbox.imagebox:set_resize(true)
+    layoutbox.mfpol_icon = imagebox()
+    layoutbox.mfpol_icon:set_resize(true)
+    layoutbox.mfpol_icon.forced_height = beautiful.basic_panel_height
+    layoutbox.mfpol_icon.forced_width = beautiful.basic_panel_height
     layoutbox.textbox = textbox()
     if args.horizontal then
         layoutbox.layout_icon:set_widget(layoutbox.imagebox)
     else
         layoutbox.layout_icon:set_widget(layoutbox.textbox)
     end
-    layoutbox.mfpol_names = args.mfpol_names or {
-        expand='←→',
-        master_width_factor='→←',
-        empty='  ',
-    }
+    --layoutbox.mfpol_names = args.mfpol_names or {
+    --    expand='←→',
+    --    master_width_factor='→←',
+    --    empty='  ',
+    --}
 
     layoutbox.n_master = wibox.container.background()
     layoutbox.n_master:set_widget(textbox())
@@ -62,10 +67,13 @@ local function create_widget(args)
     --)
     layoutbox.widget = wibox.layout.fixed.horizontal(
         layoutbox.layout_icon,
+        common.constraint({width=math.ceil(beautiful.panel_widget_spacing)}),
         layoutbox.n_master,
-        layoutbox.n_col
+        common.constraint({width=math.ceil(beautiful.panel_widget_spacing)}),
+        layoutbox.n_col,
+        layoutbox.mfpol_icon
     )
-    layoutbox.widget.spacing = beautiful.panel_widget_spacing
+    --layoutbox.widget.spacing = math.ceil(beautiful.panel_widget_spacing/2)
 
     local layouts_menu_items = {}
     for _, layout in ipairs(awful.layout.layouts) do
@@ -115,14 +123,19 @@ local function create_widget(args)
             t = t or awful.screen.focused().selected_tag
             local num_tiled = #tag_helpers.get_tiled(t)
             if self.layout_name == awful.layout.suit.floating.name then
-                self.n_col.widget:set_text(
-                    self.mfpol_names.empty
-                )
+                self.n_col.widget:set_text('')
+                self.n_col.widget.forced_width = beautiful.basic_panel_height
+                self.mfpol_icon.forced_width = 0
+                --self.n_col.widget:set_text(
+                --    self.mfpol_names.empty
+                --)
             else
                 if num_tiled <= t.master_count then return end
                 self.n_col.widget:set_text(
                     string.format("%2.d", t.column_count)
                 )
+                self.n_col.widget.forced_width = beautiful.basic_panel_height
+                self.mfpol_icon.forced_width = 0
             end
         end)
     end
@@ -134,9 +147,13 @@ local function create_widget(args)
             if g_string.startswith(self.layout_name, 'tile') or
                 g_string.startswith(self.layout_name, 'corner')
             then
-                self.n_col.widget:set_markup(
-                    self.mfpol_names[t.master_fill_policy]
-                )
+                self.mfpol_icon:set_image(beautiful.get()['icon_layout_'..t.master_fill_policy])
+                self.n_col.widget.forced_width = 0
+                self.mfpol_icon.forced_width = beautiful.basic_panel_height
+                self.n_col.widget:set_text('')
+                --self.n_col.widget:set_markup(
+                --    self.mfpol_names[t.master_fill_policy]
+                --)
             end
         end)
     end
