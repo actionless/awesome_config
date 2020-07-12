@@ -75,13 +75,25 @@ function menus.init(context)
   local term = awesome_menubar.utils.terminal .. " -e "
 
   local myawesomemenu = {
-    { "hotkeys", function() return false, hotkeys_popup.show_help end},
+    { "hotkeys", function() return false, hotkeys_popup.show_help end, get_icon('devices', 'keyboard')},
     { "manual page", term .. "man awesome" },
     { "edit config", context.cmds.editor_cmd .. " " .. awesome.conffile },
     { "reload", awesome.restart },
-
-    { "hibernate", "xscreensaver-command -lock ; sudo systemctl hibernate", get_icon("apps", "system-hibernate") },
-
+    { "quit", function()
+      awesome.quit()
+    end},
+    { "quit2 (toggle argb)", function()
+      awesome.quit(2)
+    end, get_icon('actions', 'format-text-italic')},
+    { "quit3 (openbox)", function()
+      awesome.quit(3)
+    end, get_icon('apps', 'openbox')},
+  }
+  local shutdown_menu = {
+    { "hibernate",
+      "xscreensaver-command -lock ; sudo systemctl hibernate",
+      get_icon("apps", "system-hibernate") },
+    -- Without X Session Manager:
     { "reboot", function()
       shutdown.kill_everybody(function()
         awful_spawn("reboot")
@@ -92,20 +104,8 @@ function menus.init(context)
         awful_spawn("poweroff")
       end)
     end, get_icon('apps', 'system-shutdown') },
-
-    -- Without X Session Manager:
-    { "quit", function()
-      awesome.quit()
-    end},
-    { "quit2 (toggle argb)", function()
-      awesome.quit(2)
-    end},
-    { "quit3 (openbox)", function()
-      awesome.quit(3)
-    end},
-    { "force shutdown", shutdown.skip_kill},
-    { "cancel shutdown", shutdown.cancel_kill},
-
+    { "force shutdown", shutdown.skip_kill, get_icon('actions', 'edit-redo')},
+    { "cancel shutdown", shutdown.cancel_kill, get_icon('actions', 'edit-undo')},
     -- With X Session Manager:
     --{ "logout", session_logout, get_icon('actions', 'system-log-out') },
     --{ "reboot", session_reboot, get_icon('actions', 'view-refresh') },
@@ -216,11 +216,12 @@ function menus.init(context)
       get_icon('apps', 'audio-player')
     },
     { "applications", applications_menu, get_icon('apps', 'menu-editor') },
+    { "shutdown", shutdown_menu, get_icon('apps', 'system-shutdown') },
     { "awesome", myawesomemenu, beautiful.awesome_icon },
-    { "mpv-xsel",
-      function() awful_spawn.with_shell('mpv "$(xsel -b)"') end,
-      get_icon('apps', 'mpv')
-    },
+    --{ "mpv-xsel",
+    --  function() awful_spawn.with_shell('mpv "$(xsel -b)"') end,
+    --  get_icon('apps', 'mpv')
+    --},
   }
 
 
