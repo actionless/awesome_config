@@ -58,13 +58,6 @@ local function create_widget(args)
     layoutbox.n_col = wibox.container.background()
     layoutbox.n_col:set_widget(textbox())
 
-    --layoutbox.widget = wibox.layout.fixed.horizontal(
-        --layoutbox.layout_icon,
-        --wibox.layout.fixed.horizontal(
-            --layoutbox.n_master,
-            --layoutbox.n_col
-        --)
-    --)
     layoutbox.widget = wibox.layout.fixed.horizontal(
         layoutbox.layout_icon,
         common.constraint({width=math.ceil(beautiful.panel_widget_spacing)}),
