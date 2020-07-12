@@ -243,7 +243,8 @@ function widget_loader.init(awesome_context)
         margin.right = math.floor(beautiful.panel_widget_spacing/2)
         if index == 1 then
           margin.left = shaped_widget_side_padding
-        elseif index == #objects then
+        end
+        if index == #objects then
           margin.right = shaped_widget_side_padding
         end
       end
