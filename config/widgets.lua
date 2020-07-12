@@ -14,6 +14,7 @@ local common = require("actionless.widgets").common
 local tasklist_addon = require("actionless.tasklist_addon")
 local persistent = require("actionless.persistent")
 local markup = require("actionless.util.markup")
+local h_color = require("actionless.util.color")
 
 
 local TRANSPARENT = "#00000000"
@@ -130,7 +131,9 @@ function widget_loader.init(awesome_context)
   end
   -- Arch updates
   w.updates = widgets.arch_updates({
-      bg = TRANSPARENT,
+      bg = (
+        h_color.is_dark(beautiful.panel_bg) == h_color.is_dark(beautiful.xrdb.background)
+      ) and TRANSPARENT or beautiful.panel_widget_fg_warning,
       fg = beautiful.panel_widget_bg_warning,
   })
 
