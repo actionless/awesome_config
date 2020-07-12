@@ -40,6 +40,11 @@ theme.panel_bg = gsc.menubar_bg_color
 theme.panel_widget_bg = gsc.base_color
 theme.panel_widget_fg = gsc.text_color
 
+theme.basic_panel_height = dpi(18)
+theme.panel_padding_bottom = dpi(3)
+theme.panel_height = theme.basic_panel_height + theme.panel_padding_bottom
+
+
 local gtk_border_radius = gsc.button_border_radius
 local gtk_border_width = gsc.button_border_width
 if gtk_border_width < 1 then
@@ -52,6 +57,7 @@ end
 ------ the 3 lines above confirmed to display well with 1x scaling
 ------ @TODO: double-check on hidpi setup if GDK_SCALE need to be used or not
 theme.border_radius = dpi(gtk_border_radius*0.8)
+theme.border_radius = math.min(theme.border_radius, theme.basic_panel_height/2)
 theme.client_border_radius = "theme.border_radius"
 theme.panel_widget_border_radius = "theme.border_radius"
 
@@ -174,9 +180,6 @@ theme.mono_text_font          = "Monospace " .. theme.gtk.font_size - 1
 --MISC:
 --
 
-theme.basic_panel_height = dpi(18)
-theme.panel_padding_bottom = dpi(3)
-
 --theme.border_width = dpi(3)
 --theme.useless_gap = dpi(6)
 
@@ -194,7 +197,6 @@ theme.border_width = dpi(gtk_border_width) * 4
 theme.base_border_width = theme.border_width
 theme.border_width = 0
 
-theme.panel_height = theme.basic_panel_height + theme.panel_padding_bottom
 theme.titlebar_height = theme.basic_panel_height + theme.base_border_width*2
 
 
