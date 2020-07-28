@@ -140,14 +140,15 @@ function player.init(args)
     player.hide_notification()
     if ps.album or ps.date then
       text = string.format(
-        "%s%s\n%s",
+        --"<i>from</i> %s%s\n<i>by</i> %s",
+        "from <b>%s</b>%s\nby <b>%s</b>",
         ps.album,
         ps.date and " ("..ps.date..")" or "",
         ps.artist
       )
     elseif ps.artist then
       text = string.format(
-        "%s\n%s",
+        "by <b>%s</b>\nat %s",
         ps.artist,
         ps.file or enabled_backends[backend_id]
       )
