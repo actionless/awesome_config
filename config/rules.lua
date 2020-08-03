@@ -96,7 +96,7 @@ function rules.init(awesome_context)
 
       -- Applications:
 
-      { rule = { class = "Skype" },
+      { rule_any = { class = {"Skype", "Microsoft Teams - Preview", } },
         properties = {
           tag=capi.screen.primary.tags[4],
           raise=false
