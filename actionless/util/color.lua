@@ -61,7 +61,7 @@ end
 
 function color.transparentize(hex_color, opacity)
   if (opacity < 0) or (opacity > 1) then error("Opacity should be within 0 and 1") end
-  return h_string.max_length(hex_color, 7) .. string.format("%2.2x", opacity*255)
+  return h_string.max_length(hex_color, 7) .. string.format("%2.2x", math.ceil(opacity*255))
 end
 
 return color
