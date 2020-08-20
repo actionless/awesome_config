@@ -25,39 +25,41 @@ function module.kill_everybody(callback, retries)
 
   -- kill (sigterm) firefox instead of closing:
   -- otherwise only the last window would be restored on start
-  awful_spawn('killall firefox')
+  awful_spawn.easy_async_with_shell('while pgrep -f firefox; do kill $(pgrep -f firefox); sleep 0.1 ; done', function()
 
-  for si=1,screen.count() do
-    local s = screen[si]
-    for _, c in ipairs(s.all_clients) do
-      c:kill()
+    for si=1,screen.count() do
+      local s = screen[si]
+      for _, c in ipairs(s.all_clients) do
+        c:kill()
+      end
     end
-  end
 
-  local clients_remains = 0
-  for si=1,screen.count() do
-    local s = screen[si]
-    for _, _ in ipairs(s.all_clients) do
-      clients_remains = clients_remains + 1
+    local clients_remains = 0
+    for si=1,screen.count() do
+      local s = screen[si]
+      for _, _ in ipairs(s.all_clients) do
+        clients_remains = clients_remains + 1
+      end
     end
-  end
-  if (clients_remains == 0) or _confirm_force_shutdown then
-    if callback then
-      callback()
+    if (clients_remains == 0) or _confirm_force_shutdown then
+      if callback then
+        callback()
+      end
+    else
+      if retries > 1 then
+        nlog("there are "..tostring(clients_remains).." clients are still running")
+      end
+      if not kill_timer then
+        kill_timer = gears_timer({
+          callback=function() module.kill_everybody(callback) end,
+          timeout=1,
+          autostart=true,
+          call_now=false,
+        })
+      end
     end
-  else
-    if retries > 1 then
-      nlog("there are "..tostring(clients_remains).." clients are still running")
-    end
-    if not kill_timer then
-      kill_timer = gears_timer({
-        callback=function() module.kill_everybody(callback) end,
-        timeout=1,
-        autostart=true,
-        call_now=false,
-      })
-    end
-  end
+
+  end)
 end
 
 --local function session_logout()
