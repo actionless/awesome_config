@@ -1,11 +1,13 @@
 -- https://github.com/awesomeWM/awesome/issues/2599#issuecomment-455847701
 
-local protected_call = require("gears.protected_call")
 local lgi = require("lgi")
 --local GLib = lgi.GLib
 local Gio = lgi.Gio
 local cairo = lgi.cairo
 local GdkPixbuf = lgi.GdkPixbuf
+
+local protected_call = require("gears.protected_call")
+local awful_spawn = require("awful.spawn")
 
 local h_table = require("actionless.util.table")
 
@@ -55,7 +57,7 @@ local function create_save_callback(filepath)
 end
 
 
-function module.save_image_async(url, filepath, callback)
+function module.save_image_async_real(url, filepath, callback)
   log('gonna '..url..' as '..filepath)
   if cache[url] then
     log('cached '..url..' as '..filepath)
@@ -82,5 +84,20 @@ function module.save_image_async(url, filepath, callback)
   )
 end
 
+function module.save_image_async_curl(url, filepath, callback)
+    awful_spawn.with_line_callback(
+      string.format(
+        "curl -L -s %s -o %s",
+        url,
+        filepath
+      ),{
+      exit=callback
+    })
+end
+
+function module.save_image_async(url, filepath, callback)
+  --return module.save_image_async_real(url, filepath, callback)
+  return module.save_image_async_curl(url, filepath, callback)
+end
 
 return module
