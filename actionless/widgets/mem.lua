@@ -20,6 +20,11 @@ local mem = {
   now = {},
   notification = nil,
   show_percents = true,
+  preserve_args = {
+    python = true,
+    lua = true,
+    node = true,
+  },
 }
 
 
@@ -73,9 +78,12 @@ function mem._show_notification_callback(output)
     local values = h_string.split(line, ' ')
     local percent = values[mem.columns.percent]
     if percent then
-      local name = values[mem.columns.name]
-      if name == 'Web' then name = 'firefox' end
-      if name == 'WebExtensions' then name = 'firefox' end
+      local path = values[mem.columns.name] and h_string.split(values[mem.columns.name], '/')
+      local name = path and path[#path]
+      local args = h_table.range(values, mem.columns.name+1, #values)
+      if args and mem.preserve_args[name] then
+        name = name .. ' ' .. table.concat(args, ' ')
+      end
       percent = mem.show_percents and (percent + 0) or (percent * 0.01 * mem.now.total)
       if result[name] then
         result[name] = result[name] + percent
@@ -184,7 +192,7 @@ function mem.init(args)
     end)
   ))
 
-  mem.command = "top -o \\%MEM -b -n 1 -w 512"
+  mem.command = "top -o \\%MEM -b -n 1 -w 512 -c"
   mem.columns = args.columns or {
     percent=10,
     name=12

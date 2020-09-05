@@ -21,6 +21,11 @@ local cpu = {
   last_active = 0,
   now = {},
   notification = nil,
+  preserve_args = {
+    python = true,
+    lua = true,
+    node = true,
+  },
 }
 
 function cpu.hide_notification()
@@ -70,7 +75,12 @@ function cpu.notification_callback_done(output)
     local values = h_string.split(line, ' ')
     local pid = values[cpu.columns.pid]
     local percent = values[cpu.columns.percent]
-    local name = values[cpu.columns.name]
+    local path = values[cpu.columns.name] and h_string.split(values[cpu.columns.name], '/')
+    local name = path and path[#path]
+    local args = h_table.range(values, cpu.columns.name+1, #values)
+    if args and cpu.preserve_args[name] then
+      name = name .. ' ' .. table.concat(args, ' ')
+    end
     if percent then percent = percent + 0 end
     if percent and percent ~= 0 and name ~= 'top' then
       if result[pid] then
@@ -186,7 +196,7 @@ function cpu.init(args)
     "mouse::leave", function () cpu.hide_notification() end
   )
 
-  cpu.command = "top -o \\%CPU -b -n 1 -w 512"
+  cpu.command = "top -o \\%CPU -b -n 1 -w 512 -c"
   cpu.columns = args.columns or {
     pid=1,
     percent=9,
