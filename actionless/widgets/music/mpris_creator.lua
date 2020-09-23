@@ -13,6 +13,7 @@ local a_image = require("actionless.util.async_web_image")
 local a_table = require("actionless.util.table")
 
 local DEBUG_LOG = false
+--local DEBUG_LOG = true
 local function _log(...)
   if DEBUG_LOG then
     log(...)
@@ -229,6 +230,7 @@ end
 
 local TIMEOUT = 10
 local function create_for_match(match, args)
+
   local player
   local tmp_result = {
     init = function(_p) player=_p end,
@@ -236,15 +238,19 @@ local function create_for_match(match, args)
   }
 
   local last_instance_id
-
   local _worker
   function _worker()
     find_service_names(match, function(names)
-      if #names > 0 then
+      if #names == 0 then
+        _log("::MPRIS-CREATOR: Service '"..match.."' not found")
+        _log("::MPRIS-CREATOR: Retrying in "..tostring(TIMEOUT).." seconds")
+      else
         --for _, name in ipairs(names) do
         local name = names[#names]
           local postfix = table.concat(a_table.range(g_string.split(name, '.'), 4), '.')
-          if postfix ~= last_instance_id then
+          if postfix == last_instance_id then
+            _log("::MPRIS-CREATOR: backend for "..match.." already exists")
+          else
             last_instance_id = postfix
             _log("::MPRIS-CREATOR: Creating MPRIS backend for "..name)
             local backend = create(postfix, args)
@@ -255,31 +261,20 @@ local function create_for_match(match, args)
             player.update()
           end
         --end
-      else
-        _log("::MPRIS-CREATOR: Service '"..match.."' not found")
-        _log("::MPRIS-CREATOR: Retrying in "..tostring(TIMEOUT).." seconds")
-        --local timer
-        --timer = g_timer{
-        --  callback=function()
-        --    timer:stop()
-        --    _worker()
-        --  end,
-        --  timeout=TIMEOUT,
-        --  autostart=true,
-        --  call_now=false,
-        --}
       end
     end)
   end
-  --_worker()
-    g_timer{
-      callback=function()
+
+  g_timer{
+    callback=function()
+      if not player or (player.backend == tmp_result) then
         _worker()
-      end,
-      timeout=TIMEOUT,
-      autostart=true,
-      call_now=true,
-    }
+      end
+    end,
+    timeout=TIMEOUT,
+    autostart=true,
+    call_now=true,
+  }
 
   return tmp_result
 end
