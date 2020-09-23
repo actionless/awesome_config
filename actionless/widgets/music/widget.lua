@@ -153,7 +153,7 @@ function player.init(args)
         ps.file or enabled_backends[backend_id]
       )
     else
-      text = enabled_backends[backend_id]
+      text = "at " .. enabled_backends[backend_id]
       if ps.state == nil then
         text = "waiting for " .. text .. "…"
       end

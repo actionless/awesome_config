@@ -7,23 +7,66 @@ local dbus = dbus -- luacheck: ignore
 local Gio = require("lgi").Gio
 local GLib = require("lgi").GLib
 local g_string		= require("gears.string")
+local g_timer = require("gears.timer")
 
 local a_image = require("actionless.util.async_web_image")
+local a_table = require("actionless.util.table")
 
+local DEBUG_LOG = false
+local function _log(...)
+  if DEBUG_LOG then
+    log(...)
+  end
+end
 
+log("::MPRIS-CREATOR: Initializing DBus connection...")
 local dbus_connection = assert(Gio.bus_get_sync(Gio.BusType.SESSION))
 local default_parameters = GLib.Variant('()', {})
 local default_reply_type = GLib.VariantType.new("()")
 
+local function find_service_names(match, callback)
+  --
+  -- qdbus org.freedesktop.DBus /org/freedesktop/DBus GetAll org.freedesktop.DBus
+  -- qdbus org.freedesktop.DBus /org/freedesktop/DBus Introspect
+  -- qdbus org.freedesktop.DBus / ListNames
+  --
+  _log("DBUS-SHIT: gonna list names...")
+  dbus_connection:call(
+    "org.freedesktop.DBus",
+    "/",
+    "org.freedesktop.DBus",
+    "ListNames",
+    default_parameters,
+    GLib.VariantType.new("(as)"),
+    Gio.DBusCallFlags.NO_AUTO_START,
+    -1,
+    nil,
+    function(conn, result)
+      local call_result = conn:call_finish(result)
+      local values
+      if call_result then
+        values = call_result.value
+      end
+      _log("DBUS-SHIT: got names")
+      local names_found = {}
+      for _, service_name in values[1]:ipairs() do
+        if service_name:match(match) then
+          table.insert(names_found, service_name)
+        end
+      end
+      callback(names_found)
+    end
+  )
+end
 
 local function create(name, args)
   args = args or {}
   local cmd = args.cmd or name
   local seek = args.seek or false
 
-  local dbus_path1 = "org.mpris.MediaPlayer2."..name
-  local dbus_path2 = "/org/mpris/MediaPlayer2"
-  local dbus_path3 = "org.mpris.MediaPlayer2.Player"
+  local bus_name = "org.mpris.MediaPlayer2."..name
+  local object_path = "/org/mpris/MediaPlayer2"
+  local default_interface_name = "org.mpris.MediaPlayer2.Player"
 
   local backend = {
     player_status = {},
@@ -34,12 +77,14 @@ local function create(name, args)
     backend.player = widget
   end
   -------------------------------------------------------------------------------
-  local function dbus_call(action, dbus_args)
+  local function dbus_call(method_name, dbus_args)
     dbus_args = dbus_args or {}
     local callback = dbus_args.callback
     local parameters = dbus_args.parameters or default_parameters
     local reply_type = dbus_args.reply_type or default_reply_type
-    local dbus_path = dbus_args.dbus_path3 or dbus_path3
+    local interface_name = dbus_args.interface_name or default_interface_name
+
+    --_log("DBUS-SHIT: calling "..method_name.." on "..name.."...")
 
     local function invoke_callback(conn, result)
         local call_result = conn:call_finish(result)
@@ -47,16 +92,17 @@ local function create(name, args)
         if call_result then
           values = call_result.value
         end
+        --_log("DBUS-SHIT: "..method_name.." on "..name.." returned: " .. (values and 'values' or 'nil'))
         if callback then
             callback(values)
         end
     end
 
     dbus_connection:call(
-      dbus_path1,
-      dbus_path2,
-      dbus_path,
-      action,
+      bus_name,
+      object_path,
+      interface_name,
+      method_name,
       parameters,
       reply_type,
       Gio.DBusCallFlags.NO_AUTO_START,
@@ -84,7 +130,7 @@ local function create(name, args)
       callback=function(result)
         backend._post_update(result, parse_status_callback)
       end,
-      dbus_path3 = "org.freedesktop.DBus.Properties",
+      interface_name = "org.freedesktop.DBus.Properties",
       reply_type = GLib.VariantType.new("(a{sv})"),
       parameters = GLib.Variant('(s)', {"org.mpris.MediaPlayer2.Player"})
     })
@@ -135,6 +181,11 @@ local function create(name, args)
       file=result['xesam:url'],
       date=result['year'],
     }
+    for k, v in pairs(player_status) do
+      if v == "" then
+        player_status[k] = nil
+      end
+    end
     backend.player_status = player_status
     parse_status_callback(backend.player_status)
   end
@@ -176,4 +227,61 @@ local function create(name, args)
   return backend
 end
 
-return create
+local TIMEOUT = 10
+local function create_for_match(match, args)
+  local player
+  local tmp_result = {
+    init = function(_p) player=_p end,
+    update = function() end,
+  }
+
+  local last_instance_id
+
+  local _worker
+  function _worker()
+    find_service_names(match, function(names)
+      if #names > 0 then
+        --for _, name in ipairs(names) do
+        local name = names[#names]
+          local postfix = table.concat(a_table.range(g_string.split(name, '.'), 4), '.')
+          if postfix ~= last_instance_id then
+            last_instance_id = postfix
+            _log("::MPRIS-CREATOR: Creating MPRIS backend for "..name)
+            local backend = create(postfix, args)
+            for k, v in pairs(backend) do
+              tmp_result[k] = v
+            end
+            tmp_result.init(player)
+            player.update()
+          end
+        --end
+      else
+        _log("::MPRIS-CREATOR: Service '"..match.."' not found")
+        _log("::MPRIS-CREATOR: Retrying in "..tostring(TIMEOUT).." seconds")
+        --local timer
+        --timer = g_timer{
+        --  callback=function()
+        --    timer:stop()
+        --    _worker()
+        --  end,
+        --  timeout=TIMEOUT,
+        --  autostart=true,
+        --  call_now=false,
+        --}
+      end
+    end)
+  end
+  --_worker()
+    g_timer{
+      callback=function()
+        _worker()
+      end,
+      timeout=TIMEOUT,
+      autostart=true,
+      call_now=true,
+    }
+
+  return tmp_result
+end
+
+return setmetatable({create_for_match=create_for_match}, {__call=function(_, ...)return create(...)end})
