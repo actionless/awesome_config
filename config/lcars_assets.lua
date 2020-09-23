@@ -29,7 +29,6 @@ function assets.top_left_corner_wibox()
   external_corner_wibox_layout.width  = beautiful.left_panel_width - beautiful.panel_padding_bottom
   external_corner_wibox_layout.x = 0
   external_corner_wibox_layout.y = 0
-  external_corner_wibox_layout.opacity = beautiful.panel_opacity
   local top_left_corner_image = assets.top_left_corner_image()
   local top_left_corner_imagebox = wibox.widget.imagebox()
   top_left_corner_imagebox:set_image(top_left_corner_image)
@@ -103,7 +102,6 @@ function assets.internal_corner_wibox()
   w.width  = internal_corner_radius
   w.x = beautiful.left_panel_width - beautiful.panel_padding_bottom
   w.y = beautiful.basic_panel_height
-  w.opacity = beautiful.panel_opacity
   local img = assets.internal_corner_image()
   local internal_corner_imagebox = wibox.widget.imagebox()
   internal_corner_imagebox:set_image(img)
@@ -123,7 +121,6 @@ function assets.top_internal_corner_wibox()
   wibox_instance.width  = internal_corner_radius
   wibox_instance.x = beautiful.left_panel_width - beautiful.panel_padding_bottom
   wibox_instance.y = beautiful.basic_panel_height
-  wibox_instance.opacity = beautiful.panel_opacity
   local img = cairo.ImageSurface.create(cairo.Format.ARGB32, internal_corner_radius, internal_corner_radius)
   local cr = cairo.Context.create(img)
 

@@ -381,7 +381,6 @@ function widget_loader.init(awesome_context)
       position = "top",
       screen = s,
       height = beautiful.panel_height,
-      opacity = beautiful.panel_opacity,
       bg=beautiful.panel_bg,
       fg=beautiful.panel_fg,
     })

@@ -87,9 +87,6 @@ function common_theme.create_default_theme(theme_dir, icons_dir)
 
   -- PANEL OPTIONS:
 
-  --theme.panel_opacity		= 0.96
-  --theme.panel_opacity		= 0.92
-  theme.panel_opacity		= 0.87
   theme.basic_panel_height	= dpi(18)
   theme.panel_padding_bottom	= dpi(6)
   theme.panel_height		= theme.basic_panel_height + theme.panel_padding_bottom

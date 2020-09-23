@@ -71,7 +71,6 @@ function toolbar.init(awesome_context)
       screen = s,
       --height = beautiful.panel_height,
       width = beautiful.left_panel_width,
-      opacity = beautiful.panel_opacity,
       visible = false,
       bg=beautiful.panel_bg,
       fg=beautiful.panel_fg,
