@@ -50,7 +50,7 @@ function widget_loader.init(awesome_context)
       update_interval = 5,
       backends = conf.music_players,
       fg = beautiful.widget_music_bg,
-      bg = beautiful.panel_bg,
+      bg = TRANSPARENT,
       force_no_bgimage=true,
       mopidy_player_command = awesome_context.cmds.tmux_run .. "ncmpcpp",
       enable_notifications = false,
