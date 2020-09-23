@@ -153,9 +153,11 @@ function player.init(args)
         ps.file or enabled_backends[backend_id]
       )
     else
-      text = "at " .. enabled_backends[backend_id]
+      text = enabled_backends[backend_id]
       if ps.state == nil then
         text = "waiting for " .. text .. "…"
+      else
+        text = "at " .. text
       end
     end
     local cover_url = ps.cover_url
