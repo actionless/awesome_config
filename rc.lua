@@ -69,7 +69,8 @@ local context = {
 
   -- @TODO: rename to 'widget_config'
   config = {
-    net_preset = 'netctl-auto',
+    --net_preset = 'netctl-auto',
+    net_preset = nil,
     wlan_if = 'wlp12s0',
     eth_if = 'enp0s25',
     music_players = { 'spotify', 'clementine' },

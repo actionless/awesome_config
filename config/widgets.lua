@@ -37,12 +37,14 @@ function widget_loader.init(awesome_context)
   })
 
   -- NetCtl
-  --w.netctl = widgets.netctl({
-    --update_interval = 5,
-    --preset = conf.net_preset,
-    --wlan_if = conf.wlan_if,
-    --eth_if = conf.eth_if,
-  --})
+  if conf.net_preset then
+    w.netctl = widgets.netctl({
+      update_interval = 5,
+      preset = conf.net_preset,
+      wlan_if = conf.wlan_if,
+      eth_if = conf.eth_if,
+    })
+  end
   -- MUSIC
   w.music = widgets.music.widget({
       update_interval = 5,
@@ -71,24 +73,21 @@ function widget_loader.init(awesome_context)
       end
   end
 
-  local separator  = common.constraint({ width=beautiful.panel_widget_spacing, })
   -- systray_toggle
-  w.systray_toggle = widgets.sneaky_toggle({
+  local panel_widget_separator = wibox.container.background(
+    common.constraint({ width=beautiful.panel_widget_spacing, }),
+    beautiful.panel_widget_bg
+  )
+  w.systray_toggle = common.panel_shape(widgets.sneaky_toggle({
       widgets={
-        --h_sep,
-        --sep_media,
-
-        separator,
-        --w.netctl,
-        --separator,
-
-        --sep_media,
-        --h_sep,
+        panel_widget_separator,
+        w.netctl,
+        panel_widget_separator,
       },
       enable_sneaky_tray = true,
-      margin_right = beautiful.panel_padding_bottom,
-      panel_shape = true,
-  })
+      --margin_right = beautiful.panel_padding_bottom,
+      panel_shape = false,
+  }))
 
   -- MEM
   w.mem = widgets.mem({

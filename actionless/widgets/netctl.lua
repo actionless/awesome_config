@@ -36,7 +36,15 @@ local function worker(args)
     awful.spawn.easy_async(
       cmd,
       function(stdout)
-        netctl.update_widget(stdout:match(match) or fallback)
+        local got_match = stdout:match(match)
+        --netctl.update_widget(got_match or fallback)
+        --
+        netctl.widget:set_text(got_match or fallback)
+        if got_match then
+          netctl.widget:set_image(beautiful.widget_net_wifi)
+        else
+          netctl.widget:set_image(beautiful.widget_net_searching)
+        end
       end)
   end
 
@@ -110,7 +118,6 @@ local function worker(args)
   end
 
   function netctl.update_widget(network_name)
-    --nlog(network_name)
     netctl.widget:set_text(network_name)
     if netctl.interface == netctl.eth_if then
       netctl.widget:set_image(beautiful.widget_net_wired)
