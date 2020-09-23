@@ -282,7 +282,6 @@ function player.init(args)
       player.icon_widget:set_image(beautiful.widget_music_play)
     elseif player_status.state == "pause" then
       -- paused
-      --player.widget:set_icon('music_pause')
       --player.widget:set_warning()
       --player.separator_widget:set_text("⏸")
       player.widget:set_color({

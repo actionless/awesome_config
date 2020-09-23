@@ -156,14 +156,6 @@ function common.widget(args)
     return self.text_widget:set_markup(...)
   end
 
-  function widget_bg:set_icon(name)
-    if self.icon_widget then
-      local icon = beautiful.get()['widget_' .. name]
-      gears.debug.assert(icon, ":set_icon failed: icon is missing: " .. name)
-      return self.icon_widget:set_image(icon)
-    end
-  end
-
   if args.text then
     widget_bg:set_text(args.text)
   end
