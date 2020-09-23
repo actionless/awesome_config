@@ -258,7 +258,9 @@ local function create_for_match(match, args)
               tmp_result[k] = v
             end
             tmp_result.init(player)
-            player.update()
+            if player then
+              player.update()
+            end
           end
         --end
       end
