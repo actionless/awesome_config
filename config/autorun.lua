@@ -12,7 +12,6 @@ function autorun.init(awesome_context)
   --with_shell(os.getenv('HOME').."/.screenlayout/awesome.sh")
   --with_shell('xinput disable "ELAN Touchscreen"')
 
-  local sanwa_pad = true
 
   --local kensington = nil
   --if kensington then  -- detect it after asynchronously reading `xinput list` output
@@ -26,29 +25,6 @@ function autorun.init(awesome_context)
     --with_shell('xinput set-prop ' .. kensington .. ' "Evdev Wheel Emulation Timeout" 200')
   --end
 
-  if sanwa_pad then  -- detect it after asynchronously reading `xinput list` output
-    --legacy evdev-based:
-    --local sanwa_big = 12
-    --with_shell('xinput set-prop ' .. sanwa_pad .. ' "Device Accel Velocity Scaling" 26')
-    --with_shell('xinput set-prop ' .. sanwa_pad .. ' "Evdev Middle Button Emulation" 1')
-    --with_shell('xinput set-prop ' .. sanwa_pad .. ' "Evdev Wheel Emulation" 1')
-    --with_shell('xinput set-prop ' .. sanwa_pad .. ' "Evdev Wheel Emulation Button" 2')
-    --with_shell('xinput set-prop ' .. sanwa_pad .. ' "Evdev Wheel Emulation Timeout" 200')
-    ----wheel inertia:
-    ----default:
-    --with_shell('xinput set-prop ' .. sanwa_pad .. ' "Evdev Wheel Emulation Inertia" 350')
-    ----from workstation:
-    ----with_shell('xinput set-prop ' .. sanwa_pad .. ' "Evdev Wheel Emulation Inertia" 50')
-    ----from vm:
-    ----with_shell('xinput set-prop ' .. sanwa_pad .. ' "Evdev Wheel Emulation Inertia" 170')
-
-
-    --libinput-based:
-    spawn{
-      'xinput', 'set-prop', 'HID 04d9:1166',
-      "libinput Scroll Method Enabled", '0', '0', '1'
-    }
-  end
 
   -- keyboard settings:
   spawn{"xset", "r", "rate", "250", "25"}
