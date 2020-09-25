@@ -113,6 +113,12 @@ function updates.init(args)
   updates.widget:connect_signal(
     "mouse::leave", function () updates.hide_notification() end
   )
+  updates.widget:buttons(awful.util.table.join(
+    awful.button({ }, 1, function()
+      updates.check_updates()
+    end)
+  ))
+
 
   gears_timer({
     callback=updates.check_updates,
