@@ -97,7 +97,7 @@ function updates.init(args)
       gmath.round(beautiful.panel_widget_spacing/2)
     )
   }
-  local update_interval = args.update_interval or 60
+  local update_interval = args.update_interval or 600  -- 10 minutes
   updates.helper = args.helper or "pikaur"
 
   updates.widget = decorated_widget(args)
