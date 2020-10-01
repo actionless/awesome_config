@@ -139,7 +139,7 @@ function widget_loader.init(awesome_context)
   -- Textclock
   local textclock = wibox.widget.textclock(
     markup.font(
-      beautiful.bold_font,
+      beautiful.clock_font or beautiful.bold_font,
       markup.fg(
         beautiful.clock_fg or beautiful.panel_fg,
         "%H:%M"
