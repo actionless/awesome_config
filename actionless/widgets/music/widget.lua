@@ -258,6 +258,7 @@ function player.init(args)
     local title = ""
     local old_title = player.player_status.title
     player.player_status = player_status
+    player.old_player_status = player_status
 
     if (
         player_status.state == "play" or
