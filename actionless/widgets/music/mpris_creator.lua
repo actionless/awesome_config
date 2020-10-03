@@ -150,9 +150,11 @@ local function create(name, args)
       state  = 'play'
     elseif result_string:match("Paused") then
       state = 'pause'
+    elseif result_string:match("Stopped") then
+      state = 'stop'
     end
     backend.player_status.state = state
-    if state == 'play' or state == 'pause' then
+    if state == 'play' or state == 'pause' or state == 'stop' then
       backend.parse_metadata(result[1].Metadata, parse_status_callback)
     else
       parse_status_callback(backend.player_status)

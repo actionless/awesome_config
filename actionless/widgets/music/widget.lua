@@ -189,6 +189,7 @@ function player.init(args)
   function player.toggle()
     if player.player_status.state ~= 'pause'
       and player.player_status.state ~= 'play'
+      and player.player_status.state ~= 'stop'
     then
       player.run_player()
       return
@@ -258,7 +259,11 @@ function player.init(args)
     local old_title = player.player_status.title
     player.player_status = player_status
 
-    if player_status.state == "play" or player_status.state == "pause" then
+    if (
+        player_status.state == "play" or
+        player_status.state == "pause" or
+        player_status.state == "stop"
+    ) then
       -- playing
       artist = player_status.artist or (player_status.title and '' or "playing")
       title = player_status.title or ""
@@ -293,9 +298,9 @@ function player.init(args)
       player.icon_widget:set_image(beautiful.widget_music_pause)
     elseif player_status.state == "stop" then
       -- stop
-      player.separator_widget:set_text("")
-      artist = enabled_backends[backend_id]
-      title = "stopped"
+      --player.separator_widget:set_text("")
+      artist = artist or enabled_backends[backend_id]
+      title = title or "stopped"
       player.widget:set_disabled()
       player.icon_widget:set_image(beautiful.widget_music_stop)
     else
