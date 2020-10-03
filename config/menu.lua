@@ -165,7 +165,7 @@ function menus.init(context)
 
     category("Text", {
       --app("Geany", "geany"),
-      app("Oni", "oni"),  -- replace to onivim2 or get rid of it at all
+      app("Oni2", "Oni2", "Onivim2"),
       app("xed", "xed", "accessories-text-editor"),
     }, "office"),
 
