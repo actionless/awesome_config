@@ -110,7 +110,7 @@ function rules.init(awesome_context)
         }
       },
 
-      { rule = { class = "Gradio" },
+      { rule = { class = "Shortwave" },
         properties = {
           tag=capi.screen.primary.tags[7],
           raise=false

@@ -140,7 +140,7 @@ function menus.init(context)
 
     category("Multimedia", {
       app("Clementine", "clementine"),
-      app("GRadio", "gradio", "de.haeckerfelix.gradio"),
+      app("Shortwave", "shortwave", "de.haeckerfelix.Shortwave"),
       app("mpv", "mpv"),
     }, "multimedia"),
 
