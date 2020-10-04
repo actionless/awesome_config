@@ -249,7 +249,6 @@ theme.taglist_bg_occupied = gsc.header_button_bg_color
 theme.border_normal = gsc.wm_border_unfocused_color
 theme.border_focus = gsc.wm_border_focused_color
 theme.titlebar_fg_normal	= color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color)
-theme.titlebar_bg_normal	= gsc.menubar_bg_color
 theme.notification_border_radius = "theme.border_radius"
 theme.notification_sidebar_bg = color_utils.transparentize(gsc.menubar_bg_color, 0.66)
 
@@ -264,18 +263,7 @@ theme.notification_sidebar_bg = color_utils.transparentize(gsc.menubar_bg_color,
     )
   end
 
-  theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
   theme.notification_shape = rounded_rect_shape
-if theme.border_radius > 0 and not awesome.composite_manager_running then
-  theme.titlebar_fg_focus		= gsc.menubar_fg_color
-  --theme.titlebar_bg_focus		= "theme.titlebar_bg_normal"
-  --theme.notification_shape = rounded_rect_shape
-else
-  theme.titlebar_fg_focus		= gsc.selected_fg_color
-  --theme.titlebar_bg_focus		= gsc.wm_border_focused_color
-  ----theme.actionless_titlebar_bg_focus = gsc.wm_border_focused_color
-  --theme.notification_shape = nil
-end
 
 theme.tasklist_shape_minimized = less_rounded_rect_shape
 theme.tasklist_shape_border_width_minimized = theme.panel_widget_border_width
@@ -318,18 +306,22 @@ else
   theme.clock_fg = color_utils.darker(theme.panel_fg, 16)
 end
 
-theme.actionless_titlebar_bg_normal = theme.titlebar_bg_normal
-if theme.border_radius > 0 then
-  theme.actionless_titlebar_bg_focus  = theme.border_focus
-else
-  theme.actionless_titlebar_bg_focus  = theme.gtk.wm_border_focused_color
-end
 
 if theme.border_radius > dpi(15) then
   theme.border_radius = dpi(15)
 end
 
 
+theme.actionless_titlebar_bg_normal = gsc.menubar_bg_color
+if theme.border_radius > 0 then
+  theme.actionless_titlebar_bg_focus  = theme.border_focus
+else
+  theme.actionless_titlebar_bg_focus  = theme.gtk.wm_border_focused_color
+end
+
+
+theme.titlebar_bg_normal = TRANSPARENT
+theme.titlebar_bg_focus = TRANSPARENT
 if awesome.composite_manager_running then
   for _, theme_var in ipairs({
     'border_normal',
@@ -337,21 +329,34 @@ if awesome.composite_manager_running then
     'notification_bg',
     'panel_bg',
     'menu_bg_normal',
-    'titlebar_bg_normal',
-    'titlebar_bg_focus',
   }) do
     --theme[theme_var] = color_utils.transparentize(theme[theme_var], 0.86)
     theme[theme_var] = color_utils.transparentize(theme[theme_var], 0.93)
     --theme[theme_var] = color_utils.transparentize(theme[theme_var], 0.53)
   end
+  theme['notification_bg'] = color_utils.transparentize(
+    theme['notification_bg'], 0.8
+  )
   for _, theme_var in ipairs({
     'actionless_titlebar_bg_normal',
     'actionless_titlebar_bg_focus',
   }) do
-    theme[theme_var] = color_utils.transparentize(theme[theme_var], 0.36)
-    --theme[theme_var] = color_utils.transparentize(theme[theme_var], 0.57)
+    --theme[theme_var] = color_utils.transparentize(theme[theme_var], 0.36)
+    theme[theme_var] = color_utils.transparentize(theme[theme_var], 0.57)
   end
-  theme['notification_bg'] = color_utils.transparentize(theme['notification_bg'], 0.8)
+else
+  for _, theme_var in ipairs({
+    --'actionless_titlebar_bg_normal',
+    'actionless_titlebar_bg_focus',
+  }) do
+    theme[theme_var] = color_utils.transparentize(theme[theme_var], 0.66)
+  end
+end
+
+if theme.border_radius > 0 and not awesome.composite_manager_running then
+  theme.titlebar_fg_focus		= gsc.menubar_fg_color
+else
+  theme.titlebar_fg_focus		= gsc.selected_fg_color
 end
 
 --theme.bg_systray = TRANSPARENT

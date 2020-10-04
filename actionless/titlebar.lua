@@ -574,24 +574,27 @@ function titlebar.make_titlebar(c)
   local titlebar_setup = {
       {
         {
-          awful.titlebar.widget.closebutton(c),
-          awful.titlebar.widget.minimizebutton(c),
-          --awful.titlebar.widget.maximizedbutton(c)),
-          layout = wibox.layout.fixed.horizontal,
-        }, {
           {
-            widget = awful.titlebar.widget.titlewidget(c),
-            align = "center",
-            font = font,
+            awful.titlebar.widget.closebutton(c),
+            awful.titlebar.widget.minimizebutton(c),
+            --awful.titlebar.widget.maximizedbutton(c)),
+            layout = wibox.layout.fixed.horizontal,
+          }, {
+            {
+              widget = awful.titlebar.widget.titlewidget(c),
+              align = "center",
+              font = font,
+            },
+            layout = wibox.layout.flex.horizontal,
+            buttons = get_buttons(c),
+          }, {
+            awful.titlebar.widget.ontopbutton(c),
+            awful.titlebar.widget.stickybutton(c),
+            layout = wibox.layout.fixed.horizontal,
           },
-          layout = wibox.layout.flex.horizontal,
-          buttons = get_buttons(c),
-        }, {
-          awful.titlebar.widget.ontopbutton(c),
-          awful.titlebar.widget.stickybutton(c),
-          layout = wibox.layout.fixed.horizontal,
+          layout = wibox.layout.align.horizontal,
         },
-        layout = wibox.layout.align.horizontal,
+        widget = wibox.container.background,
       },
       top   = beautiful.base_border_width,
       left   = beautiful.base_border_width,
@@ -634,11 +637,11 @@ function titlebar.make_titlebar(c)
       }
   else
     titlebar_setup.color = border_color
+    titlebar_setup[1].bg = beautiful.actionless_titlebar_bg_normal
     tbt:setup({
       titlebar_setup,
       widget = wibox.widget {
         shape = titlebar_container_shape(beautiful.client_border_radius, "top"),
-        bg = beautiful.actionless_titlebar_bg_normal,
         widget = wibox.container.background
       }
     })
