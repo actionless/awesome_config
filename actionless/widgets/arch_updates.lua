@@ -24,7 +24,7 @@ function updates.show_notification()
   if not updates.notification then
     updates.notification = naughty.notification({
       position = beautiful.widget_notification_position,
-      font = beautiful.mono_font,
+      font = beautiful.mono_text_font,
       timeout=0,
       max_width = math.ceil(awful.screen.focused().workarea.width / 2),
     })

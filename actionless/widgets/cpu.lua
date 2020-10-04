@@ -43,7 +43,7 @@ function cpu.show_notification()
   cpu.notification = naughty.notify({
     text = "waiting for top...",
     timeout = cpu.timeout,
-    font = beautiful.mono_font,
+    font = beautiful.mono_text_font,
     replaces_id = cpu.get_notification_id(),
     position = beautiful.widget_notification_position,
   })
@@ -128,15 +128,13 @@ function cpu.notification_callback_done(output)
         column_headers[cpu.columns.name]
       )
     end
-    result_string = (header_string ..
-      '<span font="'  .. tostring(beautiful.mono_text_font)  .. '">' .. result_string .. '</span> '
-    )
+    result_string = header_string .. result_string
   end
 
   cpu.notification = naughty.notify({
     text = result_string,
     timeout = cpu.timeout,
-    font = beautiful.mono_font,
+    font = beautiful.mono_text_font,
     replaces_id = cpu.get_notification_id(),
     position = beautiful.widget_notification_position,
   })

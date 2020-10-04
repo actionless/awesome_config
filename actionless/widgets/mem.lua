@@ -45,7 +45,7 @@ function mem.show_notification()
   mem.notification = naughty.notify({
     text = "waiting for top...",
     timeout = mem.timeout,
-    font = beautiful.mono_font,
+    font = beautiful.mono_text_font,
     replaces_id = mem.get_notification_id(),
     position = beautiful.widget_notification_position,
   })
@@ -98,7 +98,6 @@ function mem._show_notification_callback(output)
     mem.show_percents and column_headers[mem.columns.percent] or "MiB",
     column_headers[mem.columns.name]
   )
-  result_string = result_string .. '<span font="'  .. tostring(beautiful.mono_text_font)  .. '">'
   local counter = 0
   for k, v in h_table.spairs(result, function(t,a,b) return t[b] < t[a] end) do
     result_string = result_string .. string.format(mem.show_percents and "%5.1f %s" or "%5d %s", v, k)
@@ -108,12 +107,11 @@ function mem._show_notification_callback(output)
     end
     result_string = result_string .. '\n'
   end
-  result_string = result_string .. '</span> '
 
   mem.notification = naughty.notify({
     text = result_string,
     timeout = mem.timeout,
-    font = beautiful.mono_font,
+    font = beautiful.mono_text_font,
     replaces_id = mem.get_notification_id(),
     position = beautiful.widget_notification_position,
   })
