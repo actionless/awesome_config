@@ -140,8 +140,9 @@ function menus.init(context)
 
     category("Multimedia", {
       app("Clementine", "clementine"),
-      app("Shortwave", "shortwave", "de.haeckerfelix.Shortwave"),
+      app("Goodvibes", "goodvibes", "io.gitlab.Goodvibes"),
       app("mpv", "mpv"),
+      --app("Shortwave", "shortwave", "de.haeckerfelix.Shortwave"),
     }, "multimedia"),
 
     category("Productivity", {
