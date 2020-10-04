@@ -144,7 +144,7 @@ local function need_titlebar(c)
   end
 end
 
-local function attach_highlight_on_hover(args)
+local function attach_hover_actions(args)
   args = args or {}
   local titlebar_widget = args.widget
   local c = args.client
@@ -251,8 +251,34 @@ function titlebar.remove_border(c)
   c:geometry(geom)
 end
 
-local function make_border_with_shadow(c, color, shadow, is_titlebar)
-  local SHADOW = shadow
+local function get_style_for_client(c)
+  local client_is_focused = client.focus == c
+  return {
+    border = (
+      client_is_focused
+      and beautiful.actionless_titlebar_bg_focus
+      or beautiful.actionless_titlebar_bg_normal
+    ),
+    shadow = (
+      client_is_focused
+      and beautiful.titlebar_shadow_focus
+      or beautiful.titlebar_shadow_normal
+    ),
+    font = (
+      client_is_focused
+      and (beautiful.titlebar_font_focus or beautiful.titlebar_font)
+      or (beautiful.titlebar_font_normal or beautiful.titlebar_font)
+    ),
+  }
+end
+
+local function make_border_with_shadow(c, args)
+  args = args or {}
+  local is_titlebar = args.is_titlebar
+
+  local style = get_style_for_client(c)
+  local border_color = style.border
+  local shadow_color = style.shadow
 
   --               Top border                --
   local tbt
@@ -269,7 +295,7 @@ local function make_border_with_shadow(c, color, shadow, is_titlebar)
               top   = beautiful.border_shadow_width,
               layout = wibox.container.margin,
             },
-            bg=color,
+            bg=border_color,
             widget = wibox.container.background,
           },
           {
@@ -299,7 +325,7 @@ local function make_border_with_shadow(c, color, shadow, is_titlebar)
             layout = wibox.container.margin,
           },
     buttons = get_buttons(c),
-    bg=color,
+    bg=border_color,
     widget    = wibox.container.background
   }
 
@@ -317,7 +343,7 @@ local function make_border_with_shadow(c, color, shadow, is_titlebar)
           left   = beautiful.base_border_width,
           layout = wibox.container.margin,
         },
-        bg=color,
+        bg=border_color,
         widget = wibox.container.background,
       },
       layout = wibox.container.margin,
@@ -339,7 +365,7 @@ local function make_border_with_shadow(c, color, shadow, is_titlebar)
       {
         {
           { text   = ' ', widget = wibox.widget.textbox, },
-          bg=SHADOW,
+          bg=shadow_color,
           widget = wibox.container.background,
         },
         width   = beautiful.border_shadow_width,
@@ -365,7 +391,7 @@ local function make_border_with_shadow(c, color, shadow, is_titlebar)
           top   = beautiful.base_border_width,
           layout = wibox.container.margin,
         },
-        bg=color,
+        bg=border_color,
         widget = wibox.container.background,
       },
       {
@@ -375,7 +401,7 @@ local function make_border_with_shadow(c, color, shadow, is_titlebar)
             top   = beautiful.base_border_width,
             layout = wibox.container.margin,
           },
-          bg=SHADOW,
+          bg=shadow_color,
           widget = wibox.container.background,
         },
         height   = beautiful.base_border_width,
@@ -397,7 +423,7 @@ local function make_border_with_shadow(c, color, shadow, is_titlebar)
       {
         {
           { text   = ' ', widget = wibox.widget.textbox, },
-          bg=SHADOW,
+          bg=shadow_color,
           widget = wibox.container.background,
         },
         height   = beautiful.border_shadow_width,
@@ -461,19 +487,16 @@ if beautiful.client_border_radius and awesome.composite_manager_running then
         end
     end
 else
-    titlebar_container_shape = function()
-        return gears.shape.rectangle
-    end
+  titlebar_container_shape = function(_, _, _)
+    return nil
+  end
 end
 
 
-local function make_border_normal(c, color, is_titlebar)
-
-  color = color or (
-    client.focus == c
-    and beautiful.actionless_titlebar_bg_focus
-    or beautiful.actionless_titlebar_bg_normal
-  )
+local function make_border_normal(c, args)
+  args = args or {}
+  local is_titlebar = args.is_titlebar
+  local border_color = get_style_for_client(c).border
 
   local function _setup_widget(position)
     local tbt = awful.titlebar(c,{size= beautiful.base_border_width or 5, position=position})
@@ -485,7 +508,7 @@ local function make_border_normal(c, color, is_titlebar)
       },
       widget = wibox.widget {
         shape = titlebar_container_shape(beautiful.client_border_radius, position),
-        bg = color,
+        bg = border_color,
         widget = wibox.container.background
       }
     }
@@ -508,73 +531,39 @@ local function make_border_normal(c, color, is_titlebar)
 end
 
 
-function titlebar.make_border(c, color, shadow, is_titlebar)
-  --if not is_titlebar and titlebar.is_enabled(c) then
-    --nlog(1)
-    --titlebar.remove_titlebar(c)
-  --end
+function titlebar.make_border(c, args)
+  local shadow = get_style_for_client(c).shadow
 
-  --if not shadow and titlebar.border_is_enabled(c) then
-    --return
-  --end
-
-  --c.border_width = 0
-  --c.border_color = beautiful.border_normal
+  if not (beautiful.client_border_radius or shadow) and titlebar.border_is_enabled(c) then
+    return
+  end
 
   local borders
   if shadow then
-    make_border_with_shadow(c, color, shadow, is_titlebar)
+    make_border_with_shadow(c, args)
   else
-    borders = make_border_normal(c, color, is_titlebar)
+    borders = make_border_normal(c, args)
     for _, position in ipairs({"top", "bottom", "left", "right"}) do
       if borders[position] then
-        attach_highlight_on_hover({widget=borders[position], client=c})
+        attach_hover_actions({widget=borders[position], client=c})
       end
     end
   end
 end
 
-function titlebar.make_titlebar(c, color, shadow)
-  --if titlebar.is_enabled(c) and not shadow then
-    --return
-  --end
+function titlebar.make_titlebar(c)
+  local style = get_style_for_client(c)
+  local border_color = style.border
+  local shadow = style.shadow
+  local font = style.font
+
+  if not (beautiful.client_border_radius or shadow) and titlebar.is_enabled(c) then
+    return
+  end
 
   if not titlebar.border_is_enabled(c) or shadow then
-    titlebar.make_border(c, color, shadow, true)
+    titlebar.make_border(c, {is_titlebar=true})
   end
-
-  local client_is_focused = client.focus == c
-
-  color = (
-    client_is_focused
-    and (
-      awesome.composite_manager_running
-      and beautiful.actionless_titlebar_bg_focus
-      or  beautiful.actionless_titlebar_bg_normal
-    )
-    or beautiful.actionless_titlebar_bg_normal
-  )
-  if shadow and client_is_focused then
-    color = beautiful.actionless_titlebar_bg_focus
-  end
-
-  local function _setup_widget(position)
-    local w = awful.titlebar(c,{size= beautiful.base_border_width or 5, position=position})
-    w:setup {
-      {
-        buttons = get_buttons(c),
-        id     = "main_layout",
-        layout = wibox.container.background,
-      },
-      widget = wibox.widget {
-        shape = titlebar_container_shape(beautiful.client_border_radius, position, true),
-        bg = color,
-        widget = wibox.container.background
-      }
-    }
-    return w
-  end
-
 
   local tbt = awful.titlebar(c, {
       size=beautiful.titlebar_height or 16,
@@ -582,44 +571,29 @@ function titlebar.make_titlebar(c, color, shadow)
       opacity = beautiful.titlebar_opacity,
     }
   )
-  local font = beautiful.titlebar_font_normal or beautiful.titlebar_font
-  if client_is_focused then
-    font = beautiful.titlebar_font_focus or beautiful.titlebar_font
-  end
   local titlebar_setup = {
       {
         {
-          {
-            awful.titlebar.widget.closebutton(c),
-            awful.titlebar.widget.minimizebutton(c),
-            --awful.titlebar.widget.maximizedbutton(c)),
-            layout = wibox.layout.fixed.horizontal,
-          },
-          top   = beautiful.base_border_width,
-          layout = wibox.container.margin,
+          awful.titlebar.widget.closebutton(c),
+          awful.titlebar.widget.minimizebutton(c),
+          --awful.titlebar.widget.maximizedbutton(c)),
+          layout = wibox.layout.fixed.horizontal,
         }, {
           {
-            {
-              widget = awful.titlebar.widget.titlewidget(c),
-              align = "center",
-              font = font,
-            },
-            layout = wibox.layout.flex.horizontal,
+            widget = awful.titlebar.widget.titlewidget(c),
+            align = "center",
+            font = font,
           },
+          layout = wibox.layout.flex.horizontal,
           buttons = get_buttons(c),
-          top   = beautiful.base_border_width,
-          layout = wibox.container.margin,
         }, {
-          {
-            awful.titlebar.widget.ontopbutton(c),
-            awful.titlebar.widget.stickybutton(c),
-            layout = wibox.layout.fixed.horizontal,
-          },
-          top   = beautiful.base_border_width,
-          layout = wibox.container.margin,
+          awful.titlebar.widget.ontopbutton(c),
+          awful.titlebar.widget.stickybutton(c),
+          layout = wibox.layout.fixed.horizontal,
         },
         layout = wibox.layout.align.horizontal,
       },
+      top   = beautiful.base_border_width,
       left   = beautiful.base_border_width,
       right   = beautiful.base_border_width,
       layout = wibox.container.margin,
@@ -630,7 +604,7 @@ function titlebar.make_titlebar(c, color, shadow)
           nil,
           {
             titlebar_setup,
-            bg=color,
+            bg=border_color,
             widget = wibox.container.background,
           },
           {
@@ -659,20 +633,17 @@ function titlebar.make_titlebar(c, color, shadow)
         layout = wibox.container.background,
       }
   else
+    titlebar_setup.color = border_color
     tbt:setup({
       titlebar_setup,
       widget = wibox.widget {
         shape = titlebar_container_shape(beautiful.client_border_radius, "top"),
-        bg = color,
+        bg = beautiful.actionless_titlebar_bg_normal,
         widget = wibox.container.background
       }
     })
-    _setup_widget("left")
-    _setup_widget("right")
-    attach_highlight_on_hover({widget=tbt, client=c})
+    attach_hover_actions({widget=tbt, client=c})
   end
-
-  --c.skip_taskbar = true
 end
 
 function titlebar.get_titlebar_widget(c)

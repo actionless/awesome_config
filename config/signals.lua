@@ -32,7 +32,7 @@ local function _on_client_unfocus (c)
   if c.titlebars_enabled ==false then
     clog("F: tile: titlebars disabled explicitly", c)
     c.border_width = 0
-    --titlebar.make_border(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
+    --titlebar.make_border(c)
     titlebar.remove_border(c)
   elseif persistent.titlebar.get() and (
     num_tiled > 1 or (
@@ -40,7 +40,7 @@ local function _on_client_unfocus (c)
     )
   ) then
     clog("U: tile: titlebars enabled explicitly", c)
-    titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
+    titlebar.make_titlebar(c)
   elseif c.maximized or c.fullscreen then
     clog("U: maximized", c)
     --set_default_screen_padding(s)
@@ -48,23 +48,23 @@ local function _on_client_unfocus (c)
     titlebar.remove_border(c)
   elseif c.floating and c.class == 'mpv' then
     clog("U: floating mpv", c)
-    titlebar.make_border(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
+    titlebar.make_border(c)
   elseif c.floating then
     clog("U: floating client", c)
-    titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
+    titlebar.make_titlebar(c)
   elseif layout == awful.layout.suit.floating then
     clog("U: floating layout", c)
-    titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
+    titlebar.make_titlebar(c)
   elseif num_tiled > 1 then
     clog("U: multiple tiling clients", c)
-    titlebar.make_border(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
+    titlebar.make_border(c)
   elseif num_tiled == 1 then
     if t.master_fill_policy == 'expand' and screen.count() == 1 then
       clog("U: one tiling client: expand", c)
       titlebar.remove_border(c)
     else
       clog("U: one tiling client", c)
-      titlebar.make_border(c, beautiful.actionless_titlebar_bg_normal, beautiful.titlebar_shadow_normal)
+      titlebar.make_border(c)
     end
   else
     nlog('Signals: U: How did that happened?')
@@ -119,7 +119,7 @@ local function on_client_focus(c)
   if c.titlebars_enabled ==false then
     clog("F: tile: titlebars disabled explicitly", c)
     c.border_width = 0
-    --titlebar.make_border(c, beautiful.actionless_titlebar_bg_focus, beautiful.titlebar_shadow_focus)
+    --titlebar.make_border(c)
     titlebar.remove_border(c)
   elseif persistent.titlebar.get() and (
     num_tiled > 1 or (
@@ -128,7 +128,7 @@ local function on_client_focus(c)
   ) then
     clog("F: tile: titlebars enabled explicitly", c)
     --choose_screen_padding(s, t, num_tiled)
-    titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_focus, beautiful.titlebar_shadow_focus)
+    titlebar.make_titlebar(c)
   elseif c.maximized or c.fullscreen then
     clog("F: maximized", c)
     --set_default_screen_padding(s)
@@ -136,20 +136,20 @@ local function on_client_focus(c)
     titlebar.remove_border(c)
   elseif c.floating and c.class == 'mpv' then
     clog("F: floating mpv", c)
-    titlebar.make_border(c, beautiful.actionless_titlebar_bg_focus, beautiful.titlebar_shadow_focus)
+    titlebar.make_border(c)
   elseif c.floating then
     clog("F: floating client", c)
     --choose_screen_padding(s, t, num_tiled)
-    titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_focus, beautiful.titlebar_shadow_focus)
+    titlebar.make_titlebar(c)
   elseif layout == awful.layout.suit.floating then
     clog("F: floating layout", c)
     --choose_screen_padding(s, t, num_tiled)
-    titlebar.make_titlebar(c, beautiful.actionless_titlebar_bg_focus, beautiful.titlebar_shadow_focus)
+    titlebar.make_titlebar(c)
   elseif num_tiled > 1 then
     clog("F: multiple tiling clients", c)
     --set_default_screen_padding(s)
     c.border_width = beautiful.border_width
-    titlebar.make_border(c, beautiful.actionless_titlebar_bg_focus, beautiful.titlebar_shadow_focus)
+    titlebar.make_border(c)
   elseif num_tiled == 1 then
     if t.master_fill_policy == 'expand' and screen.count() == 1 then
       clog("F: one tiling client: expand", c)
@@ -159,7 +159,7 @@ local function on_client_focus(c)
       clog("F: one tiling client", c)
       --set_mwfact_screen_padding(t)
       c.border_width = beautiful.border_width
-      titlebar.make_border(c, beautiful.actionless_titlebar_bg_focus, beautiful.titlebar_shadow_focus)
+      titlebar.make_border(c)
     end
   else
     clog("F: zero tiling clients -- other tag?", c)
