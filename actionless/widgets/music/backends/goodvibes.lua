@@ -5,4 +5,4 @@
 
 local mpris_creator = require("actionless.widgets.music.mpris_creator")
 
-return mpris_creator('Goodvibes', {cmd='goodvibes'})
+return mpris_creator('Goodvibes', {cmd='goodvibes', key_artist="goodvibes:station"})

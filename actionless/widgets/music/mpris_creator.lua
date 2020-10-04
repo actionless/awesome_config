@@ -64,6 +64,7 @@ local function create(name, args)
   args = args or {}
   local cmd = args.cmd or name
   local seek = args.seek or false
+  local key_artist = args.key_artist
 
   local bus_name = "org.mpris.MediaPlayer2."..name
   local object_path = "/org/mpris/MediaPlayer2"
@@ -177,7 +178,7 @@ local function create(name, args)
     --)
     local player_status = {
       state = backend.player_status.state,
-      artist = result['xesam:artist'] and result['xesam:artist'][1],
+      artist = result[key_artist or 'xesam:artist'],
       title = result['xesam:title'],
       album = result['xesam:album'],
       cover_url=result['mpris:artUrl'],
@@ -185,6 +186,10 @@ local function create(name, args)
       date=result['year'],
     }
     for k, v in pairs(player_status) do
+      if type(v) == 'userdata' then
+        v = v[1]
+        player_status[k] = v
+      end
       if v == "" then
         player_status[k] = nil
       end
