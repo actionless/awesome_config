@@ -21,19 +21,32 @@ function menus.init(context)
   local term = awesome_menubar.utils.terminal .. " -e "
 
   local myawesomemenu = {
-    { "hotkeys", function() return false, hotkeys_popup.show_help end, get_icon('devices', 'keyboard')},
-    { "manual page", term .. "man awesome" },
-    { "edit config", context.cmds.editor_cmd .. " " .. awesome.conffile },
-    { "reload", awesome.restart },
+    { "hotkeys", function()
+        return false, hotkeys_popup.show_help
+      end, get_icon('devices', 'keyboard')
+    },
+    { "manual page", term .. "man awesome",
+      get_icon('actions', 'help-contents')
+    },
+    { "edit config", context.cmds.editor_cmd .. " " .. awesome.conffile,
+      get_icon('actions', 'document-properties')
+    },
+    { "reload", awesome.restart,
+      get_icon('actions', 'view-refresh')
+    },
     { "quit", function()
-      awesome.quit()
-    end},
-    { "quit2 (toggle argb)", function()
-      awesome.quit(2)
-    end, get_icon('actions', 'format-text-italic')},
+        awesome.quit()
+      end, get_icon('actions', 'application-exit')
+    },
+    --{ "quit2 (toggle argb)", function()
+    { "quit2 (argb)", function()
+        awesome.quit(2)
+      end, get_icon('actions', 'format-text-italic')
+    },
     { "quit3 (openbox)", function()
-      awesome.quit(3)
-    end, get_icon('apps', 'openbox')},
+        awesome.quit(3)
+      end, get_icon('apps', 'openbox')
+    },
   }
   local shutdown_menu = {
     { "hibernate",
@@ -41,17 +54,23 @@ function menus.init(context)
       get_icon("apps", "system-hibernate") },
     -- Without X Session Manager:
     { "reboot", function()
-      shutdown.kill_everybody(function()
-        awful_spawn("reboot")
-      end)
-    end, get_icon('apps', 'system-restart') },
+        shutdown.kill_everybody(function()
+          awful_spawn("reboot")
+        end)
+      end, get_icon('apps', 'system-restart')
+    },
     { "poweroff", function()
-      shutdown.kill_everybody(function()
-        awful_spawn("poweroff")
-      end)
-    end, get_icon('apps', 'system-shutdown') },
-    { "force shutdown", shutdown.skip_kill, get_icon('actions', 'edit-redo')},
-    { "cancel shutdown", shutdown.cancel_kill, get_icon('actions', 'edit-undo')},
+        shutdown.kill_everybody(function()
+          awful_spawn("poweroff")
+        end)
+      end, get_icon('apps', 'system-shutdown')
+    },
+    { "force shutdown", shutdown.skip_kill,
+      get_icon('actions', 'edit-redo')
+    },
+    { "cancel shutdown", shutdown.cancel_kill,
+      get_icon('actions', 'edit-undo')
+    },
     -- With X Session Manager:
     --{ "logout", session_logout, get_icon('actions', 'system-log-out') },
     --{ "reboot", session_reboot, get_icon('actions', 'view-refresh') },
