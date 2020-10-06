@@ -16,6 +16,7 @@ local decorated_widget	= common.decorated
 local markup		= require("actionless.util.markup")
 local db = require("actionless.util.db")
 local h_file = require("actionless.util.file")
+local get_icon = require("actionless.util.xdg").get_icon
 
 local backend_modules	= require("actionless.widgets.music.backends")
 
@@ -84,7 +85,7 @@ function player.init(args)
     end
   )
 
-  function player.use_next_backend(index)
+  function player.use_next_backend(args_here)
   --[[ music player backends:
 
       backend should have methods:
@@ -96,8 +97,10 @@ function player.init(args)
       * .init(args)
       * .get_coverart(coversize, default_art, show_notification_callback)
   --]]
-    index = index or 1
-    backend_id = backend_id + index
+    args_here = args_here or {}
+    local index = args_here.relative_index or 1
+    backend_id = args_here.backend_id or (backend_id + index)
+
     if backend_id > #enabled_backends then backend_id = 1 end
     if not cached_backends[backend_id] then
       cached_backends[backend_id] = backend_modules[enabled_backends[backend_id]]
@@ -227,8 +230,27 @@ function player.init(args)
     awful.button({ }, 1, player.toggle),
     awful.button({ }, 2, player.seek),
     awful.button({ }, 3, function()
-      player.use_next_backend()
-      player.show_notification()
+      if player.menu and player.menu.wibox.visible then
+        player.menu:hide()
+      else
+        local items = {}
+        for each_backend_id, backend_name in ipairs(enabled_backends) do
+          local item = {backend_name, }
+          item[2] = function()
+            player.use_next_backend{backend_id=each_backend_id}
+            player.menu:hide()
+            --player.show_notification()
+          end
+          if player.backend == backend_modules[backend_name] then
+            item[3] = get_icon('actions', 'object-select-symbolic')
+          end
+          table.insert(items, item)
+        end
+        player.menu = awful.menu{
+          items=items,
+        }
+        player.menu:show()
+      end
     end),
     awful.button({ }, 5, player.next_song),
     awful.button({ }, 4, player.prev_song)
@@ -357,7 +379,7 @@ function player.get_coverart()
   end
 end
 -------------------------------------------------------------------------------
-  player.use_next_backend(0)
+  player.use_next_backend{relative_index=0}
   return setmetatable(player, { __index = player.widget })
 end
 
