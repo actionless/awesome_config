@@ -44,10 +44,7 @@ local function find_service_names(match, callback)
     nil,
     function(conn, result)
       local call_result = conn:call_finish(result)
-      local values
-      if call_result then
-        values = call_result.value
-      end
+      local values = call_result.value
       _log("DBUS-SHIT: got names")
       local names_found = {}
       for _, service_name in values[1]:ipairs() do
