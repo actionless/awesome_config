@@ -10,7 +10,7 @@ INSTALL_NO_ARGB_SHORTCUTS=${NOARGB:-n}
 pkgname=actionless_awesome_config_meta
 conflicts=(awesome_config_actionless_meta)
 pkgver=0.3
-pkgrel=2
+pkgrel=3
 pkgdesc="Awesome config dependencies"
 arch=('x86_64' 'i686')
 url="https://github.com/actionless/awesome_config"
@@ -22,23 +22,25 @@ depends=(
 	'lightdm-gtk-greeter'
 	'bash'
 	'coreutils'
+	'librsvg' # SVG scaling
+	'xcb-util-errors' # for pretty-printing of X11 errors
 
-	'lm_sensors'  # temperature widget
-	'jq'  # temperature widget
-	'procps-ng'  # mem and cpu widgets
-	'upower'  # for battery widget
-	'pacman-contrib'  # for updates widget
-	'curl'  # async image fallback
+	'lm_sensors' # temperature widget
+	'jq' # temperature widget
+	'procps-ng' # mem and cpu widgets
+	'upower' # for battery widget
+	'pacman-contrib' # for updates widget
+	'curl' # async image fallback
 
-	'xorg-xrdb'  # reload Xresources on awesome WM reload
-	'xorg-xset'  # config/autorun: keyboard tweaks
-	'xst-git'  # default terminal
-	'tmux'  # default terminal multiplexer
-	'scrot'  # config/keys: default screenshot tool
-	'slop'  # config/keys: helper for default screenshot tool
+	'xorg-xrdb' # reload Xresources on awesome WM reload
+	'xorg-xset' # config/autorun: keyboard tweaks
+	'xst-git' # default terminal
+	'tmux' # default terminal multiplexer
+	'scrot' # config/keys: default screenshot tool
+	'slop' # config/keys: helper for default screenshot tool
 
-	'xsettingsd'  # or use lxsettings-daemon from lxsession
-	#'lxsession-gtk3' # or 'lxsession'  # needed for lxpolkit
+	'xsettingsd' # or use lxsettings-daemon from lxsession
+	#'lxsession-gtk3' # or 'lxsession' # needed for lxpolkit
 )
 optdepends=(
 	'mate-session-manager: mate session'
@@ -67,24 +69,24 @@ optdepends=(
 )
 
 package() {
-  config_dir=$(pwd)/..
-  if [[ ${INSTALL_NO_ARGB_SHORTCUTS} = 'y' ]] ; then
-	  install -Dm755 ${config_dir}/packaging/awesome_argb \
+	config_dir=$(pwd)/..
+	if [[ ${INSTALL_NO_ARGB_SHORTCUTS} = 'y' ]] ; then
+	install -Dm755 ${config_dir}/packaging/awesome_argb \
 		"$pkgdir/usr/bin/awesome_argb"
 
-	  install -Dm755 ${config_dir}/packaging/awesome_no_argb \
+	install -Dm755 ${config_dir}/packaging/awesome_no_argb \
 		"$pkgdir/usr/bin/awesome_no_argb"
 
-	  install -Dm644 ${config_dir}/packaging/awesome_argb.desktop \
+	install -Dm644 ${config_dir}/packaging/awesome_argb.desktop \
 		"$pkgdir/usr/share/xsessions/awesome_argb.desktop"
 
-	  install -Dm644 ${config_dir}/packaging/awesome_no_argb.desktop \
+	install -Dm644 ${config_dir}/packaging/awesome_no_argb.desktop \
 		"$pkgdir/usr/share/xsessions/awesome_no_argb.desktop"
 
-	  install -Dm644 ${config_dir}/packaging/mate_awesome.desktop \
+	install -Dm644 ${config_dir}/packaging/mate_awesome.desktop \
 		"$pkgdir/usr/share/xsessions/mate_awesome.desktop"
 
-	  install -Dm644 ${config_dir}/packaging/awesome_argb.desktop \
+	install -Dm644 ${config_dir}/packaging/awesome_argb.desktop \
 		"$pkgdir/usr/share/xsession_current/awesome_argb.desktop"
 	fi
 }
