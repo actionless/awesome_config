@@ -1,73 +1,19 @@
 local awful_menu = require("awful.menu")
 local awful_spawn = require("awful.spawn")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
-local awesome_menubar = require("menubar")
 local beautiful = require("beautiful")
-local gfs = require("gears.filesystem")
+local awesome_menubar = require("menubar")
 
 local menugen = require("actionless.util.menugen")
 local wlppr = require("actionless.wlppr")
 local shutdown = require("actionless.util.shutdown")
 local menu_addon = require("actionless.menu_addon")
+local get_icon = require("actionless.util.xdg").get_icon
 
 
 awful_menu.entry = menu_addon.menu_entry
 
-
-local ICON_SIZES = {
-  '512x512',
-  '256x256',
-  'scalable',
-  '128x128',
-  '96x96',
-  '64x64',
-  '32x32',
-  '24x24',
-  '22x22',
-  'symbolic',
-}
-local FORMATS = {
-  '.svg', '.png', '-symbolic.svg',
-}
-local ICON_THEMES = {
-  beautiful.icon_theme,
-  'gnome',
-  'Adwaita',
-  'breeze',
-  'hicolor',
-  --'locolor',
-}
-
-
 local menus = {}
-
-
-local function get_icon(category, name)
-  if category == 'apps' or category == 'categories' then
-    local awesome_found = awesome_menubar.utils.lookup_icon(name)
-    if awesome_found then return awesome_found end
-  end
-  for _, icon_theme_name in ipairs(ICON_THEMES) do
-    for _, icon_root in ipairs({
-      os.getenv('HOME') .. '/.icons/',
-      '/usr/share/icons/',
-    }) do
-      for _, icon_size in ipairs(ICON_SIZES) do
-        for _, extension in ipairs(FORMATS) do
-          for _, path in ipairs({
-            icon_root .. icon_theme_name .. "/" .. icon_size .. "/" .. category .. "/" .. name .. extension,
-            icon_root .. icon_theme_name .. "/" .. category .. "/" .. icon_size .. "/" .. name .. extension,
-          }) do
-            if gfs.file_readable(path) then
-              --log("R:"..path)
-              return path
-            end
-          end
-        end
-      end
-    end
-  end
-end
 
 -- Menu
 -- Create a laucher widget and a main menu

@@ -16,6 +16,7 @@ local utils = {
   table = require("actionless.util.table"),
   tag = require("actionless.util.tag"),
   tmux = require("actionless.util.tmux"),
+  xdg = require("actionless.util.xdg"),
 }
 
 return utils
