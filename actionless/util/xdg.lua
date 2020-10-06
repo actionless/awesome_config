@@ -1,6 +1,10 @@
+local cairo = require('lgi').cairo
+
 local awesome_menubar = require("menubar")
 local beautiful = require("beautiful")
 local gfs = require("gears.filesystem")
+local gstring = require('gears.string')
+local wibox_widget = require('wibox.widget')
 
 
 local ICON_SIZES = {
@@ -25,6 +29,25 @@ local FORMATS = {
 local ICON_THEMES
 
 local module = {}
+
+--module.default_icon_size = 128
+module.default_icon_size = nil
+
+function module.resize_svg(input_image, icon_width, icon_height)
+
+  if not module.default_icon_size then
+    module.default_icon_size = beautiful.menu_height
+  end
+
+  icon_width = icon_width or module.default_icon_size
+  icon_height = icon_height or icon_width
+
+  local img = cairo.ImageSurface(cairo.Format.ARGB32, icon_width, icon_height)
+  local cr = cairo.Context(img)
+  local image_box = wibox_widget.imagebox(input_image)
+  image_box:draw(nil, cr, icon_width, icon_height)
+  return img
+end
 
 function module.get_icon(category, name, args)
   if not ICON_THEMES then
@@ -59,7 +82,11 @@ function module.get_icon(category, name, args)
           }) do
             if gfs.file_readable(path) then
               --log("R:"..path)
-              return path
+              if gstring.endswith(path, '.svg') then
+                return module.resize_svg(path)
+              else
+                return path
+              end
             end
           end
         end
