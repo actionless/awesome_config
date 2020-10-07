@@ -20,11 +20,10 @@ local ICON_SIZES = {
   'symbolic',
 }
 local FORMATS = {
-  --'.svg',
-  '.png',
-  '.symbolic.png',
   '.svg',
+  '.png',
   '-symbolic.svg',
+  '.symbolic.png',
 }
 local ICON_THEMES
 
