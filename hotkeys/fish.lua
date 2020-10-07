@@ -1,6 +1,6 @@
 local hotkeys_popup = require("awful.hotkeys_popup.widget")
 
-local fish_rule_any = {name={"fish", "st "}}
+local fish_rule_any = {name={"fish", }, class={"xst-256color", "st-256color"}, }
 for group_name, group_data in pairs({
     ["fish"] =             { color="#5f6d93", rule_any=fish_rule_any },
 }) do
