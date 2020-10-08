@@ -1,10 +1,10 @@
 local cairo = require('lgi').cairo
+local Rsvg = require('lgi').Rsvg
 
 local awesome_menubar = require("menubar")
 local beautiful = require("beautiful")
 local gfs = require("gears.filesystem")
 local gstring = require('gears.string')
-local wibox_widget = require('wibox.widget')
 
 
 local ICON_SIZES = {
@@ -43,8 +43,11 @@ function module.resize_svg(input_image, icon_width, icon_height)
 
   local img = cairo.ImageSurface(cairo.Format.ARGB32, icon_width, icon_height)
   local cr = cairo.Context(img)
-  local image_box = wibox_widget.imagebox(input_image)
-  image_box:draw(nil, cr, icon_width, icon_height)
+  local handle = assert(Rsvg.Handle.new_from_file(input_image))
+  local dim = handle:get_dimensions()
+  local aspect = math.min(icon_width/dim.width, icon_height/dim.height)
+  cr:scale(aspect, aspect)
+  handle:render_cairo(cr)
   return img
 end
 
