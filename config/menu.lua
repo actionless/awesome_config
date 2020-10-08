@@ -96,9 +96,9 @@ function menus.init(context)
     }, "development"),
 
     category("Graphics", {
-      app("gcolor3", "gcolor3", "nl.hjdskes.gcolor3"),
       app("Drawing", "drawing", "com.github.maoschanz.drawing"),
       app("GIMP", "gimp"),
+      app("Gpick", "gpick"),
       app("Nomacs", "nomacs"),
       app("Viewnior", "viewnior"),
     }, "graphics"),
@@ -138,8 +138,8 @@ function menus.init(context)
     category("Markdown", {
       app("abricotine"),  -- best inline
       app("ghostwriter"),  -- good inline + preview
-      app("retext"),  -- classic + preview (Qt)
       app("marker", "marker", "com.github.fabiocolacio.marker"),  -- classic + preview (GTK)
+      app("retext"),  -- classic + preview (Qt)
     }, "education-language"),
 
   }
