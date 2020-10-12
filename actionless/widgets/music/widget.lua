@@ -119,12 +119,18 @@ function player.init(args)
     player.backend = cached_backends[backend_id]
     player.cmd = args.player_cmd or player.backend.player_cmd
     player.parse_status(player.player_status, player.backend, true)
-    gears_timer({
-      callback=player.update,
-      timeout=20,
+    player._update_timer = gears_timer({
+      callback=function()
+        player._update_timer:stop()
+        player.update("timer")
+        player._update_timer.timeout = player.backend.update_interval or update_interval
+        player._update_timer:start()
+      end,
+      timeout=(player.backend.update_interval or update_interval),
       autostart=true,
-      call_now=true,
+      call_now=false,
     })
+    player.update("init")
     db.set('widget_music_backend', backend_id)
   end
 
