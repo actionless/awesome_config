@@ -182,7 +182,7 @@ function common_theme.create_default_theme(theme_dir, icons_dir)
   theme.mouse_finder_color	= "theme.error"
   theme.menu_border_width		= dpi(3)
   theme.menu_height		= dpi(18)
-  theme.menu_width		= dpi(140)
+  theme.menu_width		= dpi(160)
   theme.menu_submenu_icon = nil
   theme.menu_submenu = "▸ "
 
