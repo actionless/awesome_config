@@ -13,9 +13,11 @@ fi
 while true ; do
     code=0
     awesome $@ >> ${CACHEDIR}/awesome_stdout  2>> ${CACHEDIR}/awesome_stderr || code=$?
-    if [[ ${code} -eq 2 ]] ; then
+    if [ ${code} -eq 2 ] ; then
         awesome --no-argb $@ >> ${CACHEDIR}/awesome_stdout  2>> ${CACHEDIR}/awesome_stderr
-    elif [[ ${code} -ne 0 ]] ; then
+    elif [ ${code} -eq 9 ] ; then
+        exit $code
+    elif [ ${code} -ne 0 ] ; then
         (sleep 1 ; openbox) || xterm
         sleep 1
     fi

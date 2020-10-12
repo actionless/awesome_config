@@ -34,18 +34,21 @@ function menus.init(context)
     { "reload", awesome.restart,
       get_icon('actions', 'view-refresh')
     },
-    { "quit", function()
+    { "quit (hard reload)", function()
         awesome.quit()
       end, get_icon('actions', 'application-exit')
     },
-    --{ "quit2 (toggle argb)", function()
-    { "quit2 (argb)", function()
+    { "quit2 (toggle argb)", function()
         awesome.quit(2)
       end, get_icon('actions', 'format-text-italic')
     },
     { "quit3 (openbox)", function()
         awesome.quit(3)
       end, get_icon('apps', 'openbox')
+    },
+    { "quit9 (to DM)", function()
+        awesome.quit(9)
+      end, get_icon('actions', 'window-close')
     },
   }
   local shutdown_menu = {
