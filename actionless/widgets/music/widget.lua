@@ -21,6 +21,15 @@ local get_icon = require("actionless.util.xdg").get_icon
 local backend_modules	= require("actionless.widgets.music.backends")
 
 
+local DEBUG_LOG = false
+--local DEBUG_LOG = true
+local function _log(...)
+  if DEBUG_LOG then
+    log({"::MUSIC-WIDGET:" ,...})
+  end
+end
+
+
 -- player infos
 local player = {
   notification_object=nil,
@@ -43,7 +52,8 @@ function player.init(args)
   args = args or {}
   player.args = args
   args.spacing = 0
-  local timeout = args.timeout or 5
+  local update_interval = args.update_interval
+  local timeout = args.popup_timeout or 5
   local default_art = args.default_art
   local enabled_backends = args.backends
                            or { 'mpd', 'cmus', 'spotify', 'clementine', }
@@ -81,7 +91,7 @@ function player.init(args)
   dbus.connect_signal(
     "org.freedesktop.DBus.Properties",
     function()
-      player.update()
+      player.update("dbus_properties")
     end
   )
 
@@ -256,16 +266,16 @@ function player.init(args)
     awful.button({ }, 4, player.prev_song)
   ))
 -------------------------------------------------------------------------------
-  function player.update()
-    for _, key in ipairs(player.keys) do
-      player.old_player_status[key] = player.player_status[key]
-    end
+  function player.update(from)
+    _log("update from "..from)
     player.backend.update(function(player_status)
         player.parse_status(player_status, player.backend)
     end)
   end
 -------------------------------------------------------------------------------
   function player.parse_status(player_status, backend, force)
+    _log(player.old_player_status)
+    _log(player_status)
     if backend ~= player.backend then return end
     local status_updated = force or false
     for _, key in ipairs(player.keys) do
@@ -274,13 +284,19 @@ function player.init(args)
         break
       end
     end
-    if not status_updated then return end
+    if not status_updated then
+      _log("state not changed")
+      return
+    end
 
     local artist = ""
     local title = ""
     local old_title = player.player_status.title
+
     player.player_status = player_status
-    player.old_player_status = player_status
+    for _, key in ipairs(player.keys) do
+      player.old_player_status[key] = player_status[key]
+    end
 
     if (
         player_status.state == "play" or
@@ -306,6 +322,7 @@ function player.init(args)
       end
       player.separator_widget:set_text(player_status.artist and " - " or "")
     end
+    _log(player_status.state)
     if player_status.state == "play" then
       player.widget:set_normal()
       --player.separator_widget:set_text("⏵")

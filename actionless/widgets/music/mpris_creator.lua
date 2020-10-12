@@ -3,7 +3,6 @@
    * (c) 2020, Yauheni Kirylau
 --]]
 
-local dbus = dbus -- luacheck: ignore
 local Gio = require("lgi").Gio
 local GLib = require("lgi").GLib
 local g_string		= require("gears.string")
@@ -16,7 +15,7 @@ local DEBUG_LOG = false
 --local DEBUG_LOG = true
 local function _log(...)
   if DEBUG_LOG then
-    log(...)
+    log({"::MPRIS-CREATOR:" ,...})
   end
 end
 
@@ -31,7 +30,7 @@ local function find_service_names(match, callback)
   -- qdbus org.freedesktop.DBus /org/freedesktop/DBus Introspect
   -- qdbus org.freedesktop.DBus / ListNames
   --
-  _log("DBUS-SHIT: gonna list names...")
+  _log("gonna list names...")
   dbus_connection:call(
     "org.freedesktop.DBus",
     "/",
@@ -45,7 +44,7 @@ local function find_service_names(match, callback)
     function(conn, result)
       local call_result = conn:call_finish(result)
       local values = call_result.value
-      _log("DBUS-SHIT: got names")
+      _log("got names")
       local names_found = {}
       for _, service_name in values[1]:ipairs() do
         if service_name:match(match) then
@@ -83,7 +82,7 @@ local function create(name, args)
     local reply_type = dbus_args.reply_type or default_reply_type
     local interface_name = dbus_args.interface_name or default_interface_name
 
-    --_log("DBUS-SHIT: calling "..method_name.." on "..name.."...")
+    --_log("calling "..method_name.." on "..name.."...")
 
     local function invoke_callback(conn, result)
         local call_result = conn:call_finish(result)
@@ -91,7 +90,7 @@ local function create(name, args)
         if call_result then
           values = call_result.value
         end
-        --_log("DBUS-SHIT: "..method_name.." on "..name.." returned: " .. (values and 'values' or 'nil'))
+        --_log(method_name.." on "..name.." returned: " .. (values and 'values' or 'nil'))
         if callback then
             callback(values)
         end
@@ -263,7 +262,7 @@ local function create_for_match(match, args)
             end
             tmp_result.init(player)
             if player then
-              player.update()
+              player.update("mpris_creator")
             end
           end
         --end
