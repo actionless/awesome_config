@@ -103,14 +103,7 @@ function rules.init(awesome_context)
         }
       },
 
-      { rule = { class = "Spotify" },
-        properties = {
-          tag=capi.screen.primary.tags[7],
-          raise=false
-        }
-      },
-
-      { rule = { class = "Shortwave" },
+      { rule_any = { class = {"Shortwave", "Goodvibes", "Spotify", } },
         properties = {
           tag=capi.screen.primary.tags[7],
           raise=false
