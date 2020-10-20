@@ -239,10 +239,10 @@ function widget_loader.init(awesome_context)
       )
     )
     local function update_taglist_padding(self, c3, index, objects) --luacheck: no unused args
+      local margin = self:get_children_by_id('margin_role')[1]
+      margin.left  = math.floor(beautiful.panel_widget_spacing/2)
+      margin.right = math.floor(beautiful.panel_widget_spacing/2)
       if beautiful.panel_widget_border_radius > 0 then
-        local margin = self:get_children_by_id('margin_role')[1]
-        margin.left  = math.floor(beautiful.panel_widget_spacing/2)
-        margin.right = math.floor(beautiful.panel_widget_spacing/2)
         if index == 1 then
           margin.left = shaped_widget_side_padding
         end
