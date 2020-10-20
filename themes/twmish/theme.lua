@@ -51,8 +51,9 @@ theme.panel_widget_border_width = gtk_border_width * gdk_scale
 --theme.panel_widget_border_color = color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color, 0.5)
 theme.panel_widget_border_color = color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color, 0.3)
 theme.panel_widget_progress_bg = color_utils.mix(gsc.selected_fg_color, theme.panel_widget_bg, 0.2)
-theme.panel_widget_progress_fg = gsc.selected_bg_color
---theme.panel_widget_progress_fg = gsc.text_color
+theme.panel_widget_progress_bg = color_utils.mix(gsc.selected_fg_color, theme.panel_widget_bg, 0.2)
+--theme.panel_widget_progress_fg = gsc.selected_bg_color
+theme.panel_widget_progress_fg = gsc.text_color
 theme.panel_widget_progress_border_color = theme.panel_widget_border_color
 theme.notification_border_color = gsc.selected_fg_color
 
@@ -90,7 +91,7 @@ theme.dir = theme_dir
 theme.icons_dir = theme.dir .. "/icons/"
 
 --theme.error = theme.xrdb.color1
---theme.warning = theme.xrdb.color2
+theme.warning = theme.xrdb.color3
 
 
 -- TERMINAL COLORSCHEME:
