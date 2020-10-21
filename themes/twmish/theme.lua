@@ -55,6 +55,7 @@ theme.panel_widget_progress_bg = color_utils.mix(gsc.selected_fg_color, theme.pa
 --theme.panel_widget_progress_fg = gsc.selected_bg_color
 theme.panel_widget_progress_fg = gsc.text_color
 theme.panel_widget_progress_border_color = theme.panel_widget_border_color
+theme.panel_widget_updates_fg = gsc.fg_color
 theme.notification_border_color = gsc.selected_fg_color
 
 theme.widget_close_bg = gsc.selected_fg_color
