@@ -130,10 +130,10 @@ function widget_loader.init(awesome_context)
   end
   -- Arch updates
   w.updates = widgets.arch_updates({
-      bg = (
+      bg = beautiful.panel_widget_updates_bg or (
         h_color.is_dark(beautiful.panel_bg) == h_color.is_dark(beautiful.xrdb.background)
       ) and TRANSPARENT or beautiful.panel_widget_fg_warning,
-      fg = beautiful.panel_widget_bg_warning,
+      fg = beautiful.panel_widget_updates_fg or beautiful.panel_widget_bg_warning,
   })
 
   -- Textclock
