@@ -199,6 +199,13 @@ function rules.init(awesome_context)
         },
       },
 
+      { rule = { class = "Blueman-manager", },
+        properties = {
+          tag=capi.screen.primary.tags[11],
+          raise=false
+        }
+      },
+
     }) do
       ruled.client.append_rule(rule)
     end
