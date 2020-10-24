@@ -202,6 +202,16 @@ function rules.init(awesome_context)
     }) do
       ruled.client.append_rule(rule)
     end
+    for i, _ in ipairs(screen.primary.tags) do
+      ruled.client.append_rule(
+        { rule = { instance = "tag"..tostring(i) },
+          properties = {
+            tag=capi.screen.primary.tags[i],
+            raise=false
+          }
+        }
+      )
+    end
   end)
 
   --awful.ewmh.add_activate_filter(function(c, source)
