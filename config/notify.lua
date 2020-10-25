@@ -8,19 +8,17 @@ local notify = {}
 function notify.init(awesome_context)
 
   naughty.config.padding = beautiful.useless_gap
-  naughty.config.defaults.opacity = beautiful.notification_opacity
   naughty.config.defaults.font = beautiful.notification_font
   naughty.config.defaults.bg = beautiful.notification_bg
+  naughty.config.defaults.bg = "#00000000"  -- fix for doubled bg with opacity
   naughty.config.defaults.fg = beautiful.notification_fg
   naughty.config.defaults.border_color = beautiful.notification_border_color
   naughty.config.defaults.border_width = beautiful.notification_border_width
   naughty.config.defaults.margin = beautiful.notification_margin
   naughty.config.defaults.padding = beautiful.notification_spacing
 
-  naughty.config.presets.low.opacity = beautiful.notification_opacity
   naughty.config.presets.low.font = beautiful.notification_font
 
-  naughty.config.presets.critical.opacity = beautiful.notification_opacity
   naughty.config.presets.critical.font = beautiful.notification_font
   naughty.config.presets.critical.bg = beautiful.fg_urgent
   naughty.config.presets.critical.fg = beautiful.bg_urgent

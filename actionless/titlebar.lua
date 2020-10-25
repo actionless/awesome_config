@@ -442,7 +442,8 @@ local function make_border_with_shadow(c, args)
 end
 
 local titlebar_container_shape
-if beautiful.client_border_radius and awesome.composite_manager_running then
+-- @TODO: do big clean-up around here :-)
+if false and beautiful.client_border_radius and awesome.composite_manager_running then
     beautiful.titlebar_bg_focus = TRANSPARENT
     beautiful.titlebar_bg_normal = TRANSPARENT
 

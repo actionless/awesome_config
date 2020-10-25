@@ -53,6 +53,12 @@ end
 
 local pending_shapes = {}
 local function round_up_client_corners(c, force, reference) -- luacheck: no unused
+
+    -- @TODO: do big clean-up around here :-)
+    if awesome.composite_manager_running then
+      return
+    end
+
   if not force and ((
     -- @TODO: figure it out and uncomment
     not beautiful.client_border_radius or beautiful.client_border_radius == 0

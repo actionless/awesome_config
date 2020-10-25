@@ -154,7 +154,6 @@ function widget_loader.init(awesome_context)
   w.calendar_popup = awful.widget.calendar_popup.month({
     spacing=dpi(2),
     margin=beautiful.useless_gap*2,
-    opacity=beautiful.notification_opacity,
     style_month={
       bg_color = TRANSPARENT,
       border_color = TRANSPARENT,
