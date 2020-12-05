@@ -75,6 +75,9 @@ theme.panel_widget_border_color = color_utils.mix(gsc.menubar_fg_color, gsc.menu
 --theme.panel_widget_border_color = color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color, 0.12)
 
 
+theme.bg_systray    = "theme.panel_widget_bg"
+
+
 theme.widget_close_bg = gsc.header_button_bg_color
 theme.widget_close_fg = gsc.header_button_fg_color
 
