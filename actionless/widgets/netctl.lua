@@ -32,14 +32,18 @@ local function worker(args)
   netctl.wlan_if = args.wlan_if or 'wlan0'
   netctl.eth_if = args.eth_if or 'eth0'
 
-  local function do_update(cmd, match, fallback)
+  local function do_update_wifi(wargs)
+    local cmd = wargs.cmd
+    local match = wargs.match
+    local found = wargs.found or 'wifi up'
+    local fallback = wargs.fallback or 'searching...'
     awful.spawn.easy_async(
       cmd,
       function(stdout)
         local got_match = stdout:match(match)
         --netctl.update_widget(got_match or fallback)
         --
-        netctl.widget:set_text(got_match or fallback)
+        netctl.widget:set_text(found or got_match or fallback)
         if got_match then
           netctl.widget:set_image(beautiful.widget_net_wifi)
         else
@@ -56,17 +60,19 @@ local function worker(args)
     elseif netctl.preset == 'netctl' then
       netctl.netctl_update()
     elseif netctl.preset == 'systemd' then
-      do_update(
-        "systemctl list-unit-files systemd-networkd.service",
-        "systemd%-(networkd)%.service.*enabled.*",
-        'networkd...'
-      )
+      do_update_wifi{
+        cmd = "systemctl list-unit-files systemd-networkd.service",
+        match = "systemd%-(networkd)%.service.*enabled.*",
+        found = 'networkd up',
+        fallback = 'networkd...'
+      }
     elseif netctl.preset == 'wpa_supplicant' then
-      do_update(
-        "systemctl status wpa_supplicant.service",
-        "Active: active",
-        'wpa_supplicant...'
-      )
+      do_update_wifi{
+        cmd = "systemctl status wpa_supplicant.service",
+        match = "Active: active",
+        found = 'wpa up',
+        fallback = 'wpa_supplicant...'
+      }
     end
   end
 
