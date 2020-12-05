@@ -21,7 +21,7 @@ local sneaky_toggle = { mt = {} }
 local function widget_factory(args)
   -- ARGUMENTS: ---------------------------------------------------------------
     args = args or {}
-    local loaded_widgets = args.widgets
+    local loaded_widgets = args.widgets or {}
     local enable_sneaky_tray = args.enable_sneaky_tray
     local show_on_start = false
     if args.show_on_start ~= nil then show_on_start = args.show_on_start end
