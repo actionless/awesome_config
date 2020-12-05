@@ -125,9 +125,6 @@ function toolbar.init(awesome_context)
         loaded_widgets.screen[si].layoutbox,
         separator,
         sep,
-        si==1
-          and loaded_widgets.systray_toggle
-          or common.constraint({ width=beautiful.panel_padding_bottom, }),
         loaded_widgets.naughty_sidebar,
       }
     }

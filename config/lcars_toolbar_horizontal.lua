@@ -65,6 +65,22 @@ function toolbar.init(awesome_context)
       nil
     )
 
+     --systray_toggle
+    local panel_widget_separator = wibox.container.background(
+      common.constraint({ width=beautiful.panel_widget_spacing, }),
+      beautiful.panel_widget_bg
+    )
+    loaded_widgets.systray_toggle = common.panel_shape(widgets.sneaky_toggle({
+        widgets={
+          panel_widget_separator,
+        --  w.netctl,
+        --  panel_widget_separator,
+        },
+        enable_sneaky_tray = true,
+        --margin_right = beautiful.panel_padding_bottom,
+        panel_shape = false,
+    }))
+
     -- add sneaky_toggle on first screen
     if si == 1 then
       local fancy_volume_widget = common.constraint({

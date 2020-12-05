@@ -10,7 +10,6 @@ local capi = {
 }
 
 local widgets = require("actionless.widgets")
-local common = require("actionless.widgets").common
 local tasklist_addon = require("actionless.tasklist_addon")
 local persistent = require("actionless.persistent")
 local markup = require("actionless.util.markup")
@@ -72,22 +71,6 @@ function widget_loader.init(awesome_context)
         awful.spawn.spawn('xset -led named "Scroll Lock"')
       end
   end
-
-  -- systray_toggle
-  local panel_widget_separator = wibox.container.background(
-    common.constraint({ width=beautiful.panel_widget_spacing, }),
-    beautiful.panel_widget_bg
-  )
-  w.systray_toggle = common.panel_shape(widgets.sneaky_toggle({
-      widgets={
-        panel_widget_separator,
-        w.netctl,
-        panel_widget_separator,
-      },
-      enable_sneaky_tray = true,
-      --margin_right = beautiful.panel_padding_bottom,
-      panel_shape = false,
-  }))
 
   -- MEM
   w.mem = widgets.mem({
@@ -191,7 +174,14 @@ function widget_loader.init(awesome_context)
   end
   w.calendar_popup:attach(w.textclock, nil, {on_hover=true})
 
-  w.naughty_counter = widgets.naughty_counter()
+  local systray = wibox.widget.systray()
+  systray.forced_height = beautiful.basic_panel_height
+  w.naughty_sidebar = widgets.naughty_sidebar{
+    custom_widgets = w.netctl and {
+        awful.widget.only_on_screen(systray, screen.primary),
+        w.netctl,
+    },
+  }
 
   w.screen = {}
   awful.screen.connect_for_each_screen(function(s)

@@ -148,7 +148,13 @@ function keys.init(awesome_context)
     ),
 
     bind_key({ modkey,  altkey  }, "t",
-      function() awesome_context.widgets.systray_toggle:toggle() end,
+      function()
+        if awesome_context.widgets.systray_toggle then
+          awesome_context.widgets.systray_toggle:toggle()
+        else
+          awesome_context.widgets.naughty_sidebar:toggle_sidebox()
+        end
+      end,
       "toggle systray popup", AWESOME_COLOR
     ),
 
