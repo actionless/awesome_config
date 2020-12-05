@@ -40,6 +40,7 @@ local function widget_factory(args)
   naughty_counter.saved_notifications = db.get_or_set(DB_ID, {})
   naughty_counter.prev_count = db.get_or_set(DB_ID_READ_COUNT, 0)
   naughty_counter.scroll_offset = 0
+  naughty_counter._custom_widgets = args.custom_widgets or {}
 
 
   function naughty_counter:widget_action_button(text, callback, widget_args)
@@ -220,6 +221,9 @@ local function widget_factory(args)
     margin.margins = beautiful.notification_sidebar_margin or dpi(10)
     layout.spacing = beautiful.notification_sidebar_spacing or dpi(10)
     if #self.saved_notifications > 0 then
+      for _, widget in ipairs(naughty_counter._custom_widgets) do
+        layout:add(widget)
+      end
       layout:add(self:widget_action_button(
         '  X  Clear Notifications  ',
         function()
