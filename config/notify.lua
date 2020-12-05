@@ -36,7 +36,7 @@ function notify.init(awesome_context)
         rule       = { },
         except_any = {app_name = {'', "xfce4-power-manager"}},
         callback = function(notification)
-          awesome_context.widgets.naughty_counter:add_notification(notification)
+          awesome_context.widgets.naughty_sidebar:add_notification(notification)
         end
       }
     }
@@ -49,9 +49,9 @@ function notify.init(awesome_context)
   naughty.connect_signal('request::display', function(n, _, args)
     if (
       n.app_name ~= '' and
-      awesome_context.widgets.naughty_counter and
-      awesome_context.widgets.naughty_counter.sidebar and
-      awesome_context.widgets.naughty_counter.sidebar.visible
+      awesome_context.widgets.naughty_sidebar and
+      awesome_context.widgets.naughty_sidebar.sidebar and
+      awesome_context.widgets.naughty_sidebar.sidebar.visible
     ) then
       return
     end

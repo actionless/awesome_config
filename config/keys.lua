@@ -546,7 +546,7 @@ function keys.init(awesome_context)
     ),
     bind_key({modkey, altkey}, "n",
       function()
-        awesome_context.widgets.naughty_counter:toggle_sidebox()
+        awesome_context.widgets.naughty_sidebar:toggle_sidebox()
       end,
       "notifications sidebox", AWESOME_COLOR
     ),

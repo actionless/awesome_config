@@ -17,7 +17,7 @@ local DB_ID = 'notifications_storage'
 local DB_ID_READ_COUNT = 'notifications_storage_read_count'
 
 
-local naughty_counter = {}
+local naughty_sidebar = {}
 
 local function widget_factory(args)
   args	 = args or {}
@@ -36,14 +36,14 @@ local function widget_factory(args)
   args.fg = args.fg or beautiful.notification_counter_fg
   args.bg = args.bg or beautiful.notification_counter_bg
 
-  naughty_counter.widget = common.decorated(args)
-  naughty_counter.saved_notifications = db.get_or_set(DB_ID, {})
-  naughty_counter.prev_count = db.get_or_set(DB_ID_READ_COUNT, 0)
-  naughty_counter.scroll_offset = 0
-  naughty_counter._custom_widgets = args.custom_widgets or {}
+  naughty_sidebar.widget = common.decorated(args)
+  naughty_sidebar.saved_notifications = db.get_or_set(DB_ID, {})
+  naughty_sidebar.prev_count = db.get_or_set(DB_ID_READ_COUNT, 0)
+  naughty_sidebar.scroll_offset = 0
+  naughty_sidebar._custom_widgets = args.custom_widgets or {}
 
 
-  function naughty_counter:widget_action_button(text, callback, widget_args)
+  function naughty_sidebar:widget_action_button(text, callback, widget_args)
     local bg_color = beautiful.notification_bg or beautiful.bg_normal
     local fg_color = beautiful.notification_fg or beautiful.fg_normal
     widget_args = widget_args or {}
@@ -88,7 +88,7 @@ local function widget_factory(args)
     return widget
   end
 
-  function naughty_counter:write_notifications_to_db()
+  function naughty_sidebar:write_notifications_to_db()
     local mini_notifications = {}
     for _, notification in ipairs(self.saved_notifications) do
       local mini_notification = {}
@@ -100,9 +100,9 @@ local function widget_factory(args)
     db.set(DB_ID, mini_notifications)
   end
 
-  function naughty_counter:update_counter()
-    self.widget:set_text(#naughty_counter.saved_notifications)
-    local num_notifications = #naughty_counter.saved_notifications
+  function naughty_sidebar:update_counter()
+    self.widget:set_text(#naughty_sidebar.saved_notifications)
+    local num_notifications = #naughty_sidebar.saved_notifications
     if num_notifications > 0 then
       local unread_count = #self.saved_notifications - self.prev_count
       if unread_count > 0 then
@@ -116,7 +116,7 @@ local function widget_factory(args)
     end
   end
 
-  function naughty_counter:remove_notification(idx)
+  function naughty_sidebar:remove_notification(idx)
     table.remove(self.saved_notifications, idx)
     self:write_notifications_to_db()
     self:update_counter()
@@ -127,14 +127,14 @@ local function widget_factory(args)
     end
   end
 
-  function naughty_counter:remove_all_notifications()
+  function naughty_sidebar:remove_all_notifications()
     self.saved_notifications = {}
     self:write_notifications_to_db()
     self:toggle_sidebox()
     self:update_counter()
   end
 
-  function naughty_counter:widget_notification(notification, idx, unread)
+  function naughty_sidebar:widget_notification(notification, idx, unread)
     notification.args = notification.args or {}
     local bg_color = beautiful.notification_bg or beautiful.bg_normal
     local fg_color = beautiful.notification_fg or beautiful.fg_normal
@@ -197,7 +197,7 @@ local function widget_factory(args)
     return widget
   end
 
-  function naughty_counter:widget_panel_label(text)
+  function naughty_sidebar:widget_panel_label(text)
     local fg = beautiful.notification_sidebar_fg or beautiful.panel_fg or beautiful.fg_normal
     return wibox.widget{
       nil,
@@ -215,13 +215,13 @@ local function widget_factory(args)
     }
   end
 
-  function naughty_counter:refresh_notifications()
+  function naughty_sidebar:refresh_notifications()
     local layout = wibox.layout.fixed.vertical()
     local margin = wibox.container.margin()
     margin.margins = beautiful.notification_sidebar_margin or dpi(10)
     layout.spacing = beautiful.notification_sidebar_spacing or dpi(10)
     if #self.saved_notifications > 0 then
-      for _, widget in ipairs(naughty_counter._custom_widgets) do
+      for _, widget in ipairs(naughty_sidebar._custom_widgets) do
         layout:add(widget)
       end
       layout:add(self:widget_action_button(
@@ -236,7 +236,7 @@ local function widget_factory(args)
           --text='^^^',
         layout:add(self:widget_panel_label('↑ ↑'))
       end
-      for idx, n in ipairs(naughty_counter.saved_notifications) do
+      for idx, n in ipairs(naughty_sidebar.saved_notifications) do
         if idx > self.scroll_offset then
           layout:add(
             self:widget_notification(n, idx, idx<=unread_count)
@@ -253,12 +253,12 @@ local function widget_factory(args)
     self.sidebar.lie_layout = layout
   end
 
-  function naughty_counter:mark_all_as_read()
+  function naughty_sidebar:mark_all_as_read()
     self.prev_count = #self.saved_notifications
     db.set(DB_ID_READ_COUNT, self.prev_count)
   end
 
-  function naughty_counter:remove_unread()
+  function naughty_sidebar:remove_unread()
     self.scroll_offset = 0
     self:refresh_notifications()
     local num_notifications = #self.saved_notifications
@@ -271,7 +271,7 @@ local function widget_factory(args)
     end
   end
 
-  function naughty_counter:toggle_sidebox()
+  function naughty_sidebar:toggle_sidebox()
     if not self.sidebar then
       local width = (
         beautiful.notification_sidebar_width or
@@ -313,7 +313,7 @@ local function widget_factory(args)
     self.widget:set_normal()
   end
 
-  function naughty_counter:add_notification(notification)
+  function naughty_sidebar:add_notification(notification)
     log{
       'notification added',
       notification.title,
@@ -329,31 +329,31 @@ local function widget_factory(args)
   end
 
 
-  naughty_counter.widget:buttons(awful.util.table.join(
+  naughty_sidebar.widget:buttons(awful.util.table.join(
     awful.button({ }, 1, function()
-      naughty_counter:toggle_sidebox()
+      naughty_sidebar:toggle_sidebox()
     end),
     awful.button({ }, 3, function()
-      if naughty_counter.sidebar and naughty_counter.sidebar.visible then
-        naughty_counter:remove_unread()
-        naughty_counter.sidebar.visible = false
+      if naughty_sidebar.sidebar and naughty_sidebar.sidebar.visible then
+        naughty_sidebar:remove_unread()
+        naughty_sidebar.sidebar.visible = false
       else
-        naughty_counter:mark_all_as_read()
-        naughty_counter:update_counter()
+        naughty_sidebar:mark_all_as_read()
+        naughty_sidebar:update_counter()
       end
     end)
   ))
 
   if beautiful.show_widget_icon and beautiful.widget_notifications then
-    naughty_counter.widget:set_image(beautiful.widget_notifications)
+    naughty_sidebar.widget:set_image(beautiful.widget_notifications)
   else
-    naughty_counter.widget:hide()
+    naughty_sidebar.widget:hide()
   end
-  naughty_counter:update_counter()
+  naughty_sidebar:update_counter()
 
-  return setmetatable(naughty_counter, { __index = naughty_counter.widget })
+  return setmetatable(naughty_sidebar, { __index = naughty_sidebar.widget })
 end
 
-return setmetatable(naughty_counter, { __call = function(_, ...)
+return setmetatable(naughty_sidebar, { __call = function(_, ...)
   return widget_factory(...)
 end })
