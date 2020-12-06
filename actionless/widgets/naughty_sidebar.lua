@@ -265,7 +265,7 @@ local function widget_factory(args)
     if num_notifications > 0 then
       local unread_count = #self.saved_notifications - self.prev_count
       while unread_count > 0 do
-        self:remove_notification(self.sidebar.lie_layout.children[2].lie_idx)
+        self:remove_notification(1)
         unread_count = unread_count - 1
       end
     end
