@@ -77,7 +77,7 @@ function toolbar.init(awesome_context)
         --  panel_widget_separator,
         },
         enable_sneaky_tray = true,
-        --margin_right = beautiful.panel_padding_bottom,
+        --margin = {right = beautiful.panel_padding_bottom},
         panel_shape = false,
     }))
 

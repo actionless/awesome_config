@@ -23,14 +23,14 @@ local function widget_factory(args)
   args	 = args or {}
   args.orientation = args.orientation or "horizontal"
   if beautiful.panel_widget_spacing  then
-    args.margin = {
-      left=beautiful.panel_widget_spacing,
-      right=beautiful.panel_widget_spacing,
+    args.padding = {
+      left=math.ceil(beautiful.panel_widget_spacing/2),
+      right=math.ceil(beautiful.panel_widget_spacing/2),
     }
-    if beautiful.panel_widget_spacing then
-      args.margin_left = beautiful.panel_widget_spacing - beautiful.panel_padding_bottom
-      args.margin_right = beautiful.panel_padding_bottom
-    end
+    args.margin = {
+      left = beautiful.panel_widget_spacing - beautiful.panel_padding_bottom,
+      right = beautiful.panel_padding_bottom,
+    }
   end
   args.panel_shape = true
   args.fg = args.fg or beautiful.notification_counter_fg

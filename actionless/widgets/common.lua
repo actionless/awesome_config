@@ -375,10 +375,6 @@ function common.decorated_horizontal(args)
   decorated.bg = args.bg or beautiful.panel_widget_bg or beautiful.fg or "#ffffff"
   decorated.fg = args.fg or beautiful.panel_widget_fg or beautiful.bg or "#000000"
 
-  local spacing = beautiful.panel_widget_spacing or 0
-  if args.spacing ~= nil then spacing=args.spacing end
-  local separator = spacing and common.constraint{width = spacing}
-
   args.margin = args.margin or {
     left = args.margin_left,
     right = args.margin_right,
@@ -516,11 +512,8 @@ function common.decorated_horizontal(args)
     for _, this_separator in ipairs(self.left_separator_widgets) do
       self.wrap_layout:insert(1, this_separator)
     end
-    for i, each_widget in ipairs(self.lie_widget_list) do
+    for _, each_widget in ipairs(self.lie_widget_list) do
       self.lie_layout:add(each_widget)
-      if separator and i ~= #self.lie_widget_list then
-        self.lie_layout:add(separator)
-      end
     end
     for _, this_separator in ipairs(self.right_separator_widgets) do
       self.wrap_layout:add(this_separator)
