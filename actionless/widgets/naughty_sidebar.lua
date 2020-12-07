@@ -35,6 +35,7 @@ local function widget_factory(args)
   args.panel_shape = true
   args.fg = args.fg or beautiful.notification_counter_fg
   args.bg = args.bg or beautiful.notification_counter_bg
+  args.hide_when_no_notifications = (args.hide_when_no_notifications == nil) and true or false
 
   naughty_sidebar.widget = common.decorated(args)
   naughty_sidebar.saved_notifications = db.get_or_set(DB_ID, {})
@@ -101,9 +102,9 @@ local function widget_factory(args)
   end
 
   function naughty_sidebar:update_counter()
-    self.widget:set_text(#naughty_sidebar.saved_notifications)
     local num_notifications = #naughty_sidebar.saved_notifications
-    if num_notifications > 0 then
+    self.widget:set_text((num_notifications==0) and '' or num_notifications)
+    if (num_notifications > 0) or (not args.hide_when_no_notifications) then
       local unread_count = #self.saved_notifications - self.prev_count
       if unread_count > 0 then
         self.widget:set_warning()
@@ -220,10 +221,10 @@ local function widget_factory(args)
     local margin = wibox.container.margin()
     margin.margins = beautiful.notification_sidebar_margin or dpi(10)
     layout.spacing = beautiful.notification_sidebar_spacing or dpi(10)
+    for _, widget in ipairs(naughty_sidebar._custom_widgets) do
+      layout:add(widget)
+    end
     if #self.saved_notifications > 0 then
-      for _, widget in ipairs(naughty_sidebar._custom_widgets) do
-        layout:add(widget)
-      end
       layout:add(self:widget_action_button(
         '  X  Clear Notifications  ',
         function()
