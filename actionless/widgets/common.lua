@@ -107,53 +107,53 @@ function common.widget(args)
   end
 
   function widget_bg:set_image(image)
-    if not self.icon_widget then
+    if not widget_bg.icon_widget then
       return
     end
-    if (image == self.old_image) then
+    if (image == widget_bg.old_image) then
       return
     end
-    self.old_image = image
+    widget_bg.old_image = image
     image = image and gears.surface.load(image)
     if not image then
       return
     end
-    self.icon_widget:set_resize(image.height > beautiful.basic_panel_height)
+    widget_bg.icon_widget:set_resize(image.height > beautiful.basic_panel_height)
     --local ratio = beautiful.basic_panel_height / image.height
-    --self.icon_widget.forced_width = math.ceil(image.width * ratio)
-    self.icon_widget:set_image(image)
+    --widget_bg.icon_widget.forced_width = math.ceil(image.width * ratio)
+    widget_bg.icon_widget:set_image(image)
   end
 
   function widget_bg:set_font(...)
-    return self.text_widget:set_font(...)
+    return widget_bg.text_widget:set_font(...)
   end
 
-  widget_bg.text_widget.lie_set_text = widget_bg.text_widget.set_text
+  widget_bg.text_widget._orig_set_text = widget_bg.text_widget.set_text
   function widget_bg.text_widget:set_text(text, ...)
-    if not self.icon_widget and (not text or text == '') then
+    if not widget_bg.icon_widget and (not text or text == '') then
       widget_bg.visible = false
     else
       widget_bg.visible = true
-      return self:lie_set_text(text, ...)
+      return widget_bg.text_widget:_orig_set_text(text, ...)
     end
   end
 
-  widget_bg.text_widget.lie_set_markup = widget_bg.text_widget.set_markup
+  widget_bg.text_widget._orig_set_markup = widget_bg.text_widget.set_markup
   function widget_bg.text_widget:set_markup(text, ...)
-    if not self.icon_widget and (not text or text == '') then
+    if not widget_bg.icon_widget and (not text or text == '') then
       widget_bg.visible = false
     else
       widget_bg.visible = true
-      return self:lie_set_markup(text, ...)
+      return widget_bg.text_widget:_orig_set_markup(text, ...)
     end
   end
 
   function widget_bg:set_text(...)
-    return self.text_widget:set_text(...)
+    return widget_bg.text_widget:set_text(...)
   end
 
   function widget_bg:set_markup(...)
-    return self.text_widget:set_markup(...)
+    return widget_bg.text_widget:set_markup(...)
   end
 
   if args.text then
