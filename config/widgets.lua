@@ -10,6 +10,7 @@ local capi = {
 }
 
 local widgets = require("actionless.widgets")
+local common = require("actionless.widgets").common
 local tasklist_addon = require("actionless.tasklist_addon")
 local persistent = require("actionless.persistent")
 local markup = require("actionless.util.markup")
@@ -174,12 +175,24 @@ function widget_loader.init(awesome_context)
   end
   w.calendar_popup:attach(w.textclock, nil, {on_hover=true})
 
+  local sidebar_item_heiht = beautiful.basic_panel_height
+  local sidebar_item_width = beautiful.notification_sidebar_width - (
+    (beautiful.notification_sidebar_margin or dpi(10)) * 2
+  )
   local systray = wibox.widget.systray()
-  systray.forced_height = beautiful.basic_panel_height
+  systray.forced_height = sidebar_item_heiht
+  systray.forced_width = sidebar_item_width
+  systray = common.set_panel_shape(
+    wibox.container.background(systray, beautiful.panel_widget_bg)
+  )
+  local netctl = common.panel_shape(w.netctl)
+  netctl.lie_background.forced_height = sidebar_item_heiht
+  netctl.lie_background.forced_width = sidebar_item_width
   w.naughty_sidebar = widgets.naughty_sidebar{
+    hide_when_no_notifications = false,
     custom_widgets = w.netctl and {
         awful.widget.only_on_screen(systray, screen.primary),
-        w.netctl,
+        netctl,
     },
   }
 
