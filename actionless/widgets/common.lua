@@ -14,6 +14,7 @@ local TRANSPARENT = "#00000000"
 
 
 local common = {}
+-- @TODO: get rid of setmetatable-s
 
 
 function common.centered(widget)
@@ -63,7 +64,8 @@ function common.panel_shape(widget, args)
   args = args or {}
   local shaped = wibox.container.background(widget)
   common.set_panel_shape(shaped, args)
-  setmetatable(shaped,        { __index = widget })
+  --setmetatable(shaped,        { __index = widget })
+  shaped.lie_widget = widget
   return shaped
 end
 
@@ -348,7 +350,6 @@ function common.decorated_vertical(args)
   end
 
   decorated:init()
-  --setmetatable(decorated.constraint, { __index = decorated.lie_widget })
   setmetatable(decorated.lie_layout, { __index = decorated.constraint })
   setmetatable(decorated,        { __index = decorated.lie_layout })
   return decorated
@@ -413,7 +414,6 @@ function common.decorated_horizontal(args)
         widget.set_markup(...)
       end
       decorated.lie_widget_list[i] = bg_widget
-      --decorated.lie_widget_list[i] = setmetatable(bg_widget, widget)
     end
   end
 
