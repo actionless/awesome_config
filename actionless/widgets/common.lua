@@ -372,20 +372,29 @@ function common.decorated_horizontal(args)
   }
 
   args = args or {}
-  args.margin = args.margin or {}
-  args.margin_left = args.margin_left or args.margin.left
-  args.margin_right = args.margin_right or args.margin.right
   decorated.bg = args.bg or beautiful.panel_widget_bg or beautiful.fg or "#ffffff"
   decorated.fg = args.fg or beautiful.panel_widget_fg or beautiful.bg or "#000000"
 
   local spacing = beautiful.panel_widget_spacing or 0
   if args.spacing ~= nil then spacing=args.spacing end
   local separator = spacing and common.constraint{width = spacing}
+
+  args.margin = args.margin or {}
+  args.margin_left = args.margin_left or args.margin.left
+  args.margin_right = args.margin_right or args.margin.right
   if args.margin_left then
-    decorated.left_separator_widgets = {common.constraint{width = args.margin_left, }}
+    local left_margin = common.constraint{width = args.margin_left, }
+    if args.margin.set_bg then
+      left_margin = wibox.container.background(left_margin)
+    end
+    decorated.left_separator_widgets = {left_margin, }
   end
   if args.margin_right then
-    decorated.right_separator_widgets = {common.constraint{width = args.margin_right, }}
+    local right_margin = common.constraint{width = args.margin_right, }
+    if args.margin.set_bg then
+      right_margin = wibox.container.background(right_margin)
+    end
+    decorated.right_separator_widgets = {right_margin, }
   end
 
   if args.widgets then
