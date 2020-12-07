@@ -379,22 +379,34 @@ function common.decorated_horizontal(args)
   if args.spacing ~= nil then spacing=args.spacing end
   local separator = spacing and common.constraint{width = spacing}
 
-  args.margin = args.margin or {}
-  args.margin_left = args.margin_left or args.margin.left
-  args.margin_right = args.margin_right or args.margin.right
-  if args.margin_left then
-    local left_margin = common.constraint{width = args.margin_left, }
-    if args.margin.set_bg then
-      left_margin = wibox.container.background(left_margin)
-    end
-    decorated.left_separator_widgets = {left_margin, }
+  args.margin = args.margin or {
+    left = args.margin_left,
+    right = args.margin_right,
+  }
+  args.padding = args.padding or {}
+  if args.margin.left then
+    table.insert(
+      decorated.left_separator_widgets,
+      common.constraint{width = args.margin.left, }
+    )
   end
-  if args.margin_right then
-    local right_margin = common.constraint{width = args.margin_right, }
-    if args.margin.set_bg then
-      right_margin = wibox.container.background(right_margin)
-    end
-    decorated.right_separator_widgets = {right_margin, }
+  if args.padding.left then
+    table.insert(
+      decorated.left_separator_widgets,
+      wibox.container.background(common.constraint{width = args.padding.left, })
+    )
+  end
+  if args.padding.right then
+    table.insert(
+      decorated.right_separator_widgets,
+      wibox.container.background(common.constraint{width = args.padding.right, })
+    )
+  end
+  if args.margin.right then
+    table.insert(
+      decorated.right_separator_widgets,
+      common.constraint{width = args.margin.right, }
+    )
   end
 
   if args.widgets then
