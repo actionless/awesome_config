@@ -175,26 +175,59 @@ function widget_loader.init(awesome_context)
   end
   w.calendar_popup:attach(w.textclock, nil, {on_hover=true})
 
-  local sidebar_item_heiht = beautiful.basic_panel_height
+  -- --------------------------------------------
+  -- Naughty sidebar
+  -- --------------------------------------------
+  -- @TODO: move it smth to widgets.naughty_sidebar,
+  --        smth mb just separately to the new config.naughty_sidebar module.
+  -- --------------------------------------------
+  local sidebar_item_padding = beautiful.notification_sidebar_button_padding or dpi(5)
+  local sidebar_item_margin = beautiful.notification_sidebar_margin or dpi(10)
+  --local sidebar_item_height = beautiful.basic_panel_height
+  local sidebar_item_height = beautiful.basic_panel_height + sidebar_item_padding
   local sidebar_item_width = beautiful.notification_sidebar_width - (
-    (beautiful.notification_sidebar_margin or dpi(10)) * 2
+    sidebar_item_margin * 2
   )
-  local systray = wibox.widget.systray()
-  systray.forced_height = sidebar_item_heiht
-  systray.forced_width = sidebar_item_width
-  systray = common.set_panel_shape(
-    wibox.container.background(systray, beautiful.panel_widget_bg)
+
+  ---- Systray
+  local systray_icon_size = 32 or (sidebar_item_height - sidebar_item_padding*2)
+  local systray_inner = wibox.widget.systray()
+  systray_inner.forced_height = systray_icon_size
+  systray_inner.forced_width = systray_icon_size
+  local systray = common.panel_shape(
+    wibox.container.margin(
+      wibox.container.background(systray_inner, beautiful.panel_widget_bg),
+      sidebar_item_padding, sidebar_item_padding,
+      sidebar_item_padding, sidebar_item_padding,
+      beautiful.panel_widget_bg
+    )
   )
-  local netctl = common.panel_shape(w.netctl)
-  netctl.lie_background.forced_height = sidebar_item_heiht
-  netctl.lie_background.forced_width = sidebar_item_width
+
+  -- Network connectivity
+  local netctl
+  if w.netctl then
+    local netctl_inner = wibox.container.background(w.netctl, beautiful.panel_widget_bg)
+    netctl_inner.forced_height = sidebar_item_height - sidebar_item_padding*2
+    netctl_inner.forced_width = sidebar_item_width - sidebar_item_padding*2
+    netctl = common.panel_shape(
+      wibox.container.margin(
+        netctl_inner,
+        sidebar_item_padding, sidebar_item_padding,
+        sidebar_item_padding, sidebar_item_padding,
+        beautiful.panel_widget_bg
+      )
+    )
+  end
+
+  -- Nauhty sidebar itself
   w.naughty_sidebar = widgets.naughty_sidebar{
-    hide_when_no_notifications = false,
-    custom_widgets = w.netctl and {
+    hide_without_notifications = false,
+    custom_widgets = {
         awful.widget.only_on_screen(systray, screen.primary),
         netctl,
     },
   }
+  --/naughty_sidebar END ---------------------------
 
   w.screen = {}
   awful.screen.connect_for_each_screen(function(s)

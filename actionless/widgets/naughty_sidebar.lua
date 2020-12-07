@@ -35,7 +35,7 @@ local function widget_factory(args)
   args.panel_shape = true
   args.fg = args.fg or beautiful.notification_counter_fg
   args.bg = args.bg or beautiful.notification_counter_bg
-  args.hide_when_no_notifications = (args.hide_when_no_notifications == nil) and true or false
+  args.hide_without_notifications = (args.hide_without_notifications == nil) and true or false
 
   naughty_sidebar.widget = common.decorated(args)
   naughty_sidebar.saved_notifications = db.get_or_set(DB_ID, {})
@@ -104,7 +104,7 @@ local function widget_factory(args)
   function naughty_sidebar:update_counter()
     local num_notifications = #naughty_sidebar.saved_notifications
     self.widget:set_text((num_notifications==0) and '' or num_notifications)
-    if (num_notifications > 0) or (not args.hide_when_no_notifications) then
+    if (num_notifications > 0) or (not args.hide_without_notifications) then
       local unread_count = #self.saved_notifications - self.prev_count
       if unread_count > 0 then
         self.widget:set_warning()
