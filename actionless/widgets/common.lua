@@ -372,6 +372,9 @@ function common.decorated_horizontal(args)
   }
 
   args = args or {}
+  args.margin = args.margin or {}
+  args.margin_left = args.margin_left or args.margin.left
+  args.margin_right = args.margin_right or args.margin.right
   decorated.bg = args.bg or beautiful.panel_widget_bg or beautiful.fg or "#ffffff"
   decorated.fg = args.fg or beautiful.panel_widget_fg or beautiful.bg or "#000000"
 
