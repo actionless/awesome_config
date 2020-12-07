@@ -4,6 +4,7 @@ Licensed under GNU General Public License v2
 --]]
 
 local wibox = require('wibox')
+local beautiful = require('beautiful')
 local awful_widget_keyboardlayout = require("awful.widget.keyboardlayout")
 
 local capi = {
@@ -16,12 +17,17 @@ local kbd = {}
 
 local function widget_factory(args)
   args	 = args or {}
-  args.orientation = args.orientation or "horizontal"
-  local replacements = args.replacements or {us="eng", ["ru(winkeys)"]="rus"}
   local default_layout = args.default_layout or "us"
+  local replacements = args.replacements or {us="eng", ["ru(winkeys)"]="rus"}
 
-  args.widget = wibox.widget.textbox()
-  kbd.widget = common.panel_shape(common.decorated(args))
+  args.widget = args.widget or wibox.widget.textbox()
+  args.orientation = args.orientation or "horizontal"
+  args.padding = args.padding or {
+    left=math.ceil((beautiful.panel_widget_spacing or beautiful.xresources.apply_dpi(3)) / 2),
+    right=math.ceil((beautiful.panel_widget_spacing or beautiful.xresources.apply_dpi(3)) / 2),
+  }
+  local decorated = common.decorated(args)
+  kbd.widget = common.panel_shape(decorated)
 
   local akb_widget = awful_widget_keyboardlayout()
 
@@ -32,10 +38,10 @@ local function widget_factory(args)
         text = (akb_widget._layout[akb_widget._current+1])
     end
     if text == default_layout then
-      kbd.widget:hide()
+      decorated:hide()
     else
-      kbd.widget:show()
-      kbd.widget:set_markup(replacements[text] or text)
+      decorated:show()
+      decorated:set_markup(replacements[text] or text)
     end
   end
 
