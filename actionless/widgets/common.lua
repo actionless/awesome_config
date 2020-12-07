@@ -383,23 +383,10 @@ function common.decorated_horizontal(args)
     left = args.margin_left,
     right = args.margin_right,
   }
-  args.padding = args.padding or {}
   if args.margin.left then
     table.insert(
       decorated.left_separator_widgets,
       common.constraint{width = args.margin.left, }
-    )
-  end
-  if args.padding.left then
-    table.insert(
-      decorated.left_separator_widgets,
-      wibox.container.background(common.constraint{width = args.padding.left, })
-    )
-  end
-  if args.padding.right then
-    table.insert(
-      decorated.right_separator_widgets,
-      wibox.container.background(common.constraint{width = args.padding.right, })
     )
   end
   if args.margin.right then
@@ -420,6 +407,21 @@ function common.decorated_horizontal(args)
     decorated.lie_widget = args.widget
   else
     decorated.lie_widget = decorated.lie_widget_list[1]
+  end
+
+  args.padding = args.padding or {}
+  if args.padding.left then
+    table.insert(
+      decorated.lie_widget_list,
+      1,
+      wibox.container.background(common.constraint{width = args.padding.left, })
+    )
+  end
+  if args.padding.right then
+    table.insert(
+      decorated.lie_widget_list,
+      wibox.container.background(common.constraint{width = args.padding.right, })
+    )
   end
 
   -- give set_bg and set_fg methods to ones don't have it:
