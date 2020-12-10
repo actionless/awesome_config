@@ -249,13 +249,26 @@ local function widget_factory(args)
         {
           {
             {
-              wibox.widget.textbox(notification.title),
+              {
+                wibox.widget.textbox(notification.title),
+                margins = {
+                  top = naughty_sidebar.theme.close_button_size / 4,
+                },
+                layout = wibox.container.margin,
+              },
               nil,
               nil,
               layout = wibox.layout.align.vertical
             },
             nil,
-            close_button,
+            {
+              close_button,
+              margins = {
+                bottom = naughty_sidebar.theme.padding,
+                left = naughty_sidebar.theme.padding,
+              },
+              layout = wibox.container.margin,
+            },
             layout = wibox.layout.align.horizontal
           },
           {
