@@ -17,21 +17,6 @@ local common = {}
 -- @TODO: get rid of setmetatable-s
 
 
-function common.centered(widget)
-  if not widget then widget=wibox.container.background() end
-  local centered_widget = {}
-  centered_widget.widget = widget
-
-  local horizontal_align = wibox.layout.align.horizontal()
-  horizontal_align:set_second(widget)
-  local vertical_align = wibox.layout.align.vertical()
-  vertical_align:set_second(horizontal_align)
-
-  setmetatable(centered_widget, { __index = centered_widget.widget })
-  return setmetatable(centered_widget, { __index = vertical_align })
-end
-
-
 function common.constraint(args)
   args = args or {}
   local strategy = args.strategy or "exact"
