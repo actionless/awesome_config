@@ -122,6 +122,7 @@ local function widget_factory(args)
   naughty_sidebar.theme.close_button_size = naughty_sidebar.theme.padding * 2
   naughty_sidebar.theme.button_bg_hover = beautiful.bg_focus
   naughty_sidebar.theme.button_fg_hover = beautiful.fg_focus
+  naughty_sidebar.theme.close_button_opacity = naughty_sidebar.theme.close_button_opacity or 0.4
 
   naughty_sidebar.widget = common.decorated(args)
   naughty_sidebar.saved_notifications = db.get_or_set(DB_ID, {})
@@ -242,7 +243,7 @@ local function widget_factory(args)
       strategy = 'exact',
       layout = wibox.container.constraint,
     })
-    close_button.opacity = 0.4
+    close_button.opacity = naughty_sidebar.theme.close_button_opacity
 
     local widget = wibox.widget{
       {
@@ -342,7 +343,7 @@ local function widget_factory(args)
       close_button.fg = naughty_sidebar.theme.button_fg_hover
     end)
     close_button:connect_signal("mouse::leave", function()
-      close_button.opacity = 0.4
+      close_button.opacity = naughty_sidebar.theme.close_button_opacity
       close_button.bg = naughty_sidebar.theme.notification_bg
       close_button.fg = naughty_sidebar.theme.notification_fg
     end)
