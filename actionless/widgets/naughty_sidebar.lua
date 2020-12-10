@@ -248,7 +248,12 @@ local function widget_factory(args)
       {
         {
           {
-            wibox.widget.textbox(notification.title),
+            {
+              wibox.widget.textbox(notification.title),
+              nil,
+              nil,
+              layout = wibox.layout.align.vertical
+            },
             nil,
             close_button,
             layout = wibox.layout.align.horizontal
