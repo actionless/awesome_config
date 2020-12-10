@@ -17,15 +17,24 @@ local DB_ID = 'notifications_storage'
 local DB_ID_READ_COUNT = 'notifications_storage_read_count'
 
 
-local naughty_sidebar = {}
+local pack = table.pack or function(...) -- luacheck: ignore 143
+  return { n = select("#", ...), ... }
+end
+
+
+local naughty_sidebar = {
+  theme = {
+    num_buttons = 2,
+  },
+}
 
 local function widget_factory(args)
   args	 = args or {}
   args.orientation = args.orientation or "horizontal"
-  if beautiful.panel_widget_spacing  then
+  if (beautiful.panel_widget_spacing ~= nil) and (beautiful.panel_padding_bottom ~= nil) then
     args.padding = {
-      left=math.ceil(beautiful.panel_widget_spacing/2),
-      right=math.ceil(beautiful.panel_widget_spacing/2),
+      left=gears.math.round(beautiful.panel_widget_spacing/2),
+      right=math.max(0, gears.math.round(beautiful.panel_widget_spacing/2 + beautiful.panel_padding_bottom) - 1),
     }
     args.margin = {
       left = beautiful.panel_widget_spacing - beautiful.panel_padding_bottom,
@@ -37,6 +46,83 @@ local function widget_factory(args)
   args.bg = args.bg or beautiful.notification_counter_bg
   args.hide_without_notifications = (args.hide_without_notifications == nil) and true or false
 
+  local set_theme = function(key, ...)
+    if naughty_sidebar.theme[key] ~= nil then
+      return
+    end
+    local candidates = pack(...)
+    for i=1,candidates.n do
+      local candidate = candidates[i]
+      if candidate ~= nil then
+        naughty_sidebar.theme[key] = candidate
+        return
+      end
+    end
+  end
+
+  set_theme('width',
+    beautiful.notification_sidebar_width,
+    beautiful.notification_max_width,
+    dpi(300)
+  )
+  set_theme('button_padding',
+    beautiful.notification_sidebar_button_padding,
+    dpi(5)
+  )
+  set_theme('padding',
+    beautiful.notification_sidebar_padding,
+    dpi(10)
+  )
+  set_theme('margin',
+    beautiful.notification_sidebar_margin,
+    dpi(10)
+  )
+  set_theme('spacing',
+    beautiful.notification_sidebar_spacing,
+    dpi(10)
+  )
+  set_theme('font',
+    beautiful.notification_font,
+    "Sans 8"
+  )
+  set_theme('bg',
+    beautiful.notification_sidebar_bg,
+    beautiful.panel_bg,
+    beautiful.bg_normal
+  )
+  set_theme('fg',
+    beautiful.notification_sidebar_fg,
+    beautiful.panel_fg,
+    beautiful.fg_normal
+  )
+  set_theme('notification_bg',
+    beautiful.notification_bg,
+    beautiful.bg_normal
+  )
+  set_theme('notification_fg',
+    beautiful.notification_fg,
+    beautiful.fg_normal
+  )
+  set_theme('notification_border_radius',
+    beautiful.notification_border_radius,
+    0
+  )
+  set_theme('notification_border_width',
+    beautiful.notification_border_width,
+    0
+  )
+  set_theme('notification_border_color',
+    beautiful.notification_border_color,
+    beautiful.border_normal
+  )
+  set_theme('notification_border_color_unread',
+    beautiful.warning,
+    beautiful.bg_focus
+  )
+  naughty_sidebar.theme.close_button_size = naughty_sidebar.theme.padding * 2
+  naughty_sidebar.theme.button_bg_hover = beautiful.bg_focus
+  naughty_sidebar.theme.button_fg_hover = beautiful.fg_focus
+
   naughty_sidebar.widget = common.decorated(args)
   naughty_sidebar.saved_notifications = db.get_or_set(DB_ID, {})
   naughty_sidebar.prev_count = db.get_or_set(DB_ID_READ_COUNT, 0)
@@ -45,12 +131,11 @@ local function widget_factory(args)
 
 
   function naughty_sidebar:widget_action_button(text, callback, widget_args)
-    local bg_color = beautiful.notification_bg or beautiful.bg_normal
-    local fg_color = beautiful.notification_fg or beautiful.fg_normal
     widget_args = widget_args or {}
+
     local label = {
       markup = text,
-      font = beautiful.notification_font or "Sans 8",
+      font = naughty_sidebar.theme.font,
       widget = wibox.widget.textbox,
     }
     if widget_args.align == 'middle' then
@@ -64,27 +149,27 @@ local function widget_factory(args)
     end
     local widget = common.set_panel_shape(wibox.widget{
       {
-        {
+        --{
           label,
-          layout = wibox.layout.fixed.vertical
-        },
-        margins = beautiful.notification_sidebar_button_padding or dpi(5),
+          --layout = wibox.layout.fixed.vertical,
+        --},
+        margins = naughty_sidebar.theme.button_padding,
         layout = wibox.container.margin,
       },
-      bg = bg_color,
-      fg = fg_color,
+      bg = naughty_sidebar.theme.notification_bg,
+      fg = naughty_sidebar.theme.notification_fg,
       layout = wibox.container.background,
     })
     widget:buttons(awful.util.table.join(
       awful.button({ }, 1, callback)
     ))
     widget:connect_signal("mouse::enter", function()
-      widget.bg = beautiful.bg_focus
-      widget.fg = beautiful.fg_focus
+      widget.bg = naughty_sidebar.theme.button_bg_hover
+      widget.fg = naughty_sidebar.theme.button_fg_hover
     end)
     widget:connect_signal("mouse::leave", function()
-      widget.bg = bg_color
-      widget.fg = fg_color
+      widget.bg = naughty_sidebar.theme.notification_bg
+      widget.fg = naughty_sidebar.theme.notification_fg
     end)
     return widget
   end
@@ -104,7 +189,7 @@ local function widget_factory(args)
   function naughty_sidebar:update_counter()
     local num_notifications = #naughty_sidebar.saved_notifications
     self.widget:set_text((num_notifications==0) and '' or num_notifications)
-    if (num_notifications > 0) or (not args.hide_without_notifications) then
+    if num_notifications > 0 then
       local unread_count = #self.saved_notifications - self.prev_count
       if unread_count > 0 then
         self.widget:set_warning()
@@ -113,7 +198,11 @@ local function widget_factory(args)
       end
       self.widget:show()
     else
-      self.widget:hide()
+      if args.hide_without_notifications then
+        self.widget:hide()
+      --else
+      --  @TODO: set icon for no notifications
+      end
     end
   end
 
@@ -137,54 +226,113 @@ local function widget_factory(args)
 
   function naughty_sidebar:widget_notification(notification, idx, unread)
     notification.args = notification.args or {}
-    local bg_color = beautiful.notification_bg or beautiful.bg_normal
-    local fg_color = beautiful.notification_fg or beautiful.fg_normal
-    local panel_padding = beautiful.notification_sidebar_padding or dpi(10)
     local actions = wibox.layout.fixed.vertical()
-    actions.spacing = math.ceil(panel_padding/2)
+    actions.spacing = gears.math.round(naughty_sidebar.theme.padding * 0.75)
+
+    local close_button = common.panel_shape(wibox.widget{
+      {
+        nil,
+        wibox.widget.textbox('x'),
+        nil,
+        expand='outside',
+        layout = wibox.layout.align.horizontal,
+      },
+      height = naughty_sidebar.theme.close_button_size,
+      width = naughty_sidebar.theme.close_button_size,
+      strategy = 'exact',
+      layout = wibox.container.constraint,
+    })
+    close_button.opacity = 0.4
+
     local widget = wibox.widget{
       {
         {
-          wibox.widget.textbox(notification.title),
+          {
+            wibox.widget.textbox(notification.title),
+            nil,
+            close_button,
+            layout = wibox.layout.align.horizontal
+          },
           {
             markup = notification.message,
-            font = beautiful.notification_font or "Sans 8",
+            font = naughty_sidebar.theme.font,
             widget = wibox.widget.textbox,
           },
           actions,
           layout = wibox.layout.fixed.vertical
         },
-        margins = panel_padding,
+        margins = naughty_sidebar.theme.padding,
         layout = wibox.container.margin,
       },
-      bg = bg_color,
-      fg = fg_color,
+      bg = naughty_sidebar.theme.notification_bg,
+      fg = naughty_sidebar.theme.notification_fg,
       shape_clip = true,
       shape = function(c, w, h)
-        return gears.shape.rounded_rect(c, w, h, beautiful.notification_border_radius or dpi(1))
+        return gears.shape.rounded_rect(c, w, h, naughty_sidebar.theme.notification_border_radius)
       end,
-      shape_border_width = beautiful.notification_border_width or dpi(1),
-      shape_border_color = beautiful.notification_border_color or beautiful.border_normal,
+      shape_border_width = naughty_sidebar.theme.notification_border_width,
+      shape_border_color = naughty_sidebar.theme.notification_border_color,
       layout = wibox.container.background,
     }
     if unread then
-      widget.border_color = beautiful.warning or beautiful.bg_focus
-      --widget.border_width = widget.border_width * 2
-      --widget.border_color = beautiful.error or beautiful.bg_focus
+      widget.border_color = naughty_sidebar.theme.notification_border_color_unread
     end
     widget.lie_idx = idx
     local function default_action()
       notification.args.run(notification)
     end
+
+    local create_buttons_row = function()
+      local row = wibox.layout.flex.horizontal()
+      row.spacing = actions.spacing
+      row.max_widget_size = (
+        naughty_sidebar.theme.width -
+        naughty_sidebar.theme.margin * 2 -
+        naughty_sidebar.theme.padding * 2 -
+        actions.spacing * (naughty_sidebar.theme.num_buttons - 1)
+      ) / naughty_sidebar.theme.num_buttons
+      return row
+    end
+    local separator_before_actions = common.constraint{height=naughty_sidebar.theme.padding * 0.25}
+    local buttons_row = create_buttons_row()
+    local num_buttons = 0
     if notification.args.run then
-      actions:add(common.constraint({height=actions.spacing}))
-      actions:add(self:widget_action_button('Open', default_action))
+      buttons_row:add(self:widget_action_button('Open', default_action))
+      num_buttons = num_buttons + 1
     end
     for _, action in pairs(notification.actions or {}) do
-      actions:add(self:widget_action_button(action:get_name(), function()
+      buttons_row:add(self:widget_action_button(action:get_name(), function()
         action:invoke(notification)
       end))
+      num_buttons = num_buttons + 1
+      if num_buttons % naughty_sidebar.theme.num_buttons == 0 then
+        if num_buttons == naughty_sidebar.theme.num_buttons then
+          actions:add(separator_before_actions)
+        end
+        actions:add(buttons_row)
+        buttons_row = create_buttons_row()
+      end
     end
+    if num_buttons > 0 and num_buttons < naughty_sidebar.theme.num_buttons then
+      actions:add(separator_before_actions)
+      actions:add(buttons_row)
+    end
+
+    close_button:connect_signal("mouse::enter", function()
+      close_button.opacity = 1
+      close_button.bg = naughty_sidebar.theme.button_bg_hover
+      close_button.fg = naughty_sidebar.theme.button_fg_hover
+    end)
+    close_button:connect_signal("mouse::leave", function()
+      close_button.opacity = 0.4
+      close_button.bg = naughty_sidebar.theme.notification_bg
+      close_button.fg = naughty_sidebar.theme.notification_fg
+    end)
+    close_button:buttons(awful.util.table.join(
+      awful.button({ }, 1, function()
+        self:remove_notification(widget.lie_idx)
+      end)
+    ))
     widget:buttons(awful.util.table.join(
       awful.button({ }, 1, function()
         if notification.args.run then
@@ -199,7 +347,6 @@ local function widget_factory(args)
   end
 
   function naughty_sidebar:widget_panel_label(text)
-    local fg = beautiful.notification_sidebar_fg or beautiful.panel_fg or beautiful.fg_normal
     return wibox.widget{
       nil,
       {
@@ -207,7 +354,7 @@ local function widget_factory(args)
           text=text,
           widget=wibox.widget.textbox
         },
-        fg=fg,
+        fg=naughty_sidebar.theme.fg,
         layout = wibox.container.background,
       },
       nil,
@@ -218,9 +365,9 @@ local function widget_factory(args)
 
   function naughty_sidebar:refresh_notifications()
     local layout = wibox.layout.fixed.vertical()
+    layout.spacing = naughty_sidebar.theme.spacing
     local margin = wibox.container.margin()
-    margin.margins = beautiful.notification_sidebar_margin or dpi(10)
-    layout.spacing = beautiful.notification_sidebar_spacing or dpi(10)
+    margin.margins = naughty_sidebar.theme.margin
     for _, widget in ipairs(naughty_sidebar._custom_widgets) do
       layout:add(widget)
     end
@@ -230,7 +377,7 @@ local function widget_factory(args)
         function()
           self:remove_all_notifications()
         end,
-        {align='middle'}
+        {align='middle', full_width=true}
       ))
       local unread_count = #self.saved_notifications - self.prev_count
       if self.scroll_offset > 0 then
@@ -248,7 +395,7 @@ local function widget_factory(args)
       layout:add(self:widget_panel_label('No notifications'))
     end
     margin:set_widget(layout)
-    self.sidebar.bg = beautiful.notification_sidebar_bg or beautiful.panel_bg or beautiful.bg_normal
+    self.sidebar.bg = naughty_sidebar.theme.bg
 
     self.sidebar:set_widget(margin)
     self.sidebar.lie_layout = layout
@@ -274,16 +421,11 @@ local function widget_factory(args)
 
   function naughty_sidebar:toggle_sidebox()
     if not self.sidebar then
-      local width = (
-        beautiful.notification_sidebar_width or
-        beautiful.notification_max_width or
-        dpi(300)
-      )
       local workarea = awful.screen.focused().workarea
       self.sidebar = wibox({
-        width = width,
+        width = naughty_sidebar.theme.width,
         height = workarea.height,
-        x = workarea.width - width,
+        x = workarea.width - naughty_sidebar.theme.width,
         y = workarea.y,
         ontop = true,
         type='dock',
