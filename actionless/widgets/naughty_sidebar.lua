@@ -329,7 +329,7 @@ local function widget_factory(args)
       close_button.fg = naughty_sidebar.theme.notification_fg
     end)
     close_button:buttons(awful.util.table.join(
-      awful.button({ }, 1, function()
+      awful.button({ }, 1, nil, function()
         self:remove_notification(widget.lie_idx)
       end)
     ))
