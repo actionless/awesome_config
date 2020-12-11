@@ -34,10 +34,10 @@ local function widget_factory(args)
   if (beautiful.panel_widget_spacing ~= nil) and (beautiful.panel_padding_bottom ~= nil) then
     args.padding = {
       left=gears.math.round(beautiful.panel_widget_spacing/2),
-      right=math.max(0, gears.math.round(beautiful.panel_widget_spacing/2 + beautiful.panel_padding_bottom) - 1),
+      right=math.max(0, gears.math.round(beautiful.panel_widget_spacing/2 + beautiful.panel_padding_bottom - 1)),
     }
     args.margin = {
-      left = beautiful.panel_widget_spacing - beautiful.panel_padding_bottom,
+      left = math.max(0, beautiful.panel_widget_spacing - beautiful.panel_padding_bottom),
       right = beautiful.panel_padding_bottom,
     }
   end
@@ -65,22 +65,6 @@ local function widget_factory(args)
     beautiful.notification_max_width,
     dpi(300)
   )
-  set_theme('button_padding',
-    beautiful.notification_sidebar_button_padding,
-    dpi(5)
-  )
-  set_theme('padding',
-    beautiful.notification_sidebar_padding,
-    dpi(10)
-  )
-  set_theme('margin',
-    beautiful.notification_sidebar_margin,
-    dpi(10)
-  )
-  set_theme('spacing',
-    beautiful.notification_sidebar_spacing,
-    dpi(10)
-  )
   set_theme('font',
     beautiful.notification_font,
     "Sans 8"
@@ -95,6 +79,11 @@ local function widget_factory(args)
     beautiful.panel_fg,
     beautiful.fg_normal
   )
+  set_theme('spacing',
+    beautiful.notification_sidebar_spacing,
+    dpi(10)
+  )
+
   set_theme('notification_bg',
     beautiful.notification_bg,
     beautiful.bg_normal
@@ -102,6 +91,10 @@ local function widget_factory(args)
   set_theme('notification_fg',
     beautiful.notification_fg,
     beautiful.fg_normal
+  )
+  set_theme('notification_padding',
+    beautiful.notification_sidebar_padding,
+    dpi(7)
   )
   set_theme('notification_border_radius',
     beautiful.notification_border_radius,
@@ -119,10 +112,30 @@ local function widget_factory(args)
     beautiful.warning,
     beautiful.bg_focus
   )
-  naughty_sidebar.theme.close_button_size = naughty_sidebar.theme.padding * 2
-  naughty_sidebar.theme.button_bg_hover = beautiful.bg_focus
-  naughty_sidebar.theme.button_fg_hover = beautiful.fg_focus
-  naughty_sidebar.theme.close_button_opacity = naughty_sidebar.theme.close_button_opacity or 0.4
+
+  set_theme('close_button_size',
+    beautiful.notification_close_button_size,
+    dpi(20)
+  )
+  set_theme('close_button_margin',
+    beautiful.notification_close_button_margin,
+    dpi(1)
+  )
+  set_theme('close_button_opacity',
+    beautiful.notification_close_button_opacity,
+    0.4
+  )
+
+  set_theme('button_padding',
+    beautiful.notification_button_padding,
+    dpi(5)
+  )
+  set_theme('button_bg_hover',
+    beautiful.bg_focus
+  )
+  set_theme('button_fg_hover',
+    beautiful.fg_focus
+  )
 
   naughty_sidebar.widget = common.decorated(args)
   naughty_sidebar.saved_notifications = db.get_or_set(DB_ID, {})
@@ -228,7 +241,7 @@ local function widget_factory(args)
   function naughty_sidebar:widget_notification(notification, idx, unread)
     notification.args = notification.args or {}
     local actions = wibox.layout.fixed.vertical()
-    actions.spacing = gears.math.round(naughty_sidebar.theme.padding * 0.75)
+    actions.spacing = gears.math.round(naughty_sidebar.theme.notification_padding * 0.75)
 
     local close_button = common.panel_shape(wibox.widget{
       {
@@ -248,39 +261,75 @@ local function widget_factory(args)
     local widget = wibox.widget{
       {
         {
+          -- TITLE:
           {
+
             {
+              nil,
               {
                 wibox.widget.textbox(notification.title),
                 margins = {
-                  top = naughty_sidebar.theme.close_button_size / 4,
+                  top = naughty_sidebar.theme.notification_padding,
+                  bottom = gears.math.round(naughty_sidebar.theme.notification_padding / 2.5),
+                  right = (
+                    naughty_sidebar.theme.close_button_size +
+                    naughty_sidebar.theme.close_button_margin * 2
+                  ),
                 },
                 layout = wibox.container.margin,
               },
               nil,
-              nil,
               layout = wibox.layout.align.vertical
             },
+
             nil,
+
             {
-              close_button,
-              margins = {
-                bottom = naughty_sidebar.theme.padding,
-                left = naughty_sidebar.theme.padding,
+              nil,
+              nil,
+              {
+                {
+                  close_button,
+                  margins = {
+                    bottom = naughty_sidebar.theme.close_button_margin,
+                    left = naughty_sidebar.theme.close_button_margin,
+                  },
+                  layout = wibox.container.margin,
+                },
+                layout = wibox.layout.fixed.vertical,
               },
-              layout = wibox.container.margin,
+              expand='none',
+              layout = wibox.layout.align.horizontal
             },
+
+            expand='outside',
             layout = wibox.layout.align.horizontal
           },
+          --/ end TITLE
+
+          -- MESSAGE:
           {
-            markup = notification.message,
-            font = naughty_sidebar.theme.font,
-            widget = wibox.widget.textbox,
+            {
+              markup = notification.message,
+              font = naughty_sidebar.theme.font,
+              widget = wibox.widget.textbox,
+            },
+            margins = {
+              right = naughty_sidebar.theme.notification_padding,
+            },
+            layout = wibox.container.margin,
           },
+          --/ end MESSAGE
+
           actions,
           layout = wibox.layout.fixed.vertical
         },
-        margins = naughty_sidebar.theme.padding,
+        margins = {
+          top = naughty_sidebar.theme.close_button_margin,
+          right = naughty_sidebar.theme.close_button_margin,
+          bottom = naughty_sidebar.theme.notification_padding,
+          left = naughty_sidebar.theme.notification_padding,
+        },
         layout = wibox.container.margin,
       },
       bg = naughty_sidebar.theme.notification_bg,
@@ -293,6 +342,7 @@ local function widget_factory(args)
       shape_border_color = naughty_sidebar.theme.notification_border_color,
       layout = wibox.container.background,
     }
+
     if unread then
       widget.border_color = naughty_sidebar.theme.notification_border_color_unread
     end
@@ -306,13 +356,13 @@ local function widget_factory(args)
       row.spacing = actions.spacing
       row.max_widget_size = (
         naughty_sidebar.theme.width -
-        naughty_sidebar.theme.margin * 2 -
-        naughty_sidebar.theme.padding * 2 -
+        naughty_sidebar.theme.spacing * 2 -
+        naughty_sidebar.theme.notification_padding * 2 -
         actions.spacing * (naughty_sidebar.theme.num_buttons - 1)
       ) / naughty_sidebar.theme.num_buttons
       return row
     end
-    local separator_before_actions = common.constraint{height=naughty_sidebar.theme.padding * 0.25}
+    local separator_before_actions = common.constraint{height=naughty_sidebar.theme.notification_padding * 0.25}
     local buttons_row = create_buttons_row()
     local num_buttons = 0
     if notification.args.run then
@@ -386,7 +436,7 @@ local function widget_factory(args)
     local layout = wibox.layout.fixed.vertical()
     layout.spacing = naughty_sidebar.theme.spacing
     local margin = wibox.container.margin()
-    margin.margins = naughty_sidebar.theme.margin
+    margin.margins = naughty_sidebar.theme.spacing
     for _, widget in ipairs(naughty_sidebar._custom_widgets) do
       layout:add(widget)
     end
