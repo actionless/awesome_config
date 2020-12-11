@@ -8,6 +8,8 @@ local awful = require('awful')
 local gears = require('gears')
 local beautiful = require('beautiful')
 local dpi = beautiful.xresources.apply_dpi
+local ruled = require("ruled")
+local naughty = require("naughty")
 
 local common = require("actionless.widgets.common")
 local db = require("actionless.util.db")
@@ -22,10 +24,69 @@ local pack = table.pack or function(...) -- luacheck: ignore 143
 end
 
 
-local naughty_sidebar = {
+local naughty_sidebar
+naughty_sidebar = {
   theme = {
     num_buttons = 2,
   },
+
+  init_naughty = function(args)
+    args = args or {}
+    args.skip_rule = args.skip_rule or {app_name = {'', "xfce4-power-manager"}}
+
+    ruled.notification.connect_signal('request::rules', function()
+      ruled.notification.append_rules{
+        {
+          -- All notifications will match this rule.
+          rule       = {},
+          properties = {
+            screen           = awful.screen.preferred,
+            implicit_timeout = 5,
+          },
+        },{
+          rule       = { },
+          except_any = args.skip_rule,
+          callback = function(notification)
+            naughty_sidebar:add_notification(notification)
+          end
+        }
+      }
+    end)
+
+    naughty.persistence_enabled = true
+    naughty.connect_signal('request::preset', function(n, _, notification_args)
+      n.args = notification_args
+    end)
+    naughty.connect_signal('request::display', function(n, _, notification_args)
+      if (
+        n.app_name ~= '' and
+        naughty_sidebar.sidebar and
+        naughty_sidebar.sidebar.visible
+      ) then
+        return
+      end
+      n:set_title('<b>'..n:get_title()..'</b>')
+      local box = naughty.layout.box{
+        notification = n,
+        -- workaround for https://github.com/awesomeWM/awesome/issues/3081 :
+        shape = function(cr,w,h)
+          gears.shape.rounded_rect(
+            cr, w, h, beautiful.notification_border_radius+beautiful.notification_border_width+1
+          )
+        end,
+      }
+      if notification_args.run then
+        local buttons = box:buttons()
+        buttons = awful.util.table.join(buttons,
+          awful.button({}, 1,
+          function()
+            notification_args.run(n)
+          end)
+        )
+        box:buttons(buttons)
+      end
+    end)
+  end
 }
 
 local function widget_factory(args)
