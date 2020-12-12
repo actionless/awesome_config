@@ -330,7 +330,7 @@ theme.titlebar_bg_normal = TRANSPARENT
 theme.titlebar_bg_focus = TRANSPARENT
 if awesome.composite_manager_running then
   theme.border_width = 0
-  theme.base_border_width = 2
+  theme.base_border_width = dpi(1.5)
 
   -- let picom do AA-rounding of notifications' borders:
   theme.notification_sidebar_notification_border_radius = theme.notification_border_radius
