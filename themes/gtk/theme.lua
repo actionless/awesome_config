@@ -341,7 +341,6 @@ if awesome.composite_manager_running then
   for _, theme_var in ipairs({
     'border_normal',
     'border_focus',
-    'notification_bg',
     'panel_bg',
     'menu_bg_normal',
   }) do
@@ -350,7 +349,7 @@ if awesome.composite_manager_running then
     --theme[theme_var] = color_utils.transparentize(theme[theme_var], 0.53)
   end
   theme['notification_bg'] = color_utils.transparentize(
-    theme['notification_bg'], 0.8
+    theme['notification_bg'], 0.88
   )
   for _, theme_var in ipairs({
     'actionless_titlebar_bg_normal',
