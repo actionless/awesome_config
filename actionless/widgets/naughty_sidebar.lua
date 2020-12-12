@@ -217,11 +217,12 @@ local function widget_factory(args)
     }
   end
   args.panel_widget_shape = true
-  args.hide_without_notifications = (args.hide_without_notifications == nil) and true or false
+  naughty_sidebar.widget = common.decorated(args)
 
   init_theme(args)
 
-  naughty_sidebar.widget = common.decorated(args)
+  args.hide_without_notifications = (args.hide_without_notifications == nil) and true or args.hide_without_notifications
+
   naughty_sidebar.saved_notifications = db.get_or_set(DB_ID, {})
   naughty_sidebar.prev_count = db.get_or_set(DB_ID_READ_COUNT, 0)
   naughty_sidebar.scroll_offset = 0
