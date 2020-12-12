@@ -195,7 +195,8 @@ theme.mono_text_font          = "Monospace " .. theme.gtk.font_size - 1
 --theme.border_width = dpi(4)
 theme.useless_gap = dpi(4)
 
-theme.border_width = dpi(gtk_border_width) * 4
+--theme.border_width = dpi(gtk_border_width) * 4
+theme.border_width = dpi(gtk_border_width) * 3
 
 theme.base_border_width = theme.border_width
 theme.border_width = 0
