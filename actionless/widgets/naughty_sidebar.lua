@@ -216,7 +216,7 @@ local function widget_factory(args)
       right = beautiful.panel_padding_bottom,
     }
   end
-  args.panel_shape = true
+  args.panel_widget_shape = true
   args.hide_without_notifications = (args.hide_without_notifications == nil) and true or false
 
   init_theme(args)
@@ -245,7 +245,7 @@ local function widget_factory(args)
         layout = wibox.layout.align.horizontal,
       }
     end
-    local widget = common.set_panel_shape(wibox.widget{
+    local widget = common.set_panel_widget_shape(wibox.widget{
       {
         --{
           label,
@@ -327,7 +327,7 @@ local function widget_factory(args)
     local actions = wibox.layout.fixed.vertical()
     actions.spacing = gears.math.round(naughty_sidebar.theme.notification_padding * 0.75)
 
-    local close_button = common.panel_shape(wibox.widget{
+    local close_button = common.panel_widget_shape(wibox.widget{
       {
         nil,
         wibox.widget.textbox('x'),
@@ -531,7 +531,7 @@ local function widget_factory(args)
       naughty_sidebar.theme.spacing * 2 -
       naughty_sidebar.theme.button_padding * 2
     )
-    local widget = common.panel_shape(
+    local widget = common.panel_widget_shape(
       wibox.container.margin(
         widget_inner,
         naughty_sidebar.theme.button_padding, naughty_sidebar.theme.button_padding,

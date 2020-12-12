@@ -70,7 +70,7 @@ function toolbar.init(awesome_context)
       common.constraint({ width=beautiful.panel_widget_spacing, }),
       beautiful.panel_widget_bg
     )
-    loaded_widgets.systray_toggle = common.panel_shape(widgets.sneaky_toggle({
+    loaded_widgets.systray_toggle = common.panel_widget_shape(widgets.sneaky_toggle({
         widgets={
           panel_widget_separator,
         --  w.netctl,
@@ -78,7 +78,7 @@ function toolbar.init(awesome_context)
         },
         enable_sneaky_tray = true,
         --margin = {right = beautiful.panel_padding_bottom},
-        panel_shape = false,
+        panel_widget_shape = false,
     }))
 
     -- add sneaky_toggle on first screen

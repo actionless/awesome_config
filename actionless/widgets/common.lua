@@ -35,7 +35,7 @@ function common.constraint(args)
 end
 
 
-function common.set_panel_shape(bg_widget, args)
+function common.set_panel_widget_shape(bg_widget, args)
   args = args or {}
   bg_widget.shape_clip = true
   bg_widget.shape = function(c, w, h) return gears.shape.rounded_rect(c, w, h, beautiful.panel_widget_border_radius) end
@@ -45,10 +45,10 @@ function common.set_panel_shape(bg_widget, args)
 end
 
 
-function common.panel_shape(widget, args)
+function common.panel_widget_shape(widget, args)
   args = args or {}
   local shaped = wibox.container.background(widget)
-  common.set_panel_shape(shaped, args)
+  common.set_panel_widget_shape(shaped, args)
   --setmetatable(shaped,        { __index = widget })
   shaped.lie_widget = widget
   return shaped
@@ -432,8 +432,8 @@ function common.decorated_horizontal(args)
   --decorated.wrap_layout = wibox.layout.flex.horizontal()
   decorated.wrap_layout = wibox.layout.fixed.horizontal()
   decorated.wrap_layout:add(decorated.lie_background)
-  if args.panel_shape then
-    decorated.lie_background = common.set_panel_shape(decorated.lie_background)
+  if args.panel_widget_shape then
+    decorated.lie_background = common.set_panel_widget_shape(decorated.lie_background)
   end
 
   setmetatable(decorated,        { __index = decorated.wrap_layout })

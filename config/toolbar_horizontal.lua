@@ -19,7 +19,7 @@ function toolbar.init(awesome_context)
   local sep = common.constraint({ width=gmath.round(beautiful.panel_widget_spacing/4) })
 
   local apw = wibox.layout.fixed.horizontal(
-    common.panel_shape(
+    common.panel_widget_shape(
       common.constraint({
         widget=loaded_widgets.volume,
         width=awesome_context.apw_width or dpi(120),
@@ -55,7 +55,7 @@ function toolbar.init(awesome_context)
         layout = wibox.layout.fixed.horizontal,
         buttons = wheel_binding,
         left_margin,
-        common.panel_shape(manage_client),
+        common.panel_widget_shape(manage_client),
         sep,
         loaded_widgets.screen[si].promptbox,
         loaded_widgets.kbd,
@@ -83,7 +83,7 @@ function toolbar.init(awesome_context)
     }
 
     -- CENTER
-    local center_layout = common.panel_shape(loaded_widgets.screen[si].taglist)
+    local center_layout = common.panel_widget_shape(loaded_widgets.screen[si].taglist)
     center_layout:buttons(wheel_binding)
 
     -- RIGHT side
@@ -94,7 +94,7 @@ function toolbar.init(awesome_context)
       {
         --layout = wibox.layout.flex.horizontal,
         layout = wibox.layout.fixed.horizontal,
-        common.panel_shape(
+        common.panel_widget_shape(
           loaded_widgets.music,
           {
             border_width = 0,
@@ -105,7 +105,7 @@ function toolbar.init(awesome_context)
         layout = wibox.layout.fixed.horizontal,
         separator,
         not awesome_context.apw_on_the_left and apw,
-        common.panel_shape(wibox.widget{
+        common.panel_widget_shape(wibox.widget{
           layout = wibox.layout.fixed.horizontal,
           iseparator,
           loaded_widgets.mem,
