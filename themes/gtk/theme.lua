@@ -330,6 +330,8 @@ if awesome.composite_manager_running then
   theme.border_width = 0
   theme.base_border_width = 2
 
+  -- let picom do AA-rounding of notifications' borders:
+  theme.notification_sidebar_notification_border_radius = theme.notification_border_radius
   theme.notification_border_radius = 0
   theme.notification_border_width = theme.base_border_width
   theme.notification_shape = nil

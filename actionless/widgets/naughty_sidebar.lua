@@ -153,6 +153,7 @@ local function init_theme(widget_args)
     dpi(7)
   )
   set_theme('notification_border_radius',
+    beautiful.notification_sidebar_notification_border_radius,
     beautiful.notification_border_radius,
     0
   )
