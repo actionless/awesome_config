@@ -89,25 +89,13 @@ naughty_sidebar = {
   end
 }
 
-local function widget_factory(args)
-  args	 = args or {}
-  args.orientation = args.orientation or "horizontal"
-  if (beautiful.panel_widget_spacing ~= nil) and (beautiful.panel_padding_bottom ~= nil) then
-    args.padding = {
-      left=gears.math.round(beautiful.panel_widget_spacing/2),
-      right=math.max(0, gears.math.round(beautiful.panel_widget_spacing/2 + beautiful.panel_padding_bottom - 1)),
-    }
-    args.margin = {
-      left = math.max(0, beautiful.panel_widget_spacing - beautiful.panel_padding_bottom),
-      right = beautiful.panel_padding_bottom,
-    }
-  end
-  args.panel_shape = true
-  args.fg = args.fg or beautiful.notification_counter_fg
-  args.bg = args.bg or beautiful.notification_counter_bg
-  args.hide_without_notifications = (args.hide_without_notifications == nil) and true or false
+local function init_theme(widget_args)
 
   local set_theme = function(key, ...)
+    if widget_args[key] ~= nil then
+      naughty_sidebar.theme[key] = widget_args[key]
+      return
+    end
     if naughty_sidebar.theme[key] ~= nil then
       return
     end
@@ -121,6 +109,13 @@ local function widget_factory(args)
     end
   end
 
+  set_theme('fg',
+    beautiful.notification_counter_fg
+  )
+  set_theme('bg',
+    beautiful.notification_counter_bg
+  )
+
   set_theme('width',
     beautiful.notification_sidebar_width,
     beautiful.notification_max_width,
@@ -130,12 +125,12 @@ local function widget_factory(args)
     beautiful.notification_font,
     "Sans 8"
   )
-  set_theme('bg',
+  set_theme('sidebar_bg',
     beautiful.notification_sidebar_bg,
     beautiful.panel_bg,
     beautiful.bg_normal
   )
-  set_theme('fg',
+  set_theme('sidebar_fg',
     beautiful.notification_sidebar_fg,
     beautiful.panel_fg,
     beautiful.fg_normal
@@ -205,6 +200,25 @@ local function widget_factory(args)
     beautiful.panel_widget_bg,
     beautiful.bg_normal
   )
+end
+
+local function widget_factory(args)
+  args	 = args or {}
+  args.orientation = args.orientation or "horizontal"
+  if (beautiful.panel_widget_spacing ~= nil) and (beautiful.panel_padding_bottom ~= nil) then
+    args.padding = {
+      left=gears.math.round(beautiful.panel_widget_spacing/2),
+      right=math.max(0, gears.math.round(beautiful.panel_widget_spacing/2 + beautiful.panel_padding_bottom - 1)),
+    }
+    args.margin = {
+      left = math.max(0, beautiful.panel_widget_spacing - beautiful.panel_padding_bottom),
+      right = beautiful.panel_padding_bottom,
+    }
+  end
+  args.panel_shape = true
+  args.hide_without_notifications = (args.hide_without_notifications == nil) and true or false
+
+  init_theme(args)
 
   naughty_sidebar.widget = common.decorated(args)
   naughty_sidebar.saved_notifications = db.get_or_set(DB_ID, {})
@@ -492,7 +506,7 @@ local function widget_factory(args)
           text=text,
           widget=wibox.widget.textbox
         },
-        fg=naughty_sidebar.theme.fg,
+        fg=naughty_sidebar.theme.sidebar_fg,
         layout = wibox.container.background,
       },
       nil,
@@ -561,7 +575,7 @@ local function widget_factory(args)
       layout:add(self:widget_panel_label('No notifications'))
     end
     margin:set_widget(layout)
-    self.sidebar.bg = naughty_sidebar.theme.bg
+    self.sidebar.bg = naughty_sidebar.theme.sidebar_bg
 
     self.sidebar:set_widget(margin)
     self.sidebar.lie_layout = layout
