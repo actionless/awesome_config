@@ -17,7 +17,12 @@ local persistent = require("actionless.persistent")
 local TRANSPARENT = "#00000000"
 
 
+--@TODO: move to init?
+awesome.register_xproperty("_ACTNLZZ_IGNORE_PICOM_BORDER", "boolean")
+
+
 local titlebar = { }
+
 
 local function get_buttons(c)
   return awful.util.table.join(
@@ -240,6 +245,7 @@ function titlebar.remove_titlebar(c)
   c:geometry(geom)
 end
 
+
 function titlebar.remove_border(c)
   if not (titlebar.border_is_enabled(c) or titlebar.is_enabled(c)) then
     return
@@ -249,6 +255,7 @@ function titlebar.remove_border(c)
     awful.titlebar.hide(c, position)
   end
   c:geometry(geom)
+  c:set_xproperty('_ACTNLZZ_IGNORE_PICOM_BORDER', true)
 end
 
 local function get_style_for_client(c)
@@ -523,6 +530,7 @@ local function make_border_normal(c, args)
   local tbl = _setup_widget("left")
   local tbr = _setup_widget("right")
   local tbb = _setup_widget("bottom")
+  c:set_xproperty('_ACTNLZZ_IGNORE_PICOM_BORDER', false)
   return {
     top = tbt,
     left = tbl,
