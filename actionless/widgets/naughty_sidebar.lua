@@ -11,17 +11,17 @@ local dpi = beautiful.xresources.apply_dpi
 local ruled = require("ruled")
 local naughty = require("naughty")
 
+local pack = table.pack or function(...) -- luacheck: ignore 143
+  return { n = select("#", ...), ... }
+end
+
 local common = require("actionless.widgets.common")
 local db = require("actionless.util.db")
 
 
+
 local DB_ID = 'notifications_storage'
 local DB_ID_READ_COUNT = 'notifications_storage_read_count'
-
-
-local pack = table.pack or function(...) -- luacheck: ignore 143
-  return { n = select("#", ...), ... }
-end
 
 
 local naughty_sidebar
@@ -196,6 +196,14 @@ local function widget_factory(args)
   )
   set_theme('button_fg_hover',
     beautiful.fg_focus
+  )
+
+  set_theme('custom_widget_height',
+    (beautiful.basic_panel_height or dpi(18)) + naughty_sidebar.theme.button_padding
+  )
+  set_theme('custom_widget_bg',
+    beautiful.panel_widget_bg,
+    beautiful.bg_normal
   )
 
   naughty_sidebar.widget = common.decorated(args)
@@ -493,14 +501,42 @@ local function widget_factory(args)
     }
   end
 
+  local function add_custom_widget(layout, widget_description)
+    if not (widget_description and widget_description.widget) then
+      return
+    end
+    local widget_inner = wibox.container.background(
+      widget_description.widget, naughty_sidebar.theme.custom_widget_bg
+    )
+    widget_inner.forced_height = widget_description.height or (
+      naughty_sidebar.theme.custom_widget_height - naughty_sidebar.theme.button_padding*2
+    )
+    widget_inner.forced_width = widget_description.width or (
+      naughty_sidebar.theme.width -
+      naughty_sidebar.theme.spacing * 2 -
+      naughty_sidebar.theme.button_padding * 2
+    )
+    local widget = common.panel_shape(
+      wibox.container.margin(
+        widget_inner,
+        naughty_sidebar.theme.button_padding, naughty_sidebar.theme.button_padding,
+        naughty_sidebar.theme.button_padding, naughty_sidebar.theme.button_padding,
+        naughty_sidebar.theme.custom_widget_bg
+      )
+    )
+    layout:add(widget)
+  end
+
   function naughty_sidebar:refresh_notifications()
     local layout = wibox.layout.fixed.vertical()
     layout.spacing = naughty_sidebar.theme.spacing
     local margin = wibox.container.margin()
     margin.margins = naughty_sidebar.theme.spacing
-    for _, widget in ipairs(naughty_sidebar._custom_widgets) do
-      layout:add(widget)
+
+    for _, widget_description in ipairs(naughty_sidebar._custom_widgets) do
+      add_custom_widget(layout, widget_description)
     end
+
     if #self.saved_notifications > 0 then
       layout:add(self:widget_action_button(
         '  X  Clear Notifications  ',
@@ -624,7 +660,7 @@ local function widget_factory(args)
   end
   naughty_sidebar:update_counter()
 
-  return setmetatable(naughty_sidebar, { __index = naughty_sidebar.widget })
+  return setmetatable(naughty_sidebar, { __index = naughty_sidebar.widget, })
 end
 
 return setmetatable(naughty_sidebar, { __call = function(_, ...)
