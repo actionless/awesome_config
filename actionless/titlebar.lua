@@ -247,6 +247,7 @@ end
 
 
 function titlebar.remove_border(c)
+  c:set_xproperty('_ACTNLZZ_IGNORE_PICOM_BORDER', true)
   if not (titlebar.border_is_enabled(c) or titlebar.is_enabled(c)) then
     return
   end
@@ -255,7 +256,6 @@ function titlebar.remove_border(c)
     awful.titlebar.hide(c, position)
   end
   c:geometry(geom)
-  c:set_xproperty('_ACTNLZZ_IGNORE_PICOM_BORDER', true)
 end
 
 local function get_style_for_client(c)
@@ -502,6 +502,7 @@ end
 
 
 local function make_border_normal(c, args)
+  c:set_xproperty('_ACTNLZZ_IGNORE_PICOM_BORDER', false)
   args = args or {}
   local is_titlebar = args.is_titlebar
   local border_color = get_style_for_client(c).border
@@ -530,7 +531,6 @@ local function make_border_normal(c, args)
   local tbl = _setup_widget("left")
   local tbr = _setup_widget("right")
   local tbb = _setup_widget("bottom")
-  c:set_xproperty('_ACTNLZZ_IGNORE_PICOM_BORDER', false)
   return {
     top = tbt,
     left = tbl,
