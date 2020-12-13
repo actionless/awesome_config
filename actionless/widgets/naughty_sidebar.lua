@@ -74,6 +74,7 @@ naughty_sidebar = {
             cr, w, h, beautiful.notification_border_radius+beautiful.notification_border_width+1
           )
         end,
+        --widget_template = @TODO:
       }
       if notification_args.run then
         local buttons = box:buttons()
@@ -356,7 +357,7 @@ local function widget_factory(args)
       shape_clip = true,
       shape = function(c, w, h)
         return gears.shape.partially_rounded_rect(c, w, h,
-          false, false, false, true, beautiful.panel_widget_border_radius
+          false, true, false, true, beautiful.panel_widget_border_radius
         )
       end,
       shape_border_width = naughty_sidebar.theme.close_button_border_width,
