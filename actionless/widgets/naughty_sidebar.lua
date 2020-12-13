@@ -439,12 +439,14 @@ local function widget_factory(args)
     local create_buttons_row = function()
       local row = wibox.layout.flex.horizontal()
       row.spacing = actions.spacing
-      row.max_widget_size = (
-        naughty_sidebar.theme.width -
-        naughty_sidebar.theme.spacing * 2 -
-        naughty_sidebar.theme.notification_padding * 2 -
-        actions.spacing * (naughty_sidebar.theme.num_buttons - 1)
-      ) / naughty_sidebar.theme.num_buttons
+      row.max_widget_size = gears.math.round(
+        (
+          naughty_sidebar.theme.width -
+          naughty_sidebar.theme.spacing * 2 -
+          naughty_sidebar.theme.notification_padding * 2 -
+          actions.spacing * (naughty_sidebar.theme.num_buttons - 1)
+        ) / naughty_sidebar.theme.num_buttons
+      )
       return row
     end
     local separator_before_actions = common.constraint{height=naughty_sidebar.theme.notification_padding * 0.25}
