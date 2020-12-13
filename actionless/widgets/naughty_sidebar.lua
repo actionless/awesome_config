@@ -182,6 +182,16 @@ local function init_theme(widget_args)
     beautiful.notification_close_button_opacity,
     0.4
   )
+  set_theme('close_button_border_width',
+    beautiful.notification_close_button_border_width,
+    beautiful.panel_widget_border_width,
+    0
+  )
+  set_theme('close_button_border_color',
+    beautiful.notification_close_button_border_color,
+    beautiful.panel_widget_border_color,
+    beautiful.border_normal
+  )
 
   set_theme('button_padding',
     beautiful.notification_button_padding,
@@ -328,20 +338,31 @@ local function widget_factory(args)
     local actions = wibox.layout.fixed.vertical()
     actions.spacing = gears.math.round(naughty_sidebar.theme.notification_padding * 0.75)
 
-    local close_button = common.panel_widget_shape(wibox.widget{
+    local close_button = wibox.widget{
       {
-        nil,
-        wibox.widget.textbox('x'),
-        nil,
-        expand='outside',
-        layout = wibox.layout.align.horizontal,
+        {
+          nil,
+          wibox.widget.textbox('x'),
+          nil,
+          expand='outside',
+          layout = wibox.layout.align.horizontal,
+        },
+        height = naughty_sidebar.theme.close_button_size,
+        width = naughty_sidebar.theme.close_button_size,
+        strategy = 'exact',
+        layout = wibox.container.constraint,
       },
-      height = naughty_sidebar.theme.close_button_size,
-      width = naughty_sidebar.theme.close_button_size,
-      strategy = 'exact',
-      layout = wibox.container.constraint,
-    })
-    close_button.opacity = naughty_sidebar.theme.close_button_opacity
+      layout = wibox.container.background,
+      shape_clip = true,
+      shape = function(c, w, h)
+        return gears.shape.partially_rounded_rect(c, w, h,
+          false, false, false, true, beautiful.panel_widget_border_radius
+        )
+      end,
+      shape_border_width = naughty_sidebar.theme.close_button_border_width,
+      shape_border_color = naughty_sidebar.theme.close_button_border_color,
+      opacity = naughty_sidebar.theme.close_button_opacity,
+    }
 
     local widget = wibox.widget{
       {
