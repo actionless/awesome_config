@@ -74,7 +74,7 @@ naughty_sidebar = {
             cr, w, h, beautiful.notification_border_radius+beautiful.notification_border_width+1
           )
         end,
-        --widget_template = @TODO:
+        --widget_template = @TODO: fork from /usr/share/awesome/lib/naughty/widget/_default.lua
       }
       if notification_args.run then
         local buttons = box:buttons()
