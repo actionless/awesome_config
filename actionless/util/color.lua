@@ -61,9 +61,24 @@ function color.choose_contrast_color(reference, candidate1, candidate2)
     end
 end
 
+
+local composite_manager_running = awesome.composite_manager_running
+
 function color.transparentize(hex_color, opacity)
   if (opacity < 0) or (opacity > 1) then error("Opacity should be within 0 and 1") end
-  return h_string.max_length(hex_color, 7) .. string.format("%2.2x", math.ceil(opacity*255))
+  local scaled_alpha = gmath.round(opacity * 255)
+  if not composite_manager_running then
+    return h_string.max_length(hex_color, 7) .. string.format("%2.2x", scaled_alpha)
+  else
+    -- X11 uses premultiplied alpha values (i.e. 50% opacity white is
+    -- 0x7f7f7f7f, not 0x7fffffff), so multiply color by alpha
+    local channels = hex_color:gmatch("[a-fA-F0-9][a-fA-F0-9]")
+    local result = '#'
+    for _=1,3 do
+      result = result .. string.format("%2.2x", tonumber('0x'..channels()) * scaled_alpha / 0xff)
+    end
+    return result .. string.format("%2.2x", scaled_alpha)
+  end
 end
 
 return color
