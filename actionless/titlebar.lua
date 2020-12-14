@@ -18,7 +18,8 @@ local TRANSPARENT = "#00000000"
 
 
 --@TODO: move to init?
-if awesome.composite_manager_running then
+local composite_manager_running = awesome.composite_manager_running
+if composite_manager_running then
   awesome.register_xproperty("_ACTNLZZ_IGNORE_PICOM_BORDER", "boolean")
 end
 
@@ -250,7 +251,7 @@ end
 
 function titlebar.remove_border(c)
 
-  if awesome.composite_manager_running then
+  if composite_manager_running then
     c:set_xproperty('_ACTNLZZ_IGNORE_PICOM_BORDER', true)
   end
 
@@ -456,7 +457,7 @@ end
 
 local titlebar_container_shape
 -- @TODO: do big clean-up around here :-)
-if false and beautiful.client_border_radius and awesome.composite_manager_running then
+if false and beautiful.client_border_radius and composite_manager_running then
     beautiful.titlebar_bg_focus = TRANSPARENT
     beautiful.titlebar_bg_normal = TRANSPARENT
 
@@ -509,7 +510,7 @@ end
 
 local function make_border_normal(c, args)
 
-  if awesome.composite_manager_running then
+  if composite_manager_running then
     local client_tag = tag_helpers.get_client_tag(c)
     if client_tag.layout.name == "floating" or client_tag:get_gap() ~= 0 then
       c:set_xproperty('_ACTNLZZ_IGNORE_PICOM_BORDER', false)

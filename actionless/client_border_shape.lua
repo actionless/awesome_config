@@ -50,12 +50,13 @@ local function apply_shape(draw, shape, outer_shape_args, inner_shape_args)
   img:finish()
 end
 
+local composite_manager_running = awesome.composite_manager_running
 
 local pending_shapes = {}
 local function round_up_client_corners(c, force, reference) -- luacheck: no unused
 
     -- @TODO: do big clean-up around here :-)
-    if awesome.composite_manager_running then
+    if composite_manager_running then
       local client_tag = tag_helpers.get_client_tag(c)
       if client_tag.layout.name == "floating" or client_tag:get_gap() ~= 0 then
         c:set_xproperty('_ACTNLZZ_IGNORE_PICOM_BORDER', false)
@@ -113,7 +114,7 @@ local function round_up_client_corners(c, force, reference) -- luacheck: no unus
     --local inner_shape_args = beautiful.client_border_radius - beautiful.base_border_width
     --if inner_shape_args < 0 then inner_shape_args = 0 end
 
-    if not awesome.composite_manager_running then
+    if not composite_manager_running then
       apply_shape(c, gears.shape.rounded_rect, outer_shape_args, inner_shape_args)
     else
       -- needed for compoton's shadow:
