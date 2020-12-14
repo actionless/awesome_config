@@ -9,8 +9,8 @@ INSTALL_NO_ARGB_SHORTCUTS=${NOARGB:-n}
 
 pkgname=actionless_awesome_config_meta
 conflicts=(awesome_config_actionless_meta)
-pkgver=0.3
-pkgrel=4
+pkgver=0.4
+pkgrel=1
 pkgdesc="Awesome config dependencies"
 arch=('x86_64' 'i686')
 url="https://github.com/actionless/awesome_config"
@@ -66,6 +66,8 @@ optdepends=(
 	'xorg-xinput: config/autorun: configure trackball'
 	'xscreensaver: config/autorun,config/keys'
 	'autolight: config/autorun: laptop: adaptive brightness'
+
+	'picom-ibhagwan-git: compositing + rounded borders'
 )
 
 package() {
@@ -77,11 +79,17 @@ package() {
 	install -Dm755 ${config_dir}/packaging/awesome_no_argb \
 		"$pkgdir/usr/bin/awesome_no_argb"
 
+	install -Dm755 ${config_dir}/packaging/awesome_composite \
+		"$pkgdir/usr/bin/awesome_composite"
+
 	install -Dm644 ${config_dir}/packaging/awesome_argb.desktop \
 		"$pkgdir/usr/share/xsessions/awesome_argb.desktop"
 
 	install -Dm644 ${config_dir}/packaging/awesome_no_argb.desktop \
 		"$pkgdir/usr/share/xsessions/awesome_no_argb.desktop"
+
+	install -Dm644 ${config_dir}/packaging/awesome_composite.desktop \
+		"$pkgdir/usr/share/xsessions/awesome_composite.desktop"
 
 	install -Dm644 ${config_dir}/packaging/mate_awesome.desktop \
 		"$pkgdir/usr/share/xsessions/mate_awesome.desktop"
