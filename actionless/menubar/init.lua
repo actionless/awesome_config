@@ -31,6 +31,12 @@ local common = require("awful.widget.common")
 local theme = require("beautiful")
 local wibox = require("wibox")
 
+
+local function get_screen(s)
+    return s and capi.screen[s]
+end
+
+
 -- menubar
 local menubar_module = { mt = {} }
 menubar_module.menu_gen = require("menubar.menu_gen")
@@ -68,6 +74,11 @@ menubar_module.right_label = "▶▶"
 
 --- Label used for "Previous page", default "◀◀".
 menubar_module.left_label = "◀◀"
+
+-- awful.widget.common.list_update adds three times a margin of dpi(4)
+-- for each item:
+-- @tfield number list_spacing
+local list_spacing = theme.xresources.apply_dpi(4)
 
 --- Allows user to specify custom parameters for prompt.run function
 -- (like colors).
@@ -163,6 +174,7 @@ end
 -- @tparam str query Search query.
 -- @return table List of items for current page.
 function menubar:get_current_page(all_items, query, scr)
+    scr = get_screen(scr)
     if not self.instance.prompt.width then
         self.instance.prompt.width = compute_text_width(self.instance.prompt.prompt, scr)
     end
@@ -174,14 +186,14 @@ function menubar:get_current_page(all_items, query, scr)
     end
     local available_space = self.instance.geometry.width - self.right_margin -
         self.right_label_width - self.left_label_width -
-        compute_text_width(query, scr) - self.instance.prompt.width
+        compute_text_width(query..' ', scr) - self.instance.prompt.width
 
     local width_sum = 0
     local current_page = {}
     for i, item in ipairs(all_items) do
         item.width = item.width or
-            compute_text_width(" " .. item.name, scr) +
-            (item.icon and self.instance.geometry.height or 0)
+            compute_text_width(item.name, scr) +
+            (item.icon and (self.instance.geometry.height + list_spacing) or 0) + list_spacing * 2
         if width_sum + item.width > available_space then
             if current_item < i then
                 table.insert(current_page, { name = self.right_label, icon = nil })
