@@ -56,6 +56,12 @@ local function round_up_client_corners(c, force, reference) -- luacheck: no unus
 
     -- @TODO: do big clean-up around here :-)
     if awesome.composite_manager_running then
+      local client_tag = tag_helpers.get_client_tag(c)
+      if client_tag.layout.name == "floating" or client_tag:get_gap() ~= 0 then
+        c:set_xproperty('_ACTNLZZ_IGNORE_PICOM_BORDER', false)
+      else
+        c:set_xproperty('_ACTNLZZ_IGNORE_PICOM_BORDER', true)
+      end
       return
     end
 

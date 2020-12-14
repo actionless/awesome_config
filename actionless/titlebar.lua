@@ -18,7 +18,9 @@ local TRANSPARENT = "#00000000"
 
 
 --@TODO: move to init?
-awesome.register_xproperty("_ACTNLZZ_IGNORE_PICOM_BORDER", "boolean")
+if awesome.composite_manager_running then
+  awesome.register_xproperty("_ACTNLZZ_IGNORE_PICOM_BORDER", "boolean")
+end
 
 
 local titlebar = { }
@@ -247,7 +249,11 @@ end
 
 
 function titlebar.remove_border(c)
-  c:set_xproperty('_ACTNLZZ_IGNORE_PICOM_BORDER', true)
+
+  if awesome.composite_manager_running then
+    c:set_xproperty('_ACTNLZZ_IGNORE_PICOM_BORDER', true)
+  end
+
   if not (titlebar.border_is_enabled(c) or titlebar.is_enabled(c)) then
     return
   end
@@ -502,7 +508,16 @@ end
 
 
 local function make_border_normal(c, args)
-  c:set_xproperty('_ACTNLZZ_IGNORE_PICOM_BORDER', false)
+
+  if awesome.composite_manager_running then
+    local client_tag = tag_helpers.get_client_tag(c)
+    if client_tag.layout.name == "floating" or client_tag:get_gap() ~= 0 then
+      c:set_xproperty('_ACTNLZZ_IGNORE_PICOM_BORDER', false)
+    else
+      c:set_xproperty('_ACTNLZZ_IGNORE_PICOM_BORDER', true)
+    end
+  end
+
   args = args or {}
   local is_titlebar = args.is_titlebar
   local border_color = get_style_for_client(c).border
