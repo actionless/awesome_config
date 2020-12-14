@@ -1,3 +1,5 @@
+local gmath = require('gears.math')
+
 local h_string = require('actionless.util.string')
 
 
@@ -22,7 +24,7 @@ function color.mix(color1, color2, ratio)
     local channels1 = color1:gmatch("[a-fA-F0-9][a-fA-F0-9]")
     local channels2 = color2:gmatch("[a-fA-F0-9][a-fA-F0-9]")
     for _ = 1,3 do
-        local bg_numeric_value = math.ceil(
+        local bg_numeric_value = gmath.round(
           tonumber("0x"..channels1())*ratio +
           tonumber("0x"..channels2())*(1-ratio)
         )
