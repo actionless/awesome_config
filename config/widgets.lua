@@ -181,6 +181,8 @@ function widget_loader.init(awesome_context)
       {
         widget=awful.widget.only_on_screen(wibox.widget.systray(), screen.primary),
         width=32, height=32,
+        --width=24, height=24,
+        --width=48, height=48,
       },
       {widget=w.netctl},
     },
