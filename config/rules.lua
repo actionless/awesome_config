@@ -199,6 +199,15 @@ function rules.init(awesome_context)
         },
       },
 
+      { rule_any = { class = {"MEGAsync"}, },
+        properties = {
+          floating = true,
+        },
+        callback = function(c)
+          c.titlebars_enabled = false
+        end,
+      },
+
       { rule = { class = "Blueman-manager", },
         properties = {
           tag=capi.screen.primary.tags[11],
