@@ -353,7 +353,8 @@ if awesome.composite_manager_running then
   }) do
     --theme[theme_var] = color_utils.transparentize(theme[theme_var], 0.36)
     --theme[theme_var] = color_utils.transparentize(theme[theme_var], 0.57)
-    theme[theme_var] = color_utils.transparentize(theme[theme_var], 0.86)
+    theme[theme_var] = color_utils.transparentize(theme[theme_var], 0.865)
+    --theme[theme_var] = color_utils.transparentize(theme[theme_var], 0.874)  -- match st.opacity: 223
   end
   theme['menu_bg_normal'] = color_utils.transparentize(theme['menu_bg_normal'], 0.73)
   theme['notification_bg'] = color_utils.transparentize(theme['notification_bg'], 0.88)
