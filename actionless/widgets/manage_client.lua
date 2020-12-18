@@ -8,6 +8,8 @@ local beautiful = require("beautiful")
 local dpi = beautiful.xresources.apply_dpi
 local wibox = require('wibox')
 local delayed_call = require("gears.timer").delayed_call
+local gears_color = require("gears.color")
+local recolor_image = gears_color.recolor_image
 
 local capi = { client = client, screen = screen }
 
@@ -26,10 +28,24 @@ local function widget_factory(args)
   args.fg = args.fg or beautiful.panel_widget_fg or beautiful.bg
   args.error_color_on_hover = args.error_color_on_hover or false
   local widget_screen = args.screen or awful.screen.focused()
-  local padding = args.padding or dpi(12)
+  local padding = args.padding or dpi(8)
 
   -- WIDGET: ------------------------------------------------------------------
-  args.widget = wibox.widget.textbox()
+  local bg_image_normal
+  --local bg_image_manage
+  if beautiful.show_widget_icon then
+    bg_image_normal = recolor_image(
+      beautiful.titlebar_close_button_normal,
+      args.fg
+    )
+    --bg_image_manage = recolor_image(
+    --  beautiful.titlebar_ontop_button_normal_inactive,  -- @TODO: replace to some other icon
+    --  beautiful.panel_widget_fg_warning or args.fg
+    --)
+    args.widget = wibox.widget.imagebox(bg_image_normal)
+  else
+    args.widget = wibox.widget.textbox()
+  end
   args.widgets = {
     common.constraint{width=padding},
     args.widget,
@@ -42,10 +58,18 @@ local function widget_factory(args)
   function widget:_update_status()
     if self.titlebars_forced_globally then
       self:set_warning()
-      self:set_text('T')
+      if not beautiful.show_widget_icon then
+        self:set_text('T')
+      --else
+      --  self:set_image(bg_image_manage)
+      end
     else
       self:set_normal()
-      self:set_text('X')
+      if not beautiful.show_widget_icon then
+        self:set_text('X')
+      --else
+      --  self:set_image(bg_image_normal)
+      end
     end
   end
 
@@ -98,7 +122,7 @@ local function widget_factory(args)
     ) then return end
 
     if s == widget_screen then
-      widget:set_text(' ')
+      --widget:set_text(' ')
       widget:show()
     else
       widget:hide()
