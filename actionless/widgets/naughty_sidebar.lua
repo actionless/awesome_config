@@ -179,10 +179,10 @@ local function init_theme(widget_args)
     beautiful.notification_close_button_margin,
     dpi(1)
   )
-  set_theme('close_button_opacity',
-    beautiful.notification_close_button_opacity,
-    0.4
-  )
+  --set_theme('close_button_opacity',
+  --  beautiful.notification_close_button_opacity,
+  --  0.4
+  --)
   set_theme('close_button_border_width',
     beautiful.notification_close_button_border_width,
     beautiful.panel_widget_border_width,
@@ -271,7 +271,7 @@ local function widget_factory(args)
       layout = wibox.container.background,
     })
     widget:buttons(awful.util.table.join(
-      awful.button({ }, 1, callback)
+      awful.button({ }, 1, nil, callback)
     ))
     widget:connect_signal("mouse::enter", function()
       widget.bg = naughty_sidebar.theme.button_bg_hover
@@ -339,11 +339,14 @@ local function widget_factory(args)
     local actions = wibox.layout.fixed.vertical()
     actions.spacing = gears.math.round(naughty_sidebar.theme.notification_padding * 0.75)
 
+    local close_button_imagebox = wibox.widget.imagebox(beautiful.titlebar_close_button_normal)
+
     local close_button = wibox.widget{
-      {
+      --{
         {
           nil,
-          wibox.widget.textbox('x'),
+          --wibox.widget.textbox('x'),
+          close_button_imagebox,
           nil,
           expand='outside',
           layout = wibox.layout.align.horizontal,
@@ -352,17 +355,17 @@ local function widget_factory(args)
         width = naughty_sidebar.theme.close_button_size,
         strategy = 'exact',
         layout = wibox.container.constraint,
-      },
-      layout = wibox.container.background,
-      shape_clip = true,
-      shape = function(c, w, h)
-        return gears.shape.partially_rounded_rect(c, w, h,
-          false, true, false, true, beautiful.panel_widget_border_radius
-        )
-      end,
-      shape_border_width = naughty_sidebar.theme.close_button_border_width,
-      shape_border_color = naughty_sidebar.theme.close_button_border_color,
-      opacity = naughty_sidebar.theme.close_button_opacity,
+      --},
+      --layout = wibox.container.background,
+      --shape_clip = true,
+      --shape = function(c, w, h)
+      --  return gears.shape.partially_rounded_rect(c, w, h,
+      --    false, true, false, true, beautiful.panel_widget_border_radius
+      --  )
+      --end,
+      --shape_border_width = naughty_sidebar.theme.close_button_border_width,
+      --shape_border_color = naughty_sidebar.theme.close_button_border_color,
+      --opacity = naughty_sidebar.theme.close_button_opacity,
     }
 
     local widget = wibox.widget{
@@ -497,14 +500,18 @@ local function widget_factory(args)
     end
 
     close_button:connect_signal("mouse::enter", function()
-      close_button.opacity = 1
-      close_button.bg = naughty_sidebar.theme.button_bg_hover
-      close_button.fg = naughty_sidebar.theme.button_fg_hover
+      --close_button.opacity = 1
+      --close_button.bg = naughty_sidebar.theme.button_bg_hover
+      --close_button.fg = naughty_sidebar.theme.button_fg_hover
+
+      close_button_imagebox:set_image(beautiful.titlebar_close_button_focus)
     end)
     close_button:connect_signal("mouse::leave", function()
-      close_button.opacity = naughty_sidebar.theme.close_button_opacity
-      close_button.bg = naughty_sidebar.theme.notification_bg
-      close_button.fg = naughty_sidebar.theme.notification_fg
+      --close_button.opacity = naughty_sidebar.theme.close_button_opacity
+      --close_button.bg = naughty_sidebar.theme.notification_bg
+      --close_button.fg = naughty_sidebar.theme.notification_fg
+
+      close_button_imagebox:set_image(beautiful.titlebar_close_button_normal)
     end)
     close_button:buttons(awful.util.table.join(
       awful.button({ }, 1, nil, function()
@@ -578,13 +585,39 @@ local function widget_factory(args)
     end
 
     if #self.saved_notifications > 0 then
-      layout:add(self:widget_action_button(
-        '  X  Clear Notifications  ',
-        function()
-          self:remove_all_notifications()
-        end,
-        {align='middle', full_width=true}
-      ))
+      local spacing = naughty_sidebar.theme.notification_padding
+      local create_buttons_row = function()
+        local row = wibox.layout.flex.horizontal()
+        row.spacing = spacing
+        row.max_widget_size = gears.math.round(
+          (
+            naughty_sidebar.theme.width -
+            naughty_sidebar.theme.spacing * 2 -
+            spacing * (naughty_sidebar.theme.num_buttons - 1)
+          ) / naughty_sidebar.theme.num_buttons
+        )
+        return row
+      end
+      local row = create_buttons_row()
+      row:add(
+          self:widget_action_button(
+            'X  Clear All  ',
+            function()
+              self:remove_all_notifications()
+            end,
+            {align='middle'}
+          )
+        )
+      row:add(
+          self:widget_action_button(
+            '★ Clear Unread',
+            function()
+              self:remove_unread()
+            end,
+            {align='middle'}
+          )
+          )
+      layout:add(row)
       local unread_count = #self.saved_notifications - self.prev_count
       if self.scroll_offset > 0 then
           --text='^^^',
