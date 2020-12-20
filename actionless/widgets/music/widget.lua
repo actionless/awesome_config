@@ -353,7 +353,7 @@ function player.init(args)
       if beautiful.show_widget_icon then
         player.separator_widget:set_text("")
       else
-        player.separator_widget:set_text("waiting for " .. enabled_backends[backend_id] .. "… ")
+        player.separator_widget:set_text(" waiting for " .. enabled_backends[backend_id] .. "… ")
       end
       artist = ""
       title = ""
