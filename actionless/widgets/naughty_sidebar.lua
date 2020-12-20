@@ -24,6 +24,10 @@ local DB_ID = 'notifications_storage'
 local DB_ID_READ_COUNT = 'notifications_storage_read_count'
 
 
+
+local _DUAL_KAWASE_FIXED_IN_PICOM = false
+
+
 local naughty_sidebar
 naughty_sidebar = {
   theme = {
@@ -139,6 +143,11 @@ local function init_theme(widget_args)
   set_theme('spacing',
     beautiful.notification_sidebar_spacing,
     dpi(10)
+  )
+  set_theme('internal_corner_radius',
+    beautiful.notification_sidebar_internal_corner_radius,
+    dpi(30)
+    --dpi(10)
   )
 
   set_theme('notification_bg',
@@ -575,10 +584,28 @@ local function widget_factory(args)
   end
 
   function naughty_sidebar:refresh_notifications()
+    local left_border = beautiful.panel_border_width or beautiful.panel_widget_border_width or 0
+    local margins = {
+      left=math.max(0, naughty_sidebar.theme.spacing+(
+        _DUAL_KAWASE_FIXED_IN_PICOM and naughty_sidebar.theme.internal_corner_radius or 0
+      )-left_border),
+      right=naughty_sidebar.theme.spacing,
+      top=naughty_sidebar.theme.spacing,
+      bottom=naughty_sidebar.theme.spacing,
+    }
+
     local layout = wibox.layout.fixed.vertical()
     layout.spacing = naughty_sidebar.theme.spacing
-    local margin = wibox.container.margin()
-    margin.margins = naughty_sidebar.theme.spacing
+    local margin_inner = wibox.widget{
+      layout = wibox.container.margin,
+      margins = margins,
+    }
+    local margin_outer = wibox.widget{
+      margin_inner,
+      color = naughty_sidebar.theme.sidebar_bg,
+      margins = { left = left_border },
+      layout = wibox.container.margin,
+    }
 
     for _, widget_description in ipairs(naughty_sidebar._custom_widgets) do
       add_custom_widget(layout, widget_description)
@@ -592,7 +619,7 @@ local function widget_factory(args)
         row.max_widget_size = gears.math.round(
           (
             naughty_sidebar.theme.width -
-            naughty_sidebar.theme.spacing * 2 -
+            margins.left - margins.right -
             spacing * (naughty_sidebar.theme.num_buttons - 1)
           ) / naughty_sidebar.theme.num_buttons
         )
@@ -633,10 +660,10 @@ local function widget_factory(args)
     else
       layout:add(self:widget_panel_label('No notifications'))
     end
-    margin:set_widget(layout)
+    margin_inner:set_widget(layout)
     self.sidebar.bg = naughty_sidebar.theme.sidebar_bg
 
-    self.sidebar:set_widget(margin)
+    self.sidebar:set_widget(margin_outer)
     self.sidebar.lie_layout = layout
   end
 
@@ -658,7 +685,34 @@ local function widget_factory(args)
     end
   end
 
+  function naughty_sidebar:_internal_corner_wibox()
+    local internal_corner_radius = naughty_sidebar.theme.internal_corner_radius
+    local workarea = awful.screen.focused().workarea
+    return wibox({
+      ontop = true,
+      type='dock',
+      bg = naughty_sidebar.theme.sidebar_bg,
+      height = internal_corner_radius,
+      width  = internal_corner_radius,
+      x = workarea.width - naughty_sidebar.theme.width - internal_corner_radius,
+      y = beautiful.basic_panel_height + beautiful.panel_padding_bottom,
+      shape = function(cr, _w, _h)
+        cr:move_to(0, 0)
+        cr:line_to(internal_corner_radius, 0)
+        cr:line_to(internal_corner_radius, internal_corner_radius)
+        cr:curve_to(
+          internal_corner_radius, internal_corner_radius,
+          internal_corner_radius, 0,
+          0, 0
+        )
+        cr:close_path()
+        return cr
+      end,
+    })
+  end
+
   function naughty_sidebar:toggle_sidebox()
+    local internal_corner_radius = naughty_sidebar.theme.internal_corner_radius
     if not self.sidebar then
       local workarea = awful.screen.focused().workarea
       self.sidebar = wibox({
@@ -668,6 +722,19 @@ local function widget_factory(args)
         y = workarea.y,
         ontop = true,
         type='dock',
+        shape = _DUAL_KAWASE_FIXED_IN_PICOM and function(cr, w, h)
+          cr:move_to(0, 0)
+          cr:curve_to(
+            0, 0,
+            internal_corner_radius, 0,
+            internal_corner_radius, internal_corner_radius
+          )
+          cr:line_to(internal_corner_radius, h)
+          cr:line_to(w, h)
+          cr:line_to(w, 0)
+          cr:close_path()
+          return cr
+        end,
       })
       self.sidebar:buttons(awful.util.table.join(
         awful.button({ }, 4, function()
@@ -685,14 +752,24 @@ local function widget_factory(args)
       ))
       self:refresh_notifications()
     end
+    --if not self.corner then
+    --  self.corner = naughty_sidebar:_internal_corner_wibox()
+    --end
     if self.sidebar.visible then
       self.sidebar.visible = false
+      --self.corner.visible = false
       self:mark_all_as_read()
+      self.widget.lie_background.border_color = beautiful.panel_widget_border_color
+      self.widget:set_normal()
     else
       self:refresh_notifications()
       self.sidebar.visible = true
+      --self.corner.visible = true
+      self.widget.lie_background.border_color = '#00000000'
+      self.widget:set_bg('#00000000')
+      self.widget:set_fg(beautiful.panel_fg)
     end
-    self.widget:set_normal()
+    self.widget.lie_background:emit_signal("widget::redraw_needed")
   end
 
   function naughty_sidebar:add_notification(notification)

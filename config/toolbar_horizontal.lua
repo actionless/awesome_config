@@ -145,13 +145,19 @@ function toolbar.init(awesome_context)
 
     -- panel bottom padding:
     if beautiful.panel_padding_bottom then
+      local border_width = beautiful.panel_border_width or beautiful.panel_widget_border_width or 0
       local const = wibox.container.constraint()
       const:set_strategy("exact")
-      const:set_height(beautiful.panel_padding_bottom)
+      const:set_height(beautiful.panel_padding_bottom - border_width)
       layout = wibox.layout.align.vertical(
         nil,
         layout,
-        const
+        wibox.widget{
+          const,
+          margins = { bottom = border_width },
+          layout = wibox.container.margin,
+          color = beautiful.panel_padding_color or beautiful.panel_bg,
+        }
       )
     end
 

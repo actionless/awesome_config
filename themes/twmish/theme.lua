@@ -57,6 +57,7 @@ theme.panel_widget_progress_fg = gsc.text_color
 theme.panel_widget_progress_border_color = theme.panel_widget_border_color
 theme.panel_widget_updates_fg = gsc.fg_color
 theme.notification_border_color = gsc.selected_fg_color
+theme.notification_border_radius = 0
 
 theme.widget_close_bg = gsc.selected_fg_color
 theme.widget_close_fg = gsc.selected_bg_color

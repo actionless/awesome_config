@@ -65,14 +65,21 @@ theme.panel_widget_border_radius = "theme.border_radius"
 --theme.border_radius = dpi(5)
 --theme.panel_widget_border_radius = dpi(5)
 local gdk_scale = tonumber(os.getenv("GDK_SCALE") or 1.0)
-theme.panel_widget_border_width = gtk_border_width * gdk_scale
+theme.panel_widget_border_width = gears.math.round(gtk_border_width * gdk_scale)
 --theme.panel_widget_border_width = dpi(gtk_border_width)
 --theme.panel_widget_border_width = dpi(gtk_border_width*2)
 --theme.panel_widget_border_color = color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color, 0.5)
 theme.panel_widget_border_color = color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color, 0.3)
 theme.panel_widget_border_color = color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color, 0.2)
+theme.panel_widget_border_color = color_utils.transparentize(
+  color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color, 0.52),
+  --color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color, 0.66),
+  0.8
+)
 --theme.panel_widget_border_color = color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color, 0.15)
 --theme.panel_widget_border_color = color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_color, 0.12)
+
+theme.panel_border_width = gears.math.round(gtk_border_width * gdk_scale * 2)
 
 
 theme.bg_systray    = "theme.panel_widget_bg"
@@ -282,6 +289,7 @@ theme.tasklist_spacing = gears.math.round(theme.panel_widget_spacing/4)
 
 theme.panel_widget_bg_error = theme.xrdb.color1
 theme.panel_widget_fg_error = theme.xrdb.color15
+theme.panel_widget_bg_disabled = color_utils.transparentize(theme.xrdb.color8, 0.6)
 
 theme.widget_music_bg = color_utils.mix(theme.border_focus, theme.panel_fg, 0.8)
 
@@ -330,12 +338,12 @@ theme.titlebar_bg_normal = TRANSPARENT
 theme.titlebar_bg_focus = TRANSPARENT
 if awesome.composite_manager_running then
   theme.border_width = 0
-  theme.base_border_width = dpi(1.5)
+  theme.base_border_width = dpi(3)
 
   -- let picom do AA-rounding of notifications' borders:
   theme.notification_sidebar_notification_border_radius = theme.notification_border_radius
   theme.notification_border_radius = 0
-  theme.notification_border_width = theme.base_border_width
+  theme.notification_border_width = dpi(1.5)
   theme.notification_shape = nil
 
   for _, theme_var in ipairs({
@@ -358,6 +366,7 @@ if awesome.composite_manager_running then
   end
   theme['menu_bg_normal'] = color_utils.transparentize(theme['menu_bg_normal'], 0.73)
   theme['notification_bg'] = color_utils.transparentize(theme['notification_bg'], 0.88)
+  --theme['panel_bg'] = theme.notification_sidebar_bg
 
 else
   for _, theme_var in ipairs({
