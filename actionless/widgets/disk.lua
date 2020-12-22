@@ -92,8 +92,8 @@ end
 
 function disk.init(args)
   args = args or {}
-  args.margin = args.margin or {
-    left = math.ceil(beautiful.panel_widget_spacing / 4) or dpi(3),
+  args.padding = args.padding or {
+    left = beautiful.panel_widget_spacing or dpi(3),
     right = beautiful.panel_widget_spacing or dpi(3),
   }
   disk.warning_rules = args.rules or {}

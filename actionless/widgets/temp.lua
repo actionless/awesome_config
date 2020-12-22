@@ -63,7 +63,7 @@ end
 
 function temp.init(args)
   args = args or {}
-  args.margin = args.margin or {
+  args.padding = args.padding or {
     left = math.ceil(beautiful.panel_widget_spacing / 2) or dpi(3),
     right = math.ceil(beautiful.panel_widget_spacing / 2) or dpi(3),
   }

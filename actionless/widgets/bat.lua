@@ -16,7 +16,7 @@ local common_widget	= require("actionless.widgets.common").decorated
 
 local function worker(args)
   args = args or {}
-  args.margin = args.margin or {left = dpi(3), right=dpi(5)}
+  args.padding = args.padding or {left = dpi(3), right=dpi(5)}
   local update_interval = args.update_interval or 30
   local device = args.device or "battery_BAT0"
   local bg = args.bg or beautiful.panel_fg or beautiful.fg
