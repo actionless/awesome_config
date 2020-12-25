@@ -6,7 +6,9 @@ local beautiful = require("beautiful")
 local dpi = beautiful.xresources.apply_dpi
 local awful = require("awful")
 local gears_timer = require("gears.timer")
+local gears_table = require("gears.table")
 local g_string = require("gears.string")
+local naughty = require("naughty")
 
 local parse = require("actionless.util.parse")
 local h_table = require("actionless.util.table")
@@ -19,12 +21,66 @@ local disk = {
   default_warning={
     pcent=90,
     --avail=307200,  -- 300MiB
-    avail=1048576,  -- 1GiB
+    --avail=1048576,  -- 1GiB
+    --avail=2097152,  -- 2GiB
+    avail=4194304,  -- 4GiB
     -- test params:
     --pcent=80,
     --avail=10485760,  -- 10GiB
-  }
+  },
+  current_warnings = {},
 }
+
+function disk.hide_notification()
+  if disk.notification ~= nil then
+    naughty.destroy(disk.notification)
+    disk.notification = nil
+  end
+end
+
+
+function disk.get_notification_id()
+  return disk.notification and disk.notification.id or nil
+end
+
+
+function disk.show_notification()
+  local max_source_len = 0
+  local max_target_len = 0
+  for _, warning in ipairs(disk.current_warnings) do
+    if warning.source and #warning.source > max_source_len then
+      max_source_len = #warning.source
+    end
+    if warning.target and #warning.target > max_target_len then
+      max_target_len = #warning.target
+    end
+  end
+  max_source_len = tostring(max_source_len+2)
+  max_target_len = tostring(max_target_len+2)
+  local message = string.format(
+      "%-"..max_source_len.."s%-"..max_target_len.."s%5s%7s",
+      'DEV',
+      'MNT',
+      'USED',
+      'AVAIL'
+    )
+  for _, warning in ipairs(disk.current_warnings) do
+    message = message..string.format(
+      "\n%-"..max_source_len.."s%-"..max_target_len.."s%3.1f%%%5.1fGB",
+      warning.source,
+      warning.target,
+      warning.pcent,
+      warning.avail / 1024 / 1024
+    )
+  end
+  disk.notification = naughty.notify({
+    text = message,
+    timeout = disk.notification_timeout,
+    font = beautiful.mono_text_font,
+    replaces_id = disk.get_notification_id(),
+    position = beautiful.widget_notification_position,
+  })
+end
 
 function disk.update()
   awful.spawn.easy_async({
@@ -41,6 +97,7 @@ function disk._post_update(str)
     source='',
     target='',
   }
+  disk.current_warnings = {}
 
   for _, line in ipairs(h_table.range(
     parse.string_to_lines(
@@ -67,16 +124,26 @@ function disk._post_update(str)
       ) or not warning.avail
     ) then
       max.pcent = pcent
+      max.avail = avail
+      max.message = (
+        (avail and avail < warning.avail) and string.format(
+          "%2.1fGB", (avail/1024/1024)
+        ) or string.format(
+          "%2.1f%", pcent
+        )
+      )
       max.source = source
       max.target = target
+      table.insert(disk.current_warnings, gears_table.clone(max))
     end
   end
 
   if max.pcent > 0 then
-    disk.widget:set_text(string.format(
-      "%2.1f%% %s",
-      max.pcent, max.target or max.source
-    ))
+    --disk.widget:set_text(string.format(
+    --  "%s %s",
+    --  max.message, max.target or max.source
+    --))
+    disk.widget:set_text(max.message)
     if beautiful.widget_disk_high then
       disk.widget:set_image(beautiful.widget_disk_high)
     end
@@ -97,6 +164,7 @@ function disk.init(args)
     right = beautiful.panel_widget_spacing or dpi(3),
   }
   disk.warning_rules = args.rules or {}
+  disk.notification_timeout = args.notification_timeout or 60
   local update_interval = args.update_interval or 100
   local exec = args.exec or "gnome-system-monitor -f"
 
@@ -112,6 +180,12 @@ function disk.init(args)
       awful.spawn.with_shell(exec)
     end)
   ))
+  disk.widget:connect_signal(
+    "mouse::enter", function () disk.show_notification() end
+  )
+  disk.widget:connect_signal(
+    "mouse::leave", function () disk.hide_notification() end
+  )
 
   gears_timer({
     callback=disk.update,
