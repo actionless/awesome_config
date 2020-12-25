@@ -98,7 +98,8 @@ function widget_loader.init(awesome_context)
     sensors = awesome_context.sensors,
   })
   w.disk = widgets.disk({
-    update_interval = 200,
+    --update_interval = 200,
+    update_interval = 20,
     rules = awesome_context.config.disk_warnings,
   })
   -- Battery
