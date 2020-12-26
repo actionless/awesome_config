@@ -685,40 +685,15 @@ local function widget_factory(args)
     end
   end
 
-  function naughty_sidebar:_internal_corner_wibox()
-    local internal_corner_radius = naughty_sidebar.theme.internal_corner_radius
-    local workarea = awful.screen.focused().workarea
-    return wibox({
-      ontop = true,
-      type='dock',
-      bg = naughty_sidebar.theme.sidebar_bg,
-      height = internal_corner_radius,
-      width  = internal_corner_radius,
-      x = workarea.width - naughty_sidebar.theme.width - internal_corner_radius,
-      y = beautiful.basic_panel_height + beautiful.panel_padding_bottom,
-      shape = function(cr, _w, _h)
-        cr:move_to(0, 0)
-        cr:line_to(internal_corner_radius, 0)
-        cr:line_to(internal_corner_radius, internal_corner_radius)
-        cr:curve_to(
-          internal_corner_radius, internal_corner_radius,
-          internal_corner_radius, 0,
-          0, 0
-        )
-        cr:close_path()
-        return cr
-      end,
-    })
-  end
-
   function naughty_sidebar:toggle_sidebox()
     local internal_corner_radius = naughty_sidebar.theme.internal_corner_radius
     if not self.sidebar then
       local workarea = awful.screen.focused().workarea
+      local screen_geo = awful.screen.focused().geometry
       self.sidebar = wibox({
         width = naughty_sidebar.theme.width,
         height = workarea.height,
-        x = workarea.width - naughty_sidebar.theme.width,
+        x = screen_geo.width - naughty_sidebar.theme.width,
         y = workarea.y,
         ontop = true,
         type='dock',
@@ -752,19 +727,14 @@ local function widget_factory(args)
       ))
       self:refresh_notifications()
     end
-    --if not self.corner then
-    --  self.corner = naughty_sidebar:_internal_corner_wibox()
-    --end
     if self.sidebar.visible then
       self.sidebar.visible = false
-      --self.corner.visible = false
       self:mark_all_as_read()
       self.widget.lie_background.border_color = beautiful.panel_widget_border_color
       self.widget:set_normal()
     else
       self:refresh_notifications()
       self.sidebar.visible = true
-      --self.corner.visible = true
       self.widget.lie_background.border_color = '#00000000'
       self.widget:set_bg('#00000000')
       self.widget:set_fg(beautiful.panel_fg)
