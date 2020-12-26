@@ -88,6 +88,7 @@ function toolbar.init(awesome_context)
 
     -- RIGHT side
     local iseparator  = wibox.container.background(separator, beautiful.panel_widget_bg)
+    local progress_width = beautiful.panel_widget_width or dpi(20)
     local right_layout = wibox.widget{
       layout = wibox.layout.align.horizontal,
       separator,
@@ -108,8 +109,8 @@ function toolbar.init(awesome_context)
         common.panel_widget_shape(wibox.widget{
           layout = wibox.layout.fixed.horizontal,
           iseparator,
-          loaded_widgets.mem,
-          loaded_widgets.cpu,
+          common.constraint{widget=loaded_widgets.mem, width=progress_width},
+          common.constraint{widget=loaded_widgets.cpu, width=progress_width},
           loaded_widgets.disk and loaded_widgets.disk,
           loaded_widgets.temp and loaded_widgets.temp,
           loaded_widgets.bat and loaded_widgets.bat,

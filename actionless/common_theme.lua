@@ -92,7 +92,7 @@ function common_theme.create_default_theme(theme_dir, icons_dir)
   theme.panel_height		= theme.basic_panel_height + theme.panel_padding_bottom
   theme.panel_widget_spacing	= dpi(8)
   theme.panel_widget_border_radius = dpi(2)
-  theme.panel_widget_width	= dpi(20)
+  theme.panel_widget_width	= dpi(40)
 
   theme.left_panel_width = dpi(120)
   theme.left_widget_min_height = dpi(120)

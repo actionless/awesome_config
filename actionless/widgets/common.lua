@@ -578,35 +578,12 @@ function common.text_progressbar(args)
   --local progress_margin_bottom = dpi(2)
   local progress_margin_bottom = dpi(1)
   local progress_height = dpi(3)
-  local progress_width = beautiful.panel_widget_width or dpi(20)
   local progress_border_radius = beautiful.panel_widget_border_radius * (
      progress_height / beautiful.basic_panel_height
   ) * 2
 
   local widget = wibox.widget{
     {
-      {
-        {
-            id = "progressbar",
-            max_value     = 1,
-            forced_width  = progress_width,
-            margins      = {
-              bottom=progress_margin_bottom,
-              top=beautiful.panel_height - progress_margin_bottom - progress_height - beautiful.panel_padding_bottom,
-            },
-            color = progress_fg,
-            background_color = progress_bg,
-            border_width = progress_border_width,
-            border_color = progress_border_color,
-            shape         = function(c, w, h) return gears.shape.rounded_rect(
-                              c, w, h, progress_border_radius
-                            ) end,
-            widget        = wibox.widget.progressbar,
-        },
-        id = "p1",
-        bg = args.bg or TRANSPARENT,
-        layout = wibox.container.background,
-      },
       {
         {
           nil,
@@ -640,6 +617,40 @@ function common.text_progressbar(args)
         bottom = text_margin_bottom,
         layout = wibox.container.margin,
       },
+      {
+        {
+          {
+            {
+              id = "progressbar",
+              max_value     = 1,
+              margins      = {
+                bottom=progress_margin_bottom,
+                top=(
+                  beautiful.panel_height - progress_margin_bottom -
+                  progress_height - beautiful.panel_padding_bottom
+                ),
+              },
+              color = progress_fg,
+              background_color = progress_bg,
+              border_width = progress_border_width,
+              border_color = progress_border_color,
+              shape = function(c, w, h) return gears.shape.rounded_rect(
+                c, w, h, progress_border_radius
+              ) end,
+              widget = wibox.widget.progressbar,
+            },
+            id = "p3",
+            layout = wibox.layout.flex.vertical,
+          },
+          id = "p2",
+        bg = args.bg or TRANSPARENT,
+        layout = wibox.container.background,
+        },
+        id = "p1",
+          height  = progress_height,
+          strategy = 'exact',
+          layout = wibox.container.constraint,
+      },
       id = "w1",
       layout = wibox.layout.stack
     },
@@ -650,7 +661,7 @@ function common.text_progressbar(args)
   }
 
   widget.textbox = widget.w1.t1.t2.t3.textbox
-  widget.progressbar = widget.w1.p1.progressbar
+  widget.progressbar = widget.w1.p1.p2.p3.progressbar
 
   local show_icon = args.show_icon
   if show_icon == nil then
@@ -681,11 +692,11 @@ function common.text_progressbar(args)
     if need_resize then
       if self.textbox.text and self.textbox.text ~= '' then
         local ratio = beautiful.basic_panel_height / image.height
-        self.icon_widget.forced_width = math.ceil(image.width * ratio)
+        self.icon_widget.forced_width = gears.math.round(image.width * ratio)
       else
         self.icon_widget.forced_width = nil
       end
-      self.icon_widget.forced_height = math.ceil(beautiful.basic_panel_height)
+      self.icon_widget.forced_height = gears.math.round(beautiful.basic_panel_height)
     end
     self.icon_widget:set_image(image)
   end
