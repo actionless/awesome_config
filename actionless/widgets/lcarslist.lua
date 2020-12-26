@@ -173,7 +173,7 @@ local function tasklist_label(c, args)
         text = text .. name
     end
     text = text .. "</span>"
-    return text, bg, bg_image, not tasklist_disable_icon and c.icon or nil
+    return text, bg, bg_image, not tasklist_disable_icon and (#c.icon_sizes() > 0) or nil
 end
 
 
