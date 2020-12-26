@@ -3,7 +3,8 @@ local wibox = require("wibox")
 local beautiful = require("beautiful")
 local dpi = beautiful.xresources.apply_dpi
 
-local common = require("actionless.widgets.common")
+local widgets = require("actionless.widgets")
+local common = widgets.common
 
 --local assets = require("config.lcars_assets")
 
@@ -134,10 +135,10 @@ function toolbar.init(awesome_context)
       )
     )
     -- add :buttons method
-    top_panel_layout = setmetatable(
-      top_panel_layout,
-      wibox.container.background(top_panel_layout)
-    )
+    --top_panel_layout = setmetatable(
+    --  top_panel_layout,
+    --  wibox.container.background(top_panel_layout)
+    --)
     topwibox_layout[si] = top_panel_layout
 
   end)

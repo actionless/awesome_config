@@ -143,10 +143,10 @@ local function tile(p, orientation)
     end
 
     -- Workarea size correction depending on useless gap and global border
-    wa.height = wa.height - 2 * global_border - useless_gap.h + ((#cls_other >= 1) and useless_gap.h*3 or 0)
-    wa.width  = wa.width -  2 * global_border - useless_gap.w
-    wa.x = wa.x + useless_gap.x / 2 + global_border
-    wa.y = (#cls_other >= 1) and 0 or wa.y + useless_gap.x / 2 + global_border
+    --wa.height = wa.height - 2 * global_border - useless_gap.h + ((#cls_other >= 1) and useless_gap.h*3 or 0)
+    --wa.width  = wa.width -  2 * global_border - useless_gap.w
+    --wa.x = wa.x + useless_gap.x / 2 + global_border
+    --wa.y = (#cls_other >= 1) and 0 or wa.y + useless_gap.x / 2 + global_border
 
     -- Find which transformation we need for given orientation
     local transformation = {
