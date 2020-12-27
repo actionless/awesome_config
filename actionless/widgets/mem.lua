@@ -172,6 +172,7 @@ function mem.init(args)
   local widget = common_widgets.text_progressbar(args)
   mem.widget = common_widgets.decorated{widget=widget}
   mem.widget.progressbar = widget.progressbar
+  mem.widget.textbox = widget.textbox
 
   if beautiful.show_widget_icon then
     mem.widget_text = args.text or ''

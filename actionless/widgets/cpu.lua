@@ -179,6 +179,7 @@ function cpu.init(args)
   local widget = common_widgets.text_progressbar(args)
   cpu.widget = common_widgets.decorated{widget=widget}
   cpu.widget.progressbar = widget.progressbar
+  cpu.widget.textbox = widget.textbox
 
   if beautiful.show_widget_icon then
     cpu.widget_text = args.text or ''
