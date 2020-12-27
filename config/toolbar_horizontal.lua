@@ -87,10 +87,8 @@ function toolbar.init(awesome_context)
     center_layout:buttons(wheel_binding)
 
     -- RIGHT side
-    local iseparator  = wibox.container.background(separator, beautiful.panel_widget_bg)
-    local progress_width = beautiful.panel_widget_width or dpi(20)
+    --local iseparator  = wibox.container.background(separator, beautiful.panel_widget_bg)
     local right_layout = wibox.widget{
-      layout = wibox.layout.align.horizontal,
       separator,
       {
         --layout = wibox.layout.flex.horizontal,
@@ -103,18 +101,17 @@ function toolbar.init(awesome_context)
         )
       },
       {
-        layout = wibox.layout.fixed.horizontal,
         separator,
         not awesome_context.apw_on_the_left and apw,
         common.panel_widget_shape(wibox.widget{
+          --iseparator,
+          loaded_widgets.mem,
+          loaded_widgets.cpu,
+          loaded_widgets.disk,
+          loaded_widgets.temp,
+          loaded_widgets.bat,
+          --iseparator,
           layout = wibox.layout.fixed.horizontal,
-          iseparator,
-          common.constraint{widget=loaded_widgets.mem, width=progress_width},
-          common.constraint{widget=loaded_widgets.cpu, width=progress_width},
-          loaded_widgets.disk and loaded_widgets.disk,
-          loaded_widgets.temp and loaded_widgets.temp,
-          loaded_widgets.bat and loaded_widgets.bat,
-          iseparator,
         }),
         separator,
         loaded_widgets.updates,
@@ -127,7 +124,9 @@ function toolbar.init(awesome_context)
         separator,
         sep,
         loaded_widgets.naughty_sidebar,
-      }
+        layout = wibox.layout.fixed.horizontal,
+      },
+      layout = wibox.layout.align.horizontal,
     }
 
 

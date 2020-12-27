@@ -581,6 +581,7 @@ function common.text_progressbar(args)
   local progress_border_radius = beautiful.panel_widget_border_radius * (
      progress_height / beautiful.basic_panel_height
   ) * 2
+  local progress_width = beautiful.panel_widget_width or dpi(20)
 
   local widget = wibox.widget{
     {
@@ -634,13 +635,14 @@ function common.text_progressbar(args)
               background_color = progress_bg,
               border_width = progress_border_width,
               border_color = progress_border_color,
+              forced_width = progress_width,
               shape = function(c, w, h) return gears.shape.rounded_rect(
                 c, w, h, progress_border_radius
               ) end,
               widget = wibox.widget.progressbar,
             },
             id = "p3",
-            layout = wibox.layout.flex.vertical,
+            layout = wibox.layout.fixed.vertical,
           },
           id = "p2",
         bg = args.bg or TRANSPARENT,
