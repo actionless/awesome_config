@@ -108,7 +108,7 @@ local context = {
 
     scrot_preview_cmd = [['mv $f ~/images/ && viewnior ~/images/$f']],
 
-    system_monitor = 'gnome-system-monitor',
+    system_monitor = 'gnome-system-monitor -p',
   },
 
   autorun = {},
