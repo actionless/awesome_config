@@ -181,7 +181,7 @@ if persistent.lcarslist.get() then
   --@TODO: somewhere inside a nasty memory leak is hiding:
   config.lcars_toolbar_vertical.init(context)
   config.lcars_toolbar_horizontal.init(context)
-  config.lcars_layout.init(context)
+  config.lcars_features.init(context)
 end
 config.rules.init(context)
 for _, callback in ipairs(context.after_config_loaded) do

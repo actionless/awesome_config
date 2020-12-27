@@ -33,14 +33,10 @@ local function handle_left_panel_visibility(t)
     lcars_layout_helper.is_visible = visible
   end
   local s = t.screen.index
-  awesome_context.topwibox[s]:struts({top=0})
   awesome_context.lcars_assets.leftwibox[s]:struts({left=0})
-  awesome_context.topwibox[s]:struts({top=0})
   awesome_context.lcars_assets.leftwibox[s].visible = visible
-  awesome_context.topwibox[s]:struts({top=0})
   awesome_context.lcars_assets.leftwibox[s]:struts({left=beautiful.left_panel_width})
-  awesome_context.topwibox[s]:struts({top=0})
-  --awesome_context.topwibox[s].stretch = 1
+  awesome_context.topwibox[s].stretch = 1
   if visible then
     awesome_context.topwibox[s]:set_widget(
       awesome_context.lcars_assets.topwibox_layout[s]
@@ -68,13 +64,15 @@ local function lcars_unite(t, from)
   log("LCARS: unite|"..from)
   local s = t.screen.index
   local w = awesome_context.topwibox[s]
-  awesome_context.lcars_assets.topwibox_layout[s]:reset()
+  w.visible = true
+  awesome_context.lcars_assets.horizontal_wibox[s].visible = false
+  --awesome_context.lcars_assets.topwibox_layout[s]:reset()
   w:struts({top = beautiful.panel_height})
   w.height = beautiful.panel_height
   awful.wibar.set_position(w, "top", s)
   awesome_context.lcars_assets.top_left_corner_container[s]:set_widget(awesome_context.lcars_assets.top_left_corner_placeholder[s])
   awesome_context.lcars_assets.leftwibox_separator[s]:set_height(0)
-  awesome_context.lcars_assets.topwibox_layout[s]:set_first(nil)
+    awesome_context.lcars_assets.topwibox_layout[s]:set_first(nil)
 
   awesome_context.lcars_assets.left_panel_top_layouts[s]:reset()
   awesome_context.lcars_assets.left_panel_bottom_layouts[s]:reset()
@@ -93,14 +91,18 @@ local function lcars_separate(t, from)
   end
   log("LCARS: separate|"..from)
   local tw = awesome_context.topwibox[s]
-  --if not lcars_layout_helper.is_separated then
-    --tw:struts({top = 0})
-  --end
+  if not lcars_layout_helper.is_separated then
+    tw:struts({top = 0})
+  end
+  t.master_width_factor = 0.5
   local mwfact =  t.master_width_factor
-  local height = screen[s].geometry.height
+  local workarea = screen[s].workarea
+  local height = workarea.height
+    local ugw = beautiful.useless_gap or 0
   local computed_y = gears.math.round(
-    height*(1-mwfact) + beautiful.useless_gap * 2 + beautiful.panel_height + beautiful.panel_padding_bottom
+    height*(1-mwfact) - beautiful.panel_height
   )
+  nlog({'y',computed_y, height})
   if lcars_layout_helper.is_separated and lcars_layout_helper.last_y == computed_y
     then return end
   log("LCARS: not cached")
@@ -108,17 +110,22 @@ local function lcars_separate(t, from)
   lcars_layout_helper.last_y = computed_y
 
   awesome_context.lcars_assets.topwibox_layout[s]:set_first(awesome_context.lcars_assets.topwibox_toplayout[s])
-  local wibox = require('wibox')
-  awesome_context.lcars_assets.topwibox_layout[s]:set_first(wibox.widget.textbox('123123123'))
-    awesome_context.lcars_assets.topwibox_layout[s]:set_third(
-      awesome_context.topwibox_layout[s]
-    )
-  --tw:geometry({height = beautiful.panel_height * 8 + beautiful.panel_padding_bottom})
-  tw.height = beautiful.panel_height * 8 + beautiful.panel_padding_bottom
-  tw:set_widget(awesome_context.lcars_assets.topwibox_layout[s])
-  tw.y = computed_y - beautiful.panel_height - beautiful.panel_padding_bottom
-  tw.x = beautiful.left_panel_width
-  --tw.visible = false
+  tw.visible = false
+  tw:struts({top = 0})
+  local hw = awesome_context.lcars_assets.horizontal_wibox[s]
+  hw.visible = true
+  --local wibox = require('wibox')
+  --awesome_context.lcars_assets.topwibox_layout[s]:set_first(wibox.widget.textbox('123123123'))
+  --  awesome_context.lcars_assets.topwibox_layout[s]:set_third(
+  --    awesome_context.topwibox_layout[s]
+  --  )
+  hw.height = beautiful.panel_height * 2 + beautiful.panel_padding_bottom
+  hw.width = screen[s].geometry.width - beautiful.left_panel_width
+  hw.bg = beautiful.panel_bg
+  hw:set_widget(awesome_context.lcars_assets.topwibox_layout[s])
+  --hw.y = computed_y - beautiful.panel_height - beautiful.panel_padding_bottom
+  hw.y = computed_y
+  hw.x = beautiful.left_panel_width
   --nlog({y = computed_y - beautiful.panel_height * 1 - beautiful.panel_padding_bottom * 1 })
 
   awesome_context.lcars_assets.leftwibox_separator[s]:set_height(computed_y)
@@ -142,9 +149,8 @@ local function lcars_separate(t, from)
     awesome_context.lcars_assets.left_panel_bottom_layouts[s]:add(awesome_context.lcars_assets.left_panel_widgets[s][c])
   end
 
-    tw:struts({top = 0})
+  awesome_context.lcars_assets.leftwibox[s]:struts({left=beautiful.left_panel_width})
   lcars_layout_helper.is_separated = true
-  --nlog(tw:struts())
 end
 
 

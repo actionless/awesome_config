@@ -116,27 +116,13 @@ function toolbar.init(awesome_context)
         orientation="vertical",
       }),
       v_sep,
-      wibox.widget{
-        {
-          {
-            {
-              loaded_widgets.mem,
-              loaded_widgets.cpu,
-              max_widget_size = gears.math.round(beautiful.left_panel_width / 6),
-              spacing = gears.math.round(beautiful.left_panel_width / 6),
-              layout = wibox.layout.flex.vertical,
-            },
-            top = gears.math.round(beautiful.left_panel_width / 4),
-            bottom = gears.math.round(beautiful.left_panel_width / 4),
-            layout = wibox.container.margin,
-          },
-          bg = beautiful.panel_widget_bg,
-          layout = wibox.container.background,
+      common.decorated({
+        widgets={
+              loaded_widgets.mem.widget.textbox,
+              loaded_widgets.cpu.widget.textbox,
         },
-        height = beautiful.left_panel_width,
-        layout = wibox.container.constraint,
-        strategy = 'exact',
-      },
+        orientation="vertical",
+      }),
       v_sep,
       screen_widgets.lcarslist,
       loaded_widgets.temp,

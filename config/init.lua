@@ -11,7 +11,7 @@ local config = {
 	toolbar_horizontal       = require("config.toolbar_horizontal"),
 	lcars_toolbar_vertical	 = require("config.lcars_toolbar_vertical"),
 	lcars_toolbar_horizontal = require("config.lcars_toolbar_horizontal"),
-	lcars_layout             = require("config.lcars_layout"),
+	lcars_features           = require("config.lcars_features"),
 }
 
 return config

@@ -107,6 +107,8 @@ local function tile(p, orientation)
 
     -- Aliases
     local wa = p.workarea
+    --local wa = p.workarea
+    wa.height = screen[p.screen].geometry.height
     local cls = p.clients
     local t = screen[p.screen].selected_tag
 
@@ -160,14 +162,15 @@ local function tile(p, orientation)
     -- Tile master windows
     local master_area = {
         x = (#cls_other >= 1)
-          and wa.x + beautiful.panel_height*0 + ugw*1
+          and (wa.x + ugw*2)
           or wa.x,
         y = wa.y,
         width  = (#cls_other >= 1)
-          and wa.width * mwfact - beautiful.panel_height * 2 - ugw*2
+          and (wa.width * mwfact - beautiful.panel_height - ugw*2)
           or ((nmaster > 0) and wa.width * mwfact or 0),
-        height = wa.height + ugw
+        height = wa.height
     }
+    nlog({'ma', master_area.width, mwfact, wa.width})
 
     if not data[0] then data[0] = {} end
     tile_column(
@@ -189,7 +192,7 @@ local function tile(p, orientation)
           or wa.x + master_area.width + ugw*2,
         y = wa.y,
         width = (nmaster >= 1)
-          and wa.width - master_area.width - beautiful.panel_height * 2 - ugw*5
+          and wa.width - master_area.width - beautiful.panel_height * 2 - ugw*4
           or wa.width - master_area.width - ugw*2,
         height = wa.height + ugw
     }

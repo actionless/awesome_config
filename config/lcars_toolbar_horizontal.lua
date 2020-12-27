@@ -17,6 +17,7 @@ function toolbar.init(awesome_context)
 
   local topwibox_layout = {}
   local topwibox_toplayout = {}
+  local horizontal_wibox = {}
 
   -- Separators
   local separator  = common.constraint({ width=dpi(8), })
@@ -140,11 +141,15 @@ function toolbar.init(awesome_context)
     --  wibox.container.background(top_panel_layout)
     --)
     topwibox_layout[si] = top_panel_layout
-
+    horizontal_wibox[si] = wibox()
+    if awesome.composite_manager_running then
+      horizontal_wibox[si]:set_xproperty('_ACTNLZZ_IGNORE_PICOM_BORDER', true)
+    end
   end)
 
   awesome_context.lcars_assets.topwibox_layout = topwibox_layout  -- this one!
   awesome_context.lcars_assets.topwibox_toplayout = topwibox_toplayout
+  awesome_context.lcars_assets.horizontal_wibox = horizontal_wibox
 
 end
 return toolbar
