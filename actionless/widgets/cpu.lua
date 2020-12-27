@@ -209,7 +209,7 @@ function cpu.init(args)
     call_now=true,
   })
 
-  return setmetatable(cpu, { __index = cpu.widget })
+  return cpu.widget
 end
 
 return setmetatable(cpu, { __call = function(_, ...) return cpu.init(...) end })

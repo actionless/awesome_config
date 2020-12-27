@@ -204,7 +204,7 @@ function mem.init(args)
     call_now=true,
   })
 
-  return setmetatable(mem, { __index = mem.widget })
+  return mem.widget
 end
 
 

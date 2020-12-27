@@ -118,8 +118,8 @@ function toolbar.init(awesome_context)
       v_sep,
       common.decorated({
         widgets={
-              loaded_widgets.mem.widget.textbox,
-              loaded_widgets.cpu.widget.textbox,
+              loaded_widgets.mem.textbox,
+              loaded_widgets.cpu.textbox,
         },
         orientation="vertical",
       }),
