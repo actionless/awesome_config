@@ -596,7 +596,6 @@ function common.text_progressbar(args)
                   widget = wibox.widget.imagebox,
               },
               nil,
-              id = "t4",
               layout = wibox.layout.align.vertical,
               expand = 'none',
             },
@@ -604,15 +603,12 @@ function common.text_progressbar(args)
                 id = "textbox",
                 widget = wibox.widget.textbox,
             },
-            id = "t3",
             layout = wibox.layout.fixed.horizontal,
           },
           nil,
-          id = "t2",
           layout = wibox.layout.align.horizontal,
           expand = 'none',
         },
-        id = "t1",
         left  = text_margin_left,
         right = text_margin_right,
         bottom = text_margin_bottom,
@@ -641,36 +637,31 @@ function common.text_progressbar(args)
               ) end,
               widget = wibox.widget.progressbar,
             },
-            id = "p3",
             layout = wibox.layout.fixed.vertical,
           },
-          id = "p2",
-        bg = args.bg or TRANSPARENT,
-        layout = wibox.container.background,
+          bg = args.bg or TRANSPARENT,
+          layout = wibox.container.background,
         },
-        id = "p1",
-          height  = progress_height,
-          strategy = 'exact',
-          layout = wibox.container.constraint,
+        height  = progress_height,
+        strategy = 'exact',
+        layout = wibox.container.constraint,
       },
-      id = "w1",
       layout = wibox.layout.stack
     },
-    id = "w0",
     left=widget_margin_left,
     right=widget_margin_right,
     layout = wibox.container.margin,
   }
 
-  widget.textbox = widget.w1.t1.t2.t3.textbox
-  widget.progressbar = widget.w1.p1.p2.p3.progressbar
+  widget.textbox = widget:get_children_by_id('textbox')[1]
+  widget.progressbar = widget:get_children_by_id('progressbar')[1]
 
   local show_icon = args.show_icon
   if show_icon == nil then
     show_icon = beautiful.show_widget_icon
   end
   if show_icon then
-    widget.icon_widget = widget.w1.t1.t2.t3.t4.imagebox
+    widget.icon_widget = widget:get_children_by_id('imagebox')[1]
   end
 
   function widget:set_image(image)
