@@ -14,6 +14,7 @@ local common = {
   decorated_vertical = decorated.vertical,
   panel_widget_shape = shape.panel_widget_shape,
   set_panel_widget_shape = shape.set_panel_widget_shape,
+  shape = shape,
   text_progressbar = require('actionless.widgets.common.progressbar'),
   widget = require('actionless.widgets.common.widget'),
 }

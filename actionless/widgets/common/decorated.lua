@@ -82,8 +82,7 @@ function module.decorated_vertical(args)
 
   decorated.lie_widget_layout = wibox.layout.fixed.vertical()
   if decorated.valign == "top" then
-    decorated.internal_widget_layout =
-    wibox.layout.align.horizontal(
+    decorated.internal_widget_layout = wibox.layout.align.horizontal(
         nil,
         decorated.lie_widget_layout,
         common_constraint({width=args.padding or beautiful.panel_padding_bottom})
