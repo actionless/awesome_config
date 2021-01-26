@@ -59,7 +59,7 @@ function toolbar.init(awesome_context)
         sep,
         loaded_widgets.screen[si].promptbox,
         loaded_widgets.kbd,
-        sep
+        sep,
       },
       {
         layout = wibox.container.background,
@@ -74,11 +74,11 @@ function toolbar.init(awesome_context)
           awesome_context.apw_on_the_left and separator or sep,
         },
         awesome_context.apw_on_the_left and apw,
-      },
-      {
-        layout = wibox.container.background,
-        buttons = wheel_binding,
-        separator,
+        awesome_context.apw_on_the_left and {
+          layout = wibox.container.background,
+          buttons = wheel_binding,
+          sep,
+        },
       },
     }
 
@@ -89,6 +89,7 @@ function toolbar.init(awesome_context)
     -- RIGHT side
     --local iseparator  = wibox.container.background(separator, beautiful.panel_widget_bg)
     local right_layout = wibox.widget{
+      layout = wibox.layout.align.horizontal,
       separator,
       {
         --layout = wibox.layout.flex.horizontal,
@@ -126,39 +127,42 @@ function toolbar.init(awesome_context)
         loaded_widgets.naughty_sidebar,
         layout = wibox.layout.fixed.horizontal,
       },
-      layout = wibox.layout.align.horizontal,
     }
 
 
     -- PANEL LAYOUT
-    local width = s.geometry.width
-    local w3 = width/3
-    local layout = wibox.layout.align.horizontal(
-      wibox.container.constraint(left_layout, 'max', w3*0.1),
-      --left_layout,
-      wibox.container.constraint(center_layout, 'max', w3*1.1),
-      --center_layout,
-      wibox.container.constraint(right_layout, 'max', w3*1.8)
-      --right_layout
-    )
-    layout:set_expand('outside')
+    local layout = wibox.widget{
+      left_layout,
+      center_layout,
+        {
+          nil,
+          nil,
+          right_layout,
+          expand = 'inside',
+          layout = wibox.layout.align.horizontal,
+        },
+      expand = 'outside',
+      layout = wibox.layout.align.horizontal,
+    }
 
     -- panel bottom padding:
     if beautiful.panel_padding_bottom then
       local border_width = beautiful.panel_border_width or beautiful.panel_widget_border_width or 0
-      local const = wibox.container.constraint()
-      const:set_strategy("exact")
-      const:set_height(beautiful.panel_padding_bottom - border_width)
-      layout = wibox.layout.align.vertical(
+      layout = wibox.widget{
+        layout = wibox.layout.align.vertical,
         nil,
         layout,
-        wibox.widget{
-          const,
+        {
+          {
+            layout = wibox.container.constraint,
+            strategy = "exact",
+            height = beautiful.panel_padding_bottom - border_width,
+          },
           margins = { bottom = border_width },
           layout = wibox.container.margin,
           color = beautiful.panel_padding_color or beautiful.panel_bg,
         }
-      )
+      }
     end
 
     awesome_context.topwibox_layout[si] = layout  -- this one!
