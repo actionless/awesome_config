@@ -92,7 +92,6 @@ function toolbar.init(awesome_context)
       layout = wibox.layout.align.horizontal,
       separator,
       {
-        --layout = wibox.layout.flex.horizontal,
         layout = wibox.layout.fixed.horizontal,
         common.panel_widget_shape(
           loaded_widgets.music,
@@ -102,30 +101,31 @@ function toolbar.init(awesome_context)
         )
       },
       {
+        layout = wibox.layout.align.horizontal,
         separator,
-        not awesome_context.apw_on_the_left and apw,
-        common.panel_widget_shape(wibox.widget{
-          --iseparator,
-          loaded_widgets.mem,
-          loaded_widgets.cpu,
-          loaded_widgets.disk,
-          loaded_widgets.temp,
-          loaded_widgets.bat,
-          --iseparator,
+        {
           layout = wibox.layout.fixed.horizontal,
-        }),
-        separator,
-        loaded_widgets.updates,
-        separator,
-        loaded_widgets.textclock,
-        separator,
-        sep,
-        sep,
-        loaded_widgets.screen[si].layoutbox,
-        separator,
-        sep,
+          not awesome_context.apw_on_the_left and apw,
+          common.panel_widget_shape(wibox.widget{
+            loaded_widgets.mem,
+            loaded_widgets.cpu,
+            loaded_widgets.disk,
+            loaded_widgets.temp,
+            loaded_widgets.bat,
+            layout = wibox.layout.fixed.horizontal,
+          }),
+          separator,
+          loaded_widgets.updates,
+          separator,
+          loaded_widgets.textclock,
+          separator,
+          sep,
+          sep,
+          loaded_widgets.screen[si].layoutbox,
+          separator,
+          sep,
+        },
         loaded_widgets.naughty_sidebar,
-        layout = wibox.layout.fixed.horizontal,
       },
     }
 
@@ -134,13 +134,7 @@ function toolbar.init(awesome_context)
     local layout = wibox.widget{
       left_layout,
       center_layout,
-        {
-          nil,
-          nil,
-          right_layout,
-          expand = 'inside',
-          layout = wibox.layout.align.horizontal,
-        },
+      right_layout,
       expand = 'outside',
       layout = wibox.layout.align.horizontal,
     }
