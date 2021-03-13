@@ -264,6 +264,8 @@ theme.titlebar_fg_normal	= color_utils.mix(gsc.menubar_fg_color, gsc.menubar_bg_
 theme.notification_border_radius = "theme.border_radius"
 --theme.notification_sidebar_bg = color_utils.transparentize(gsc.menubar_bg_color, 0.66)
 theme.notification_sidebar_bg = color_utils.transparentize(gsc.menubar_bg_color, 0.75)
+theme.notification_bg_critical = "theme.panel_bg"
+--theme.notification_fg_critical = "theme.bg_urgent"
 
   local rounded_rect_shape = function(cr,w,h)
     gears.shape.rounded_rect(

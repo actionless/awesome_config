@@ -164,6 +164,8 @@ function common_theme.create_default_theme(theme_dir, icons_dir)
   theme.notification_font	= "theme.sans_font"
   theme.notification_bg = "theme.bg_normal"
   theme.notification_fg = "theme.fg_normal"
+  theme.notification_bg_critical = "theme.fg_urgent"
+  theme.notification_fg_critical = "theme.bg_urgent"
   theme.notification_border_color = "theme.bg_focus"
   theme.notification_border_color = "theme.xrdb.color8"
   theme.notification_border_width = dpi(2)

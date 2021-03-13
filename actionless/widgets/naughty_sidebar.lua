@@ -70,6 +70,10 @@ naughty_sidebar = {
         return
       end
       n:set_title('<b>'..n:get_title()..'</b>')
+      if n.args.urgency == 'critical' then
+        n.bg = beautiful.notification_bg_critical or beautiful.bg_urgent
+        n.fg = beautiful.notification_fg_critical or beautiful.fg_urgent
+      end
       local box = naughty.layout.box{
         notification = n,
         -- workaround for https://github.com/awesomeWM/awesome/issues/3081 :

@@ -17,12 +17,6 @@ function notify.init(_awesome_context)
   naughty.config.defaults.margin = beautiful.notification_margin
   naughty.config.defaults.padding = beautiful.notification_spacing
 
-  naughty.config.presets.low.font = beautiful.notification_font
-
-  naughty.config.presets.critical.font = beautiful.notification_font
-  naughty.config.presets.critical.bg = beautiful.fg_urgent
-  naughty.config.presets.critical.fg = beautiful.bg_urgent
-
   naughty_sidebar.init_naughty{
     skip_rule={app_name = {'', "xfce4-power-manager"}},
   }
@@ -31,7 +25,7 @@ function notify.init(_awesome_context)
   -- Check if awesome encountered an error during startup and fell back to
   -- another config (This code will only ever execute for the fallback config)
   if awesome.startup_errors then
-    naughty.notify({ preset = naughty.config.presets.critical,
+    naughty.notify({ urgency = "critical",
                      title = "Oops, there were errors during startup!",
                      text = awesome.startup_errors })
   end
@@ -44,7 +38,7 @@ function notify.init(_awesome_context)
       if in_error then return end
       in_error = true
 
-      naughty.notify({ preset = naughty.config.presets.critical,
+      naughty.notify({ urgency = "critical",
                        title = "Oops, an error happened!",
                        text = err })
       in_error = false
