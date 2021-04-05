@@ -166,7 +166,12 @@ beautiful.init(context.theme_dir)
 -- Init config
 -------------------------------------------------------------------------------
 for _, callback in ipairs(context.before_config_loaded) do
-  callback()
+  if not gears.protected_call(function()
+    callback()
+    return true
+  end) then
+    nlog('error when calling local config callback, check the logs')
+  end
 end
 local config = require("config")
 config.notify.init(context)
