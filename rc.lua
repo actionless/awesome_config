@@ -1,6 +1,8 @@
 -- Enable jit if on luajit
 pcall(function() jit.on() end)
 
+local gears = require('gears')
+
 -- Localization
 os.setlocale(os.getenv("LANG"))
 
@@ -131,7 +133,7 @@ local context = {
 
 -- Override config from local settings file
 -------------------------------------------------------------------------------
-local workstation_settings_result, workstation_settings_details = pcall(function()
+local workstation_settings_result, workstation_settings_details = gears.protected_call(function()
   context = require("config.workstation").init(context) or context
 end)
 if workstation_settings_result ~= true then
@@ -139,7 +141,7 @@ if workstation_settings_result ~= true then
   print(workstation_settings_details)
 end
 
-local local_settings_result, local_settings_details = pcall(function()
+local local_settings_result, local_settings_details = gears.protected_call(function()
   context = require("config.local").init(context) or context
 end)
 if local_settings_result ~= true then
