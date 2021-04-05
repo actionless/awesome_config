@@ -149,7 +149,7 @@ function mem.update()
     )
     mem.widget:set_error()
     widget_icon = beautiful.widget_mem_critical
-  elseif mem.now.used > mem.now.total * 0.8 then
+  elseif mem.now.used > (mem.now.total * (1 - mem.swappiness * 2 / 100)) then
     mem.widget:set_warning()
     widget_icon = beautiful.widget_mem_high
   else
