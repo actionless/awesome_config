@@ -140,7 +140,10 @@ function mem.update()
     "%6s", mem.now.used .. "MB"
   )
   local widget_icon
-  if (mem.now.used > mem.now.total * 0.9) or (mem.now.swapused > mem.now.swap * 0.8) then
+  if (
+      (mem.now.used > (mem.now.total * (1 - mem.swappiness / 100))) or
+      (mem.now.swapused > (mem.now.swap * 0.8))
+  ) then
     msg = string.format(
       "%6s swp:%s", mem.now.used .. "MB", mem.now.swapused .. "MB"
     )
@@ -159,6 +162,11 @@ function mem.update()
   if widget_icon then
     mem.widget:set_image(widget_icon)
   end
+end
+
+
+function mem._get_swappiness()
+  mem.swappiness = tonumber(parse.filename_to_string('/proc/sys/vm/swappiness'))
 end
 
 
@@ -196,6 +204,7 @@ function mem.init(args)
     percent=10,
     name=12
   }
+  mem._get_swappiness()
 
   gears_timer({
     callback=mem.update,
