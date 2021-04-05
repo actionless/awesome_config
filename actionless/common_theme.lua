@@ -8,6 +8,7 @@ local xresources = require("beautiful").xresources
 local dpi = xresources.apply_dpi
 local g_string = require("gears.string")
 local surface = require("gears.surface")
+local gears = require("gears")
 local recolor_image = require("gears.color").recolor_image
 
 local h_string = require("actionless.util.string")
@@ -22,7 +23,7 @@ local common_theme = {}
 function common_theme.create_default_theme(theme_dir, icons_dir)
 
   local theme
-  pcall(function()
+  gears.protected_call(function()
     theme = dofile("/usr/share/awesome/themes/xresources/theme.lua")
   end)
   if not theme then
