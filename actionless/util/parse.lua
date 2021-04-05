@@ -50,6 +50,11 @@ function parse.filename_to_lines(file_name)
     file_name, parse.fo_to_lines)
 end
 
+function parse.filename_to_string(file_name)
+  return parse.lines_to_string(
+    parse.filename_to_lines(file_name))
+end
+
 function parse.command_to_lines(cmd)
   return parse.process_command(
     cmd, parse.fo_to_lines)
