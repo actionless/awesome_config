@@ -160,7 +160,14 @@ require("menubar.utils").terminal = context.cmds.terminal
 -- Init theme
 -------------------------------------------------------------------------------
 local beautiful	= require("beautiful")
-beautiful.init(context.theme_dir)
+local h_table = require("actionless.util.table")
+if not gears.protected_call(function()
+  beautiful.init(context.theme_dir)
+  return true
+end) or (h_table.getn(beautiful.get()) == 0) then
+  nlog("CAN'T LOAD THEME, loading default one")
+  beautiful.init(gears.filesystem.get_themes_dir() .. "xresources/theme.lua")
+end
 
 
 -- Init config
