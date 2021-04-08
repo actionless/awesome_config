@@ -60,9 +60,9 @@ local function create_widget(args)
 
     layoutbox.widget = wibox.layout.fixed.horizontal(
         layoutbox.layout_icon,
-        common.constraint({width=math.ceil(beautiful.panel_widget_spacing)}),
+        common.constraint({width=math.ceil(beautiful.panel_widget_spacing or 0)}),
         layoutbox.n_master,
-        common.constraint({width=math.ceil(beautiful.panel_widget_spacing)}),
+        common.constraint({width=math.ceil(beautiful.panel_widget_spacing or 0)}),
         layoutbox.n_col,
         layoutbox.mfpol_icon
     )

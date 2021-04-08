@@ -79,7 +79,7 @@ naughty_sidebar = {
         -- workaround for https://github.com/awesomeWM/awesome/issues/3081 :
         shape = function(cr,w,h)
           gears.shape.rounded_rect(
-            cr, w, h, beautiful.notification_border_radius+beautiful.notification_border_width+1
+            cr, w, h, (beautiful.notification_border_radius or 0)+(beautiful.notification_border_width or 0)+1
           )
         end,
         --widget_template = @TODO: fork from /usr/share/awesome/lib/naughty/widget/_default.lua

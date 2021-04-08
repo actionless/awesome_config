@@ -57,7 +57,7 @@ local function mouse_is_on_borders(c)
     return false
   end
   local client_geometry = object_under_pointer:geometry()
-  local border = beautiful.base_border_width * 2
+  local border = (beautiful.base_border_width or beautiful.border_width) * 2
   local mouse_coords = mouse.coords()
 
   local mx = mouse_coords.x
@@ -690,7 +690,7 @@ function titlebar.is_enabled(c)
   local tb = titlebar.get_titlebar_widget(c)
   if not tb then return end
   if (
-    tb:geometry()['height'] > beautiful.base_border_width * 2
+    tb:geometry()['height'] > (beautiful.base_border_width ~= nil and beautiful.base_border_width or beautiful.border_width) * 2
     ) then
     return true
   else

@@ -16,7 +16,7 @@ function toolbar.init(awesome_context)
 
   -- Separators
   local separator  = common.constraint({ width=beautiful.panel_widget_spacing, })
-  local sep = common.constraint({ width=gmath.round(beautiful.panel_widget_spacing/4) })
+  local sep = common.constraint({ width=gmath.round((beautiful.panel_widget_spacing or 0)/4) })
 
   local apw = wibox.layout.fixed.horizontal(
     common.panel_widget_shape(

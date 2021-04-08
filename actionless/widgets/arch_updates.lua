@@ -90,11 +90,11 @@ end
 function updates.init(args)
   args = args or {}
   args.margin = args.margin or {
-    left = gmath.round(beautiful.panel_widget_spacing/2),
+    left = gmath.round((beautiful.panel_widget_spacing or 0)/2),
     right = (
       (beautiful.show_widget_icon and beautiful.widget_updates) and
       beautiful.panel_widget_spacing or
-      gmath.round(beautiful.panel_widget_spacing/2)
+      gmath.round((beautiful.panel_widget_spacing or 0)/2)
     )
   }
   local update_interval = args.update_interval or 600  -- 10 minutes

@@ -115,17 +115,18 @@ function widget_loader.init(awesome_context)
   -- Arch updates
   w.updates = widgets.arch_updates({
       bg = beautiful.panel_widget_updates_bg or (
-        h_color.is_dark(beautiful.panel_bg) == h_color.is_dark(beautiful.xrdb.background)
-      ) and TRANSPARENT or beautiful.panel_widget_fg_warning,
+        h_color.is_dark(beautiful.panel_bg or beautiful.bg_normal) == h_color.is_dark(beautiful.xrdb and beautiful.xrdb.background or beautiful.bg_normal)
+      ) and TRANSPARENT or
+      beautiful.panel_widget_fg_warning,
       fg = beautiful.panel_widget_updates_fg or beautiful.panel_widget_bg_warning,
   })
 
   -- Textclock
   local textclock = wibox.widget.textclock(
     markup.font(
-      beautiful.clock_font or beautiful.bold_font,
+      beautiful.clock_font or beautiful.bold_font or beautiful.font,
       markup.fg(
-        beautiful.clock_fg or beautiful.panel_fg,
+        beautiful.clock_fg or beautiful.panel_fg or beautiful.fg_normal,
         "%H:%M"
       )
     )
@@ -164,7 +165,7 @@ function widget_loader.init(awesome_context)
   })
   w.calendar_popup.bg = beautiful.notification_bg
   w.calendar_popup.border_width = beautiful.notification_border_width
-  w.calendar_popup.border_color = beautiful.notification_border_color
+  w.calendar_popup.border_color = beautiful.notification_border_color or beautiful.border_color_normal
   if beautiful.notification_border_radius then
     w.calendar_popup.shape = function(_c, _w, _h)
       return gears.shape.rounded_rect(
@@ -229,14 +230,14 @@ function widget_loader.init(awesome_context)
     )
 
     local shaped_widget_side_padding =  math.floor(
-      beautiful.panel_widget_spacing/2 + math.min(
-        beautiful.panel_widget_border_radius, beautiful.basic_panel_height/3.5
+      (beautiful.panel_widget_spacing or 0)/2 + math.min(
+        beautiful.panel_widget_border_radius or 0, (beautiful.basic_panel_height or dpi(18))/3.5
       )
     )
     local function update_taglist_padding(self, c3, index, objects) --luacheck: no unused args
       local margin = self:get_children_by_id('margin_role')[1]
-      margin.left  = math.floor(beautiful.panel_widget_spacing/2)
-      margin.right = math.floor(beautiful.panel_widget_spacing/2)
+      margin.left  = math.floor((beautiful.panel_widget_spacing or 0)/2)
+      margin.right = math.floor((beautiful.panel_widget_spacing or 0)/2)
       if beautiful.panel_widget_border_radius > 0 then
         if index == 1 then
           margin.left = shaped_widget_side_padding

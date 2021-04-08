@@ -64,8 +64,8 @@ end
 function temp.init(args)
   args = args or {}
   args.padding = args.padding or {
-    left = math.ceil(beautiful.panel_widget_spacing / 2) or dpi(3),
-    right = math.ceil(beautiful.panel_widget_spacing / 2) or dpi(3),
+    left = math.ceil((beautiful.panel_widget_spacing or 0) / 2) or dpi(3),
+    right = math.ceil((beautiful.panel_widget_spacing or 0) / 2) or dpi(3),
   }
   local update_interval = args.update_interval or 10
   temp.sensors = args.sensors

@@ -34,8 +34,8 @@ function module.text_progressbar(args)
   --local progress_margin_bottom = dpi(2)
   local progress_margin_bottom = dpi(1)
   local progress_height = dpi(3)
-  local progress_border_radius = beautiful.panel_widget_border_radius * (
-     progress_height / beautiful.basic_panel_height
+  local progress_border_radius = (beautiful.panel_widget_border_radius or 0) * (
+     progress_height / (beautiful.basic_panel_height or dpi(18))
   ) * 2
   local progress_width = beautiful.panel_widget_width or dpi(20)
 
@@ -79,8 +79,8 @@ function module.text_progressbar(args)
               margins      = {
                 bottom=progress_margin_bottom,
                 top=(
-                  beautiful.panel_height - progress_margin_bottom -
-                  progress_height - beautiful.panel_padding_bottom
+                  (beautiful.panel_height or dpi(18))- progress_margin_bottom -
+                  progress_height - (beautiful.panel_padding_bottom or 0)
                 ),
               },
               color = progress_fg,

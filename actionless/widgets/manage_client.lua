@@ -24,8 +24,8 @@ local manage_client = {}
 local function widget_factory(args)
   -- ARGUMENTS: ---------------------------------------------------------------
   args	 = args or {}
-  args.bg = args.bg or beautiful.panel_widget_bg or beautiful.fg
-  args.fg = args.fg or beautiful.panel_widget_fg or beautiful.bg
+  args.bg = args.bg or beautiful.panel_widget_bg or beautiful.fg_normal
+  args.fg = args.fg or beautiful.panel_widget_fg or beautiful.bg_normal
   args.error_color_on_hover = args.error_color_on_hover or false
   local widget_screen = args.screen or awful.screen.focused()
   local padding = args.padding or dpi(8)
