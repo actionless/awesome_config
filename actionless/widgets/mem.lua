@@ -17,6 +17,7 @@ local common_widgets = require("actionless.widgets.common")
 
 -- Memory usage (ignoring caches)
 local mem = {
+  max_swap_ratio = 0.5,
   now = {},
   notification = nil,
   show_percents = true,
@@ -141,8 +142,8 @@ function mem.update()
   )
   local widget_icon
   if (
-      (mem.now.used > (mem.now.total * (1 - mem.swappiness / 100))) or
-      (mem.now.swapused > (mem.now.swap * 0.8))
+      (mem.now.used > (mem.now.total * (1 - mem.swappiness * 0.8 / 100))) or
+      (mem.now.swapused > (mem.now.swap * mem.max_swap_ratio))
   ) then
     msg = string.format(
       "%6s swp:%s", mem.now.used .. "MB", mem.now.swapused .. "MB"
