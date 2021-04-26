@@ -87,7 +87,7 @@ function keys.init(awesome_context)
   local CLIENT_FOCUS = "client: focus"
   local CLIENT_MOVE = "client: move"
   local GROUP_MENU = "menu"
-  local AWESOME_COLOR = "awesome"
+  local AWESOME_COLOR = "AWESOME"
   local CLIENT_MANIPULATION = "client"
   local LAYOUT_MANIPULATION = "layout"
   local LCARS = "LCARS"
@@ -108,12 +108,17 @@ function keys.init(awesome_context)
     awful.key({modkey}, "/", function()
       hkng.show_help()
     end, nil, {
-      description = "show help", group=AWESOME_COLOR
+      description = "show help (all)", group="HELP"
     }),
     awful.key({"Shift", modkey}, "/", function()
       hkng.show_help(nil, nil, {show_awesome_keys=false})
     end, nil, {
-      description = "show help for apps", group=AWESOME_COLOR
+      description = "show help for current app", group="HELP"
+    }),
+    awful.key({altkey, modkey}, "/", function()
+      hkng.show_help('', nil, {show_awesome_keys=true})
+    end, nil, {
+      description = "show help for awesome only", group="HELP"
     }),
 
     awful.key({ modkey}, ";", function()
@@ -415,7 +420,7 @@ function keys.init(awesome_context)
       end,
       "run command", LAUNCHER
     ),
-    bind_key({ modkey }, "x",
+    bind_key({ modkey, "Control" }, "x",
       function ()
         awful.prompt.run {
           prompt       = "Run Lua code: ",
@@ -443,15 +448,25 @@ function keys.init(awesome_context)
     awful.key({}, "#198", function () awesome_context.widgets.volume.toggle_mic() end),
 
     -- Music player control
-    bind_key({modkey, altkey}, ",",
+    --bind_key({modkey, altkey}, ",",
+    --  function () awesome_context.widgets.music.prev_song() end,
+    --  "prev song", MUSIC),
+    --bind_key({modkey, altkey}, ".",
+    --  function () awesome_context.widgets.music.next_song() end,
+    --  "next song", MUSIC),
+    --bind_key({modkey, altkey}, "/",
+    --  function () awesome_context.widgets.music.toggle() end,
+    --  "pause music", MUSIC),
+
+    bind_key({modkey, }, "<",
       function () awesome_context.widgets.music.prev_song() end,
       "prev song", MUSIC),
-    bind_key({modkey, altkey}, ".",
+    bind_key({modkey, }, "z",
       function () awesome_context.widgets.music.next_song() end,
       "next song", MUSIC),
-    bind_key({modkey, altkey}, "/",
+    bind_key({modkey, }, "x",
       function () awesome_context.widgets.music.toggle() end,
-      "Pause", MUSIC),
+      "pause music", MUSIC),
 
     -- Generic
     awful.key({}, "XF86AudioPlay", function () awesome_context.widgets.music.toggle() end),
