@@ -89,9 +89,11 @@ naughty_sidebar = {
                       {
                           naughty.widget.icon,
                           {
-                              wibox.widget.textbox(
-                                '<b>'..gears.string.xml_escape(n.title)..'</b>'
-                              ),
+                              {
+                                markup = '<b>'..gears.string.xml_escape(n.title)..'</b>',
+                                font = beautiful.notification_font,
+                                widget = wibox.widget.textbox,
+                              },
                               naughty.widget.message,
                               spacing = (n.title ~= '' and n.message ~= '') and dpi(4) or 0,
                               layout  = wibox.layout.fixed.vertical,
@@ -421,7 +423,11 @@ local function widget_factory(args)
             {
               nil,
               {
-                wibox.widget.textbox(gears.string.xml_escape(notification.title)),
+                {
+                  markup = gears.string.xml_escape(notification.title),
+                  font = naughty_sidebar.theme.font,
+                  widget = wibox.widget.textbox,
+                },
                 margins = {
                   top = naughty_sidebar.theme.notification_padding,
                   bottom = gears.math.round(naughty_sidebar.theme.notification_padding / 2.5),
