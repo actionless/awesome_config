@@ -424,7 +424,7 @@ local function widget_factory(args)
               nil,
               {
                 {
-                  markup = gears.string.xml_escape(notification.title),
+                  markup = '<b>'..gears.string.xml_escape(notification.title)..'</b>',
                   font = naughty_sidebar.theme.font,
                   widget = wibox.widget.textbox,
                 },
