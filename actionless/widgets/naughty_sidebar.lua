@@ -93,7 +93,7 @@ naughty_sidebar = {
                                 '<b>'..gears.string.xml_escape(n.title)..'</b>'
                               ),
                               naughty.widget.message,
-                              spacing = dpi(4),
+                              spacing = (n.title ~= '' and n.message ~= '') and dpi(4) or 0,
                               layout  = wibox.layout.fixed.vertical,
                           },
                           fill_space = true,
