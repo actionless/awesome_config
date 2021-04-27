@@ -69,7 +69,6 @@ naughty_sidebar = {
       ) then
         return
       end
-      n:set_title('<b>'..n:get_title()..'</b>')
       if n.args.urgency == 'critical' then
         n.bg = beautiful.notification_bg_critical or beautiful.bg_urgent
         n.fg = beautiful.notification_fg_critical or beautiful.fg_urgent
@@ -82,7 +81,39 @@ naughty_sidebar = {
             cr, w, h, (beautiful.notification_border_radius or 0)+(beautiful.notification_border_width or 0)+1
           )
         end,
-        --widget_template = @TODO: fork from /usr/share/awesome/lib/naughty/widget/_default.lua
+        -- @TODO: merge widget template with the sidebar widget template:
+        widget_template = {
+          {
+              {
+                  {
+                      {
+                          naughty.widget.icon,
+                          {
+                              wibox.widget.textbox(
+                                '<b>'..gears.string.xml_escape(n.title)..'</b>'
+                              ),
+                              naughty.widget.message,
+                              spacing = dpi(4),
+                              layout  = wibox.layout.fixed.vertical,
+                          },
+                          fill_space = true,
+                          spacing    = dpi(4),
+                          layout     = wibox.layout.fixed.horizontal,
+                      },
+                      naughty.list.actions,
+                      spacing = notification_args.run and dpi(10) or 0,
+                      layout  = wibox.layout.fixed.vertical,
+                  },
+                  margins = beautiful.notification_margin,
+                  widget  = wibox.container.margin,
+              },
+              id     = "background_role",
+              widget = naughty.container.background,
+          },
+          strategy = "max",
+          width    = beautiful.notification_max_width or beautiful.xresources.apply_dpi(500),
+          widget   = wibox.container.constraint,
+        }
       }
       if notification_args.run then
         local buttons = box:buttons()
@@ -390,7 +421,7 @@ local function widget_factory(args)
             {
               nil,
               {
-                wibox.widget.textbox(notification.title),
+                wibox.widget.textbox(gears.string.xml_escape(notification.title)),
                 margins = {
                   top = naughty_sidebar.theme.notification_padding,
                   bottom = gears.math.round(naughty_sidebar.theme.notification_padding / 2.5),
@@ -433,7 +464,7 @@ local function widget_factory(args)
           -- MESSAGE:
           {
             {
-              markup = notification.message,
+              markup = gears.string.xml_escape(notification.message),
               font = naughty_sidebar.theme.font,
               widget = wibox.widget.textbox,
             },
