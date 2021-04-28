@@ -74,14 +74,47 @@ naughty_sidebar = {
         n.fg = beautiful.notification_fg_critical or beautiful.fg_urgent
       end
 
-      local bold_title_widget = wibox.widget{
-        font = beautiful.notification_font,
-        widget = wibox.widget.textbox,
+      local widget_template = wibox.widget{
+        {
+            {
+                {
+                    {
+                        naughty.widget.icon,
+                        {
+                            {
+                                font = beautiful.notification_font,
+                                widget = wibox.widget.textbox,
+                                id = 'title',
+                            },
+                            naughty.widget.message,
+                            layout  = wibox.layout.fixed.vertical,
+                            id = 'title_and_message_layout',
+                        },
+                        fill_space = true,
+                        spacing    = dpi(4),
+                        layout     = wibox.layout.fixed.horizontal,
+                    },
+                    naughty.list.actions,
+                    spacing = notification_args.run and dpi(10) or 0,
+                    layout  = wibox.layout.fixed.vertical,
+                },
+                margins = beautiful.notification_margin,
+                widget  = wibox.container.margin,
+            },
+            id     = "background_role",
+            widget = naughty.container.background,
+        },
+        strategy = "max",
+        width    = beautiful.notification_max_width or beautiful.xresources.apply_dpi(500),
+        widget   = wibox.container.constraint,
       }
       local function title_changed_callback()
-        bold_title_widget.markup = '<b>'..gears.string.xml_escape(n.title)..'</b>'
+        widget_template:get_children_by_id('title')[1].markup = '<b>'..gears.string.xml_escape(n.title)..'</b>'
+        widget_template:get_children_by_id('title_and_message_layout')[1].spacing =
+          (n.title ~= '' and n.message ~= '') and dpi(4) or 0
       end
       n:connect_signal("property::title", title_changed_callback)
+      n:connect_signal("property::message", title_changed_callback)
       title_changed_callback()
 
       local box = naughty.layout.box{
@@ -93,36 +126,7 @@ naughty_sidebar = {
           )
         end,
         -- @TODO: merge widget template with the sidebar widget template:
-        widget_template = {
-          {
-              {
-                  {
-                      {
-                          naughty.widget.icon,
-                          {
-                              bold_title_widget,
-                              naughty.widget.message,
-                              spacing = (n.title ~= '' and n.message ~= '') and dpi(4) or 0,
-                              layout  = wibox.layout.fixed.vertical,
-                          },
-                          fill_space = true,
-                          spacing    = dpi(4),
-                          layout     = wibox.layout.fixed.horizontal,
-                      },
-                      naughty.list.actions,
-                      spacing = notification_args.run and dpi(10) or 0,
-                      layout  = wibox.layout.fixed.vertical,
-                  },
-                  margins = beautiful.notification_margin,
-                  widget  = wibox.container.margin,
-              },
-              id     = "background_role",
-              widget = naughty.container.background,
-          },
-          strategy = "max",
-          width    = beautiful.notification_max_width or beautiful.xresources.apply_dpi(500),
-          widget   = wibox.container.constraint,
-        }
+        widget_template = widget_template,
       }
       if notification_args.run then
         local buttons = box:buttons()

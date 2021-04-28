@@ -202,7 +202,7 @@ function player.init(args)
     end
     player.notification_object.icon = cover_url
     player.notification_object.title = ps.title or ''
-    player.notification_object.text = text
+    player.notification_object.message = text
   end
 -------------------------------------------------------------------------------
   function player.toggle()
