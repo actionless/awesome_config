@@ -73,6 +73,17 @@ naughty_sidebar = {
         n.bg = beautiful.notification_bg_critical or beautiful.bg_urgent
         n.fg = beautiful.notification_fg_critical or beautiful.fg_urgent
       end
+
+      local bold_title_widget = wibox.widget{
+        font = beautiful.notification_font,
+        widget = wibox.widget.textbox,
+      }
+      local function title_changed_callback()
+        bold_title_widget.markup = '<b>'..gears.string.xml_escape(n.title)..'</b>'
+      end
+      n:connect_signal("property::title", title_changed_callback)
+      title_changed_callback()
+
       local box = naughty.layout.box{
         notification = n,
         -- workaround for https://github.com/awesomeWM/awesome/issues/3081 :
@@ -89,11 +100,7 @@ naughty_sidebar = {
                       {
                           naughty.widget.icon,
                           {
-                              {
-                                markup = '<b>'..gears.string.xml_escape(n.title)..'</b>',
-                                font = beautiful.notification_font,
-                                widget = wibox.widget.textbox,
-                              },
+                              bold_title_widget,
                               naughty.widget.message,
                               spacing = (n.title ~= '' and n.message ~= '') and dpi(4) or 0,
                               layout  = wibox.layout.fixed.vertical,
