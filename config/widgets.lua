@@ -133,7 +133,7 @@ function widget_loader.init(awesome_context)
   )
   w.textclock = textclock
   -- Calendar
-  beautiful.calendar_month_padding = dpi(20)
+  beautiful.calendar_month_padding = dpi(10)
   beautiful.calendar_month_border_color = beautiful.notification_border_color
   beautiful.calendar_month_border_width = beautiful.notification_border_width
   w.calendar_popup = awful.widget.calendar_popup.month({
@@ -154,7 +154,7 @@ function widget_loader.init(awesome_context)
     style_focus={
       shape=function(_c, _w, _h)
         return gears.shape.rounded_rect(
-          _c, _w, _h, beautiful.notification_border_radius
+          _c, _w, _h, beautiful.border_radius
         )
       end,
     },
@@ -238,7 +238,7 @@ function widget_loader.init(awesome_context)
       local margin = self:get_children_by_id('margin_role')[1]
       margin.left  = math.floor((beautiful.panel_widget_spacing or 0)/2)
       margin.right = math.floor((beautiful.panel_widget_spacing or 0)/2)
-      if beautiful.panel_widget_border_radius > 0 then
+      if beautiful.panel_widget_border_radius and beautiful.panel_widget_border_radius > 0 then
         if index == 1 then
           margin.left = shaped_widget_side_padding
         end
