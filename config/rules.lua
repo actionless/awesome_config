@@ -8,7 +8,7 @@ local dpi = beautiful.xresources.apply_dpi
 
 
 local function apply_delayed_rule(c)  -- luacheck: no unused
-  if not c.class and (not c.name or c.name == "") then
+  if not c.class and c.name == "" then
     local begin_message = {"begin", c.class, c.name}
     local f
     f = function(_c)
