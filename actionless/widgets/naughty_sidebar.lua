@@ -91,8 +91,8 @@ naughty_sidebar = {
                             id = 'title_and_message_layout',
                         },
                         fill_space = true,
-                        spacing    = dpi(4),
                         layout     = wibox.layout.fixed.horizontal,
+                        id = 'icon_and_text_layout',
                     },
                     naughty.list.actions,
                     spacing = notification_args.run and dpi(10) or 0,
@@ -112,9 +112,12 @@ naughty_sidebar = {
         widget_template:get_children_by_id('title')[1].markup = '<b>'..gears.string.xml_escape(n.title)..'</b>'
         widget_template:get_children_by_id('title_and_message_layout')[1].spacing =
           (n.title ~= '' and n.message ~= '') and dpi(4) or 0
+        widget_template:get_children_by_id('icon_and_text_layout')[1].spacing =
+           n.icon and dpi(4) or 0
       end
       n:connect_signal("property::title", title_changed_callback)
       n:connect_signal("property::message", title_changed_callback)
+      n:connect_signal("property::icon", title_changed_callback)
       title_changed_callback()
 
       local box = naughty.layout.box{
