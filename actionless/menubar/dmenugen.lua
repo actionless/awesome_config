@@ -14,7 +14,7 @@ local awful = require("awful")
 -----
 -- move this one to awful.util.table ?
 ----------
-local function ReverseTable(t)
+local function ReversedTable(t)
     local reversedTable = {}
     local itemCount = #t
     for k, v in ipairs(t) do
@@ -22,6 +22,7 @@ local function ReverseTable(t)
     end
     return reversedTable
 end
+
 local function DedupTable(t)
     local dedupedTable = {}
     for _, v in ipairs(t) do
@@ -30,6 +31,29 @@ local function DedupTable(t)
         end
     end
     return dedupedTable
+end
+
+local function SortedDedupTable(t)
+    local dedupedTable = {}
+    local maxNum = 0
+    for _, v in ipairs(t) do
+        dedupedTable[v] = (dedupedTable[v] or 0)+ 1
+        if dedupedTable[v] > maxNum then
+            maxNum = dedupedTable[v]
+        end
+    end
+
+    local result = {}
+    for i=0,maxNum-1 do
+        for _, v in ipairs(t) do
+            if dedupedTable[v] == (maxNum-i) then
+                if awful.util.table.hasitem(result, v) == nil then
+                    table.insert(result, v)
+                end
+            end
+        end
+    end
+    return result
 end
 
 
@@ -52,11 +76,14 @@ function menu_gen.add_history_record(record, id)
 end
 function menu_gen.remove_history_record(record, id)
     id = id or history_file_path
+    local keys_to_remove = {}
     for i, cmd in ipairs(data.history[id]['table']) do
         if cmd == record then
-            table.remove(data.history[id]['table'], i)
-            return
+            table.insert(keys_to_remove, i)
         end
+    end
+    for _, key in ipairs(ReversedTable(keys_to_remove)) do
+        table.remove(data.history[id]['table'], key)
     end
 end
 --- Load history file in history table
@@ -114,12 +141,12 @@ end
 function menu_gen.generate()
 
     --menu_gen.history_save(history_file_path)
-    menu_gen.history_check_load(history_file_path, 666)
+    menu_gen.history_check_load(history_file_path, 6666)
     local history_table = data.history[history_file_path]['table']
 
     local result = {}
 
-    for _, command in ipairs(DedupTable(ReverseTable(history_table))) do
+    for _, command in ipairs(SortedDedupTable(ReversedTable(history_table))) do
                 table.insert(result, { name = command,
                                        cmdline = command,
                                        icon = nil,
