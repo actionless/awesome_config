@@ -9,6 +9,7 @@
 
 -- Grab environment
 local awful = require("awful")
+local h_table = require("actionless.util.table")
 
 
 -----
@@ -23,7 +24,7 @@ local function ReversedTable(t)
     return reversedTable
 end
 
-local function DedupTable(t)
+local function DedupTable(t)  -- @TODO: unused anymore
     local dedupedTable = {}
     for _, v in ipairs(t) do
         if awful.util.table.hasitem(dedupedTable, v) == nil then
@@ -33,23 +34,34 @@ local function DedupTable(t)
     return dedupedTable
 end
 
-local function SortedDedupTable(t)
+local function DedupTableValues(t)
     local dedupedTable = {}
-    local maxNum = 0
-    for _, v in ipairs(t) do
-        dedupedTable[v] = (dedupedTable[v] or 0)+ 1
-        if dedupedTable[v] > maxNum then
-            maxNum = dedupedTable[v]
+    local dedupedTableValues = {}
+    for _, v in pairs(t) do
+        if dedupedTableValues[v] == nil then
+            dedupedTableValues[v] = true
+            table.insert(dedupedTable, v)
         end
     end
+    return dedupedTable
+end
+
+local function SortedDedupTable(t)
+    local items_count = {}
+    for _, v in ipairs(t) do
+        items_count[v] = (items_count[v] or 0) + 1
+    end
+
+    local quantities = DedupTableValues(items_count)
+    table.sort(quantities, function(a, b) return a > b end)
 
     local result = {}
-    for i=0,maxNum-1 do
+    local unique_values = {}
+    for _, i in ipairs(quantities) do
         for _, v in ipairs(t) do
-            if dedupedTable[v] == (maxNum-i) then
-                if awful.util.table.hasitem(result, v) == nil then
-                    table.insert(result, v)
-                end
+            if items_count[v] == i and unique_values[v] == nil then
+                unique_values[v] = true
+                table.insert(result, v)
             end
         end
     end
@@ -93,22 +105,17 @@ function menu_gen.history_check_load(id, max)
     id = id or history_file_path
     if id and id ~= ""
         and not data.history[id] then
-	data.history[id] = { max = max or 50, table = {} }
+        data.history[id] = { max = max or 50, table = {} }
 
-	local f = io.open(id, "r")
+        local f = io.open(id, "r")
 
-	-- Read history file
-	if f then
+        -- Read history file
+        if f then
             for line in f:lines() do
-                --if awful.util.table.hasitem(data.history[id].table, line) == nil then
-                        table.insert(data.history[id].table, line)
-                        --if #data.history[id].table >= data.history[id].max then
-                           --break
-                        --end
-                --end
+                table.insert(data.history[id].table, line)
             end
             f:close()
-	end
+        end
     end
 end
 --- Save history table in history file
@@ -125,8 +132,7 @@ function menu_gen.history_save(id)
             awful.util.mkdir(id:sub(1, i - 1))
             f = assert(io.open(id, "w"))
         end
-	--for i = 1, math.min(#data.history[id].table, data.history[id].max) do
-	for i = 1, #data.history[id].table do
+        for i = 1, #data.history[id].table do
             f:write(data.history[id].table[i] .. "\n")
         end
        f:close()
