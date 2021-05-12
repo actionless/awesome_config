@@ -47,6 +47,8 @@ local function DedupTableValues(t)
 end
 
 local function SortedDedupTable(t)
+    --- sorted by number of items, decreasing,
+    -- it preserves the order of items with the same count
     local items_count = {}
     for _, v in ipairs(t) do
         items_count[v] = (items_count[v] or 0) + 1
