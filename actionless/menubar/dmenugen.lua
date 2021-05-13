@@ -46,16 +46,20 @@ local function DedupTableValues(t)
     return dedupedTable
 end
 
---- Sorted by number of items, decreasing,
+--- Sorted by number of items,
 -- it preserves the order of items with the same count.
-local function SortedDedupTable(t)
+local function SortedDedupTable(t, args)
     local items_count = {}
     for _, v in ipairs(t) do
         items_count[v] = (items_count[v] or 0) + 1
     end
 
     local quantities = DedupTableValues(items_count)
-    table.sort(quantities, function(a, b) return a > b end)
+    table.sort(
+        quantities,
+        args.reverse and function(a, b) return a > b end
+        or function(a, b) return a < b end
+    )
 
     local result = {}
     local unique_values = {}
@@ -154,11 +158,11 @@ function menu_gen.generate()
 
     local result = {}
 
-    for _, command in ipairs(SortedDedupTable(ReversedTable(history_table))) do
-                table.insert(result, { name = command,
-                                       cmdline = command,
-                                       icon = nil,
-                                       category = nil })
+    for _, command in ipairs(SortedDedupTable(history_table, {reverse=true})) do
+        table.insert(result, { name = command,
+                               cmdline = command,
+                               icon = nil,
+                               category = nil })
     end
     return result
 end
