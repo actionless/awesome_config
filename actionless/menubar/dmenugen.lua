@@ -158,11 +158,18 @@ function menu_gen.generate()
 
     local result = {}
 
-    for _, command in ipairs(SortedDedupTable(history_table, {reverse=true})) do
-        table.insert(result, { name = command,
-                               cmdline = command,
-                               icon = nil,
-                               category = nil })
+    for _, command in ipairs(
+            SortedDedupTable(ReversedTable(history_table), {reverse=true})
+    ) do
+        table.insert(
+            result,
+            {
+                name = command,
+                cmdline = command,
+                icon = nil,
+                category = nil
+            }
+        )
     end
     return result
 end
