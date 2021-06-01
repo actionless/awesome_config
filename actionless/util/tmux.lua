@@ -27,10 +27,11 @@ function tmux.swap_bydirection(dir, c, stacked)
 
   local source_tmux_session = focused_client.name:match(tmux_session_pattern)
   local target_tmux_session = visible_clients[target_client_id].name:match(tmux_session_pattern)
-  awful.spawn.with_shell(string.format(
-    "tmux move-window -s %d: -t %d:",
-    source_tmux_session, target_tmux_session
-  ))
+  awful.spawn({
+    "tmux", "move-window",
+    "-s", string.format("%d:", source_tmux_session),
+    "-t", string.format("%d:", target_tmux_session),
+  })
   client.focus = visible_clients[target_client_id]
 end
 

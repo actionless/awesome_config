@@ -22,7 +22,7 @@ package.path = package.path .. ';' .. userconfdir .. 'third_party/?.lua;' .. use
 -- Run session and settings daemon
 -------------------------------------------------------------------------------
 -- option a)
-awful_spawn.with_shell("xsettingsd")
+awful_spawn("xsettingsd")
 --awful_spawn.once("/usr/lib/mate-polkit/polkit-mate-authentication-agent-1")
 -- option b)
 --awful_spawn.once("lxsession -a -n -r -s awesome -e LXDE")
@@ -104,8 +104,9 @@ local context = {
     --file_manager = "nautilus",
     file_manager = "nemo",
 
-    tmux       = terminal .. " -e bash \\-c tmux",
-    tmux_light = terminal .. " -e bash \\-c tmux",  -- @TODO: add it
+    tmux       = terminal .. " -e tmux",
+    --tmux       = terminal .. " -e bash \\-c tmux",
+    --tmux_light = terminal .. " -e bash \\-c tmux",  -- @TODO: add it
     tmux_run   = terminal .. " -e tmux new-session ",
 
     scrot_preview_cmd = [['mv $f ~/images/ && viewnior ~/images/$f']],

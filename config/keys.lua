@@ -510,10 +510,12 @@ function keys.init(awesome_context)
 
     bind_key({ modkey, "Control"  }, "r",
       function()
-        awful.spawn.easy_async('bash -c "xrdb -merge $HOME/.Xresources ; pgrep "^st\\$" | xargs kill -s USR1"',
-        function()
-          awful.util.restart()
-        end)
+        awful.spawn.easy_async_with_shell(
+          'xrdb -merge $HOME/.Xresources ; pgrep "^xst\\$" | xargs kill -s USR1',
+          function()
+            awful.util.restart()
+          end
+        )
       end,
       "reload awesome wm", AWESOME_COLOR
     ),
@@ -539,10 +541,9 @@ function keys.init(awesome_context)
     ),
     bind_key({ altkey        }, "Print",
       function ()
-        awful.spawn({
-          "bash", "-c",
-          "scrot -a $(slop -f '%x,%y,%w,%h') '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. shell_commands.scrot_preview_cmd
-        })
+        awful.spawn.with_shell(
+          "scrot -a $(slop -o -f '%x,%y,%w,%h') '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. shell_commands.scrot_preview_cmd
+        )
       end,
       "screenshot selected", SCREENSHOT
     ),
