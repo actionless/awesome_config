@@ -18,7 +18,11 @@ function menubars.init(context)
     height = beautiful.panel_height,
     width = screen[awful.screen.focused()].workarea.width,
     x = 0,
-    y = screen[awful.screen.focused()].workarea.height - (beautiful.panel_height or 0)
+    y = (
+      screen[awful.screen.focused()].workarea.height -
+      (beautiful.panel_height or 0) -
+      (beautiful.menubar_border_width or 0) * 2
+    )
   }
 
   local dmenubar = menubar.create({
