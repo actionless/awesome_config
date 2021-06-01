@@ -12,6 +12,9 @@ local awful = require("awful")
 local h_table = require("actionless.util.table")
 
 
+local MAX_HISTORY_SIZE = 6666
+
+
 -----
 -- move this one to awful.util.table ?
 ----------
@@ -153,13 +156,16 @@ end
 function menu_gen.generate()
 
     --menu_gen.history_save(history_file_path)
-    menu_gen.history_check_load(history_file_path, 6666)
-    local history_table = data.history[history_file_path]['table']
+    menu_gen.history_check_load(history_file_path, MAX_HISTORY_SIZE)
 
     local result = {}
-
     for _, command in ipairs(
-            SortedDedupTable(ReversedTable(history_table), {reverse=true})
+            SortedDedupTable(
+                ReversedTable(
+                    data.history[history_file_path]['table']
+                ),
+                {reverse=true}
+            )
     ) do
         table.insert(
             result,
