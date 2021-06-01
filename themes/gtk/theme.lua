@@ -37,6 +37,13 @@ theme.bg_focus = gsc.selected_bg_color
 theme.panel_fg = gsc.menubar_fg_color
 theme.panel_bg = gsc.menubar_bg_color
 
+--theme.menubar_bg_normal = gsc.menubar_bg_color
+--theme.menubar_fg_normal = gsc.menubar_fg_color
+theme.menubar_bg_normal = gsc.bg_color
+theme.menubar_fg_normal = gsc.fg_color
+theme.menubar_border_color = gsc.bg_color
+theme.menubar_border_width = dpi(3)
+
 theme.panel_widget_bg = gsc.base_color
 theme.panel_widget_fg = gsc.text_color
 
