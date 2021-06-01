@@ -4,7 +4,7 @@ local naughty = require("naughty")
 local debug_module = {}
 
 local function eprint(text)
-  io.stderr:write(text..'\n')
+  io.stderr:write('[AWESOME_CONFIG] '..text..'\n')
 end
 
 function debug_module.log(object)
