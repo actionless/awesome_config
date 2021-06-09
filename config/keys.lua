@@ -198,7 +198,7 @@ function keys.init(awesome_context)
         local s = awful.screen.focused()
         local tag = s.selected_tag
         if not tag then return end
-        local tag_id = tag.index
+        local tag_id = tag_helpers.tag_idx_to_key(tag.index)
         awful.prompt.run(
           { prompt = "new tag name: ",
             text = tag_id .. ":" ,

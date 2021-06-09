@@ -121,4 +121,20 @@ function tag_helpers.get_client_tag(c)
 end
 
 
+function tag_helpers.tag_idx_to_key(tag_idx)
+  if tag_idx == 10 then
+    tag_idx = '0'
+  elseif tag_idx == 11 then
+    tag_idx = '-'
+  elseif tag_idx == 12 then
+    tag_idx = '='
+  elseif tag_idx > 12 then
+    tag_idx = 'F'..(tag_idx-12)
+  else
+    tag_idx = tostring(tag_idx)
+  end
+  return tag_idx
+end
+
+
 return tag_helpers

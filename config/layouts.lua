@@ -3,6 +3,7 @@ local gears = require("gears")
 local beautiful = require("beautiful")
 local lcars_layout = require("actionless.lcars_layout")
 local persistent = require("actionless.persistent")
+local tag_helpers = require("actionless.util.tag")
 
 local layouts = {}
 
@@ -63,13 +64,13 @@ function layouts.init(context)
     end
 
     local tag_names = persistent.tag.get_all_names(s, {
-      '1:bs', '2:web',  '3:ww', '4:im',   '5:mm', '6',
-      '7:sp', '8',      '9:sd', '10:nl',  '11',  '12'
+      '1:bs', '2:web', '3:ww', '4:im', '5:mm', '6',
+      '7:sp', '8',     '9:sd', '-:nl', '=',    'F1',
     })
 
     local num_tags = #tag_names
     for i = 1, max_tag - num_tags do
-      local tag_idx = max_tag - num_tags + i
+      local tag_idx = tag_helpers.tag_idx_to_key(max_tag - num_tags + i)
       table.insert(enabled_layouts, awful.layout.layouts[1])
       table.insert(tag_names, tostring(tag_idx))
     end
