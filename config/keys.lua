@@ -36,6 +36,9 @@ function keys.init(awesome_context)
   revelation.font = beautiful.revelation_font
   revelation.init()
 
+  local tag_previewz = require("actionless.tag_previewz")
+  tag_previewz.enable()
+
 
   -- {{{ Client mouse bindings
   awful.layout.suit.floating.resize_jump_to_corner = false
@@ -562,9 +565,19 @@ function keys.init(awesome_context)
       "screenshot all", SCREENSHOT
     ),
 
-    bind_key({modkey}, "a",
+    bind_key({modkey, "Shift"}, "a",
       revelation,
       "Revelation", AWESOME_COLOR
+    ),
+    bind_key({modkey}, "a",
+      function()
+        awesome.emit_signal(
+          "tag_previewz::visibility::toggle",
+          awful.screen.focused(),
+          { update = true }
+        )
+      end,
+      "Tag Preview", AWESOME_COLOR
     ),
     bind_key({modkey, altkey}, "n",
       function()

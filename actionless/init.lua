@@ -8,6 +8,7 @@ local actionless = {
   wlppr = require("actionless.wlppr"),
   mpv = require("actionless.mpv"),
   keyboard = require("actionless.keyboard"),
+  tag_previewz = require("actionless.tag_previewz"),
   -- awesome addons
   menu_addon = require("actionless.menu_addon"),
   tasklist_addon = require("actionless.tasklist_addon"),
