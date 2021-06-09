@@ -462,11 +462,11 @@ function keys.init(awesome_context)
       function () awesome_context.widgets.music.prev_song() end,
       "prev song", MUSIC),
     bind_key({modkey, }, "z",
-      function () awesome_context.widgets.music.next_song() end,
-      "next song", MUSIC),
-    bind_key({modkey, }, "x",
       function () awesome_context.widgets.music.toggle() end,
       "pause music", MUSIC),
+    bind_key({modkey, }, "x",
+      function () awesome_context.widgets.music.next_song() end,
+      "next song", MUSIC),
 
     -- Generic
     awful.key({}, "XF86AudioPlay", function () awesome_context.widgets.music.toggle() end),
