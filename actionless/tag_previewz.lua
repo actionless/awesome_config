@@ -211,7 +211,7 @@ local function draw_widget(tag_preview_box, s, geo, settings)
       ))
     end
 
-    local all_widths = 0
+    local used_width = 0
     local previews_v = wibox.layout.fixed.vertical()
     previews_v.fill_space = false
     previews_v.spacing = settings.margin * 2
@@ -219,14 +219,15 @@ local function draw_widget(tag_preview_box, s, geo, settings)
     previews_h.fill_space = false
     previews_h.spacing = settings.margin * 2
     previews_v:add(previews_h)
-    for tag_idx, client_list in ipairs(client_lists) do
-      if geo.width * settings.scale * tag_idx > (geo.width + all_widths) then
+    for _, client_list in ipairs(client_lists) do
+      if geo.width < (settings.scale * geo.width + used_width) then
         previews_h = wibox.layout.fixed.horizontal()
         previews_h.fill_space = false
         previews_h.spacing = settings.margin * 2
         previews_v:add(previews_h)
-        all_widths = all_widths + geo.width
+        used_width = 0
       end
+      used_width = used_width + geo.width * settings.scale
       previews_h:add(wibox.widget{
           {
               {
@@ -296,6 +297,7 @@ local function get_settings(opts)
     screen_bg = beautiful.tag_preview_screen_bg or "#60600023",
     tag_bg = beautiful.tag_preview_tag_bg or "#00606088",
     tag_bg_focus = beautiful.tag_preview_tag_bg_focus or beautiful.taglist_bg_focus or "#00606088",
+
   }
   settings.client_fg = settings.client_border_color
 
