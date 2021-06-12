@@ -545,7 +545,9 @@ function keys.init(awesome_context)
     bind_key({ altkey        }, "Print",
       function ()
         awful.spawn.with_shell(
-          "scrot -a $(slop -o -f '%x,%y,%w,%h') '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. shell_commands.scrot_preview_cmd
+          --"scrot -a $(slop -o -f '%x,%y,%w,%h') '%Y-%m-%d--%s_$wx$h_scrot.png' -e " ..
+          "scrot -a $(slop -f '%x,%y,%w,%h' && sleep 0.3) '%Y-%m-%d--%s_$wx$h_scrot.png' -e " ..
+          shell_commands.scrot_preview_cmd
         )
       end,
       "screenshot selected", SCREENSHOT
