@@ -5,7 +5,7 @@
 --
 -- Provides:
 -- tag_previewz::update   -- first line is the signal
---      t    (tag)              -- indented lines are function parameters
+--      s    (screen)            -- indented lines are function parameters
 -- tag_previewz::visibility::toggle
 --      s    (screen)
 --      args (table)
@@ -23,6 +23,9 @@ local h_string = require("actionless.util.string")
 local get_icon = require("actionless.util.xdg").get_icon
 
 
+local module = {}
+
+
 local function rounded_rect(radius)
     return function(cr, width, height)
         gears.shape.rounded_rect(cr, width, height, radius)
@@ -31,7 +34,7 @@ end
 
 
 local function create_box(
-    client_geo, client_icon, client_name, geo, img, buttons,
+    client_geo, client_icon, client_name, screen_geo, img, buttons,
     client_bg, client_fg, client_opacity, client_border_color, client_border_width, client_radius,
     settings
 )
@@ -95,15 +98,15 @@ local function create_box(
     }
 
     client_box.point = {
-        x = math.floor((client_geo.x - geo.x) * settings.scale),
-        y = math.floor((client_geo.y - geo.y) * settings.scale)
+        x = math.floor((client_geo.x - screen_geo.x) * settings.scale),
+        y = math.floor((client_geo.y - screen_geo.y) * settings.scale)
     }
     client_box:buttons(buttons)
     return client_box
 end
 
 
-local function create_client_box(tag_preview_box, c, t, s, geo, settings)
+local function create_client_box(tag_preview_box, c, t, s, screen_geo, settings)
     local client_name = c.name
     local client_icon = c.icon or settings.default_client_icon
     local client_geo = {
@@ -148,17 +151,26 @@ local function create_client_box(tag_preview_box, c, t, s, geo, settings)
       end
     end
 
+    local client_border_width = settings.client_border_width
+    local client_radius = settings.client_radius
+    local geo = client_geo
+    if c.fullscreen then
+      client_border_width = 0
+      client_radius = 0
+      geo = screen_geo
+    end
+
     local client_box = create_box(
-        client_geo, client_icon, client_name, geo, img, buttons,
+        geo, client_icon, client_name, screen_geo, img, buttons,
         settings.client_bg, settings.client_fg, settings.client_opacity, settings.client_border_color,
-        settings.client_border_width, settings.client_radius,
+        client_border_width, client_radius,
         settings
     )
     return client_box
 end
 
 
-local function create_tag_box(tag_preview_box, t, s, geo, settings)
+local function create_tag_box(tag_preview_box, t, s, screen_geo, settings)
     local tag_buttons = awful.util.table.join({
       awful.button({}, 1, function()
         if not tag_preview_box.visible then return end
@@ -170,7 +182,7 @@ local function create_tag_box(tag_preview_box, t, s, geo, settings)
       end)
     })
     local tag_geo = {
-      x = 10, y = 10, height = 250, width = 400,
+      x = 10 + screen_geo.x, y = 10 + screen_geo.y, height = 250, width = 400,
     }
     local this_tag_bg = settings.tag_bg
     local this_tag_fg = settings.tag_fg
@@ -182,7 +194,7 @@ local function create_tag_box(tag_preview_box, t, s, geo, settings)
       end
     end
     local tag_box = create_box(
-        tag_geo, nil, t.name, geo, nil, tag_buttons,
+        tag_geo, nil, t.name, screen_geo, nil, tag_buttons,
         this_tag_bg, this_tag_fg, settings.tag_opacity, settings.tag_border_color,
         settings.tag_border_width, settings.tag_radius,
         settings
@@ -191,23 +203,23 @@ local function create_tag_box(tag_preview_box, t, s, geo, settings)
 end
 
 
-local function draw_widget(tag_preview_box, s, geo, settings)
+local function draw_widget(tag_preview_box, s, screen_geo, settings)
 
     local client_lists = {}
     for _, t in ipairs(s.tags) do
       local client_list = wibox.layout.manual()
       table.insert(client_lists, client_list)
-      client_list.forced_height = geo.height
-      client_list.forced_width = geo.width
+      client_list.forced_height = screen_geo.height
+      client_list.forced_width = screen_geo.width
       for _, c in ipairs(t:clients()) do
         if not c.hidden and not c.minimized then
             client_list:add(create_client_box(
-              tag_preview_box, c, t, s, geo, settings
+              tag_preview_box, c, t, s, screen_geo, settings
             ))
         end
       end
       client_list:add(create_tag_box(
-        tag_preview_box, t, s, geo, settings
+        tag_preview_box, t, s, screen_geo, settings
       ))
     end
 
@@ -220,14 +232,14 @@ local function draw_widget(tag_preview_box, s, geo, settings)
     previews_h.spacing = settings.margin * 2
     previews_v:add(previews_h)
     for _, client_list in ipairs(client_lists) do
-      if geo.width < (settings.scale * geo.width + used_width) then
+      if screen_geo.width < (settings.scale * screen_geo.width + used_width) then
         previews_h = wibox.layout.fixed.horizontal()
         previews_h.fill_space = false
         previews_h.spacing = settings.margin * 2
         previews_v:add(previews_h)
         used_width = 0
       end
-      used_width = used_width + geo.width * settings.scale
+      used_width = used_width + screen_geo.width * settings.scale
       previews_h:add(wibox.widget{
           {
               {
@@ -239,8 +251,8 @@ local function draw_widget(tag_preview_box, s, geo, settings)
                             widget = wibox.container.background
                         },
                         layout = wibox.container.constraint,
-                        height = geo.height * settings.scale,
-                        width = geo.width * settings.scale,
+                        height = screen_geo.height * settings.scale,
+                        width = screen_geo.width * settings.scale,
                         strategy = "exact",
                       },
                       layout = wibox.layout.align.horizontal
@@ -288,7 +300,8 @@ local function get_settings(opts)
 
     scale = 0.1963,
     --scale = 0.2,
-    work_area = false,
+    --work_area = false,
+    work_area = true,
     padding = false,
 
     icon_size = 32 or dpi(24),
@@ -320,51 +333,96 @@ local function get_settings(opts)
 end
 
 
-local enable = function(opts)
+local function create_class(from_table)
+  local result = {
+    mt = {},
+    prototype = from_table,
+  }
+  result.mt.__index = function (_, key)
+    return result.prototype[key]
+  end
+  result.new = function(...)
+    local instance = {}
+    setmetatable(instance, result.mt)
+    instance:init(...)
+    return instance
+  end
+  return result
+end
 
-    local tag_preview_box = wibox({
+
+local tag_previewz = create_class{
+
+  init = function(self, opts)
+    self.tag_preview_box = wibox({
         visible = false,
         ontop = true,
         --input_passthrough = true,
         bg = "#00000000"
     })
+    self.settings = get_settings(opts)
+    --if instance.settings.tag_preview_image then
+    --  tag.connect_signal("property::selected", function(t)
+    --      for _, c in ipairs(t:clients()) do
+    --          c.prev_content = gears.surface.duplicate_surface(c.content)
+    --      end
+    --  end)
+    --end
+  end,
 
-    local settings = get_settings(opts)
+  update = function(self, s)
+      local widget_honor_padding = false
+      local widget_honor_work_area = false
 
-    if settings.tag_preview_image then
-      tag.connect_signal("property::selected", function(t)
-          for _, c in ipairs(t:clients()) do
-              c.prev_content = gears.surface.duplicate_surface(c.content)
-          end
-      end)
+      local screen_geo = s:get_bounding_geometry{
+          honor_padding = self.settings.padding,
+          honor_workarea = self.settings.work_area
+      }
+      local full_screen_geo = (
+        self.settings.padding == widget_honor_padding and
+        self.settings.work_area == widget_honor_work_area
+      ) and screen_geo or s:get_bounding_geometry{
+          honor_padding = widget_honor_padding,
+          honor_workarea = widget_honor_work_area
+      }
+
+      self.tag_preview_box.x = full_screen_geo.x + self.settings.widget_x
+      self.tag_preview_box.y = full_screen_geo.y + self.settings.widget_y
+      self.tag_preview_box.width = self.settings.widget_width or full_screen_geo.width
+      self.tag_preview_box.height = self.settings.widget_height or full_screen_geo.height
+
+      draw_widget(
+        self.tag_preview_box, s, screen_geo, self.settings
+      )
+  end,
+
+  toggle = function(self, s, args)
+    s = s or awful.screen.focused()
+    args = args or {}
+    if args.update and args.visible ~= false then
+      self:update(s)
     end
+    local target_state = not self.tag_preview_box.visible
+    if args.visible ~= nil then target_state = args.visible end
+    self.tag_preview_box.visible = target_state
+  end,
 
-    awesome.connect_signal("tag_previewz::update", function(t)
-        local geo = t.screen:get_bounding_geometry{
-            honor_padding = settings.padding,
-            honor_workarea = settings.work_area
-        }
+}
 
-        tag_preview_box.width = geo.width
-        tag_preview_box.height = geo.height
-
-        draw_widget(
-          tag_preview_box, t.screen, geo, settings
-        )
-    end)
-
-    awesome.connect_signal("tag_previewz::visibility::toggle", function(s, args)
-      s = s or awful.screen.focused()
-      args = args or {}
-      if args.update and s.selected_tag and args.visible ~= false then
-        awesome.emit_signal("tag_previewz::update", s.selected_tag)
-      end
-      local target_state = not tag_preview_box.visible
-      if args.visible ~= nil then target_state = args.visible end
-      tag_preview_box.x = s.geometry.x + settings.widget_x
-      tag_preview_box.y = s.geometry.y + settings.widget_y
-      tag_preview_box.visible = target_state
-    end)
+function module.new(opts)
+  return tag_previewz.new(opts)
 end
 
-return {enable = enable}
+
+function module.enable(opts)
+  -- DEPRECATED
+  local instance = module.new(opts)
+  awesome.connect_signal("tag_previewz::update", function(s)
+    instance:update(s)
+  end)
+  awesome.connect_signal("tag_previewz::visibility::toggle", function(s, args)
+    instance:toggle(s, args)
+  end)
+end
+
+return module
