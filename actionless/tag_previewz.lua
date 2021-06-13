@@ -388,21 +388,34 @@ local tag_previewz = create_class{
 }
 
 
-local module = {}
+local module = {
+  saving_client_content_enabled = false,
+}
 
 function module.new(opts)
-  return tag_previewz.new(opts)
+  local instance = tag_previewz.new(opts)
+  if instance.settings.tag_preview_image then
+    module.enable_saving_client_content()
+  end
+  return instance
+end
+
+function module.enable_saving_client_content()
+  if not module.saving_client_content_enabled then
+    module.saving_client_content_enabled = true
+    tag.connect_signal("property::selected", function(t)
+      for _, c in ipairs(t:clients()) do
+        c.prev_content = gears.surface.duplicate_surface(c.content)
+      end
+    end)
+  end
 end
 
 function module.enable(opts)
   -- DEPRECATED
   local instance = module.new(opts)
   if instance.settings.tag_preview_image then
-    tag.connect_signal("property::selected", function(t)
-        for _, c in ipairs(t:clients()) do
-            c.prev_content = gears.surface.duplicate_surface(c.content)
-        end
-    end)
+    module.enable_saving_client_content()
   end
   awesome.connect_signal("tag_previewz::update", function(s)
     instance:update(s)

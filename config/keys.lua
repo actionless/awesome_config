@@ -36,8 +36,7 @@ function keys.init(awesome_context)
   revelation.font = beautiful.revelation_font
   revelation.init()
 
-  local tag_previewz = require("actionless.tag_previewz")
-  tag_previewz.enable()
+  local tag_previewz = require("actionless.tag_previewz").new()
 
 
   -- {{{ Client mouse bindings
@@ -573,8 +572,7 @@ function keys.init(awesome_context)
     ),
     bind_key({modkey}, "a",
       function()
-        awesome.emit_signal(
-          "tag_previewz::visibility::toggle",
+        tag_previewz:toggle(
           awful.screen.focused(),
           { update = true }
         )
