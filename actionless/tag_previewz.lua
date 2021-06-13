@@ -2,14 +2,6 @@
 -- https://github.com/BlingCorp/bling
 -- forked from:
 -- https://github.com/BlingCorp/bling/blob/487cdb69a5b38b48a8a6045218cbdea313325b8a/widget/tag_preview.lua
---
--- Provides:
--- tag_previewz::update   -- first line is the signal
---      s    (screen)            -- indented lines are function parameters
--- tag_previewz::visibility::toggle
---      s    (screen)
---      args (table)
---
 
 local cairo = require("lgi").cairo
 
@@ -21,9 +13,6 @@ local dpi = beautiful.xresources.apply_dpi
 
 local h_string = require("actionless.util.string")
 local get_icon = require("actionless.util.xdg").get_icon
-
-
-local module = {}
 
 
 local function rounded_rect(radius)
@@ -103,173 +92,6 @@ local function create_box(
     }
     client_box:buttons(buttons)
     return client_box
-end
-
-
-local function create_client_box(tag_preview_box, c, t, s, screen_geo, settings)
-    local client_name = c.name
-    local client_icon = c.icon or settings.default_client_icon
-    local client_geo = {
-      height = c.height,
-      width = c.width,
-      x = c.x,
-      y = c.y
-    }
-
-    local buttons = awful.util.table.join({
-      awful.button({}, 1, function()
-        if not tag_preview_box.visible then return end
-        awesome.emit_signal(
-          "tag_previewz::visibility::toggle",
-          s, { visible = false }
-        )
-        t:view_only()
-        client.focus = c
-        c:raise()
-      end)
-    })
-
-    local img
-    if settings.tag_preview_image then
-        if c.prev_content or t.selected then
-        local content
-        if t.selected then
-            content = gears.surface(c.content)
-        else
-            content = gears.surface(c.prev_content)
-        end
-
-          local cr = cairo.Context(content)
-          local x, y, w, h = cr:clip_extents()
-          img = cairo.ImageSurface.create(
-              cairo.Format.ARGB32, w - x, h - y
-          )
-          cr = cairo.Context(img)
-          cr:set_source_surface(content, 0, 0)
-          cr.operator = cairo.Operator.SOURCE
-          cr:paint()
-      end
-    end
-
-    local client_border_width = settings.client_border_width
-    local client_radius = settings.client_radius
-    local geo = client_geo
-    if c.fullscreen then
-      client_border_width = 0
-      client_radius = 0
-      geo = screen_geo
-    end
-
-    local client_box = create_box(
-        geo, client_icon, client_name, screen_geo, img, buttons,
-        settings.client_bg, settings.client_fg, settings.client_opacity, settings.client_border_color,
-        client_border_width, client_radius,
-        settings
-    )
-    return client_box
-end
-
-
-local function create_tag_box(tag_preview_box, t, s, screen_geo, settings)
-    local tag_buttons = awful.util.table.join({
-      awful.button({}, 1, function()
-        if not tag_preview_box.visible then return end
-        awesome.emit_signal(
-          "tag_previewz::visibility::toggle",
-          s, { visible = false }
-        )
-        t:view_only()
-      end)
-    })
-    local tag_geo = {
-      x = 10 + screen_geo.x, y = 10 + screen_geo.y, height = 250, width = 400,
-    }
-    local this_tag_bg = settings.tag_bg
-    local this_tag_fg = settings.tag_fg
-    for _, each_selected_tag in ipairs(s.selected_tags) do
-      if t == each_selected_tag then
-        this_tag_bg = settings.tag_bg_focus
-        this_tag_fg = settings.tag_fg_focus
-        break
-      end
-    end
-    local tag_box = create_box(
-        tag_geo, nil, t.name, screen_geo, nil, tag_buttons,
-        this_tag_bg, this_tag_fg, settings.tag_opacity, settings.tag_border_color,
-        settings.tag_border_width, settings.tag_radius,
-        settings
-    )
-    return tag_box
-end
-
-
-local function draw_widget(tag_preview_box, s, screen_geo, settings)
-
-    local client_lists = {}
-    for _, t in ipairs(s.tags) do
-      local client_list = wibox.layout.manual()
-      table.insert(client_lists, client_list)
-      client_list.forced_height = screen_geo.height
-      client_list.forced_width = screen_geo.width
-      for _, c in ipairs(t:clients()) do
-        if not c.hidden and not c.minimized then
-            client_list:add(create_client_box(
-              tag_preview_box, c, t, s, screen_geo, settings
-            ))
-        end
-      end
-      client_list:add(create_tag_box(
-        tag_preview_box, t, s, screen_geo, settings
-      ))
-    end
-
-    local used_width = 0
-    local previews_v = wibox.layout.fixed.vertical()
-    previews_v.fill_space = false
-    previews_v.spacing = settings.margin * 2
-    local previews_h = wibox.layout.fixed.horizontal()
-    previews_h.fill_space = false
-    previews_h.spacing = settings.margin * 2
-    previews_v:add(previews_h)
-    for _, client_list in ipairs(client_lists) do
-      if screen_geo.width < (settings.scale * screen_geo.width + used_width) then
-        previews_h = wibox.layout.fixed.horizontal()
-        previews_h.fill_space = false
-        previews_h.spacing = settings.margin * 2
-        previews_v:add(previews_h)
-        used_width = 0
-      end
-      used_width = used_width + screen_geo.width * settings.scale
-      previews_h:add(wibox.widget{
-          {
-              {
-                  {
-                      {
-                        {
-                            client_list,
-                            bg = settings.screen_bg,
-                            widget = wibox.container.background
-                        },
-                        layout = wibox.container.constraint,
-                        height = screen_geo.height * settings.scale,
-                        width = screen_geo.width * settings.scale,
-                        strategy = "exact",
-                      },
-                      layout = wibox.layout.align.horizontal
-                  },
-                  layout = wibox.layout.align.vertical
-              },
-              margins = settings.margin,
-              widget = wibox.container.margin
-          },
-          bg = settings.widget_bg,
-          border_width = settings.widget_border_width,
-          border_color = settings.widget_border_color,
-          shape = rounded_rect(settings.screen_radius),
-          widget = wibox.container.background
-      })
-    end
-    tag_preview_box:set_widget(previews_v)
 end
 
 
@@ -361,14 +183,8 @@ local tag_previewz = create_class{
         bg = "#00000000"
     })
     self.settings = get_settings(opts)
-    --if instance.settings.tag_preview_image then
-    --  tag.connect_signal("property::selected", function(t)
-    --      for _, c in ipairs(t:clients()) do
-    --          c.prev_content = gears.surface.duplicate_surface(c.content)
-    --      end
-    --  end)
-    --end
   end,
+
 
   update = function(self, s)
       local widget_honor_padding = false
@@ -391,10 +207,11 @@ local tag_previewz = create_class{
       self.tag_preview_box.width = self.settings.widget_width or full_screen_geo.width
       self.tag_preview_box.height = self.settings.widget_height or full_screen_geo.height
 
-      draw_widget(
-        self.tag_preview_box, s, screen_geo, self.settings
+      self:draw_widget(
+        s, screen_geo, self.settings
       )
   end,
+
 
   toggle = function(self, s, args)
     s = s or awful.screen.focused()
@@ -407,16 +224,186 @@ local tag_previewz = create_class{
     self.tag_preview_box.visible = target_state
   end,
 
+
+  draw_widget = function(self, s, screen_geo, settings)
+    local tag_preview_box = self.tag_preview_box
+    local client_lists = {}
+    for _, t in ipairs(s.tags) do
+      local client_list = wibox.layout.manual()
+      table.insert(client_lists, client_list)
+      client_list.forced_height = screen_geo.height
+      client_list.forced_width = screen_geo.width
+      for _, c in ipairs(t:clients()) do
+        if not c.hidden and not c.minimized then
+          client_list:add(
+            self:create_client_box(c, t, s, screen_geo, settings)
+          )
+        end
+      end
+      client_list:add(
+        self:create_tag_box(t, s, screen_geo, settings)
+      )
+    end
+
+    local used_width = 0
+    local previews_v = wibox.layout.fixed.vertical()
+    previews_v.fill_space = false
+    previews_v.spacing = settings.margin * 2
+    local previews_h = wibox.layout.fixed.horizontal()
+    previews_h.fill_space = false
+    previews_h.spacing = settings.margin * 2
+    previews_v:add(previews_h)
+    for _, client_list in ipairs(client_lists) do
+      if screen_geo.width < (settings.scale * screen_geo.width + used_width) then
+        previews_h = wibox.layout.fixed.horizontal()
+        previews_h.fill_space = false
+        previews_h.spacing = settings.margin * 2
+        previews_v:add(previews_h)
+        used_width = 0
+      end
+      used_width = used_width + screen_geo.width * settings.scale
+      previews_h:add(wibox.widget{
+          {
+              {
+                  {
+                      {
+                        {
+                            client_list,
+                            bg = settings.screen_bg,
+                            widget = wibox.container.background
+                        },
+                        layout = wibox.container.constraint,
+                        height = screen_geo.height * settings.scale,
+                        width = screen_geo.width * settings.scale,
+                        strategy = "exact",
+                      },
+                      layout = wibox.layout.align.horizontal
+                  },
+                  layout = wibox.layout.align.vertical
+              },
+              margins = settings.margin,
+              widget = wibox.container.margin
+          },
+          bg = settings.widget_bg,
+          border_width = settings.widget_border_width,
+          border_color = settings.widget_border_color,
+          shape = rounded_rect(settings.screen_radius),
+          widget = wibox.container.background
+      })
+    end
+    tag_preview_box:set_widget(previews_v)
+  end,
+
+
+  create_tag_box = function(self, t, s, screen_geo, settings)
+    local tag_buttons = awful.util.table.join({
+      awful.button({}, 1, function()
+        if not self.tag_preview_box.visible then return end
+        self:toggle(s, { visible = false })
+        t:view_only()
+      end)
+    })
+    local tag_geo = {
+      x = 10 + screen_geo.x, y = 10 + screen_geo.y, height = 250, width = 400,
+    }
+    local this_tag_bg = settings.tag_bg
+    local this_tag_fg = settings.tag_fg
+    for _, each_selected_tag in ipairs(s.selected_tags) do
+      if t == each_selected_tag then
+        this_tag_bg = settings.tag_bg_focus
+        this_tag_fg = settings.tag_fg_focus
+        break
+      end
+    end
+    local tag_box = create_box(
+        tag_geo, nil, t.name, screen_geo, nil, tag_buttons,
+        this_tag_bg, this_tag_fg, settings.tag_opacity, settings.tag_border_color,
+        settings.tag_border_width, settings.tag_radius,
+        settings
+    )
+    return tag_box
+  end,
+
+
+  create_client_box = function(self, c, t, s, screen_geo, settings)
+    local client_name = c.name
+    local client_icon = c.icon or settings.default_client_icon
+    local client_geo = {
+      height = c.height,
+      width = c.width,
+      x = c.x,
+      y = c.y
+    }
+
+    local buttons = awful.util.table.join({
+      awful.button({}, 1, function()
+        if not self.tag_preview_box.visible then return end
+        self:toggle(s, { visible = false })
+        t:view_only()
+        client.focus = c
+        c:raise()
+      end)
+    })
+
+    local img
+    if settings.tag_preview_image then
+        if c.prev_content or t.selected then
+        local content
+        if t.selected then
+            content = gears.surface(c.content)
+        else
+            content = gears.surface(c.prev_content)
+        end
+
+          local cr = cairo.Context(content)
+          local x, y, w, h = cr:clip_extents()
+          img = cairo.ImageSurface.create(
+              cairo.Format.ARGB32, w - x, h - y
+          )
+          cr = cairo.Context(img)
+          cr:set_source_surface(content, 0, 0)
+          cr.operator = cairo.Operator.SOURCE
+          cr:paint()
+      end
+    end
+
+    local client_border_width = settings.client_border_width
+    local client_radius = settings.client_radius
+    local geo = client_geo
+    if c.fullscreen then
+      client_border_width = 0
+      client_radius = 0
+      geo = screen_geo
+    end
+
+    local client_box = create_box(
+        geo, client_icon, client_name, screen_geo, img, buttons,
+        settings.client_bg, settings.client_fg, settings.client_opacity, settings.client_border_color,
+        client_border_width, client_radius,
+        settings
+    )
+    return client_box
+  end,
+
 }
+
+
+local module = {}
 
 function module.new(opts)
   return tag_previewz.new(opts)
 end
 
-
 function module.enable(opts)
   -- DEPRECATED
   local instance = module.new(opts)
+  if instance.settings.tag_preview_image then
+    tag.connect_signal("property::selected", function(t)
+        for _, c in ipairs(t:clients()) do
+            c.prev_content = gears.surface.duplicate_surface(c.content)
+        end
+    end)
+  end
   awesome.connect_signal("tag_previewz::update", function(s)
     instance:update(s)
   end)
