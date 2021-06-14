@@ -330,7 +330,7 @@ local tag_previewz = create_class{
       end)
     })
     local tag_geo = {
-      x = 10 + screen_geo.x, y = 10 + screen_geo.y, height = 250, width = 400,
+      x = 0 + screen_geo.x, y = 0 + screen_geo.y, height = 250, width = 400,
     }
     local this_tag_bg = settings.tag_bg
     local this_tag_fg = settings.tag_fg
