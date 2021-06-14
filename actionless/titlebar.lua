@@ -153,6 +153,7 @@ local function need_titlebar(c)
 end
 
 local function attach_hover_actions(args)
+  if not beautiful.titlebar_expand_on_hover then return end
   args = args or {}
   local titlebar_widget = args.widget
   local c = args.client
@@ -690,8 +691,10 @@ function titlebar.is_enabled(c)
   local tb = titlebar.get_titlebar_widget(c)
   if not tb then return end
   if (
-    tb:geometry()['height'] > (beautiful.base_border_width ~= nil and beautiful.base_border_width or beautiful.border_width) * 2
-    ) then
+    tb:geometry()['height'] > (
+      beautiful.base_border_width ~= nil and beautiful.base_border_width or beautiful.border_width
+    ) * 2
+  ) then
     return true
   else
     return false
