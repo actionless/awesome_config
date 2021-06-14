@@ -13,6 +13,7 @@ local dpi = beautiful.xresources.apply_dpi
 
 local h_string = require("actionless.util.string")
 local get_icon = require("actionless.util.xdg").get_icon
+local color_utils = require("actionless.util.color")
 
 
 local function rounded_rect(radius)
@@ -99,6 +100,15 @@ local function get_settings(opts)
   local settings = {
     tag_preview_image = false,
     --tag_preview_image = true,
+    --work_area = false,
+    work_area = true,
+    padding = false,
+
+    scale = 0.1963,
+    --scale = 0.2,
+    icon_size = 32 or dpi(24),
+    default_client_icon = get_icon('apps', 'terminal'),
+
     --widget_x = dpi(20),
     --widget_y = dpi(20),
     widget_x = dpi(0),
@@ -109,38 +119,54 @@ local function get_settings(opts)
       beautiful.tag_preview_widget_border_radius or
       (beautiful.client_border_radius or dpi(0))*2.7
     ),
-    client_radius = beautiful.tag_preview_client_border_radius or beautiful.client_border_radius or dpi(0),
-    client_opacity = beautiful.tag_preview_client_opacity or 0.5,  -- ???
-    client_bg = beautiful.tag_preview_client_bg or "#60006088",
-    client_border_color = beautiful.tag_preview_client_border_color or
-                              "#ffffff88",
-    client_border_width = beautiful.tag_preview_client_border_width or
-                              dpi(3),
     widget_bg = beautiful.tag_preview_widget_bg or "#00000013",  -- ???
     widget_border_color = beautiful.tag_preview_widget_border_color or "#ffffff22",
     widget_border_width = beautiful.tag_preview_widget_border_width or dpi(0),
 
-    scale = 0.1963,
-    --scale = 0.2,
-    --work_area = false,
-    work_area = true,
-    padding = false,
+    screen_bg = beautiful.tag_preview_screen_bg or
+      (
+        beautiful.bg_normal and color_utils.transparentize(beautiful.bg_normal, 0.3)
+      ) or "#60600023",
 
-    icon_size = 32 or dpi(24),
-    default_client_icon = get_icon('apps', 'terminal'),
+    client_radius = beautiful.tag_preview_client_border_radius or
+      beautiful.client_border_radius or 0,
+    client_border_width = beautiful.tag_preview_client_border_width or
+      dpi(2),
+    client_opacity = beautiful.tag_preview_client_opacity or 0.5,  -- ???
+    client_bg = beautiful.tag_preview_client_bg or
+      beautiful.actionless_titlebar_bg_normal or
+      beautiful.titlebar_bg_normal or "#60006088",
+    client_fg = beautiful.tag_preview_client_fg or
+      beautiful.actionless_titlebar_fg_normal or
+      beautiful.titlebar_fg_normal or "#ffffff88",
+    client_border_color = beautiful.tag_preview_client_border_color or
+      beautiful.actionless_titlebar_bg_normal or
+      beautiful.border_normal or "#ffffff88",
+    client_bg_focus = beautiful.tag_preview_client_bg_focus or
+      beautiful.actionless_titlebar_bg_normal or
+      beautiful.titlebar_bg_focus or "#60006088",
+    client_fg_focus = beautiful.tag_preview_client_fg_focus or
+      beautiful.actionless_titlebar_fg_focus or
+      beautiful.titlebar_fg_focus or "#ffffff88",
+    client_border_color_focus = beautiful.tag_preview_client_border_color_focus or
+      beautiful.actionless_titlebar_bg_focus or
+      beautiful.border_focus or "#ffffff88",
 
-    screen_bg = beautiful.tag_preview_screen_bg or "#60600023",
-    tag_bg = beautiful.tag_preview_tag_bg or "#00606088",
-    tag_bg_focus = beautiful.tag_preview_tag_bg_focus or beautiful.taglist_bg_focus or "#00606088",
+    tag_bg = beautiful.tag_preview_tag_bg or
+      beautiful.taglist_bg_occupied or "#00606088",
+    tag_bg_focus = beautiful.tag_preview_tag_bg_focus or
+      beautiful.taglist_bg_focus or "#00606088",
+    tag_fg = beautiful.tag_preview_tag_fg or
+      beautiful.taglist_fg_occupied or "#00606088",
+    tag_fg_focus = beautiful.tag_preview_tag_fg_focus or
+      beautiful.taglist_fg_focus or "#00606088",
 
   }
-  settings.client_fg = settings.client_border_color
 
   settings.tag_opacity = settings.client_opacity
   settings.tag_radius = settings.client_radius
   settings.tag_border_width = settings.client_border_width
-  settings.tag_border_color = settings.client_border_color
-  settings.tag_fg = settings.tag_border_color
+  settings.tag_border_color = beautiful.panel_widget_border_color or settings.client_border_color
 
   if opts then
     settings.tag_preview_image = opts.show_client_content or settings.tag_preview_image
@@ -367,18 +393,26 @@ local tag_previewz = create_class{
       end
     end
 
-    local client_border_width = settings.client_border_width
     local client_radius = settings.client_radius
+    local client_border_width = settings.client_border_width
+    local client_border_color = settings.client_border_color
+    local client_bg = settings.client_bg
+    local client_fg = settings.client_fg
     local geo = client_geo
     if c.fullscreen then
       client_border_width = 0
       client_radius = 0
       geo = screen_geo
     end
+    if c == client.focus then
+      client_bg = settings.client_bg_focus
+      client_fg = settings.client_fg_focus
+      client_border_color = settings.client_border_color_focus
+    end
 
     local client_box = create_box(
         geo, client_icon, client_name, screen_geo, img, buttons,
-        settings.client_bg, settings.client_fg, settings.client_opacity, settings.client_border_color,
+        client_bg, client_fg, settings.client_opacity, client_border_color,
         client_border_width, client_radius,
         settings
     )
