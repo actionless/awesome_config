@@ -19,6 +19,7 @@ local mpv = require("actionless.mpv")
 local kbd_helpers = require('actionless.keyboard')
 local h_table = require('actionless.util.table')
 local get_icon = require("actionless.util.xdg").get_icon
+local color_utils = require("actionless.util.color")
 
 
 local keys = {}
@@ -39,6 +40,7 @@ function keys.init(awesome_context)
 
   local tag_previewz = require("actionless.tag_previewz").new({
     default_client_icon = get_icon('apps', 'terminal'),
+    screen_bg = beautiful.bg_normal and color_utils.transparentize(beautiful.bg_normal, 0.3),
   })
 
 

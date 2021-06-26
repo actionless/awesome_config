@@ -12,7 +12,6 @@ local awful = require("awful")
 local dpi = beautiful.xresources.apply_dpi
 
 local h_string = require("actionless.util.string")
-local color_utils = require("actionless.util.color")
 
 
 local function rounded_rect(radius)
@@ -122,10 +121,7 @@ local function get_settings(opts)
     widget_border_color = beautiful.tag_preview_widget_border_color or "#ffffff22",
     widget_border_width = beautiful.tag_preview_widget_border_width or dpi(0),
 
-    screen_bg = beautiful.tag_preview_screen_bg or
-      (
-        beautiful.bg_normal and color_utils.transparentize(beautiful.bg_normal, 0.3)
-      ) or "#60600023",
+    screen_bg = beautiful.tag_preview_screen_bg or beautiful.bg_normal or "#60600023",
 
     client_radius = beautiful.tag_preview_client_border_radius or
       beautiful.client_border_radius or 0,
