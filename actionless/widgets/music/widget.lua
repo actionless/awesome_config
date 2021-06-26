@@ -328,7 +328,10 @@ function player.init(args)
       if player_status.title ~= old_title then
         player.get_coverart()
       end
-      player.separator_widget:set_text(player_status.artist and " - " or "")
+      player.separator_widget:set_text(
+        player_status.artist and player_status.title and
+        " - " or ""
+      )
     end
     _log(player_status.state)
     if player_status.state == "play" then
