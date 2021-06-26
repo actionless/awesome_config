@@ -52,7 +52,7 @@ function player.init(args)
   args = args or {}
   player.args = args
   args.spacing = 0
-  local update_interval = args.update_interval
+  local update_interval = args.update_interval or 10
   local timeout = args.popup_timeout or 5
   local default_art = args.default_art
   local enabled_backends = args.backends
