@@ -144,6 +144,8 @@ function player.init(args)
 -------------------------------------------------------------------------------
   function player.run_player()
     awful.spawn.with_shell(player.cmd)
+    player._update_timer.timeout = 1
+    player._update_timer:again()
   end
 -------------------------------------------------------------------------------
   function player.hide_notification()
