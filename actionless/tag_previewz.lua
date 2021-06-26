@@ -11,7 +11,22 @@ local beautiful = require("beautiful")
 local awful = require("awful")
 local dpi = beautiful.xresources.apply_dpi
 
-local h_string = require("actionless.util.string")
+
+local function ellipsize(unicode_string, max_length)
+  if not unicode_string then return nil end
+  local result = ''
+  local counter = 1
+  for uchar in string.gmatch(unicode_string, '([%z\1-\127\194-\244][\128-\191]*)') do
+      counter = counter + 1
+      if counter > max_length then
+        result = result .. '…'
+        break
+      else
+        result = result .. uchar
+      end
+  end
+  return result
+end
 
 
 local function rounded_rect(radius)
@@ -57,7 +72,7 @@ local function create_box(
                       img_box,
                       wibox.widget.textbox(
                         gears.string.xml_escape(
-                          h_string.max_length(client_name, 80, true)
+                          ellipsize(client_name, 80)
                         )
                       ),
                       layout = wibox.layout.fixed.horizontal,
