@@ -132,7 +132,7 @@ local function get_settings(opts)
       beautiful.client_border_radius or 0,
     client_border_width = beautiful.tag_preview_client_border_width or
       dpi(2),
-    client_opacity = beautiful.tag_preview_client_opacity or 0.5,  -- ???
+    client_opacity = beautiful.tag_preview_client_opacity or 0.5,
     client_bg = beautiful.tag_preview_client_bg or
       beautiful.actionless_titlebar_bg_normal or
       beautiful.titlebar_bg_normal or "#60006088",
@@ -152,6 +152,7 @@ local function get_settings(opts)
       beautiful.actionless_titlebar_bg_focus or
       beautiful.border_focus or "#ffffff88",
 
+    tag_opacity = beautiful.tag_preview_tag_opacity or 0.8,
     tag_bg = beautiful.tag_preview_tag_bg or
       beautiful.taglist_bg_occupied or "#00606088",
     tag_bg_focus = beautiful.tag_preview_tag_bg_focus or
@@ -163,7 +164,6 @@ local function get_settings(opts)
 
   }
 
-  settings.tag_opacity = settings.client_opacity
   settings.tag_radius = settings.client_radius
   settings.tag_border_width = settings.client_border_width
   settings.tag_border_color = beautiful.panel_widget_border_color or settings.client_border_color
@@ -331,6 +331,7 @@ local tag_previewz = create_class{
     })
     local tag_geo = {
       x = 0 + screen_geo.x, y = 0 + screen_geo.y, height = 250, width = 400,
+      --x = 0 + screen_geo.x, y = 0 + screen_geo.y, height = 200, width = 350,
     }
     local this_tag_bg = settings.tag_bg
     local this_tag_fg = settings.tag_fg
@@ -445,8 +446,7 @@ function module.enable_saving_client_content()
   end
 end
 
-function module.enable(opts)
-  -- DEPRECATED
+function module.enable_signals(opts)
   local instance = module.new(opts)
   if instance.settings.tag_preview_image then
     module.enable_saving_client_content()
