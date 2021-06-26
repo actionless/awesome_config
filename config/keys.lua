@@ -18,6 +18,7 @@ local wlppr = require("actionless.wlppr")
 local mpv = require("actionless.mpv")
 local kbd_helpers = require('actionless.keyboard')
 local h_table = require('actionless.util.table')
+local get_icon = require("actionless.util.xdg").get_icon
 
 
 local keys = {}
@@ -36,7 +37,9 @@ function keys.init(awesome_context)
   revelation.font = beautiful.revelation_font
   revelation.init()
 
-  local tag_previewz = require("actionless.tag_previewz").new()
+  local tag_previewz = require("actionless.tag_previewz").new({
+    default_client_icon = get_icon('apps', 'terminal'),
+  })
 
 
   -- {{{ Client mouse bindings

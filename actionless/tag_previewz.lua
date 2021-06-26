@@ -12,7 +12,6 @@ local awful = require("awful")
 local dpi = beautiful.xresources.apply_dpi
 
 local h_string = require("actionless.util.string")
-local get_icon = require("actionless.util.xdg").get_icon
 local color_utils = require("actionless.util.color")
 
 
@@ -107,7 +106,7 @@ local function get_settings(opts)
     scale = 0.1963,
     --scale = 0.2,
     icon_size = 32 or dpi(24),
-    default_client_icon = get_icon('apps', 'terminal'),
+    default_client_icon = beautiful.tag_preview_default_client_icon or beautiful.awesome_icon,
 
     --widget_x = dpi(20),
     --widget_y = dpi(20),
@@ -169,12 +168,11 @@ local function get_settings(opts)
   settings.tag_border_color = beautiful.panel_widget_border_color or settings.client_border_color
 
   if opts then
-    settings.tag_preview_image = opts.show_client_content or settings.tag_preview_image
-    settings.widget_x = opts.x or settings.widget_x
-    settings.widget_y = opts.y or settings.widget_y
-    settings.scale = opts.scale or settings.scale
-    settings.work_area = opts.honor_workarea or settings.work_area
-    settings.padding = opts.honor_padding or settings.padding
+    for key, value in pairs(opts) do
+      if opts[key] then
+        settings[key] = value
+      end
+    end
   end
 
   return settings
