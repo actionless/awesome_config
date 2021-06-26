@@ -41,6 +41,12 @@ function keys.init(awesome_context)
   local tag_previewz = require("actionless.tag_previewz").new({
     default_client_icon = get_icon('apps', 'terminal'),
     screen_bg = beautiful.bg_normal and color_utils.transparentize(beautiful.bg_normal, 0.3),
+    client_bg = beautiful.actionless_titlebar_bg_normal,
+    client_fg = beautiful.actionless_titlebar_fg_normal,
+    client_border_color = beautiful.actionless_titlebar_bg_normal,
+    client_bg_focus = beautiful.actionless_titlebar_bg_normal,
+    client_fg_focus = beautiful.actionless_titlebar_fg_focus,
+    client_border_color_focus = beautiful.actionless_titlebar_bg_focus,
   })
 
 

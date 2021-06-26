@@ -144,22 +144,16 @@ local function get_settings(opts)
       dpi(2),
     client_opacity = beautiful.tag_preview_client_opacity or 0.5,
     client_bg = beautiful.tag_preview_client_bg or
-      beautiful.actionless_titlebar_bg_normal or
       beautiful.titlebar_bg_normal or "#60006088",
     client_fg = beautiful.tag_preview_client_fg or
-      beautiful.actionless_titlebar_fg_normal or
       beautiful.titlebar_fg_normal or "#ffffff88",
     client_border_color = beautiful.tag_preview_client_border_color or
-      beautiful.actionless_titlebar_bg_normal or
       beautiful.border_normal or "#ffffff88",
     client_bg_focus = beautiful.tag_preview_client_bg_focus or
-      beautiful.actionless_titlebar_bg_normal or
       beautiful.titlebar_bg_focus or "#60006088",
     client_fg_focus = beautiful.tag_preview_client_fg_focus or
-      beautiful.actionless_titlebar_fg_focus or
       beautiful.titlebar_fg_focus or "#ffffff88",
     client_border_color_focus = beautiful.tag_preview_client_border_color_focus or
-      beautiful.actionless_titlebar_bg_focus or
       beautiful.border_focus or "#ffffff88",
 
     tag_opacity = beautiful.tag_preview_tag_opacity or 0.8,
