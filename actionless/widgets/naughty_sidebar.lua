@@ -299,6 +299,9 @@ local function widget_factory(args)
   naughty_sidebar.scroll_offset = 0
   naughty_sidebar._custom_widgets = args.custom_widgets or {}
 
+  naughty_sidebar.callback_on_open = args.callback_on_open
+  naughty_sidebar.callback_on_close = args.callback_on_close
+
 
   function naughty_sidebar:widget_action_button(text, callback, widget_args)
     widget_args = widget_args or {}
@@ -787,12 +790,18 @@ local function widget_factory(args)
       self:mark_all_as_read()
       self.widget.lie_background.border_color = beautiful.panel_widget_border_color
       self.widget:set_normal()
+      if self.callback_on_close then
+        self.callback_on_close()
+      end
     else
       self:refresh_notifications()
       self.sidebar.visible = true
       self.widget.lie_background.border_color = '#00000000'
       self.widget:set_bg('#00000000')
       self.widget:set_fg(beautiful.panel_fg)
+      if self.callback_on_open then
+        self.callback_on_open()
+      end
     end
     self.widget.lie_background:emit_signal("widget::redraw_needed")
   end
