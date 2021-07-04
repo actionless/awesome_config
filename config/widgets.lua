@@ -60,6 +60,8 @@ function widget_loader.init(awesome_context)
   if lcarslist_enabled then
     beautiful.apw_bg_color = beautiful.panel_bg
   end
+  w.backlight = require("actionless.abw")
+  --w.backlight.update_interval = 60
   w.volume = require("third_party/apw/widget")
   w.volume.pulseBar.step = 0.02
   w.volume.pulse.OrigToggleMute = w.volume.pulse.ToggleMute
@@ -189,7 +191,25 @@ function widget_loader.init(awesome_context)
         --width=48, height=48,
       },
       {widget=w.netctl},
+      {
+        widget=wibox.widget{
+          {
+            {
+              markup = 'Backlight: ',
+              widget = wibox.widget.textbox,
+            },
+            fg = beautiful.panel_widget_fg,
+            widget = wibox.container.background,
+          },
+          widgets.common.panel_widget_shape(w.backlight),
+          layout = wibox.layout.fixed.horizontal,
+          fill_space = true,
+        }
+      },
     },
+    callback_on_open = function()
+      w.backlight.Update()
+    end,
   } -------------------
 
   w.screen = {}
