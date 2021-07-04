@@ -38,7 +38,7 @@ function keys.init(awesome_context)
   revelation.font = beautiful.revelation_font
   revelation.init()
 
-  local tag_previewz = require("actionless.tag_previewz").new({
+  local tag_previewz = require("third_party.awesome_overview").new({
     default_client_icon = get_icon('apps', 'terminal'),
     screen_bg = beautiful.bg_normal and color_utils.transparentize(beautiful.bg_normal, 0.3),
     client_bg = beautiful.actionless_titlebar_bg_normal,
