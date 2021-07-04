@@ -98,18 +98,18 @@ else
 end
 
 function pulseWidget.setColor(mute)
-	if mute then
-		pulseBar:set_color(color_mute)
-		pulseBar:set_background_color(color_bg_mute)
-	else
-		pulseBar:set_color(color)
-		pulseBar:set_background_color(color_bg)
-	end
+  if mute then
+    pulseBar:set_color(color_mute)
+    pulseBar:set_background_color(color_bg_mute)
+  else
+    pulseBar:set_color(color)
+    pulseBar:set_background_color(color_bg)
+  end
 end
 
 local function _update()
-	pulseBar:set_value(p.Volume)
-	pulseWidget.setColor(p.Mute)
+  pulseBar:set_value(p.Volume)
+  pulseWidget.setColor(p.Mute)
     if show_text then
         pulseText:set_markup('<span color="'..text_color..'">'..math.ceil(p.Volume*100)..'%</span>')
 
@@ -117,23 +117,23 @@ local function _update()
 end
 
 function pulseWidget.SetMixer(command)
-	mixer = command
+  mixer = command
 end
 
 function pulseWidget.Up()
-	p:SetVolume(p.Volume + pulseBar.step)
-	_update()
+  p:SetVolume(p.Volume + pulseBar.step)
+  _update()
 end
 
 function pulseWidget.Down()
-	p:SetVolume(p.Volume - pulseBar.step)
-	_update()
+  p:SetVolume(p.Volume - pulseBar.step)
+  _update()
 end
 
 
 function pulseWidget.ToggleMute()
-	p:ToggleMute()
-	_update()
+  p:ToggleMute()
+  _update()
 end
 
 function pulseWidget.Update()
@@ -141,18 +141,18 @@ function pulseWidget.Update()
 end
 
 function pulseWidget.LaunchMixer()
-	spawn_with_shell( mixer )
+  spawn_with_shell( mixer )
 end
 
 
 -- register mouse button actions
 pulseWidget:buttons(awful.util.table.join(
-		--awful.button({ }, 1, pulseWidget.ToggleMute),
-		awful.button({ }, 1, pulseWidget.Update),
-		awful.button({ }, 3, pulseWidget.LaunchMixer),
-		awful.button({ }, 4, pulseWidget.Up),
-		awful.button({ }, 5, pulseWidget.Down)
-	)
+    --awful.button({ }, 1, pulseWidget.ToggleMute),
+    awful.button({ }, 1, pulseWidget.Update),
+    awful.button({ }, 3, pulseWidget.LaunchMixer),
+    awful.button({ }, 4, pulseWidget.Up),
+    awful.button({ }, 5, pulseWidget.Down)
+  )
 )
 
 pulseWidget.pulse = p
