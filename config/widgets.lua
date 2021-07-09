@@ -65,8 +65,8 @@ function widget_loader.init(awesome_context)
   w.volume = require("third_party/apw/widget")
   w.volume.pulseBar.step = 0.02
   w.volume.pulse.OrigToggleMute = w.volume.pulse.ToggleMute
-  w.volume.pulse.ToggleMute = function(self)
-      w.volume.pulse.OrigToggleMute(self)
+  w.volume.pulse.ToggleMute = function(...)
+      w.volume.pulse.OrigToggleMute(...)
       if w.volume.pulse.Mute then
         awful.spawn.spawn('xset led named "Scroll Lock"')
       else
