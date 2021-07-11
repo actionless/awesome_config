@@ -51,6 +51,7 @@ function menus.init(context)
       end, get_icon('actions', 'window-close')
     },
   }
+
   local shutdown_menu = {
     { "hibernate",
       "xscreensaver-command -lock ; sudo systemctl hibernate",
@@ -80,14 +81,24 @@ function menus.init(context)
     --{ "poweroff", session_poweroff, get_icon('actions', 'system-shutdown') },
   }
 
-  local function app(display_name, name, icon_name)
+  local function app(display_name, name, icon_name, fallback_icon_name)
     name = name or display_name
     icon_name = icon_name or name
-    return { display_name, name, awesome_menubar.utils.lookup_icon(icon_name) }
+    return {
+      display_name, name,
+      awesome_menubar.utils.lookup_icon(icon_name) or (
+        fallback_icon_name and awesome_menubar.utils.lookup_icon(fallback_icon_name)
+      )
+    }
   end
 
-  local function category(display_name, content, icon_name)
-    return { display_name, content, get_icon('categories', 'applications-'..icon_name) }
+  local function category(display_name, content, icon_name, fallback_icon_name)
+    return {
+      display_name, content,
+      get_icon('categories', 'applications-'..icon_name) or (
+        fallback_icon_name and awesome_menubar.utils.lookup_icon(fallback_icon_name)
+      )
+    }
   end
 
   local applications_menu = {
@@ -106,11 +117,18 @@ function menus.init(context)
       app("Viewnior", "viewnior"),
     }, "graphics"),
 
-    category("Multimedia", {
+    category("Markdown", {
+      app("abricotine"),  -- best inline
+      app("ghostwriter"),  -- good inline + preview
+      app("marker", "marker", "com.github.fabiocolacio.marker"),  -- classic + preview (GTK)
+      app("retext"),  -- classic + preview (Qt)
+    }, "education-language"),
+
+    category("Media players", {
       app("Clementine", "clementine"),
       app("Goodvibes", "goodvibes", "io.gitlab.Goodvibes"),
-      app("mpv", "mpv"),
-      --app("Shortwave", "shortwave", "de.haeckerfelix.Shortwave"),
+      app("MPV", "mpv"),
+      --app("Shortwave", "shortwave", "de.haeckerfelix.Shortwave"), -- nice but buggy
     }, "multimedia"),
 
     category("Productivity", {
@@ -124,13 +142,13 @@ function menus.init(context)
       app("dconf Editor", "dconf-editor"),
     }, "system"),
 
-    {"Terminals", {
+    category("Terminals", {
       app("st", "st", 'terminal'),
       app("tmux in xst", "xst-tmux", 'terminator'),
       app("URxvt", "urxvt"),
       app("xst", "xst", 'terminal'),
       app("XTerm", "xterm"),
-    }, get_icon("apps", "terminal")},
+    }, "terminal", "terminal"),
 
     category("Text", {
       --app("Geany", "geany"),
@@ -138,12 +156,11 @@ function menus.init(context)
       app("xed", "xed", "accessories-text-editor"),
     }, "office"),
 
-    category("Markdown", {
-      app("abricotine"),  -- best inline
-      app("ghostwriter"),  -- good inline + preview
-      app("marker", "marker", "com.github.fabiocolacio.marker"),  -- classic + preview (GTK)
-      app("retext"),  -- classic + preview (Qt)
-    }, "education-language"),
+    category("Video Editing", {
+      app("Flowblade", "flowblade"),
+      app("Kdenlive", "kdenlive"),
+      app("Shotcut", "shotcut"),
+    }, "video", "multimedia-video-player"),
 
   }
 
@@ -200,9 +217,11 @@ function menus.init(context)
       if nomouse then args.coords = {x=0,y=0} end
       context.menu.mainmenu:show(args)
     end
-    if not context.menu.mainmenu then
+    if context.menu.mainmenu then
+      show_menu()
+    else
       context.menu.mainmenu = awful_menu({
-        items =menu_content,
+        items = menu_content,
       })
       show_menu()
       menugen.build_menu(function(menulist)
@@ -212,8 +231,6 @@ function menus.init(context)
           1
         )
       end)
-    else
-      show_menu()
     end
   end
 

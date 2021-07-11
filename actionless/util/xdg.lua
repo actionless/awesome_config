@@ -52,6 +52,13 @@ function module.resize_svg(input_image, icon_width, icon_height)
 end
 
 function module.get_icon(category, name, args)
+  if category == 'apps' or category == 'categories' then
+    local awesome_found = awesome_menubar.utils.lookup_icon(name)
+    if awesome_found then return awesome_found end
+  end
+
+  args = args or {}
+
   if not ICON_THEMES then
     ICON_THEMES = {
       beautiful.icon_theme,
@@ -62,15 +69,9 @@ function module.get_icon(category, name, args)
       --'locolor',
     }
   end
-
-  args = args or {}
   local icon_sizes = args.icon_sizes or ICON_SIZES
   local icon_themes = args.icon_themes or ICON_THEMES
 
-  if category == 'apps' or category == 'categories' then
-    local awesome_found = awesome_menubar.utils.lookup_icon(name)
-    if awesome_found then return awesome_found end
-  end
   for _, icon_theme_name in ipairs(icon_themes) do
     for _, icon_root in ipairs({
       os.getenv('HOME') .. '/.icons/',
