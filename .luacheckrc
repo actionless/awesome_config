@@ -7,7 +7,7 @@ self = false
 ----function f()
 --    --a, b, c = call() ; return a, b  -- unused "c"
 ----end
---unused_secondaries = false
+unused_secondaries = true
 
 -- The unit tests can use busted
 --files["spec"].std = "+busted"
@@ -15,6 +15,7 @@ self = false
 --
 ignore = {
     "212/_.*",
+    --"212/self",
 }
 
 -- The .luacheck config may set global variables
