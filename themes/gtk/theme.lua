@@ -323,7 +323,7 @@ end
 
 
 if color_utils.is_dark(theme.panel_bg) then
-  theme.clock_fg = color_utils.darker(theme.panel_fg, -16)
+  theme.clock_fg = color_utils.darker(theme.panel_fg, -42)
   --theme.tasklist_fg_focus = color_utils.darker(theme.xrdb.foreground, 12)
 else
   theme.clock_fg = color_utils.darker(theme.panel_fg, 16)
