@@ -4,6 +4,7 @@
 --]]
 
 local mpris_creator = require("actionless.widgets.music.mpris_creator")
+
 local backends = {
   clementine = mpris_creator('clementine', {seek=30}),
   firefox = mpris_creator.create_for_match('firefox', {seek=30}),
@@ -17,5 +18,4 @@ local backends = {
   spotify = require("actionless.widgets.music.backends.spotify"),
   strawberry = mpris_creator('strawberry', {seek=30}),
 }
-
 return backends
