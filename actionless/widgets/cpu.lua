@@ -7,6 +7,7 @@ local naughty = require("naughty")
 local beautiful = require("beautiful")
 local awful = require("awful")
 local gears_timer = require("gears.timer")
+local gears_string = require("gears.string")
 
 local h_table = require("actionless.util.table")
 local h_string = require("actionless.util.string")
@@ -59,7 +60,7 @@ function cpu.notification_callback_done(output)
   if not notification_id then return end
   local result = {}
   local names = {}
-  local column_headers = h_string.split(
+  local column_headers = gears_string.split(
     h_string.lstrip(h_table.range(
       parse.string_to_lines(output),
       6, 6
@@ -72,10 +73,10 @@ function cpu.notification_callback_done(output)
     )
   ) do
     line = h_string.lstrip(line)
-    local values = h_string.split(line, ' ')
+    local values = gears_string.split(line, ' ')
     local pid = values[cpu.columns.pid]
     local percent = values[cpu.columns.percent]
-    local path = values[cpu.columns.name] and h_string.split(values[cpu.columns.name], '/')
+    local path = values[cpu.columns.name] and gears_string.split(values[cpu.columns.name], '/')
     local name = path and path[#path]
     local args = h_table.range(values, cpu.columns.name+1, #values)
     if args and cpu.preserve_args[name] then

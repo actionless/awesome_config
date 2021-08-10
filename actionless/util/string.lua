@@ -14,23 +14,6 @@ function string_helpers.only_digits(str)
   return tonumber(str:match("%d+"))
 end
 
-function string_helpers.split(str, delimiter)
-    delimiter = delimiter or "\n"
-    local result = {}
-    if gstring.startswith(str, delimiter) then
-        result[#result+1] = ""
-    end
-    local pattern = string.format("([^%s]+)", delimiter)
-    str:gsub(pattern, function(c) result[#result+1] = c end)
-    if gstring.endswith(str, delimiter) then
-        result[#result+1] = ""
-    end
-    if #result == 0 then
-        result[#result+1] = str
-    end
-    return result
-end
-
 function string_helpers.lstrip(str, chars)
   if type(chars) == 'string' then
     chars = {chars,}
@@ -128,7 +111,7 @@ function string_helpers.multiline_limit(unicode_string, max_length) --char
 end
 
 function string_helpers.multiline_limit_word(unicode_string, max_length)
-  local words = string_helpers.split(unicode_string, ' ')
+  local words = gstring.split(unicode_string, ' ')
 
   local result = ''
   local line = ''

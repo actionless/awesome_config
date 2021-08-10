@@ -9,6 +9,7 @@ local naughty = require("naughty")
 local beautiful = require("beautiful")
 local awful = require("awful")
 local gears_timer = require("gears.timer")
+local gears_string = require("gears.string")
 
 local h_table = require("actionless.util.table")
 local h_string = require("actionless.util.string")
@@ -63,7 +64,7 @@ function mem._show_notification_callback(output)
   if not notification_id then return end
   local result = {}
 
-  local column_headers = h_string.split(
+  local column_headers = gears_string.split(
     h_string.lstrip(h_table.range(
       parse.string_to_lines(output),
       6, 6
@@ -76,10 +77,10 @@ function mem._show_notification_callback(output)
     )
   ) do
     line = h_string.lstrip(line)
-    local values = h_string.split(line, ' ')
+    local values = gears_string.split(line, ' ')
     local percent = values[mem.columns.percent]
     if percent then
-      local path = values[mem.columns.name] and h_string.split(values[mem.columns.name], '/')
+      local path = values[mem.columns.name] and gears_string.split(values[mem.columns.name], '/')
       local name = path and path[#path]
       local args = h_table.range(values, mem.columns.name+1, #values)
       if args and mem.preserve_args[name] then

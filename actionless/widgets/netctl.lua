@@ -6,10 +6,10 @@
 local beautiful		= require("beautiful")
 local awful             = require("awful")
 local gears_timer = require("gears.timer")
+local gears_string = require("gears.string")
 
 local common_widget	= require("actionless.widgets.common").decorated
 local parse		= require("actionless.util.parse")
-local s_helpers		= require("actionless.util.string")
 
 
 local netctl = {
@@ -115,7 +115,7 @@ local function worker(args)
       "systemctl list-unit-files 'netctl*'",
       function(stdout)
         netctl.update_widget(
-          s_helpers.split(
+          gears_string.split(
             stdout:match("netctl(.*)%.service.*enabled") or 'nctl...',
             "\n"
           )[1]

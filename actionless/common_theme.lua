@@ -11,8 +11,6 @@ local surface = require("gears.surface")
 local gears = require("gears")
 local recolor_image = require("gears.color").recolor_image
 
-local h_string = require("actionless.util.string")
-
 local h_table = require("actionless.util.table")
 local h_parse = require("actionless.util.parse")
 local h_color = require("actionless.util.color")
@@ -297,8 +295,7 @@ function common_theme.fill_theme(theme, recursion_counter)
   recursion_counter = recursion_counter or 0
   for key, value in pairs(theme) do
     if type(value)=="string" and g_string.startswith(value, "theme.") then
-      --local actual_key_path = g_string.split(value, ".")
-      local actual_key_path = h_string.split(value, ".")
+      local actual_key_path = g_string.split(value, ".")
       local actual_value = theme
       for i=2,#actual_key_path do
         actual_value = actual_value[actual_key_path[i]]
