@@ -23,11 +23,11 @@ local spawn_with_shell = awful.util.spawn_with_shell or awful.spawn.with_shell
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 local gears_timer = require('gears.timer')
+local gears_string = require('gears.string')
+
 
 local parse = require('actionless.util.parse')
-
-
-local p = {
+local _ = {
   Init = function(self)
     self.max_brightness = tonumber(
       parse.filename_to_string('/sys/class/backlight/intel_backlight/max_brightness')
@@ -39,11 +39,49 @@ local p = {
       parse.filename_to_string('/sys/class/backlight/intel_backlight/actual_brightness')
     )
     self.Volume = actual_brightness / self.max_brightness
-    log({actual_brightness, self.Volume})
     self.Mute = false
     if callback then
       callback()
     end
+  end,
+}
+
+local p = {
+  Init = function(self)
+    self:UpdateState()
+  end,
+  _ParseOutput = function(_self, output)
+    local results = gears_string.split(gears_string.split(output)[1], ',')
+    return tonumber(results[4]:match("%d+")) / 100
+  end,
+  UpdateState = function(self, callback)
+    awful.spawn.easy_async(
+      "brightnessctl info -m",
+      function(output)
+        self.Volume = self:_ParseOutput(output)
+        self.Mute = false
+        if callback then
+          callback()
+        end
+      end
+    )
+  end,
+  IncreaseValue = function(self, step, callback)
+    local operation = '+'
+    if step < 0 then
+      operation = '-'
+      step = -step
+    end
+    awful.spawn.easy_async(
+      "brightnessctl set -m "  .. tostring(step * 100) .. "%" .. operation,
+      function(output)
+        self.Volume = self:_ParseOutput(output)
+        self.Mute = false
+        if callback then
+          callback()
+        end
+      end
+    )
   end,
 }
 p:Init()
@@ -121,15 +159,12 @@ function pulseWidget.SetMixer(command)
 end
 
 function pulseWidget.Up()
-  p:SetVolume(p.Volume + pulseBar.step)
-  _update()
+  p:IncreaseValue(pulseBar.step, _update)
 end
 
 function pulseWidget.Down()
-  p:SetVolume(p.Volume - pulseBar.step)
-  _update()
+  p:IncreaseValue(-pulseBar.step, _update)
 end
-
 
 function pulseWidget.ToggleMute()
   p:ToggleMute()

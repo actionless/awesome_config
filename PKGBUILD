@@ -10,7 +10,7 @@ INSTALL_NO_ARGB_SHORTCUTS=${NOARGB:-n}
 pkgname=actionless_awesome_config_meta
 conflicts=(awesome_config_actionless_meta)
 pkgver=0.4
-pkgrel=1
+pkgrel=2
 pkgdesc="Awesome config dependencies"
 arch=('x86_64' 'i686')
 url="https://github.com/actionless/awesome_config"
@@ -31,6 +31,7 @@ depends=(
 	'upower' # for battery widget
 	'pacman-contrib' # for updates widget
 	'curl' # async image fallback
+	'brightnessctl' # brightness widget
 
 	'xorg-xrdb' # reload Xresources on awesome WM reload
 	'xorg-xset' # config/autorun: keyboard tweaks
