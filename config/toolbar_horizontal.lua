@@ -50,7 +50,6 @@ function toolbar.init(awesome_context)
     left_margin:connect_signal("mouse::leave", manage_client._on_mouse_leave)
     local left_layout = wibox.widget{
       layout = wibox.layout.align.horizontal,
-      expand = 'inside',
       {
         layout = wibox.layout.fixed.horizontal,
         buttons = wheel_binding,
@@ -62,9 +61,27 @@ function toolbar.init(awesome_context)
         sep,
       },
       {
-        layout = wibox.container.background,
-        buttons = wheel_binding,
-        loaded_widgets.screen[si].tasklist,
+        layout = wibox.layout.align.horizontal,
+        nil,
+        {
+          layout = wibox.container.background,
+          buttons = wheel_binding,
+          loaded_widgets.screen[si].tasklist,
+        },
+        awesome_context.music_on_the_left and {
+          layout = wibox.container.constraint,
+          strategy = 'max',
+          width = dpi(180),
+          {
+            layout = wibox.layout.fixed.horizontal,
+            common.panel_widget_shape(
+              loaded_widgets.music,
+              {
+                border_width = 0,
+              }
+            )
+          },
+        },
       },
       {
         layout = wibox.layout.fixed.horizontal,
@@ -91,7 +108,7 @@ function toolbar.init(awesome_context)
     local right_layout = wibox.widget{
       layout = wibox.layout.align.horizontal,
       separator,
-      {
+      not awesome_context.music_on_the_left and {
         layout = wibox.layout.fixed.horizontal,
         common.panel_widget_shape(
           loaded_widgets.music,
