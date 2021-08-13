@@ -556,7 +556,8 @@ function keys.init(awesome_context)
       function ()
         awful.spawn.with_shell(
           --"scrot -a $(slop -o -f '%x,%y,%w,%h') '%Y-%m-%d--%s_$wx$h_scrot.png' -e " ..
-          "scrot -a $(slop -f '%x,%y,%w,%h' && sleep 0.3) '%Y-%m-%d--%s_$wx$h_scrot.png' -e " ..
+          --"scrot -a $(slop -f '%x,%y,%w,%h' && sleep 0.3) '%Y-%m-%d--%s_$wx$h_scrot.png' -e " ..
+          "scrot -a $(slop -f '%x,%y,%w,%h' -o && sleep 0.3) '%Y-%m-%d--%s_$wx$h_scrot.png' -e " ..
           shell_commands.scrot_preview_cmd
         )
       end,
