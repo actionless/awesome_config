@@ -19,13 +19,16 @@ local common = require("actionless.widgets.common")
 local db = require("actionless.util.db")
 
 
-
 local DB_ID = 'notifications_storage'
 local DB_ID_READ_COUNT = 'notifications_storage_read_count'
 
-
-
 local _DUAL_KAWASE_FIXED_IN_PICOM = false
+
+
+local SCROLL_UP = 4
+local SCROLL_DOWN = 5
+local MOUSE_LEFT = 1
+local MOUSE_RIGHT = 3
 
 
 local naughty_sidebar
@@ -134,7 +137,7 @@ naughty_sidebar = {
       if notification_args.run then
         local buttons = box:buttons()
         buttons = awful.util.table.join(buttons,
-          awful.button({}, 1,
+          awful.button({}, MOUSE_LEFT,
           function()
             notification_args.run(n)
           end)
@@ -334,7 +337,7 @@ local function widget_factory(args)
       layout = wibox.container.background,
     })
     widget:buttons(awful.util.table.join(
-      awful.button({ }, 1, nil, callback)
+      awful.button({ }, MOUSE_LEFT, nil, callback)
     ))
     widget:connect_signal("mouse::enter", function()
       widget.bg = naughty_sidebar.theme.button_bg_hover
@@ -581,17 +584,17 @@ local function widget_factory(args)
       close_button_imagebox:set_image(beautiful.titlebar_close_button_normal)
     end)
     close_button:buttons(awful.util.table.join(
-      awful.button({ }, 1, nil, function()
+      awful.button({ }, MOUSE_LEFT, nil, function()
         self:remove_notification(widget.lie_idx)
       end)
     ))
     widget:buttons(awful.util.table.join(
-      awful.button({ }, 1, function()
+      awful.button({ }, MOUSE_LEFT, function()
         if notification.args.run then
           default_action()
         end
       end),
-      awful.button({ }, 3, function()
+      awful.button({ }, MOUSE_RIGHT, function()
         self:remove_notification(widget.lie_idx)
       end)
     ))
@@ -641,6 +644,74 @@ local function widget_factory(args)
     layout:add(widget)
   end
 
+  function naughty_sidebar:_render_notifications(margins)
+    local layout = wibox.layout.fixed.vertical()
+    layout.spacing = naughty_sidebar.theme.spacing
+
+    local spacing = naughty_sidebar.theme.notification_padding
+    local create_buttons_row = function()
+      local row = wibox.layout.flex.horizontal()
+      row.spacing = spacing
+      row.max_widget_size = gears.math.round(
+        (
+          naughty_sidebar.theme.width -
+          margins.left - margins.right -
+          spacing * (naughty_sidebar.theme.num_buttons - 1)
+        ) / naughty_sidebar.theme.num_buttons
+      )
+      return row
+    end
+    local row = create_buttons_row()
+    row:add(
+        self:widget_action_button(
+          'X  Clear All  ',
+          function()
+            self:remove_all_notifications()
+          end,
+          {align='middle'}
+        )
+      )
+    row:add(
+        self:widget_action_button(
+          '★ Clear Unread',
+          function()
+            self:remove_unread()
+          end,
+          {align='middle'}
+        )
+        )
+    layout:add(row)
+    local unread_count = #self.saved_notifications - self.prev_count
+    if self.scroll_offset > 0 then
+        --text='^^^',
+      layout:add(self:widget_panel_label('↑ ↑'))
+    end
+    for idx, n in ipairs(naughty_sidebar.saved_notifications) do
+      if idx > self.scroll_offset then
+        layout:add(
+          self:widget_notification(n, idx, idx<=unread_count)
+        )
+      end
+    end
+
+    layout:buttons(awful.util.table.join(
+      awful.button({ }, SCROLL_UP, function()
+        self.scroll_offset = math.max(
+          self.scroll_offset - 1, 0
+        )
+        self:refresh_notifications()
+      end),
+      awful.button({ }, SCROLL_DOWN, function()
+        self.scroll_offset = math.min(
+          self.scroll_offset + 1, #self.saved_notifications - 1
+        )
+        self:refresh_notifications()
+      end)
+    ))
+
+    return layout
+  end
+
   function naughty_sidebar:refresh_notifications()
     local left_border = beautiful.panel_border_width or beautiful.panel_widget_border_width or 0
     local margins = {
@@ -670,51 +741,9 @@ local function widget_factory(args)
     end
 
     if #self.saved_notifications > 0 then
-      local spacing = naughty_sidebar.theme.notification_padding
-      local create_buttons_row = function()
-        local row = wibox.layout.flex.horizontal()
-        row.spacing = spacing
-        row.max_widget_size = gears.math.round(
-          (
-            naughty_sidebar.theme.width -
-            margins.left - margins.right -
-            spacing * (naughty_sidebar.theme.num_buttons - 1)
-          ) / naughty_sidebar.theme.num_buttons
-        )
-        return row
-      end
-      local row = create_buttons_row()
-      row:add(
-          self:widget_action_button(
-            'X  Clear All  ',
-            function()
-              self:remove_all_notifications()
-            end,
-            {align='middle'}
-          )
-        )
-      row:add(
-          self:widget_action_button(
-            '★ Clear Unread',
-            function()
-              self:remove_unread()
-            end,
-            {align='middle'}
-          )
-          )
-      layout:add(row)
-      local unread_count = #self.saved_notifications - self.prev_count
-      if self.scroll_offset > 0 then
-          --text='^^^',
-        layout:add(self:widget_panel_label('↑ ↑'))
-      end
-      for idx, n in ipairs(naughty_sidebar.saved_notifications) do
-        if idx > self.scroll_offset then
-          layout:add(
-            self:widget_notification(n, idx, idx<=unread_count)
-          )
-        end
-      end
+      layout:add(
+        self:_render_notifications(margins)
+      )
     else
       layout:add(self:widget_panel_label('No notifications'))
     end
@@ -769,20 +798,6 @@ local function widget_factory(args)
           return cr
         end,
       })
-      self.sidebar:buttons(awful.util.table.join(
-        awful.button({ }, 4, function()
-          self.scroll_offset = math.max(
-            self.scroll_offset - 1, 0
-          )
-          self:refresh_notifications()
-        end),
-        awful.button({ }, 5, function()
-          self.scroll_offset = math.min(
-            self.scroll_offset + 1, #self.saved_notifications - 1
-          )
-          self:refresh_notifications()
-        end)
-      ))
       self:refresh_notifications()
     end
     if self.sidebar.visible then
@@ -823,10 +838,10 @@ local function widget_factory(args)
 
 
   naughty_sidebar.widget:buttons(awful.util.table.join(
-    awful.button({ }, 1, function()
+    awful.button({ }, MOUSE_LEFT, function()
       naughty_sidebar:toggle_sidebox()
     end),
-    awful.button({ }, 3, function()
+    awful.button({ }, MOUSE_RIGHT, function()
       if naughty_sidebar.sidebar and naughty_sidebar.sidebar.visible then
         naughty_sidebar:remove_unread()
         naughty_sidebar.sidebar.visible = false
