@@ -133,7 +133,11 @@ function toolbar.init(awesome_context)
           }),
           separator,
           loaded_widgets.updates,
-          separator,
+          sep,
+        },
+        {
+          layout = wibox.layout.fixed.horizontal,
+          sep,
           loaded_widgets.textclock,
           separator,
           sep,
@@ -141,8 +145,8 @@ function toolbar.init(awesome_context)
           loaded_widgets.screen[si].layoutbox,
           separator,
           sep,
+          loaded_widgets.naughty_sidebar,
         },
-        loaded_widgets.naughty_sidebar,
       },
     }
 
