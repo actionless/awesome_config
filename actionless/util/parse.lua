@@ -77,41 +77,23 @@ function parse.find_values_in_string(str, regex, match_keys, post_func)
 end
 
 ----------------------------------------------
-function parse.fo_to_lines(f)
-  if not f then return nil end
-  local lines = {}
-  local counter = 1
-  for line in f:lines() do
-    lines[counter] = line
-    counter = counter + 1
-  end
-  return lines
-end
-
-function parse.find_in_fo(f, regex)
-  return parse.find_in_lines(
-    parse.fo_to_lines(f), regex)
-end
-
-function parse.process_filename(file_name, func, ...)
-  log("process_filename() is deprecated")
-  local fp = io.open(file_name)
-  if fp == nil then return nil end
-  local result = h_table.pack(func(fp, ...))
-  fp:close()
-  return h_table.unpack(result)
-end
 
 function parse.find_in_file(file_name, regex)
   log("find_in_file() is deprecated")
-  local result = {parse.process_filename(
-    file_name,
-    parse.find_in_fo, regex)}
-  log(result)
+  local fp = io.open(file_name)
+  if fp == nil then return nil end
+
+  local lines = {}
+  local counter = 1
+  for line in fp:lines() do
+    lines[counter] = line
+    counter = counter + 1
+  end
+
+  local result = {parse.find_in_lines(lines, regex)}
+  fp:close()
   return h_table.unpack(result)
 end
-
-----------------------------------------------
 
 function parse.find_in_file_async(file_name, regex, callback)
   parse.filename_to_lines_async(file_name, function(lines)
