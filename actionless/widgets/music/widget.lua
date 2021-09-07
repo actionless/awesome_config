@@ -15,7 +15,6 @@ local common = require("actionless.widgets.common")
 local decorated_widget	= common.decorated
 local markup		= require("actionless.util.markup")
 local db = require("actionless.util.db")
-local h_file = require("actionless.util.file")
 local get_icon = require("actionless.util.xdg").get_icon
 
 local backend_modules	= require("actionless.widgets.music.backends")
@@ -190,9 +189,6 @@ function player.init(args)
       end
       if not g_string.startswith(cover_url, '/') then
         cover_url = player.get_coverart_path()
-        if not h_file.exists(cover_url) then
-          cover_url = nil
-        end
       end
     end
 

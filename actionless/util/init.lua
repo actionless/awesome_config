@@ -4,7 +4,6 @@ local utils = {
   db = require("actionless.util.db"),
   debug = require("actionless.util.debug"),
   doubleclick = require("actionless.util.doubleclick"),
-  file = require("actionless.util.file"),
   inspect = require("actionless.util.inspect"),
   markup = require("actionless.util.markup"),
   menugen = require("actionless.util.menugen"),
