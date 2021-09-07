@@ -133,11 +133,10 @@ function toolbar.init(awesome_context)
           }),
           separator,
           loaded_widgets.updates,
-          sep,
         },
         {
           layout = wibox.layout.fixed.horizontal,
-          sep,
+          separator,
           loaded_widgets.textclock,
           separator,
           sep,
