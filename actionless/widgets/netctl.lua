@@ -77,19 +77,22 @@ local function worker(args)
   end
 
   function netctl.update_bond()
-    netctl.interface = parse.find_in_file(
+    parse.find_in_file_async(
       "/proc/net/bonding/bond0",
-      "Currently Active Slave: (.*)"
-    ) or 'bndng.err'
-    if netctl.interface == netctl.eth_if then
-      netctl.update_widget('ethernet')
-    elseif netctl.interface == netctl.wlan_if then
-      netctl.wpa_update()
-    elseif netctl.interface == "None" then
-      netctl.update_widget("bndng...")
-    else
-      netctl.update_widget(netctl.interface)
-    end
+      "Currently Active Slave: (.*)",
+      function(result)
+        netctl.interface = result or 'bndng.err'
+        if netctl.interface == netctl.eth_if then
+          netctl.update_widget('ethernet')
+        elseif netctl.interface == netctl.wlan_if then
+          netctl.wpa_update()
+        elseif netctl.interface == "None" then
+          netctl.update_widget("bonding...")
+        else
+          netctl.update_widget(netctl.interface)
+        end
+      end
+    )
   end
 
   function netctl.wpa_update()

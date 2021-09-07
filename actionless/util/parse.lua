@@ -1,9 +1,10 @@
 --[[
      Licensed under GNU General Public License v2
-      * (c) 2014  Yauheni Kirylau
+      * (c) 2014-2021  Yauheni Kirylau
 --]]
 
 local g_string = require("gears.string")
+local awful_spawn = require("awful.spawn")
 
 local h_table = require("actionless.util.table")
 
@@ -19,52 +20,16 @@ function parse.lines_to_string(lines)
   return table.concat(lines, '\n')
 end
 
-function parse.fo_to_lines(f)
-  if not f then return nil end
-  local lines = {}
-  local counter = 1
-  for line in f:lines() do
-    lines[counter] = line
-    counter = counter + 1
-  end
-  return lines
+----------------------------------------------
+
+function parse.filename_to_string_async(file_name, callback)
+  awful_spawn.easy_async({'cat', file_name}, function(result) callback(result) end)
 end
 
-function parse.process_filename(file_name, func, ...)
-  local fp = io.open(file_name)
-  if fp == nil then return nil end
-  local result = h_table.pack(func(fp, ...))
-  fp:close()
-  return h_table.unpack(result)
+function parse.filename_to_lines_async(file_name, callback)
+  parse.filename_to_string_async(file_name, function(result) callback(parse.string_to_lines(result)) end)
 end
 
-function parse.process_command(cmd, func, ...)
-  local fp = io.popen(cmd)
-  if fp == nil then return nil end
-  local result = h_table.pack(func(fp, ...))
-  fp:close()
-  return h_table.unpack(result)
-end
-
-function parse.filename_to_lines(file_name)
-  return parse.process_filename(
-    file_name, parse.fo_to_lines)
-end
-
-function parse.filename_to_string(file_name)
-  return parse.lines_to_string(
-    parse.filename_to_lines(file_name))
-end
-
-function parse.command_to_lines(cmd)
-  return parse.process_command(
-    cmd, parse.fo_to_lines)
-end
-
-function parse.command_to_string(cmd)
-  return parse.lines_to_string(
-    parse.command_to_lines(cmd))
-end
 ----------------------------------------------
 
 function parse.find_in_lines(lines, regex)
@@ -112,9 +77,15 @@ function parse.find_values_in_string(str, regex, match_keys, post_func)
 end
 
 ----------------------------------------------
-function parse.first_line_in_fo(f)
+function parse.fo_to_lines(f)
   if not f then return nil end
-  return f:read("*l")
+  local lines = {}
+  local counter = 1
+  for line in f:lines() do
+    lines[counter] = line
+    counter = counter + 1
+  end
+  return lines
 end
 
 function parse.find_in_fo(f, regex)
@@ -122,29 +93,36 @@ function parse.find_in_fo(f, regex)
     parse.fo_to_lines(f), regex)
 end
 
-function parse.find_values_in_fo(f, regex, match_keys, post_func)
-  return parse.find_values_in_lines(
-    parse.fo_to_lines(f),
-    regex, match_keys, post_func)
-end
-----------------------------------------
-
-function parse.first_line_in_file(file_name)
-  return parse.process_filename(
-    file_name,
-    parse.first_line_in_fo)
+function parse.process_filename(file_name, func, ...)
+  log("process_filename() is deprecated")
+  local fp = io.open(file_name)
+  if fp == nil then return nil end
+  local result = h_table.pack(func(fp, ...))
+  fp:close()
+  return h_table.unpack(result)
 end
 
 function parse.find_in_file(file_name, regex)
-  return parse.process_filename(
+  log("find_in_file() is deprecated")
+  local result = {parse.process_filename(
     file_name,
-    parse.find_in_fo, regex)
+    parse.find_in_fo, regex)}
+  log(result)
+  return h_table.unpack(result)
 end
 
-function parse.find_values_in_file(file_name, regex, match_keys, post_func)
-  return parse.process_filename(
-    file_name,
-    parse.find_values_in_fo, regex, match_keys, post_func)
+----------------------------------------------
+
+function parse.find_in_file_async(file_name, regex, callback)
+  parse.filename_to_lines_async(file_name, function(lines)
+    callback(parse.find_in_lines(lines, regex))
+  end)
+end
+
+function parse.find_values_in_file_async(file_name, regex, match_keys, post_func, callback)
+  parse.filename_to_lines_async(file_name, function(lines)
+    callback(parse.find_values_in_lines(lines, regex, match_keys, post_func))
+  end)
 end
 
 return parse

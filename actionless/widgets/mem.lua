@@ -121,7 +121,7 @@ end
 
 
 function mem.update()
-  mem.now = parse.find_values_in_file(
+  parse.find_values_in_file_async(
     "/proc/meminfo",
     "([%a]+):[%s]+([%d]+).+",
     { total = "MemTotal",
@@ -133,42 +133,49 @@ function mem.update()
       swap = "SwapTotal",
       swapf = "SwapFree",
     },
-    function(v) return math.floor(v / 1024) end)
-  --mem.now.used = mem.now.total - (mem.now.free + mem.now.buf + mem.now.cache)
-  mem.now.used = mem.now.total - mem.now.available
-  mem.now.swapused = mem.now.swap - mem.now.swapf
+    function(v) return math.floor(v / 1024) end,
+    function(now)
+      mem.now = now
+      --mem.now.used = mem.now.total - (mem.now.free + mem.now.buf + mem.now.cache)
+      mem.now.used = mem.now.total - mem.now.available
+      mem.now.swapused = mem.now.swap - mem.now.swapf
 
-  local msg = string.format(
-    "%6s", mem.now.used .. "MB"
+      local msg = string.format(
+        "%6s", mem.now.used .. "MB"
+      )
+      local widget_icon
+      if (
+          (mem.now.used > (mem.now.total * (1 - mem.swappiness * 0.8 / 100))) or
+          (mem.now.swapused > (mem.now.swap * mem.max_swap_ratio))
+      ) then
+        msg = string.format(
+          "%6s swp:%s", mem.now.used .. "MB", mem.now.swapused .. "MB"
+        )
+        mem.widget:set_error()
+        widget_icon = beautiful.widget_mem_critical
+      elseif mem.now.used > (mem.now.total * (1 - mem.swappiness * 2 / 100)) then
+        mem.widget:set_warning()
+        widget_icon = beautiful.widget_mem_high
+      else
+        mem.widget:set_normal()
+        msg = mem.widget_text
+        widget_icon = beautiful.widget_mem
+      end
+      mem.widget:set_text(msg)
+      mem.widget.progressbar:set_value(mem.now.used/mem.now.total)
+      if widget_icon then
+        mem.widget:set_image(widget_icon)
+      end
+    end
   )
-  local widget_icon
-  if (
-      (mem.now.used > (mem.now.total * (1 - mem.swappiness * 0.8 / 100))) or
-      (mem.now.swapused > (mem.now.swap * mem.max_swap_ratio))
-  ) then
-    msg = string.format(
-      "%6s swp:%s", mem.now.used .. "MB", mem.now.swapused .. "MB"
-    )
-    mem.widget:set_error()
-    widget_icon = beautiful.widget_mem_critical
-  elseif mem.now.used > (mem.now.total * (1 - mem.swappiness * 2 / 100)) then
-    mem.widget:set_warning()
-    widget_icon = beautiful.widget_mem_high
-  else
-    mem.widget:set_normal()
-    msg = mem.widget_text
-    widget_icon = beautiful.widget_mem
-  end
-  mem.widget:set_text(msg)
-  mem.widget.progressbar:set_value(mem.now.used/mem.now.total)
-  if widget_icon then
-    mem.widget:set_image(widget_icon)
-  end
 end
 
 
-function mem._get_swappiness()
-  mem.swappiness = tonumber(parse.filename_to_string('/proc/sys/vm/swappiness'))
+function mem._get_swappiness(callback)
+  parse.filename_to_string_async('/proc/sys/vm/swappiness', function(result)
+    mem.swappiness = tonumber(result)
+    callback()
+  end)
 end
 
 
@@ -206,14 +213,14 @@ function mem.init(args)
     percent=10,
     name=12
   }
-  mem._get_swappiness()
-
-  gears_timer({
-    callback=mem.update,
-    timeout=update_interval,
-    autostart=true,
-    call_now=true,
-  })
+  mem._get_swappiness(function()
+    gears_timer({
+      callback=mem.update,
+      timeout=update_interval,
+      autostart=true,
+      call_now=true,
+    })
+  end)
 
   return mem.widget
 end

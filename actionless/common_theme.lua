@@ -345,7 +345,7 @@ function common_theme.create_theme(args)
 
   theme = common_theme.fill_theme(
     h_table.merge(
-      common_theme.create_default_theme(theme_dir, icons_dir),
+      not args.dont_create_default_theme and common_theme.create_default_theme(theme_dir, icons_dir) or {},
       theme
     )
   )

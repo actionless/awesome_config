@@ -7,8 +7,8 @@ local function eprint(text)
   io.stderr:write('[AWESOME_CONFIG] '..text..'\n')
 end
 
-function debug_module.log(object)
-  eprint(inspect(object))
+function debug_module.log(...)
+  eprint(inspect(...))
 end
 
 function debug_module.nlog(object)

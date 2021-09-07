@@ -142,36 +142,38 @@ function cpu.notification_callback_done(output)
 end
 
 function cpu.update()
-  cpu.now.la1, cpu.now.la5, cpu.now.la15 = parse.find_in_file(
+  parse.find_in_file_async(
     "/proc/loadavg",
-    "^([0-9.]+) ([0-9.]+) ([0-9.]+) .*"
+    "^([0-9.]+) ([0-9.]+) ([0-9.]+) .*",
+    function(la1, la5, la15)
+      cpu.now.la1, cpu.now.la5, cpu.now.la15 = la1, la5, la15
+      local msg = string.format(
+        "%-4s", cpu.now.la1
+      )
+      local widget_icon
+      if tonumber(cpu.now.la1) > cpu.cores_number * 2 then
+        cpu.widget:set_error()
+        widget_icon = beautiful.widget_cpu_critical
+      elseif tonumber(cpu.now.la1) > cpu.cores_number then
+        cpu.widget:set_warning()
+        widget_icon = beautiful.widget_cpu_high
+      else
+        cpu.widget:set_normal()
+        msg = cpu.widget_text
+        widget_icon = beautiful.widget_cpu
+      end
+      cpu.widget:set_text(msg)
+      cpu.widget.progressbar:set_value(cpu.now.la1/cpu.cores_number)
+      if widget_icon then
+        cpu.widget:set_image(widget_icon)
+      end
+    end
   )
-  local msg = string.format(
-    "%-4s", cpu.now.la1
-  )
-  local widget_icon
-  if tonumber(cpu.now.la1) > cpu.cores_number * 2 then
-    cpu.widget:set_error()
-    widget_icon = beautiful.widget_cpu_critical
-  elseif tonumber(cpu.now.la1) > cpu.cores_number then
-    cpu.widget:set_warning()
-    widget_icon = beautiful.widget_cpu_high
-  else
-    cpu.widget:set_normal()
-    msg = cpu.widget_text
-    widget_icon = beautiful.widget_cpu
-  end
-  cpu.widget:set_text(msg)
-  cpu.widget.progressbar:set_value(cpu.now.la1/cpu.cores_number)
-  if widget_icon then
-    cpu.widget:set_image(widget_icon)
-  end
 end
 
 function cpu.init(args)
   args     = args or {}
   local update_interval  = args.update_interval or 5
-  cpu.cores_number = tonumber(parse.command_to_string('nproc'))
   cpu.timeout = args.timeout or 0
   cpu.show_pid = args.show_pid or false
   cpu.list_len = args.list_length or 10
@@ -203,12 +205,15 @@ function cpu.init(args)
     name=12
   }
 
-  gears_timer({
-    callback=cpu.update,
-    timeout=update_interval,
-    autostart=true,
-    call_now=true,
-  })
+  awful.spawn.easy_async({"nproc"}, function(result)
+    cpu.cores_number = tonumber(result)
+    gears_timer({
+      callback=cpu.update,
+      timeout=update_interval,
+      autostart=true,
+      call_now=true,
+    })
+  end)
 
   return cpu.widget
 end

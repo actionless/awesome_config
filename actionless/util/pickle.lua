@@ -34,6 +34,7 @@ local pickle = {}
 
    --// The Save Function
    function pickle.save(  tbl,filename )
+     log("PICKLE: writing to file...")
       local charS,charE = "   ","\n"
       local file,err = io.open( filename, "wb" )
       if err then return err end
@@ -108,6 +109,7 @@ local pickle = {}
 
    --// The Load Function
    function pickle.load( sfile )
+     log("PICKLE: reading from file...")
       local ftables,err = loadfile( sfile )
       if err then return nil, err end
       local tables = ftables()
