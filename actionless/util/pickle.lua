@@ -177,6 +177,15 @@ local pickle = {}
 
   end
 
+  function pickle.save_sync(  tbl,filename )
+    log("PICKLE: writing to file (sync)...")
+    local file,err = io.open( filename, "wb" )
+    if err then return err end
+    file:write(pickle.marshal(tbl))
+    file:close()
+    log("PICKLE: writing to file done")
+  end
+
   --// The Load Function
   function pickle.load( sfile )
     log("PICKLE: reading from file...")

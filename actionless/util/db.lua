@@ -31,7 +31,14 @@ db._init = function()
       autostart=true,
       call_now=false,
     })
-    awesome.connect_signal('exit', function() db.write() end)
+    awesome.connect_signal('exit', db.write_sync)
+  end
+end
+
+db.write_sync = function()
+  if db._was_changed then
+    pickle.save_sync(db._file_table, db.filename)
+    db._was_changed = false
   end
 end
 
