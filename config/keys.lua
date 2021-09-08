@@ -20,6 +20,7 @@ local kbd_helpers = require('actionless.keyboard')
 local h_table = require('actionless.util.table')
 local get_icon = require("actionless.util.xdg").get_icon
 local color_utils = require("actionless.util.color")
+local nlog = require("actionless.util.debug").naughty_log
 
 
 local keys = {}

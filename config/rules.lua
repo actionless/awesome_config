@@ -6,6 +6,8 @@ local capi = {
 }
 local dpi = beautiful.xresources.apply_dpi
 
+local nlog = require("actionless.util.debug").naughty_log
+
 
 local function apply_delayed_rule(c)  -- luacheck: no unused
   if not c.class and c.name == "" then

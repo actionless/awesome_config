@@ -9,6 +9,7 @@ local gears_timer = require("gears.timer")
 
 local parse = require("actionless.util.parse")
 local decorated_widget= require("actionless.widgets.common").decorated
+local nlog = require("actionless.util.debug").naughty_log
 
 
 -- coretemp

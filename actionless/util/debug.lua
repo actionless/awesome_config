@@ -11,7 +11,7 @@ function debug_module.log(...)
   eprint(inspect(...))
 end
 
-function debug_module.nlog(object)
+function debug_module.naughty_log(object)
   local formatted = inspect(object)
   eprint("nlog: " .. formatted)
   naughty.notify{
@@ -20,5 +20,7 @@ function debug_module.nlog(object)
     timeout=60,
   }
 end
+
+debug_module.nlog = debug_module.naughty_log
 
 return debug_module

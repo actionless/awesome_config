@@ -7,6 +7,7 @@ local cairo = require("lgi").cairo
 local delayed_call = require("gears.timer").delayed_call
 
 local tag_helpers = require("actionless.util.tag")
+local nlog = require("actionless.util.debug").naughty_log
 
 
 local function apply_shape(draw, shape, outer_shape_args, inner_shape_args)

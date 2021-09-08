@@ -1,6 +1,8 @@
 local awful_spawn = require("awful.spawn")
 local gears_timer = require("gears.timer")
 
+local nlog = require("actionless.util.debug").naughty_log
+
 
 local module = {}
 

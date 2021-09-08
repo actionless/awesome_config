@@ -8,6 +8,7 @@ local titlebar	= require("actionless.titlebar")
 local persistent = require("actionless.persistent")
 local tag_helpers = require("actionless.util.tag")
 local round_up_client_corners = require("actionless.client_border_shape").round_up_client_corners
+local nlog = require("actionless.util.debug").naughty_log
 
 
 local function clog(msg, c) -- luacheck: ignore
