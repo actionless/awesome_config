@@ -10,6 +10,7 @@ local protected_call = require("gears.protected_call")
 local awful_spawn = require("awful.spawn")
 
 local h_table = require("actionless.util.table")
+local log = require("actionless.util.debug").log
 
 
 local CACHE_SIZE = 128

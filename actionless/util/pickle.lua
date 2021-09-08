@@ -31,6 +31,9 @@ local lgi = require("lgi")
 local gio = lgi.Gio
 local glib = lgi.GLib
 
+local log = require("actionless.util.debug").log
+
+
 local pickle = {}
   -- declare local variables
   --// exportstring( string )

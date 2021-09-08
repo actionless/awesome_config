@@ -3,6 +3,8 @@ local beautiful = require("beautiful")
 local naughty = require("naughty")
 local pack = pack or table.pack  -- luacheck: ignore 143
 
+local log = require("actionless.util.debug").log
+
 local wlppr = {}
 
 

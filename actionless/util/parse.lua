@@ -7,6 +7,7 @@ local g_string = require("gears.string")
 local awful_spawn = require("awful.spawn")
 
 local h_table = require("actionless.util.table")
+local log = require("actionless.util.debug").log
 
 
 local parse = {}

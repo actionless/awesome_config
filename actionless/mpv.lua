@@ -2,6 +2,7 @@ local naughty = require('naughty')
 local awful_spawn = require('awful.spawn')
 
 local kbd = require('actionless.keyboard')
+local log = require("actionless.util.debug").log
 
 
 local mpv = {}

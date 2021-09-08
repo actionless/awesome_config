@@ -16,6 +16,7 @@ local decorated_widget	= common.decorated
 local markup		= require("actionless.util.markup")
 local db = require("actionless.util.db")
 local get_icon = require("actionless.util.xdg").get_icon
+local log = require("actionless.util.debug").log
 
 local backend_modules	= require("actionless.widgets.music.backends")
 

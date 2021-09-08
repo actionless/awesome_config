@@ -17,6 +17,7 @@ end
 
 local common = require("actionless.widgets.common")
 local db = require("actionless.util.db")
+local log = require("actionless.util.debug").log
 
 
 local DB_ID = 'notifications_storage'

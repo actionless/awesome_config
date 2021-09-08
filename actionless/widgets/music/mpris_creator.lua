@@ -10,6 +10,8 @@ local g_timer = require("gears.timer")
 
 local a_image = require("actionless.util.async_web_image")
 local a_table = require("actionless.util.table")
+local log = require("actionless.util.debug").log
+
 
 local DEBUG_LOG = false
 --local DEBUG_LOG = true

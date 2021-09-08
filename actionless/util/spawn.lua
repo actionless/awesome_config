@@ -1,5 +1,8 @@
 local awful_spawn = require("awful.spawn")
 
+local log = require("actionless.util.debug").log
+
+
 local spawn = {}
 
 function spawn.run_once(cmd)
