@@ -145,7 +145,7 @@ local pickle = {}
             io_stream:seek(0, glib.SeekType.SET, nil)
             local file = io_stream:get_output_stream()
             local data = pickle.marshal(tbl)
-            log{"PICKLE: writing data", data}
+            --log{"PICKLE: writing data", data}
             file:write_all_async(data, glib.PRIORITY_DEFAULT, nil, function(_, write_result)
               local length_written = file:write_all_finish(write_result)
               log{
