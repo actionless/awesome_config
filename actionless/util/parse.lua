@@ -5,12 +5,12 @@
 
 local lgi = require("lgi")
 local gio = lgi.Gio
-local glib = lgi.GLib
 
 local g_string = require("gears.string")
 
 local h_table = require("actionless.util.table")
 local log = require("actionless.util.debug").log
+local h_fs = require("actionless.util.filesystem")
 
 
 local parse = {}
@@ -26,28 +26,18 @@ end
 
 ----------------------------------------------
 function parse.filename_to_string_async(file_name, callback)
-  --log("PARSE: opening file...")
   local gfile = gio.File.new_for_path(file_name)
-
-  gfile:query_info_async(
-    "standard::type,access::can-read",
-    gio.FileQueryInfoFlags.NONE, glib.PRIORITY_DEFAULT,
-    nil,
-    function(_, gfileinfo_result)
-      local gfileinfo = gfile:query_info_finish(gfileinfo_result)
-      if not (
-        gfileinfo and gfileinfo:get_file_type() ~= "DIRECTORY" and
-        gfileinfo:get_attribute_boolean("access::can-read")
-      ) then
-        log("PARSE: file '"..file_name.."' not found...")
-        callback(nil)
-      else
-        gfile:load_contents_async(nil, function(_, contents_result)
-          local result = gfile:load_contents_finish(contents_result)
-          callback(result)
-        end, nil)
-      end
-  end, nil)  -- query_info_async - end
+  h_fs.is_readable(gfile, function(is_readable)
+    if not is_readable then
+      log("PARSE: file '"..file_name.."' is not found or not readable...")
+      callback(nil)
+    else
+      gfile:load_contents_async(nil, function(_, contents_result)
+        local result = gfile:load_contents_finish(contents_result)
+        callback(result)
+      end, nil)
+    end
+  end)
 end
 
 function parse.filename_to_lines_async(file_name, callback)
