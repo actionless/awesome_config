@@ -18,25 +18,35 @@ local db = {
 
 db._init = function()
   if not db._file_table then
+    log("DB: init...")
     db._file_table = pickle.load(db.filename)
     if not db._file_table then
+      log("DB: no data found, creating new one...")
       db._file_table = {}
       db.write()
     end
     gears_timer({
-      callback=db.write,
+      callback=function() db.write() end,
       timeout=db.auto_write_timeout,
       autostart=true,
       call_now=false,
     })
-    awesome.connect_signal('exit', db.write)
+    awesome.connect_signal('exit', function() db.write() end)
   end
 end
 
-db.write = function()
-  if db._was_changed then
-    pickle.save(db._file_table, db.filename)
-    db._was_changed = false
+db.write = function(callback)
+  if not db._was_changed then
+    if callback then
+      callback()
+    end
+  else
+    pickle.save(db._file_table, db.filename, function()
+      db._was_changed = false
+      if callback then
+        callback()
+      end
+    end)
   end
 end
 
@@ -53,7 +63,8 @@ end
 
 db.get_or_set = function(key, fallback_value)
   local value = db.get(key)
-  if not value then
+  if value == nil then
+    log("DB: no value found for ".. key .. " - using fallback")
     value = fallback_value
     db.set(key, value)
   end

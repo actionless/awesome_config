@@ -523,12 +523,14 @@ function keys.init(awesome_context)
 
     bind_key({ modkey, "Control"  }, "r",
       function()
-        awful.spawn.easy_async_with_shell(
-          'xrdb -merge $HOME/.Xresources ; pgrep "^xst\\$" | xargs kill -s USR1',
-          function()
-            awful.util.restart()
-          end
-        )
+        require("actionless.util.db").write(function()
+          awful.spawn.easy_async_with_shell(
+            'xrdb -merge $HOME/.Xresources ; pgrep "^xst\\$" | xargs kill -s USR1',
+            function()
+              awful.util.restart()
+            end
+          )
+        end)
       end,
       "reload awesome wm", AWESOME_COLOR
     ),
