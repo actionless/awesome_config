@@ -3,14 +3,11 @@
       * (c) 2014-2021  Yauheni Kirylau
 --]]
 
-local lgi = require("lgi")
-local gio = lgi.Gio
-
 local g_string = require("gears.string")
 
-local h_table = require("actionless.util.table")
 local log = require("actionless.util.debug").log
 local h_fs = require("actionless.util.filesystem")
+local h_table = require("actionless.util.table")
 
 
 local parse = {}
@@ -26,18 +23,7 @@ end
 
 ----------------------------------------------
 function parse.filename_to_string_async(file_name, callback)
-  local gfile = gio.File.new_for_path(file_name)
-  h_fs.is_readable(gfile, function(is_readable)
-    if not is_readable then
-      log("PARSE: file '"..file_name.."' is not found or not readable...")
-      callback(nil)
-    else
-      gfile:load_contents_async(nil, function(_, contents_result)
-        local result = gfile:load_contents_finish(contents_result)
-        callback(result)
-      end, nil)
-    end
-  end)
+  h_fs.read_file(file_name, callback)
 end
 
 function parse.filename_to_lines_async(file_name, callback)

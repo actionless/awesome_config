@@ -27,10 +27,6 @@
 
 -- ported to Gio by Y. Kirylau
 
-local lgi = require("lgi")
-local gio = lgi.Gio
-local glib = lgi.GLib
-
 local log = require("actionless.util.debug").log
 local h_fs = require("actionless.util.filesystem")
 
@@ -121,55 +117,9 @@ local pickle = {}
 
   --// The Save Function
   function pickle.save(  tbl,filename,callback )
-    log("PICKLE: writing to file...")
-    local gfile = gio.File.new_for_path(filename)
-    h_fs.is_readable(gfile, function(is_readable)
-      if not is_readable then
-
-        log("PICKLE: creating file...")
-        gfile:create_readwrite_async(gio.FileCreateFlags.NONE, glib.PRIORITY_DEFAULT, nil, function(_, create_result)
-          log{
-            "file created",
-            gfile:create_readwrite_finish(create_result)
-          }
-          pickle.save(tbl, filename, callback)
-        end, nil) -- create_readwrite end
-
-      else
-
-        gfile:open_readwrite_async(glib.PRIORITY_DEFAULT, nil, function(_, io_stream_result)
-          local io_stream = gfile:open_readwrite_finish(io_stream_result)
-          io_stream:seek(0, glib.SeekType.SET, nil)
-          local file = io_stream:get_output_stream()
-          local data = pickle.marshal(tbl)
-          --log{"PICKLE: writing data", data}
-          file:write_all_async(data, glib.PRIORITY_DEFAULT, nil, function(_, write_result)
-            local length_written = file:write_all_finish(write_result)
-            log{
-              "file written",
-              length_written
-            }
-            file:truncate(length_written, nil)
-            file:close_async(glib.PRIORITY_DEFAULT, nil, function(_, file_close_result)
-              log{
-                "output stream closed",
-                file:close_finish(file_close_result)
-              }
-              io_stream:close_async(glib.PRIORITY_DEFAULT, nil, function(_, stream_close_result)
-                log{
-                  "file stream closed",
-                  io_stream:close_finish(stream_close_result)
-                }
-                if callback then
-                  callback()
-                end
-              end, nil) -- io_stream:close end
-            end, nil) -- file:close end
-          end, nil) -- file:write end
-        end, nil) -- open_readwrite end
-
-      end
-    end)  -- is_readable - end
+    local data = pickle.marshal(tbl)
+    --log{"PICKLE: writing data", data}
+    h_fs.write_file(filename, data, callback)
   end
 
   function pickle.save_sync(  tbl,filename )
