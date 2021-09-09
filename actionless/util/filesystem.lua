@@ -2,13 +2,7 @@ local lgi = require("lgi")
 local gio = lgi.Gio
 local glib = lgi.GLib
 
-local _log = require("actionless.util.debug").log
-
-
-local function log(message, ...)
-  message = 'UTIL.FILESYSTEM: '..message
-  _log(message, ...)
-end
+local log = require("actionless.util.debug").get_decorated_logger('UTIL.FILESYSTEM')
 
 
 local filesystem = {}
