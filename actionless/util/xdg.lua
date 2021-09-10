@@ -65,11 +65,7 @@ local function do_lookup(category, name, icon_themes, icon_sizes)
           }) do
             if gfs.file_readable(path) then
               --log("R:"..path)
-              if gstring.endswith(path, '.svg') then
-                return module.resize_svg(path)
-              else
-                return path
-              end
+              return path
             end
           end
         end
@@ -105,7 +101,12 @@ function module.get_icon(category, name, args)
   if not _path_cache[cache_id] then
     _path_cache[cache_id] = do_lookup(category, name, icon_themes, icon_sizes)
   end
-  return _path_cache[cache_id]
+  local path = _path_cache[cache_id]
+  if gstring.endswith(path, '.svg') then
+    return module.resize_svg(path)
+  else
+    return path
+  end
 end
 
 return module
