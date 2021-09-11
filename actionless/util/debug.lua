@@ -9,6 +9,7 @@ end
 
 local function my_inspect(...)
   local args = {...}
+  if #args == 0 then return 'nil' end
   local obj = args[1]
   if #args == 1 then
     if type(obj) == 'string' then
