@@ -40,23 +40,28 @@ function filesystem.read_file(file_name, callback)
   end)
 end
 
-function filesystem.write_file(file_name, text, callback)
+function filesystem.write_file(file_name, text, callback, is_retry)
     log("writing to file...")
     local gfile = gio.File.new_for_path(file_name)
     filesystem.is_readable(gfile, function(is_readable)
-      if not is_readable then
 
+      if not is_readable then
+        if is_retry then
+          log("failed creating file "..file_name)
+          if callback then
+            callback(false)
+          end
+        end
         log("creating file...")
         gfile:create_readwrite_async(gio.FileCreateFlags.NONE, glib.PRIORITY_DEFAULT, nil, function(_, create_result)
           log{
             "file created",
             gfile:create_readwrite_finish(create_result)
           }
-          filesystem.write_file(file_name, text, callback)
+          filesystem.write_file(file_name, text, callback, true)
         end, nil) -- create_readwrite end
 
       else
-
         gfile:open_readwrite_async(glib.PRIORITY_DEFAULT, nil, function(_, io_stream_result)
           local io_stream = gfile:open_readwrite_finish(io_stream_result)
           io_stream:seek(0, glib.SeekType.SET, nil)
@@ -79,7 +84,7 @@ function filesystem.write_file(file_name, text, callback)
                   io_stream:close_finish(stream_close_result)
                 }
                 if callback then
-                  callback()
+                  callback(true)
                 end
               end, nil) -- io_stream:close end
             end, nil) -- file:close end
