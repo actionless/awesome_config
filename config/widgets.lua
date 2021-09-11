@@ -181,11 +181,14 @@ function widget_loader.init(awesome_context)
   w.calendar_popup:attach(w.textclock, nil, {on_hover=true})
 
   -- NAUGHTY SIDEBAR --
+  --local systray = awful.widget.only_on_screen(wibox.widget.systray(), screen.primary)
+  local systray = wibox.widget.systray()
+  systray:set_screen(screen.primary)
   w.naughty_sidebar = widgets.naughty_sidebar{
     hide_without_notifications = false,
     custom_widgets = {
       {
-        widget=awful.widget.only_on_screen(wibox.widget.systray(), screen.primary),
+        widget=systray,
         width=32, height=32,
         --width=24, height=24,
         --width=48, height=48,
