@@ -67,7 +67,7 @@ local function widget_factory(args)
       common_widgets.constraint{width=padding},
     }
     args.spacing = 0
-    local icon_layout = common_widgets.decorated_horizontal(args)
+    local icon_layout = common_widgets.decorated(args)
     icon_layout:buttons(awful.util.table.join(
         awful.button({ }, 1, function() st:toggle() end)
     ))
