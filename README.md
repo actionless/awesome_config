@@ -8,10 +8,8 @@
 
 ```sh
 cd ~/.config/
-git clone https://github.com/actionless/awesome_config.git awesome
+git clone --recursive https://github.com/actionless/awesome_config.git awesome
 cd awesome
-git submodule init
-git submodule update
 # optionally copy config with machine-specific variables
 cp config/local.lua.example config/local.lua
 # on Arch Linux or Manjaro:
