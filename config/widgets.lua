@@ -11,6 +11,7 @@ local capi = {
 
 local widgets = require("actionless.widgets")
 local tasklist_addon = require("actionless.tasklist_addon")
+local menu_addon = require("actionless.menu_addon")
 local persistent = require("actionless.persistent")
 local markup = require("actionless.util.markup")
 local h_color = require("actionless.util.color")
@@ -347,7 +348,8 @@ function widget_loader.init(awesome_context)
           if awesome_context.menu.instance then
             awesome_context.menu.instance:hide()
           end
-          awesome_context.menu.instance = awful.menu.clients({
+          --awesome_context.menu.instance = awful.menu.clients({
+          awesome_context.menu.instance = menu_addon.clients_on_tag({
             theme = {
               width=capi.screen[awful.screen.focused()].workarea.width
             },
