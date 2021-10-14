@@ -42,7 +42,7 @@ function autorun.init(awesome_context)
   --run_once{"redshift"}
   --run_once{awesome_context.cmds.compositor}
 
-  with_shell("start-pulseaudio-x11")  -- yes, with shell
+  with_shell("start-pulseaudio-x11 || pulseaudio")
 
   for _, item in ipairs(awesome_context.autorun) do
     with_shell(item)
