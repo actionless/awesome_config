@@ -1,7 +1,8 @@
 local awful_spawn = require("awful.spawn")
 local gears_timer = require("gears.timer")
 
-local nlog = require("actionless.util.debug").naughty_log
+--local nlog = require("actionless.util.debug").naughty_log
+local naughty_log_eternal = require("actionless.util.debug").naughty_log_eternal
 
 
 local module = {}
@@ -22,7 +23,7 @@ function module.skip_kill()
 end
 
 function module.kill_everybody(callback, retries)
-  retries = retries or 0
+  retries = retries or 10
   module.cancel_kill()
 
   -- kill (sigterm) firefox instead of closing:
@@ -36,24 +37,29 @@ function module.kill_everybody(callback, retries)
       end
     end
 
-    local clients_remains = 0
+    local clients_remains = {}
     for si=1,screen.count() do
       local s = screen[si]
-      for _, _ in ipairs(s.all_clients) do
-        clients_remains = clients_remains + 1
+      for _, c in ipairs(s.all_clients) do
+        table.insert(clients_remains, c)
       end
     end
-    if (clients_remains == 0) or _confirm_force_shutdown then
+    retries = retries - 1
+    if (#clients_remains == 0) or _confirm_force_shutdown then
       if callback then
         callback()
       end
     else
-      if retries > 1 then
-        nlog("there are "..tostring(clients_remains).." clients are still running")
+      if retries == 0 then
+        local message = "there are "..tostring(#clients_remains).." clients still running:"
+        for _, c in ipairs(clients_remains) do
+          message = message .. '\n  ' .. (c.name or '<unnamed>')
+        end
+        naughty_log_eternal(message)
       end
       if not kill_timer then
         kill_timer = gears_timer({
-          callback=function() module.kill_everybody(callback) end,
+          callback=function() module.kill_everybody(callback, retries) end,
           timeout=1,
           autostart=true,
           call_now=false,
