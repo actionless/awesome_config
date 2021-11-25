@@ -1,15 +1,21 @@
 local awful_spawn = require("awful.spawn")
 local gears_timer = require("gears.timer")
+local naughty = require("naughty")
 
 --local nlog = require("actionless.util.debug").naughty_log
-local naughty_log_eternal = require("actionless.util.debug").naughty_log_eternal
+local naughty_log = require("actionless.util.debug").naughty_log
 
 
-local module = {}
+local module = {
+  kill_classes = {
+    "Spotify",
+  }
+}
 
 
 local kill_timer
 local _confirm_force_shutdown = false
+local _notification_remains
 
 function module.cancel_kill()
   if kill_timer then
@@ -44,18 +50,41 @@ function module.kill_everybody(callback, retries)
         table.insert(clients_remains, c)
       end
     end
-    retries = retries - 1
     if (#clients_remains == 0) or _confirm_force_shutdown then
+      module.cancel_kill()
       if callback then
         callback()
       end
     else
-      if retries == 0 then
-        local message = "there are "..tostring(#clients_remains).." clients still running:"
+      if retries > 0 then
+        retries = retries - 1
+      else
+        local message = ""
+        local num_clients_remains = 0
         for _, c in ipairs(clients_remains) do
-          message = message .. '\n  ' .. (c.name or '<unnamed>')
+          local should_be_killed = false
+          for _, killable_class in ipairs(module.kill_classes) do
+            if c.class == killable_class then
+              should_be_killed = true
+              break
+            end
+          end
+          if should_be_killed then
+            naughty_log('Killing "'..c.class..' - '..c.name..'"...')
+            awful_spawn({'kill', '-9', tostring(c.pid)})
+          else
+            message = message .. '\n  ' .. c.class .. ' - ' .. c.name
+            num_clients_remains = num_clients_remains + 1
+          end
         end
-        naughty_log_eternal(message)
+        if num_clients_remains > 0 then
+          message = "There are "..tostring(num_clients_remains).." clients still running:" .. message
+          if not _notification_remains then
+            _notification_remains = naughty.notification{text=message, timeout=0}
+          else
+            _notification_remains.text = message
+          end
+        end
       end
       if not kill_timer then
         kill_timer = gears_timer({
