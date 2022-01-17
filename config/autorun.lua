@@ -36,7 +36,7 @@ function autorun.init(awesome_context)
     "-layout", "us,ru",
     "-variant", ",winkeys",
     --"-option", "grp:caps_toggle,grp_led:caps,terminate:ctrl_alt_bksp,compose:ralt",
-    "-option", "grp:shifts_toggle,grp_led:caps,terminate:ctrl_alt_bksp,compose:ralt,caps:escape_shifted_capslock",
+    "-option", "grp:shifts_toggle,grp_led:caps,terminate:ctrl_alt_bksp,compose:ralt,caps:escape_shifted_capslock,caps:escape",
  }
 
   --run_once{"redshift"}
