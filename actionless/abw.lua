@@ -26,26 +26,6 @@ local gears_timer = require('gears.timer')
 local gears_string = require('gears.string')
 
 
-local parse = require('actionless.util.parse')
-local _ = {
-  Init = function(self)
-    parse.filename_to_string_async('/sys/class/backlight/intel_backlight/max_brightness', function(result)
-      self.max_brightness = tonumber(result)
-      self:UpdateState()
-    end)
-  end,
-  UpdateState = function(self, callback)
-    parse.filename_to_string_async('/sys/class/backlight/intel_backlight/actual_brightness', function(result)
-      local actual_brightness = tonumber(result)
-      self.Volume = actual_brightness / self.max_brightness
-      self.Mute = false
-      if callback then
-        callback()
-      end
-    end)
-  end,
-}
-
 local p = {
   Init = function(self)
     self:UpdateState()
