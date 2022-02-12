@@ -12,7 +12,7 @@ fi
 
 while true ; do
     code=0
-    picom >> ${CACHEDIR}/picom_stdout  2>> ${CACHEDIR}/picom_stderr &
+    picom --experimental-backends >> ${CACHEDIR}/picom_stdout  2>> ${CACHEDIR}/picom_stderr &
 	sleep 0.2
     awesome $@ >> ${CACHEDIR}/awesome_stdout  2>> ${CACHEDIR}/awesome_stderr || code=$?
 	killall picom

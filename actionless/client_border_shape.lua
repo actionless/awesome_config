@@ -11,7 +11,6 @@ local nlog = require("actionless.util.debug").naughty_log
 
 
 local function apply_shape(draw, shape, outer_shape_args, inner_shape_args)
-
   local geo = draw:geometry()
 
   local border = beautiful.base_border_width
@@ -64,7 +63,7 @@ local function round_up_client_corners(c, force, reference) -- luacheck: no unus
       else
         c:set_xproperty('_ACTNLZZ_IGNORE_PICOM_BORDER', true)
       end
-      return
+      --return
     end
 
   if not force and ((
@@ -118,7 +117,7 @@ local function round_up_client_corners(c, force, reference) -- luacheck: no unus
     if not composite_manager_running then
       apply_shape(c, gears.shape.rounded_rect, outer_shape_args, inner_shape_args)
     else
-      -- needed for compoton's shadow:
+      -- needed for picom's shadow/blur (https://github.com/yshui/picom/issues/775):
       c.shape = function(cr, w, h) gears.shape.rounded_rect(
         cr, w, h, beautiful.client_border_radius*0.9
       ) end

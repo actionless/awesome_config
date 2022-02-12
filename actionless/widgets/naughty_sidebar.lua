@@ -23,7 +23,7 @@ local log = require("actionless.util.debug").log
 local DB_ID = 'notifications_storage'
 local DB_ID_READ_COUNT = 'notifications_storage_read_count'
 
-local _DUAL_KAWASE_FIXED_IN_PICOM = false
+local _DUAL_KAWASE_FIXED_IN_PICOM = true
 
 
 local SCROLL_UP = 4
@@ -185,6 +185,11 @@ local function init_theme(widget_args)
     beautiful.notification_font,
     "Sans 8"
   )
+  set_theme('sidebar_border_width',
+    beautiful.notification_sidebar_border_width,
+    beautiful.panel_border_width,
+    0
+  )
   set_theme('sidebar_bg',
     beautiful.notification_sidebar_bg,
     beautiful.panel_bg,
@@ -201,8 +206,8 @@ local function init_theme(widget_args)
   )
   set_theme('internal_corner_radius',
     beautiful.notification_sidebar_internal_corner_radius,
-    dpi(30)
-    --dpi(10)
+    --dpi(30)
+    dpi(10)
   )
 
   set_theme('notification_bg',
@@ -714,12 +719,14 @@ local function widget_factory(args)
   end
 
   function naughty_sidebar:refresh_notifications()
-    local left_border = beautiful.panel_border_width or beautiful.panel_widget_border_width or 0
+    local left_border = naughty_sidebar.theme.sidebar_border_width
+    local internal_corner_radius = naughty_sidebar.theme.internal_corner_radius
+
     local margins = {
-      left=math.max(0, naughty_sidebar.theme.spacing+(
-        _DUAL_KAWASE_FIXED_IN_PICOM and naughty_sidebar.theme.internal_corner_radius or 0
-      )-left_border),
-      right=naughty_sidebar.theme.spacing,
+      --left=math.max(0, naughty_sidebar.theme.spacing-left_border),
+      left=naughty_sidebar.theme.spacing,
+      --right=naughty_sidebar.theme.spacing,
+      right=math.max(0, naughty_sidebar.theme.spacing-left_border),
       top=naughty_sidebar.theme.spacing,
       bottom=naughty_sidebar.theme.spacing,
     }
@@ -730,11 +737,37 @@ local function widget_factory(args)
       layout = wibox.container.margin,
       margins = margins,
     }
+
     local margin_outer = wibox.widget{
-      margin_inner,
-      color = naughty_sidebar.theme.sidebar_bg,
-      margins = { left = left_border },
-      layout = wibox.container.margin,
+        {
+          {
+            bg=naughty_sidebar.theme.sidebar_bg,
+            shape = _DUAL_KAWASE_FIXED_IN_PICOM and function(cr, w, h)
+              cr:move_to(0, 0)
+              cr:curve_to(
+                0, 0,
+                internal_corner_radius, 0,
+                internal_corner_radius, internal_corner_radius
+              )
+              cr:line_to(internal_corner_radius, h)
+              cr:line_to(w, h)
+              cr:line_to(w, internal_corner_radius)
+              cr:curve_to(
+                w, internal_corner_radius,
+                w+left_border, 0-left_border,
+                0, 0
+              )
+              cr:close_path()
+              return cr
+            end,
+            layout = wibox.container.background,
+          },
+          width=(_DUAL_KAWASE_FIXED_IN_PICOM and internal_corner_radius or 0)+left_border,
+          strategy = 'exact',
+          layout = wibox.container.constraint,
+        },
+        margin_inner,
+        layout = wibox.layout.fixed.horizontal,
     }
 
     for _, widget_description in ipairs(naughty_sidebar._custom_widgets) do
