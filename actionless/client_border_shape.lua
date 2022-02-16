@@ -56,15 +56,15 @@ local pending_shapes = {}
 local function round_up_client_corners(c, force, reference) -- luacheck: no unused
 
     -- @TODO: do big clean-up around here :-)
-    if composite_manager_running then
-      local client_tag = tag_helpers.get_client_tag(c)
-      if not client_tag or client_tag.layout.name == "floating" or client_tag:get_gap() ~= 0 then
-        c:set_xproperty('_ACTNLZZ_IGNORE_PICOM_BORDER', false)
-      else
-        c:set_xproperty('_ACTNLZZ_IGNORE_PICOM_BORDER', true)
-      end
-      --return
-    end
+    --if composite_manager_running then
+    --  local client_tag = tag_helpers.get_client_tag(c)
+    --  if not client_tag or client_tag.layout.name == "floating" or client_tag:get_gap() ~= 0 then
+    --    c:set_xproperty('_ACTNLZZ_IGNORE_PICOM_BORDER', false)
+    --  else
+    --    c:set_xproperty('_ACTNLZZ_IGNORE_PICOM_BORDER', true)
+    --  end
+    --  --return
+    --end
 
   if not force and ((
     -- @TODO: figure it out and uncomment
@@ -89,6 +89,7 @@ local function round_up_client_corners(c, force, reference) -- luacheck: no unus
     local client_tag = tag_helpers.get_client_tag(c)
     if not client_tag then
       nlog('no client tag')
+      pending_shapes[c] = nil
       return
     end
     local num_tiled = #tag_helpers.get_tiled(client_tag)
@@ -101,8 +102,11 @@ local function round_up_client_corners(c, force, reference) -- luacheck: no unus
       and not c.floating
       and client_tag.layout.name ~= "floating"
     )) then
-      pending_shapes[c] = nil
       --nlog('R2 F='..(force and force or 'nil').. ', R='..reference..', C='.. c.name)
+      if composite_manager_running then
+        c:set_xproperty('_ACTNLZZ_IGNORE_PICOM_BORDER', true)
+      end
+      pending_shapes[c] = nil
       return
     end
     -- Draw outer shape only if floating layout or useless gaps
@@ -121,6 +125,7 @@ local function round_up_client_corners(c, force, reference) -- luacheck: no unus
       c.shape = function(cr, w, h) gears.shape.rounded_rect(
         cr, w, h, beautiful.client_border_radius*0.9
       ) end
+      c:set_xproperty('_ACTNLZZ_IGNORE_PICOM_BORDER', false)
     end
 
     --clog("apply_shape "..(reference or 'no_ref'), c)
