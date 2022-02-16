@@ -63,12 +63,14 @@ function widget_loader.init(awesome_context)
   end
   w.backlight = require("actionless.abw")
   --w.backlight.update_interval = 60
-  w.volume = require("third_party/apw/widget")
+  w.volume = require("third_party/apw/widget")({
+    backend='pactl',
+  })
   w.volume.pulseBar.step = 0.02
-  w.volume.pulse.OrigToggleMute = w.volume.pulse.ToggleMute
-  w.volume.pulse.ToggleMute = function(...)
-      w.volume.pulse.OrigToggleMute(...)
-      if w.volume.pulse.Mute then
+  w.volume.backend.OrigToggleMute = w.volume.backend.ToggleMute
+  w.volume.backend.ToggleMute = function(...)
+      w.volume.backend.OrigToggleMute(...)
+      if w.volume.backend.Mute then
         awful.spawn.spawn('xset -led named "Scroll Lock"')
       else
         awful.spawn.spawn('xset led named "Scroll Lock"')
