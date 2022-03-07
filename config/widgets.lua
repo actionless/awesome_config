@@ -62,8 +62,9 @@ function widget_loader.init(awesome_context)
     beautiful.apw_bg_color = beautiful.panel_bg
   end
   w.backlight = require("actionless.abw")
-  --w.backlight.update_interval = 60
-  w.volume = require("third_party/apw/widget")({
+  w.backlight.update_interval = 60
+
+  w.volume = require("third_party/apw")({
     backend='pactl',
   })
   w.volume.pulseBar.step = 0.02
