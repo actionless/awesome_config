@@ -21,7 +21,7 @@ local h_table = require('actionless.util.table')
 local get_icon = require("actionless.util.xdg").get_icon
 local color_utils = require("actionless.util.color")
 local nlog = require("actionless.util.debug").naughty_log
-
+local dpi = beautiful.xresources.apply_dpi
 
 local keys = {}
 function keys.init(awesome_context)
@@ -31,6 +31,10 @@ function keys.init(awesome_context)
   local altkey = awesome_context.altkey
 
   local shell_commands = awesome_context.cmds
+
+  local MOUSE_MOVE_PX = dpi(5)
+  local MOUSE_FAST_MOVE_PX = dpi(50)
+  local VIRTUAL_MOUSE_MODIFIERS = { modkey, altkey, "Shift", "Control"}
 
   local revelation = require("third_party.revelation")
   revelation.fg = beautiful.revelation_fg
@@ -109,6 +113,7 @@ function keys.init(awesome_context)
   local MUSIC = "music"
   local PROGRAMS = "programs"
   local SCREENSHOT = "screenshot"
+  local VIRTUAL_MOUSE = "virtual mouse"
   -- }}}
 
   local bind_key = function(mod, key, press, description, group)
@@ -143,6 +148,78 @@ function keys.init(awesome_context)
     end, {
       description = "context menu", group=GROUP_MENU
     }),
+
+  -- {{{ Virtual mouse
+    awful.key(VIRTUAL_MOUSE_MODIFIERS, "Return", function()
+      awful.spawn({'xdotool', 'mousedown', '--clearmodifiers', '1'})
+    end, function()
+      awful.spawn({'xdotool', 'mouseup', '--clearmodifiers', '1'})
+    end, {
+      description = "mouse left click", group=VIRTUAL_MOUSE
+    }),
+
+    awful.key(VIRTUAL_MOUSE_MODIFIERS, "Up", function()
+      awful.spawn({'xdotool', 'mousemove_relative', '--', '0',  '-'..tostring(MOUSE_MOVE_PX)})
+    end, {
+      description = "mouse move up", group=VIRTUAL_MOUSE
+    }),
+    awful.key(VIRTUAL_MOUSE_MODIFIERS, "Down", function()
+      awful.spawn({'xdotool', 'mousemove_relative', '0',  tostring(MOUSE_MOVE_PX)})
+    end, {
+      description = "mouse move down", group=VIRTUAL_MOUSE
+    }),
+    awful.key(VIRTUAL_MOUSE_MODIFIERS, "Left", function()
+      awful.spawn({'xdotool', 'mousemove_relative', '--', '-'..tostring(MOUSE_MOVE_PX),  '0'})
+    end, {
+      description = "mouse move left", group=VIRTUAL_MOUSE
+    }),
+    awful.key(VIRTUAL_MOUSE_MODIFIERS, "Right", function()
+      awful.spawn({'xdotool', 'mousemove_relative', tostring(MOUSE_MOVE_PX),  '0'})
+    end, {
+      description = "mouse move right", group=VIRTUAL_MOUSE
+    }),
+
+
+    awful.key(VIRTUAL_MOUSE_MODIFIERS, "Home", function()
+      awful.spawn({'xdotool', 'mousemove_relative', '--', '0',  '-'..tostring(MOUSE_FAST_MOVE_PX)})
+    end, {
+      description = "mouse move up", group=VIRTUAL_MOUSE
+    }),
+    awful.key(VIRTUAL_MOUSE_MODIFIERS, "End", function()
+      awful.spawn({'xdotool', 'mousemove_relative', '0',  tostring(MOUSE_FAST_MOVE_PX)})
+    end, {
+      description = "mouse move down", group=VIRTUAL_MOUSE
+    }),
+    awful.key(VIRTUAL_MOUSE_MODIFIERS, "Delete", function()
+      awful.spawn({'xdotool', 'mousemove_relative', '--', '-'..tostring(MOUSE_FAST_MOVE_PX),  '0'})
+    end, {
+      description = "mouse move left", group=VIRTUAL_MOUSE
+    }),
+    awful.key(VIRTUAL_MOUSE_MODIFIERS, "Page_Down", function()
+      awful.spawn({'xdotool', 'mousemove_relative', tostring(MOUSE_FAST_MOVE_PX),  '0'})
+    end, {
+      description = "mouse move right", group=VIRTUAL_MOUSE
+    }),
+    awful.key(VIRTUAL_MOUSE_MODIFIERS, "Insert", function()
+      awful.spawn({
+        'xdotool',
+        'mousemove_relative',
+        '--', '-'..tostring(MOUSE_FAST_MOVE_PX),  '-'..tostring(MOUSE_FAST_MOVE_PX)
+      })
+    end, {
+      description = "mouse move left", group=VIRTUAL_MOUSE
+    }),
+    awful.key(VIRTUAL_MOUSE_MODIFIERS, "Page_Up", function()
+      awful.spawn({
+        'xdotool',
+        'mousemove_relative',
+        '--', tostring(MOUSE_FAST_MOVE_PX),  '-'..tostring(MOUSE_FAST_MOVE_PX)
+      })
+    end, {
+      description = "mouse move left", group=VIRTUAL_MOUSE
+    }),
+  -- }}} Virtual mouse
+
 
     -- bind_key({ modkey,  }, "Control", "show_help"), -- show hotkey on hold
     bind_key({ modkey,  "Control"  }, "w",
