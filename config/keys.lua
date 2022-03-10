@@ -155,8 +155,16 @@ function keys.init(awesome_context)
     end, function()
       awful.spawn({'xdotool', 'mouseup', '--clearmodifiers', '1'})
     end, {
-      description = "mouse left click", group=VIRTUAL_MOUSE
+      description = "left click", group=VIRTUAL_MOUSE
     }),
+    awful.key(VIRTUAL_MOUSE_MODIFIERS, "BackSpace", function()
+      awful.spawn({'xdotool', 'mousedown', '--clearmodifiers', '3'})
+    end, function()
+      awful.spawn({'xdotool', 'mouseup', '--clearmodifiers', '3'})
+    end, {
+      description = "right click", group=VIRTUAL_MOUSE
+    }),
+
 
     awful.key(VIRTUAL_MOUSE_MODIFIERS, "Up", function()
       awful.spawn({'xdotool', 'mousemove_relative', '--', '0',  '-'..tostring(MOUSE_MOVE_PX)})
