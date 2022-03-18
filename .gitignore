@@ -13,3 +13,5 @@ icons/**/*_3.png
 
 .SRCINFO
 last_installed.txt
+pkg/
+*.pkg.*
