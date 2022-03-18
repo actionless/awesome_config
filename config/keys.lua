@@ -554,12 +554,18 @@ function keys.init(awesome_context)
       "execute lua code", LAUNCHER
     ),
 
-    -- ALSA volume control
+    -- volume control
     awful.key({}, "#123", function ()
         awesome_context.widgets.volume.Up()
     end),
     awful.key({}, "#122", function ()
         awesome_context.widgets.volume.Down()
+    end),
+    awful.key({modkey}, "#123", function ()
+        awesome_context.widgets.volume.Up(nil, 0.002)
+    end),
+    awful.key({modkey}, "#122", function ()
+        awesome_context.widgets.volume.Down(nil, 0.002)
     end),
     awful.key({}, "#121", function ()
         awesome_context.widgets.volume.ToggleMute()
