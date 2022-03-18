@@ -67,6 +67,13 @@ function keys.init(awesome_context)
           c:raise();
         end
       end),
+    awful.button({ }, 3,
+      function (c)
+        if c.focusable then
+          client.focus = c;
+          c:raise();
+        end
+      end),
     awful.button({ modkey }, 1, awful.mouse.client.move),
     awful.button({ modkey }, 3, function(c)
       awful.mouse.resize(c, nil, {jump_to_corner=false})
