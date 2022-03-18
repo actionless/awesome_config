@@ -127,7 +127,9 @@ function keys.init(awesome_context)
     return awful.key.new(mod, key, press, nil, {description=description, group=group})
   end
 
-  hkng.widget.labels.BackSpace = "BackSpace"
+  if hkng.widget.labels then
+    hkng.widget.labels.BackSpace = "BackSpace"
+  end
 
 
   -- {{{ Root keybindings
