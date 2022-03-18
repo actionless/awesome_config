@@ -10,7 +10,7 @@ INSTALL_NO_ARGB_SHORTCUTS=${NOARGB:-n}
 pkgname=actionless_awesome_config_meta
 conflicts=(awesome_config_actionless_meta)
 pkgver=0.5
-pkgrel=1
+pkgrel=2
 pkgdesc="Awesome config dependencies"
 arch=('x86_64' 'i686')
 url="https://github.com/actionless/awesome_config"
@@ -94,8 +94,5 @@ package() {
 
 	install -Dm644 ${config_dir}/packaging/mate_awesome.desktop \
 		"$pkgdir/usr/share/xsessions/mate_awesome.desktop"
-
-	install -Dm644 ${config_dir}/packaging/awesome_argb.desktop \
-		"$pkgdir/usr/share/xsession_current/awesome_argb.desktop"
 	fi
 }
