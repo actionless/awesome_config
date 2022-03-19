@@ -121,6 +121,7 @@ function keys.init(awesome_context)
   local PROGRAMS = "programs"
   local SCREENSHOT = "screenshot"
   local VIRTUAL_MOUSE = "virtual mouse"
+  local DISPLAY_GROUP = "display"
   -- }}}
 
   local bind_key = function(mod, key, press, description, group)
@@ -295,16 +296,26 @@ function keys.init(awesome_context)
 
     bind_key({ modkey,  "Control"  }, "s",
       function() awful.spawn{"xscreensaver-command", "-lock"} end,
-      "xscreensaver lock", AWESOME_COLOR
+      "xscreensaver lock", DISPLAY_GROUP
     ),
     bind_key({ modkey,  "Control"  }, "d",
       function() awful.spawn.with_shell("sleep 1 && xset dpms force off") end,
-      "turn off display", AWESOME_COLOR
+      "turn off display", DISPLAY_GROUP
     ),
     bind_key({ modkey,  }, "o",
       function() awful.spawn.with_shell(os.getenv('HOME').."/.screenlayout/cycle.sh") end,
-      "rotate display", AWESOME_COLOR
+      "rotate display", DISPLAY_GROUP
     ),
+    awful.key({modkey, altkey}, "Page_Up", function()
+      awesome_context.widgets.backlight.Up()
+    end, {
+      description = "backlight up", group=DISPLAY_GROUP
+    }),
+    awful.key({modkey, altkey}, "Page_Down", function()
+      awesome_context.widgets.backlight.Down()
+    end, {
+      description = "backlight down", group=DISPLAY_GROUP
+    }),
 
 
     bind_key({ modkey,        }, ",",
@@ -561,17 +572,6 @@ function keys.init(awesome_context)
       end,
       "execute lua code", LAUNCHER
     ),
-
-    awful.key({modkey, altkey}, "Page_Up", function()
-      awesome_context.widgets.backlight.Up()
-    end, {
-      description = "up", group="backlight"
-    }),
-    awful.key({modkey, altkey}, "Page_Down", function()
-      awesome_context.widgets.backlight.Down()
-    end, {
-      description = "down", group="backlight"
-    }),
 
     -- volume control
     awful.key({}, "#123", function ()
