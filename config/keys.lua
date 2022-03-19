@@ -219,7 +219,6 @@ function keys.init(awesome_context)
       description = "move right", group=VIRTUAL_MOUSE
     }),
 
-
     awful.key(VIRTUAL_MOUSE_MODIFIERS, "Home", function()
       awful.spawn({'xdotool', 'mousemove_relative', '--', '0',  '-'..tostring(MOUSE_FAST_MOVE_PX)})
     end, {
@@ -562,6 +561,17 @@ function keys.init(awesome_context)
       end,
       "execute lua code", LAUNCHER
     ),
+
+    awful.key({modkey, altkey}, "Page_Up", function()
+      awesome_context.widgets.backlight.Up()
+    end, {
+      description = "up", group="backlight"
+    }),
+    awful.key({modkey, altkey}, "Page_Down", function()
+      awesome_context.widgets.backlight.Down()
+    end, {
+      description = "down", group="backlight"
+    }),
 
     -- volume control
     awful.key({}, "#123", function ()
