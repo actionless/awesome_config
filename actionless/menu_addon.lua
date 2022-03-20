@@ -8,10 +8,20 @@ local escape_f = require("gears.string").xml_escape
 local awful_screen = require("awful.screen")
 
 local table_add = require("actionless.util.table").add
+local get_app_icon = require("actionless.util.xdg").get_app_icon
 
 
-local menu_addon = { mt={} }
+local menu_addon = {
+  default_client_icon = get_app_icon('terminal'),
+  mt={}
+}
 
+local function _get_app_icon(c)
+  return get_app_icon(c.instance) or
+    get_app_icon(c.class) or
+    c.icon or
+    menu_addon.default_client_icon
+end
 
 function menu_addon.clients_on_tag(args, item_args)
   local cls_t = {}
@@ -26,7 +36,7 @@ function menu_addon.clients_on_tag(args, item_args)
           client.focus = c
           c:raise()
         end,
-        c.icon
+        _get_app_icon(c)
       })
       if item_args then
         if type(item_args) == "function" then

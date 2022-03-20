@@ -112,4 +112,8 @@ function module.get_icon(category, name, args)
   end
 end
 
+function module.get_app_icon(name, args)
+  return module.get_icon('apps', name, args)
+end
+
 return module
