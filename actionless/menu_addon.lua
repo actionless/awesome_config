@@ -4,8 +4,10 @@
 --------------------------------------------------------------------------------
 
 local menu = require("awful.menu")
-local escape_f = require("gears.string").xml_escape
 local awful_screen = require("awful.screen")
+local tags = require("awful.tag")
+local escape_f = require("gears.string").xml_escape
+local gtable = require("gears.table")
 
 local table_add = require("actionless.util.table").add
 local get_app_icon = require("actionless.util.xdg").get_app_icon
@@ -54,6 +56,37 @@ function menu_addon.clients_on_tag(args, item_args)
   local m = menu.new(args)
   m:show(args)
   return m
+end
+
+local client_iterate = require("awful.client").iterate
+function menu_addon.clients_with_icons(args, item_args, filter)
+    local cls_t = {}
+    for c in client_iterate(filter or function() return true end) do
+        cls_t[#cls_t + 1] = {
+            c.name or "",
+            function ()
+                if not c.valid then return end
+                if not c:isvisible() then
+                    tags.viewmore(c:tags(), c.screen)
+                end
+                c:emit_signal("request::activate", "menu.clients", {raise=true})
+            end,
+            _get_app_icon(c) }
+        if item_args then
+            if type(item_args) == "function" then
+                gtable.merge(cls_t[#cls_t], item_args(c))
+            else
+                gtable.merge(cls_t[#cls_t], item_args)
+            end
+        end
+    end
+    args = args or {}
+    args.items = args.items or {}
+    gtable.merge(args.items, cls_t)
+
+    local m = menu.new(args)
+    m:show(args)
+    return m
 end
 
 --------------------------------------------------------------------------------
