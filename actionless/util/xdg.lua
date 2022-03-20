@@ -98,10 +98,13 @@ function module.get_icon(category, name, args)
   local icon_themes = args.icon_themes or ICON_THEMES
 
   local cache_id = string.format('%s/%s/%s/%s', category, name, icon_themes, icon_sizes)
-  if not _path_cache[cache_id] then
-    _path_cache[cache_id] = do_lookup(category, name, icon_themes, icon_sizes)
+  if _path_cache[cache_id] == nil then
+    _path_cache[cache_id] = do_lookup(category, name, icon_themes, icon_sizes) or false
   end
   local path = _path_cache[cache_id]
+  if not path then
+    return nil
+  end
   if gstring.endswith(path, '.svg') then
     return module.resize_svg(path)
   else
