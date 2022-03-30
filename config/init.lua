@@ -4,6 +4,7 @@ local config = {
 	layouts	= require("config.layouts"),
 	menu	= require("config.menu"),
 	menubar	= require("config.menubar"),
+	mouse	= require("config.mouse"),
 	notify	= require("config.notify"),
 	rules	= require("config.rules"),
 	signals	= require("config.signals"),

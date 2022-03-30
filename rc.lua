@@ -192,6 +192,7 @@ config.layouts.init(context)
 config.widgets.init(context)
 config.toolbar_horizontal.init(context)
 config.keys.init(context)
+config.mouse.init(context)
 config.signals.init(context)
 local persistent = require("actionless.persistent")
 if persistent.lcarslist.get() then
