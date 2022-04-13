@@ -1,13 +1,16 @@
 local awful = require("awful")
+local beautiful = require("beautiful")
 local capi = {
   root = root,
 }
 
 local tag_helpers = require("actionless.util.tag")
 
-local mouse = {}
-function mouse.init(awesome_context)
+local module = {}
+function module.init(awesome_context)
   local modkey = awesome_context.modkey
+
+  awful.mouse.snap.aerosnap_distance = beautiful.xresources.apply_dpi(1)
 
   -- {{{ Client mouse bindings
   awful.layout.suit.floating.resize_jump_to_corner = false
@@ -52,4 +55,4 @@ function mouse.init(awesome_context)
   -- }}}
 
 end
-return mouse
+return module
