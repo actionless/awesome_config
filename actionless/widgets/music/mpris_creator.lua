@@ -238,7 +238,7 @@ local function create_for_match(match, args)
 
   local player
   local tmp_result = {
-    init = function(_p) player=_p end,
+    init = function(p) player=p end,
     update = function() end,
   }
 
@@ -254,7 +254,7 @@ local function create_for_match(match, args)
         local name = names[#names]
           local postfix = table.concat(a_table.range(g_string.split(name, '.'), 4), '.')
           if postfix == last_instance_id then
-            _log("::MPRIS-CREATOR: backend for "..match.." already exists")
+            _log("::MPRIS-CREATOR: backend for "..match.." already exists: "..postfix)
           else
             last_instance_id = postfix
             _log("::MPRIS-CREATOR: Creating MPRIS backend for "..name)

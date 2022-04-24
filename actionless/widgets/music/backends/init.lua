@@ -7,7 +7,7 @@ local mpris_creator = require("actionless.widgets.music.mpris_creator")
 
 local backends = {
   clementine = mpris_creator('clementine', {seek=30}),
-  firefox = mpris_creator.create_for_match('firefox', {seek=30}),
+  firefox = mpris_creator.create_for_match('MediaPlayer2.firefox', {seek=30}),
   goodvibes = mpris_creator('Goodvibes', {cmd='goodvibes', key_artist="goodvibes:station"}),
   gradio = mpris_creator('gradio'),  -- @TODO: removeme
   headset = mpris_creator('headset', {seek=60}),
