@@ -77,6 +77,9 @@ end
 local _path_cache = {}
 
 function module.get_icon(category, name, args)
+  if not name then
+    return
+  end
   if category == 'apps' or category == 'categories' then
     local awesome_found = awesome_menubar.utils.lookup_icon(name)
     if awesome_found then return awesome_found end

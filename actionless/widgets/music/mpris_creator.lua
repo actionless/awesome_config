@@ -14,7 +14,7 @@ local log = require("actionless.util.debug").log
 
 
 local DEBUG_LOG = false
---local DEBUG_LOG = true
+--DEBUG_LOG = true
 local function _log(...)
   if DEBUG_LOG then
     log({"::MPRIS-CREATOR:" ,...})
