@@ -18,7 +18,10 @@ function notify.init(_awesome_context)
   naughty.config.defaults.padding = beautiful.notification_spacing
 
   naughty_sidebar.init_naughty{
-    skip_rule={app_name = {'', "xfce4-power-manager"}},
+    skip_rule={
+      app_name = {'', "xfce4-power-manager", "udiskie", "nemo", },
+      message = {"Cannot discard a tab when it is active", },
+    },
   }
 
   -- {{{ Error handling
