@@ -15,6 +15,7 @@ local widgets = {
         arch_updates            = require("actionless.widgets.arch_updates"),
         disk                    = require("actionless.widgets.disk"),
         naughty_sidebar         = require("actionless.widgets.naughty_sidebar"),
+        backlight         = require("actionless.widgets.backlight"),
 }
 
 return widgets
