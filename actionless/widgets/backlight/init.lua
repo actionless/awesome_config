@@ -4,7 +4,7 @@ local wibox = require("wibox")
 
 local common = require("actionless.widgets.common")
 
-local backlight_progressbar = require("actionless.abw")
+local backlight_progressbar = require("actionless.widgets.backlight.progressbar")
 
 
 return function(args)

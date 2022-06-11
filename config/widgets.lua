@@ -61,8 +61,6 @@ function widget_loader.init(awesome_context)
   if lcarslist_enabled then
     beautiful.apw_bg_color = beautiful.panel_bg
   end
-  w.backlight = require("actionless.abw")
-  w.backlight.update_interval = 60
 
   w.volume = require("third_party/apw")({
     backend='pactl',
@@ -188,6 +186,11 @@ function widget_loader.init(awesome_context)
   --local systray = awful.widget.only_on_screen(wibox.widget.systray(), screen.primary)
   local systray = wibox.widget.systray()
   systray:set_screen(screen.primary)
+  w.backlight = widgets.backlight{
+    markup = 'Backlight: ',
+    presets = {64, 75, 100},
+  }
+  w.backlight.progressbar.update_interval = 60
   w.naughty_sidebar = widgets.naughty_sidebar{
     hide_without_notifications = false,
     custom_widgets = {
@@ -197,28 +200,17 @@ function widget_loader.init(awesome_context)
         --width=24, height=24,
         --width=48, height=48,
       },
-      {widget=w.netctl},
       {
-        widget=wibox.widget{
-          {
-            {
-              markup = 'Backlight: ',
-              widget = wibox.widget.textbox,
-            },
-            fg = beautiful.panel_widget_fg,
-            widget = wibox.container.background,
-          },
-          widgets.common.panel_widget_shape(w.backlight),
-          layout = wibox.layout.fixed.horizontal,
-          fill_space = true,
-        }
+        widget=w.netctl
+      },
+      {
+        widget=w.backlight,
       },
     },
     callback_on_open = function()
       w.backlight.Update()
     end,
   } -------------------
-
   w.screen = {}
   awful.screen.connect_for_each_screen(function(s)
     local si = s.index
