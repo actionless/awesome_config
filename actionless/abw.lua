@@ -186,7 +186,7 @@ pulseWidget:buttons(awful.util.table.join(
   )
 )
 
-pulseWidget.pulse = p
+pulseWidget.backend = p
 pulseWidget.pulseBar = pulseBar
 
 _update()
