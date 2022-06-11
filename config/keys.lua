@@ -276,6 +276,20 @@ function keys.init(awesome_context)
     end, {
       description = "backlight down", group=DISPLAY_GROUP
     }),
+    awful.key({modkey, altkey}, "End", function()
+      local current_backlight = awesome_context.widgets.backlight.backend.Volume
+      local prev_backlight = awesome_context.widgets.backlight.backend.prev_backlight
+      awesome_context.widgets.backlight.backend.prev_backlight = current_backlight
+      local new_backlight
+      if (current_backlight == 1) and prev_backlight then
+        new_backlight = prev_backlight
+      else
+        new_backlight = 1
+      end
+      awesome_context.widgets.backlight.SetValue(new_backlight)
+    end, {
+      description = "backlight toggle prev", group=DISPLAY_GROUP
+    }),
 
 
     bind_key({ modkey,        }, ",",
