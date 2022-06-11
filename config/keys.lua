@@ -119,6 +119,9 @@ function keys.init(awesome_context)
     }),
 
   -- {{{ Virtual mouse
+  -- @TODO: refactor to native awesome stuff and extract to a separate file:
+  -- file:///usr/share/doc/awesome/doc/core_components/root.html#fake_input
+  -- file:///usr/share/doc/awesome/doc/input_handling/mouse.html#coords
     awful.key(VIRTUAL_MOUSE_MODIFIERS, "Return", function()
       awful.spawn({'xdotool', 'mousedown', '--clearmodifiers', '1'})
     end, function()
