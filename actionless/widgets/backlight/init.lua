@@ -67,6 +67,7 @@ return function(args)
     ))
   end
 
+  custom_backlight_widget.presets = presets
   custom_backlight_widget.progressbar = backlight_progressbar
   for _, method_name in ipairs({'Update', 'Up', 'Down', 'SetValue', 'backend', }) do
     custom_backlight_widget[method_name] = custom_backlight_widget.progressbar[method_name]
