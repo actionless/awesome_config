@@ -160,9 +160,9 @@ function widget_loader.init(awesome_context)
       fg_color = beautiful.notification_border_color,
     },
     style_focus={
-      shape=function(_c, _w, _h)
+      shape=function(c2, w2, h2)
         return gears.shape.rounded_rect(
-          _c, _w, _h, beautiful.border_radius
+          c2, w2, h2, beautiful.border_radius
         )
       end,
     },
@@ -175,9 +175,9 @@ function widget_loader.init(awesome_context)
   w.calendar_popup.border_width = beautiful.notification_border_width
   w.calendar_popup.border_color = beautiful.notification_border_color or beautiful.border_color_normal
   if beautiful.notification_border_radius then
-    w.calendar_popup.shape = function(_c, _w, _h)
+    w.calendar_popup.shape = function(c2, w2, h2)
       return gears.shape.rounded_rect(
-        _c, _w, _h, beautiful.notification_border_radius+1
+        c2, w2, h2, beautiful.notification_border_radius+1
       )
     end
     w.calendar_popup.shape_clip = true
@@ -310,9 +310,9 @@ function widget_loader.init(awesome_context)
     sw.promptbox.bg = beautiful.panel_widget_bg_warning
     sw.promptbox.shape_border_width = beautiful.panel_widget_border_width or 0
     sw.promptbox.shape_clip = true
-    sw.promptbox.shape = function(_c, _w, _h)
+    sw.promptbox.shape = function(c2, w2, h2)
       return gears.shape.rounded_rect(
-        _c, _w, _h, beautiful.panel_widget_border_radius
+        c2, w2, h2, beautiful.panel_widget_border_radius
       )
     end
 
