@@ -281,8 +281,12 @@ function keys.init(awesome_context)
       local prev_backlight = awesome_context.widgets.backlight.backend.prev_backlight
       awesome_context.widgets.backlight.backend.prev_backlight = current_backlight
       local new_backlight
-      if (current_backlight == 1) and prev_backlight then
-        new_backlight = prev_backlight
+      if current_backlight == 1 then
+        if prev_backlight then
+          new_backlight = prev_backlight
+        else
+          new_backlight = awesome_context.widgets.backlight.presets[1]/100
+        end
       else
         new_backlight = 1
       end
