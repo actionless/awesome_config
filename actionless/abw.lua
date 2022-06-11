@@ -63,6 +63,18 @@ local p = {
       end
     )
   end,
+  SetValue = function(self, value, callback)
+    awful.spawn.easy_async(
+      "brightnessctl set -m "  .. tostring(value * 100) .. "%",
+      function(output)
+        self.Volume = self:_ParseOutput(output)
+        self.Mute = false
+        if callback then
+          callback()
+        end
+      end
+    )
+  end,
 }
 p:Init()
 
@@ -144,6 +156,10 @@ end
 
 function pulseWidget.Down()
   p:IncreaseValue(-pulseBar.step, _update)
+end
+
+function pulseWidget.SetValue(value)
+  p:SetValue(value, _update)
 end
 
 function pulseWidget.ToggleMute()
