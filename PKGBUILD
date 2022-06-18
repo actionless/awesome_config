@@ -10,7 +10,7 @@ INSTALL_NO_ARGB_SHORTCUTS=${NOARGB:-n}
 pkgname=actionless_awesome_config_meta
 conflicts=(awesome_config_actionless_meta)
 pkgver=0.5
-pkgrel=3
+pkgrel=4
 pkgdesc="Awesome config dependencies"
 arch=('x86_64' 'i686')
 url="https://github.com/actionless/awesome_config"
@@ -54,6 +54,7 @@ optdepends=(
 	'plotinus: Ctrl+Shift+P menu in GTK+3 applications'
 	'qt5ct: qt5 theme'
 	'nemo: default file manager'
+	'bulky: bulk file renamer for nemo'
 	'nitrogen: default wallpaper manager'
 	'gnome-system-monitor: default action when click on cpu/mem widgets'
 
