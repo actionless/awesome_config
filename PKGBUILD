@@ -10,7 +10,7 @@ INSTALL_NO_ARGB_SHORTCUTS=${NOARGB:-n}
 pkgname=actionless_awesome_config_meta
 conflicts=(awesome_config_actionless_meta)
 pkgver=0.5
-pkgrel=4
+pkgrel=5
 pkgdesc="Awesome config dependencies"
 arch=('x86_64' 'i686')
 url="https://github.com/actionless/awesome_config"
@@ -60,10 +60,18 @@ optdepends=(
 
 	'gnome-keyring: config/autorun'
 	'gpaste: config/autorun'
-	'pulseaudio: config/autorun'
+	#'pulseaudio: config/autorun'
+		'gst-plugin-pipewire: new audio server'
+		'lib32-pipewire: new audio server'
+		'lib32-pipewire-jack: new audio server'
+		'pipewire: new audio server'
+		'pipewire-alsa: new audio server'
+		'pipewire-jack: new audio server'
+		'pipewire-media-session: new audio server'
+		'pipewire-pulse: new audio server'
 	'kbdd-git: config/autorun: per-window keyboard layout'
-	#'unclutter: config/autorun: hide mouse pointer'
-	'unclutter-xfixes-git: config/autorun: hide mouse pointer'
+	'unclutter: config/autorun: hide mouse pointer'
+	#'unclutter-xfixes-git: config/autorun: hide mouse pointer'
 	'xfce4-power-manager: config/autorun,actionless/widgets/bat'
 	'xorg-xinput: config/autorun: configure trackball'
 	'xscreensaver: config/autorun,config/keys'
