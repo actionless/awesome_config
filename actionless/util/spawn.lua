@@ -21,7 +21,7 @@ function spawn.run_once(cmd)
         return
       end
       if output ~= '' then
-        local pid, _tty, _stat, _time, _command = h_table.unpack(
+        local pid, _, _, _, _ = h_table.unpack(
             g_string.split(
               h_string.lstrip(
                 h_string.rstrip(output, '\n'),

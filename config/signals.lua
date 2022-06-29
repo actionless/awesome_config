@@ -268,9 +268,9 @@ function signals.init(_)
             round_up_client_corners(c, false, "MF")
           end
         else
-          on_client_unfocus(c, true, function(_c)
+          on_client_unfocus(c, true, function(c2)
             if awesome_startup then
-              round_up_client_corners(_c, false, "MU")
+              round_up_client_corners(c2, false, "MU")
             end
           end)
         end

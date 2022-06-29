@@ -13,13 +13,13 @@ local function apply_delayed_rule(c)  -- luacheck: no unused
   if not c.class and c.name == "" then
     local begin_message = {"begin", c.class, c.name}
     local f
-    f = function(_c)
-        _c:disconnect_signal("property::class", f)
-        if _c.class == "Spotify" then
-            awful.rules.apply(_c)
+    f = function(c2)
+        c2:disconnect_signal("property::class", f)
+        if c2.class == "Spotify" then
+            awful.rules.apply(c2)
         else
           nlog(begin_message)
-          nlog({"end", _c.class, _c.name})
+          nlog({"end", c2.class, c2.name})
         end
     end
     c:connect_signal("property::class", f)

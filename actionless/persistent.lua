@@ -63,9 +63,9 @@ local function get_tag_and_screen(t, s, tag_id)
 end
 
 function persistent.tag._connect_signal(signal_name, tag_callback)
-  tag.connect_signal(signal_name, function(_t)
+  tag.connect_signal(signal_name, function(t2)
     if not awesome.startup then
-      local t, screen_id, tag_id = get_tag_and_screen(_t)
+      local t, screen_id, tag_id = get_tag_and_screen(t2)
       if t and screen_id and tag_id then
           tag_callback(t, screen_id, tag_id)
       end

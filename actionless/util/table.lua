@@ -134,9 +134,9 @@ function table_helpers.hasvalue(container_table, desired_key)
   return false
 end
 
-function table_helpers._map(container_table, func, _pairs_func)
+function table_helpers._map(container_table, func, pairs_func)
   local result = {}
-  for key, value in _pairs_func(container_table) do
+  for key, value in pairs_func(container_table) do
     result[key] = func(value)
   end
   return result
