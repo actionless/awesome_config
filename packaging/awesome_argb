@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 
 SCREENLAYOUT_SCRIPT=~/.screenlayout/default.sh
 if test -f "$SCREENLAYOUT_SCRIPT" ; then
-	"$SCREENLAYOUT_SCRIPT"
+    "$SCREENLAYOUT_SCRIPT"
 fi
 
 CACHEDIR="$HOME"/.cache
