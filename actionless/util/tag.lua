@@ -33,43 +33,54 @@ function tag_helpers.togglemfpol(t)
 end
 
 
-function tag_helpers.noempty_list(s)
+local function _filter_empty_list(t)
+  return not awful.widget.taglist.filter.noempty(t)
+end
+
+
+local function _filter_tag_list(s, t, filter_func)
   s = s or awful.screen.focused()
+  t = t or s.selected_tag
+  local current_tag_rel_idx = 0
   local vtags = {}
-  for _, t in pairs(s.tags) do
-    if awful.widget.taglist.filter.noempty(t) then
-      vtags[#vtags + 1] = t
+  for _, tag in pairs(s.tags) do
+    if filter_func(tag) or tag==t then
+      vtags[#vtags + 1] = tag
+      if t == tag then
+        current_tag_rel_idx = #vtags
+      end
     end
   end
-  return vtags
+  return vtags, current_tag_rel_idx
 end
 
 
-function tag_helpers.get_idx(target_tag, tag_list, s)
-  s = s or awful.screen.focused()
-  tag_list = tag_list or s.tags
-  for idx, t in ipairs(tag_list) do
-    if t == target_tag then
-      return idx
-    end
-  end
-end
-
-
-function tag_helpers.view_noempty(delta, s)
+function tag_helpers.view_filtered(delta, s, filter_func)
   s = s or awful.screen.focused()
   local selected_tag = s.selected_tag
-  local noempty_tags = tag_helpers.noempty_list(s)
-  local target_tag_local_idx = tag_helpers.get_idx(selected_tag, noempty_tags, s) + delta
+  local noempty_tags, selected_tag_rel_idx = _filter_tag_list(
+    s, selected_tag, filter_func
+  )
+  local target_tag_local_idx = selected_tag_rel_idx + delta
   if target_tag_local_idx < 1 then
     target_tag_local_idx = #noempty_tags
   elseif target_tag_local_idx > #noempty_tags then
     target_tag_local_idx = 1
   end
-  local current_idx = s.selected_tag.index
+  local current_idx = selected_tag.index
   local target_idx = noempty_tags[target_tag_local_idx].index
   local idx_delta = current_idx - target_idx
   awful.tag.viewidx(-idx_delta, s)
+end
+
+
+function tag_helpers.view_noempty(delta, s)
+  return tag_helpers.view_filtered(delta, s, awful.widget.taglist.filter.noempty)
+end
+
+
+function tag_helpers.view_empty(delta, s)
+  return tag_helpers.view_filtered(delta, s, _filter_empty_list)
 end
 
 
