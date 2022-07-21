@@ -532,6 +532,7 @@ function keys.init(awesome_context)
       "toggle useless gap", LAYOUT_MANIPULATION
     ),
 
+
     -- Prompt
     bind_key({ modkey }, "r",
       function ()
@@ -1085,6 +1086,25 @@ function keys.init(awesome_context)
         c:raise()
       end,
       "maximize client", CLIENT_MANIPULATION
+    ),
+    bind_key({ modkey, altkey }, "c",
+      function (c)
+        c.maximized = false
+        c.fullscreen = false
+        c.maximized_horizontal = false
+        c.maximized_vertical   = false
+        local sgeo = c.screen.workarea
+        local cgeo = c:geometry()
+        if (cgeo.height > sgeo.height) then
+          cgeo.height = math.ceil(sgeo.height * 0.9)
+        end
+        if (cgeo.width > sgeo.width) then
+          cgeo.width = sgeo.width + math.ceil(sgeo.height * 0.9) - sgeo.height
+        end
+        c:geometry(cgeo)
+        awful.placement.centered(c, {honor_workarea=true, })
+      end,
+      "center and resize client", CLIENT_MANIPULATION
     )
   )
   -- }}}
