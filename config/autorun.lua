@@ -65,6 +65,7 @@ function autorun.init(awesome_context)
     --run_once("mopidy -q 2>&1 >> $HOME/.cache/mopidy.log")
     --run_once{"urxvtd"}
     run_once{"udiskie", "--appindicator"}
+    run_once{"emote"}
   end)
 
 

@@ -10,7 +10,7 @@ INSTALL_NO_ARGB_SHORTCUTS=${NOARGB:-n}
 pkgname=actionless_awesome_config_meta
 conflicts=(awesome_config_actionless_meta)
 pkgver=0.5
-pkgrel=5
+pkgrel=6
 pkgdesc="Awesome config dependencies"
 arch=('x86_64' 'i686')
 url="https://github.com/actionless/awesome_config"
@@ -77,6 +77,7 @@ optdepends=(
 	'xscreensaver: config/autorun,config/keys'
 	'autolight: config/autorun: laptop: adaptive brightness'
 	'udiskie: config/autorun: automounting'
+	'emote: config/autorun: emoji keyboard'
 
 	'picom: compositing + rounded borders'
 )
