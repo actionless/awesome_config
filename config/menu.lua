@@ -100,7 +100,7 @@ function menus.init(context)
     local function category(display_name, content, icon_name, fallback_icon_name)
       return {
         display_name, content,
-        get_icon('categories', 'applications-'..icon_name) or (
+        get_icon('categories', 'applications-'..icon_name) or get_icon('categories', icon_name) or (
           fallback_icon_name and awesome_menubar.utils.lookup_icon(fallback_icon_name)
         )
       }
