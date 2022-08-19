@@ -108,6 +108,12 @@ function menus.init(context)
 
     local applications_menu = {
 
+      category("Audio", {
+        app("EasyEffects", "easyeffects"),
+        app("qpwgraph", nil, "org.rncbc.qpwgraph.png"),
+        app("ocenaudio"),
+      }, "audio-recorder", "multimedia"),
+
       category("Development", {
         app("Git-Cola", "git-cola"),
         app("Meld", "meld"),
@@ -134,7 +140,7 @@ function menus.init(context)
         app("Goodvibes", "goodvibes", "io.gitlab.Goodvibes"),
         app("MPV", "mpv"),
         --app("Shortwave", "shortwave", "de.haeckerfelix.Shortwave"), -- nice but buggy
-      }, "multimedia"),
+      }, "audio-player", "multimedia"),
 
       category("Productivity", {
         app("Go For It!", "com.github.jmoerman.go-for-it"),

@@ -10,7 +10,7 @@ INSTALL_NO_ARGB_SHORTCUTS=${NOARGB:-n}
 pkgname=actionless_awesome_config_meta
 conflicts=(awesome_config_actionless_meta)
 pkgver=0.5
-pkgrel=6
+pkgrel=7
 pkgdesc="Awesome config dependencies"
 arch=('x86_64' 'i686')
 url="https://github.com/actionless/awesome_config"
@@ -80,6 +80,10 @@ optdepends=(
 	'emote: config/autorun: emoji keyboard'
 
 	'picom: compositing + rounded borders'
+
+	'easyeffects: config/menu/audio'
+	'qpwgraph: config/menu/audio'
+	'ocenaudio: config/menu/audio'
 )
 
 package() {
