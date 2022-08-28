@@ -855,6 +855,16 @@ local function widget_factory(args)
     self.widget.lie_background:emit_signal("widget::redraw_needed")
   end
 
+  function naughty_sidebar:remove_or_mark_as_read()
+    if naughty_sidebar.sidebar and naughty_sidebar.sidebar.visible then
+      naughty_sidebar:remove_unread()
+      naughty_sidebar.sidebar.visible = false
+    else
+      naughty_sidebar:mark_all_as_read()
+      naughty_sidebar:update_counter()
+    end
+  end
+
   function naughty_sidebar:add_notification(notification)
     log{
       'notification added',
@@ -876,13 +886,7 @@ local function widget_factory(args)
       naughty_sidebar:toggle_sidebox()
     end),
     awful.button({ }, MOUSE_RIGHT, function()
-      if naughty_sidebar.sidebar and naughty_sidebar.sidebar.visible then
-        naughty_sidebar:remove_unread()
-        naughty_sidebar.sidebar.visible = false
-      else
-        naughty_sidebar:mark_all_as_read()
-        naughty_sidebar:update_counter()
-      end
+      naughty_sidebar:remove_or_mark_as_read()
     end)
   ))
 
