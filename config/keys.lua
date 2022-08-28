@@ -712,6 +712,13 @@ function keys.init(awesome_context)
       end,
       "notifications sidebox", AWESOME_COLOR
     ),
+    bind_key({modkey, altkey}, "u",
+      function()
+        awesome_context.widgets.naughty_sidebar:remove_or_mark_as_read()
+      end,
+      "remove unread / mark as read", AWESOME_COLOR
+    ),
+
 
     bind_key({modkey, altkey}, "p",
       function()
