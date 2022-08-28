@@ -17,5 +17,6 @@ local backends = {
   shortwave = mpris_creator('de.haeckerfelix.Shortwave', {cmd='shortwave'}),
   spotify = require("actionless.widgets.music.backends.spotify"),
   strawberry = mpris_creator('strawberry', {seek=30}),
+  tuner = mpris_creator('Tuner', {cmd='com.github.louis77.tuner'}),
 }
 return backends
