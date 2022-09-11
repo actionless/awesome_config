@@ -20,7 +20,8 @@ function notify.init(_awesome_context)
   naughty_sidebar.init_naughty{
     skip_rule={
       app_name = {'', "xfce4-power-manager", "udiskie", "nemo", },
-      message = {"Cannot discard a tab when it is active", },
+      message = { },
+      title = {"Auto Tab Discard", }
     },
   }
 
