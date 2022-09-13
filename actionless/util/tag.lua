@@ -5,13 +5,15 @@ Licensed under GNU General Public License v2
 
 local awful = require("awful")
 local beautiful = require("beautiful")
+local persistent = require("actionless.persistent")
 
 
 local tag_helpers = {}
 
 
-function tag_helpers.toggle_gap(t)
-  t = t or awful.screen.focused().selected_tag
+function tag_helpers.toggle_gap(s, t)
+  s = s or awful.screen.focused()
+  t = t or s.selected_tag
   local current_gap = t.gap
   local new_gap
   if current_gap == 0 then
@@ -20,6 +22,8 @@ function tag_helpers.toggle_gap(t)
     new_gap = 0
   end
   t.gap = new_gap
+  --@TODO: remove this after property::gap will be implemented:
+  persistent.tag.uselessgaps_save(t, s.index, t.index)
 end
 
 

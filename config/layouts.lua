@@ -99,6 +99,20 @@ function layouts.init(context)
         tags[tag_number].master_fill_policy = mfpol
     end
 
+    local u = beautiful.useless_gap
+    for tag_number, gap in pairs(persistent.tag.get_all_uselessgaps(s, {
+    --1                      2                      3
+      u,	             u,	                    u,
+    --4                      5                      6
+      u,	             u,	                    u,
+    --7                      8                      9
+      u,	             u,	                    u,
+    --10                     11                     12
+      u,	             u,	                    u,
+    })) do
+        tags[tag_number].gap = gap
+    end
+
   end)
   -- }}}
 

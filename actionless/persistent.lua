@@ -91,6 +91,10 @@ function persistent.tag.get_all_layouts(s, fallback)
   return db.get_or_set("tag_layout_ids_"..s.index, fallback)
 end
 
+function persistent.tag.get_all_uselessgaps(s, fallback)
+  return db.get_or_set("tag_usellessgaps_"..s.index, fallback)
+end
+
 --Tag params setters and signals:
 
 function persistent.tag.master_width_factor_save(t, screen_id, tag_id)
@@ -138,5 +142,17 @@ persistent.tag._connect_signal(
   "property::layout",
   persistent.tag.layout_save
 )
+
+function persistent.tag.uselessgaps_save(t, screen_id, tag_id)
+  local db_id = "tag_usellessgaps_"..screen_id
+  local uselessgaps = db.get(db_id)
+  uselessgaps[tag_id] = t.gap
+  db.set(db_id, uselessgaps)
+end
+persistent.tag._connect_signal(
+  "property::gap",
+  persistent.tag.uselessgaps_save
+)
+
 
 return persistent
