@@ -608,7 +608,7 @@ function titlebar.make_titlebar(c)
           }, {
             {
               widget = awful.titlebar.widget.titlewidget(c),
-              align = "center",
+              halign = "center",
               font = font,
             },
             layout = wibox.layout.flex.horizontal,
