@@ -149,8 +149,9 @@ function persistent.tag.uselessgaps_save(t, screen_id, tag_id)
   uselessgaps[tag_id] = t.gap
   db.set(db_id, uselessgaps)
 end
+-- @TODO: see https://github.com/awesomeWM/awesome/issues/3692
 persistent.tag._connect_signal(
-  "property::gap",
+  "property::useless_gap",
   persistent.tag.uselessgaps_save
 )
 

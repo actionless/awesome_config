@@ -5,7 +5,6 @@ Licensed under GNU General Public License v2
 
 local awful = require("awful")
 local beautiful = require("beautiful")
-local persistent = require("actionless.persistent")
 
 
 local tag_helpers = {}
@@ -22,8 +21,6 @@ function tag_helpers.toggle_gap(s, t)
     new_gap = 0
   end
   t.gap = new_gap
-  --@TODO: remove this after property::gap will be implemented:
-  persistent.tag.uselessgaps_save(t, s.index, t.index)
 end
 
 
