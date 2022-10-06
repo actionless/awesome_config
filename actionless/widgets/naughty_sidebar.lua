@@ -406,7 +406,8 @@ local function widget_factory(args)
     self:update_counter()
   end
 
-  function naughty_sidebar:widget_notification(notification, idx, unread)
+  function naughty_sidebar:widget_notification(notification, idx, unread, s)
+    local height = 0
     notification.args = notification.args or {}
     local actions = wibox.layout.fixed.vertical()
     actions.spacing = gears.math.round(naughty_sidebar.theme.notification_padding * 0.75)
@@ -453,6 +454,7 @@ local function widget_factory(args)
                   markup = '<b>'..gears.string.xml_escape(notification.title)..'</b>',
                   font = naughty_sidebar.theme.font,
                   widget = wibox.widget.textbox,
+                  id = 'title'
                 },
                 margins = {
                   top = naughty_sidebar.theme.notification_padding,
@@ -499,6 +501,7 @@ local function widget_factory(args)
               markup = gears.string.xml_escape(notification.message),
               font = naughty_sidebar.theme.font,
               widget = wibox.widget.textbox,
+              id = 'message',
             },
             margins = {
               right = naughty_sidebar.theme.notification_padding,
@@ -528,6 +531,12 @@ local function widget_factory(args)
       shape_border_color = naughty_sidebar.theme.notification_border_color,
       layout = wibox.container.background,
     }
+    height = height + pack(
+      widget:get_children_by_id('title')[1]:get_preferred_size(s)
+    )[2]
+    height = height + pack(
+      widget:get_children_by_id('message')[1]:get_preferred_size(s)
+    )[2]
 
     if unread then
       widget.border_color = naughty_sidebar.theme.notification_border_color_unread
@@ -604,6 +613,7 @@ local function widget_factory(args)
         self:remove_notification(widget.lie_idx)
       end)
     ))
+    widget.height = height
     return widget
   end
 
@@ -650,7 +660,7 @@ local function widget_factory(args)
     layout:add(widget)
   end
 
-  function naughty_sidebar:_render_notifications(margins)
+  function naughty_sidebar:_render_notifications(margins, s)
     local layout = wibox.layout.fixed.vertical()
     layout.spacing = naughty_sidebar.theme.spacing
 
@@ -676,7 +686,7 @@ local function widget_factory(args)
           end,
           {align='middle'}
         )
-      )
+    )
     row:add(
         self:widget_action_button(
           '★ Clear Unread',
@@ -685,18 +695,26 @@ local function widget_factory(args)
           end,
           {align='middle'}
         )
-        )
+    )
     layout:add(row)
     local unread_count = #self.saved_notifications - self.prev_count
     if self.scroll_offset > 0 then
         --text='^^^',
       layout:add(self:widget_panel_label('↑ ↑'))
     end
+
+    local workarea = awful.screen.focused().workarea
+    local layout_spacing = naughty_sidebar.theme.spacing
+    local shown_height = 0
     for idx, n in ipairs(naughty_sidebar.saved_notifications) do
-      if idx > self.scroll_offset then
-        layout:add(
-          self:widget_notification(n, idx, idx<=unread_count)
-        )
+      if (
+          idx > self.scroll_offset
+      ) and (
+          shown_height < workarea.height
+      )then
+        local notification = self:widget_notification(n, idx, idx<=unread_count, s)
+        layout:add(notification)
+        shown_height = shown_height + layout_spacing + notification.height
       end
     end
 
