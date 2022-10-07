@@ -864,7 +864,6 @@ local function widget_factory(args)
           return cr
         end,
       })
-      self:refresh_notifications()
     end
     if self.sidebar.visible then
       self.sidebar.visible = false
