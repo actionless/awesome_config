@@ -441,6 +441,10 @@ local function widget_factory(args)
       --opacity = naughty_sidebar.theme.close_button_opacity,
     }
 
+    local title_margin_top = naughty_sidebar.theme.notification_padding
+    local title_margin_bottom = gears.math.round(naughty_sidebar.theme.notification_padding / 2.5)
+    local message_margin_top = naughty_sidebar.theme.close_button_margin
+    local message_margin_bottom = naughty_sidebar.theme.notification_padding
     local widget = wibox.widget{
       {
         {
@@ -457,8 +461,8 @@ local function widget_factory(args)
                   id = 'title'
                 },
                 margins = {
-                  top = naughty_sidebar.theme.notification_padding,
-                  bottom = gears.math.round(naughty_sidebar.theme.notification_padding / 2.5),
+                  top = title_margin_top,
+                  bottom = title_margin_bottom,
                   right = (
                     naughty_sidebar.theme.close_button_size +
                     naughty_sidebar.theme.close_button_margin * 2
@@ -514,9 +518,9 @@ local function widget_factory(args)
           layout = wibox.layout.fixed.vertical
         },
         margins = {
-          top = naughty_sidebar.theme.close_button_margin,
+          top = message_margin_top,
           right = naughty_sidebar.theme.close_button_margin,
-          bottom = naughty_sidebar.theme.notification_padding,
+          bottom = message_margin_bottom,
           left = naughty_sidebar.theme.notification_padding,
         },
         layout = wibox.container.margin,
@@ -531,12 +535,19 @@ local function widget_factory(args)
       shape_border_color = naughty_sidebar.theme.notification_border_color,
       layout = wibox.container.background,
     }
-    height = height + pack(
-      widget:get_children_by_id('title')[1]:get_preferred_size(s)
-    )[2]
-    height = height + pack(
-      widget:get_children_by_id('message')[1]:get_preferred_size(s)
-    )[2]
+    height = (
+      height +
+      title_margin_top +
+      pack(
+        widget:get_children_by_id('title')[1]:get_preferred_size(s)
+      )[2] +
+      title_margin_bottom +
+      message_margin_top +
+      pack(
+        widget:get_children_by_id('message')[1]:get_preferred_size(s)
+      )[2] +
+      message_margin_bottom
+    )
 
     if unread then
       widget.border_color = naughty_sidebar.theme.notification_border_color_unread
@@ -559,7 +570,8 @@ local function widget_factory(args)
       )
       return row
     end
-    local separator_before_actions = common.constraint{height=naughty_sidebar.theme.notification_padding * 0.25}
+    local separator_before_actions_height = naughty_sidebar.theme.notification_padding * 0.25
+    local separator_before_actions = common.constraint{height=separator_before_actions_height}
     local buttons_row = create_buttons_row()
     local num_buttons = 0
     if notification.args.run then
@@ -577,11 +589,13 @@ local function widget_factory(args)
         end
         actions:add(buttons_row)
         buttons_row = create_buttons_row()
+        height = height + actions.spacing
       end
     end
     if num_buttons > 0 and num_buttons < naughty_sidebar.theme.num_buttons then
       actions:add(separator_before_actions)
       actions:add(buttons_row)
+      height = height + actions.spacing * 2 + separator_before_actions_height
     end
 
     close_button:connect_signal("mouse::enter", function()
@@ -613,7 +627,7 @@ local function widget_factory(args)
         self:remove_notification(widget.lie_idx)
       end)
     ))
-    widget.height = height
+    widget.lie_height = height
     return widget
   end
 
@@ -714,7 +728,7 @@ local function widget_factory(args)
       )then
         local notification = self:widget_notification(n, idx, idx<=unread_count, s)
         layout:add(notification)
-        shown_height = shown_height + layout_spacing + notification.height
+        shown_height = shown_height + layout_spacing + notification.lie_height
       end
     end
 
