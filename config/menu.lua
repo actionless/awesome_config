@@ -5,7 +5,7 @@ local beautiful = require("beautiful")
 local awesome_menubar = require("menubar")
 
 local menugen = require("actionless.util.menugen")
-local wlppr = require("actionless.wlppr")
+--local wlppr = require("actionless.wlppr")
 local shutdown = require("actionless.util.shutdown")
 local menu_addon = require("actionless.menu_addon")
 local get_icon = require("actionless.util.xdg").get_icon
@@ -26,58 +26,58 @@ function menus.init(context)
       return _cached_menu_content
     end
     local myawesomemenu = {
-      { "hotkeys", function()
+      { "Hotkeys", function()
           return false, hotkeys_popup.show_help
         end, get_icon('devices', 'keyboard')
       },
-      { "manual page", term .. "man awesome",
+      { "Manual Page", term .. "man awesome",
         get_icon('actions', 'help-contents')
       },
-      { "edit config", context.cmds.editor_cmd .. " " .. awesome.conffile,
+      { "Edit Config", context.cmds.editor_cmd .. " " .. awesome.conffile,
         get_icon('actions', 'document-properties')
       },
-      { "reload", awesome.restart,
+      { "Reload", awesome.restart,
         get_icon('actions', 'view-refresh')
       },
-      { "quit (hard reload)", function()
+      { "Quit (Hard Reload)", function()
           awesome.quit()
         end, get_icon('actions', 'application-exit')
       },
-      { "quit2 (toggle argb)", function()
+      { "Quit(2) (Toggle ARGB)", function()
           awesome.quit(2)
         end, get_icon('actions', 'format-text-italic')
       },
-      { "quit3 (openbox)", function()
+      { "Quit(3) (Openbox)", function()
           awesome.quit(3)
         end, get_icon('apps', 'openbox')
       },
-      { "quit9 (to DM)", function()
+      { "Quit(9) (to DM)", function()
           awesome.quit(9)
         end, get_icon('actions', 'window-close')
       },
     }
 
     local shutdown_menu = {
-      { "hibernate",
+      { "Hibernate",
         "xscreensaver-command -lock ; sudo systemctl hibernate",
         get_icon("apps", "system-hibernate") },
       -- Without X Session Manager:
-      { "reboot", function()
+      { "Reboot", function()
           shutdown.kill_everybody(function()
             awful_spawn("reboot")
           end)
         end, get_icon('apps', 'system-restart')
       },
-      { "poweroff", function()
+      { "Poweroff", function()
           shutdown.kill_everybody(function()
             awful_spawn("poweroff")
           end)
         end, get_icon('apps', 'system-shutdown')
       },
-      { "force shutdown", shutdown.skip_kill,
+      { "Force Shutdown", shutdown.skip_kill,
         get_icon('actions', 'edit-redo')
       },
-      { "cancel shutdown", shutdown.cancel_kill,
+      { "Cancel Shutdown", shutdown.cancel_kill,
         get_icon('actions', 'edit-undo')
       },
       -- With X Session Manager:
@@ -177,44 +177,44 @@ function menus.init(context)
 
     local menu_content = {
       {
-        "freedesktop loading...", nil,
+        "Freedesktop loading...", nil,
         get_icon('status', 'image-loading')
       },
       {
-        "open terminal", "bash -c 'xst-tmux || "..awesome_menubar.utils.terminal.."'",
+        "Terminal", "bash -c 'xst-tmux || "..awesome_menubar.utils.terminal.."'",
         get_icon('apps', 'terminal')
       },
       --{ "kill compositor", "killall compton" },
       --{ "start compositor", context.cmds.compositor },
-      {
-        "wlppr",
-        {{
-          "save", wlppr.save,
-          get_icon('actions', 'filesave')
-        }, {
-          "save to best", wlppr.save_best,
-          get_icon('status', 'starred')
-        }, {
-          "dump", wlppr.dump,
-          get_icon('status', 'user-trash-full')
-        }},
-        get_icon('apps', 'preferences-desktop-wallpaper')
-      },
-      {
-        "jack",
-        {{
-          "start", os.getenv("HOME").."/scripts/jack_start.sh",
-          get_icon('devices', 'audio-speakers')
-        }, {
-          "stop", os.getenv("HOME").."/scripts/jack_stop.sh",
-          get_icon('actions', 'stop')
-        }},
-        --get_icon('devices', 'audio-input-microphone')
-        get_icon('apps', 'audio-player')
-      },
-      { "applications", applications_menu, get_icon('apps', 'menu-editor') },
-      { "shutdown", shutdown_menu, get_icon('apps', 'system-shutdown') },
-      { "awesome", myawesomemenu, beautiful.awesome_icon },
+      --{
+      --  "Wlppr",
+      --  {{
+      --    "save", wlppr.save,
+      --    get_icon('actions', 'filesave')
+      --  }, {
+      --    "save to best", wlppr.save_best,
+      --    get_icon('status', 'starred')
+      --  }, {
+      --    "dump", wlppr.dump,
+      --    get_icon('status', 'user-trash-full')
+      --  }},
+      --  get_icon('apps', 'preferences-desktop-wallpaper')
+      --},
+      --{
+      --  "Jack",
+      --  {{
+      --    "start", os.getenv("HOME").."/scripts/jack_start.sh",
+      --    get_icon('devices', 'audio-speakers')
+      --  }, {
+      --    "stop", os.getenv("HOME").."/scripts/jack_stop.sh",
+      --    get_icon('actions', 'stop')
+      --  }},
+      --  --get_icon('devices', 'audio-input-microphone')
+      --  get_icon('apps', 'audio-player')
+      --},
+      { "Applications", applications_menu, get_icon('apps', 'menu-editor') },
+      { "Shutdown", shutdown_menu, get_icon('apps', 'system-shutdown') },
+      { "Awesome", myawesomemenu, beautiful.awesome_icon },
       --{ "mpv-xsel",
       --  function() awful_spawn.with_shell('mpv "$(xsel -b)"') end,
       --  get_icon('apps', 'mpv')
@@ -242,7 +242,7 @@ function menus.init(context)
       menugen.build_menu(function(menulist)
         context.menu.mainmenu:delete(1)
         context.menu.mainmenu:add(
-          { "freedesktop", menulist, get_icon('categories', 'applications-accessories') },
+          { "Freedesktop", menulist, get_icon('categories', 'applications-accessories') },
           1
         )
       end)
