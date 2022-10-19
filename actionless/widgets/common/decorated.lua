@@ -256,6 +256,7 @@ function module.decorated_horizontal(args)
   setmetatable(decorated,        { __index = decorated.wrap_layout })
 
   function decorated:set_widgets(widgets)
+    decorated:hide()
     if widgets then
       decorated.lie_widget_list = widgets
     elseif args.widgets then
@@ -303,6 +304,7 @@ function module.decorated_horizontal(args)
         decorated.lie_widget_list[i] = bg_widget
       end
     end
+    decorated:show()
   end
 
   --- Set widget color
@@ -422,7 +424,6 @@ function module.decorated_horizontal(args)
 
   decorated:set_widgets()
   decorated:set_normal()
-  decorated:show()
   return decorated
 end
 
