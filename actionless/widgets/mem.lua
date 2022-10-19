@@ -18,7 +18,10 @@ local common_widgets = require("actionless.widgets.common")
 
 -- Memory usage (ignoring caches)
 local mem = {
-  max_swap_ratio = 0.5,
+  critical_swap_ratio = 0.75,
+  high_swap_ratio = 0.5,
+  --critical_ram_ratio = 0.9,
+  --high_ram_ratio = 0.7,
   now = {},
   notification = nil,
   show_percents = true,
@@ -27,6 +30,7 @@ local mem = {
     lua = true,
     node = true,
   },
+  _display_swap = false,
 }
 
 
@@ -143,28 +147,79 @@ function mem.update()
       local msg = string.format(
         "%6s", mem.now.used .. "MB"
       )
+      local swap_msg = ''
       local widget_icon
-      if (
-          (mem.now.used > (mem.now.total * (1 - mem.swappiness * 0.8 / 100))) or
-          (mem.now.swap_used > (mem.now.swap_total * mem.max_swap_ratio))
-      ) then
-        msg = string.format(
-          "%6s swp:%s", mem.now.used .. "MB", mem.now.swap_used .. "MB"
+      local swap_widget_icon
+      local display_swap
+
+      local _ram_is_critical = (
+        --mem.now.used > (mem.now.total * (1 - mem.swappiness * 0.8 / 100))
+        mem.now.used > (mem.now.total * (1 - mem.swappiness * 0.8 / 100))
+      )
+      local _swap_is_critical = (
+        mem.now.swap_used > (mem.now.swap_total * mem.critical_swap_ratio)
+      )
+      local _ram_is_high = (
+        --mem.now.used > (mem.now.total * (1 - mem.swappiness / 100))
+        mem.now.used > (mem.now.total * (1 - mem.swappiness / 100))
+      )
+      local _swap_is_high = (
+        mem.now.swap_used > (mem.now.swap_total * mem.high_swap_ratio)
+      )
+
+      if _swap_is_critical or _swap_is_high then
+        swap_msg = string.format(
+          "%s", mem.now.swap_used .. "MB"
         )
-        mem.widget:set_error()
+        display_swap = true
+        if _swap_is_critical then
+          swap_widget_icon = beautiful.widget_mem_swap_critical
+        else
+        swap_widget_icon = beautiful.widget_mem_swap_high
+        end
+      else
+        display_swap = false
+      end
+
+      if _ram_is_critical then
         widget_icon = beautiful.widget_mem_critical
-      elseif mem.now.used > (mem.now.total * (1 - mem.swappiness / 100)) then
-        mem.widget:set_warning()
+      elseif _ram_is_high then
         widget_icon = beautiful.widget_mem_high
+      else
+        widget_icon = beautiful.widget_mem
+      end
+
+      if (
+          _ram_is_critical or _swap_is_critical or
+          (_swap_is_high and _ram_is_high)
+      ) then
+        mem.widget:set_error()
+      elseif (
+          _ram_is_high or _swap_is_high
+      ) then
+        mem.widget:set_warning()
       else
         mem.widget:set_normal()
         msg = mem.widget_text
-        widget_icon = beautiful.widget_mem
       end
+
       mem.widget:set_text(msg)
+      mem.swap_widget:set_text(swap_msg)
       mem.widget.progressbar:set_value(mem.now.used/mem.now.total)
+      mem.swap_widget.progressbar:set_value(mem.now.swap_used/mem.now.swap_total)
+      if display_swap ~= mem._display_swap then
+        if display_swap then
+          mem.widget:set_widgets({mem.ram_widget, mem.swap_widget})
+        else
+          mem.widget:set_widgets({mem.ram_widget})
+        end
+        mem._display_swap = display_swap
+      end
       if widget_icon then
         mem.widget:set_image(widget_icon)
+      end
+      if swap_widget_icon then
+        mem.swap_widget:set_image(swap_widget_icon)
       end
     end
   )
@@ -186,10 +241,13 @@ function mem.init(args)
   mem.list_len = args.list_length or 10
   mem.widget_text = args.text or beautiful.widget_mem_text or 'RAM'
 
-  local widget = common_widgets.text_progressbar(args)
-  mem.widget = common_widgets.decorated{widget=widget}
-  mem.widget.progressbar = widget.progressbar
-  mem.widget.textbox = widget.textbox
+  local ram_widget = common_widgets.text_progressbar(args)
+  local swap_widget = common_widgets.text_progressbar(args)
+  mem.widget = common_widgets.decorated{widgets={ram_widget, }}
+  mem.ram_widget = ram_widget
+  mem.swap_widget = swap_widget
+  mem.widget.progressbar = ram_widget.progressbar
+  mem.widget.textbox = ram_widget.textbox
 
   if beautiful.show_widget_icon then
     mem.widget_text = args.text or ''
