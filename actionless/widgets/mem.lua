@@ -130,15 +130,15 @@ function mem.update()
       buf = "Buffers",
       cache = "Cached",
       --shared = "Shmem",
-      swap = "SwapTotal",
-      swapf = "SwapFree",
+      swap_total = "SwapTotal",
+      swap_free = "SwapFree",
     },
     function(v) return math.floor(v / 1024) end,
     function(now)
       mem.now = now
       --mem.now.used = mem.now.total - (mem.now.free + mem.now.buf + mem.now.cache)
       mem.now.used = mem.now.total - mem.now.available
-      mem.now.swapused = mem.now.swap - mem.now.swapf
+      mem.now.swap_used = mem.now.swap_total - mem.now.swap_free
 
       local msg = string.format(
         "%6s", mem.now.used .. "MB"
@@ -146,10 +146,10 @@ function mem.update()
       local widget_icon
       if (
           (mem.now.used > (mem.now.total * (1 - mem.swappiness * 0.8 / 100))) or
-          (mem.now.swapused > (mem.now.swap * mem.max_swap_ratio))
+          (mem.now.swap_used > (mem.now.swap_total * mem.max_swap_ratio))
       ) then
         msg = string.format(
-          "%6s swp:%s", mem.now.used .. "MB", mem.now.swapused .. "MB"
+          "%6s swp:%s", mem.now.used .. "MB", mem.now.swap_used .. "MB"
         )
         mem.widget:set_error()
         widget_icon = beautiful.widget_mem_critical
