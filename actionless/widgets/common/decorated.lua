@@ -239,52 +239,7 @@ function module.decorated_horizontal(args)
     )
   end
 
-  if args.widgets then
-    decorated.lie_widget_list = args.widgets
-  elseif args.widget then
-    decorated.lie_widget_list = {args.widget}
-  else
-    decorated.lie_widget_list = {common_widget(args)}
-  end
-  if args.widget then
-    decorated.lie_widget = args.widget
-  else
-    decorated.lie_widget = decorated.lie_widget_list[1]
-  end
-
   args.padding = args.padding or {}
-  if args.padding.left then
-    table.insert(
-      decorated.lie_widget_list,
-      1,
-      wibox.container.background(common_constraint{width = args.padding.left, })
-    )
-  end
-  if args.padding.right then
-    table.insert(
-      decorated.lie_widget_list,
-      wibox.container.background(common_constraint{width = args.padding.right, })
-    )
-  end
-
-  -- give set_bg and set_fg methods to ones don't have it:
-  for i, widget in ipairs(decorated.lie_widget_list) do
-    if widget.set_font then
-      widget:set_font(args.font or beautiful.panel_widget_font or beautiful.font)
-    end
-    if (decorated.fg and not widget.set_fg) or (decorated.bg and not widget.set_bg) then
-      local bg_widget = setmetatable(wibox.container.background(widget), widget)
-      if widget.set_font then
-        bg_widget.set_font = function(...)
-          widget.set_font(...)
-        end
-      end
-      bg_widget.set_markup = function(...)
-        widget.set_markup(...)
-      end
-      decorated.lie_widget_list[i] = bg_widget
-    end
-  end
 
   decorated.lie_visible = false
   decorated.lie_layout = wibox.layout.fixed.horizontal()
@@ -299,6 +254,56 @@ function module.decorated_horizontal(args)
   end
 
   setmetatable(decorated,        { __index = decorated.wrap_layout })
+
+  function decorated:set_widgets(widgets)
+    if widgets then
+      decorated.lie_widget_list = widgets
+    elseif args.widgets then
+      decorated.lie_widget_list = args.widgets
+    elseif args.widget then
+      decorated.lie_widget_list = {args.widget}
+    else
+      decorated.lie_widget_list = {common_widget(args)}
+    end
+    if args.widget then
+      decorated.lie_widget = args.widget
+    else
+      decorated.lie_widget = decorated.lie_widget_list[1]
+    end
+
+    if args.padding.left then
+      table.insert(
+        decorated.lie_widget_list,
+        1,
+        wibox.container.background(common_constraint{width = args.padding.left, })
+      )
+    end
+    if args.padding.right then
+      table.insert(
+        decorated.lie_widget_list,
+        wibox.container.background(common_constraint{width = args.padding.right, })
+      )
+    end
+
+    -- give set_bg and set_fg methods to ones don't have it:
+    for i, widget in ipairs(decorated.lie_widget_list) do
+      if widget.set_font then
+        widget:set_font(args.font or beautiful.panel_widget_font or beautiful.font)
+      end
+      if (decorated.fg and not widget.set_fg) or (decorated.bg and not widget.set_bg) then
+        local bg_widget = setmetatable(wibox.container.background(widget), widget)
+        if widget.set_font then
+          bg_widget.set_font = function(...)
+            widget.set_font(...)
+          end
+        end
+        bg_widget.set_markup = function(...)
+          widget.set_markup(...)
+        end
+        decorated.lie_widget_list[i] = bg_widget
+      end
+    end
+  end
 
   --- Set widget color
   -- @param args. "fg", "bg", "name" - "err", "warn", "b", "f" or 1..16
@@ -415,6 +420,7 @@ function module.decorated_horizontal(args)
     return self.lie_widget:set_image(...)
   end
 
+  decorated:set_widgets()
   decorated:set_normal()
   decorated:show()
   return decorated
