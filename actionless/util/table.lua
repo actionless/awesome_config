@@ -111,6 +111,9 @@ end
 
 function table_helpers.range(original_table, range_start, range_finish)
   range_finish = range_finish or #original_table
+  if range_finish < 0 then
+    range_finish = #original_table + range_finish
+  end
   local result = {}
   for i=range_start,range_finish do
     table.insert(result, original_table[i])
