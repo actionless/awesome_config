@@ -55,7 +55,7 @@ function mem.show_notification()
     replaces_id = mem.get_notification_id(),
     position = beautiful.widget_notification_position,
   })
-  awful.spawn.easy_async(
+  awful.spawn.easy_async_with_shell(
     mem.command,
     mem._show_notification_callback
   )
@@ -82,19 +82,21 @@ function mem._show_notification_callback(output)
   ) do
     line = h_string.lstrip(line)
     local values = gears_string.split(line, ' ')
-    local percent = values[mem.columns.percent]
-    if percent then
+    local mem_percent = values[mem.columns.percent]
+    local swap_mb = h_string.rstrip(values[mem.columns.swap], 'm')
+    if mem_percent then
       local path = values[mem.columns.name] and gears_string.split(values[mem.columns.name], '/')
       local name = path and path[#path]
       local args = h_table.range(values, mem.columns.name+1, #values)
       if args and mem.preserve_args[name] then
         name = name .. ' ' .. table.concat(args, ' ')
       end
-      percent = mem.show_percents and (percent + 0) or (percent * 0.01 * mem.now.total)
+      local mem_to_add = mem.show_percents and (mem_percent + 0) or (mem_percent * 0.01 * mem.now.total)
+      local swap_to_add = mem.show_percents and (swap_mb / 0.01 / mem.now.total) or (swap_mb + 0)
       if result[name] then
-        result[name] = result[name] + percent
+        result[name] = result[name] + mem_to_add + swap_to_add
       elseif name then
-        result[name] = percent
+        result[name] = mem_to_add + swap_to_add
       end
     end
   end
@@ -266,10 +268,19 @@ function mem.init(args)
     end)
   ))
 
-  mem.command = "top -o \\%MEM -b -n 1 -w 512 -c"
+  local self_filepath = debug.getinfo(1)['short_src']
+  local self_dirpath = h_string.join(
+    '/',
+    h_table.range(
+      gears_string.split(self_filepath, '/'),
+      0, -1
+    )
+  )
+  mem.command = "HOME="..self_dirpath.." top -o \\%MEM -b -n 1 -w 512 -c -e m"
   mem.columns = args.columns or {
     percent=10,
-    name=12
+    swap=11,
+    name=13
   }
   mem._get_swappiness(function()
     gears_timer({
