@@ -127,4 +127,12 @@ function string_helpers.multiline_limit_word(unicode_string, max_length)
   return result
 end
 
+function string_helpers.join(separator, items)
+  local result = ''
+  for _, word in ipairs(items) do
+    result = result .. separator .. word
+  end
+  return result
+end
+
 return string_helpers
