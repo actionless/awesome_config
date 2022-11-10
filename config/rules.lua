@@ -213,7 +213,7 @@ function rules.init(awesome_context)
         end,
       },
 
-      { rule = { class = "Blueman-manager", },
+      { rule_any = { class = {"Blueman-manager", "easyeffects"}, },
         properties = {
           tag=capi.screen.primary.tags[11],
           raise=false
