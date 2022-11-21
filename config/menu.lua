@@ -144,7 +144,7 @@ function menus.init(context)
 
       category("Productivity", {
         app("Go For It!", "com.github.jmoerman.go-for-it"),
-        --app("GNOME To Do", "gnome-todo"),
+        --app("Endeavour (GNOME ToDo)", "endeavour"),
         app("QOwnNotes", "QOwnNotes"),
         --app("vnote", "vnote"),  -- replace to qOwnNotes or mindforger?
       }, "office"),
