@@ -84,6 +84,9 @@ function mem._show_notification_callback(output)
     local values = gears_string.split(line, ' ')
     local mem_percent = values[mem.columns.percent]
     local swap_mb = h_string.rstrip(values[mem.columns.swap], 'm')
+    if gears_string.endswith(swap_mb, 'g') then
+      swap_mb = h_string.rstrip(swap_mb, 'g') * 1024
+    end
     if mem_percent then
       local path = values[mem.columns.name] and gears_string.split(values[mem.columns.name], '/')
       local name = path and path[#path]
