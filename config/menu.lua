@@ -109,6 +109,7 @@ function menus.init(context)
     local applications_menu = {
 
       category("Audio", {
+        app("AudioRelay", "audiorelay"),
         app("EasyEffects", "easyeffects"),
         app("qpwgraph", nil, "org.rncbc.qpwgraph.png"),
         app("ocenaudio"),
