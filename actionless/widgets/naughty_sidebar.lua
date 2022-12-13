@@ -378,12 +378,16 @@ local function widget_factory(args)
       else
         self.widget:set_normal()
       end
-      self.widget:show()
+      if args.hide_without_notifications then
+        self.widget:show()
+      else
+        naughty_sidebar.widget:set_image(beautiful.widget_notifications)
+      end
     else
       if args.hide_without_notifications then
         self.widget:hide()
-      --else
-      --  @TODO: set icon for no notifications
+      else
+        naughty_sidebar.widget:set_image(beautiful.widget_notifications_empty)
       end
     end
   end
