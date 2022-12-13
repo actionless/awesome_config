@@ -418,8 +418,8 @@ function module.decorated_horizontal(args)
     return self.lie_widget:set_markup(...)
   end
 
-  function decorated:set_image(...)
-    return self.lie_widget:set_image(...)
+  function decorated:set_image(img, ...)
+    return self.lie_widget:set_image(img, ...)
   end
 
   decorated:set_widgets()
