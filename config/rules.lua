@@ -29,23 +29,7 @@ end
 
 local rules = {}
 
-function rules.init(awesome_context)
-
-  ruled.client.connect_signal("request::rules", function()
-    for _, rule in ipairs({
-
-      { rule = { },
-        properties = {
-          --border_width = beautiful.border_width,
-          --border_color = beautiful.border_normal,
-          focus = awful.client.focus.filter,
-          raise = true,
-          keys = awesome_context.clientkeys,
-          buttons = awesome_context.clientbuttons,
-          placement =
-            awful.placement.centered +
-            awful.placement.no_overlap +
-            setmetatable(
+local no_offscreen_margined_placement = setmetatable(
               {
                 is_placement = true,
                 context = {},
@@ -68,8 +52,28 @@ function rules.init(awesome_context)
                   return awful.placement.no_offscreen(c, args)
                 end
               }
-            --),
-            ) + awful.placement.skip_fullscreen,
+            --)
+            )
+
+function rules.init(awesome_context)
+
+  ruled.client.connect_signal("request::rules", function()
+    for _, rule in ipairs({
+
+      { rule = { },
+        --apply_on_restart=true,
+        properties = {
+          --border_width = beautiful.border_width,
+          --border_color = beautiful.border_normal,
+          focus = awful.client.focus.filter,
+          raise = true,
+          keys = awesome_context.clientkeys,
+          buttons = awesome_context.clientbuttons,
+          placement =
+            awful.placement.centered +
+            awful.placement.no_overlap +
+            no_offscreen_margined_placement +
+            awful.placement.skip_fullscreen,
           size_hints_honor = false,
           screen = awful.screen.preferred,
           --slave = true,
@@ -216,8 +220,36 @@ function rules.init(awesome_context)
       { rule_any = { class = {"Blueman-manager", "easyeffects"}, },
         properties = {
           tag=capi.screen.primary.tags[11],
-          raise=false
-        }
+          raise=false,
+        },
+      },
+
+      { rule_any = { class = {"Blueman-manager",}, },
+        properties = {
+          width = 480,
+          placement =
+            awful.placement.bottom_right +
+            awful.placement.no_overlap +
+            no_offscreen_margined_placement +
+            awful.placement.skip_fullscreen,
+        },
+        apply_on_restart = true,
+        callback = function(c)
+          c:deny('geometry', 'arghhh')
+          --c:deny('client_geometry_requests', 'arghhh')
+          --c:connect_signal("property::floating_geometry", function(c2)
+          --end)
+          c:connect_signal("property::width", function(c2)
+            local g = c2:geometry()
+            g.width = 480
+            c2:geometry(g)
+          end)
+          c:connect_signal("request::geometry", function(c2)
+            local g = c2:geometry()
+            g.width = 480
+            c2:geometry(g)
+          end)
+        end
       },
 
     }) do
