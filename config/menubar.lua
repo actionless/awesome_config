@@ -1,5 +1,4 @@
 local awful = require("awful")
-local beautiful = require("beautiful")
 
 local menubar = require("actionless.menubar")
 
@@ -13,25 +12,13 @@ function menubars.init(context)
   --context.menu.menubar = awesome_menubar.get()
   context.menu.menubar = menubar.create()
 
-  -- D-Menubar configuration
-  menubar.geometry = {
-    height = beautiful.panel_height,
-    width = screen[awful.screen.focused()].workarea.width,
-    x = 0,
-    y = (
-      screen[awful.screen.focused()].workarea.height -
-      (beautiful.panel_height or 0) -
-      (beautiful.menubar_border_width or 0) * 2
-    )
-  }
-
   local dmenubar = menubar.create({
     term_prefix = context.cmds.tmux_run,
+    position = 'bottom',
   })
   dmenubar.cache_entries = false
   dmenubar.menu_cache_path = awful.util.getdir("cache") .. "/history"
   dmenubar.menu_gen = require("actionless.menubar.dmenugen")
-
   context.menu.dmenubar = dmenubar
 
 end

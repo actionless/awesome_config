@@ -32,6 +32,7 @@ local theme = require("beautiful")
 local wibox = require("wibox")
 local gstring = require("gears.string")
 local gfs = require("gears.filesystem")
+local gmath = require("gears.math")
 
 
 local function get_screen(s)
@@ -93,6 +94,7 @@ function menubar_module.create(...)
 
     --local menubar = {mt = {}, menu_entries = {}}
     local menubar = {}
+    menubar.instance = {}
     menubar.menu_entries = {}
     menubar.menu_gen = menubar_module.menu_gen
     menubar.cache_entries = args.cache_entries or menubar_module.cache_entries
@@ -105,6 +107,7 @@ function menubar_module.create(...)
     menubar.left_label = args.left_label or menubar_module.left_label
 
     menubar.term_prefix = args.term_prefix or menubar_module.utils.terminal .. " -e "
+    menubar.position = args.position or 'top'
 
 
 -- Private section
@@ -177,14 +180,15 @@ end
 -- @tparam str query Search query.
 -- @return table List of items for current page.
 function menubar:get_current_page(all_items, query, scr)
+    scr = get_screen(scr)
+    local instance = self:get_instance(scr)
 
     local compute_text_width = function(text, s)
-        return wibox.widget.textbox.get_markup_geometry(text, s, self.instance.font)['width']
+        return wibox.widget.textbox.get_markup_geometry(text, s, instance.font)['width']
     end
 
-    scr = get_screen(scr)
-    if not self.instance.prompt.width then
-        self.instance.prompt.width = compute_text_width(self.instance.prompt.prompt, scr)
+    if not instance.prompt.width then
+        instance.prompt.width = compute_text_width(instance.prompt.prompt, scr)
     end
     if not self.left_label_width then
         self.left_label_width = compute_text_width(self.left_label, scr)
@@ -193,9 +197,9 @@ function menubar:get_current_page(all_items, query, scr)
         self.right_label_width = compute_text_width(self.right_label, scr)
     end
     local border_width = theme.menubar_border_width or theme.menu_border_width or 0
-    local available_space = self.instance.geometry.width - self.right_margin -
+    local available_space = instance.geometry.width - self.right_margin -
         self.right_label_width - self.left_label_width -
-        compute_text_width(query..' ', scr) - self.instance.prompt.width
+        compute_text_width(query..' ', scr) - instance.prompt.width
 
     local width_sum = 0
     local current_page = {}
@@ -346,6 +350,12 @@ local function prompt_keypressed_callback(mod, key, comm)
     return false
 end
 
+function menubar:get_instance(scr)
+    scr = get_screen(scr or awful.screen.focused() or 1)
+    local scr_idx_str = tostring(scr.index)
+    return self.instance[scr_idx_str]
+end
+
 --- Show the menubar on the given screen.
 -- @param scr Screen number.
 function menubar:show(scr)
@@ -356,7 +366,10 @@ function menubar:show(scr)
     local border_color = theme.menubar_border_color or theme.menu_border_color
     local font = theme.menubar_font or theme.font or "Monospace 10"
 
-    if not self.instance then
+    local scr_idx_str = tostring(scr.index)
+    local instance = self:get_instance(scr)
+
+    if not instance then
         -- Add to each category the name of its key in all_categories
         for k, v in pairs(self.menu_gen.all_categories) do
             v.key = k
@@ -366,7 +379,7 @@ function menubar:show(scr)
             self:refresh(scr)
         end
 
-        self.instance = {
+        self.instance[scr_idx_str] = {
             wibox = wibox{
                 ontop = true,
                 bg = bg_color,
@@ -374,6 +387,7 @@ function menubar:show(scr)
                 border_width = border_width,
                 border_color = border_color,
                 font = font,
+                screen = scr,
             },
             widget = common_args.w,
             prompt = awful.widget.prompt(),
@@ -381,13 +395,14 @@ function menubar:show(scr)
             count_table = nil,
             font = font,
         }
+        instance = self.instance[scr_idx_str]
         local layout = wibox.layout.fixed.horizontal()
-        layout:add(self.instance.prompt)
-        layout:add(self.instance.widget)
-        self.instance.wibox:set_widget(layout)
+        layout:add(instance.prompt)
+        layout:add(instance.widget)
+        instance.wibox:set_widget(layout)
     end
 
-    if self.instance.wibox and self.instance.wibox.visible then -- Menu already shown, exit
+    if instance.wibox and instance.wibox.visible then -- Menu already shown, exit
         return
     elseif not self.cache_entries then
         self:refresh(scr)
@@ -396,11 +411,22 @@ function menubar:show(scr)
     -- Set position and size
     local scrgeom = scr.workarea
     local geometry = self.geometry
-    self.instance.geometry = {x = geometry.x or scrgeom.x,
-                             y = geometry.y or scrgeom.y,
-                             height = geometry.height or gmath.round(theme.get_font_height(font) * 1.5),
-                             width = (geometry.width or scrgeom.width) - border_width * 2}
-    self.instance.wibox:geometry(self.instance.geometry)
+    local y = geometry.y or scrgeom.y
+    if self.position == 'bottom' then
+        y = geometry.y or (
+            scrgeom.y +
+            scrgeom.height -
+            border_width * 2 -
+            (
+                geometry.height or gmath.round(theme.get_font_height(font) * 1.5)
+            )
+        )
+    end
+    instance.geometry = {x = geometry.x or scrgeom.x,
+                         y = y,
+                         height = geometry.height or gmath.round(theme.get_font_height(font) * 1.5),
+                         width = (geometry.width or scrgeom.width) - border_width * 2}
+    instance.wibox:geometry(instance.geometry)
 
     current_item = 1
     current_category = nil
@@ -408,12 +434,12 @@ function menubar:show(scr)
 
     local default_prompt_args = {
         prompt              = "Run: ",
-        textbox             = self.instance.prompt.widget,
+        textbox             = instance.prompt.widget,
         completion_callback = awful.completion.shell,
         history_path        = gfs.get_cache_dir() .. "/history_menu",
         done_callback       = function() self:hide() end,
         changed_callback    = function(query)
-            self.instance.query = query
+            instance.query = query
             self:menulist_update(query, scr)
         end,
         keypressed_callback = prompt_keypressed_callback
@@ -422,12 +448,13 @@ function menubar:show(scr)
     awful.prompt.run(setmetatable(menubar.prompt_args, {__index=default_prompt_args}))
 
 
-    self.instance.wibox.visible = true
+    instance.wibox.visible = true
 end
 
 --- Hide the menubar.
 function menubar:hide()
-    self.instance.wibox.visible = false
+    local instance = self:get_instance(scr)
+    instance.wibox.visible = false
 end
 
 --- Get a menubar wibox.
