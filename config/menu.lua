@@ -137,7 +137,8 @@ function menus.init(context)
       }, "education-language"),
 
       category("Media players", {
-        app("Clementine", "clementine"),
+        --app("Clementine", "clementine"),
+        app("Strawberry", "strawberry"),
         app("Goodvibes", "goodvibes", "io.gitlab.Goodvibes"),
         app("MPV", "mpv"),
         --app("Shortwave", "shortwave", "de.haeckerfelix.Shortwave"), -- nice but buggy
