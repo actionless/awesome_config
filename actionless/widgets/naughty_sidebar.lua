@@ -37,6 +37,7 @@ naughty_sidebar = {
   theme = {
     num_buttons = 2,
   },
+  sidebar = {},
 
   init_naughty = function(args)
     args = args or {}
@@ -66,10 +67,11 @@ naughty_sidebar = {
       n.args = notification_args
     end)
     naughty.connect_signal('request::display', function(n, _, notification_args)
+      local screen_idx_str = tostring(awful.screen.focused().index)
       if (
         n.app_name ~= '' and
-        naughty_sidebar.sidebar and
-        naughty_sidebar.sidebar.visible
+        naughty_sidebar.sidebar[screen_idx_str] and
+        naughty_sidebar.sidebar[screen_idx_str].visible
       ) then
         return
       end
@@ -818,10 +820,11 @@ local function widget_factory(args)
       layout:add(self:widget_panel_label('No notifications'))
     end
     margin_inner:set_widget(layout)
-    self.sidebar.bg = naughty_sidebar.theme.sidebar_bg
+    local screen_idx_str = tostring(awful.screen.focused().index)
+    self.sidebar[screen_idx_str].bg = naughty_sidebar.theme.sidebar_bg
 
-    self.sidebar:set_widget(margin_outer)
-    self.sidebar.lie_layout = layout
+    self.sidebar[screen_idx_str]:set_widget(margin_outer)
+    self.sidebar[screen_idx_str].lie_layout = layout
   end
 
   function naughty_sidebar:mark_all_as_read()
@@ -844,13 +847,15 @@ local function widget_factory(args)
 
   function naughty_sidebar:toggle_sidebox()
     local internal_corner_radius = naughty_sidebar.theme.internal_corner_radius
-    if not self.sidebar then
-      local workarea = awful.screen.focused().workarea
-      local screen_geo = awful.screen.focused().geometry
-      self.sidebar = wibox({
+    local focused_screen = awful.screen.focused()
+    local screen_idx_str = tostring(focused_screen.index)
+    if not self.sidebar[screen_idx_str] then
+      local workarea = focused_screen.workarea
+      local screen_geo = focused_screen.geometry
+      self.sidebar[screen_idx_str] = wibox({
         width = naughty_sidebar.theme.width,
         height = workarea.height,
-        x = screen_geo.width - naughty_sidebar.theme.width,
+        x = screen_geo.width - naughty_sidebar.theme.width + workarea.x,
         y = workarea.y,
         ontop = true,
         type='dock',
@@ -869,8 +874,8 @@ local function widget_factory(args)
         end,
       })
     end
-    if self.sidebar.visible then
-      self.sidebar.visible = false
+    if self.sidebar[screen_idx_str].visible then
+      self.sidebar[screen_idx_str].visible = false
       self:mark_all_as_read()
       self.widget.lie_background.border_color = beautiful.panel_widget_border_color
       self.widget:set_normal()
@@ -879,7 +884,7 @@ local function widget_factory(args)
       end
     else
       self:refresh_notifications()
-      self.sidebar.visible = true
+      self.sidebar[screen_idx_str].visible = true
       self.widget.lie_background.border_color = '#00000000'
       self.widget:set_bg('#00000000')
       self.widget:set_fg(beautiful.panel_fg)
@@ -891,9 +896,10 @@ local function widget_factory(args)
   end
 
   function naughty_sidebar:remove_or_mark_as_read()
-    if naughty_sidebar.sidebar and naughty_sidebar.sidebar.visible then
+    local screen_idx_str = tostring(awful.screen.focused().index)
+    if naughty_sidebar.sidebar[screen_idx_str] and naughty_sidebar.sidebar[screen_idx_str].visible then
       naughty_sidebar:remove_unread()
-      naughty_sidebar.sidebar.visible = false
+      naughty_sidebar.sidebar[screen_idx_str].visible = false
     else
       naughty_sidebar:mark_all_as_read()
       naughty_sidebar:update_counter()
@@ -910,7 +916,8 @@ local function widget_factory(args)
     table.insert(self.saved_notifications, 1, notification)
     self:write_notifications_to_db()
     self:update_counter()
-    if self.sidebar and self.sidebar.visible then
+    local screen_idx_str = tostring(awful.screen.focused().index)
+    if self.sidebar[screen_idx_str] and self.sidebar.visible[screen_idx_str] then
       self:refresh_notifications()
     end
   end
