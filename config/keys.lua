@@ -779,21 +779,41 @@ function keys.init(awesome_context)
 
       if not skip then
 
-        if scr == 1 then
-          if i <= 12 then
-            -- num keys:
-            diff = 9
-          elseif i>22 then
-            diff = 72
-          else
-            diff = 54
+        if awesome_context.config.swap_screen_hotkeys then
+          if scr >= 2 then
+            if i <= 12 then
+              -- num keys:
+              diff = 9
+            elseif i>22 then
+              diff = 72
+            else
+              diff = 54
+            end
+          elseif scr == 1 then
+            -- f-keys:
+            if i>10 then
+              diff = 84
+            else
+              diff = 66
+            end
           end
-        elseif scr >= 2 then
-          -- f-keys:
-          if i>10 then
-            diff = 84
-          else
-            diff = 66
+        else
+          if scr == 1 then
+            if i <= 12 then
+              -- num keys:
+              diff = 9
+            elseif i>22 then
+              diff = 72
+            else
+              diff = 54
+            end
+          elseif scr >= 2 then
+            -- f-keys:
+            if i>10 then
+              diff = 84
+            else
+              diff = 66
+            end
           end
         end
 

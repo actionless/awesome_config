@@ -76,6 +76,7 @@ local context = {
     wlan_if = 'wlp12s0',
     eth_if = 'enp0s25',
     music_players = { 'spotify', 'clementine' },
+    swap_screen_hotkeys = false,
   },
   -- @TODO: move to 'widget_config'?
   have_battery = true,
