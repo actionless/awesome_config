@@ -137,7 +137,7 @@ function toolbar.init(awesome_context)
         {
           layout = wibox.layout.fixed.horizontal,
           separator,
-          loaded_widgets.textclock,
+          loaded_widgets.screen[si].textclock,
           separator,
           sep,
           sep,

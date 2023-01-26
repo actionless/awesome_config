@@ -127,61 +127,6 @@ function widget_loader.init(awesome_context)
       fg = beautiful.panel_widget_updates_fg or beautiful.panel_widget_bg_warning,
   })
 
-  -- Textclock
-  local textclock = wibox.widget.textclock(
-    markup.font(
-      beautiful.clock_font or beautiful.bold_font or beautiful.font,
-      markup.fg(
-        beautiful.clock_fg or beautiful.panel_fg or beautiful.fg_normal,
-        "%H:%M"
-      )
-    )
-  )
-  w.textclock = textclock
-  -- Calendar
-  beautiful.calendar_month_padding = dpi(10)
-  beautiful.calendar_month_border_color = beautiful.notification_border_color
-  beautiful.calendar_month_border_width = beautiful.notification_border_width
-  w.calendar_popup = awful.widget.calendar_popup.month({
-    spacing=dpi(2),
-    margin=beautiful.useless_gap*2,
-    style_month={
-      bg_color = TRANSPARENT,
-      border_color = TRANSPARENT,
-    },
-    style_header={
-      bg_color = TRANSPARENT,
-      fg_color = beautiful.notification_fg,
-    },
-    style_weekday={
-      bg_color = TRANSPARENT,
-      fg_color = beautiful.notification_border_color,
-    },
-    style_focus={
-      shape=function(c2, w2, h2)
-        return gears.shape.rounded_rect(
-          c2, w2, h2, beautiful.border_radius
-        )
-      end,
-    },
-    style_normal={
-      bg_color = TRANSPARENT,
-      fg_color = beautiful.notification_fg,
-    },
-  })
-  w.calendar_popup.bg = beautiful.notification_bg
-  w.calendar_popup.border_width = beautiful.notification_border_width
-  w.calendar_popup.border_color = beautiful.notification_border_color or beautiful.border_color_normal
-  if beautiful.notification_border_radius then
-    w.calendar_popup.shape = function(c2, w2, h2)
-      return gears.shape.rounded_rect(
-        c2, w2, h2, beautiful.notification_border_radius+1
-      )
-    end
-    w.calendar_popup.shape_clip = true
-  end
-  w.calendar_popup:attach(w.textclock, nil, {on_hover=true})
-
   -- NAUGHTY SIDEBAR --
   --local systray = awful.widget.only_on_screen(wibox.widget.systray(), screen.primary)
   local systray = wibox.widget.systray()
@@ -210,7 +155,9 @@ function widget_loader.init(awesome_context)
     callback_on_open = function()
       w.backlight.Update()
     end,
-  } -------------------
+  }
+
+  -------------------
   w.screen = {}
   awful.screen.connect_for_each_screen(function(s)
     local si = s.index
@@ -384,6 +331,63 @@ function widget_loader.init(awesome_context)
         tasklist_addon.list_update
       )
     end
+
+    -- Textclock
+    sw.textclock = wibox.widget.textclock(
+      markup.font(
+        beautiful.clock_font or beautiful.bold_font or beautiful.font,
+        markup.fg(
+          beautiful.clock_fg or beautiful.panel_fg or beautiful.fg_normal,
+          "%H:%M"
+        )
+      )
+    )
+    -- Calendar
+    beautiful.calendar_month_padding = dpi(10)
+    beautiful.calendar_month_border_color = beautiful.notification_border_color
+    beautiful.calendar_month_border_width = beautiful.notification_border_width
+    sw.calendar_popup = awful.widget.calendar_popup.month({
+      screen=s,
+      spacing=dpi(2),
+      margin=beautiful.useless_gap*2,
+      style_month={
+        bg_color = TRANSPARENT,
+        border_color = TRANSPARENT,
+      },
+      style_header={
+        bg_color = TRANSPARENT,
+        fg_color = beautiful.notification_fg,
+      },
+      style_weekday={
+        bg_color = TRANSPARENT,
+        fg_color = beautiful.notification_border_color,
+      },
+      style_focus={
+        shape=function(c2, w2, h2)
+          return gears.shape.rounded_rect(
+            c2, w2, h2, beautiful.border_radius
+          )
+        end,
+      },
+      style_normal={
+        bg_color = TRANSPARENT,
+        fg_color = beautiful.notification_fg,
+      },
+    })
+    sw.calendar_popup.bg = beautiful.notification_bg
+    sw.calendar_popup.border_width = beautiful.notification_border_width
+    sw.calendar_popup.border_color = beautiful.notification_border_color or beautiful.border_color_normal
+    if beautiful.notification_border_radius then
+      sw.calendar_popup.shape = function(c2, w2, h2)
+        return gears.shape.rounded_rect(
+          c2, w2, h2, beautiful.notification_border_radius+1
+        )
+      end
+      sw.calendar_popup.shape_clip = true
+    end
+    sw.calendar_popup:attach(sw.textclock, nil, {on_hover=true})
+
+    -- Layoutbox
     sw.layoutbox = widgets.layoutbox({
       screen = s,
       fg = beautiful.widget_layoutbox_bg,
@@ -394,6 +398,7 @@ function widget_loader.init(awesome_context)
     })
 
 
+    -- TOOLBAR itself --
 
     topwibox[si] = awful.wibar({
       position = "top",
