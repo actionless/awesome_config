@@ -10,41 +10,79 @@ local gears_timer = require("gears.timer")
 local parse = require("actionless.util.parse")
 local decorated_widget= require("actionless.widgets.common").decorated
 local nlog = require("actionless.util.debug").naughty_log
+local h_table = require("actionless.util.table")
 
 
 -- coretemp
-local temp = {}
+local temp = {
+  temperatures = {},
+  temperatures_nv_smi = {},
+}
 
 function temp.update()
   local jq_queries = {}
+  local nv_smi_queries = {}
   for _, sensor_data in pairs(temp.sensors) do
-    table.insert(jq_queries, string.format(
-      '."%s"."%s"."%s_input"',
-      sensor_data.device,
-      sensor_data.sensor,
-      sensor_data.sensor_input or sensor_data.sensor
-    ))
+    if sensor_data.device ~= 'nvidia' then
+      table.insert(jq_queries, string.format(
+        '."%s"."%s"."%s_input"',
+        sensor_data.device,
+        sensor_data.sensor,
+        sensor_data.sensor_input or sensor_data.sensor
+      ))
+    else
+      table.insert(nv_smi_queries, string.format(
+        ' -e "%s"',
+        sensor_data.sensor
+      ))
+    end
   end
   local cmd = "sensors -Aj | jq '" .. table.concat(jq_queries, ",") .. "'"
-  awful.spawn.easy_async({'sh', '-c', cmd}, temp._post_update)
+  awful.spawn.easy_async({'sh', '-c', cmd}, temp._post_update, temp._error_handler)
+  if h_table.getn(nv_smi_queries) > 0 then
+    cmd = "nvidia-smi -q | grep " .. table.concat(nv_smi_queries, " ") .. " | cut -d: -f2 | cut -d' ' -f2"
+    awful.spawn.easy_async({'sh', '-c', cmd}, temp._post_update_nv_smi, temp._error_handler)
+  end
+end
+
+function temp._error_handler(str)
+  nlog(str)
 end
 
 function temp._post_update(str)
+  temp.temperatures = parse.string_to_lines(str)
+  temp._post_update_common()
+end
+
+function temp._post_update_nv_smi(str)
+  temp.temperatures_nv_smi = parse.string_to_lines(str)
+  temp._post_update_common()
+end
+
+function temp._post_update_common()
+  --TODO: add not only .warning but also .critical:
   local max_temp_delta = 0
   local max_temp_sensor_temp
   local max_temp_sensor_name
-
-  local temperatures = parse.string_to_lines(str)
   local sensor_counter = 1
+  local sensor_counter_nv_smi = 1
   for sensor_name, sensor_data in pairs(temp.sensors) do
-    local warning_temp = sensor_data.warning
-    local this_temp = tonumber(temperatures[sensor_counter])
-    if (this_temp - warning_temp) >= max_temp_delta then
-      max_temp_delta = this_temp - warning_temp
-      max_temp_sensor_temp = this_temp
-      max_temp_sensor_name = sensor_name
+    local this_temp
+    if sensor_data.device ~= 'nvidia' then
+      this_temp = tonumber(temp.temperatures[sensor_counter])
+      sensor_counter = sensor_counter + 1
+    else
+      this_temp = tonumber(temp.temperatures_nv_smi[sensor_counter_nv_smi])
+      sensor_counter_nv_smi = sensor_counter_nv_smi + 1
     end
-    sensor_counter = sensor_counter + 1
+    if this_temp then
+      local warning_temp = sensor_data.warning
+      if (this_temp - warning_temp) >= max_temp_delta then
+        max_temp_delta = this_temp - warning_temp
+        max_temp_sensor_temp = this_temp
+        max_temp_sensor_name = sensor_name
+      end
+    end
   end
 
   if max_temp_delta > 0 then
