@@ -226,7 +226,7 @@ function rules.init(awesome_context)
 
       { rule_any = { class = {"Blueman-manager",}, },
         properties = {
-          width = 480,
+          width = dpi(480),
           placement =
             awful.placement.bottom_right +
             awful.placement.no_overlap +
@@ -241,12 +241,12 @@ function rules.init(awesome_context)
           --end)
           c:connect_signal("property::width", function(c2)
             local g = c2:geometry()
-            g.width = 480
+            g.width = dpi(480)
             c2:geometry(g)
           end)
           c:connect_signal("request::geometry", function(c2)
             local g = c2:geometry()
-            g.width = 480
+            g.width = dpi(480)
             c2:geometry(g)
           end)
         end
