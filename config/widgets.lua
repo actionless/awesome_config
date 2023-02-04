@@ -80,6 +80,8 @@ function widget_loader.init(awesome_context)
   w.mem = widgets.mem({
     update_interval = 5,
     list_length = 20,
+    high_swap_ratio = awesome_context.config.high_swap_ratio,
+    critical_swap_ratio = awesome_context.config.critical_swap_ratio,
   })
   -- CPU
   w.cpu = widgets.cpu({

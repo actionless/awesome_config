@@ -18,10 +18,10 @@ local common_widgets = require("actionless.widgets.common")
 
 -- Memory usage (ignoring caches)
 local mem = {
-  critical_swap_ratio = 0.75,
   high_swap_ratio = 0.5,
-  --critical_ram_ratio = 0.9,
+  critical_swap_ratio = 0.75,
   --high_ram_ratio = 0.7,
+  --critical_ram_ratio = 0.9,
   now = {},
   notification = nil,
   show_percents = true,
@@ -245,6 +245,10 @@ function mem.init(args)
   mem.timeout = args.timeout or 0
   mem.list_len = args.list_length or 10
   mem.widget_text = args.text or beautiful.widget_mem_text or 'RAM'
+  --mem.high_ram_ratio = args.high_ram_ratio or mem.high_ram_ratio
+  --mem.critical_ram_ratio = args.critical_ram_ratio or mem.critical_ram_ratio
+  mem.high_swap_ratio = args.high_swap_ratio or mem.high_swap_ratio
+  mem.critical_swap_ratio = args.critical_swap_ratio or mem.critical_swap_ratio
 
   local ram_widget = common_widgets.text_progressbar(args)
   local swap_widget = common_widgets.text_progressbar(args)
