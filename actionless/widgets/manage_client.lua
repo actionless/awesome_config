@@ -38,10 +38,10 @@ local function widget_factory(args)
       beautiful.titlebar_close_button_normal,
       args.fg
     )
-    --bg_image_manage = recolor_image(
-    --  beautiful.titlebar_ontop_button_normal_inactive,  -- @TODO: replace to some other icon
-    --  beautiful.panel_widget_fg_warning or args.fg
-    --)
+    bg_image_manage = recolor_image(
+      beautiful.titlebar_ontop_button_normal_inactive,  -- @TODO: replace to some other icon
+      beautiful.panel_widget_fg_warning or args.fg
+    )
     args.widget = wibox.widget.imagebox(bg_image_normal)
   else
     args.widget = wibox.widget.textbox()
@@ -60,15 +60,15 @@ local function widget_factory(args)
       self:set_warning()
       if not beautiful.show_widget_icon then
         self:set_text('T')
-      --else
-      --  self:set_image(bg_image_manage)
+      else
+        self:set_image(bg_image_manage)
       end
     else
       self:set_normal()
       if not beautiful.show_widget_icon then
         self:set_text('X')
-      --else
-      --  self:set_image(bg_image_normal)
+      else
+        self:set_image(bg_image_normal)
       end
     end
   end
