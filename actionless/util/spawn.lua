@@ -14,7 +14,7 @@ function spawn.run_once(cmd)
   end
   log('Going to start "'..cmd..'"...')
   awful_spawn.easy_async_with_shell(
-    'ps x | grep -v grep | grep "' .. cmd .. '"',
+    'ps x | grep -v grep | grep -F "' .. cmd .. '"',
     function(output, err_output)
       if err_output ~= '' then
         log('ERROR: '..err_output)
