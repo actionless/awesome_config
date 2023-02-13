@@ -133,11 +133,13 @@ function widget_loader.init(awesome_context)
   --local systray = awful.widget.only_on_screen(wibox.widget.systray(), screen.primary)
   local systray = wibox.widget.systray()
   systray:set_screen(screen.primary)
-  w.backlight = widgets.backlight{
-    markup = 'Backlight: ',
-    presets = {64, 75, 100},
-  }
-  w.backlight.progressbar.update_interval = 60
+  if conf.have_backlight then
+    w.backlight = widgets.backlight{
+      markup = 'Backlight: ',
+      presets = {64, 75, 100},
+    }
+    w.backlight.progressbar.update_interval = 60
+  end
   w.naughty_sidebar = widgets.naughty_sidebar{
     hide_without_notifications = false,
     custom_widgets = {
@@ -150,12 +152,12 @@ function widget_loader.init(awesome_context)
       {
         widget=w.netctl
       },
-      {
+      w.backlight and {
         widget=w.backlight,
       },
     },
     callback_on_open = function()
-      w.backlight.Update()
+      if w.backlight then w.backlight.Update() end
     end,
   }
 
