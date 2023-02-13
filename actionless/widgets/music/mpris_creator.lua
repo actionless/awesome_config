@@ -14,7 +14,7 @@ local log = require("actionless.util.debug").log
 
 
 local DEBUG_LOG = false
---DEBUG_LOG = true
+DEBUG_LOG = true
 local function _log(...)
   if DEBUG_LOG then
     log({"::MPRIS-CREATOR:" ,...})
@@ -69,6 +69,7 @@ local function create(name, args)
   local default_interface_name = "org.mpris.MediaPlayer2.Player"
 
   local backend = {
+    name = name,
     player_status = {},
     player_cmd = cmd,
   }
@@ -237,44 +238,72 @@ local TIMEOUT = 10
 local function create_for_match(match, args)
 
   local player
+  local _worker
+
   local tmp_result = {
-    init = function(p) player=p end,
+    instances = {},
+    instances_by_name = {},
+    current_instance_idx = 0,
     update = function() end,
   }
+  function tmp_result.init(p)
+    log({"MPRIS :: ", "INIT", })
+    player=p
+    if #(tmp_result.instances) == 0 then
+      _worker()
+    end
+  end
+  function tmp_result.next_instance(instance_idx)
+    instance_idx = instance_idx or (tmp_result.current_instance_idx + 1)
+    if instance_idx > #(tmp_result.instances) then
+      instance_idx = 1
+    end
+    local backend = tmp_result.instances[instance_idx]
+    log({"MPRIS :: ", backend.name, })
+    for k, v in pairs(backend) do
+      tmp_result[k] = v
+    end
+    player.update("mpris_creator")
+    tmp_result.current_instance_idx = instance_idx
+  end
 
-  local last_instance_id
-  local _worker
   function _worker()
     find_service_names(match, function(names)
       if #names == 0 then
         _log("::MPRIS-CREATOR: Service '"..match.."' not found")
         _log("::MPRIS-CREATOR: Retrying in "..tostring(TIMEOUT).." seconds")
       else
-        --for _, name in ipairs(names) do
-        local name = names[#names]
+        for instance_idx, name in ipairs(names) do
+        --local name = names[#names]
           local postfix = table.concat(a_table.range(g_string.split(name, '.'), 4), '.')
-          if postfix == last_instance_id then
+          if tmp_result.instances_by_name[postfix]  then
             _log("::MPRIS-CREATOR: backend for "..match.." already exists: "..postfix)
           else
-            last_instance_id = postfix
             _log("::MPRIS-CREATOR: Creating MPRIS backend for "..name)
             local backend = create(postfix, args)
-            for k, v in pairs(backend) do
-              tmp_result[k] = v
+            backend.init(player)
+            tmp_result.instances[#(tmp_result.instances)+1] = backend
+            tmp_result.instances_by_name[postfix] = true
+            local f = function(ii)
+              backend.update(function(player_status)
+                if player_status.state == "play" then
+                  tmp_result.next_instance(ii)
+                end
+              end)
             end
-            tmp_result.init(player)
-            if player then
-              player.update("mpris_creator")
-            end
+            f(instance_idx)
           end
-        --end
+        end
+      end
+      if tmp_result.current_instance_idx == 0 then
+        tmp_result.next_instance()
       end
     end)
   end
 
   g_timer{
     callback=function()
-      if not player or (player.backend == tmp_result) then
+      if player and (player.backend == tmp_result) then
         _worker()
       end
     end,

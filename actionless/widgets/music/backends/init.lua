@@ -13,7 +13,7 @@ local backends = {
   headset = mpris_creator('headset', {seek=60}),
   mopidy = require("actionless.widgets.music.backends.mopidy"),
   mpd = require("actionless.widgets.music.backends.mpd"),
-  mpv = mpris_creator('mpv', {seek=30}),
+  mpv = mpris_creator.create_for_match('MediaPlayer2.mpv', {seek=30}),
   shortwave = mpris_creator('de.haeckerfelix.Shortwave', {cmd='shortwave'}),
   spotify = require("actionless.widgets.music.backends.spotify"),
   strawberry = mpris_creator('strawberry', {seek=30}),

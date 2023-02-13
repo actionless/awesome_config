@@ -116,6 +116,14 @@ function player.init(args)
       cached_backends[backend_id] = backend_modules[enabled_backends[backend_id]]
       if cached_backends[backend_id].init then cached_backends[backend_id].init(player) end
     end
+    if (
+        not args_here.is_startup
+        and player.backend
+        and player.backend.name == cached_backends[backend_id].name
+        and cached_backends[backend_id].next_instance
+    ) then
+      cached_backends[backend_id].next_instance()
+    end
     player.backend = cached_backends[backend_id]
     player.cmd = args.player_cmd or player.backend.player_cmd
     player.parse_status(player.player_status, player.backend, true)
@@ -130,7 +138,7 @@ function player.init(args)
       autostart=true,
       call_now=false,
     })
-    player.update("init")
+    player.update(args_here.is_startup and "init" or "backend_change")
     db.set('widget_music_backend', backend_id)
   end
 
@@ -250,7 +258,17 @@ function player.init(args)
       else
         local items = {}
         for each_backend_id, backend_name in ipairs(enabled_backends) do
-          local item = {backend_name, }
+          local display_name = backend_name
+          local backend = backend_modules[backend_name]
+          if backend.instances then
+            display_name = string.format(
+              "%s (%d/%d)",
+              display_name,
+              backend.current_instance_idx,
+              #(backend.instances)
+            )
+          end
+          local item = {display_name, }
           item[2] = function()
             player.use_next_backend{backend_id=each_backend_id}
             player.menu:hide()
@@ -271,10 +289,11 @@ function player.init(args)
     awful.button({ }, 4, player.prev_song)
   ))
 -------------------------------------------------------------------------------
-  function player.update(from)
+  function player.update(from, callback)
     _log("update from "..from)
     player.backend.update(function(player_status)
         player.parse_status(player_status, player.backend)
+        if callback then callback(player_status) end
     end)
   end
 -------------------------------------------------------------------------------
@@ -404,7 +423,7 @@ function player.get_coverart()
   end
 end
 -------------------------------------------------------------------------------
-  player.use_next_backend{relative_index=0}
+  player.use_next_backend{relative_index=0, is_startup=true}
   return setmetatable(player, { __index = player.widget })
 end
 
