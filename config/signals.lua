@@ -233,14 +233,16 @@ function signals.init(_)
   -- New client appears
   client.disconnect_signal("request::manage", ruled.client.apply)
   client.connect_signal("request::manage", function(c)
-      if awesome.startup then
+      local awesome_startup = awesome.startup
+      if awesome_startup then
           local rules = ruled.client.matching_rules(c, ruled.client.rules)
+          local mini_properties = {}
           for _,rule in ipairs(rules) do
               if rule.apply_on_restart then
                   ruled.client.execute(c, rule.properties, { rule.callback })
               else
-                  local mini_properties = {}
                   for _, prop in ipairs({
+                    --"focus",
                     "buttons",
                     "keys",
                     "size_hints_honor",
@@ -250,27 +252,27 @@ function signals.init(_)
                       mini_properties[prop] = rule.properties[prop]
                     end
                   end
-                if #(g_table.keys(mini_properties)) > 0 then
-                  ruled.client.execute(c, mini_properties, { })
-                end
               end
+          end
+          if #(g_table.keys(mini_properties)) > 0 then
+            ruled.client.execute(c, mini_properties, { })
           end
       else
           ruled.client.apply(c)
       end
   --end)
   --client.connect_signal("manage", function (c)
-    local awesome_startup = awesome.startup
+    --local awesome_startup = awesome.startup
     delayed_call(function()
         if c == client.focus then
           on_client_focus(c)
           if awesome_startup then
-            round_up_client_corners(c, false, "MF")
+            round_up_client_corners(c, false, "ManageFocus")
           end
         else
           on_client_unfocus(c, true, function(c2)
             if awesome_startup then
-              round_up_client_corners(c2, false, "MU")
+              round_up_client_corners(c2, false, "ManageUnfocus")
             end
           end)
         end
