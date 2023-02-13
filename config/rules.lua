@@ -217,7 +217,11 @@ function rules.init(awesome_context)
         end,
       },
 
-      { rule_any = { class = {"Blueman-manager", "easyeffects"}, },
+      { rule_any = { class = {
+          "Blueman-manager",
+          "easyeffects",
+          "bluetooth_workaround_cli"
+        }, },
         properties = {
           tag=capi.screen.primary.tags[11],
           raise=false,
