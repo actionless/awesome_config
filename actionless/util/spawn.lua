@@ -8,7 +8,8 @@ local log = require("actionless.util.debug").get_decorated_logger(':RUN_ONCE:')
 
 local spawn = {}
 
-function spawn.run_once(cmd)
+function spawn.run_once(cmd_orig)
+  local cmd = cmd_orig
   if type(cmd) == "table" then
     cmd = table.concat(cmd, " ")
   end
@@ -33,7 +34,7 @@ function spawn.run_once(cmd)
         log('"'..cmd..'" is already running with PID '..pid)
       else
         log('Starting "'..cmd..'"...')
-        local pid = awful_spawn.spawn(cmd)
+        local pid = awful_spawn.spawn(cmd_orig)
         log('Started "'..cmd..'" with PID '..tostring(pid))
       end
     end
