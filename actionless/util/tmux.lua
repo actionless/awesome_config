@@ -4,7 +4,8 @@ local gears_geometry = require("gears.geometry")
 
 
 local tmux = {
-  session_pattern = "%[(%d+)%]",
+  --session_pattern = "%[(%d+)%]",
+  session_pattern = "%[(.+)%] ",
 }
 
 function tmux.swap_bydirection(dir, c, stacked)
@@ -30,8 +31,8 @@ function tmux.swap_bydirection(dir, c, stacked)
   local target_tmux_session = visible_clients[target_client_id].name:match(tmux.session_pattern)
   awful.spawn({
     "tmux", "move-window",
-    "-s", string.format("%d:", source_tmux_session),
-    "-t", string.format("%d:", target_tmux_session),
+    "-s", string.format("%s:", source_tmux_session),
+    "-t", string.format("%s:", target_tmux_session),
   })
   client.focus = visible_clients[target_client_id]
 end
