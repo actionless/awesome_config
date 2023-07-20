@@ -107,7 +107,12 @@ function toolbar.init(awesome_context)
     --local iseparator  = wibox.container.background(separator, beautiful.panel_widget_bg)
     local right_layout = wibox.widget{
       layout = wibox.layout.align.horizontal,
-      separator,
+      {
+        layout = wibox.layout.fixed.horizontal,
+        not awesome_context.apw_on_the_left and separator,
+        not awesome_context.apw_on_the_left and apw,
+        separator,
+      },
       not awesome_context.music_on_the_left and {
         layout = wibox.layout.fixed.horizontal,
         common.panel_widget_shape(
@@ -122,7 +127,6 @@ function toolbar.init(awesome_context)
         separator,
         {
           layout = wibox.layout.fixed.horizontal,
-          not awesome_context.apw_on_the_left and apw,
           common.panel_widget_shape(wibox.widget{
             loaded_widgets.mem,
             loaded_widgets.cpu,
