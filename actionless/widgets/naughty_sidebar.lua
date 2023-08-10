@@ -11,13 +11,10 @@ local dpi = beautiful.xresources.apply_dpi
 local ruled = require("ruled")
 local naughty = require("naughty")
 
-local pack = table.pack or function(...) -- luacheck: ignore 143
-  return { n = select("#", ...), ... }
-end
-
 local common = require("actionless.widgets.common")
 local db = require("actionless.util.db")
 local log = require("actionless.util.debug").log
+local pack = require("actionless.util.table").pack
 
 
 local DB_ID = 'notifications_storage'
