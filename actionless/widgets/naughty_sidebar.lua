@@ -404,6 +404,7 @@ local function widget_factory(args)
 
   function naughty_sidebar:remove_all_notifications()
     self.saved_notifications = {}
+    self.prev_count = 0
     self:write_notifications_to_db()
     self:toggle_sidebox()
     self:update_counter()
@@ -914,7 +915,7 @@ local function widget_factory(args)
     self:write_notifications_to_db()
     self:update_counter()
     local screen_idx_str = tostring(awful.screen.focused().index)
-    if self.sidebar[screen_idx_str] and self.sidebar.visible[screen_idx_str] then
+    if self.sidebar[screen_idx_str] and self.sidebar[screen_idx_str].visible then
       self:refresh_notifications()
     end
   end
