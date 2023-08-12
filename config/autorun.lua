@@ -31,15 +31,15 @@ function autorun.init(awesome_context)
   --spawn{"xset", "r", "rate", "175", "17"}
   --spawn{"xset", "r", "rate", "250", "10"}
   spawn{"xset", "b", "off"} -- turn off beep
-  spawn{
-    "setxkbmap",
-    "-layout", "us,ru",
-    "-variant", ",winkeys",
-    --"-option",
-    --"grp:caps_toggle,grp_led:caps,terminate:ctrl_alt_bksp,compose:ralt",
-    "-option",
-    "grp:shifts_toggle,grp_led:caps,terminate:ctrl_alt_bksp,compose:ralt,caps:escape_shifted_capslock,caps:escape",
- }
+ -- spawn{
+ --   "setxkbmap",
+ --   "-layout", "us,ru",
+ --   "-variant", ",winkeys",
+ --   --"-option",
+ --   --"grp:caps_toggle,grp_led:caps,terminate:ctrl_alt_bksp,compose:ralt",
+ --   "-option",
+ --   "grp:shifts_toggle,grp_led:caps,terminate:ctrl_alt_bksp,compose:ralt,caps:escape_shifted_capslock,caps:escape",
+ --}
 
   --run_once{"redshift"}
   --run_once{awesome_context.cmds.compositor}
