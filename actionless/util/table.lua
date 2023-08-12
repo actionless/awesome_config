@@ -9,8 +9,8 @@ local unpack    = unpack or table.unpack -- (compatibility with Lua 5.1)
 local table_helpers = { unpack = unpack, }
 
 
-function table_helpers.pack(...)
-  return {...}
+table_helpers.pack = table.pack or function(...) -- luacheck: ignore 143
+  return { n = select("#", ...), ... }
 end
 
 

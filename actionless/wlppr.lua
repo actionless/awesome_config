@@ -1,9 +1,9 @@
 local awful = require("awful")
 local beautiful = require("beautiful")
 local naughty = require("naughty")
-local pack = pack or table.pack  -- luacheck: ignore 143
 
 local log = require("actionless.util.debug").log
+local pack = require("actionless.util.table").pack
 
 local wlppr = {}
 
