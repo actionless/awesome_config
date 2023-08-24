@@ -159,7 +159,7 @@ local function init_theme(widget_args)
       return
     end
     local candidates = pack(...)
-    for i=1,candidates.n do
+    for i=1,#candidates do
       local candidate = candidates[i]
       if candidate ~= nil then
         naughty_sidebar.theme[key] = candidate
@@ -274,7 +274,7 @@ local function init_theme(widget_args)
   )
 
   set_theme('custom_widget_height',
-    (beautiful.basic_panel_height or dpi(18)) + naughty_sidebar.theme.button_padding
+    (beautiful.basic_panel_height or dpi(18)) + (naughty_sidebar.theme.button_padding or 0)
   )
   set_theme('custom_widget_bg',
     beautiful.panel_widget_bg,
