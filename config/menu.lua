@@ -5,7 +5,7 @@ local beautiful = require("beautiful")
 local awesome_menubar = require("menubar")
 
 local menugen = require("actionless.util.menugen")
---local wlppr = require("actionless.wlppr")
+local wlppr = require("actionless.wlppr")
 local shutdown = require("actionless.util.shutdown")
 local menu_addon = require("actionless.menu_addon")
 local get_icon = require("actionless.util.xdg").get_icon
@@ -188,20 +188,20 @@ function menus.init(context)
       },
       --{ "kill compositor", "killall compton" },
       --{ "start compositor", context.cmds.compositor },
-      --{
-      --  "Wlppr",
-      --  {{
-      --    "save", wlppr.save,
-      --    get_icon('actions', 'filesave')
-      --  }, {
-      --    "save to best", wlppr.save_best,
-      --    get_icon('status', 'starred')
-      --  }, {
-      --    "dump", wlppr.dump,
-      --    get_icon('status', 'user-trash-full')
-      --  }},
-      --  get_icon('apps', 'preferences-desktop-wallpaper')
-      --},
+      {
+        "Wlppr",
+        {{
+          "save", wlppr.save,
+          get_icon('actions', 'filesave')
+        }, {
+          "save to best", wlppr.save_best,
+          get_icon('status', 'starred')
+        }, {
+          "dump", wlppr.dump,
+          get_icon('status', 'user-trash-full')
+        }},
+        get_icon('apps', 'preferences-desktop-wallpaper')
+      },
       --{
       --  "Jack",
       --  {{
