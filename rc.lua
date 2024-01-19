@@ -23,7 +23,7 @@ package.path = package.path .. ';' .. userconfdir .. 'third_party/?.lua;' .. use
 -------------------------------------------------------------------------------
 -- option a)
 awful_spawn("xsettingsd")
---awful_spawn.once("/usr/lib/mate-polkit/polkit-mate-authentication-agent-1")
+awful_spawn.once("/usr/lib/mate-polkit/polkit-mate-authentication-agent-1")
 -- option b)
 --awful_spawn.once("lxsession -a -n -r -s awesome -e LXDE")
 --awful_spawn.once("lxpolkit")
