@@ -34,7 +34,8 @@ function autorun.init(awesome_context)
  -- spawn{
  --   "setxkbmap",
  --   "-layout", "us,ru",
- --   "-variant", ",winkeys",
+ ----   "-variant", ",winkeys",
+ --   "-variant", ",ruu",
  --   --"-option",
  --   --"grp:caps_toggle,grp_led:caps,terminate:ctrl_alt_bksp,compose:ralt",
  --   "-option",

@@ -18,7 +18,11 @@ local kbd = {}
 local function widget_factory(args)
   args	 = args or {}
   local default_layout = args.default_layout or "us"
-  local replacements = args.replacements or {us="eng", ["ru(winkeys)"]="rus"}
+  local replacements = args.replacements or {
+    us="eng",
+    ["ru(winkeys)"]="rus",
+    ["ru(ruu)"]="u/b/r",
+  }
 
   args.widget = args.widget or wibox.widget.textbox()
   args.orientation = args.orientation or "horizontal"
