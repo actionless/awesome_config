@@ -66,6 +66,18 @@ function local_config.init(awesome_context)
   --awesome_context.after_config_loaded[#(awesome_context.after_config_loaded)+1] = function()
   --end
 
+  --local modkey = awesome_context.modkey
+  --awesome_context.extra_global_keys[
+  --  #(awesome_context.extra_global_keys)+1
+  --] = awful.key({modkey}, "Page_Up", function ()
+  --  awesome_context.widgets.volume.Up()
+  --end)
+  --awesome_context.extra_global_keys[
+  --  #(awesome_context.extra_global_keys)+1
+  --] = awful.key({modkey}, "Page_Down", function ()
+  --  awesome_context.widgets.volume.Down()
+  --end)
+
   return awesome_context
 end
 
