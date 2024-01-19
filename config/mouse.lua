@@ -5,6 +5,7 @@ local capi = {
 }
 
 local tag_helpers = require("actionless.util.tag")
+local doubleclick = require("actionless.util.doubleclick")
 
 local module = {}
 function module.init(awesome_context)
@@ -34,8 +35,16 @@ function module.init(awesome_context)
     awful.button({ }, 3,
       function (c)
         if c.focusable then
-          client.focus = c;
-          c:raise();
+          client.focus = c
+          c:raise()
+        end
+      end),
+    awful.button({ }, 13,
+      function (c)
+        doubleclick.perform(1)
+        if c.focusable then
+          client.focus = c
+          c:raise()
         end
       end),
     awful.button({ modkey }, 1, awful.mouse.client.move),
