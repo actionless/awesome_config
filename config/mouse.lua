@@ -20,8 +20,15 @@ function module.init(awesome_context)
     awful.button({ }, 1,
       function (c)
         if c.focusable then
-          client.focus = c;
-          c:raise();
+          client.focus = c
+          c:raise()
+        end
+      end),
+    awful.button({ }, 2,
+      function (c)
+        if c.focusable then
+          client.focus = c
+          c:raise()
         end
       end),
     awful.button({ }, 3,
