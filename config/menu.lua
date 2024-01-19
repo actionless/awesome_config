@@ -111,8 +111,9 @@ function menus.init(context)
       category("Audio", {
         app("AudioRelay", "audiorelay"),
         app("EasyEffects", "easyeffects"),
-        app("qpwgraph", nil, "org.rncbc.qpwgraph.png"),
         app("ocenaudio"),
+        app("Sonobus", "sonobus"),
+        app("qpwgraph", nil, "org.rncbc.qpwgraph.png"),
       }, "audio-recorder", "multimedia"),
 
       category("Development", {
@@ -124,6 +125,7 @@ function menus.init(context)
       category("Graphics", {
         app("Drawing", "drawing", "com.github.maoschanz.drawing"),
         app("GIMP", "gimp"),
+        app("GLIV", "gliv"),
         app("Gpick", "gpick"),
         app("Nomacs", "nomacs"),
         app("Viewnior", "viewnior"),
@@ -134,6 +136,7 @@ function menus.init(context)
         app("ghostwriter"),  -- good inline + preview
         app("marker", "marker", "com.github.fabiocolacio.marker"),  -- classic + preview (GTK)
         app("retext"),  -- classic + preview (Qt)
+        app("typora"),  -- idk, check it later
       }, "education-language"),
 
       category("Media players", {
@@ -148,11 +151,12 @@ function menus.init(context)
         app("Go For It!", "com.github.jmoerman.go-for-it"),
         --app("Endeavour (GNOME ToDo)", "endeavour"),
         app("QOwnNotes", "QOwnNotes"),
-        --app("vnote", "vnote"),  -- replace to qOwnNotes or mindforger?
+        app("vnote", "vnote"),
       }, "office"),
 
       category("Settings", {
         app("dconf Editor", "dconf-editor"),
+        app("KDE Bluetooth Settings", "systemsettings kcm_bluetooth", "preferences-bluetooth"),
       }, "system"),
 
       category("Terminals", {
