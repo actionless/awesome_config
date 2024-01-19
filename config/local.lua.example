@@ -45,6 +45,10 @@ function local_config.init(awesome_context)
   --}
 
   --conf.disk_warnings = {
+  --  ['*'] = {
+  --    pcent=90,
+  --    avail=10485760,  -- 10GiB
+  --  },
   --  ['/dev/sda8'] = {
   --    pcent=80,
   --    avail=10485760,  -- 10GiB

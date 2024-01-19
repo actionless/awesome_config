@@ -111,7 +111,7 @@ function disk._post_update(str)
     local pcent = (1 - avail / size) * 100
     local target = data[4]
 
-    local warning = disk.warning_rules[source] or disk.default_warning
+    local warning = disk.warning_rules[source] or disk.warning_rules["*"] or disk.default_warning
     if (
       pcent > max.pcent
     ) and (
