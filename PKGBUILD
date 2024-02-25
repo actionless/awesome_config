@@ -10,7 +10,7 @@ INSTALL_NO_ARGB_SHORTCUTS=${NOARGB:-n}
 pkgname=actionless_awesome_config_meta
 conflicts=(awesome_config_actionless_meta)
 pkgver=0.5
-pkgrel=8
+pkgrel=9
 pkgdesc="Awesome config dependencies"
 arch=('any')
 url="https://github.com/actionless/awesome_config"
@@ -73,8 +73,8 @@ optdepends=(
 	'pipewire: new audio server'
 	'pipewire-alsa: new audio server'
 	'pipewire-jack: new audio server'
-	'pipewire-media-session: new audio server'
 	'pipewire-pulse: new audio server'
+	'wireplumber: new audio server'
 
 	'autolight: config/autorun: adaptive brightness (LAPTOP)'
 	'xfce4-power-manager: config/autorun,actionless/widgets/bat (LAPTOP)'
