@@ -1,5 +1,7 @@
 local spawn = require("awful.spawn")
 local with_shell = spawn.with_shell
+local gears_timer = require("gears.timer")
+local delayed_call = gears_timer.delayed_call
 
 local run_once = require("actionless.util.spawn").run_once
 
@@ -51,7 +53,6 @@ function autorun.init(awesome_context)
     with_shell(item)
   end
 
-  local delayed_call = require("gears.timer").delayed_call
   delayed_call(function()
     --spawn{"gpaste-client", "start"}
     --with_shell("eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)")
@@ -70,8 +71,6 @@ function autorun.init(awesome_context)
   end)
 
 
-  --local gears_timer = require("gears.timer")
-  --local delayed_call = gears_timer.delayed_call
   --delayed_call(function()
     --local wlppr = require('actionless.wlppr')
     --gears_timer({
