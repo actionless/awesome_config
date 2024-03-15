@@ -109,11 +109,12 @@ function menus.init(context)
     local applications_menu = {
 
       category("Audio", {
-        app("AudioRelay", "audiorelay"),
+        --app("AudioRelay", "audiorelay"),
         app("EasyEffects", "easyeffects"),
+        app("Helvum", "helvum", "org.pipewire.Helvum"),
         app("ocenaudio"),
         app("Sonobus", "sonobus"),
-        app("qpwgraph", nil, "org.rncbc.qpwgraph.png"),
+        --app("qpwgraph", nil, "org.rncbc.qpwgraph.png"),
       }, "audio-recorder", "multimedia"),
 
       category("Development", {
