@@ -6,6 +6,7 @@ local beautiful = require("beautiful")
 local dpi = beautiful.xresources.apply_dpi
 local awful = require("awful")
 local gears_timer = require("gears.timer")
+local naughty = require("naughty")
 
 local parse = require("actionless.util.parse")
 local decorated_widget= require("actionless.widgets.common").decorated
@@ -18,6 +19,55 @@ local temp = {
   temperatures = {},
   temperatures_nv_smi = {},
 }
+
+
+function temp.hide_notification()
+  if temp.notification ~= nil then
+    naughty.destroy(temp.notification)
+    temp.notification = nil
+  end
+end
+
+
+function temp.get_notification_id()
+  return temp.notification and temp.notification.id or nil
+end
+
+
+function temp.show_notification()
+  local message = ''
+  local nv_i = 1
+  local i = 1
+  local num_sensors = h_table.getn(temp.sensors)
+  for sensor_id, sensor_data in pairs(temp.sensors) do
+    local temp_value
+    if sensor_data.device == 'nvidia' then
+      temp_value = temp.temperatures_nv_smi[nv_i]
+      nv_i = nv_i + 1
+    else
+      temp_value = temp.temperatures[i]
+      i = i + 1
+    end
+    message = message .. string.format(
+      "%5s: %s",
+      sensor_id,
+      temp_value or "nil"
+    )
+    local sensor_idx = i + nv_i - 2
+    if sensor_idx < num_sensors then
+      message = message .. "\n"
+    end
+  end
+
+  temp.notification = naughty.notify({
+    text = message,
+    timeout = temp.notification_timeout,
+    font = beautiful.mono_text_font,
+    replaces_id = temp.get_notification_id(),
+    position = beautiful.widget_notification_position,
+  })
+end
+
 
 function temp.update()
   local jq_queries = {}
@@ -119,6 +169,12 @@ function temp.init(args)
   if beautiful.widget_temp then
     temp.widget:set_image(beautiful.widget_temp)
   end
+  temp.widget:connect_signal(
+    "mouse::enter", function () temp.show_notification() end
+  )
+  temp.widget:connect_signal(
+    "mouse::leave", function () temp.hide_notification() end
+  )
 
   gears_timer({
     callback=temp.update,
