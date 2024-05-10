@@ -31,7 +31,7 @@ local function widget_factory(args)
   local padding = args.padding or dpi(8)
 
   -- WIDGET: ------------------------------------------------------------------
-  local bg_image_normal
+  local bg_image_normal, bg_image_manage
   --local bg_image_manage
   if beautiful.show_widget_icon then
     bg_image_normal = recolor_image(
