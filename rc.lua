@@ -111,7 +111,7 @@ local context = {
     --tmux_light = terminal .. " -e bash \\-c tmux",  -- @TODO: add it
     tmux_run   = terminal .. " -e tmux new-session ",
 
-    scrot_preview_cmd = [['mv $f ~/images/ && viewnior ~/images/$f']],
+    scrot_preview_cmd = "viewnior ~/images/$f",
 
     system_monitor = 'gnome-system-monitor -p',
   },

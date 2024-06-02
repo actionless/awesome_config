@@ -656,24 +656,33 @@ function keys.init(awesome_context)
     bind_key({ "Control"      }, "Print",
       function ()
         awful.spawn.with_shell(
-        "scrot -ub '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. shell_commands.scrot_preview_cmd)
+          "scrot -ub '%Y-%m-%d--%s_$wx$h_scrot.png' -e "
+          .. "'mv $f ~/images/ && "
+          .. shell_commands.scrot_preview_cmd
+          .. "'"
+        )
       end,
       "screenshot focused", SCREENSHOT
     ),
     bind_key({ "Control", altkey }, "Print",
       function ()
         awful.spawn.with_shell(
-        "scrot -u '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. shell_commands.scrot_preview_cmd)
+        "scrot -u '%Y-%m-%d--%s_$wx$h_scrot.png' -e "
+          .. "'mv $f ~/images/ && "
+          .. shell_commands.scrot_preview_cmd
+          .. "'")
       end,
       "screenshot focused without border", SCREENSHOT
     ),
     bind_key({ altkey        }, "Print",
       function ()
         awful.spawn.with_shell(
-          --"scrot -a $(slop -o -f '%x,%y,%w,%h') '%Y-%m-%d--%s_$wx$h_scrot.png' -e " ..
-          --"scrot -a $(slop -f '%x,%y,%w,%h' && sleep 0.3) '%Y-%m-%d--%s_$wx$h_scrot.png' -e " ..
-          "scrot -a $(slop -f '%x,%y,%w,%h' -o && sleep 0.3) '%Y-%m-%d--%s_$wx$h_scrot.png' -e " ..
-          shell_commands.scrot_preview_cmd
+          --"scrot -a $(slop -o -f '%x,%y,%w,%h') '%Y-%m-%d--%s_$wx$h_scrot.png' -e "
+          --"scrot -a $(slop -f '%x,%y,%w,%h' && sleep 0.3) '%Y-%m-%d--%s_$wx$h_scrot.png' -e "
+          "scrot -a $(slop -f '%x,%y,%w,%h' -o && sleep 0.3) '%Y-%m-%d--%s_$wx$h_scrot.png' -e "
+          .. "'mv $f ~/images/ && "
+          .. shell_commands.scrot_preview_cmd
+          .. "'"
         )
       end,
       "screenshot selected", SCREENSHOT
@@ -681,14 +690,20 @@ function keys.init(awesome_context)
     bind_key({  }, "Print",
       function ()
         awful.spawn.with_shell(
-        "scrot '%Y-%m-%d--%s_$wx$h_scrot.png' -e " .. shell_commands.scrot_preview_cmd)
+          "scrot '%Y-%m-%d--%s_$wx$h_scrot.png' -e "
+          .. "'mv $f ~/images/ && "
+          .. shell_commands.scrot_preview_cmd
+          .. "'"
+        )
       end,
       "screenshot all", SCREENSHOT
     ),
     bind_key({ "Shift" }, "Print",
       function ()
         awful.spawn.with_shell(
-        "scrot '%Y-%m-%d--%s_$wx$h_scrot.png'")
+          "scrot '%Y-%m-%d--%s_$wx$h_scrot.png' -e "
+          .. "'mv $f ~/images/'"
+        )
       end,
       "screenshot all", SCREENSHOT
     ),
