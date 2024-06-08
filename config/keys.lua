@@ -606,6 +606,17 @@ function keys.init(awesome_context)
     -- lcars keyboard
     --awful.key({}, "#163", function () awesome_context.widgets.music.next_song() end),
 
+    bind_key({modkey, "Shift"}, "p",
+      function ()
+        awesome_context.widgets.pipewire_helper.show_menu({
+          coords={
+            x=(awful.screen.focused().geometry.width - awesome_context.widgets.pipewire_helper.menu_width) / 2,
+            y=beautiful.basic_panel_height,
+          }
+        })
+      end,
+      "pipewire menu", MUSIC),
+
     bind_key({ modkey }, "c",
       function () os.execute("xsel -p -o | xsel -i -b") end,
       "copy to clipboard", AWESOME_COLOR

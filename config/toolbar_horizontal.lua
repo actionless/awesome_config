@@ -19,6 +19,8 @@ function toolbar.init(awesome_context)
   local sep = common.constraint({ width=gmath.round((beautiful.panel_widget_spacing or 0)/4) })
 
   local apw = wibox.layout.fixed.horizontal(
+    loaded_widgets.pipewire_helper,
+    separator,
     common.panel_widget_shape(
       common.constraint({
         widget=loaded_widgets.volume,

@@ -76,6 +76,8 @@ function widget_loader.init(awesome_context)
       end
   end
 
+  w.pipewire_helper = widgets.pipewire_helper({})
+
   -- MEM
   w.mem = widgets.mem({
     update_interval = 5,
