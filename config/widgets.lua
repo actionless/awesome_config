@@ -299,7 +299,7 @@ function widget_loader.init(awesome_context)
             theme = {
               width=capi.screen[awful.screen.focused()].workarea.width
             },
-            coords = { x=0, y=18 }
+            coords = { x=0, y=beautiful.basic_panel_height or dpi(18) }
           })
         end
       end)--,

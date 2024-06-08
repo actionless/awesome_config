@@ -419,7 +419,7 @@ function keys.init(awesome_context)
       function ()
         awesome_context.menu.instance = menu_addon.clients_on_tag({
           theme = {width=capi.screen[awful.screen.focused()].workarea.width - beautiful.menu_border_width*2},
-          coords = {x=0, y=18}
+          coords = {x=0, y=beautiful.basic_panel_height}
         })
       end,
       "clients on current tag menu", GROUP_MENU
@@ -428,7 +428,7 @@ function keys.init(awesome_context)
       function ()
         awesome_context.menu.instance = menu_addon.clients_with_icons({
           theme = {width=capi.screen[awful.screen.focused()].workarea.width - beautiful.menu_border_width*2},
-          coords = {x=0, y=18}
+          coords = {x=0, y=beautiful.basic_panel_height}
         })
       end,
       "all clients menu", GROUP_MENU
