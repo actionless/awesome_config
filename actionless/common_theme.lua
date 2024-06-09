@@ -16,7 +16,9 @@ local h_parse = require("actionless.util.parse")
 local h_color = require("actionless.util.color")
 
 
-local common_theme = {}
+local common_theme = {
+  system_icon_theme = nil,
+}
 
 function common_theme.create_default_theme(theme_dir, icons_dir)
 
@@ -33,9 +35,14 @@ function common_theme.create_default_theme(theme_dir, icons_dir)
 
   theme.xrdb = xresources.get_current_theme()
 
-  theme.icon_theme = h_parse.find_in_file_sync(
-    os.getenv("HOME").."/.xsettingsd", '^Net/IconThemeName.*"(.*)"'
+  theme.icon_theme = common_theme.system_icon_theme or h_parse.find_in_file_sync(
+    os.getenv("HOME").."/.xsettingsd", '^Net/IconThemeName.*"(.*)"',
+    {
+      skip_warning=true,
+      from=theme_dir,
+    }
   ) or "gnome"
+  common_theme.system_icon_theme = theme.icon_theme
 
   theme.wallpaper = nil
   theme.wallpaper_cmd = "nitrogen --restore"
