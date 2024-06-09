@@ -33,7 +33,7 @@ function common_theme.create_default_theme(theme_dir, icons_dir)
 
   theme.xrdb = xresources.get_current_theme()
 
-  theme.icon_theme = h_parse.find_in_file(
+  theme.icon_theme = h_parse.find_in_file_sync(
     os.getenv("HOME").."/.xsettingsd", '^Net/IconThemeName.*"(.*)"'
   ) or "gnome"
 

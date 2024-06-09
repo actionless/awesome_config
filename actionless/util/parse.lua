@@ -78,8 +78,14 @@ end
 
 ----------------------------------------------
 
-function parse.find_in_file(file_name, regex)
-  log("find_in_file() is deprecated")
+function parse.find_in_file_sync(file_name, regex, args)
+  args = args or {}
+  if not args.skip_warning then
+    nlog(
+      "find_in_file_sync() is deprecated\n"
+      .."(called from "..tostring(args.from)..")"
+    )
+  end
   local fp = io.open(file_name)
   if fp == nil then return nil end
 
