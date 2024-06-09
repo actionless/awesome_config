@@ -5,7 +5,7 @@
 
 local g_string = require("gears.string")
 
-local log = require("actionless.util.debug").log
+local nlog = require("actionless.util.debug").nlog
 local h_fs = require("actionless.util.filesystem")
 local h_table = require("actionless.util.table")
 
