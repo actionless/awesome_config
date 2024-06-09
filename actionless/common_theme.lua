@@ -253,6 +253,9 @@ function common_theme.create_default_theme(theme_dir, icons_dir)
   theme.widget_disk_high	= icons_dir .. "disk_high.png"
 
   theme.widget_notifications	= icons_dir .. "notifications.png"
+
+  theme.widget_wires		= icons_dir .. "wires.png"
+  theme.widget_wires_high	= icons_dir .. "wires_high.png"
   --theme.widget_notifications_empty	= icons_dir .. "notifications_empty.png"
 
   theme.recolor_widget_icons = true

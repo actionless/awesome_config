@@ -53,22 +53,14 @@ function pipewire_helper.init(args)
     left=beautiful.show_widget_icon and dpi(4) or 0,
     right=beautiful.show_widget_icon and dpi(4) or 0
   }})
-  pipewire_helper.artist_widget = wibox.widget.textbox()
-  pipewire_helper.separator_widget = wibox.widget.textbox("pw")
 
-      pipewire_helper.icon_widget:set_image(beautiful.widget_music_play)
-
-  pipewire_helper.title_widget = common.widget({margin={right=beautiful.show_widget_icon and dpi(4) or 0}})
   args.widgets = {
     --wibox.widget.textbox(' '),
-    beautiful.show_widget_icon and pipewire_helper.icon_widget or wibox.widget.textbox(''),
-    pipewire_helper.artist_widget,
+    beautiful.show_widget_icon and pipewire_helper.icon_widget or wibox.widget.textbox('pw'),
     --common.constraint({
       --height = beautiful.panel_padding_bottom * 2,
       --width = beautiful.panel_padding_bottom * 2,
     --}),
-    pipewire_helper.separator_widget,
-    pipewire_helper.title_widget,
     --wibox.widget.textbox(' '),
   }
   pipewire_helper.widget = decorated_widget(args)
@@ -98,18 +90,27 @@ function pipewire_helper.init(args)
   end
 
 -------------------------------------------------------------------------------
-  function pipewire_helper.update(from)
-    _log("update from "..from)
+  function pipewire_helper.update()
+    local connected = false
+    for enabled_script_id, status in pairs(enabled_scripts) do
+      connected = connected or status
+    end
+    if connected then
+      pipewire_helper.icon_widget:set_image(beautiful.widget_wires_high)
+    else
+      pipewire_helper.icon_widget:set_image(beautiful.widget_wires)
+    end
   end
 -------------------------------------------------------------------------------
   function pipewire_helper.turn_off(script_id)
-      local script_data = available_scripts[script_id]
-      if script_data then
-        local cmd = script_data.command or script_id
-        local cmd_off = script_data.command_off or cmd.." -d"
-        awful.spawn.with_shell(cmd_off)
-      end
-      enabled_scripts[script_id] = false
+    local script_data = available_scripts[script_id]
+    if script_data then
+      local cmd = script_data.command or script_id
+      local cmd_off = script_data.command_off or cmd.." -d"
+      awful.spawn.with_shell(cmd_off)
+    end
+    enabled_scripts[script_id] = false
+    pipewire_helper.update()
   end
 -------------------------------------------------------------------------------
   function pipewire_helper.switch(script_id)
@@ -121,6 +122,7 @@ function pipewire_helper.init(args)
     awful.spawn.with_shell(cmd)
     enabled_scripts[script_id] = true
     db.set('pipewire_monitoring_enabled', enabled_scripts)
+    pipewire_helper.update()
   end
 -------------------------------------------------------------------------------
   function pipewire_helper.restart()
@@ -139,6 +141,7 @@ function pipewire_helper.init(args)
       enabled_scripts[enabled_script_id] = false
     end
     db.set('pipewire_monitoring_enabled', enabled_scripts)
+    pipewire_helper.update()
   end
 -------------------------------------------------------------------------------
   function pipewire_helper.restuck()
@@ -204,15 +207,16 @@ function pipewire_helper.init(args)
   --pipewire_helper.widget:connect_signal(
   --  "mouse::leave", function () pipewire_helper.hide_notification() end)
   pipewire_helper.widget:buttons(awful.util.table.join(
-    awful.button({ }, 1, pipewire_helper.toggle),
-    awful.button({ }, 2, pipewire_helper.seek),
-    awful.button({ }, 3, pipewire_helper.show_menu),
+    awful.button({ }, 1, pipewire_helper.show_menu),
+    --awful.button({ }, 2, pipewire_helper.seek),
+    awful.button({ }, 3, pipewire_helper.show_menu)
     --awful.button({ }, 3, function() pipewire_helper.show_menu() end),
-    awful.button({ }, 5, pipewire_helper.next_song),
-    awful.button({ }, 4, pipewire_helper.prev_song)
+    --awful.button({ }, 5, pipewire_helper.next_song),
+    --awful.button({ }, 4, pipewire_helper.prev_song)
   ))
 
 -------------------------------------------------------------------------------
+  pipewire_helper.update()
   return setmetatable(pipewire_helper, { __index = pipewire_helper.widget })
 end
 
