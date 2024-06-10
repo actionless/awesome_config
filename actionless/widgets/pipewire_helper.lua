@@ -231,6 +231,7 @@ function pipewire_helper.init(widget_args)
     --awful.button({ }, 4, pipewire_helper.prev_song)
   ))
 
+  pipewire_helper.load()
   pipewire_helper.update()
   return setmetatable(pipewire_helper, { __index = pipewire_helper.widget })
 end
