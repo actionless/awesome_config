@@ -31,6 +31,11 @@ local pipewire_helper = {
   notification_object=nil,
   available_scripts={},
   enabled_scripts={},
+  last_script=nil,
+}
+local db_ids = {
+  enabled="pipewire_monitoring_enabled",
+  last="pipewire_monitoring_last",
 }
 
 
@@ -70,12 +75,18 @@ function pipewire_helper.init(widget_args)
 -------------------------------------------------------------------------------
 
   function pipewire_helper.load()
-    pipewire_helper.enabled_scripts = db.get_or_set("pipewire_monitoring_enabled", {})
+    pipewire_helper.enabled_scripts = db.get_or_set(db_ids.enabled, {})
+    pipewire_helper.last_script = db.get_or_set(
+      db_ids.last,
+      pipewire_helper.available_scripts[1].id
+      or pipewire_helper.available_scripts[1].cmd
+    )
   end
 -------------------------------------------------------------------------------
 
   function pipewire_helper.save()
-    db.set("pipewire_monitoring_enabled", pipewire_helper.enabled_scripts)
+    db.set(db_ids.enabled, pipewire_helper.enabled_scripts)
+    db.set(db_ids.last, pipewire_helper.get_current_script().id)
   end
 -------------------------------------------------------------------------------
 
@@ -103,12 +114,17 @@ function pipewire_helper.init(widget_args)
   end
 -------------------------------------------------------------------------------
 
-  function pipewire_helper.update()
-    local connected = false
-    for _, status in pairs(pipewire_helper.enabled_scripts) do
-      connected = connected or status
+  function pipewire_helper.get_current_script()
+    for script_id, status in pairs(pipewire_helper.enabled_scripts) do
+      if status then
+        return pipewire_helper.get_script_data_by_id(script_id)
+      end
     end
-    if connected then
+  end
+-------------------------------------------------------------------------------
+
+  function pipewire_helper.update()
+    if pipewire_helper.get_current_script() then
       pipewire_helper.icon_widget:set_image(beautiful.widget_wires_high)
     else
       pipewire_helper.icon_widget:set_image(beautiful.widget_wires)
@@ -120,6 +136,9 @@ function pipewire_helper.init(widget_args)
       for _, script_data in ipairs(pipewire_helper.available_scripts) do
         local current_script_id = script_data.id or script_data.cmd
         if current_script_id == script_id then
+          if not script_data.id then
+            script_data.id = script_data.cmd
+          end
           return script_data
         end
       end
@@ -183,6 +202,16 @@ function pipewire_helper.init(widget_args)
   end
 -------------------------------------------------------------------------------
 
+  function pipewire_helper.toggle_last()
+    local script_data = pipewire_helper.get_current_script()
+    if script_data then
+      pipewire_helper.turn_off(script_data.id)
+    else
+      pipewire_helper.switch(pipewire_helper.last_script)
+    end
+  end
+-------------------------------------------------------------------------------
+
   function pipewire_helper.show_menu(menu_args)
     menu_args = menu_args or {}
     if pipewire_helper.menu and pipewire_helper.menu.wibox.visible then
@@ -239,7 +268,7 @@ function pipewire_helper.init(widget_args)
   --  "mouse::leave", function () pipewire_helper.hide_notification() end)
   pipewire_helper.widget:buttons(awful.util.table.join(
     awful.button({ }, 1, pipewire_helper.show_menu),
-    --awful.button({ }, 2, pipewire_helper.seek),
+    awful.button({ }, 2, pipewire_helper.toggle_last),
     awful.button({ }, 3, pipewire_helper.show_menu)
     --awful.button({ }, 3, function() pipewire_helper.show_menu() end),
     --awful.button({ }, 5, pipewire_helper.next_song),
