@@ -38,16 +38,20 @@ function pipewire_helper.init(widget_args)
   widget_args = widget_args or {}
   pipewire_helper.args = widget_args
   pipewire_helper.available_scripts = widget_args.scripts or {
-    monitoring_pipewire_easyeffects_blackjack={
+    {
+      cmd="monitoring_pipewire_easyeffects_blackjack",
       title="Monitoring: BlackJack: EasyEffects",
     },
-    monitoring_pipewire_easyeffects_blackjack_zam={
+    {
+      cmd="monitoring_pipewire_easyeffects_blackjack_zam",
       title="Monitoring: BlackJack+Zam: EasyEffects",
     },
-    monitoring_pipewire_blackjack={
+    {
+      cmd="monitoring_pipewire_blackjack",
       title="Monitoring: BlackJack",
     },
   }
+
   pipewire_helper.icon_widget = common.widget({margin={
     left=beautiful.show_widget_icon and dpi(4) or 0,
     right=beautiful.show_widget_icon and dpi(4) or 0
@@ -71,7 +75,7 @@ function pipewire_helper.init(widget_args)
 -------------------------------------------------------------------------------
 
   function pipewire_helper.save()
-    db.set('pipewire_monitoring_enabled', pipewire_helper.enabled_scripts)
+    db.set("pipewire_monitoring_enabled", pipewire_helper.enabled_scripts)
   end
 -------------------------------------------------------------------------------
 
@@ -112,9 +116,19 @@ function pipewire_helper.init(widget_args)
   end
 -------------------------------------------------------------------------------
 
+  function pipewire_helper.get_script_data_by_id(script_id)
+      for _, script_data in ipairs(pipewire_helper.available_scripts) do
+        local current_script_id = script_data.id or script_data.cmd
+        if current_script_id == script_id then
+          return script_data
+        end
+      end
+  end
+-------------------------------------------------------------------------------
+
   function pipewire_helper.turn_off(script_id, args)
     args = args or {}
-    local script_data = pipewire_helper.available_scripts[script_id]
+    local script_data = pipewire_helper.get_script_data_by_id(script_id)
     if script_data then
       local cmd = script_data.command or script_id
       local cmd_off = script_data.command_off or cmd.." -d"
@@ -132,7 +146,7 @@ function pipewire_helper.init(widget_args)
     for enabled_script_id, _ in pairs(pipewire_helper.enabled_scripts) do
       pipewire_helper.turn_off(enabled_script_id, {save=false})
     end
-    local script_data = pipewire_helper.available_scripts[script_id]
+    local script_data = pipewire_helper.get_script_data_by_id(script_id)
     local cmd = script_data.command or script_id
     awful.spawn.with_shell(cmd)
     pipewire_helper.enabled_scripts[script_id] = true
@@ -175,7 +189,8 @@ function pipewire_helper.init(widget_args)
       pipewire_helper.menu:hide()
     else
       local items = {}
-      for script_id, script_data in pairs(pipewire_helper.available_scripts) do
+      for _, script_data in ipairs(pipewire_helper.available_scripts) do
+        local script_id = script_data.id or script_data.cmd
         local display_name = script_data.title
         local item = {display_name, }
         item[2] = function()
