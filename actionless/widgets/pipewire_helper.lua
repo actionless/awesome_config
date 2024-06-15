@@ -86,7 +86,10 @@ function pipewire_helper.init(widget_args)
 
   function pipewire_helper.save()
     db.set(db_ids.enabled, pipewire_helper.enabled_scripts)
-    db.set(db_ids.last, pipewire_helper.get_current_script().id)
+    local current_script = pipewire_helper.get_current_script()
+    if current_script then
+      db.set(db_ids.last, current_script.id)
+    end
   end
 -------------------------------------------------------------------------------
 
