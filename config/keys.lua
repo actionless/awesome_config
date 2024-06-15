@@ -698,7 +698,7 @@ function keys.init(awesome_context)
       end,
       "screenshot selected", SCREENSHOT
     ),
-    bind_key({  }, "Print",
+    bind_key({ "Shift" }, "Print",
       function ()
         awful.spawn.with_shell(
           "scrot '%Y-%m-%d--%s_$wx$h_scrot.png' -e "
@@ -707,9 +707,9 @@ function keys.init(awesome_context)
           .. "'"
         )
       end,
-      "screenshot all", SCREENSHOT
+      "screenshot all and open", SCREENSHOT
     ),
-    bind_key({ "Shift" }, "Print",
+    bind_key({  }, "Print",
       function ()
         awful.spawn.with_shell(
           "scrot '%Y-%m-%d--%s_$wx$h_scrot.png' -e "
