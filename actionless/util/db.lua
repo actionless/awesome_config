@@ -3,6 +3,7 @@ local gears_timer = require("gears.timer")
 
 local pickle = require("actionless.util.pickle")
 local log = require("actionless.util.debug").log
+local filesystem = require("actionless.util.filesystem")
 
 
 local db_module = {
@@ -31,7 +32,7 @@ function db_module.db(filename)
 
   db._init = function()
     if not db._file_table then
-      log("DB: init...")
+      log("DB: init "..filename.." ...")
       db._file_table = pickle.load(db.filename)
       if not db._file_table then
         log("DB: no data found, creating new one...")
@@ -117,6 +118,11 @@ end
 function db_module.update_child(...)
   local db = db_module.db()
   return db.update_child(...)
+end
+
+function db_module.session_db()
+  local username = filesystem.get_username()
+  return db_module.db("/tmp/awesome_session_"..username..".db")
 end
 
 return db_module
