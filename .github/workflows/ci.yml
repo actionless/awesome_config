@@ -26,10 +26,10 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install Luarocks
-        run: apt install luarocks
+        run: sudo apt install luarocks
 
       - name: Install Luacheck
-        run: luarocks install luacheck
+        run: sudo luarocks install luacheck
         
       - name: Luacheck
         run: luacheck .
