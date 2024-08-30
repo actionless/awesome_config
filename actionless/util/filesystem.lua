@@ -3,6 +3,7 @@ local gio = lgi.Gio
 local glib = lgi.GLib
 
 local log = require("actionless.util.debug").get_decorated_logger('UTIL.FILESYSTEM')
+local gstring = require('gears.string')
 
 
 local filesystem = {}
@@ -93,6 +94,12 @@ function filesystem.write_file(file_name, text, callback, is_retry)
 
       end
     end)  -- is_readable - end
+end
+
+function filesystem.get_username()
+  local homedir = os.getenv("HOME")
+  local parts = gstring.split(homedir, "/")
+  return parts[#parts]
 end
 
 return filesystem
