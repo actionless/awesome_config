@@ -10,7 +10,7 @@ INSTALL_NO_ARGB_SHORTCUTS=${NOARGB:-n}
 pkgname=actionless_awesome_config_meta
 conflicts=(awesome_config_actionless_meta)
 pkgver=0.5
-pkgrel=9
+pkgrel=10
 pkgdesc="Awesome config dependencies"
 arch=('any')
 url="https://github.com/actionless/awesome_config"
@@ -42,15 +42,20 @@ depends=(
 	'slop' # config/keys: helper for default screenshot tool
 
 	# @TODO: make them optional?
-	'xsettingsd' # or use lxsettings-daemon from lxsession
-	#'lxsession-gtk3' # or 'lxsession' # needed for lxpolkit
+	'xsettingsd'
+	'mate-polkit'
 )
 optdepends=(
-	'mate-session-manager: mate session'
-	'mate-polkit: mate session'
+	# < settings' daemons start
+	#'mate-session-manager: mate session and settings manager'
+	#'mate-polkit: mate polkit session'
 	#
 	#'gnome-settings-daemon: rc: alternative to xsettingsd'
 	#'gnome-session: rc: alternative to lxsession to acompany gnome-settings-daemon'
+	#
+	#'lxsession-gtk3: gtk3 lxsession, lxsettings-daemon and lxpolkit'
+	#'lxsession: lxsession, lxsettings-daemon and lxpolkit'
+	# settings' daemons end>
 
 	'picom: compositing + rounded borders'
 	'plotinus: Ctrl+Shift+P menu in GTK+3 applications'
