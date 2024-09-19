@@ -122,13 +122,14 @@ function widget_loader.init(awesome_context)
   end
   -- Arch updates
   w.updates = widgets.arch_updates({
-      bg = beautiful.panel_widget_updates_bg or (
+    update_interval = 1200, -- 20 minutes
+    bg = beautiful.panel_widget_updates_bg or (
         h_color.is_dark(beautiful.panel_bg or beautiful.bg_normal) ==
         h_color.is_dark(beautiful.xrdb and beautiful.xrdb.background or beautiful.bg_normal)
       ) and
       TRANSPARENT or
       beautiful.panel_widget_fg_warning,
-      fg = beautiful.panel_widget_updates_fg or beautiful.panel_widget_bg_warning,
+    fg = beautiful.panel_widget_updates_fg or beautiful.panel_widget_bg_warning,
   })
 
   -- NAUGHTY SIDEBAR --
