@@ -958,14 +958,17 @@ function keys.init(awesome_context)
           awful.tag.incmwfact(-0.05)
         elseif direction == "right" then
           awful.tag.incmwfact( 0.05)
+        elseif direction == "reset_clients" then
+          local s = c.screen
+          local t = s.selected_tag
+          t.windowfact = {}
+          awful.layout.arrange(s)
         elseif direction == "reset" then
           local s = c.screen
           local t = s.selected_tag
-          if t then
-            t.master_width_factor = 0.5
-            t.windowfact = {}
-            awful.layout.arrange(s)
-          end
+          t.master_width_factor = 0.5
+          t.windowfact = {}
+          awful.layout.arrange(s)
         end
       end
     end
@@ -1076,6 +1079,10 @@ function keys.init(awesome_context)
     bind_key({ modkey, "Control"  }, "Up",
       get_resize_function("up"),
       "column size+", LAYOUT_MANIPULATION
+    ),
+    bind_key({ modkey, "Control"  }, "Home",
+      get_resize_function("reset_clients"),
+      "reset layout", LAYOUT_MANIPULATION
     ),
     bind_key({ modkey, "Control"  }, "End",
       get_resize_function("reset"),
