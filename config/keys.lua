@@ -950,21 +950,38 @@ function keys.init(awesome_context)
         end
         c:geometry(g)
       else
-        if direction == "down" then
+        local s = c.screen
+        local layout = awful.layout.getname(awful.layout.get(s))
+        --nlog(layout)
+        local sign = 1
+        local new_direction = direction
+        if layout == "tileleft" then
+          sign = -1
+        elseif layout == "tilebottom" then
+          if direction == "down" then
+            new_direction = "right"
+          elseif direction == "up" then
+            new_direction = "left"
+          elseif direction == "left" then
+            new_direction = "up"
+          elseif direction == "right" then
+            new_direction = "down"
+          end
+        end
+        --nlog(new_direction)
+        if new_direction == "down" then
           awful.client.incwfact(-0.05)
-        elseif direction == "up" then
+        elseif new_direction == "up" then
           awful.client.incwfact( 0.05)
-        elseif direction == "left" then
-          awful.tag.incmwfact(-0.05)
-        elseif direction == "right" then
-          awful.tag.incmwfact( 0.05)
-        elseif direction == "reset_clients" then
-          local s = c.screen
+        elseif new_direction == "left" then
+          awful.tag.incmwfact(-0.05 * sign)
+        elseif new_direction == "right" then
+          awful.tag.incmwfact( 0.05 * sign)
+        elseif new_direction == "reset_clients" then
           local t = s.selected_tag
           t.windowfact = {}
           awful.layout.arrange(s)
-        elseif direction == "reset" then
-          local s = c.screen
+        elseif new_direction == "reset" then
           local t = s.selected_tag
           t.master_width_factor = 0.5
           t.windowfact = {}
