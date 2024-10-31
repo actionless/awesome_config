@@ -95,6 +95,15 @@ function persistent.tag.get_all_uselessgaps(s, fallback)
   return db.get_or_set("tag_usellessgaps_"..s.index, fallback)
 end
 
+function persistent.tag.get_all_mastercounts(s, fallback)
+  return db.get_or_set("tag_mastercounts_"..s.index, fallback)
+end
+
+function persistent.tag.get_all_columncounts(s, fallback)
+  return db.get_or_set("tag_columncounts_"..s.index, fallback)
+end
+
+
 --Tag params setters and signals:
 
 function persistent.tag.master_width_factor_save(t, screen_id, tag_id)
@@ -153,6 +162,30 @@ end
 persistent.tag._connect_signal(
   "property::useless_gap",
   persistent.tag.uselessgaps_save
+)
+
+function persistent.tag.mastercount_save(t, screen_id, tag_id)
+  db.update_child(
+    "tag_mastercounts_"..screen_id,
+    tag_id,
+    t.master_count
+  )
+end
+persistent.tag._connect_signal(
+  "property::master_count",
+  persistent.tag.mastercount_save
+)
+
+function persistent.tag.columncount_save(t, screen_id, tag_id)
+  db.update_child(
+    "tag_columncounts_"..screen_id,
+    tag_id,
+    t.column_count
+  )
+end
+persistent.tag._connect_signal(
+  "property::column_count",
+  persistent.tag.columncount_save
 )
 
 

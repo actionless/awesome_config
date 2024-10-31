@@ -113,6 +113,33 @@ function layouts.init(context)
         tags[tag_number].gap = gap
     end
 
+    for tag_number, master_count in pairs(persistent.tag.get_all_mastercounts(s, {
+    --1                      2                      3
+      1,                     1,                     1,
+    --4                      5                      6
+      1,                     1,                     1,
+    --7                      8                      9
+      1,                     1,                     1,
+    --10                     11                     12
+      1,                     1,                     1,
+    })) do
+        tags[tag_number].master_count = master_count
+    end
+
+    for tag_number, column_count in pairs(persistent.tag.get_all_columncounts(s, {
+    --1                      2                      3
+      1,                     1,                     1,
+    --4                      5                      6
+      1,                     1,                     1,
+    --7                      8                      9
+      1,                     1,                     1,
+    --10                     11                     12
+      1,                     1,                     1,
+    })) do
+        tags[tag_number].column_count = column_count
+    end
+
+
   end)
   -- }}}
 
