@@ -112,10 +112,6 @@ function persistent.tag.master_width_factor_save(t, screen_id, tag_id)
   current_mwfacts[tag_id] = t.master_width_factor
   db.set(db_id, current_mwfacts)
 end
-persistent.tag._connect_signal(
-  "property::master_width_factor",
-  persistent.tag.master_width_factor_save
-)
 
 function persistent.tag.master_fill_policy_save(t, screen_id, tag_id)
   local db_id = "tag_mfpol_"..screen_id
@@ -123,10 +119,6 @@ function persistent.tag.master_fill_policy_save(t, screen_id, tag_id)
   layout_expand_masters[tag_id] = t.master_fill_policy
   db.set(db_id, layout_expand_masters)
 end
-persistent.tag._connect_signal(
-  "property::master_fill_policy",
-  persistent.tag.master_fill_policy_save
-)
 
 function persistent.tag.name_save(t, screen_id, tag_id)
   db.update_child(
@@ -135,10 +127,6 @@ function persistent.tag.name_save(t, screen_id, tag_id)
     t.name
   )
 end
-persistent.tag._connect_signal(
-  "property::name",
-  persistent.tag.name_save
-)
 
 function persistent.tag.layout_save(t, screen_id, tag_id)
   db.update_child(
@@ -147,10 +135,6 @@ function persistent.tag.layout_save(t, screen_id, tag_id)
     get_layout_id(t.layout)
   )
 end
-persistent.tag._connect_signal(
-  "property::layout",
-  persistent.tag.layout_save
-)
 
 function persistent.tag.uselessgaps_save(t, screen_id, tag_id)
   local db_id = "tag_usellessgaps_"..screen_id
@@ -158,11 +142,6 @@ function persistent.tag.uselessgaps_save(t, screen_id, tag_id)
   uselessgaps[tag_id] = t.gap
   db.set(db_id, uselessgaps)
 end
--- @TODO: see https://github.com/awesomeWM/awesome/issues/3692
-persistent.tag._connect_signal(
-  "property::useless_gap",
-  persistent.tag.uselessgaps_save
-)
 
 function persistent.tag.mastercount_save(t, screen_id, tag_id)
   db.update_child(
@@ -171,10 +150,6 @@ function persistent.tag.mastercount_save(t, screen_id, tag_id)
     t.master_count
   )
 end
-persistent.tag._connect_signal(
-  "property::master_count",
-  persistent.tag.mastercount_save
-)
 
 function persistent.tag.columncount_save(t, screen_id, tag_id)
   db.update_child(
@@ -183,10 +158,40 @@ function persistent.tag.columncount_save(t, screen_id, tag_id)
     t.column_count
   )
 end
-persistent.tag._connect_signal(
-  "property::column_count",
-  persistent.tag.columncount_save
-)
 
+
+-- Init signals:
+
+function persistent.init_tag_signals()
+  persistent.tag._connect_signal(
+    "property::master_width_factor",
+    persistent.tag.master_width_factor_save
+  )
+  persistent.tag._connect_signal(
+    "property::master_fill_policy",
+    persistent.tag.master_fill_policy_save
+  )
+  persistent.tag._connect_signal(
+    "property::name",
+    persistent.tag.name_save
+  )
+  persistent.tag._connect_signal(
+    "property::layout",
+    persistent.tag.layout_save
+  )
+  persistent.tag._connect_signal(
+    -- @TODO: see https://github.com/awesomeWM/awesome/issues/3692
+    "property::useless_gap",
+    persistent.tag.uselessgaps_save
+  )
+  persistent.tag._connect_signal(
+    "property::master_count",
+    persistent.tag.mastercount_save
+  )
+  persistent.tag._connect_signal(
+    "property::column_count",
+    persistent.tag.columncount_save
+  )
+end
 
 return persistent

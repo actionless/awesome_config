@@ -14,6 +14,10 @@ function layouts.init(context)
     require("awful.layout.dynamic")
   end
 
+  gears.timer.delayed_call(function()
+    persistent.init_tag_signals()  -- init signals to autotimally save tags' properties
+  end)
+
   -- Table of layouts to cover with awful.layout.inc, order matters.
   tag.connect_signal("request::default_layouts", function()
     awful.layout.append_default_layouts({
@@ -42,7 +46,9 @@ function layouts.init(context)
     awful.screen.connect_for_each_screen(set_wallpaper)
     screen.connect_signal("property::geometry", set_wallpaper)
   elseif beautiful.wallpaper_cmd then
+    gears.timer.delayed_call(function()
       awful.spawn.with_shell(beautiful.wallpaper_cmd)
+    end)
   end
   -- }}}
 
