@@ -48,8 +48,12 @@ function pipewire_helper.init(widget_args)
       title="Monitoring: BlackJack: EasyEffects",
     },
     {
+      cmd="monitoring_pipewire_easyeffects_blackjack_carla",
+      title="Monitoring: BlackJack+Carla: EasyEffects",
+    },
+    {
       cmd="monitoring_pipewire_easyeffects_blackjack_zam",
-      title="Monitoring: BlackJack+Zam: EasyEffects",
+      title="Monitoring: BlackJack+Zam Standalone: EasyEffects",
     },
     {
       cmd="monitoring_pipewire_blackjack",
