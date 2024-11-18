@@ -227,6 +227,16 @@ function rules.init(awesome_context)
           raise=false,
         },
       },
+      { rule = { class = "Carla2", name = "Carla - switch_multicomp.carxp" },
+        properties = {
+          --width = dpi(700),
+          height = dpi(256),
+          placement = no_offscreen_margined_placement,
+          tag=capi.screen.primary.tags[11],
+          raise=false,
+        },
+      },
+
 
       { rule_any = { class = {"Blueman-manager",}, },
         properties = {
