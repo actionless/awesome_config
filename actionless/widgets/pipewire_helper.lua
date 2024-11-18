@@ -76,7 +76,7 @@ function pipewire_helper.init(widget_args)
 
   function pipewire_helper.load()
     pipewire_helper.enabled_scripts = db.session_db().get_or_set(db_ids.enabled, {})
-    pipewire_helper.last_script = db.session_db().get_or_set(
+    pipewire_helper.last_script = db.get_or_set(
       db_ids.last,
       pipewire_helper.available_scripts[1].id
       or pipewire_helper.available_scripts[1].cmd
@@ -88,7 +88,7 @@ function pipewire_helper.init(widget_args)
     db.session_db().set(db_ids.enabled, pipewire_helper.enabled_scripts)
     local current_script = pipewire_helper.get_current_script()
     if current_script then
-      db.session_db().set(db_ids.last, current_script.id)
+      db.set(db_ids.last, current_script.id)
     end
   end
 -------------------------------------------------------------------------------
