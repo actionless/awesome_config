@@ -646,6 +646,10 @@ function keys.init(awesome_context)
       nil, mpv.play_browser_url,
       {description="mpv-xsel from browser", group=PROGRAMS}
     ),
+    bind_key({ modkey,  }, "e",
+      function() awful.spawn{"emote"} end,
+      "emote", PROGRAMS
+    ),
 
     bind_key({ modkey, "Control"  }, "r",
       function()
@@ -668,12 +672,21 @@ function keys.init(awesome_context)
       function ()
         awful.spawn.with_shell(
           "scrot -ub '%Y-%m-%d--%s_$wx$h_scrot.png' -e "
+          .. "'mv $f ~/images/'"
+        )
+      end,
+      "screenshot focused", SCREENSHOT
+    ),
+    bind_key({ "Control", "Shift" }, "Print",
+      function ()
+        awful.spawn.with_shell(
+          "scrot -ub '%Y-%m-%d--%s_$wx$h_scrot.png' -e "
           .. "'mv $f ~/images/ && "
           .. shell_commands.scrot_preview_cmd
           .. "'"
         )
       end,
-      "screenshot focused", SCREENSHOT
+      "screenshot focused and open", SCREENSHOT
     ),
     bind_key({ "Control", altkey }, "Print",
       function ()
