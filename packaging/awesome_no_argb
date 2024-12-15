@@ -1,17 +1,18 @@
 #!/bin/bash
 
+SCREENLAYOUT_SCRIPT=~/.screenlayout/default.sh
+CACHEDIR="$HOME"/.cache
 PROFILE_FILE=$HOME/.profile
+
 if test -f "$PROFILE_FILE" ; then
 	# shellcheck disable=SC1090
 	. "$PROFILE_FILE"
 fi
 
-SCREENLAYOUT_SCRIPT=~/.screenlayout/default.sh
 if test -f "$SCREENLAYOUT_SCRIPT" ; then
     "$SCREENLAYOUT_SCRIPT"
 fi
 
-CACHEDIR="$HOME"/.cache
 if test ! -d "${CACHEDIR}" ; then
     mkdir -p "${CACHEDIR}"
 fi
