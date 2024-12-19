@@ -16,6 +16,7 @@ local widgets = {
   disk            = require("actionless.widgets.disk"),
   naughty_sidebar = require("actionless.widgets.naughty_sidebar"),
   backlight       = require("actionless.widgets.backlight"),
+  script_switcher = require("actionless.widgets.script_switcher"),
   pipewire_helper = require("actionless.widgets.pipewire_helper"),
 }
 
