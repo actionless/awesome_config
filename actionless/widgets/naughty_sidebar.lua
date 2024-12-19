@@ -656,8 +656,9 @@ local function widget_factory(args)
     if not (widget_description and widget_description.widget) then
       return
     end
+    local bg_color = widget_description.bg or naughty_sidebar.theme.custom_widget_bg
     local widget_inner = wibox.container.background(
-      widget_description.widget, naughty_sidebar.theme.custom_widget_bg
+      widget_description.widget, bg_color
     )
     widget_inner.forced_height = widget_description.height or (
       naughty_sidebar.theme.custom_widget_height - naughty_sidebar.theme.button_padding*2
@@ -672,7 +673,7 @@ local function widget_factory(args)
         widget_inner,
         naughty_sidebar.theme.button_padding, naughty_sidebar.theme.button_padding,
         naughty_sidebar.theme.button_padding, naughty_sidebar.theme.button_padding,
-        naughty_sidebar.theme.custom_widget_bg
+        bg_color
       )
     )
     layout:add(widget)
