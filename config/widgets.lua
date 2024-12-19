@@ -143,6 +143,7 @@ function widget_loader.init(awesome_context)
     }
     w.backlight.progressbar.update_interval = 60
   end
+  local gsc = beautiful.gtk.get_theme_variables()
   w.naughty_sidebar = widgets.naughty_sidebar{
     hide_without_notifications = false,
     custom_widgets = {
@@ -151,6 +152,10 @@ function widget_loader.init(awesome_context)
         width=32, height=32,
         --width=24, height=24,
         --width=48, height=48,
+        bg=gsc.base_color,
+      },
+      w.screen_layouts and {
+        widget=w.screen_layouts,
       },
       {
         widget=w.netctl
