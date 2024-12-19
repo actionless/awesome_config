@@ -18,6 +18,7 @@ local widgets = {
   backlight       = require("actionless.widgets.backlight"),
   script_switcher = require("actionless.widgets.script_switcher"),
   pipewire_helper = require("actionless.widgets.pipewire_helper"),
+  screen_layouts       = require("actionless.widgets.screen_layouts"),
 }
 
 return widgets

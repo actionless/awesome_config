@@ -77,6 +77,7 @@ function widget_loader.init(awesome_context)
   end
 
   w.pipewire_helper = widgets.pipewire_helper({})
+  w.screen_layouts = widgets.screen_layouts({})
 
   -- MEM
   w.mem = widgets.mem({
