@@ -5,6 +5,8 @@ local capi = {
   screen = screen
 }
 local dpi = beautiful.xresources.apply_dpi
+local gears_timer = require("gears.timer")
+local delayed_call = gears_timer.delayed_call
 
 local nlog = require("actionless.util.debug").naughty_log
 
@@ -229,8 +231,40 @@ function rules.init(awesome_context)
       },
       { rule = { class = "Carla2", name = "Carla - switch_multicomp.carxp" },
         properties = {
-          --width = dpi(700),
-          height = dpi(256),
+          width = dpi(1770),
+          height = dpi(286),
+          placement = no_offscreen_margined_placement,
+          tag=capi.screen.primary.tags[11],
+          raise=false,
+        },
+        callback = function(c)
+          c:deny('geometry', 'arghhh')
+          c:deny('client_geometry_requests', 'arghhh')
+          --c:connect_signal("property::floating_geometry", function(c2)
+          --end)
+          --c:connect_signal("property::width", function(c2)
+          --  nlog("Carla1")
+          --  local g = c2:geometry()
+          --  g.width = dpi(1770)
+          --  g.height = dpi(286)
+          --  c2:geometry(g)
+          --end)
+          c:connect_signal("request::geometry", function(c2)
+            --nlog("Carla2")
+            local g = c2:geometry()
+            g.width = dpi(1770)
+            g.height = dpi(286)
+            delayed_call(function()
+              c2:geometry(g)
+              --nlog(c2:geometry())
+            end)
+          end)
+        end
+      },
+      { rule = { class = "easyeffects" },
+        properties = {
+          width = dpi(1024),
+          height = dpi(768),
           placement = no_offscreen_margined_placement,
           tag=capi.screen.primary.tags[11],
           raise=false,
