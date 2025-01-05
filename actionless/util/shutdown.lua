@@ -9,6 +9,10 @@ local naughty_log = require("actionless.util.debug").naughty_log
 local module = {
   kill_classes = {
     "Spotify",
+  },
+  require_graceful_kill_procs = {
+    "firefox",
+    "chrome",
   }
 }
 
@@ -32,9 +36,21 @@ function module.kill_everybody(callback, retries)
   retries = retries or 10
   module.cancel_kill()
 
-  -- kill (sigterm) firefox instead of closing:
+  -- kill (sigterm) firefox and chrome instead of closing:
   -- otherwise only the last window would be restored on start
-  awful_spawn.easy_async_with_shell('while pgrep -f firefox; do kill $(pgrep -f firefox); sleep 0.1 ; done', function()
+  local kill_script = 'while ('
+  for proc_name in ipairs(module.require_graceful_kill_procs) do
+    kill_script = kill_script..'pgrep -f '..proc_name..';'
+  end
+  kill_script = kill_script..'); do kill $('
+  for proc_name in ipairs(module.require_graceful_kill_procs) do
+    kill_script = kill_script..'pgrep -f '..proc_name..';'
+  end
+  kill_script = kill_script..'); sleep 0.1 ; done'
+  awful_spawn.easy_async_with_shell(
+    --'while (pgrep -f firefox; pgrep -f chrome); do kill $(pgrep -f firefox ; pgrep -f chrome); sleep 0.1 ; done',
+    kill_script,
+    function()
 
     for si=1,screen.count() do
       local s = screen[si]
