@@ -1,11 +1,12 @@
 # Upstream URL: https://github.com/actionless/awesome_config
 
 
-if [[ $(id -u) -eq 0 ]] && [[ -z "${NOARGB:-}" ]] ; then
-	echo "INSTALL_NO_ARGB_SHORTCUTS [y/N]"
-	read NOARGB
-fi
-INSTALL_NO_ARGB_SHORTCUTS=${NOARGB:-n}
+#if [[ $(id -u) -eq 0 ]] && [[ -z "${NOARGB:-}" ]] ; then
+#    echo "INSTALL_NO_ARGB_SHORTCUTS [y/N]"
+#    read NOARGB
+#fi
+#INSTALL_NO_ARGB_SHORTCUTS=${NOARGB:-n}
+INSTALL_NO_ARGB_SHORTCUTS=${NOARGB:-y}
 
 pkgname=actionless_awesome_config_meta
 conflicts=(awesome_config_actionless_meta)
