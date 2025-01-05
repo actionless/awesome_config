@@ -259,12 +259,16 @@ local function create_for_match(match, args)
       instance_idx = 1
     end
     local backend = tmp_result.instances[instance_idx]
-    log({"MPRIS :: ", backend.name, })
-    for k, v in pairs(backend) do
-      tmp_result[k] = v
+    if backend then
+      log({"MPRIS :: ", backend.name, })
+      for k, v in pairs(backend) do
+        tmp_result[k] = v
+      end
+      player.update("mpris_creator")
+      tmp_result.current_instance_idx = instance_idx
+    else
+      log("MPRIS :: no backend??")
     end
-    player.update("mpris_creator")
-    tmp_result.current_instance_idx = instance_idx
   end
 
   function _worker()
