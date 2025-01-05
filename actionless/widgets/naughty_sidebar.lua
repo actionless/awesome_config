@@ -159,7 +159,7 @@ local function init_theme(widget_args)
       return
     end
     local candidates = pack(...)
-    for i=1,#candidates do
+    for i=1,candidates.n do
       local candidate = candidates[i]
       if candidate ~= nil then
         naughty_sidebar.theme[key] = candidate
