@@ -5,7 +5,9 @@
 
 local Gio = require("lgi").Gio
 local GLib = require("lgi").GLib
-local g_string		= require("gears.string")
+local gears = require("gears")
+local g_string = require("gears.string")
+local g_table = require("gears.table")
 local g_timer = require("gears.timer")
 
 local a_image = require("actionless.util.async_web_image")
@@ -272,22 +274,33 @@ local function create_for_match(match, args)
   end
 
   function _worker()
-    find_service_names(match, function(names)
-      if #names == 0 then
-        _log("::MPRIS-CREATOR: Service '"..match.."' not found")
-        _log("::MPRIS-CREATOR: Retrying in "..tostring(TIMEOUT).." seconds")
-      else
-        for instance_idx, name in ipairs(names) do
-        --local name = names[#names]
-          local postfix = table.concat(a_table.range(g_string.split(name, '.'), 4), '.')
-          if tmp_result.instances_by_name[postfix]  then
-            _log("::MPRIS-CREATOR: backend for "..match.." already exists: "..postfix)
-          else
-            _log("::MPRIS-CREATOR: Creating MPRIS backend for "..name)
-            local backend = create(postfix, args)
-            backend.init(player)
+    find_service_names(match, function(names_outer)
+      gears.protected_call(function(names)
+        local prev_instance_name
+        if #names == 0 then
+          _log("::MPRIS-CREATOR: Service '"..match.."' not found")
+          _log("::MPRIS-CREATOR: Retrying in "..tostring(TIMEOUT).." seconds")
+        else
+          if tmp_result.instances[tmp_result.current_instance_idx] then
+            prev_instance_name = tmp_result.instances[tmp_result.current_instance_idx].name
+          end
+          local prev_instances = g_table.clone(tmp_result.instances_by_name, false)
+          tmp_result.instances = {}
+          tmp_result.instances_by_name = {}
+          for instance_idx, name in ipairs(names) do
+          --local name = names[#names]
+            local postfix = table.concat(a_table.range(g_string.split(name, '.'), 4), '.')
+            local backend
+            if prev_instances[postfix] then
+              _log("::MPRIS-CREATOR: backend for "..match.." already exists: "..postfix)
+              backend = prev_instances[postfix]
+            else
+              _log("::MPRIS-CREATOR: Creating MPRIS backend for "..name)
+              backend = create(postfix, args)
+              backend.init(player)
+            end
             tmp_result.instances[#(tmp_result.instances)+1] = backend
-            tmp_result.instances_by_name[postfix] = true
+            tmp_result.instances_by_name[postfix] = backend
             local f = function(ii)
               backend.update(function(player_status)
                 if player_status.state == "play" then
@@ -295,13 +308,19 @@ local function create_for_match(match, args)
                 end
               end)
             end
-            f(instance_idx)
+            if not prev_instances[postfix] then
+              f(instance_idx)
+            end
           end
         end
-      end
-      if tmp_result.current_instance_idx == 0 then
-        tmp_result.next_instance()
-      end
+        if (
+            tmp_result.current_instance_idx == 0
+        ) or (
+            prev_instance_name and not tmp_result.instances_by_name[prev_instance_name]
+        ) then
+          tmp_result.next_instance()
+        end
+      end, names_outer)
     end)
   end
 
