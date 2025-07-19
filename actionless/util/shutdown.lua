@@ -1,3 +1,8 @@
+--[[
+  Licensed under GNU General Public License v2
+   * (c) 2014-2025, Yauheni Kirylau
+--]]
+
 local awful_spawn = require("awful.spawn")
 local gears_timer = require("gears.timer")
 local naughty = require("naughty")
