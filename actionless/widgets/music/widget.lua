@@ -264,7 +264,13 @@ function player.init(args)
             for instance_idx, v in pairs(backend.instances) do
               local instance_display_name = display_name
               if (v.player_status ~= nil) and (v.player_status.title) then
-                instance_display_name = v.name ..": ".. v.player_status.title
+                local instance_base_display_name
+                if v.name:match(".instance") then
+                  instance_base_display_name = string.gsub(v.name, ".instance", "(") ..")"
+                else
+                  instance_base_display_name = v.name
+                end
+                instance_display_name = instance_base_display_name ..": ".. v.player_status.title
               end
               local item = {instance_display_name, }
               item[2] = function()
