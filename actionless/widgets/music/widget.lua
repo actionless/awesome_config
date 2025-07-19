@@ -260,27 +260,49 @@ function player.init(args)
         for each_backend_id, backend_name in ipairs(enabled_backends) do
           local display_name = backend_name
           local backend = backend_modules[backend_name]
-          if backend.instances then
-            display_name = string.format(
-              "%s (%d/%d)",
-              display_name,
-              backend.current_instance_idx,
-              #(backend.instances)
-            )
+          if backend.instances and (#(backend.instances) > 0) then
+            for instance_idx, v in pairs(backend.instances) do
+              local instance_display_name = display_name
+              if (v.player_status ~= nil) and (v.player_status.title) then
+                instance_display_name = v.name ..": ".. v.player_status.title
+              end
+              local item = {instance_display_name, }
+              item[2] = function()
+                player.use_next_backend{backend_id=each_backend_id}
+                player.backend.next_instance(instance_idx)
+                player.menu:hide()
+                --player.show_notification()
+              end
+              if (
+                  player.backend == backend_modules[backend_name]
+              ) and (
+                  player.backend.current_instance_idx == instance_idx
+              ) then
+                item[3] = get_icon('actions', 'object-select-symbolic')
+              end
+              table.insert(items, item)
+            end
+          else
+            if (backend.player_status ~= nil) and (backend.player_status.title) then
+              display_name = display_name ..": ".. backend.player_status.title
+            end
+            local item = {display_name, }
+            item[2] = function()
+              player.use_next_backend{backend_id=each_backend_id}
+              player.menu:hide()
+              --player.show_notification()
+            end
+            if player.backend == backend_modules[backend_name] then
+              item[3] = get_icon('actions', 'object-select-symbolic')
+            end
+            table.insert(items, item)
           end
-          local item = {display_name, }
-          item[2] = function()
-            player.use_next_backend{backend_id=each_backend_id}
-            player.menu:hide()
-            --player.show_notification()
-          end
-          if player.backend == backend_modules[backend_name] then
-            item[3] = get_icon('actions', 'object-select-symbolic')
-          end
-          table.insert(items, item)
         end
         player.menu = awful.menu{
           items=items,
+          theme={
+            width=dpi(420),
+          },
         }
         player.menu:show()
       end

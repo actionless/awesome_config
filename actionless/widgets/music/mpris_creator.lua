@@ -276,14 +276,10 @@ local function create_for_match(match, args)
   function _worker()
     find_service_names(match, function(names_outer)
       gears.protected_call(function(names)
-        local prev_instance_name
         if #names == 0 then
           _log("::MPRIS-CREATOR: Service '"..match.."' not found")
           _log("::MPRIS-CREATOR: Retrying in "..tostring(TIMEOUT).." seconds")
         else
-          if tmp_result.instances[tmp_result.current_instance_idx] then
-            prev_instance_name = tmp_result.instances[tmp_result.current_instance_idx].name
-          end
           local prev_instances = g_table.clone(tmp_result.instances_by_name, false)
           tmp_result.instances = {}
           tmp_result.instances_by_name = {}
@@ -315,8 +311,6 @@ local function create_for_match(match, args)
         end
         if (
             tmp_result.current_instance_idx == 0
-        ) or (
-            prev_instance_name and not tmp_result.instances_by_name[prev_instance_name]
         ) then
           tmp_result.next_instance()
         end
