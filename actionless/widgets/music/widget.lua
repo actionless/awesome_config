@@ -245,77 +245,95 @@ function player.init(args)
     end
   end
 
-  player.widget:connect_signal(
-    "mouse::enter", function () player.show_notification() end)
-  player.widget:connect_signal(
-    "mouse::leave", function () player.hide_notification() end)
-  player.widget:buttons(awful.util.table.join(
-    awful.button({ }, 1, player.toggle),
-    awful.button({ }, 2, player.seek),
-    awful.button({ }, 3, function()
-      if player.menu and player.menu.wibox.visible then
-        player.menu:hide()
-      else
-        local items = {}
-        for each_backend_id, backend_name in ipairs(enabled_backends) do
-          local display_name = backend_name
-          local backend = backend_modules[backend_name]
-          if backend.instances and (#(backend.instances) > 0) then
-            for instance_idx, v in pairs(backend.instances) do
-              local instance_display_name = display_name
-              if (v.player_status ~= nil) and (v.player_status.title) then
-                local instance_base_display_name
-                if v.name:match(".instance") then
-                  instance_base_display_name = string.gsub(v.name, ".instance", "(") ..")"
-                else
-                  instance_base_display_name = v.name
-                end
-                instance_display_name = instance_base_display_name ..": ".. v.player_status.title
+  function player.backend_menu()
+    if player.menu and player.menu.wibox.visible then
+      player.menu:hide()
+    else
+      local items = {}
+      for each_backend_id, backend_name in ipairs(enabled_backends) do
+        local display_name = backend_name
+        local backend = backend_modules[backend_name]
+        if backend.instances and (#(backend.instances) > 0) then
+          for instance_idx, v in pairs(backend.instances) do
+            local instance_display_name = display_name
+            if (v.player_status ~= nil) and (v.player_status.title) then
+              local instance_base_display_name
+              if v.name:match(".instance") then
+                instance_base_display_name = string.gsub(v.name, ".instance", "(") ..")"
+              else
+                instance_base_display_name = v.name
               end
-              local item = {instance_display_name, }
-              item[2] = function()
-                player.use_next_backend{backend_id=each_backend_id}
-                player.backend.next_instance(instance_idx)
-                player.menu:hide()
-                --player.show_notification()
-              end
-              if (
-                  player.backend == backend_modules[backend_name]
-              ) and (
-                  player.backend.current_instance_idx == instance_idx
-              ) then
-                item[3] = get_icon('actions', 'object-select-symbolic')
-              end
-              table.insert(items, item)
+              instance_display_name = instance_base_display_name ..": ".. v.player_status.title
             end
-          else
-            if (backend.player_status ~= nil) and (backend.player_status.title) then
-              display_name = display_name ..": ".. backend.player_status.title
-            end
-            local item = {display_name, }
+            local item = {instance_display_name, }
             item[2] = function()
               player.use_next_backend{backend_id=each_backend_id}
+              player.backend.next_instance(instance_idx)
               player.menu:hide()
               --player.show_notification()
             end
-            if player.backend == backend_modules[backend_name] then
+            if (
+                player.backend == backend_modules[backend_name]
+            ) and (
+                player.backend.current_instance_idx == instance_idx
+            ) then
               item[3] = get_icon('actions', 'object-select-symbolic')
             end
             table.insert(items, item)
           end
+        else
+          if (backend.player_status ~= nil) and (backend.player_status.title) then
+            display_name = display_name ..": ".. backend.player_status.title
+          end
+          local item = {display_name, }
+          item[2] = function()
+            player.use_next_backend{backend_id=each_backend_id}
+            player.menu:hide()
+            --player.show_notification()
+          end
+          if player.backend == backend_modules[backend_name] then
+            item[3] = get_icon('actions', 'object-select-symbolic')
+          end
+          table.insert(items, item)
         end
-        player.menu = awful.menu{
-          items=items,
-          theme={
-            width=dpi(420),
-          },
-        }
-        player.menu:show()
       end
+      player.menu = awful.menu{
+        items=items,
+        theme={
+          width=dpi(420),
+        },
+      }
+      player.menu:show()
+    end
+  end
+
+  player.widget:connect_signal(
+    "mouse::enter", function () player.show_notification() end)
+  player.widget:connect_signal(
+    "mouse::leave", function () player.hide_notification() end)
+
+  player.widget:buttons(awful.util.table.join(
+    awful.button({ }, 1, function()
+      for _, w in ipairs(mouse.current_widgets) do
+        if w == player.icon_widget then
+          return
+        end
+      end
+      player.toggle()
     end),
+    awful.button({ }, 2, player.seek),
+    awful.button({ }, 3, player.backend_menu),
     awful.button({ }, 5, player.next_song),
     awful.button({ }, 4, player.prev_song)
   ))
+  player.icon_widget:buttons(awful.util.table.join(
+    awful.button({ }, 1, player.backend_menu),
+    awful.button({ }, 2, player.seek),
+    awful.button({ }, 3, player.backend_menu),
+    awful.button({ }, 5, player.next_song),
+    awful.button({ }, 4, player.prev_song)
+  ))
+
 -------------------------------------------------------------------------------
   function player.update(from, callback)
     _log("update from "..from)
