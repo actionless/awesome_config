@@ -30,6 +30,7 @@ local function _on_client_unfocus (c)
   local t = tag_helpers.get_client_tag(c)
   local layout = t.layout
   local num_tiled = #tag_helpers.get_tiled(t)
+  local screen_count = screen.count()
   if c.titlebars_enabled ==false then
     clog("F: tile: titlebars disabled explicitly", c)
     c.border_width = 0
@@ -42,9 +43,17 @@ local function _on_client_unfocus (c)
   ) then
     clog("U: tile: titlebars enabled explicitly", c)
     titlebar.make_titlebar(c)
-  elseif c.maximized or c.fullscreen then
+  elseif c.maximized then
     clog("U: maximized", c)
-    --set_default_screen_padding(s)
+    if screen_count == 1 then
+      --set_default_screen_padding(s)
+      c.border_width = 0
+      titlebar.remove_border(c)
+    else
+      titlebar.make_border(c)
+    end
+  elseif c.fullscreen then
+    clog("U: fullscreen", c)
     c.border_width = 0
     titlebar.remove_border(c)
   elseif c.floating and c.class == 'mpv' then
@@ -113,6 +122,7 @@ local function on_client_focus(c)
   local t = tag_helpers.get_client_tag(c)
   local layout = t.layout
   local num_tiled = #tag_helpers.get_tiled(t)
+  local screen_count = screen.count()
 
   c.border_color = beautiful.border_focus
   --
@@ -130,9 +140,17 @@ local function on_client_focus(c)
     clog("F: tile: titlebars enabled explicitly", c)
     --choose_screen_padding(s, t, num_tiled)
     titlebar.make_titlebar(c)
-  elseif c.maximized or c.fullscreen then
+  elseif c.maximized then
     clog("F: maximized", c)
-    --set_default_screen_padding(s)
+    if screen_count == 1 then
+      --set_default_screen_padding(s)
+      c.border_width = 0
+      titlebar.remove_border(c)
+    else
+      titlebar.make_border(c)
+    end
+  elseif c.fullscreen then
+    clog("F: fullscreen", c)
     c.border_width = 0
     titlebar.remove_border(c)
   elseif c.floating and c.class == 'mpv' then
