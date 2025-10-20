@@ -27,12 +27,14 @@ function autorun.init(awesome_context)
     --with_shell('xinput set-prop ' .. kensington .. ' "Evdev Wheel Emulation Timeout" 200')
   --end
 
+  spawn{"xset", "b", "off"} -- turn off beep
 
   -- keyboard settings:
   spawn{"xset", "r", "rate", "250", "25"}
   --spawn{"xset", "r", "rate", "175", "17"}
   --spawn{"xset", "r", "rate", "250", "10"}
-  spawn{"xset", "b", "off"} -- turn off beep
+  ---- replaced with: /etc/lightdm/lightdm.conf [Seat:*]xserver-command=X -ardelay 250 -arinterval 40
+
  -- spawn{
  --   "setxkbmap",
  --   "-layout", "us,ru",
@@ -43,6 +45,7 @@ function autorun.init(awesome_context)
  --   "-option",
  --   "grp:shifts_toggle,grp_led:caps,terminate:ctrl_alt_bksp,compose:ralt,caps:escape_shifted_capslock,caps:escape",
  --}
+  ---- replaced with: /etc/X11/xorg.conf.d/90-keyboard.conf
 
   --run_once{"redshift"}
   --run_once{awesome_context.cmds.compositor}
