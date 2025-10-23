@@ -1139,7 +1139,12 @@ function keys.init(awesome_context)
     ),
 
     bind_key({ modkey,        }, "f",
-      function (c) c.fullscreen = not c.fullscreen end,
+      function (c)
+        c.maximized = false
+        c.maximized_horizontal = false
+        c.maximized_vertical = false
+        c.fullscreen = not c.fullscreen
+      end,
       "toggle client fullscreen", CLIENT_MANIPULATION
     ),
     bind_key({ modkey,        }, "q",
@@ -1180,6 +1185,7 @@ function keys.init(awesome_context)
     ),
     bind_key({ modkey,        }, "m",
       function (c)
+        c.fullscreen = false
         c.maximized = not c.maximized
         if not c.maximized then
           c.maximized_horizontal = c.maximized
