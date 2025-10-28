@@ -252,6 +252,8 @@ function rules.init(awesome_context)
           c:connect_signal("request::geometry", function(c2)
             --nlog("Carla2")
             local g = c2:geometry()
+            g.x = dpi(50)
+            g.y = dpi(50)
             g.width = dpi(1770)
             g.height = dpi(286)
             delayed_call(function()
@@ -264,7 +266,8 @@ function rules.init(awesome_context)
       { rule = { class = "easyeffects" },
         properties = {
           width = dpi(1024),
-          height = dpi(768),
+          --height = dpi(768),
+          height = dpi(708),
           placement = no_offscreen_margined_placement,
           tag=capi.screen.primary.tags[11],
           raise=false,
