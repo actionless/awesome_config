@@ -238,8 +238,8 @@ function rules.init(awesome_context)
           raise=false,
         },
         callback = function(c)
-          c:deny('geometry', 'arghhh')
-          c:deny('client_geometry_requests', 'arghhh')
+          c:deny('geometry', 'arghhh_g')
+          c:deny('client_geometry_requests', 'arghhh_cgr')
           --c:connect_signal("property::floating_geometry", function(c2)
           --end)
           --c:connect_signal("property::width", function(c2)
