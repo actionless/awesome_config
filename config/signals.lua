@@ -19,6 +19,16 @@ local function clog(msg, c) -- luacheck: ignore
   --if c and c.class == "Spotify" then nlog(msg) end
 end
 
+local function _handle_size_hints_honor(c)
+  if c.class == "mpv" then
+    if c.maximized then
+      c.size_hints_honor = false
+      c:geometry(c.screen.workarea)
+    else
+      c.size_hints_honor = true
+    end
+  end
+end
 
 --=============================================================================
 -- Unfocused (normal) window logic
@@ -315,6 +325,7 @@ function signals.init(_)
   end)
 
   client.connect_signal("property::maximized", function (c)
+    _handle_size_hints_honor(c)
     delayed_call(function()
       on_client_signal(c)
     end)
