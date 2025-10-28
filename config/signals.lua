@@ -69,7 +69,7 @@ local function _on_client_unfocus (c)
     clog("U: multiple tiling clients", c)
     titlebar.make_border(c)
   elseif num_tiled == 1 then
-    if t.master_fill_policy == 'expand' and screen.count() == 1 then
+    if t.master_fill_policy == 'expand' and screen_count == 1 then
       clog("U: one tiling client: expand", c)
       titlebar.remove_border(c)
     else
@@ -170,7 +170,7 @@ local function on_client_focus(c)
     c.border_width = beautiful.border_width
     titlebar.make_border(c)
   elseif num_tiled == 1 then
-    if t.master_fill_policy == 'expand' and screen.count() == 1 then
+    if t.master_fill_policy == 'expand' and screen_count == 1 then
       clog("F: one tiling client: expand", c)
       --set_default_screen_padding(s)
       titlebar.remove_border(c)
