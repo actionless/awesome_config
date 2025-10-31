@@ -850,11 +850,10 @@ local function widget_factory(args)
     local screen_idx_str = tostring(focused_screen.index)
     if not self.sidebar[screen_idx_str] then
       local workarea = focused_screen.workarea
-      local screen_geo = focused_screen.geometry
       self.sidebar[screen_idx_str] = wibox({
         width = naughty_sidebar.theme.width,
         height = workarea.height,
-        x = screen_geo.width - naughty_sidebar.theme.width + workarea.x,
+        x = workarea.width - naughty_sidebar.theme.width + workarea.x,
         y = workarea.y,
         ontop = true,
         type='dock',
