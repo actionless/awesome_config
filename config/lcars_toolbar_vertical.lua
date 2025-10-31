@@ -43,17 +43,17 @@ function toolbar.init(awesome_context)
   local top_left_corner_imagebox = {}
   local top_left_corner_container = {}
 
-  local lcars_textclock = common.decorated({
-    widget = wibox.widget.textclock("%H:%M"),
-    valign = "bottom",
-    fg=beautiful.clock_fg,
-    orientation="vertical",
-  })
-  loaded_widgets.calendar_popup:attach(lcars_textclock, "tl", {on_hover=true})
 
   awful.screen.connect_for_each_screen(function(s)
     local si = s.index
     local screen_widgets = loaded_widgets.screen[si]
+    local lcars_textclock = common.decorated({
+      widget = wibox.widget.textclock("%H:%M"),
+      valign = "bottom",
+      fg=beautiful.clock_fg,
+      orientation="vertical",
+    })
+    screen_widgets.calendar_popup:attach(lcars_textclock, "tl", {on_hover=true})
 
     -- layoutbox
     local lcars_layoutbox = widgets.layoutbox({
@@ -67,19 +67,25 @@ function toolbar.init(awesome_context)
 
 
   local internal_corner_radius = beautiful.left_panel_internal_corner_radius
+  --local external_corner_radius = beautiful.left_panel_internal_corner_radius * 2
+  local external_corner_radius = beautiful.left_panel_width/2 - beautiful.panel_height
+
     leftwibox[si] = awful.wibar({
       position = "left",
       screen = s,
       width = beautiful.left_panel_width + internal_corner_radius,
       visible = false,
       bg=beautiful.panel_bg,
+      --bg="#00ff00",
       fg=beautiful.panel_fg,
       shape = function(cr, w, h)
         cr:move_to(w, 0)
+        cr:line_to(w, beautiful.panel_height)
+
         cr:curve_to(
-          w, 0,
-          w-internal_corner_radius, 0,
-          w-internal_corner_radius, internal_corner_radius
+          w, beautiful.panel_height,
+          w-internal_corner_radius, beautiful.panel_height,
+          w-internal_corner_radius, internal_corner_radius + beautiful.panel_height
         )
         cr:line_to(w-internal_corner_radius, h)
         cr:line_to(0, h)
@@ -93,9 +99,23 @@ function toolbar.init(awesome_context)
 
     top_left_corner_placeholder[si] = wibox.container.background(
       common.constraint({
-        height=beautiful.left_panel_width/2 - beautiful.panel_height,
+        height=external_corner_radius,
       }),
-      beautiful.panel_bg
+      beautiful.panel_widget_bg,
+      --"#0000ff",
+      function(cr, w, h)
+        cr:move_to(0, external_corner_radius)
+        cr:curve_to(
+          0, external_corner_radius,
+          0, 0,
+          external_corner_radius, 0
+        )
+        cr:line_to(w, 0)
+        cr:line_to(w, h)
+        cr:line_to(0, h)
+        cr:close_path()
+        return cr
+      end
     )
     top_left_corner_container[si] = wibox.container.background(top_left_corner_placeholder[si])
 
@@ -167,13 +187,35 @@ function toolbar.init(awesome_context)
       )
     })
 
+    top_left_corner_imagebox[si] = wibox.container.background(
+      common.constraint({
+        height=external_corner_wibox,
+      }),
+      beautiful.panel_widget_bg,
+      function(cr, w, h)
+        cr:move_to(w, 0)
+        cr:line_to(w, beautiful.basic_panel_height)
+        cr:curve_to(
+          w, beautiful.basic_panel_height,
+          0, beautiful.basic_panel_height,
+          0, internal_corner_radius + beautiful.basic_panel_height
+        )
+        cr:line_to(0, 0)
+        cr:close_path()
+        return cr
+      end
+    )
+
     local left_panel_layout = wibox.layout.align.vertical(
       leftwibox_separator[si],
       wibox.layout.align.horizontal(
         nil,
         left_panel_bottom_layouts[si],
         -- right margin + shape compensation:
-        common.constraint({width=beautiful.panel_padding_bottom + internal_corner_radius})
+        common.constraint({
+          width=beautiful.panel_padding_bottom + internal_corner_radius,
+          widget=top_left_corner_imagebox[si]
+        })
       )
     )
     leftwibox[si]:set_widget(left_panel_layout)

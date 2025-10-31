@@ -44,6 +44,8 @@ function common_theme.create_default_theme(theme_dir, icons_dir)
   ) or "gnome"
   common_theme.system_icon_theme = theme.icon_theme
 
+  theme.wibar_favor_vertical = true  -- required for LCARS panels / layout
+
   theme.wallpaper = nil
   theme.wallpaper_cmd = "nitrogen --restore"
 

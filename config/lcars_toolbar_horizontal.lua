@@ -40,17 +40,12 @@ function toolbar.init(awesome_context)
       nil,
       nil
     )
-    local top_panel_left_margin_to_compensate_left_wibox_rounding = wibox.container.background(
-      common.constraint({width=beautiful.left_panel_width/2}),
-      beautiful.panel_bg
-    )
     local top_panel_left_margin_to_compensate_left_wibox = wibox.container.background(
       common.constraint({width=beautiful.left_panel_width/2}),
       beautiful.panel_widget_bg
     )
     local top_panel_bottomlayout = wibox.layout.align.horizontal(
       wibox.layout.fixed.horizontal(
-        top_panel_left_margin_to_compensate_left_wibox_rounding,
         top_panel_left_margin_to_compensate_left_wibox,
         top_panel_left_margin,
         --loaded_widgets.screen[si].taglist,
@@ -72,16 +67,6 @@ function toolbar.init(awesome_context)
       common.constraint({ width=beautiful.panel_widget_spacing, }),
       beautiful.panel_widget_bg
     )
-    loaded_widgets.systray_toggle = common.panel_widget_shape(widgets.sneaky_toggle({
-        widgets={
-          panel_widget_separator,
-        --  w.netctl,
-        --  panel_widget_separator,
-        },
-        enable_sneaky_tray = true,
-        --margin = {right = beautiful.panel_padding_bottom},
-        panel_widget_shape = false,
-    }))
 
     -- add sneaky_toggle on first screen
     if si == 1 then
@@ -98,7 +83,7 @@ function toolbar.init(awesome_context)
         ),
         width=dpi(400)
       })
-      fancy_volume_widget:buttons(loaded_widgets.volume:buttons())
+      --fancy_volume_widget:buttons(loaded_widgets.volume:buttons())
       top_panel_bottomlayout:set_third(
         wibox.layout.fixed.horizontal(
           h_sep,
