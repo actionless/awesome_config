@@ -1163,10 +1163,20 @@ function keys.init(awesome_context)
 
     bind_key({ modkey,        }, "f",
       function (c)
-        c.maximized = false
-        c.maximized_horizontal = false
-        c.maximized_vertical = false
-        c.fullscreen = not c.fullscreen
+        if awesome_context.config.disable_fullscreen then
+          c.fullscreen = false
+          c.maximized = not c.maximized
+          if not c.maximized then
+            c.maximized_horizontal = c.maximized
+            c.maximized_vertical   = c.maximized
+          end
+        else
+          c.maximized = false
+          c.maximized_horizontal = false
+          c.maximized_vertical = false
+          c.fullscreen = not c.fullscreen
+        end
+        c:raise()
       end,
       "toggle client fullscreen", CLIENT_MANIPULATION
     ),

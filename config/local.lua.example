@@ -6,6 +6,7 @@ local local_config = {}
 function local_config.init(awesome_context)
 
   local conf = awesome_context.config
+  conf.disable_fullscreen = false
   conf.wlan_if = 'wlp4s0'
   conf.eth_if = 'enp0s25'
   conf.net_preset = 'systemd'
