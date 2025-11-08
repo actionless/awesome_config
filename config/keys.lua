@@ -89,6 +89,7 @@ function keys.init(awesome_context)
     hkng.widget.labels.BackSpace = "BackSpace"
   end
 
+  local screen_count = screen.count()
 
   -- {{{ Root keybindings
   local globalkeys = awful.util.table.join(
@@ -349,6 +350,7 @@ function keys.init(awesome_context)
       "prev screen", TAG_COLOR
     ),
 
+
     -- By direction client focus
     bind_key({ modkey,        }, "Down",
       function()
@@ -366,14 +368,36 @@ function keys.init(awesome_context)
     ),
     bind_key({ modkey        }, "Left",
       function()
-        awful.client.focus.global_bydirection("left")
+        local c = client.focus
+        if (screen_count > 1) and (
+          c.fullscreen
+          or c.maximized
+          or c.maximized_horizontal
+          or c.maximized_vertical
+          or (#(c.screen.clients) == 1)
+        ) then
+          awful.screen.focus_relative(-1)
+        else
+          awful.client.focus.global_bydirection("left")
+        end
         if client.focus then client.focus:raise() end
       end,
       "client focus", CLIENT_FOCUS
     ),
     bind_key({ modkey        }, "Right",
       function()
-        awful.client.focus.global_bydirection("right")
+        local c = client.focus
+        if (screen_count > 1) and (
+          c.fullscreen
+          or c.maximized
+          or c.maximized_horizontal
+          or c.maximized_vertical
+          or (#(c.screen.clients) == 1)
+        ) then
+          awful.screen.focus_relative(1)
+        else
+          awful.client.focus.global_bydirection("right")
+        end
         if client.focus then client.focus:raise() end
       end,
       "client focus", CLIENT_FOCUS
@@ -796,7 +820,6 @@ function keys.init(awesome_context)
   )
 
   local diff = nil
-  local screen_count = screen.count()
   local max_tag = 12
   if screen_count == 1 then
     max_tag = 24
