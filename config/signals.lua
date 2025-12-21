@@ -60,6 +60,7 @@ local function _on_client_unfocus (c)
       c.border_width = 0
       titlebar.remove_border(c)
     else
+      titlebar.remove_titlebar(c)
       titlebar.make_border(c)
     end
   elseif c.fullscreen then
@@ -157,6 +158,7 @@ local function on_client_focus(c)
       c.border_width = 0
       titlebar.remove_border(c)
     else
+      titlebar.remove_titlebar(c)
       titlebar.make_border(c)
     end
   elseif c.fullscreen then
