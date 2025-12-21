@@ -641,6 +641,17 @@ function keys.init(awesome_context)
       end,
       "pipewire menu", MUSIC),
 
+    bind_key({ modkey, }, "BackSpace",
+      function ()
+          awful.spawn.with_shell(
+            --"pw-metadata -n settings 0 clock.force-quantum 512"
+            "pw-metadata -n settings 0 clock.force-quantum 256"
+            .." ; sleep 1.0"
+            .." ; pw-metadata -n settings 0 clock.force-quantum 1024"
+          )
+      end,
+      "pipewire: restuck buffer to 1024", MUSIC),
+
     bind_key({ modkey }, "c",
       function () os.execute("xsel -p -o | xsel -i -b") end,
       "copy to clipboard", AWESOME_COLOR

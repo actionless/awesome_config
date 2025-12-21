@@ -44,6 +44,7 @@ function pipewire_helper.init(widget_args)
         function()
           awful.spawn.with_shell(
             "pw-metadata -n settings 0 clock.force-quantum 256"
+            .." ; sleep 1.0"
             .." ; pw-metadata -n settings 0 clock.force-quantum 1024"
           )
         end,
