@@ -91,8 +91,9 @@ function rules.init(awesome_context)
         end
       },
 
-      { rule = {type = "dialog"},
+      { rule_any = {type = {"dialog"}, class = {"yad", "Yad"}},
         properties = {
+          floating = true,
           titlebars_enabled = true,
           ontop = true
         },
