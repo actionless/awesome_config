@@ -333,7 +333,7 @@ function keys.init(awesome_context)
     ),
 
     -- By direction screen focus
-    bind_key({ modkey,        }, "Next",
+    bind_key({ modkey,        }, "Page_Down",
       function()
         awesome_context.widgets.screen[awful.screen.focused().index].manage_client:hide()
         awful.screen.focus_relative(1)
@@ -341,7 +341,7 @@ function keys.init(awesome_context)
       end,
       "next screen", TAG_COLOR
     ),
-    bind_key({ modkey,        }, "Prior",
+    bind_key({ modkey,        }, "Page_Up",
       function()
         awesome_context.widgets.screen[awful.screen.focused().index].manage_client:hide()
         awful.screen.focus_relative(-1)
@@ -1166,7 +1166,6 @@ function keys.init(awesome_context)
       get_resize_function("down"),
       "column size-", LAYOUT_MANIPULATION
     ),
-
     bind_key({ modkey, "Control" }, "k",
       get_resize_function("up"),
       "column size+", LAYOUT_MANIPULATION
