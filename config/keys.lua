@@ -349,6 +349,24 @@ function keys.init(awesome_context)
       end,
       "prev screen", TAG_COLOR
     ),
+    --
+    bind_key({ modkey, "Control" }, "Escape",
+      function()
+        awesome_context.widgets.screen[awful.screen.focused().index].manage_client:hide()
+        awful.screen.focus_relative(1)
+        awesome_context.widgets.screen[awful.screen.focused().index].manage_client:show()
+      end,
+      "next screen", TAG_COLOR
+    ),
+    bind_key({ modkey, altkey }, "Escape",
+      function()
+        awesome_context.widgets.screen[awful.screen.focused().index].manage_client:hide()
+        awful.screen.focus_relative(1)
+        awesome_context.widgets.screen[awful.screen.focused().index].manage_client:show()
+      end,
+      "next screen", TAG_COLOR
+    ),
+
 
 
     -- By direction client focus
