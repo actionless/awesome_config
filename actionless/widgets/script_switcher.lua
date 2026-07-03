@@ -16,13 +16,13 @@ local get_icon = require("actionless.util.xdg").get_icon
 --local log = require("actionless.util.debug").log
 
 
---local DEBUG_LOG = false
-----local DEBUG_LOG = true
---local function _log(...)
---  if DEBUG_LOG then
---    log({"::PIPEWIRE-HELPER:" ,...})
---  end
---end
+local DEBUG_LOG = false
+--local DEBUG_LOG = true
+local function _log(...)
+  if DEBUG_LOG then
+    log({"::SCRIPT-SWITCHER-BASE:" ,...})
+  end
+end
 
 
 -- script_switcher infos
@@ -158,6 +158,7 @@ function module.init(widget_args)
 -------------------------------------------------------------------------------
 
   function script_switcher.turn_off(script_id, args)
+    _log("to:begin")
     args = args or {}
     local script_data = script_switcher.get_script_data_by_id(script_id)
     if script_data then
@@ -170,27 +171,36 @@ function module.init(widget_args)
       script_switcher.save()
     end
     script_switcher.update()
+    _log("to:end")
   end
 -------------------------------------------------------------------------------
 
   function script_switcher.switch(script_id)
+    _log("sw:begin")
+    _log(script_switcher.enabled_scripts)
     for enabled_script_id, _ in pairs(script_switcher.enabled_scripts) do
       script_switcher.turn_off(enabled_script_id, {save=false})
     end
     local script_data = script_switcher.get_script_data_by_id(script_id)
+    _log(script_data)
     local cmd = script_data.cmd or script_id
+    _log(cmd)
     awful.spawn.with_shell(cmd)
     script_switcher.enabled_scripts[script_id] = true
     script_switcher.save()
     script_switcher.update()
+    _log("sw:end")
   end
 -------------------------------------------------------------------------------
 
   function script_switcher.toggle_last()
     local script_data = script_switcher.get_current_script()
+    _log(script_data)
     if script_data then
+      _log("to")
       script_switcher.turn_off(script_data.id)
     else
+      _log("sw:"..script_switcher.last_script)
       script_switcher.switch(script_switcher.last_script)
     end
   end
