@@ -166,7 +166,7 @@ function module.init(widget_args)
       local cmd_off = script_data.cmd_off or cmd.." -d"
       awful.spawn.with_shell(cmd_off)
     end
-    script_switcher.enabled_scripts[script_id] = false
+    script_switcher.enabled_scripts[script_id] = nil
     if args.save then
       script_switcher.save()
     end
