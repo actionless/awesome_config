@@ -1206,15 +1206,28 @@ function keys.init(awesome_context)
         end
         c:raise()
       end,
+      awesome_context.config.disable_fullscreen and "toggle client maximized" or "toggle client fullscreen",
+      CLIENT_MANIPULATION
+    ),
+    --bind_key({ modkey, "Control"  }, "f",
+    bind_key({ modkey, altkey  }, "f",
+      function (c)
+        c.maximized = false
+        c.maximized_horizontal = false
+        c.maximized_vertical = false
+        c.fullscreen = not c.fullscreen
+        c:raise()
+      end,
       "toggle client fullscreen", CLIENT_MANIPULATION
+    ),
+
+    bind_key({ modkey, "Shift"  }, "f",
+      awful.client.floating.toggle,
+      "toggle client float", CLIENT_MANIPULATION
     ),
     bind_key({ modkey,        }, "q",
       function (c) c:kill() end,
       "quit app", CLIENT_MANIPULATION
-    ),
-    bind_key({ modkey, "Shift"  }, "f",
-      awful.client.floating.toggle,
-      "toggle client float", CLIENT_MANIPULATION
     ),
     bind_key({ modkey, "Shift"  }, "s",
       function(c)
