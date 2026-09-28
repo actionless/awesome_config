@@ -1,7 +1,6 @@
 -- Enable jit if on luajit
 pcall(function() jit.on() end)
 
-local gears = require('gears')
 
 -- Localization
 os.setlocale(os.getenv("LANG"))
@@ -12,6 +11,7 @@ awesome.set_preferred_icon_size(256)
 
 local awful_util = require("awful.util")
 local awful_spawn = require("awful.spawn")
+local gears = require('gears')
 
 
 -- Add third-party modules to lua path
