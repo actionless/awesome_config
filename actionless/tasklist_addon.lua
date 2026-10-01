@@ -39,6 +39,13 @@ function tasklist_addon.current_and_minimizedcurrenttags(c, s)
     ) or awful.widget.tasklist.filter.minimizedcurrenttags(c, s)
 end
 
+function tasklist_addon.current_allscreens_and_minimizedcurrenttags(c, s)
+    return (
+        c == client.focus and not c.skip_taskbar
+    ) or awful.widget.tasklist.filter.minimizedcurrenttags(c, s)
+end
+
+
 return tasklist_addon
 
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80

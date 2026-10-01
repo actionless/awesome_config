@@ -331,7 +331,7 @@ function widget_loader.init(awesome_context)
 
     sw.tasklist = awful.widget.tasklist{
       screen = s,
-      filter = tasklist_addon.current_and_minimizedcurrenttags,
+      filter = tasklist_addon.current_allscreens_and_minimizedcurrenttags,
       buttons = tasklist_buttons,
       update_function = tasklist_addon.sorted_update,
     }
