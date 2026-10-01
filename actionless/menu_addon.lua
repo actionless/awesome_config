@@ -59,7 +59,7 @@ function menu_addon.clients_on_tag(args, item_args)
 end
 
 local client_iterate = require("awful.client").iterate
-function menu_addon.clients_with_icons(args, item_args, filter)
+function menu_addon.clients_with_icons_menugen(item_args, filter)
     local cls_t = {}
     for c in client_iterate(filter or function() return true end) do
         cls_t[#cls_t + 1] = {
@@ -80,6 +80,11 @@ function menu_addon.clients_with_icons(args, item_args, filter)
             end
         end
     end
+    return cls_t
+end
+
+function menu_addon.clients_with_icons(args, item_args, filter)
+    local cls_t = menu_addon.clients_with_icons_menugen(item_args, filter)
     args = args or {}
     args.items = args.items or {}
     gtable.merge(args.items, cls_t)

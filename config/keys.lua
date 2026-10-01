@@ -467,12 +467,13 @@ function keys.init(awesome_context)
       "clients on current tag menu", GROUP_MENU
     ),
     bind_key({ modkey,       }, "p",
-      function ()
-        awesome_context.menu.instance = menu_addon.clients_with_icons({
-          theme = {width=capi.screen[awful.screen.focused()].workarea.width - beautiful.menu_border_width*2},
-          coords = {x=0, y=beautiful.basic_panel_height}
-        })
-      end,
+      --function ()
+        --awesome_context.menu.instance = menu_addon.clients_with_icons({
+        --  theme = {width=capi.screen[awful.screen.focused()].workarea.width - beautiful.menu_border_width*2},
+        --  coords = {x=0, y=beautiful.basic_panel_height}
+        --})
+      --end,
+      function() awesome_context.menu.clients_menubar:show() end,
       "all clients menu", GROUP_MENU
     ),
     bind_key({ modkey, "Control"}, "p",

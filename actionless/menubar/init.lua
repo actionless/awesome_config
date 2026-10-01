@@ -45,6 +45,7 @@ local menubar_module = { mt = {} }
 menubar_module.menu_gen = require("menubar.menu_gen")
 menubar_module.utils = require("menubar.utils")
 menubar_module.dmenugen = require("actionless.menubar.dmenugen")
+menubar_module.clients = require("actionless.menubar.clients")
 
 
 -- Options section
@@ -130,7 +131,7 @@ end
 --- Get how the menu item should be displayed.
 -- @param o The menu item.
 -- @return item name, item background color, background image, item icon.
-local function label(o)
+local function label(o, instance)
     local fg_color = theme.menubar_fg_normal or theme.menu_fg_normal or theme.fg_normal
     local bg_color = theme.menubar_bg_normal or theme.menu_bg_normal or theme.bg_normal
     if o.focused then
@@ -156,6 +157,7 @@ local function perform_action(o, with_shell)
         current_item = 1
         return true, "", new_prompt
     elseif shownitems[current_item].cmdline then
+        local is_string = type(shownitems[current_item].cmdline) == "string"
         -- @TODO: remove it:
         if menubar.menu_gen == menubar_module.dmenugen then
             menubar_module.dmenugen.add_history_record(shownitems[current_item].cmdline)
@@ -163,11 +165,15 @@ local function perform_action(o, with_shell)
         end
         ----------
         local command = shownitems[current_item].cmdline
-        command = command:gsub("^TERM:", menubar.term_prefix)
-        if with_shell then
-            awful.spawn.with_shell(command)
+        if is_string then
+            command = command:gsub("^TERM:", menubar.term_prefix)
+            if with_shell then
+                awful.spawn.with_shell(command)
+            else
+                awful.spawn.spawn(command)
+            end
         else
-            awful.spawn.spawn(command)
+            shownitems[current_item].cmdline()
         end
         -- Let awful.prompt execute dummy exec_callback and
         -- done_callback to stop the keygrabber properly.
@@ -203,9 +209,10 @@ function menubar:get_current_page(all_items, query, scr)
 
     local width_sum = 0
     local current_page = {}
+
     for i, item in ipairs(all_items) do
         item.width = item.width or (
-            compute_text_width(label(item), scr) +
+            compute_text_width(label(item, instance), scr) +
             (item.icon and (instance.geometry.height + list_spacing) or 0) + list_spacing * 2
         )
         if width_sum + item.width > available_space then
@@ -225,8 +232,11 @@ end
 
 --- Update the menubar according to the command entered by user.
 -- @tparam str query Search query.
-function menubar:menulist_update(query, scr)
-    query = query or ""
+function menubar:menulist_update(scr)
+    --query = query or ""
+    local instance = self:get_instance(scr)
+    if not instance.geometry then return end
+    local query = instance.query or ""
     shownitems = {}
     local pattern = awful.util.query_to_pattern(query)
     local match_inside = {}
@@ -254,11 +264,10 @@ function menubar:menulist_update(query, scr)
     -- Add the applications according to their name and cmdline
     for i, v in ipairs(self.menu_entries) do
         v.focused = false
+        local is_string = type(v.cmdline) == "string"
         if not current_category or v.category == current_category then
-            if string.match(v.name, pattern)
-                or string.match(v.cmdline, pattern) then
-                if string.match(v.name, "^" .. pattern)
-                    or string.match(v.cmdline, "^" .. pattern) then
+            if string.match(v.name, pattern) or (is_string and string.match(v.cmdline, pattern)) then
+                if string.match(v.name, "^" .. pattern) or (is_string and string.match(v.cmdline, "^" .. pattern)) then
                     table.insert(shownitems, v)
                 else
                     table.insert(match_inside, v)
@@ -284,14 +293,20 @@ function menubar:menulist_update(query, scr)
         --table.insert(shownitems, { name = "", cmdline = query, icon = nil })
     --end
 
-    common.list_update(common_args.w, nil, label,
+    common.list_update(common_args.w, nil, function(o) return label(o, instance) end,
                        common_args.data,
                        self:get_current_page(shownitems, query, scr))
 end
 
 --- Refresh menubar's cache by reloading .desktop files.
-function menubar:refresh()
-    self.menu_entries = self.menu_gen.generate()
+function menubar:refresh(scr)
+    self.menu_gen.generate(function(menu_entries)
+        self.menu_entries = menu_entries
+        local instance = self:get_instance(scr)
+        if instance then
+            self:menulist_update(scr)
+        end
+    end)
 end
 
 --- Awful.prompt keypressed callback to be used when the user presses a key.
@@ -299,7 +314,7 @@ end
 -- @param key The key that was pressed.
 -- @param comm The current command in the prompt.
 -- @return if the function processed the callback, new awful.prompt command, new awful.prompt prompt text.
-local function prompt_keypressed_callback(mod, key, comm)
+local function prompt_keypressed_callback(mod, key, comm, scr)
     if key == "Left" or (mod.Control and key == "j") then
         current_item = math.max(current_item - 1, 1)
         return true
@@ -326,13 +341,16 @@ local function prompt_keypressed_callback(mod, key, comm)
         return true
     elseif key == "Delete" then
         -- @TODO:  allow extending hotkeys
-        menubar_module.dmenugen.remove_history_record(
-            shownitems[current_item].cmdline
-        )
-        menubar_module.dmenugen.history_save()
-        menubar_module.dmenugen.history_check_load()
-        menubar:refresh()
-        return true
+        -- @TODO: remove it:
+        if menubar.menu_gen == menubar_module.dmenugen then
+            menubar_module.dmenugen.remove_history_record(
+                shownitems[current_item].cmdline
+            )
+            menubar_module.dmenugen.history_save()
+            menubar_module.dmenugen.history_check_load()
+            menubar:refresh(scr)
+            return true
+        end
     elseif key == "space" and mod.Control then
         -- add to the cmdline
         nlog(current_item)
@@ -430,7 +448,7 @@ function menubar:show(scr)
 
     current_item = 1
     current_category = nil
-    self:menulist_update(query, scr)
+    self:menulist_update(scr)
 
     local default_prompt_args = {
         prompt              = "Run: ",
@@ -440,9 +458,9 @@ function menubar:show(scr)
         done_callback       = function() self:hide() end,
         changed_callback    = function(query)
             instance.query = query
-            self:menulist_update(query, scr)
+            self:menulist_update(scr)
         end,
-        keypressed_callback = prompt_keypressed_callback
+        keypressed_callback = function(mod, key, comm) return prompt_keypressed_callback(mod, key, comm, scr) end,
     }
 
     awful.prompt.run(setmetatable(menubar.prompt_args, {__index=default_prompt_args}))
@@ -459,8 +477,10 @@ end
 
 --- Get a menubar wibox.
 -- @return menubar wibox.
-function menubar:get()
-    menubar:refresh()
+function menubar:get(scr)
+    gdebug.deprecate("Use menubar.show() instead", { deprecated_in = 5 })
+    scr = get_screen(scr or awful.screen.focused() or 1)
+    menubar:refresh(scr)
     -- Add to each category the name of its key in all_categories
     for k, v in pairs(self.menu_gen.all_categories) do
         v.key = k

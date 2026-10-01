@@ -1,6 +1,7 @@
 local awful = require("awful")
 
 local menubar = require("actionless.menubar")
+--local awesome_menubar = require("menubar")
 
 local menubars = {}
 
@@ -10,7 +11,7 @@ function menubars.init(context)
 
   -- @TODO: for some reason this is crashing
   --context.menu.menubar = awesome_menubar.get()
-  context.menu.menubar = menubar.create()
+  --context.menu.menubar = menubar.create()
 
   local dmenubar = menubar.create({
     term_prefix = context.cmds.tmux_run,
@@ -20,6 +21,11 @@ function menubars.init(context)
   dmenubar.menu_cache_path = awful.util.getdir("cache") .. "/history"
   dmenubar.menu_gen = require("actionless.menubar.dmenugen")
   context.menu.dmenubar = dmenubar
+
+  local clients_menubar = menubar.create()
+  clients_menubar.cache_entries = false
+  clients_menubar.menu_gen = require("actionless.menubar.clients")
+  context.menu.clients_menubar = clients_menubar
 
 end
 

@@ -153,7 +153,7 @@ end
 
 --- Generate an array of all visible menu entries.
 -- @return all menu entries.
-function menu_gen.generate()
+function menu_gen.generate(callback)
 
     --menu_gen.history_save(history_file_path)
     menu_gen.history_check_load(history_file_path, MAX_HISTORY_SIZE)
@@ -177,7 +177,7 @@ function menu_gen.generate()
             }
         )
     end
-    return result
+    callback(result)
 end
 
 return menu_gen
