@@ -164,7 +164,7 @@ theme.base_border_width = theme.border_width
 theme.border_width = 0
 
 theme.panel_height = theme.basic_panel_height + theme.panel_padding_bottom
-theme.titlebar_height = theme.basic_panel_height + theme.base_border_width*2
+theme.titlebar_height = theme.basic_panel_height + theme.base_border_width
 
 
 theme.left_panel_internal_corner_radius = dpi(30)
